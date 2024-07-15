@@ -5,14 +5,28 @@ require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 const app = express();
-app.use(cors());
-app.use(express.json()); // For parsing application/json
+
+app.use(cors({
+  origin: 'https://ptcg-legends-6abc11783376.herokuapp.com', // Replace with your frontend domain
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+}));
+
+app.use(express.json());  // For parsing application/json
 
 // Connect to MongoDB
-const uri = process.env.MONGODB_URI; // Make sure this variable is not undefined
+const uri = process.env.MONGODB_URI;
+console.log('Attempting to connect to MongoDB with URI:', uri);
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    console.error('Ensure the following:');
+    console.error('1. Your IP is whitelisted in MongoDB Atlas.');
+    console.error('2. Your connection string is correct.');
+  });
 
 const eventSchema = new mongoose.Schema({
   id: String,
@@ -37,7 +51,7 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Event', eventSchema);
 
 // Route to get an event by ID
-app.get('/api/events/:id', async (req, res) => {
+app.get('/tournaments/:id', async (req, res) => {
   console.log(req.params.id);
   try {
     const event = await Event.findOne({ id: req.params.id });
