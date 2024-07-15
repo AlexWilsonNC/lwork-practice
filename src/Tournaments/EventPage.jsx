@@ -181,12 +181,16 @@ const EventPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          const response = await fetch(`https://ptcg-legends-backend.herokuapp.com/tournaments/${eventId}`);
-          if (response.ok) {
-            const data = await response.json();
-            setEventData(data);
-          } else {
-            console.error('Failed to fetch data');
+          try {
+            const response = await fetch(`https://ptcg-legends-backend.herokuapp.com/tournaments/${eventId}`);
+            if (response.ok) {
+              const data = await response.json();
+              setEventData(data);
+            } else {
+              console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+          } catch (error) {
+            console.error('Fetch error:', error);
           }
         };
         fetchData();
