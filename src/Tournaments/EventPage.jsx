@@ -181,16 +181,13 @@ const EventPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const response = await fetch(`https://ptcg-legends-backend.herokuapp.com/events/${eventId}`);
-            if (response.ok) {
-              const data = await response.json();
-              setEventData(data);
-            } else {
-              console.error('Failed to fetch data:', response.status, response.statusText);
-            }
-          } catch (error) {
-            console.error('Fetch error:', error);
+          const baseUrl = process.env.NODE_ENV === 'production' ? 'https://ptcg-legends-6abc11783376.herokuapp.com' : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/events/${eventId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setEventData(data);
+          } else {
+            console.error('Failed to fetch data');
           }
         };
         fetchData();
