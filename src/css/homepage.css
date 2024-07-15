@@ -88,7 +88,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    color: white;
+    color: white !important;
     padding: 5px 20px 5px 10px;
     clip-path: polygon(0 0, 100% 0, 100% 0%, 80% 100%, 0 100%);
     border-bottom: 1px solid transparent;
@@ -579,7 +579,7 @@
     }
     .hide-on-small {
         display: flex;
-        margin-bottom: -50px;
+        margin-bottom: -25px;
     }
     .homepage-main-content {
         flex-direction: row;

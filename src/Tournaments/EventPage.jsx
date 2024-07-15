@@ -192,7 +192,7 @@ const EventPage = () => {
         };
         fetchData();
       }, [eventId]);
-
+      
     useEffect(() => {
         if (divisionParam) {
             setDivision(divisionParam);

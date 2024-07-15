@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "cd backend && node server.js",
+    "dev": "concurrently \"vite\" \"cd backend && node server.js\"",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port $PORT"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.5.1",
