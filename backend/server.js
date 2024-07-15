@@ -4,18 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
-console.log("PORT", port)
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
-
-app.use(cors({
-  origin: 'https://ptcg-legends-backend-496751163914.herokuapp.com/',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-}));
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 const uri = process.env.MONGODB_URI;

@@ -181,7 +181,7 @@ const EventPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          const baseUrl = process.env.NODE_ENV === 'production' ? 'https://ptcg-legends-6abc11783376.herokuapp.com' : 'http://localhost:5000';
+          const baseUrl = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/events/${eventId}`);
           if (response.ok) {
             const data = await response.json();
