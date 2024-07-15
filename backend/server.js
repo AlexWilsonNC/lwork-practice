@@ -5,12 +5,14 @@ require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 const app = express();
+
 app.use(cors({
-  origin: 'https://ptcg-legends-6abc11783376.herokuapp.com', // Your frontend URL
+  origin: 'https://ptcg-legends-6abc11783376.herokuapp.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
 }));
+
 app.use(express.json());
 
 // Connect to MongoDB
@@ -36,14 +38,13 @@ const eventSchema = new mongoose.Schema({
   format: String,
   dayOnePlayers: String,
   dayTwoPlayers: String,
-  // Add other fields that might be in your event schema
 });
 
 const Event = mongoose.model('Event', eventSchema);
 
 // Route to get an event by ID
 app.get('/events/:id', async (req, res) => {
-  console.log(req.params.id);
+  console.log('Fetching event with ID:', req.params.id); // Debug log
   try {
     const event = await Event.findOne({ id: req.params.id });
     if (event) {
@@ -57,7 +58,7 @@ app.get('/events/:id', async (req, res) => {
 });
 
 // Route to get all event IDs
-app.get('/event-ids', async (req, res) => {
+app.get('/events/event-ids', async (req, res) => {
   try {
     const events = await Event.find({}, 'id');
     const eventIds = events.map(event => event.id);
