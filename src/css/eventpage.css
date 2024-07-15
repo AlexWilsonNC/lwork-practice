@@ -1,0 +1,335 @@
+.center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.regional-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+}
+.regional-info {
+    width: 100%;
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(27, 27, 29);
+    color: #E1E1E1;
+    z-index: 0;
+}
+.regional-info p {
+    font-size: 15px;
+}
+.place-n-flag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.place-n-flag img {
+    width: 24px;
+    height: auto;
+    margin: -5px 5px 0 0;
+}
+.left-regional-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 33%;
+    text-align: start;
+}
+.regional-info h2 {
+    margin-bottom: 5px;
+}
+.outer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 33%;
+    text-align: end;
+}
+.outer-links p,
+.regional-info p,
+.regional-info a {
+    margin-bottom: 5px;
+}
+.regional-info a {
+    color: #1290eb;
+}
+.regional-info a:hover {
+    color: #7cc8ff;
+}
+.reg-hr {
+    display: none;
+}
+.regional-info-bg-logo {
+    height: 130px;
+    width:auto;
+    z-index: -1;
+}
+/**/
+.contain-event {
+    width: 100%;
+}
+.event-content {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.top-divisions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: rgb(27, 27, 29);
+    width: 100%;
+    padding: 10px 25px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+.top-divisions a {
+    padding: 7px 12px;
+    margin-right: 15px;
+    border-radius: 6px;
+    color: rgb(233, 233, 233);
+    border: 1px solid transparent;
+}
+.active-division {
+    background-color: #27292c;
+    border: 1px solid #1290eb !important;
+}
+.active-division:hover,
+.other-division:hover {
+    background-color: #27292c;
+    cursor: pointer;
+}
+.bottom-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(27, 27, 29);
+    width: 100%;
+    padding: 3px 25px 0px;
+}
+.bottom-options a {
+    padding: 10px 12px 12px;
+    color: rgb(233, 233, 233);
+    font-weight: 600;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.event-option {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 0 5px;
+}
+.active-option {
+    color: #1290eb !important;
+    border-top: 1px solid #1290eb;
+    border-left: 1px solid #1290eb;
+    border-right: 1px solid #1290eb;
+}
+.event-results {
+    width: 70%;
+}
+.notavailable{
+    margin: 75px 0;
+    text-align: center;
+}
+.name-n-flag {
+    text-align: start;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    font-size: 18px;
+    overflow: hidden;
+    white-space: wrap;
+}
+.result-list-ol {
+    position: relative;
+    margin-top: 25px;
+    list-style-type: none;
+}
+.player-list-hover {
+    max-height: 50px; 
+    border-radius: 2px;
+    padding: 0 20px 0 5px;
+}
+.results-list-item {
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+}
+.player-placement {
+    margin-right: 15px;
+    width: 30px;
+}
+.flag-size {
+    width: 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.player-deck-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: -5px;
+}
+.player-deck-icons a {
+    margin-top: 8px;
+}
+.sprite {
+    width: 55px;
+    height: auto;
+}
+.second-sprite {
+    margin-left: -17.5px;
+}
+.not-yet {
+    text-align: center;
+    margin: 60px 0 40px;
+}
+.opacity-0-1 {
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+@media screen and (max-width: 1500px) {
+    .regional-container {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .regional-container p, 
+    .regional-container a {
+        font-size: 14px;
+    }
+    .regional-info h2 {
+        font-size: 22px;
+    }
+    .regional-info-bg-logo {
+        height: 110px;
+    }
+    .event-results {
+        width: 90%;
+    }
+}
+@media screen and (max-width: 950px) {
+    .regional-container {
+        width: 95%;
+    }
+}
+@media screen and (max-width: 700px) {
+    .regional-container p, 
+    .regional-container a {
+        font-size: 12px;
+    }
+    .regional-info h2 {
+        font-size: 20px;
+    }
+    .place-n-flag img {
+        width: 20px;
+    }
+    .regional-info-bg-logo {
+        height: 90px;
+    }
+    .name-n-flag {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 625px) {
+    .regional-info {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 25px;
+    } 
+    .event-results {
+        width: 100%;
+    }
+    .regional-info h2 {
+        font-size: 18px;
+    }
+    .reg-hr {
+        display: flex;
+        width: 40%;
+        border-bottom: 1px solid grey;
+        margin-top: 5px;
+    }
+    .regional-info-bg-logo {
+        height: 120px;
+        position: absolute;
+        opacity: 0.9;
+        margin-left: -39px;
+        left: 80%;
+        top: 15%;
+    }
+    .left-regional-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: auto;
+    }
+    .outer-links {
+        align-items: flex-start;
+        margin-top: 5px;
+        width: auto;
+    }   
+    .name-n-flag {
+        font-size: 14px;
+    }
+    .sprite {
+        width: 47px;
+    }
+    .second-sprite {
+        margin-left: -16px;
+    }
+    .results-list-item {
+        height: 45px;
+    }
+}
+@media screen and (max-width: 550px) {
+    .sprite {
+        width: 45px;
+    }
+    .second-sprite {
+        margin-left: -16px;
+    }
+    .name-n-flag {
+        font-size: 13px;
+        padding-left: 7px;
+    }
+    .flag-size {
+        width: 17px;
+        border-radius: 3px;
+    }
+    .player-placement {
+        margin-right: 5px;
+        width: 25px;
+    }
+    .results-list-item {
+        height: 43px;
+    }
+    .player-deck-icons a {
+        width: 15px;
+    }
+}
+@media screen and (max-width: 550px) {
+    .name-n-flag {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 410px) {
+    .event-option {
+        margin: 0 0px;
+    }
+}
