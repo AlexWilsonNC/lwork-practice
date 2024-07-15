@@ -179,18 +179,19 @@ const EventPage = () => {
     const [eventData, setEventData] = useState(null);
     const [division, setDivision] = useState('masters');
 
-     useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`/api/events/${eventId}`);
-            if (response.ok) {
-                const data = await response.json();
-                setEventData(data);
-            } else {
-                console.error('Failed to fetch data');
-            }
+          const baseUrl = process.env.NODE_ENV === 'production' ? 'https://ptcg-legends-6abc11783376.herokuapp.com' : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/events/${eventId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setEventData(data);
+          } else {
+            console.error('Failed to fetch data');
+          }
         };
         fetchData();
-    }, [eventId]);
+      }, [eventId]);
 
     useEffect(() => {
         if (divisionParam) {

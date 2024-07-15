@@ -6,10 +6,10 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors());
-app.use(express.json());  // For parsing application/json
+app.use(express.json()); // For parsing application/json
 
 // Connect to MongoDB
-const uri = process.env.MONGODB_URI;  // Make sure this variable is not undefined
+const uri = process.env.MONGODB_URI; // Make sure this variable is not undefined
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -37,8 +37,8 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Event', eventSchema);
 
 // Route to get an event by ID
-app.get('/events/:id', async (req, res) => {
-  console.log(req.params.id)
+app.get('/api/events/:id', async (req, res) => {
+  console.log(req.params.id);
   try {
     const event = await Event.findOne({ id: req.params.id });
     if (event) {
@@ -52,7 +52,7 @@ app.get('/events/:id', async (req, res) => {
 });
 
 // Route to get all event IDs
-app.get('/event-ids', async (req, res) => {
+app.get('/api/event-ids', async (req, res) => {
   try {
     const events = await Event.find({}, 'id');
     const eventIds = events.map(event => event.id);
