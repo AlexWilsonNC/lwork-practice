@@ -423,7 +423,7 @@ const tournamentList = [
         "flag": japan,
         "location": "Yokohama, Japan",
         "results": false
-          },
+    },
     {
         "id": "2022_WORLDS",
         "name": "World Championships 2022",
@@ -433,7 +433,7 @@ const tournamentList = [
         "flag": uk,
         "location": "London, United Kingdom",
         "results": false
-          },
+    },
     {
         "id": "2019_WORLDS",
         "name": "World Championships 2019",
@@ -442,7 +442,7 @@ const tournamentList = [
         "date": "Aug 16, 2019",
         "flag": usa,
         "location": "Washington DC, USA",
-          },
+    },
     {
         "id": "2018_WORLDS",
         "name": "World Championships 2018",
@@ -451,7 +451,7 @@ const tournamentList = [
         "date": "Aug 24, 2018",
         "flag": usa,
         "location": "Nashville, Tennessee",
-          },
+    },
     {
         "id": "2017_WORLDS",
         "name": "World Championships 2017",
@@ -461,7 +461,7 @@ const tournamentList = [
         "flag": usa,
         "location": "Anaheim, California",
         "results": false
-          },
+    },
     {
         "id": "2016_WORLDS",
         "name": "World Championships 2016",
@@ -470,7 +470,7 @@ const tournamentList = [
         "date": "Aug 19, 2016",
         "flag": usa,
         "location": "San Fransisco, California",
-          },
+    },
     {
         "id": "2015_WORLDS",
         "name": "World Championships 2015",
@@ -479,7 +479,7 @@ const tournamentList = [
         "date": "Aug 21, 2015",
         "flag": usa,
         "location": "Boston, Massachusetts",
-          },
+    },
     {
         "id": "2014_WORLDS",
         "name": "World Championships 2014",
@@ -488,7 +488,7 @@ const tournamentList = [
         "date": "Aug 15, 2014",
         "flag": usa,
         "location": "Washington DC, USA",
-          },
+    },
     {
         "id": "2013_WORLDS",
         "name": "World Championships 2013",
@@ -497,7 +497,7 @@ const tournamentList = [
         "date": "Aug 9, 2013",
         "flag": canada,
         "location": "Vancouver, British Columbia",
-          },
+    },
     {
         "id": "2012_WORLDS",
         "name": "World Championships 2012",
@@ -506,7 +506,7 @@ const tournamentList = [
         "date": "Aug 13, 2012",
         "flag": usa,
         "location": "Waikōloa Village, Hawaii",
-          },
+    },
     {
         "id": "2011_WORLDS",
         "name": "World Championships 2011",
@@ -515,7 +515,7 @@ const tournamentList = [
         "date": "Aug 12, 2011",
         "flag": usa,
         "location": "San Diego, California",
-          },
+    },
     {
         "id": "2010_WORLDS",
         "name": "World Championships 2010",
@@ -524,7 +524,7 @@ const tournamentList = [
         "date": "Aug 13, 2010",
         "flag": usa,
         "location": "Waikōloa Village, Hawaii",
-          },
+    },
     {
         "id": "2009_WORLDS",
         "name": "World Championships 2009",
@@ -533,7 +533,7 @@ const tournamentList = [
         "date": "Aug 13, 2009",
         "flag": usa,
         "location": "San Diego, California",
-          },
+    },
     {
         "id": "2008_WORLDS",
         "name": "World Championships 2008",
@@ -542,7 +542,7 @@ const tournamentList = [
         "date": "Aug 15, 2008",
         "flag": usa,
         "location": "Orlando, Florida",
-          },
+    },
     {
         "id": "2007_WORLDS",
         "name": "World Championships 2007",
@@ -551,7 +551,7 @@ const tournamentList = [
         "date": "Aug 10, 2007",
         "flag": usa,
         "location": "Waikōloa Village, Hawaii",
-          },
+    },
     {
         "id": "2006_WORLDS",
         "name": "World Championships 2006",
@@ -560,16 +560,16 @@ const tournamentList = [
         "date": "Aug 18, 2006",
         "flag": usa,
         "location": "Anaheim, California",
-          },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
+    },
+    {
+        "id": "2005_WORLDS",
+        "name": "World Championships 2005",
+        "eventType": "worlds",
+        "eventLogo": worldsOfive,
+        "date": "Aug 19, 2005",
+        "flag": usa,
+        "location": "San Diego, California",
+    },
     // {
     //     "id": "eee",
     //     "name": "eee",

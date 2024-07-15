@@ -1,0 +1,510 @@
+.player-deck {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    border-radius: 5px;
+    margin: 25px 0;
+}
+.player-deck-top {
+    text-align: start;
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+}
+.player-deck-top h2 {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+.playerdeck-hr {
+    width: 100%;
+    border-bottom: 2px solid rgb(206, 206, 206);
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    margin-bottom: 5px;
+}
+.player-deck-top div p {
+    margin-top: 3px;
+}
+.blue-link {
+    color: #1290eb;
+    font-size: 16px;
+    transition: ease-in-out 0.2s;
+}
+.blue-link:hover {
+    color: #b0b4cf;
+}
+.deck-cards {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    width: 97%;
+    height: auto;
+    padding: 35px 25px;
+    border-radius: 10px;
+}
+.card-container {
+    position: relative;
+    width: calc(100% / 1 - 7px);
+    transition: ease-in-out all 0.2s;
+    margin: 2px 0;
+}
+.card-container:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    z-index: 10;
+}
+.card-container img {
+    width: 100%;
+    box-shadow: 2px 2px 10px black;
+    border-radius: 7px;
+}
+.card-count {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.82);
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    width: 29%;
+    height: 20%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.deck-top-right-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+.copy-decklist-btn,
+.open-in-deckbuilder-btn {
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    position: relative;
+}
+.copy-decklist-btn:hover,
+.open-in-deckbuilder-btn:hover {
+    cursor: pointer;
+    background-color: #1290eb;
+    color:white;
+}
+.copy-decklist-btn .tooltip-text,
+.open-in-deckbuilder-btn .tooltip-text {
+    visibility: hidden;
+    background-color: black;
+    color: rgb(200, 200, 200);
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.copy-decklist-btn .tooltip-text {
+    margin-left: -35px;
+}
+.open-in-deckbuilder-btn .tooltip-text {
+    margin-left: -43px;
+}
+.copy-decklist-btn .tooltip-text::after,
+.open-in-deckbuilder-btn .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+.copy-decklist-btn:hover .tooltip-text,
+.open-in-deckbuilder-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+.deckview-switcher {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid black;
+}
+.deckview-switcher div {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 4px;
+}
+.copy-decklist-btn span,
+.open-in-deckbuilder-btn span,
+.deckview-switcher div span {
+    font-size: 24px;
+}
+.active-grid-option {
+    background-color: #1290eb !important;
+    border-radius: 4px;
+    color: white !important;
+}
+.list-form:hover,
+.playmat-form:hover{
+    cursor: pointer;
+}
+
+.deck-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    border-top: 2px solid rgb(206, 206, 206);
+    padding-top: 10px;
+}
+.column-section {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: flex-start;
+}
+.list-category {
+    height: 37px;
+    width: 95%;
+    background-color: #1290eb;
+    padding-left: 11px; 
+    margin: 4px 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(239, 239, 239);
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+.list-of-cards {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 3px;
+    height: 450px;
+}
+.list-item {
+    height: 38px;
+    width: 300px;
+    margin: 2px 2px 0 2px;
+    padding-left: 11px;  
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: ease-in-out 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.list-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+.list-item p {
+    font-size: 15px;
+    z-index: 10;
+    font-weight: 600;
+}
+.list-card-count {
+    width: 5%;
+    margin-right: 5px;
+    padding-right: 2px;
+    margin-left: -4px;
+    text-align: center;
+    border-right: 1px solid rgba(219, 219, 219, 0.801);
+}
+.bold-name {
+    font-weight: 500;
+    width: 55%;
+}
+.pokemon-list-img,
+.trainer-list-img {
+    width: 50% !important;
+    height: 100%;
+    margin-right: -13px;
+    object-fit: cover;
+    object-position: 0px 20%;
+    clip-path: inset(0 0 0 0);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 10 80 100" xml:space="preserve"><style type="text/css">.blur{filter:url(%23softedge);}</style><filter id="softedge"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter><g class="blur"><rect x="14" y="10" width="80" height="100"/></g></svg>'); 
+    -webkit-mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 10 80 100" xml:space="preserve"><style type="text/css">.blur{filter:url(%23softedge);}</style><filter id="softedge"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter><g class="blur"><rect x="14" y="10" width="80" height="100"/></g></svg>'); 
+    mask-size: cover;
+    opacity: 0.85;
+}
+.energy-list-img {
+    width: 50%;
+    height: 100%;
+    margin-right: -13px;
+    object-fit: cover;
+    object-position: 0px 44%;
+    clip-path: inset(0 0 0 0);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 10 80 100" xml:space="preserve"><style type="text/css">.blur{filter:url(%23softedge);}</style><filter id="softedge"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter><g class="blur"><rect x="14" y="10" width="80" height="100"/></g></svg>'); 
+    -webkit-mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 10 80 100" xml:space="preserve"><style type="text/css">.blur{filter:url(%23softedge);}</style><filter id="softedge"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter><g class="blur"><rect x="14" y="10" width="80" height="100"/></g></svg>'); 
+    mask-size: cover;
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 1900px){
+    .list-item {
+        height: 38px;
+        width: 260px;
+        margin: 2px 2px 0 2px;
+        padding-left: 11px;  
+    }
+}
+@media screen and (max-width: 1650px){
+    .list-item {
+        height: 30px;
+        width: 230px;
+    }
+    .list-item p {
+        font-size: 13px;
+    }
+}
+@media screen and (max-width: 1460px){
+    .list-item {
+        height: 29px;
+        width: 200px;
+    }
+    .list-item p {
+        font-size: 12px;
+    }
+    .list-category {
+        height: 28px;
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 1350px){
+    .deck-cards {
+        grid-template-columns: repeat(9, 1fr);
+    }
+}
+@media screen and (max-width: 1300px){
+    .list-item {
+        height: 28px;
+        width: 175px;
+    }
+    .list-item p {
+        font-size: 10px;
+    }
+    .list-category {
+        height: 28px;
+        font-size: 10px;
+    }
+}
+@media screen and (max-width: 1150px){
+    .list-item {
+        height: 25px;
+        width: 150px;
+    }
+    .list-item p {
+        font-size: 8px;
+    }
+    .list-category {
+        height: 25px;
+        font-size: 9px;
+    }
+}
+@media screen and (max-width: 1100px){
+    .deck-cards {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+@media screen and (max-width: 1000px){
+    .player-deck {
+        width: 95%;
+        margin-top: 5px;
+    }
+    .player-deck-top h2 {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    .player-deck-top p,
+    .player-deck-top a {
+        font-size: 14px;
+    }
+    .copy-decklist-btn span,
+    .open-in-deckbuilder-btn span,
+    .deckview-switcher div span {
+        font-size: 20px;
+    }
+    .copy-decklist-btn,
+    .open-in-deckbuilder-btn {
+        margin-right: 7px;
+    }
+    .deck-cards {
+        grid-template-columns: repeat(10, 1fr);
+        gap: 0px;
+        width: 97%;
+        padding: 15px 20px;
+        border-radius: 5px;
+    }
+    .card-container img {
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.475);
+        border-radius: 3px;
+    }
+    .card-container {
+        margin: 0 0;
+        width: calc(100% / 1 - 5px);
+    }
+    .card-count {
+        bottom: 15px;
+        font-size: 14px;
+        font-weight: bolder;
+        width: 29%;
+        height: 20%;
+    }
+    .deck-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 100%;
+        border-top: 2px solid rgb(206, 206, 206);
+        padding-top: 10px;
+    }
+    .column-section {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: flex-start;
+    }
+    .list-of-cards {
+        flex-wrap: nowrap;
+        height: auto;
+        margin: 0;
+    }
+    .list-item {
+        height: 35px;
+        width: 350px;
+        margin: 3px 0 0 0;
+    }
+    .list-item p {
+        font-size: 12px;
+    }
+    .list-category {
+        height: 35px;
+        font-size: 12px;
+        width: 350px;
+        margin: 15px 0 0 0;
+    }
+}
+@media screen and (max-width: 950px){
+    .deck-cards {
+        grid-template-columns: repeat(9, 1fr);
+    }
+}
+@media screen and (max-width: 800px){
+    .deck-cards {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+@media screen and (max-width: 700px){
+    .deck-cards {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+@media screen and (max-width: 700px){
+    .card-count {
+        bottom: 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+}
+@media screen and (max-width: 550px){
+    .deck-cards {
+        grid-template-columns: repeat(6, 1fr);
+        padding: 10px;
+    }
+    .copy-decklist-btn span,
+    .open-in-deckbuilder-btn span,
+    .deckview-switcher div span {
+        font-size: 16px;
+    }
+    .copy-decklist-btn,
+    .open-in-deckbuilder-btn {
+        margin-right: 5px;
+    }
+    .player-deck-top div p {
+        margin-top: 0px;
+    }
+    .player-deck-top h2 {
+        font-size: 16px;
+    }
+    .player-deck-top p,
+    .player-deck-top a {
+        font-size: 12px;
+    }
+    .list-item {
+        height: 30px;
+        width: 300px;
+    }
+    .list-item p {
+        font-size: 10px;
+    }
+    .list-category {
+        height: 30px;
+        font-size: 10px;
+        width: 300px;
+    }
+}
+@media screen and (max-width: 450px){
+    .card-count {
+        bottom: 10px;
+        font-size: 10px;
+        font-weight: 600;
+    }
+}
+@media screen and (max-width: 400px){
+    .copy-decklist-btn span,
+    .open-in-deckbuilder-btn span,
+    .deckview-switcher div span {
+        font-size: 14px;
+    }
+    .copy-decklist-btn,
+    .open-in-deckbuilder-btn {
+        margin-right: 5px;
+    }
+    .player-deck-top {
+        width: 105%;
+    }
+}
+@media screen and (max-width: 375px){
+    .list-item {
+        height: 28px;
+        width: 275px;
+    }
+    .list-category {
+        height: 28px;
+        width: 275px;
+    }
+}
