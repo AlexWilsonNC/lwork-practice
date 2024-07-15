@@ -1,14 +1,17 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css'
-import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './Nav/Navbar';
+import HomePage from './Homepage/HomePage';
 
 function App() {
   return (
-    <ThemeProvider>
+    <>
     <Navbar />
-      <p>PTCG Legends 3.0</p>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+    </Routes>
+    </>
   )
 }
 
