@@ -178,11 +178,13 @@ const EventPage = () => {
     const { eventId, division: divisionParam } = useParams();
     const [eventData, setEventData] = useState(null);
     const [division, setDivision] = useState('masters');
+    console.log('updated')
 
     useEffect(() => {
         const fetchData = async () => {
           const baseUrl = process.env.NODE_ENV === 'production' ? 'https://ptcg-legends-6abc11783376.herokuapp.com' : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/events/${eventId}`);
+          console.log('response', response.json())
           if (response.ok) {
             const data = await response.json();
             setEventData(data);
