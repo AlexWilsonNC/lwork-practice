@@ -182,7 +182,7 @@ const EventPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`https://ptcg-legends-backend.herokuapp.com/tournaments/${eventId}`);
+                const response = await fetch(`https://ptcg-legends-backend.herokuapp.com/events/${eventId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setEventData(data);

@@ -42,7 +42,7 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Event', eventSchema);
 
 // Route to get an event by ID
-app.get('/tournaments/:id', async (req, res) => {
+app.get('/events/:id', async (req, res) => {
   console.log(req.params.id);
   try {
     const event = await Event.findOne({ id: req.params.id });
@@ -57,7 +57,7 @@ app.get('/tournaments/:id', async (req, res) => {
 });
 
 // Route to get all event IDs
-app.get('/tournaments/event-ids', async (req, res) => {
+app.get('/event-ids', async (req, res) => {
   try {
     const events = await Event.find({}, 'id');
     const eventIds = events.map(event => event.id);
