@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -7,7 +6,7 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors({
-  origin: 'https://ptcg-legends-6abc11783376.herokuapp.com', // Replace with your frontend domain
+  origin: 'https://ptcg-legends-6abc11783376.herokuapp.com', // Your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
@@ -69,7 +68,7 @@ app.get('/tournaments/event-ids', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello World! The server is running.'); // Basic response to indicate the server is running
+  res.send('Hello World! The server is running.');
 });
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
