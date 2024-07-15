@@ -6,17 +6,17 @@ const port = process.env.PORT || 5000;
 
 console.log("PORT", port)
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// app.use(cors({
-//   origin: 'https://ptcg-legends-6abc11783376.herokuapp.com',
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//   credentials: true,
-//   optionsSuccessStatus: 204
-// }));
+// const app = express();
+// app.use(cors());
 // app.use(express.json());
+
+app.use(cors({
+  origin: 'https://ptcg-legends-backend-496751163914.herokuapp.com/',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+}));
+app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -45,9 +45,6 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Event', eventSchema);
 
 app.get('/api/events/:id', async (req, res) => {
-  return (
-    res.send({hi:"hello"})
-  )
   console.log(req.params.id);
   try {
     const event = await Event.findOne({ id: req.params.id });
