@@ -286,7 +286,7 @@ const Homepage = () => {
                     <div className='side-section'>
                         <h4>Helpful Resources:</h4>
                         <ul>
-                            <li><a href=''>Deck Builder</a></li>
+                            {/* <li><a href=''>Deck Builder</a></li>
                             <li><a href='./tournaments/completed'>Completed Tournaments</a></li>
                             <li><a href='./tournaments/upcoming'>Upcoming Tournaments</a></li>
                             <li><a href=''>Decks by Era</a></li>
@@ -294,13 +294,13 @@ const Homepage = () => {
                             <li><a href=''>Pokémon Card Database</a></li>
                             <li><a href=''>TCG Expansions</a></li>
                             <li><a href=''>World's Booklets</a></li>
-                            <li><a href=''>Rules by Era</a></li>
+                            <li><a href=''>Rules by Era</a></li> */}
                         </ul>
                     </div>
                     <div className='side-section'>
                         <h4>Popular Pages:</h4>
                         <ol>
-                            <li><a href='./decks-by-era/2010/dp-ul'>2010 Decks by Era (DP - UL)</a></li>
+                            {/* <li><a href='./decks-by-era/2010/dp-ul'>2010 Decks by Era (DP - UL)</a></li>
                             <li><a href='./worlds/2023/summary'>2023 World Championships</a></li>
                             <li><a href='./decks-by-era/2018/sum-lot'>2018 Decks by Era (SUM - LOT)</a></li>
                             <li><a href='./articles/other/greatest-players-in-history'>Greatest Players in History</a></li>
@@ -309,7 +309,7 @@ const Homepage = () => {
                             <li><a href='./worlds/2002/summary'>2002 World Championships</a></li>
                             <li><a href='./decks-by-era/1999/bs-fossil'>1999 Decks by Era (Base - Fossil)</a></li>
                             <li><a href='./worlds/2010/summary'>2010 World Championships</a></li>
-                            <li><a href='./decks-by-era/2017/prc-gri'>2017 Decks by Era (PRC - GRI)</a></li>
+                            <li><a href='./decks-by-era/2017/prc-gri'>2017 Decks by Era (PRC - GRI)</a></li> */}
                         </ol>
                     </div>
                     <div className='side-section'>
