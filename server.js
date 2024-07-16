@@ -88,14 +88,14 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
+// ***************
 app.get('/api/cards', async (req, res) => {
-  console.log('Fetching cards...');
+  console.log('/api/cards')
   try {
     const cards = await Card.find({});
-    console.log('Cards fetched:', cards.length);
+    console.log('Fetched cards:', cards.length);
     res.json(cards);
   } catch (err) {
-    console.error('Error fetching cards:', err);
     res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
