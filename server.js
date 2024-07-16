@@ -35,7 +35,7 @@ const eventSchema = new mongoose.Schema({
   dayTwoPlayers: String,
 });
 
-// const Event = mongoose.model('Event', eventSchema);
+const Event = mongoose.model('Event', eventSchema);
 
 app.get('/events/:id', async (req, res) => {
   console.log(req.params.id)
