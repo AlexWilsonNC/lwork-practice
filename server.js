@@ -37,23 +37,23 @@ const eventSchema = new mongoose.Schema({
 
 // const Event = mongoose.model('Event', eventSchema);
 
-// app.get('/events/:id', async (req, res) => {
-//   console.log(req.params.id)
-//   try {
-//     const event = await Event.findOne({ id: req.params.id });
-//     if (event) {
-//       res.json(event);
-//     } else {
-//       res.status(404).send('Event not found');
-//     }
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// });
-
 app.get('/events/:id', async (req, res) => {
-    res.send({hi:"hello"})
-})
+  console.log(req.params.id)
+  try {
+    const event = await Event.findOne({ id: req.params.id });
+    if (event) {
+      res.json(event);
+    } else {
+      res.status(404).send('Event not found');
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// app.get('/events/:id', async (req, res) => {
+//     res.send({hi:"hello"})
+// })
 
 // app.get('/event-ids', async (req, res) => {
 //   try {
