@@ -161,7 +161,7 @@
     position: absolute;
     bottom: 13px;
     width: 93%;
-    color: #1290eb;
+    color: #1290eb ;
 }
 .card-profile-pic {
     width: 40px; height: auto;
@@ -620,20 +620,11 @@
     .article-thumbnail img {
         height: 150px;
     } 
-    /* .homepage-hr {
-        margin:0 0 15px;
-    } */
-    /* .sponsored-title {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        margin-bottom: 0px;
-    } */
-    /* .article-type {
-        bottom: 120px;
-    }  */
     .lessmarginbottomsmall {
         margin-bottom: 0px;
+    }
+    .card-date-plus-read p {
+        color: #1290eb !important;
     }
 }
 @media screen and (max-width: 675px) {

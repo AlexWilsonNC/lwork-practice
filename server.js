@@ -51,10 +51,6 @@ app.get('/events/:id', async (req, res) => {
   }
 });
 
-// app.get('/events/:id', async (req, res) => {
-//     res.send({hi:"hello"})
-// })
-
 app.get('/event-ids', async (req, res) => {
   try {
     const events = await Event.find({}, 'id');
@@ -66,7 +62,7 @@ app.get('/event-ids', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello World! The server is running.'); // Basic response to indicate the server is running
+  res.send('Hello World! The server is running.');
 });
 
 app.get("*", function (_, res) {

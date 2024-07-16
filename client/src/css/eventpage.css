@@ -266,12 +266,12 @@
         margin-top: 5px;
     }
     .regional-info-bg-logo {
-        height: 120px;
+        height: 110px;
         position: absolute;
         opacity: 0.9;
         margin-left: -39px;
         left: 80%;
-        top: 15%;
+        top: 17%;
     }
     .left-regional-info {
         display: flex;
