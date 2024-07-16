@@ -35,7 +35,34 @@ const eventSchema = new mongoose.Schema({
   dayTwoPlayers: String,
 });
 
+const cardSchema = new mongoose.Schema({
+  id: String,
+  name: String,
+  supertype: String,
+  setAbbrev: String,
+  subtypes: [Object],
+  hp: Number,
+  types: [Object],
+  attacks: [Object],
+  weaknesses: [Object],
+  resistances: [Object],
+  convertedRetreatCost: Number,
+  set: {
+    id: String,
+    number: String,
+    printedToral: Number,
+    releaseDate: String,
+  },
+  number: Number,
+  rarity: String,
+  images: {
+    small: String,
+    large: String,
+  }
+});
+
 const Event = mongoose.model('Event', eventSchema);
+const Card = mongoose.model('Card', cardSchema, 'card-database');
 
 app.get('/events/:id', async (req, res) => {
   console.log(req.params.id)
@@ -58,6 +85,18 @@ app.get('/event-ids', async (req, res) => {
     res.json(eventIds);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch event IDs' });
+  }
+});
+
+app.get('/api/cards', async (req, res) => {
+  console.log('Fetching cards...');
+  try {
+    const cards = await Card.find({});
+    console.log('Cards fetched:', cards.length);
+    res.json(cards);
+  } catch (err) {
+    console.error('Error fetching cards:', err);
+    res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
 
