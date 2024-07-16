@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  build: {
+    watch: "./vite.config.js"
+  },
   plugins: [react()],
   server: {
     port: process.env.PORT || 3000,

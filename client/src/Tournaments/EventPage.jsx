@@ -182,7 +182,7 @@ const EventPage = () => {
      useEffect(() => {
         const fetchData = () => {
             console.log("fetchData", eventId)
-            fetch(`/api/events/${eventId}`).then(response => response.json()).then(data => console.log(data))
+            fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`).then(response => response.json()).then(data => console.log(data))
         };
         fetchData();
     }, [eventId]);

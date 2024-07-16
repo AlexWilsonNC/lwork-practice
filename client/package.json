@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cd backend && node server.js",
     "dev": "vite",
+    "build-watch": "vite build --watch --config ./vite.config.js",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port $PORT"
