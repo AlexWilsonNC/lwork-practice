@@ -55,15 +55,15 @@ app.get('/events/:id', async (req, res) => {
 //     res.send({hi:"hello"})
 // })
 
-// app.get('/event-ids', async (req, res) => {
-//   try {
-//     const events = await Event.find({}, 'id');
-//     const eventIds = events.map(event => event.id);
-//     res.json(eventIds);
-//   } catch (err) {
-//     res.status(500).json({ message: 'Failed to fetch event IDs' });
-//   }
-// });
+app.get('/event-ids', async (req, res) => {
+  try {
+    const events = await Event.find({}, 'id');
+    const eventIds = events.map(event => event.id);
+    res.json(eventIds);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch event IDs' });
+  }
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World! The server is running.'); // Basic response to indicate the server is running
