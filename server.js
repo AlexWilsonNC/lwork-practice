@@ -62,8 +62,8 @@ app.get('/events/:id', async (req, res) => {
 //   }
 // });
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World! The server is running.'); // Basic response to indicate the server is running
-// });
+app.get('/', (req, res) => {
+  res.send('Hello World! The server is running.'); // Basic response to indicate the server is running
+});
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
