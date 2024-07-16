@@ -213,7 +213,7 @@ const EventList = () => {
                             </select>
                         </div>
                     )}
-                    <button onClick={resetFilters} className="reset-btn"><span className="material-symbols-outlined">replay</span></button>
+                    <button onClick={resetFilters} className="reset-btn">Reset</button>
                 </FilterTop>
                 <table className='upcoming-events-table'>
                     <thead>

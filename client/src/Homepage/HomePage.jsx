@@ -43,9 +43,6 @@ const UpcomingEventsHome = styled.ul`
 
   }
 `;
-const CardDatePlusRead = styled.div`
-    p {color: ${({ theme }) => theme.CardDatePlusRead};}
-`;
 const HomepageMainContent = styled.div`
   background: ${({ theme }) => theme.homepageMainContentBg};
 `;
@@ -94,10 +91,10 @@ const Homepage = () => {
                                             View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
                                         </p>
                                     </div>
-                                    <CardDatePlusRead className='card-date-plus-read'>
+                                    <div className='card-date-plus-read'>
                                         <p>Jun 10, 2024</p>
-                                        <p>View Results</p>
-                                    </CardDatePlusRead>
+                                        <p className='blue-link'>View Results</p>
+                                    </div>
                                 </WrappedFeature>
                             </a>
                         </div>
@@ -118,10 +115,10 @@ const Homepage = () => {
                                         <h3>A Forgotten Format: BW - DRX</h3>
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo ad, quibusdam eligendi architecto dolor maiores non soluta exercitationem.</p>
                                     </div>
-                                    <CardDatePlusRead className='card-date-plus-read'>
+                                    <div className='card-date-plus-read'>
                                         <p>Aug 1, 2024</p>
                                         <p>Read More</p>
-                                    </CardDatePlusRead>
+                                    </div>
                                 </WrappedFeature>
                             </a>
                         </div>
@@ -135,10 +132,10 @@ const Homepage = () => {
                                         <h3><span className='new-color'>Long-lost</span> Decks & Results Discovered!</h3>
                                         <p>A ton of results and lists, once lost to time, were archived throughout the month of May, from 2002 Worlds to 2013, check 'em all out!</p>
                                     </div>
-                                    <CardDatePlusRead className='card-date-plus-read'>
+                                    <div className='card-date-plus-read'>
                                         <p>Jun 2, 2024</p>
                                         <p>View Updates</p>
-                                    </CardDatePlusRead>
+                                    </div>
                                 </WrappedFeature>
                             </a>
                         </div>

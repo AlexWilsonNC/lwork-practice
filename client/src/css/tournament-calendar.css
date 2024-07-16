@@ -42,21 +42,22 @@ tbody tr:nth-of-type(odd) {
     font-weight: 600;
 }
 .active-evt-btn {
-    background-color: rgba(255, 255, 255, 0.181);
+    background-color: #27292c;
+    border: 1px solid #1290eb;
 }
 .completed-btn {
     margin-right: 15px;
     margin-left: 25px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 3px;
 }
 .upcoming-btn {
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 3px;
 }
 .completed-btn:hover,
 .upcoming-btn:hover {
-    background-color: #353535;
+    background-color: #27292c;
     cursor: pointer;
 }
 .upcoming-events-table tr {
@@ -74,14 +75,6 @@ tbody tr:nth-of-type(odd) {
     height: 60px !important;
     max-height: 60px !important;
     height: 58px;
-}
-.upcoming-events-table td:nth-of-type(1) {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-.upcoming-events-table td:last-of-type {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
 }
 table{border-collapse:collapse;}
 table div {
@@ -114,7 +107,6 @@ td div a {
 .event-wth-link:hover {
     color: #1290eb !important;
 }
-/* filter */
 .filters-top {
     display: flex;
     flex-direction: row;
@@ -130,12 +122,9 @@ td div a {
     height: 30px;
     font-size: 14px;
     margin-top: 4px;
-    border-radius: 4px;
+    border-radius: 2px;
     padding-left: 5px;
     color: black;
-}
-.indiv-filter select:hover {
-    cursor: pointer;
 }
 .sort-events {
     font-size: 16px;
@@ -144,20 +133,18 @@ td div a {
 }
 .reset-btn {
     margin-top: 22px;
-    border-radius: 4px;
+    border-radius: 2px;
     border: 1px solid grey;
-    padding: 2px 3px 1px;
+    padding: 5px 10px;
     background-color: white;
+    font-size: 14px;
 }
-.reset-btn span {
-    font-size: 22px;
-    transform: rotate(-35deg);
-}
-.reset-btn:hover {
-    background-color: #1290eb;
+.reset-btn:hover,
+.indiv-filter select:hover {
     cursor: pointer;
+    border: 1px solid #1290eb;
+    filter: brightness(90%);
 }
-
 /**/
 @media screen and (max-width: 1600px) {
     .upcoming-events {
@@ -196,11 +183,8 @@ td div a {
     }
     .reset-btn {
         margin-top: 20px;
-        border-radius: 4px;
-        padding: 1px 3px;
-    }
-    .reset-btn span {
-        font-size: 17px;
+        font-size: 12px;
+        padding: 3.5px 7px;
     }
 }
 @media screen and (max-width: 950px) {
@@ -256,15 +240,15 @@ td div a {
             width: 80px;
             height: 22px;
             font-size: 10px;
+            padding-left: 0px;
         }
         .indiv-filter {
             margin-right: 8px;
         }
         .reset-btn {
             margin-top: 18px;
-        }
-        .reset-btn span {
-            font-size: 15px;
+            font-size: 11px;
+            padding: 3px 5px;
         }
         .upcoming-events-table th {
             height: 20px;
@@ -286,8 +270,7 @@ td div a {
             font-size: 19px;
         }
         .upcoming-events-table {
-            width: 98%;
-            margin-left: 5px;
+            width: 100%;
         }
         .bts-in p,
         .bts-in a {
@@ -300,7 +283,7 @@ td div a {
             margin-left: 15px;
         }
     }
-    @media screen and (max-width: 415px) {
+    @media screen and (max-width: 430px) {
         .sort-events {
             font-size: 8px;
         }
@@ -323,14 +306,11 @@ td div a {
         }
         .reset-btn {
             margin-top: 16px;
-            padding: 0px 2px;
-        }
-        .reset-btn span {
-            font-size: 12px;
+            padding: 2.5px 5px;
+            font-size: 9px;
         }
         .upcoming-events-table {
             margin-top: 15px;
-            margin-left: 3px;
         }
         .upcoming-events-table th {
             height: 16px;

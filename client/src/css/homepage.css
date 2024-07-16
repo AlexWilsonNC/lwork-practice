@@ -161,7 +161,9 @@
     position: absolute;
     bottom: 13px;
     width: 93%;
-    color: #1290eb ;
+}
+.card-date-plus-read p:nth-child(2) {
+    color: #1290eb !important;
 }
 .card-profile-pic {
     width: 40px; height: auto;
@@ -622,9 +624,6 @@
     } 
     .lessmarginbottomsmall {
         margin-bottom: 0px;
-    }
-    .card-date-plus-read p {
-        color: #1290eb !important;
     }
 }
 @media screen and (max-width: 675px) {
