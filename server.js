@@ -70,13 +70,13 @@ app.get('/', (req, res) => {
 });
 
 app.get("*", function (_, res) {
-res.sendFile(
-    path.join(__dirname, "./client/dist/index.html"),
-    function (err) {
-    res.status(500).send(err);
-    }
-);
-});
+    res.sendFile(
+      path.join(__dirname, "./client/dist/index.html"),
+      function (err) {
+        res.status(500).send(err);
+      }
+    );
+  });
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
