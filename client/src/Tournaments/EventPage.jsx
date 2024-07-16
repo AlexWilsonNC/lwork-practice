@@ -176,7 +176,7 @@ const EventPageContent = styled.div`
 const EventPage = () => {
     const { theme } = useTheme();
     const { eventId, division: divisionParam } = useParams();
-    const [eventData] = useState(null);
+    const [eventData, setEventData] = useState(null);
     const [division, setDivision] = useState('masters');
 
     useEffect(() => {
