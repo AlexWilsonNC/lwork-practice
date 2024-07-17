@@ -370,18 +370,18 @@ const CardView = () => {
     const showOtherVersions = otherVersionsToShow.length > 0;
     const displayedOtherVersions = showAllVersions ? otherVersionsToShow : otherVersionsToShow.slice(0, 5);
         
-    const getPreviousCard = () => {
-        const prevNumber = parseInt(number, 10) - 1;
-        const prevKey = `${set}-${prevNumber}`;
-        return cardData?.cardMap?.[prevKey];
-    };
-    const getNextCard = () => {
-        const nextNumber = parseInt(number, 10) + 1;
-        const nextKey = `${set}-${nextNumber}`;
-        return cardData?.cardMap?.[nextKey];
-    };
-    const previousCard = getPreviousCard();
-    const nextCard = getNextCard();
+    // const getPreviousCard = () => {
+    //     const prevNumber = parseInt(number, 10) - 1;
+    //     const prevKey = `${set}-${prevNumber}`;
+    //     return cardData?.cardMap?.[prevKey];
+    // };
+    // const getNextCard = () => {
+    //     const nextNumber = parseInt(number, 10) + 1;
+    //     const nextKey = `${set}-${nextNumber}`;
+    //     return cardData?.cardMap?.[nextKey];
+    // };
+    // const previousCard = getPreviousCard();
+    // const nextCard = getNextCard();
 
     if (!cardInfo) {
         return <div>Card not found</div>;
@@ -433,7 +433,7 @@ const CardView = () => {
                 <meta name="twitter:description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
                 <meta name="twitter:image" content={cardInfo.images.small} />
             </Helmet>
-            <div className='navigation-links'>
+            {/* <div className='navigation-links'>
                 {previousCard ? (
                     <Link to={`/card/${set}/${previousCard.number}`} className='previous-card-link'>
                         <span className="material-symbols-outlined">chevron_left</span> {previousCard.name} ({previousCard.setAbbrev}-{previousCard.number})
@@ -448,7 +448,7 @@ const CardView = () => {
                 ) : (
                     <div className='next-card-link'>&nbsp;</div>
                 )}
-            </div>
+            </div> */}
             <div className='card-view' style={{ position: 'relative' }}>
                 {cardInfo.images.large && (
                     <div
