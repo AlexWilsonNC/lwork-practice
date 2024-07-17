@@ -635,7 +635,7 @@ const CardView = () => {
                                                     </td>
                                                     <td>#{otherCard.number}</td>
                                                     <td>{otherCard.set && formatDate(otherCard.set.releaseDate)}</td>
-                                                    <td className='card-art-td'><img src={otherCard.images.small} alt={cardInfo.name} className='cropped-imagecard-art-td' /></td>
+                                                    {/* <td className='card-art-td'><img src={otherCard.images.small} alt={cardInfo.name} className='cropped-imagecard-art-td' /></td> */}
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -665,16 +665,16 @@ const CardView = () => {
                 {loading && !eventsScanned ? (
                     <p className='margintop'>Loading...</p>
                 ) : isBasicEnergy ? (
-                    <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to impode...</p>
+                    <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
                 ) : eventResults.length > 0 ? (
                     <table className='cards-specific-results'>
                         <thead>
                             <tr>
-                                <th style={{width: '1%'}}>Place</th>
-                                <th style={{width: '1%'}}>Player</th>
-                                <th style={{width: '1%'}}>Division</th>
-                                <th style={{width: '1%'}}>Event Link</th>
-                                <th style={{width: '1%'}}>Decklist</th>
+                                <th style={{ width: '1%' }}>Place</th>
+                                <th style={{ width: '1%' }}>Player</th>
+                                <th style={{ width: '1%' }}>Division</th>
+                                <th style={{ width: '1%' }}>Event Link</th>
+                                <th style={{ width: '1%' }}>Decklist</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -686,7 +686,12 @@ const CardView = () => {
                                     acc[result.eventId].push(result);
                                     return acc;
                                 }, {})
-                            ).map(([eventId, results]) => {
+                            ).sort((a, b) => {
+                                // Sort events by date from latest to oldest
+                                const dateA = new Date(a[1][0].eventDate);
+                                const dateB = new Date(b[1][0].eventDate);
+                                return dateB - dateA;
+                            }).map(([eventId, results]) => {
                                 const sortedResults = results.sort((a, b) => {
                                     const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
                                     const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
@@ -704,7 +709,7 @@ const CardView = () => {
                                             </td>
                                         </tr>
                                         {sortedResults.map((result, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} style={{ marginBottom: '5px' }}>
                                                 <td>{getPlacementSuffix(result.placement)}</td>
                                                 <td>{formatName(result.playerName)}</td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>

@@ -50,10 +50,10 @@ const cardSchema = new mongoose.Schema({
   set: {
     id: String,
     number: String,
-    printedToral: Number,
+    printedTotal: Number,
     releaseDate: String,
   },
-  number: Number,
+  number: String,
   rarity: String,
   images: {
     small: String,

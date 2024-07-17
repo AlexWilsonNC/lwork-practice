@@ -332,6 +332,12 @@
         border-radius: 10px !important;
         box-shadow: 0 0 25px black;
     }
+    .energy-icon {
+        width: 18px;
+        height: 18px;
+        margin-top: -2px;
+        margin-left: -3px;
+    }
     .cardview-setlogo {
         height: 30px;
         margin-bottom: 3px;
@@ -356,7 +362,8 @@
         height: 100%;
         width: 50%;
     }
-    .card-info p {
+    .card-info p,
+    .weakness-row {
         font-size: 14px;
     }
     .attack-ability,
@@ -474,7 +481,8 @@
     }
     .card-info p,
     .attack-ability,
-    .trainer-details {
+    .trainer-details,
+    .weakness-row {
         font-size: 12px;
     }
     .trainer-details li {

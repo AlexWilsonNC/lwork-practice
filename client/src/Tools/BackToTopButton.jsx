@@ -5,7 +5,7 @@ const Button = styled.button`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  padding: 10px 15px;
+  padding: 10px 12px;
   font-size: 16px;
   background-color: ${({ theme }) => theme.buttonBackground};
   color: ${({ theme }) => theme.buttonText};
