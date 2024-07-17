@@ -203,18 +203,6 @@ const PlayerDeck = () => {
 
         let cardInfo = cardData?.cardMap?.[key];
 
-        // old code from before puttin all sets in the database (if abbrev/num not found, grab a card from database of same name from latest set)
-        // if (!cardInfo) {
-        //     const nameKey = normalizeString(card.name);
-        //     const possibleCards = cardData.cardNameMap[nameKey];
-        //     if (possibleCards && possibleCards.length > 0) {
-        //         cardInfo = possibleCards[0];
-        //         console.log("Found card by name:", cardInfo);
-        //     } else {
-        //         console.log("Card not found by name either.");
-        //     }
-        // }
-
         if (cardInfo) {
             return cardInfo.images.small;
         }

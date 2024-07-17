@@ -221,6 +221,9 @@ td div a {
         .filters-top {
             margin-left: 25px;
         }
+        .upcoming-events-table {
+            width: 98%;
+        }
     }
     @media screen and (max-width: 630px) {
         .indiv-filter select {
@@ -268,9 +271,6 @@ td div a {
         }
         .event-icon-links span {
             font-size: 19px;
-        }
-        .upcoming-events-table {
-            width: 100%;
         }
         .bts-in p,
         .bts-in a {

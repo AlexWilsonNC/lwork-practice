@@ -1,0 +1,363 @@
+.card-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+    width: 60%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 25px;
+}
+.navigation-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    height: 5%;
+    margin-bottom: -15px;
+    margin-top: 15px;
+}
+.column-align {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.navigation-links a {
+    color:#1290eb;
+    display: flex;
+    align-items: center;
+}
+.card-data-all {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 95%;
+    width: 100%;
+}
+.card-and-setinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 5%;
+    width: 40%;
+}
+.card-and-setinfo div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 5px 20px;
+    z-index: 1;
+}
+.the-card-img {
+    max-width: 300px;
+    width: 300px;
+    height: auto;
+    border-radius: 13px !important;
+    box-shadow: 0 0 25px black;
+    z-index: 1;
+}
+.trainer-details li {
+    margin: 15px 0;
+}
+.card-info {
+    padding: 20px;
+    margin-top: -15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    width: 60%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+.blue-hr {
+   width: 70%;
+   border-top: none; 
+   border-right: none; 
+   border-left: none; 
+   border-bottom: 2px solid #1290eb;
+   margin: 7px 0;
+}
+.small-grey-hr {
+    width: 50%;
+    border-top: none; 
+    border-right: none; 
+    border-left: none; 
+    border-bottom: 1px solid grey; 
+    margin: 7px 0;
+}
+.card-info ul {
+    list-style: none;
+}
+.attack-ability li {
+    margin: 8px 0;
+}
+.one-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.card-name-view {
+    font-weight: 600;
+    font-size: 28px;
+}
+.small-hp-text {
+    font-size: 10px;
+}
+.cardview-setlogo {
+    height: 40px;
+    width: auto;
+    margin-bottom: 5px;
+}
+.cardview-setsymbol {
+    width: 20px;
+    height:auto;
+}
+.energy-icon {
+    width: 22px;
+    height: 22px;
+    margin-top: -2px;
+    vertical-align: middle;
+    margin-left: -3px;
+}
+.red {
+    color:rgb(204, 37, 37);
+}
+.green {
+    color:rgb(0, 135, 0);
+}
+.grey {
+    color:rgb(134, 134, 134);
+}
+.shrink {
+    font-size: 12px;
+}
+.weakness-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 3px;
+}
+.marginthree {
+    margin-bottom: 3px;
+}
+.smaller-than-others {
+    font-size: 12px;
+}
+.legality-checks {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.legality-checks p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 15px;
+}
+
+.marginbottom {
+    margin: 25px 0;
+}
+.decks-that-contain {
+    font-size: 20px;
+    font-weight: 600;
+}
+.ordered-by-most-recent {
+    font-size: 12px;
+}
+.margintop {
+    margin-top: 25px;
+}
+.cards-specific-results {
+    width: 100%;
+    margin-top: 15px;
+}
+.cards-specific-results th {
+    font-size: 12px;
+    text-align: start;
+}
+.cards-specific-results th:nth-child(5) {
+    text-align: end;
+}
+.cards-specific-results td {
+    padding: 2px 5px;
+    height: 40px !important;
+}
+.pushright {
+    justify-content: flex-end;
+}
+.cards-specific-results .second-sprite {
+    margin-left: -28px;
+}
+.sup {
+    font-size: 10px;
+}
+.event-separator-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.event-separator td {
+    background-color: #1290eb;
+    text-align: left;
+    font-weight: bold;
+    padding: 2px 0 2px 15px;
+    color: white;
+}
+.turned-link {
+    color:white;
+    transform: rotate(-45deg);
+    font-size: 20px;
+    margin-top: 2px;
+}
+.turned-link:hover {
+    color:rgb(16, 34, 199);
+}
+.smaller-txt {
+    font-size: 14px;
+}
+.other-versions {
+    width: 450px;
+    margin-top: 5px;
+}
+.other-versions td {
+    padding: 5px 10px !important;
+    font-size: 14px;
+}
+.linktoother a {
+    color: #1290eb;
+    font-weight: 600;
+}
+.showmoreversions {
+    width: 100%;
+    text-align: center;
+    background-color: #1290eb;
+    color:white;
+    border: none;
+    padding: 2px 0;
+}
+.showmoreversions:hover {
+    cursor: pointer;
+}
+.zoom-card-box {
+    position: fixed;
+    z-index: 1999;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+
+    background: rgba(0, 0, 0, 0.9);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity ease 0.3s;
+}
+.zoom-card-box.show {
+    visibility: visible;
+    opacity: 1;
+}
+.zoom-card-box img {
+    width: auto;
+    height: 90%;
+    object-fit: cover;
+}
+.show-ninefifty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 1400px) {
+    .card-view {
+        padding: 50px 0;
+        width: 90%;
+    }
+    .navigation-links {
+        width: 90%;
+    }
+}
+@media screen and (max-width: 950px) {
+    .the-card-img {
+        max-width: 200px;
+        width: 200px;
+        height: auto;
+        border-radius: 10px !important;
+        box-shadow: 0 0 25px black;
+    }
+    .cardview-setlogo {
+        height: 30px;
+        margin-bottom: 3px;
+    }
+    .hide-ninefifty {
+         display: none;
+    }
+    .card-name-view {
+        font-size: 24px !important;
+    }
+    .blue-hr {
+        width: 60%;
+        margin: 5px 0;
+    }
+    .small-grey-hr {
+        width: 50%;
+        margin: 5px 0;
+    }
+    .card-info {
+        padding: 15px;
+        margin-top: -15px;
+        height: 100%;
+        width: 50%;
+    }
+    .card-info p {
+        font-size: 14px;
+    }
+    .attack-ability,
+    .trainer-details  {
+        font-size: 14px;
+    }
+    .other-versions {
+        width: 125%;
+    }
+    .other-versions td {
+        font-size: 11px;
+    }
+    .navigation-links a {
+        font-size: 12px;
+    }
+    .navigation-links a span {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 675px) {
+    .other-versions {
+        width: 110%;
+    }
+    .card-view {
+        width: 100%;
+    }
+}

@@ -324,7 +324,7 @@
 }
 @media screen and (max-width: 1150px){
     .list-item {
-        height: 25px;
+        height: 30px;
         width: 150px;
     }
     .list-item p {
@@ -379,10 +379,73 @@
     }
     .card-count {
         bottom: 15px;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bolder;
         width: 29%;
         height: 20%;
+    }
+    .list-of-cards {
+        margin: 0;
+    }
+    .list-item {
+        height: 25px;
+        width: 150px;
+    }
+    .list-item p {
+        font-size: 8px;
+    }
+    .list-category {
+        height: 25px;
+        font-size: 9px;
+    }
+}
+@media screen and (max-width: 950px){
+    .deck-cards {
+        grid-template-columns: repeat(9, 1fr);
+    }
+}
+@media screen and (max-width: 890px){
+    .list-item {
+        height: 24px;
+        width: 135px;
+    }
+    .list-item p {
+        font-size: 7px;
+    }
+    .list-category {
+        height: 24px;
+        font-size: 8px;
+    }
+    .player-deck {
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 96%;
+    }
+}
+@media screen and (max-width: 800px){
+    .deck-cards {
+        grid-template-columns: repeat(8, 1fr);
+    }
+    .list-item {
+        height: 24px;
+        width: 115px;
+    }
+    .list-item p {
+        font-size: 6px;
+    }
+    .list-category {
+        height: 24px;
+        font-size: 8px;
+    }
+}
+@media screen and (max-width: 700px){
+    .card-count {
+        bottom: 12px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .deck-cards {
+        grid-template-columns: repeat(7, 1fr);
     }
     .deck-list {
         display: flex;
@@ -416,28 +479,6 @@
         font-size: 12px;
         width: 350px;
         margin: 15px 0 0 0;
-    }
-}
-@media screen and (max-width: 950px){
-    .deck-cards {
-        grid-template-columns: repeat(9, 1fr);
-    }
-}
-@media screen and (max-width: 800px){
-    .deck-cards {
-        grid-template-columns: repeat(8, 1fr);
-    }
-}
-@media screen and (max-width: 700px){
-    .deck-cards {
-        grid-template-columns: repeat(7, 1fr);
-    }
-}
-@media screen and (max-width: 700px){
-    .card-count {
-        bottom: 12px;
-        font-size: 12px;
-        font-weight: bold;
     }
 }
 @media screen and (max-width: 550px){
@@ -493,9 +534,6 @@
     .copy-decklist-btn,
     .open-in-deckbuilder-btn {
         margin-right: 5px;
-    }
-    .player-deck-top {
-        width: 105%;
     }
 }
 @media screen and (max-width: 375px){

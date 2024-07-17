@@ -215,50 +215,52 @@ const EventList = () => {
                     )}
                     <button onClick={resetFilters} className="reset-btn">Reset</button>
                 </FilterTop>
-                <table className='upcoming-events-table'>
-                    <thead>
-                        <tr>
-                            <th>Start Date</th>
-                            <th></th>
-                            <th>Event</th>
-                            {!showUpcoming && (
-                                <th>Results</th>
-                            )}
-                            {showUpcoming && (
-                                <th>Information</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredEvents.map((event, index) => (
-                            <tr key={index} className='event-row'>
-                                <td>{event.date}</td>
-                                <td><img src={event.eventLogo} className='event-type-logo2' alt="Event type" /></td>
-                                <td>
-                                    <div className='tournament-flags-container'>
-                                        <img className='tournament-flags' src={event.flag} alt="Country flag" />
-                                        <div className='country-name-tournaments'></div>
-                                    </div>
-                                    <div>
-                                        <a href={event.id} className='event-wth-link'>
-                                            {event.name}
-                                        </a>
-                                    </div>
-                                </td>
-                                {showUpcoming && (
-                                    <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
+                <div class='center'>
+                    <table className='upcoming-events-table'>
+                        <thead>
+                            <tr>
+                                <th>Start Date</th>
+                                <th></th>
+                                <th>Event</th>
+                                {!showUpcoming && (
+                                    <th>Results</th>
                                 )}
-                                 {!showUpcoming && (
-                                    <td>
-                                        {event.results !== false && event.id ? (
-                                            <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">format_list_bulleted</span></a>
-                                        ) : null}
-                                    </td>
+                                {showUpcoming && (
+                                    <th>Information</th>
                                 )}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {filteredEvents.map((event, index) => (
+                                <tr key={index} className='event-row'>
+                                    <td>{event.date}</td>
+                                    <td><img src={event.eventLogo} className='event-type-logo2' alt="Event type" /></td>
+                                    <td>
+                                        <div className='tournament-flags-container'>
+                                            <img className='tournament-flags' src={event.flag} alt="Country flag" />
+                                            <div className='country-name-tournaments'></div>
+                                        </div>
+                                        <div>
+                                            <a href={event.id} className='event-wth-link'>
+                                                {event.name}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    {showUpcoming && (
+                                        <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
+                                    )}
+                                    {!showUpcoming && (
+                                        <td>
+                                            {event.results !== false && event.id ? (
+                                                <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">format_list_bulleted</span></a>
+                                            ) : null}
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </UpcomingEvents>
     );
