@@ -91,6 +91,16 @@ const CardView = () => {
     const [currentEventIndex, setCurrentEventIndex] = useState(0);
     const [eventsScanned, setEventsScanned] = useState(false);
     const [cardData, setCardData] = useState({ cardMap: {}, cardNameMap: {} });
+    const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setViewportWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const fetchCardData = async () => {
@@ -409,8 +419,8 @@ const CardView = () => {
 
     return (
         <CardViewTheme className='center column-align' theme={theme}>
-            {/* <Helmet>
-                <title>{cardInfo.name} {cardInfo.setAbbrev} {cardInfo.number}</title>
+            <Helmet>
+                <title>{`${cardInfo.name} ${cardInfo.setAbbrev} ${cardInfo.number}`}</title>
                 <meta name="description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
                 <meta property="og:title" content="PTCG Legends" />
                 <meta property="og:description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
@@ -422,7 +432,7 @@ const CardView = () => {
                 <meta name="twitter:title" content="PTCG Legends" />
                 <meta name="twitter:description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
                 <meta name="twitter:image" content={cardInfo.images.small} />
-            </Helmet> */}
+            </Helmet>
             <div className='navigation-links'>
                 {previousCard ? (
                     <Link to={`/card/${set}/${previousCard.number}`} className='previous-card-link'>
@@ -448,7 +458,7 @@ const CardView = () => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundImage: `url(${cardInfo.images.large})`,
+                            backgroundImage: viewportWidth > 600 ? `url(${cardInfo.images.large})` : 'none',
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center 17%',
                             backgroundSize: '120%',
@@ -595,6 +605,21 @@ const CardView = () => {
                                     {isBannedInExpanded(cardInfo) && <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>}
                                 </p>
                             </div>
+                            <div className='show-cardinfo-on-small'>
+                            <hr className='small-grey-hr'></hr>
+                                <div>
+                                    <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
+                                    <p className='show-ninefifty'>
+                                        {cardInfo.set.name}
+                                        <span className='align-center'>
+                                            <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
+                                            &nbsp;
+                                            <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
+                                        </span>
+                                        Released {cardInfo.set && formatDate(cardInfo.set.releaseDate)}
+                                    </p>
+                                </div>
+                            </div>
                             <hr className='blue-hr'></hr>
                             {showOtherVersions && (
                                 <div>
@@ -610,14 +635,23 @@ const CardView = () => {
                                                     </td>
                                                     <td>#{otherCard.number}</td>
                                                     <td>{otherCard.set && formatDate(otherCard.set.releaseDate)}</td>
+                                                    <td className='card-art-td'><img src={otherCard.images.small} alt={cardInfo.name} className='cropped-imagecard-art-td' /></td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                     {otherVersionsToShow.length > 5 && (
                                         <button onClick={() => setShowAllVersions(!showAllVersions)} className='showmoreversions'>
-                                            {showAllVersions ? 'See Less ⮝' : 'See More ⮟'}
-                                        </button>
+                                        {showAllVersions ? (
+                                          <>
+                                            See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
+                                          </>
+                                        ) : (
+                                          <>
+                                            See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                                          </>
+                                        )}
+                                      </button>
                                     )}
                                 </div>
                             )}

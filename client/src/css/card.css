@@ -235,8 +235,24 @@
     margin-top: 5px;
 }
 .other-versions td {
-    padding: 5px 10px !important;
+    padding: 5px 10px;
     font-size: 14px;
+    height: 25px;
+}
+.card-art-td {
+    position: relative;
+    overflow: hidden;
+    height: 25px;
+    width: 50px;
+    border-bottom: 1px solid black;
+}
+.cropped-imagecard-art-td {
+    position: absolute;
+    top: -80%; 
+    left: -15%;
+    width: 150%;
+    height: auto;
+    opacity: 0.75;
 }
 .linktoother a {
     color: #1290eb;
@@ -249,9 +265,16 @@
     color:white;
     border: none;
     padding: 2px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 .showmoreversions:hover {
     cursor: pointer;
+}
+.show-cardinfo-on-small {
+    display: none;
 }
 .zoom-card-box {
     position: fixed;
@@ -341,7 +364,7 @@
         font-size: 14px;
     }
     .other-versions {
-        width: 125%;
+        width: 110%;
     }
     .other-versions td {
         font-size: 11px;
@@ -353,11 +376,114 @@
         font-size: 14px;
     }
 }
-@media screen and (max-width: 675px) {
+@media screen and (max-width: 800px) {
     .other-versions {
-        width: 110%;
+        width: 100%;
+    }
+}
+@media screen and (max-width: 675px) {
+    .card-view {
+        width: 100%;
+    }
+    .card-and-setinfo {
+        width: 41%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .the-card-img {
+        max-width: 95%;
+        width: 95%;
+        height: auto;
+        border-radius: 20px !important;
+        box-shadow: 0 0 12px black;
+    }
+    .card-data-all {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .card-and-setinfo {
+        width: 100%;
     }
     .card-view {
+        padding: 10px 0;
+        width: 100%;
+    }
+    .card-and-setinfo div {
+        display: none;
+    }
+    .other-versions,
+    .showmoreversions {
+        width: 125%;
+    }
+    .other-versions td,
+    .card-art-td {
+        height: 23px;
+    }
+    .card-info {
+        padding: 20px 15px;
+        margin-top: -5px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        height: 100%;
+        width: 92%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 0;
+    }
+    .show-cardinfo-on-small {
+        display: block;
+        width: 100%;
+    }
+    .show-cardinfo-on-small div {
+        display: flex;
+        align-items: center;
+    }
+    .cardview-setlogo {
+        margin-right: 15px;
+        height: 33px;
+        margin-bottom: 0px;
+    }
+}
+@media screen and (max-width: 450px) {
+    .other-versions,
+    .showmoreversions {
+        width: 110%;
+    }
+    .showmoreversions span {
+        font-size: 20px;
+    }
+    .other-versions td,
+    .card-art-td {
+        height: 20px;
+    }
+    .other-versions td {
+        font-size: 10px;
+    }
+    .card-name-view {
+        font-size: 22px !important;
+    }
+    .card-info p,
+    .attack-ability,
+    .trainer-details {
+        font-size: 12px;
+    }
+    .trainer-details li {
+        margin: 8px 0;
+    }
+    .cardview-setlogo {
+        height: 25px;
+    }
+    .cardview-setsymbol {
+        width: 15px;
+    }
+}
+@media screen and (max-width: 380px) {
+    .other-versions,
+    .showmoreversions {
         width: 100%;
     }
 }

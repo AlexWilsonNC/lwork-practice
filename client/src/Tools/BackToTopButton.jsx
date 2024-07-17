@@ -43,7 +43,7 @@ const BackToTopButton = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return <Button onClick={scrollToTop} show={showButton}>⮝</Button>;
+  return <Button onClick={scrollToTop} show={showButton}><span class="material-symbols-outlined">keyboard_arrow_up</span></Button>;
 };
 
 export default BackToTopButton;
