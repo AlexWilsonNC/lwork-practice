@@ -12,9 +12,24 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
 const uri = process.env.MONGODB_URI;
+const cardUri = process.env.CARD_MONGODB_URI;
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
+
+const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
+eventConnection.once('open', () => {
+  console.log('Connected to eventConnection');
+});
+
+cardConnection.on('error', console.error.bind(console, 'MongoDB connection error for cardConnection:'));
+cardConnection.once('open', () => {
+  console.log('Connected to cardConnection');
+});
 
 const eventSchema = new mongoose.Schema({
   id: String,
@@ -61,8 +76,8 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
-const Event = mongoose.model('Event', eventSchema);
-const Card = mongoose.model('Card', cardSchema, 'card-database');
+const Event = eventConnection.model('Event', eventSchema);
+// const Card = cardConnection.model('Card', cardSchema, 'card-database');
 
 app.get('/events/:id', async (req, res) => {
   console.log(req.params.id)
@@ -88,14 +103,24 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
-// ***************
+// Fetch all cards from all collections
 app.get('/api/cards', async (req, res) => {
-  console.log('/api/cards')
+  console.log('Fetching all cards');
   try {
-    const cards = await Card.find({});
-    console.log('Fetched cards:', cards.length);
-    res.json(cards);
+    const collections = await cardConnection.db.listCollections().toArray();
+    const cardPromises = collections.map(async collection => {
+      const collectionName = collection.name;
+      const cards = await cardConnection.db.collection(collectionName).find({}).toArray();
+      return cards;
+    });
+
+    const allCards = await Promise.all(cardPromises);
+    const flattenedCards = allCards.flat();
+
+    console.log('Fetched cards:', flattenedCards.length);
+    res.json(flattenedCards);
   } catch (err) {
+    console.error('Error fetching cards:', err);
     res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
@@ -114,4 +139,3 @@ app.get("*", function (_, res) {
   });
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
-

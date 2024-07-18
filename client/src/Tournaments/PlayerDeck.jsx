@@ -119,18 +119,20 @@ const PlayerDeck = () => {
     useEffect(() => {
         const fetchCardData = async () => {
             try {
+                console.log('Fetching cards from API');
                 const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/cards');
+                console.log('API response:', response);
                 if (response.ok) {
                     const cards = await response.json();
                     console.log('Fetched card data:', cards);
                     const newCardData = {};
                     const cardMap = {};
                     const cardNameMap = {};
-        
+
                     cards.forEach(card => {
                         const key = `${card.setAbbrev}-${card.number}`;
                         cardMap[key] = card;
-        
+
                         const nameKey = normalizeString(card.name);
                         if (!cardNameMap[nameKey]) {
                             cardNameMap[nameKey] = [];

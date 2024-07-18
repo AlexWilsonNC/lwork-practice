@@ -130,8 +130,8 @@ const OlResults = styled.ol`
 `;
 
 const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jr', 'jt', 'jz', 'pj', 'sj', 'pk'];
+    const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jr', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.'];
 
     return name
         .toLowerCase()
@@ -165,7 +165,7 @@ export const displayResults = (players, eventId, division) => {
     return (
         <OlResults className='result-list-ol'>
             {players.map((player, index) => (
-                <li key={player.name} className='player-list-hover'>
+            <li key={`${player.name}-${index}`} className='player-list-hover'>
                     <div className='results-list-item'>
                         <div className='name-n-flag'>
                             <div className='player-placement'>{index + 1}.</div>

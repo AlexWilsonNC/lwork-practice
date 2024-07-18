@@ -201,8 +201,21 @@ const EventPage = () => {
     if (!eventData) {
         return <div></div>;
     }
-    const results = division === 'masters' ? eventData.masters :
-                    division === 'seniors' ? eventData.seniors : eventData.juniors;
+
+    const getResults = (division) => {
+        switch (division) {
+            case 'masters':
+                return eventData.masters || [];
+            case 'seniors':
+                return eventData.seniors || [];
+            case 'juniors':
+                return eventData.juniors || [];
+            default:
+                return [];
+        }
+    }
+
+    const results = getResults(division);
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -223,9 +236,6 @@ const EventPage = () => {
                         {eventData.dayOneSeniors && (
                             <p><strong>Day 1:</strong> {eventData.dayOneSeniors}</p>
                         )}
-                        {/* {eventData.dayTwoSeniors && (
-                            <p><strong>Day 2:</strong> {eventData.dayTwoSeniors}</p>
-                        )} */}
                     </>
                 );
             case 'juniors':
@@ -234,9 +244,6 @@ const EventPage = () => {
                         {eventData.dayOneJuniors && (
                             <p><strong>Day 1:</strong> {eventData.dayOneJuniors}</p>
                         )}
-                        {/* {eventData.dayTwoJuniors && (
-                            <p><strong>Day 2:</strong> {eventData.dayTwoJuniors}</p>
-                        )} */}
                     </>
                 );
             default:
