@@ -130,7 +130,6 @@
     margin: 0 5px;
 }
 .active-option {
-    color: #1290eb !important;
     border-top: 1px solid #1290eb;
     border-left: 1px solid #1290eb;
     border-right: 1px solid #1290eb;

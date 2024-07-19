@@ -171,6 +171,9 @@ const EventPageContent = styled.div`
     .notavailable {
         color: ${({ theme }) => theme.text};
     }
+    .active-option {
+            color: ${({ theme }) => theme.text};
+    }
 `;
 
 const EventPage = () => {
@@ -202,24 +205,25 @@ const EventPage = () => {
         return <div></div>;
     }
 
-    const getResults = (division) => {
-        switch (division) {
-            case 'masters':
-                return eventData.masters || [];
-            case 'seniors':
-                return eventData.seniors || [];
-            case 'juniors':
-                return eventData.juniors || [];
-            default:
-                return [];
-        }
-    }
-
-    const results = getResults(division);
+    const results = division === 'masters' ? eventData.masters :
+                    division === 'seniors' ? eventData.seniors :
+                    division === 'juniors' ? eventData.juniors :
+                    division === 'professors' ? eventData.professors : [];
 
     const getPlayerCount = (division) => {
         switch (division) {
             case 'masters':
+                return (
+                    <>
+                        {eventData.dayOneMasters && (
+                            <p><strong>Day 1:</strong> {eventData.dayOneMasters}</p>
+                        )}
+                        {eventData.dayTwoMasters && (
+                            <p><strong>Day 2:</strong> {eventData.dayTwoMasters}</p>
+                        )}
+                    </>
+                );
+            case 'professors':
                 return (
                     <>
                         {eventData.dayOneMasters && (
@@ -268,12 +272,20 @@ const EventPage = () => {
                 <meta name="twitter:image" content={eventData.thumbnail} />
             </Helmet>
             <div className='regional-container'>
-                <div className='top-divisions'>
-                    <Link
-                        className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'}`}
-                        to={`/tournaments/${eventId}/masters`}
-                        style={{ opacity: eventData.masters ? 1 : 0.1, pointerEvents: eventData.masters ? 'all' : 'none' }}
-                    >Masters</Link>
+            <div className='top-divisions'>
+                    {eventData.masters ? (
+                        <Link
+                            className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'}`}
+                            to={`/tournaments/${eventId}/masters`}
+                            style={{ opacity: 1, pointerEvents: 'all' }}
+                        >Masters</Link>
+                    ) : eventData.professors ? (
+                        <Link
+                            className={`professorsBtn ${division === 'professors' ? 'active-division' : 'other-division'}`}
+                            to={`/tournaments/${eventId}/professors`}
+                            style={{ opacity: 1, pointerEvents: 'all' }}
+                        >Professors</Link>
+                    ) : null}
                     <Link
                         className={`seniorsBtn ${division === 'seniors' ? 'active-division' : 'other-division'}`}
                         to={`/tournaments/${eventId}/seniors`}
@@ -310,7 +322,7 @@ const EventPage = () => {
                     <hr className='reg-hr'></hr>
                     <div className='outer-links'>
                         {eventData.organizer && (
-                            <p><strong>Organizer:</strong> <a href={eventData.organizeLink} target="_blank">{eventData.organizer}</a></p>
+                            <p><strong>Organizer:</strong> <a href={eventData.organizerLink} target="_blank">{eventData.organizer}</a></p>
                         )}
                         {eventData.format && (
                             <p><strong>Format:</strong> {eventData.format}</p>
@@ -320,14 +332,14 @@ const EventPage = () => {
                 </div>
                 <div className='bottom-options'>
                      <a className='event-option active-option'>Results</a>
-                     <a className='event-option'>Statistics</a>
-                     <a className='event-option'>Photos</a>
+                     <a className='event-option' style={{opacity: 0.1, pointerEvents: 'none'}}>Statistics</a>
+                     <a className='event-option' style={{opacity: 0.1, pointerEvents: 'none'}}>Photos</a>
                      {/* <a className='event-option'>Info</a> */}
                  </div>
                  <div className='contain-event'>
                      <div className='event-content'>
                         <div className='event-results'>
-                            {results.length > 0 ? displayResults(results, eventId, division) : <p className='notavailable'>Results from this event are not yet available.</p>}
+                            {results?.length > 0 ? displayResults(results, eventId, division) : <p className='notavailable'>Results from this event are not yet available.</p>}
                         </div>
                     </div>
                  </div>

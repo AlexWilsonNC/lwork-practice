@@ -229,7 +229,7 @@ const PlayerDeck = () => {
     };
 
     if (!playerData) {
-        return <div>Loading...</div>;
+        return;
     }
 
     return (
