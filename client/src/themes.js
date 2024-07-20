@@ -30,6 +30,8 @@ export const lightTheme = {
     twitterTimeline: {
         'data-theme': 'light'
       },
+    searchBg: '#FFF',
+    searchTxt: '#000',
 };
 
 export const darkTheme = {
@@ -65,4 +67,6 @@ export const darkTheme = {
     twitterTimeline: {
         'data-theme': 'dark'
       },
+    searchBg: '#27292c',
+    searchTxt: '#FFF',
 };

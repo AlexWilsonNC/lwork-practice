@@ -6,6 +6,7 @@ import HomePage from './Homepage/HomePage';
 import EventList from './Tournaments/EventList';
 import EventPage from './Tournaments/EventPage';
 import PlayerDeck from './Tournaments/PlayerDeck';
+import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
         <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
+        <Route path="/cards" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
       </Routes>
     <BackToTopButton />

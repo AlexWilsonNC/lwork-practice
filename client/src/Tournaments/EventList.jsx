@@ -58,6 +58,11 @@ const UpcomingEvents = styled.div`
     p {color: ${({ theme }) => theme.text};}
     a {color: ${({ theme }) => theme.text};}
     th {color: ${({ theme }) => theme.text};}
+
+    .search-input .searcheventsfield {
+        background: ${({ theme }) => theme.searchBg};
+        color: ${({ theme }) => theme.searchTxt};
+    }
 `;
 const FilterTop = styled.div`
     select {background: ${({ theme }) => theme.body};}
@@ -87,6 +92,7 @@ const EventList = () => {
     const [sortOrder, setSortOrder] = useState('newest');
     const [viewType, setViewType] = useState('upcoming');
     const [regionFilter, setRegionFilter] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
 
@@ -100,8 +106,10 @@ const EventList = () => {
         const eventDate = new Date(event.date);
         const eventYear = eventDate.getFullYear().toString();
         const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
+        const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
 
         return isInRegion  // Checks if the event's flag is in the selected region
+        && matchesSearchTerm // Checks if the event name or type matches the search term
             && (eventTypeFilter ? event.eventType === eventTypeFilter : true) // Event type filter
             && (countryFilter ? event.flag === countryFilter : true) // Country filter
             && (yearFilter ? eventYear === yearFilter : true) // Year filter
@@ -119,6 +127,7 @@ const EventList = () => {
         setRegionFilter('');
         setYearFilter('');
         setSortOrder('newest');
+        setSearchTerm('');
     };
     const sortedFilteredEvents = !showUpcoming ? filteredEvents.sort((a, b) => {
         const dateA = new Date(a.date);
@@ -151,6 +160,10 @@ const EventList = () => {
                         <a onClick={() => handleButtonClick("/tournaments/upcoming", true)} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
                             Upcoming
                         </a>
+                    </div>
+                    <div className='search-input'>
+                        <span className="material-symbols-outlined">search</span>
+                        <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                     </div>
                 </div>
                 <FilterTop className='filters-top'>
@@ -215,7 +228,7 @@ const EventList = () => {
                     )}
                     <button onClick={resetFilters} className="reset-btn">Reset</button>
                 </FilterTop>
-                <div class='center'>
+                <div className='center'>
                     <table className='upcoming-events-table'>
                         <thead>
                             <tr>

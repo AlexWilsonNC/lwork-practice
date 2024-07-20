@@ -48,7 +48,7 @@ const RightNav = ({ open }) => {
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href=''>Decks</a></li>
-        <li><a href=''>Cards</a></li>
+        <li><a href='/cards'>Cards</a></li>
         <li><a href=''>Players</a></li>
         <li><a href=''><span className="material-symbols-outlined">search</span></a></li>
       </ul>

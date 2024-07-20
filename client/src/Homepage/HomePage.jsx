@@ -93,7 +93,7 @@ const Homepage = () => {
                                     </div>
                                     <div className='card-date-plus-read'>
                                         <p>Jun 10, 2024</p>
-                                        <p className='blue-link'>View Results</p>
+                                        <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
                             </a>

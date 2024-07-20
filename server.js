@@ -31,6 +31,35 @@ cardConnection.once('open', () => {
   console.log('Connected to cardConnection');
 });
 
+const orderedSets = [
+  // sv
+  "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+  // swsh
+  "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+  "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+  // sm
+  "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+  "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+  // xy
+  "EVO", "STS", "FCO", "GEN", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+  "FLF", "XY", "KSS", "PR-XY",
+  // bw
+  "LTR", "PLB", "PLF", "PLS", "BCR", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW",
+  "DRV", "PR-BLW",
+  // hgss
+  "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+  // dp
+  "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+  "MT", "DP", "P5", "PR-DP",
+  // rs
+  "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+  "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+  // wotc
+  "SK", "AQ", "EX", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "LC", "TR", "B2",
+  "FO", "JU", "BS", "PR-BS",
+];
+
+
 const eventSchema = new mongoose.Schema({
   id: String,
   name: String,
@@ -103,14 +132,29 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
-// Fetch all cards from all collections
 app.get('/api/cards', async (req, res) => {
-  console.log('Fetching all cards');
+  const format = req.query.format;
+  console.log(`Fetching cards for format: ${format}`);
+
+  if (!format) {
+    return res.status(400).json({ message: 'Format is required' });
+  }
+
   try {
-    const collections = await cardConnection.db.listCollections().toArray();
-    const cardPromises = collections.map(async collection => {
-      const collectionName = collection.name;
-      const cards = await cardConnection.db.collection(collectionName).find({}).toArray();
+    // Extract the sets range based on the format
+    const [startSet, endSet] = format.split('-');
+    const startIndex = orderedSets.indexOf(startSet);
+    const endIndex = orderedSets.indexOf(endSet);
+
+    if (startIndex === -1 || endIndex === -1 || startIndex > endIndex) {
+      return res.status(400).json({ message: 'Invalid format' });
+    }
+
+    const setsToQuery = orderedSets.slice(startIndex, endIndex + 1);
+    console.log('Sets to query:', setsToQuery);
+
+    const cardPromises = setsToQuery.map(async set => {
+      const cards = await cardConnection.db.collection(set).find({}).toArray();
       return cards;
     });
 

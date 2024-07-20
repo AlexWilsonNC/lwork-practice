@@ -183,80 +183,96 @@ const CardView = () => {
             }
         };
 
-        const fetchAndFilterEvents = async () => {
-            if (!cardInfo) return;
-
-            if (cardInfo.supertype === "Energy" && cardInfo.subtypes.includes("Basic")) {
-                setIsBasicEnergy(true);
-                setLoading(false);
-                return;
+        const parseDate = (dateString) => {
+            const regexRange = /(\w+ \d+) - (\d+), (\d+)/;
+            const regexSingle = /(\w+ \d+), (\d+)/;
+        
+            let match = regexRange.exec(dateString);
+            if (match) {
+                return new Date(`${match[1]}, ${match[3]}`);
             }
-
-            setLoading(true);
-            const eventIds = await fetchEventIds();
-            setEventResults([]);
-
-            for (const eventId of eventIds) {
-                const eventData = await fetchEventData(eventId);
-                if (eventData) {
-                    const divisions = ['masters', 'seniors', 'juniors'];
-                    const results = [];
-
-                    divisions.forEach(division => {
-                        if (eventData[division]) {
-                            eventData[division].forEach((player, playerIndex) => {
-                                if (player.decklist) {
-                                    let hasCard = false;
-
-                                    if (cardInfo.supertype === 'Pokémon') {
-                                        hasCard = player.decklist.pokemon?.some(p => {
-                                            const isMatch = 
-                                                p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
-                                                p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
-                                                String(p.number).trim() === String(cardInfo.number).trim();
-                                            return isMatch;
-                                        });
-                                    } else {
-                                        hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
-                                                  player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
-                                    }
-
-                                    if (hasCard) {
-                                        results.push({
-                                            eventId: eventData.id,
-                                            eventName: eventData.name,
-                                            eventDate: eventData.date,
-                                            playerName: player.name,
-                                            division,
-                                            flag: player.flag,
-                                            placement: playerIndex + 1,
-                                            decklist: player.decklist,
-                                            sprite1: player.sprite1,
-                                            sprite2: player.sprite2
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
-
-                    setEventResults(prevResults => {
-                        const uniqueResults = results.filter(result => 
-                            !prevResults.some(prevResult => 
-                                prevResult.eventId === result.eventId &&
-                                prevResult.playerName === result.playerName &&
-                                prevResult.division === result.division
-                            )
-                        );
-                        return [...prevResults, ...uniqueResults];
-                    });
-                }
+        
+            match = regexSingle.exec(dateString);
+            if (match) {
+                return new Date(`${match[1]}, ${match[2]}`);
             }
-
-            setLoading(false);
-            setEventsScanned(true);
+        
+            return new Date(dateString);
         };
 
+const fetchAndFilterEvents = async () => {
+    if (!cardInfo) return;
+
+    if (cardInfo.supertype === "Energy" && cardInfo.subtypes.includes("Basic")) {
+        setIsBasicEnergy(true);
+        setLoading(false);
+        return;
+    }
+
+    setLoading(true);
+    const eventIds = await fetchEventIds();
+    const allResults = [];
+
+    for (const eventId of eventIds) {
+        const eventData = await fetchEventData(eventId);
+        if (eventData) {
+            const divisions = ['masters', 'seniors', 'juniors'];
+            const results = [];
+
+            divisions.forEach(division => {
+                if (eventData[division]) {
+                    eventData[division].forEach((player, playerIndex) => {
+                        if (player.decklist) {
+                            let hasCard = false;
+
+                            if (cardInfo.supertype === 'Pokémon') {
+                                hasCard = player.decklist.pokemon?.some(p => {
+                                    const isMatch = 
+                                        p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
+                                        p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
+                                        String(p.number).trim() === String(cardInfo.number).trim();
+                                    return isMatch;
+                                });
+                            } else {
+                                hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
+                                          player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
+                            }
+
+                            if (hasCard) {
+                                results.push({
+                                    eventId: eventData.id,
+                                    eventName: eventData.name,
+                                    eventDate: eventData.date,
+                                    playerName: player.name,
+                                    division,
+                                    flag: player.flag,
+                                    placement: playerIndex + 1,
+                                    decklist: player.decklist,
+                                    sprite1: player.sprite1,
+                                    sprite2: player.sprite2
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            allResults.push(...results);
+        }
+    }
+
+    console.log('Before sorting:', allResults.map(result => result.eventDate));
+
+    // Sort results by eventDate from latest to oldest using the custom parseDate function
+    allResults.sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate));
+
+    console.log('After sorting:', allResults.map(result => result.eventDate));
+
+    setEventResults(allResults);
+
+    setLoading(false);
+    setEventsScanned(true);
+};
         fetchAndFilterEvents();
     }, [cardInfo]);
 
@@ -678,54 +694,55 @@ const CardView = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Object.entries(
-                                eventResults.reduce((acc, result) => {
-                                    if (!acc[result.eventId]) {
-                                        acc[result.eventId] = [];
-                                    }
-                                    acc[result.eventId].push(result);
-                                    return acc;
-                                }, {})
-                            ).sort((a, b) => {
-                                // Sort events by date from latest to oldest
-                                const dateA = new Date(a[1][0].eventDate);
-                                const dateB = new Date(b[1][0].eventDate);
-                                return dateB - dateA;
-                            }).map(([eventId, results]) => {
-                                const sortedResults = results.sort((a, b) => {
-                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
-                                    const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
-                                    if (divisionComparison !== 0) return divisionComparison;
-                                    return a.placement - b.placement;
-                                });
-                                const { eventName, eventDate } = results[0];
-                                return (
-                                    <React.Fragment key={eventId}>
-                                        <tr className="event-separator">
-                                            <td colSpan="5">
-                                                <div className="event-separator-content">
-                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp;&nbsp; {eventDate} &nbsp;&nbsp; <Link className='blue-link' to={`/tournaments/${eventId}`}><span class="material-symbols-outlined turned-link">link</span></Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        {sortedResults.map((result, index) => (
-                                            <tr key={index} style={{ marginBottom: '5px' }}>
-                                                <td>{getPlacementSuffix(result.placement)}</td>
-                                                <td>{formatName(result.playerName)}</td>
-                                                <td><span className='grey'>{formatName(result.division)}</span></td>
-                                                <td><Link className='blue-link' to={`/tournaments/${result.eventId}`}>{result.eventName}</Link></td>
-                                                <td className='player-deck-icons pushright'>
-                                                    <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                                                    <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
-                                                        <span className="material-symbols-outlined">format_list_bulleted</span>
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </React.Fragment>
-                                );
-                            })}
-                        </tbody>
+    {Object.entries(
+        eventResults.reduce((acc, result) => {
+            if (!acc[result.eventId]) {
+                acc[result.eventId] = [];
+            }
+            acc[result.eventId].push(result);
+            return acc;
+        }, {})
+    ).sort((a, b) => {
+        // Sort events by date from latest to oldest
+        const dateA = new Date(a[1][0].eventDate);
+        const dateB = new Date(b[1][0].eventDate);
+        return dateB - dateA;
+    }).map(([eventId, results]) => {
+        const sortedResults = results.sort((a, b) => {
+            const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
+            const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
+            if (divisionComparison !== 0) return divisionComparison;
+            return a.placement - b.placement;
+        });
+        const { eventName, eventDate } = results[0];
+        return (
+            <React.Fragment key={eventId}>
+                <tr className="event-separator">
+                    <td colSpan="5">
+                        <div className="event-separator-content">
+                            <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp;&nbsp; {eventDate} &nbsp;&nbsp; <Link className='blue-link' to={`/tournaments/${eventId}`}><span className="material-symbols-outlined turned-link">link</span></Link>
+                        </div>
+                    </td>
+                </tr>
+                {sortedResults.map((result, index) => (
+                    <tr key={index} style={{ marginBottom: '5px' }}>
+                        <td>{getPlacementSuffix(result.placement)}</td>
+                        <td>{formatName(result.playerName)}</td>
+                        <td><span className='grey'>{formatName(result.division)}</span></td>
+                        <td><Link className='blue-link' to={`/tournaments/${result.eventId}`}>{result.eventName}</Link></td>
+                        <td className='player-deck-icons pushright'>
+                            <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
+                            <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
+                                <span className="material-symbols-outlined">format_list_bulleted</span>
+                            </Link>
+                        </td>
+                    </tr>
+                ))}
+            </React.Fragment>
+        );
+    })}
+</tbody>
+
                     </table>
                 ) : (
                     eventsScanned && (

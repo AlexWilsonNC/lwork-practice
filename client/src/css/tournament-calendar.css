@@ -143,7 +143,27 @@ td div a {
 .indiv-filter select:hover {
     cursor: pointer;
     border: 1px solid #1290eb;
-    filter: brightness(90%);
+    filter: brightness(99%);
+}
+.search-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.search-input span {
+    color: white;
+    margin-right: 7px;
+    font-size: 26px;
+}
+.searcheventsfield {
+    border: 1px solid transparent;
+    padding: 7px 5px;
+    margin-right: 25px;
+}
+.searcheventsfield:hover {
+    border: 1px solid #1290eb;
+    filter: brightness(99%);
 }
 /**/
 @media screen and (max-width: 1600px) {
