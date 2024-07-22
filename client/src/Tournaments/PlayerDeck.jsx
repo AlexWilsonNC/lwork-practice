@@ -117,10 +117,10 @@ const PlayerDeck = () => {
     const [cardData, setCardData] = useState("null");
 
     useEffect(() => {
-        const fetchCardData = async () => {
+        const fetchCardData = async (format) => {
             try {
                 console.log('Fetching cards from API');
-                const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/cards');
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${format}`);
                 console.log('API response:', response);
                 if (response.ok) {
                     const cards = await response.json();
@@ -168,6 +168,7 @@ const PlayerDeck = () => {
                     if (player) {
                         setPlayerData(player);
                         setPlacement(playerIndex + 1);
+                        fetchCardData(eventData.format);
                     } else {
                         console.error('Player not found in division data');
                     }
@@ -178,7 +179,6 @@ const PlayerDeck = () => {
                 console.error('Failed to fetch player data');
             }
         };
-        fetchCardData();
         fetchPlayerData();
     }, [eventId, division, playerId]);
 

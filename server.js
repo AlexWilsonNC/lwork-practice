@@ -106,7 +106,6 @@ const cardSchema = new mongoose.Schema({
 });
 
 const Event = eventConnection.model('Event', eventSchema);
-// const Card = cardConnection.model('Card', cardSchema, 'card-database');
 
 app.get('/events/:id', async (req, res) => {
   console.log(req.params.id)
@@ -141,7 +140,6 @@ app.get('/api/cards', async (req, res) => {
   }
 
   try {
-    // Extract the sets range based on the format
     const [startSet, endSet] = format.split('-');
     const startIndex = orderedSets.indexOf(startSet);
     const endIndex = orderedSets.indexOf(endSet);
