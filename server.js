@@ -59,7 +59,6 @@ const orderedSets = [
   "FO", "JU", "BS", "PR-BS",
 ];
 
-
 const eventSchema = new mongoose.Schema({
   id: String,
   name: String,
@@ -136,6 +135,7 @@ app.get('/api/cards', async (req, res) => {
   console.log(`Fetching cards for format: ${format}`);
 
   if (!format) {
+    console.error('Format is missing');
     return res.status(400).json({ message: 'Format is required' });
   }
 
@@ -144,15 +144,26 @@ app.get('/api/cards', async (req, res) => {
     const startIndex = orderedSets.indexOf(startSet);
     const endIndex = orderedSets.indexOf(endSet);
 
-    if (startIndex === -1 || endIndex === -1 || startIndex > endIndex) {
+    console.log(`startSet: ${startSet}, endSet: ${endSet}`);
+    console.log(`startIndex: ${startIndex}, endIndex: ${endIndex}`);
+
+    if (startIndex === -1 || endIndex === -1) {
+      console.error('Start or end set not found in orderedSets');
       return res.status(400).json({ message: 'Invalid format' });
+    }
+
+    if (startIndex > endIndex) {
+      console.error('Start index is greater than end index');
+      return res.status(400).json({ message: 'Invalid format range' });
     }
 
     const setsToQuery = orderedSets.slice(startIndex, endIndex + 1);
     console.log('Sets to query:', setsToQuery);
 
     const cardPromises = setsToQuery.map(async set => {
+      console.log(`Fetching cards for set: ${set}`);
       const cards = await cardConnection.db.collection(set).find({}).toArray();
+      console.log(`Fetched ${cards.length} cards for set: ${set}`);
       return cards;
     });
 

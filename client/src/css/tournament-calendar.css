@@ -206,6 +206,9 @@ td div a {
         font-size: 12px;
         padding: 3.5px 7px;
     }
+    .search-input span {
+        font-size: 22px;
+    }
 }
 @media screen and (max-width: 950px) {
     .indiv-filter {
@@ -302,6 +305,16 @@ td div a {
         .filters-top {
             margin-left: 15px;
         }
+        .search-input span {
+            margin-right: 7px;
+            font-size: 18px;
+        }
+        .searcheventsfield {
+            padding: 5px;
+            margin-right: 15px;
+            width: 125px;
+            font-size: 12px;
+        }
     }
     @media screen and (max-width: 430px) {
         .sort-events {
@@ -355,6 +368,13 @@ td div a {
         }
         .filters-top {
             margin-left: 5px;
+        }
+        .completed-n-upcoming {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .search-input {
+            margin: 15px 0 0 5px;
         }
     }
 }

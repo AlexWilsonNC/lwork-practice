@@ -114,12 +114,12 @@ const PlayerDeck = () => {
     const [placement, setPlacement] = useState(null);
     const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
     const navigate = useNavigate();
-    const [cardData, setCardData] = useState("null");
+    const [cardData, setCardData] = useState(null);
 
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
-                console.log('Fetching cards from API');
+                console.log('Fetching cards from API with format:', format);
                 const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${format}`);
                 console.log('API response:', response);
                 if (response.ok) {
@@ -229,7 +229,7 @@ const PlayerDeck = () => {
     };
 
     if (!playerData) {
-        return;
+        return null;
     }
 
     return (
