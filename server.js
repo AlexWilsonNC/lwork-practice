@@ -140,8 +140,10 @@ app.get('/api/cards/:set/:number', async (req, res) => {
       return res.status(404).json({ message: `Collection ${set} not found` });
     }
 
-    const card = await collection.findOne({ number: number });
+    // Ensure number is treated as a string
+    const card = await collection.findOne({ number: String(number) });
     if (card) {
+      console.log('Card found:', card);
       res.status(200).json(card);
     } else {
       console.error(`Card not found in set: ${set}, number: ${number}`);
