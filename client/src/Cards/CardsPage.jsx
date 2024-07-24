@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { useTheme } from '../contexts/ThemeContext';
-import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useParams, Link } from 'react-router-dom';
 import '../css/card.css';
 
 const CardsContainer = styled.div`
@@ -24,7 +24,7 @@ const CardImage = styled.img`
 
 const CardsPage = () => {
   const { theme } = useTheme();
-  const { setName } = useParams(); // Get the setName from the URL parameters
+  const { setName } = useParams();
   const [cards, setCards] = useState([]);
   const [logoUrl, setLogoUrl] = useState('');
   const [nameText, setNameText] = useState(''); 
@@ -38,6 +38,7 @@ const CardsPage = () => {
         if (response.ok) {
           const data = await response.json();
           console.log('Fetched card data:', data); // Log fetched data
+          data.sort((a, b) => parseInt(a.number) - parseInt(b.number));
           setCards(data);
           if (data.length > 0) {
             setLogoUrl(data[0].set.images.logo); // Extract logo URL from the first card
@@ -77,6 +78,7 @@ const CardsPage = () => {
             <Link key={index} to={`/card/${card.setAbbrev}/${card.number}`}>
               <CardImage
                 src={card.images.small}
+                loading="lazy"
                 alt={`${card.setAbbrev} ${card.number}`}
               />
             </Link>

@@ -103,28 +103,25 @@ const CardView = () => {
 
     useEffect(() => {
         const fetchCardData = async () => {
-          setLoading(true);
-          setError('');
-          try {
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
-            if (response.ok) {
-              const card = await response.json();
-              console.log('Fetched card data:', card);
-              setCardInfo(card);
-            } else {
-              console.error('Failed to fetch card data');
-              setError('Card not found');
+            setLoading(true);
+            try {
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
+                if (response.ok) {
+                    const card = await response.json();
+                    console.log('Fetched card data:', card);
+                    setCardInfo(card);
+                } else {
+                    console.error('Failed to fetch card data');
+                }
+            } catch (error) {
+                console.error('Error fetching card data:', error);
+            } finally {
+                setLoading(false);
             }
-          } catch (error) {
-            console.error('Error fetching card data:', error);
-            setError('Error fetching card data');
-          } finally {
-            setLoading(false);
-          }
         };
-    
+
         fetchCardData();
-      }, [set, number]);
+    }, [set, number]);
     
     useEffect(() => {
         if (!cardInfo) {
@@ -445,7 +442,7 @@ const CardView = () => {
                             <div>
                                 <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
                                 <p className='show-ninefifty'>
-                                    {cardInfo.set.name}
+                                    <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
                                     <span className='align-center'>
                                         <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
                                         &nbsp;

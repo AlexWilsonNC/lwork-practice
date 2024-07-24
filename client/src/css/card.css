@@ -220,9 +220,6 @@
 }
 .turned-link {
     color:white;
-    transform: rotate(-45deg);
-    font-size: 20px;
-    margin-top: 2px;
 }
 .turned-link:hover {
     color:rgb(16, 34, 199);
