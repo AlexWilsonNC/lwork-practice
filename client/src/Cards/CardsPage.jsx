@@ -28,13 +28,11 @@ const CardsPage = () => {
       try {
         const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/TWM');
         console.log('Response status:', response.status); // Log response status
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Fetched card data:', data); // Log fetched data
-          setCards(data);
-        } else {
-          console.error('Failed to fetch cards');
-        }
+        const text = await response.text(); // Read the response as text
+        console.log('Response text:', text); // Log the response text
+        const data = JSON.parse(text); // Parse the text as JSON
+        console.log('Fetched card data:', data); // Log fetched data
+        setCards(data);
       } catch (error) {
         console.error('Error fetching cards:', error);
       }

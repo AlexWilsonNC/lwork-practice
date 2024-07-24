@@ -9,8 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "./client/dist")));
-
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
 
@@ -106,6 +104,7 @@ const cardSchema = new mongoose.Schema({
 
 const Event = eventConnection.model('Event', eventSchema);
 
+// Define API routes before static files and catch-all route
 app.get('/events/:id', async (req, res) => {
   console.log(req.params.id)
   try {
@@ -127,6 +126,20 @@ app.get('/event-ids', async (req, res) => {
     res.json(eventIds);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch event IDs' });
+  }
+});
+
+app.get('/api/cards/:collectionName', async (req, res) => {
+  const collectionName = req.params.collectionName;
+
+  try {
+    const collection = cardConnection.collection(collectionName);
+    const cards = await collection.find({}).toArray();
+
+    res.status(200).json(cards);
+  } catch (error) {
+    console.error('Error fetching cards:', error);
+    res.status(500).send('Error fetching cards');
   }
 });
 
@@ -178,17 +191,12 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World! The server is running.');
-});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get("*", function (_, res) {
-    res.sendFile(
-      path.join(__dirname, "./client/dist/index.html"),
-      function (err) {
-        res.status(500).send(err);
-      }
-    );
-  });
+// Catch-all route to serve the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
