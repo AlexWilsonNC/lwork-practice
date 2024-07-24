@@ -88,7 +88,6 @@ const CardView = () => {
     const [loading, setLoading] = useState(false);
     const [isBasicEnergy, setIsBasicEnergy] = useState(false);
     const [showAllVersions, setShowAllVersions] = useState(false);
-    const [currentEventIndex, setCurrentEventIndex] = useState(0);
     const [eventsScanned, setEventsScanned] = useState(false);
     const [cardData, setCardData] = useState({ cardMap: {}, cardNameMap: {} });
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -104,47 +103,29 @@ const CardView = () => {
 
     useEffect(() => {
         const fetchCardData = async () => {
-            try {
-                const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/cards');
-                if (response.ok) {
-                    const cards = await response.json();
-                    console.log('Fetched card data:', cards);
-                    const cardMap = {};
-                    const cardNameMap = {};
-        
-                    cards.forEach(card => {
-                        const key = `${card.setAbbrev}-${card.number}`;
-                        cardMap[key] = card;
-        
-                        const nameKey = normalizeString(card.name);
-                        if (!cardNameMap[nameKey]) {
-                            cardNameMap[nameKey] = [];
-                        }
-                        cardNameMap[nameKey].push(card);
-                    });
-                    setCardData({ cardMap, cardNameMap });
-
-                    // Find the specific card using set and number params
-                    const specificCardKey = `${set}-${number}`;
-                    const specificCard = cardMap[specificCardKey];
-                    if (specificCard) {
-                        console.log('Specific card found:', specificCard);
-                        setCardInfo(specificCard);
-                    } else {
-                        console.error('Card not found in card data');
-                    }
-                } else {
-                    console.error('Failed to fetch card data');
-                }
-            } catch (error) {
-                console.error('Error fetching card data:', error);
+          setLoading(true);
+          setError('');
+          try {
+            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
+            if (response.ok) {
+              const card = await response.json();
+              console.log('Fetched card data:', card);
+              setCardInfo(card);
+            } else {
+              console.error('Failed to fetch card data');
+              setError('Card not found');
             }
+          } catch (error) {
+            console.error('Error fetching card data:', error);
+            setError('Error fetching card data');
+          } finally {
+            setLoading(false);
+          }
         };
-
+    
         fetchCardData();
-    }, [set, number]);
-
-    // Fetch event data if card info is set
+      }, [set, number]);
+    
     useEffect(() => {
         if (!cardInfo) {
             console.log('Card info is not set, skipping event fetch');
@@ -200,79 +181,80 @@ const CardView = () => {
             return new Date(dateString);
         };
 
-const fetchAndFilterEvents = async () => {
-    if (!cardInfo) return;
+        const fetchAndFilterEvents = async () => {
+            if (!cardInfo) return;
 
-    if (cardInfo.supertype === "Energy" && cardInfo.subtypes.includes("Basic")) {
-        setIsBasicEnergy(true);
-        setLoading(false);
-        return;
-    }
+            if (cardInfo.supertype === "Energy" && cardInfo.subtypes.includes("Basic")) {
+                setIsBasicEnergy(true);
+                setLoading(false);
+                return;
+            }
 
-    setLoading(true);
-    const eventIds = await fetchEventIds();
-    const allResults = [];
+            setLoading(true);
+            const eventIds = await fetchEventIds();
+            const allResults = [];
 
-    for (const eventId of eventIds) {
-        const eventData = await fetchEventData(eventId);
-        if (eventData) {
-            const divisions = ['masters', 'seniors', 'juniors'];
-            const results = [];
+            for (const eventId of eventIds) {
+                const eventData = await fetchEventData(eventId);
+                if (eventData) {
+                    const divisions = ['masters', 'seniors', 'juniors'];
+                    const results = [];
 
-            divisions.forEach(division => {
-                if (eventData[division]) {
-                    eventData[division].forEach((player, playerIndex) => {
-                        if (player.decklist) {
-                            let hasCard = false;
+                    divisions.forEach(division => {
+                        if (eventData[division]) {
+                            eventData[division].forEach((player, playerIndex) => {
+                                if (player.decklist) {
+                                    let hasCard = false;
 
-                            if (cardInfo.supertype === 'Pokémon') {
-                                hasCard = player.decklist.pokemon?.some(p => {
-                                    const isMatch = 
-                                        p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
-                                        p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
-                                        String(p.number).trim() === String(cardInfo.number).trim();
-                                    return isMatch;
-                                });
-                            } else {
-                                hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
-                                          player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
-                            }
+                                    if (cardInfo.supertype === 'Pokémon') {
+                                        hasCard = player.decklist.pokemon?.some(p => {
+                                            const isMatch = 
+                                                p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
+                                                p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
+                                                String(p.number).trim() === String(cardInfo.number).trim();
+                                            return isMatch;
+                                        });
+                                    } else {
+                                        hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
+                                                player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
+                                    }
 
-                            if (hasCard) {
-                                results.push({
-                                    eventId: eventData.id,
-                                    eventName: eventData.name,
-                                    eventDate: eventData.date,
-                                    playerName: player.name,
-                                    division,
-                                    flag: player.flag,
-                                    placement: playerIndex + 1,
-                                    decklist: player.decklist,
-                                    sprite1: player.sprite1,
-                                    sprite2: player.sprite2
-                                });
-                            }
+                                    if (hasCard) {
+                                        results.push({
+                                            eventId: eventData.id,
+                                            eventName: eventData.name,
+                                            eventDate: eventData.date,
+                                            playerName: player.name,
+                                            division,
+                                            flag: player.flag,
+                                            placement: playerIndex + 1,
+                                            decklist: player.decklist,
+                                            sprite1: player.sprite1,
+                                            sprite2: player.sprite2
+                                        });
+                                    }
+                                }
+                            });
                         }
                     });
+
+                    allResults.push(...results);
                 }
-            });
+            }
 
-            allResults.push(...results);
-        }
-    }
+            console.log('Before sorting:', allResults.map(result => result.eventDate));
 
-    console.log('Before sorting:', allResults.map(result => result.eventDate));
+            // Sort results by eventDate from latest to oldest using the custom parseDate function
+            allResults.sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate));
 
-    // Sort results by eventDate from latest to oldest using the custom parseDate function
-    allResults.sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate));
+            console.log('After sorting:', allResults.map(result => result.eventDate));
 
-    console.log('After sorting:', allResults.map(result => result.eventDate));
+            setEventResults(allResults);
 
-    setEventResults(allResults);
+            setLoading(false);
+            setEventsScanned(true);
+        };
 
-    setLoading(false);
-    setEventsScanned(true);
-};
         fetchAndFilterEvents();
     }, [cardInfo]);
 
@@ -331,7 +313,7 @@ const fetchAndFilterEvents = async () => {
                 otherCard.regulationMark &&
                 regulationMarks.includes(otherCard.regulationMark)
             );
-            return otherVersions.length > 0;
+            return true;
         }
         return false;
     };
@@ -385,19 +367,6 @@ const fetchAndFilterEvents = async () => {
     );
     const showOtherVersions = otherVersionsToShow.length > 0;
     const displayedOtherVersions = showAllVersions ? otherVersionsToShow : otherVersionsToShow.slice(0, 5);
-        
-    // const getPreviousCard = () => {
-    //     const prevNumber = parseInt(number, 10) - 1;
-    //     const prevKey = `${set}-${prevNumber}`;
-    //     return cardData?.cardMap?.[prevKey];
-    // };
-    // const getNextCard = () => {
-    //     const nextNumber = parseInt(number, 10) + 1;
-    //     const nextKey = `${set}-${nextNumber}`;
-    //     return cardData?.cardMap?.[nextKey];
-    // };
-    // const previousCard = getPreviousCard();
-    // const nextCard = getNextCard();
 
     if (!cardInfo) {
         return <div>Card not found</div>;
@@ -449,22 +418,6 @@ const fetchAndFilterEvents = async () => {
                 <meta name="twitter:description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
                 <meta name="twitter:image" content={cardInfo.images.small} />
             </Helmet>
-            {/* <div className='navigation-links'>
-                {previousCard ? (
-                    <Link to={`/card/${set}/${previousCard.number}`} className='previous-card-link'>
-                        <span className="material-symbols-outlined">chevron_left</span> {previousCard.name} ({previousCard.setAbbrev}-{previousCard.number})
-                    </Link>
-                ) : (
-                    <div className='previous-card-link'>&nbsp;</div>
-                )}
-                {nextCard ? (
-                    <Link to={`/card/${set}/${nextCard.number}`} className='next-card-link'>
-                        {nextCard.name} ({nextCard.setAbbrev}-{nextCard.number}) <span className="material-symbols-outlined">chevron_right</span>
-                    </Link>
-                ) : (
-                    <div className='next-card-link'>&nbsp;</div>
-                )}
-            </div> */}
             <div className='card-view' style={{ position: 'relative' }}>
                 {cardInfo.images.large && (
                     <div
@@ -484,7 +437,7 @@ const fetchAndFilterEvents = async () => {
                             filter: 'blur(5px)',
                         }}
                     ></div>
-                )}   
+                )}
                 <div className='card-data-all'>
                     <div className='card-and-setinfo'>
                         <img className='the-card-img' src={cardInfo.images.large} alt={cardInfo.name} />
@@ -515,7 +468,7 @@ const fetchAndFilterEvents = async () => {
                                 {cardInfo.supertype}
                                 {cardInfo.subtypes && cardInfo.subtypes.length > 0 && ` • ${cardInfo.subtypes.join(' • ')}`}
                             </p>
-                        )}                        
+                        )}
                         {cardInfo.evolvesFrom && (
                             <p className='marginthree'>
                                 {cardInfo.subtypes && cardInfo.subtypes.includes('Level-Up') ? 'Levels up from' : 'Evolves from'} {cardInfo.evolvesFrom}
@@ -651,23 +604,22 @@ const fetchAndFilterEvents = async () => {
                                                     </td>
                                                     <td>#{otherCard.number}</td>
                                                     <td>{otherCard.set && formatDate(otherCard.set.releaseDate)}</td>
-                                                    {/* <td className='card-art-td'><img src={otherCard.images.small} alt={cardInfo.name} className='cropped-imagecard-art-td' /></td> */}
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                     {otherVersionsToShow.length > 5 && (
                                         <button onClick={() => setShowAllVersions(!showAllVersions)} className='showmoreversions'>
-                                        {showAllVersions ? (
-                                          <>
-                                            See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
-                                          </>
-                                        ) : (
-                                          <>
-                                            See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
-                                          </>
-                                        )}
-                                      </button>
+                                            {showAllVersions ? (
+                                                <>
+                                                    See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                                                </>
+                                            )}
+                                        </button>
                                     )}
                                 </div>
                             )}
@@ -694,55 +646,54 @@ const fetchAndFilterEvents = async () => {
                             </tr>
                         </thead>
                         <tbody>
-    {Object.entries(
-        eventResults.reduce((acc, result) => {
-            if (!acc[result.eventId]) {
-                acc[result.eventId] = [];
-            }
-            acc[result.eventId].push(result);
-            return acc;
-        }, {})
-    ).sort((a, b) => {
-        // Sort events by date from latest to oldest
-        const dateA = new Date(a[1][0].eventDate);
-        const dateB = new Date(b[1][0].eventDate);
-        return dateB - dateA;
-    }).map(([eventId, results]) => {
-        const sortedResults = results.sort((a, b) => {
-            const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
-            const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
-            if (divisionComparison !== 0) return divisionComparison;
-            return a.placement - b.placement;
-        });
-        const { eventName, eventDate } = results[0];
-        return (
-            <React.Fragment key={eventId}>
-                <tr className="event-separator">
-                    <td colSpan="5">
-                        <div className="event-separator-content">
-                            <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp;&nbsp; {eventDate} &nbsp;&nbsp; <Link className='blue-link' to={`/tournaments/${eventId}`}><span className="material-symbols-outlined turned-link">link</span></Link>
-                        </div>
-                    </td>
-                </tr>
-                {sortedResults.map((result, index) => (
-                    <tr key={index} style={{ marginBottom: '5px' }}>
-                        <td>{getPlacementSuffix(result.placement)}</td>
-                        <td>{formatName(result.playerName)}</td>
-                        <td><span className='grey'>{formatName(result.division)}</span></td>
-                        <td><Link className='blue-link' to={`/tournaments/${result.eventId}`}>{result.eventName}</Link></td>
-                        <td className='player-deck-icons pushright'>
-                            <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                            <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
-                                <span className="material-symbols-outlined">format_list_bulleted</span>
-                            </Link>
-                        </td>
-                    </tr>
-                ))}
-            </React.Fragment>
-        );
-    })}
-</tbody>
-
+                            {Object.entries(
+                                eventResults.reduce((acc, result) => {
+                                    if (!acc[result.eventId]) {
+                                        acc[result.eventId] = [];
+                                    }
+                                    acc[result.eventId].push(result);
+                                    return acc;
+                                }, {})
+                            ).sort((a, b) => {
+                                // Sort events by date from latest to oldest
+                                const dateA = new Date(a[1][0].eventDate);
+                                const dateB = new Date(b[1][0].eventDate);
+                                return dateB - dateA;
+                            }).map(([eventId, results]) => {
+                                const sortedResults = results.sort((a, b) => {
+                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
+                                    const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
+                                    if (divisionComparison !== 0) return divisionComparison;
+                                    return a.placement - b.placement;
+                                });
+                                const { eventName, eventDate } = results[0];
+                                return (
+                                    <React.Fragment key={eventId}>
+                                        <tr className="event-separator">
+                                            <td colSpan="5">
+                                                <div className="event-separator-content">
+                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp;&nbsp; {eventDate} &nbsp;&nbsp; <Link className='blue-link' to={`/tournaments/${eventId}`}><span className="material-symbols-outlined turned-link">link</span></Link>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {sortedResults.map((result, index) => (
+                                            <tr key={index} style={{ marginBottom: '5px' }}>
+                                                <td>{getPlacementSuffix(result.placement)}</td>
+                                                <td>{formatName(result.playerName)}</td>
+                                                <td><span className='grey'>{formatName(result.division)}</span></td>
+                                                <td><Link className='blue-link' to={`/tournaments/${result.eventId}`}>{result.eventName}</Link></td>
+                                                <td className='player-deck-icons pushright'>
+                                                    <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
+                                                    <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
+                                                        <span className="material-symbols-outlined">format_list_bulleted</span>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </tbody>
                     </table>
                 ) : (
                     eventsScanned && (

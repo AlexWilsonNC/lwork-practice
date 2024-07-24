@@ -129,6 +129,27 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
+app.get('/api/debug/:set', async (req, res) => {
+  const { set } = req.params;
+  console.log(`Fetching documents from set: ${set}`);
+
+  try {
+    const collection = cardConnection.collection(set);
+    const documents = await collection.find({}).limit(1).toArray();
+
+    if (documents.length > 0) {
+      console.log('Sample document:', documents[0]);
+      res.status(200).json(documents[0]);
+    } else {
+      console.log('No documents found in collection');
+      res.status(404).json({ message: 'No documents found in collection' });
+    }
+  } catch (error) {
+    console.error('Error fetching documents:', error);
+    res.status(500).send('Error fetching documents');
+  }
+});
+
 app.get('/api/cards/:collectionName', async (req, res) => {
   const collectionName = req.params.collectionName;
 

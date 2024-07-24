@@ -14,20 +14,20 @@ import BackToTopButton from './Tools/BackToTopButton';
 function App() {
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
         <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
         <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
-        <Route path="/cards" element={<CardsPage />} />
+        <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
       </Routes>
-    <BackToTopButton />
-    <Footer />
+      <BackToTopButton />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

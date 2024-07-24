@@ -314,6 +314,42 @@
     display: flex;
     align-items: center;
 }
+.card-set-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 25px;
+}
+.set-search-area {
+    width: 100%;
+    height:100px;
+    background-color: red;
+    margin: 15px 0;
+}
+.set-info-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 30px;
+}
+.set-info-area img {
+    width: 180px;
+    height: auto;
+    margin-right: 15px;
+}
+.set-info-area p {
+    font-weight: 600;
+    text-align: center;
+    font-size: 20px;
+}
+.card-display-area {
+    text-align: center;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+.card-display-area img:hover {
+    transform: scale(1.1);
+}
 
 @media screen and (max-width: 1400px) {
     .card-view {
@@ -501,3 +537,6 @@
         width: 100%;
     }
 }
+
+
+
