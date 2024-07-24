@@ -29,7 +29,9 @@ import worldsOSeven from '../assets/event-logo/2007worlds.png';
 import worldsOsix from '../assets/event-logo/2006worlds.png';
 import worldsOfive from '../assets/event-logo/2005worlds.png';
 import worldsOfour from '../assets/event-logo/2004worlds.png';
-import nationals from '../assets/event-logo/nats-logo.png';
+import nationals from '../assets/event-logo/nats-hd.png';
+import oldNationals from '../assets/event-logo/old-nats-logo-hd.png';
+import oFourNationals from '../assets/event-logo/nats-logo-04-hd.png';
 import retro from '../assets/event-logo/retro.png';
 
 import argentina from '../assets/flags/argentina.png';
@@ -150,6 +152,8 @@ const logos = {
     worldsOsix: worldsOsix,
     worldsOfive: worldsOfive,
     worldsOfour: worldsOfour,
+    oldNationals: oldNationals,
+    oFourNationals: oFourNationals,
 }
 
 const EventPageContent = styled.div`
