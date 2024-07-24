@@ -218,11 +218,11 @@ app.get('/api/cards', async (req, res) => {
 });
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, "./client/dist")));
 
 // Catch-all route to serve the React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
