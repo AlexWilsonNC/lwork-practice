@@ -216,29 +216,30 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-app.get('/api/cards/search', async (req, res) => {
-  const { name } = req.query;
-  console.log(`Searching for cards with name: ${name}`);
+const { MongoClient } = require('mongodb');
+
+async function testSearch() {
+  const uri = 'YOUR_MONGO_URI';
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
   try {
-    const collections = await cardConnection.db().listCollections().toArray();
-    const searchResults = [];
+    await client.connect();
+    const db = client.db('YOUR_DATABASE_NAME');
+    const collections = await db.listCollections().toArray();
 
     for (let collection of collections) {
       console.log(`Searching in collection: ${collection.name}`);
-      const col = cardConnection.collection(collection.name);
-      const results = await col.find({ name: { $regex: new RegExp(name, 'i') } }).toArray();
+      const col = db.collection(collection.name);
+      const results = await col.find({ name: { $regex: new RegExp('pikachu', 'i') } }).toArray();
       console.log(`Found ${results.length} results in collection ${collection.name}`);
-      searchResults.push(...results);
+      console.log(results);
     }
-
-    console.log(`Total results found: ${searchResults.length}`);
-    res.status(200).json(searchResults);
-  } catch (error) {
-    console.error('Error searching for cards:', error);
-    res.status(500).send('Error searching for cards');
+  } finally {
+    await client.close();
   }
-});
+}
+
+testSearch().catch(console.error);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
