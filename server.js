@@ -220,8 +220,12 @@ app.get('/api/cards/search', async (req, res) => {
   const { name } = req.query;
   console.log(`Searching for cards with name: ${name}`);
 
+  if (!name) {
+    return res.status(400).json({ message: 'Missing required query parameter: name' });
+  }
+
   try {
-    const collections = await cardConnection.db().listCollections().toArray();
+    const collections = await cardConnection.db.listCollections().toArray();
     console.log(`Collections found: ${collections.map(col => col.name).join(', ')}`);
 
     const searchResults = [];
@@ -245,9 +249,6 @@ app.get('/api/cards/search', async (req, res) => {
     res.status(500).send('Error searching for cards');
   }
 });
-
-
-testSearch().catch(console.error);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
