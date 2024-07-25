@@ -216,28 +216,36 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-const { MongoClient } = require('mongodb');
-
-async function testSearch() {
-  const uri = 'YOUR_MONGO_URI';
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+app.get('/api/cards/search', async (req, res) => {
+  const { name } = req.query;
+  console.log(`Searching for cards with name: ${name}`);
 
   try {
-    await client.connect();
-    const db = client.db('YOUR_DATABASE_NAME');
-    const collections = await db.listCollections().toArray();
+    const collections = await cardConnection.db().listCollections().toArray();
+    console.log(`Collections found: ${collections.map(col => col.name).join(', ')}`);
 
+    const searchResults = [];
     for (let collection of collections) {
       console.log(`Searching in collection: ${collection.name}`);
-      const col = db.collection(collection.name);
-      const results = await col.find({ name: { $regex: new RegExp('pikachu', 'i') } }).toArray();
+      const col = cardConnection.collection(collection.name);
+
+      // Log the count of documents in the collection
+      const count = await col.countDocuments();
+      console.log(`Collection ${collection.name} has ${count} documents`);
+
+      const results = await col.find({ name: { $regex: new RegExp(name, 'i') } }).toArray();
       console.log(`Found ${results.length} results in collection ${collection.name}`);
-      console.log(results);
+      searchResults.push(...results);
     }
-  } finally {
-    await client.close();
+
+    console.log(`Total results found: ${searchResults.length}`);
+    res.status(200).json(searchResults);
+  } catch (error) {
+    console.error('Error searching for cards:', error);
+    res.status(500).send('Error searching for cards');
   }
-}
+});
+
 
 testSearch().catch(console.error);
 
