@@ -400,7 +400,7 @@ const CardView = () => {
     };
 
     return (
-        <CardViewTheme className='center column-align' theme={theme}>
+        <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
             <Helmet>
                 <title>{`${cardInfo.name} ${cardInfo.setAbbrev} ${cardInfo.number}`}</title>
                 <meta name="description" content={`Pokémon card info on ${cardInfo.name} from ${cardInfo.set.name}, including every deck the card's been played in and more.`} />
@@ -625,7 +625,7 @@ const CardView = () => {
                 </div>
             </div>
             <div className="event-results marginbottom">
-                <p className='decks-that-contain'>Decklists that contain {cardInfo.name}</p>
+                <p className='decks-that-contain'>Decklists that contain <span className='italic'>{cardInfo.name}</span></p>
                 <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
                 {loading && !eventsScanned ? (
                     <p className='margintop'>Loading...</p>

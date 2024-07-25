@@ -220,6 +220,7 @@
 }
 .turned-link {
     color:white;
+    transform: rotate(-45deg);
 }
 .turned-link:hover {
     color:rgb(16, 34, 199);
@@ -449,6 +450,9 @@
     .other-versions {
         width: 100%;
     }
+    .turned-link {
+        font-size: 18px;
+    }
     .card-display-area img {
         width: 120px;
         border-radius: 6px;
@@ -465,6 +469,16 @@
     .dropdowncontent {
         width: 85% !important;
     }
+    .cards-specific-results td,
+    .cards-specific-results .blue-link {
+        font-size: 13px;
+    }
+    .cards-specific-results .sprite {
+        width: 48px;
+    }
+    .cards-specific-results .second-sprite {
+        margin-left: -28px;
+    }
 }
 @media screen and (max-width: 675px) {
     .card-view {
@@ -473,13 +487,16 @@
     .card-and-setinfo {
         width: 41%;
     }
+    .justcardviewonly .event-results {
+        width: 98%;
+    }
 }
 @media screen and (max-width: 600px) {
     .the-card-img {
         max-width: 95%;
         width: 95%;
         height: auto;
-        border-radius: 20px !important;
+        border-radius: 27px !important;
         box-shadow: 0 0 12px black;
     }
     .dropdownbutton {
@@ -501,8 +518,9 @@
         width: 100%;
     }
     .card-view {
-        padding: 10px 0;
+        padding: 0;
         width: 100%;
+        margin-top: 15px;
     }
     .card-and-setinfo div {
         display: none;
@@ -553,6 +571,47 @@
     .hidetdonsmall {
         display: none;
     }
+    .cards-specific-results td {
+        padding: 2px 5px;
+        height: 30px !important;
+    }
+    .cards-specific-results td,
+    .cards-specific-results .blue-link {
+        font-size: 10px;
+    }
+    .sup {
+        font-size: 8px;
+    }
+    .cards-specific-results .sprite {
+        width: 40px;
+    }
+    .cards-specific-results .player-deck-icons span {
+        font-size: 21px;
+        padding-right: 5px;
+    }
+    .decks-that-contain {
+        font-size: 16px;
+    }
+    .ordered-by-most-recent {
+        font-size: 8px;
+    }
+    .cards-specific-results th {
+        font-size: 9px;
+    }
+    .turned-link {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 530px) {
+    .the-card-img {
+        border-radius: 24px !important;
+    }
+    .card-view {
+        margin-top: 5px;
+    }
+    .cards-specific-results .second-sprite {
+        margin-left: -21px;
+    }
 }
 @media screen and (max-width: 500px) {
     .card-display-area img {
@@ -560,6 +619,9 @@
         margin: 2px 4px;
         box-shadow: 1px 1px 7px black;
         border-radius: 5px;
+    }
+    .the-card-img {
+        border-radius: 22px !important;
     }
     .dropdownbutton {
         width: 75% !important;
@@ -571,11 +633,30 @@
     .set-info-area img {
         height: 45px;
     }
+    .cards-specific-results td,
+    .cards-specific-results .blue-link {
+        font-size: 8px;
+    }
+    .cards-specific-results .sprite {
+        width: 35px;
+    }
+    .cards-specific-results .player-deck-icons span {
+        font-size: 18px;
+    }
+    .sup {
+        font-size: 6px;
+    }
 }
 @media screen and (max-width: 450px) {
     .other-versions,
     .showmoreversions {
         width: 110%;
+    }
+    .cards-specific-results th:nth-child(3),
+    .cards-specific-results td:nth-child(3),
+    .cards-specific-results th:nth-child(4),
+    .cards-specific-results td:nth-child(4) {
+        text-align: end;
     }
     .showmoreversions span {
         font-size: 20px;
@@ -606,10 +687,18 @@
         width: 15px;
     }
 }
+@media screen and (max-width: 420px) {
+    .the-card-img {
+        border-radius: 18px !important;
+    }
+}
 @media screen and (max-width: 380px) {
     .other-versions,
     .showmoreversions {
         width: 100%;
+    }
+    .the-card-img {
+        border-radius: 16px !important;
     }
 }
 
