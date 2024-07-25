@@ -221,7 +221,8 @@ app.get('/api/cards/search', async (req, res) => {
   console.log(`Searching for cards with name: ${name}`);
 
   if (!name) {
-    return res.status(400).json({ message: 'Missing required query parameter: name' });
+    console.error('Name parameter is missing');
+    return res.status(400).json({ message: 'Name parameter is required' });
   }
 
   try {
@@ -249,7 +250,6 @@ app.get('/api/cards/search', async (req, res) => {
     res.status(500).send('Error searching for cards');
   }
 });
-
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
