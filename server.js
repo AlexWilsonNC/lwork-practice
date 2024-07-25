@@ -225,18 +225,20 @@ app.get('/api/cards/search', async (req, res) => {
     const searchResults = [];
 
     for (let collection of collections) {
+      console.log(`Searching in collection: ${collection.name}`);
       const col = cardConnection.collection(collection.name);
       const results = await col.find({ name: { $regex: new RegExp(name, 'i') } }).toArray();
+      console.log(`Found ${results.length} results in collection ${collection.name}`);
       searchResults.push(...results);
     }
 
+    console.log(`Total results found: ${searchResults.length}`);
     res.status(200).json(searchResults);
   } catch (error) {
     console.error('Error searching for cards:', error);
     res.status(500).send('Error searching for cards');
   }
 });
-
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
