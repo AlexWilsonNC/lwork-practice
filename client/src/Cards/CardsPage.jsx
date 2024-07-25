@@ -13,6 +13,27 @@ const CardsContainer = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 
+const SearchBarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+`;
+const SearchInput = styled.input`
+  padding: 10px;
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+`;
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.setChangeBtn};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+`;
+
 const DropdownButton = styled.button`
   padding: 10px;
   width: 500px;
@@ -27,7 +48,6 @@ const DropdownButton = styled.button`
   justify-content: space-between;
   font-weight: 600;
 `;
-
 const DropdownOverlay = styled.div`
   display: ${({ show }) => (show ? 'block' : 'none')};
   position: fixed;
@@ -38,7 +58,6 @@ const DropdownOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 10000;
 `;
-
 const DropdownContent = styled.div`
   display: ${({ show }) => (show ? 'block' : 'none')};
   position: absolute;
@@ -50,7 +69,6 @@ const DropdownContent = styled.div`
   top: 0;
   border: 2px solid black;
 `;
-
 const DropdownTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -60,10 +78,8 @@ const DropdownTable = styled.table`
    padding: 8px;
   }
 `;
-
 const DropdownTableRow = styled.tr`
 `;
-
 const DropdownTableCell = styled.td`
   padding: 8px;
   border-bottom: 1px solid #ddd;
@@ -72,7 +88,6 @@ const DropdownTableCell = styled.td`
     color: ${({ theme }) => theme.setChangeHover};
   }
 `;
-
 const SeparatorRow = styled.tr`
   background-color: #1290eb !important;
   color: white;
@@ -100,6 +115,7 @@ const CardsPage = () => {
   const [setTotal, setSetTotal] = useState(''); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
@@ -316,6 +332,22 @@ const CardsPage = () => {
     };
   }, [dropdownOpen, handleClickOutside]);
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+
+    try {
+      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/search?name=${encodeURIComponent(searchQuery)}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCards(data);
+      } else {
+        console.error('Failed to fetch search results');
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
   return (
     <CardsContainer theme={theme}>
       <Helmet>
@@ -325,6 +357,15 @@ const CardsPage = () => {
         <meta property="og:description" content={`Browse all cards from the ${setName} collection.`} />
       </Helmet>
       <div className='card-set-container'>
+        <SearchBarContainer>
+          <SearchInput
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for a card name..."
+          />
+          <SearchButton onClick={handleSearch}>Search</SearchButton>
+        </SearchBarContainer>
         <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
           <p>Change Set</p>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>

@@ -687,6 +687,15 @@
         width: 15px;
     }
 }
+@media screen and (max-width: 440px) {
+    .card-display-area img {
+        width: 75px;
+        border-radius: 3px;
+    }
+    .card-set-container {
+        padding: 0 15px;
+    }
+}
 @media screen and (max-width: 420px) {
     .the-card-img {
         border-radius: 18px !important;

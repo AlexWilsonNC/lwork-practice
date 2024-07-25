@@ -576,7 +576,7 @@ const CardView = () => {
                                 <div>
                                     <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
                                     <p className='show-ninefifty'>
-                                        {cardInfo.set.name}
+                                        <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
                                         <span className='align-center'>
                                             <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
                                             &nbsp;
@@ -638,7 +638,7 @@ const CardView = () => {
                                 <th style={{ width: '1%' }}>Place</th>
                                 <th style={{ width: '1%' }}>Player</th>
                                 <th style={{ width: '1%' }}>Division</th>
-                                <th style={{ width: '1%' }}>Event Link</th>
+                                <th style={{ width: '1%' }}>Event</th>
                                 <th style={{ width: '1%' }}>Decklist</th>
                             </tr>
                         </thead>
