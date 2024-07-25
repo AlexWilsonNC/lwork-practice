@@ -218,27 +218,25 @@ app.get('/api/cards', async (req, res) => {
 
 app.get('/api/cards/search', async (req, res) => {
   const { name } = req.query;
-
-  if (!name) {
-    return res.status(400).json({ message: 'Name query parameter is required' });
-  }
+  console.log(`Searching for cards with name: ${name}`);
 
   try {
-    const searchRegex = new RegExp(name, 'i'); // Case-insensitive regex for partial match
-    const collections = await cardConnection.collections();
-    const allCards = [];
+    const collections = await cardConnection.db().listCollections().toArray();
+    const searchResults = [];
 
-    for (const collection of collections) {
-      const cards = await collection.find({ name: searchRegex }).toArray();
-      allCards.push(...cards);
+    for (let collection of collections) {
+      const col = cardConnection.collection(collection.name);
+      const results = await col.find({ name: { $regex: new RegExp(name, 'i') } }).toArray();
+      searchResults.push(...results);
     }
 
-    res.status(200).json(allCards);
+    res.status(200).json(searchResults);
   } catch (error) {
     console.error('Error searching for cards:', error);
     res.status(500).send('Error searching for cards');
   }
 });
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));

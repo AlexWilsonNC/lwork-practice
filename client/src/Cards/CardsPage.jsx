@@ -320,6 +320,23 @@ const CardsPage = () => {
     }
   }, []);
 
+  const handleSearch = async () => {
+    if (searchQuery.trim() === '') return;
+
+    try {
+      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/search?name=${searchQuery}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCards(data);
+        setDropdownOpen(false);
+      } else {
+        console.error('Failed to fetch search results');
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
   useEffect(() => {
     if (dropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -331,22 +348,6 @@ const CardsPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownOpen, handleClickOutside]);
-
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-
-    try {
-      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/search?name=${encodeURIComponent(searchQuery)}`);
-      if (response.ok) {
-        const data = await response.json();
-        setCards(data);
-      } else {
-        console.error('Failed to fetch search results');
-      }
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
 
   return (
     <CardsContainer theme={theme}>
