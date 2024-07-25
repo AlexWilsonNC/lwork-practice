@@ -39,18 +39,17 @@ const orderedSets = [
   "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
   "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
   // xy
-  "EVO", "STS", "FCO", "GEN", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+  "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
   "FLF", "XY", "KSS", "PR-XY",
   // bw
-  "LTR", "PLB", "PLF", "PLS", "BCR", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW",
-  "DRV", "PR-BLW",
+  "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
   // hgss
   "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
   // dp
   "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
-  "MT", "DP", "P5", "PR-DP",
+  "MT", "DP", "PR-DP",
   // rs
-  "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+   "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
   "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
   // wotc
   "SK", "AQ", "EX", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "LC", "TR", "B2",

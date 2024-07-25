@@ -32,6 +32,9 @@ export const lightTheme = {
       },
     searchBg: '#FFF',
     searchTxt: '#000',
+    setChangeBtn: 'rgb(240, 240, 240)',
+    setChangeHover: '#0721b5 !important',
+    
 };
 
 export const darkTheme = {
@@ -69,4 +72,7 @@ export const darkTheme = {
       },
     searchBg: '#27292c',
     searchTxt: '#FFF',
+    setChangeBtn: '#1d1e21',
+    setChangeHover: '#FFF !important',
+
 };

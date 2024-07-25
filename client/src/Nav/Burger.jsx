@@ -8,7 +8,7 @@ const StyledBurger = styled.div`
   height: 2rem;
   position: ${({ open }) => open ? 'fixed' : 'relative'};
   right: 30px;
-  z-index: 100000001;
+  z-index: 1000;
   display: flex;
   justify-content: space-around;
   flex-flow: column nowrap;

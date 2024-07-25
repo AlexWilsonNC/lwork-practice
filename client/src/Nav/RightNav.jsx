@@ -19,7 +19,7 @@ const BurgerOpen = styled.ul`
     padding-top: 3.5rem;
     padding-left: 1.5rem;
     transition: transform 0.3s ease-in-out;
-    z-index: 100000000;
+    z-index: 1000;
     font-size: 24px;
     font-weight: 600;
 

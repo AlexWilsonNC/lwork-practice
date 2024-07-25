@@ -119,7 +119,7 @@ const tournamentList = [
         "location": "Honolulu, Hawaii"
     },
     {
-        "id": '2025_BALTIMORE',
+        "id": '',
         "name": "Baltimore Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -128,7 +128,7 @@ const tournamentList = [
         "location": "Baltimore, Maryland"
     },
     {
-        "id": '2025_DORTMUND',
+        "id": '',
         "name": "Dortmund Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
