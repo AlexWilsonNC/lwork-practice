@@ -132,6 +132,7 @@ const CardsPage = () => {
     { name: "Obsidian Flames", abbrev: "OBF", releaseDate: "Aug 11, 2023", total: "230" },
     { name: "Paldea Evolved", abbrev: "PAL", releaseDate: "Jun 9, 2023", total: "279" },
     { name: "Scarlet & Violet", abbrev: "SVI", releaseDate: "Mar 31, 2023", total: "252" },
+    { name: "SV Energy", abbrev: "SVE", releaseDate: "Mar 31, 2023", total: "8" },
     { name: "SV Black Star Promos", abbrev: "PR-SV", releaseDate: "-", total: "75" },
     { separator: true, text: "Sword & Shield"},
     { name: "Crown Zenith", abbrev: "CRZ", releaseDate: "Jan 20, 2023", total: "160" },

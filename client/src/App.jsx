@@ -12,6 +12,7 @@ import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 
 function App() {
+
   return (
     <>
       <Navbar />

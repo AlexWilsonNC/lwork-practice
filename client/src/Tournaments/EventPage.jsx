@@ -259,6 +259,13 @@ const EventPage = () => {
         }
     }
 
+    const getEventFormat = (division) => {
+        if (division === 'professors' && eventData.formatProfessors) {
+            return eventData.formatProfessors;
+        }
+        return eventData.format;
+    }
+
     return (
         <EventPageContent className='center' theme={theme}>
             <Helmet>
@@ -276,7 +283,7 @@ const EventPage = () => {
                 <meta name="twitter:image" content={eventData.thumbnail} />
             </Helmet>
             <div className='regional-container'>
-            <div className='top-divisions'>
+                <div className='top-divisions'>
                     {eventData.masters ? (
                         <Link
                             className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'}`}
@@ -329,7 +336,7 @@ const EventPage = () => {
                             <p><strong>Organizer:</strong> <a href={eventData.organizerLink} target="_blank">{eventData.organizer}</a></p>
                         )}
                         {eventData.format && (
-                            <p><strong>Format:</strong> {eventData.format}</p>
+                            <p><strong>Format:</strong> {getEventFormat(division)}</p>
                         )}
                         {getPlayerCount(division)}
                     </div>

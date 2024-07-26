@@ -21,12 +21,12 @@ const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: tru
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
-  console.log('Connected to eventConnection');
+  // console.log('Connected to eventConnection');
 });
 
 cardConnection.on('error', console.error.bind(console, 'MongoDB connection error for cardConnection:'));
 cardConnection.once('open', () => {
-  console.log('Connected to cardConnection');
+  // console.log('Connected to cardConnection');
 });
 
 const eventSchema = new mongoose.Schema({
@@ -78,7 +78,7 @@ const Event = eventConnection.model('Event', eventSchema);
 
 // Define API routes before static files and catch-all route
 app.get('/events/:id', async (req, res) => {
-  console.log(req.params.id)
+  // console.log(req.params.id)
   try {
     const event = await Event.findOne({ id: req.params.id });
     if (event) {
@@ -103,7 +103,7 @@ app.get('/event-ids', async (req, res) => {
 
 app.get('/api/cards/:set/:number', async (req, res) => {
   const { set, number } = req.params;
-  console.log(`Fetching card from set: ${set}, number: ${number}`);
+  // console.log(`Fetching card from set: ${set}, number: ${number}`);
 
   try {
     const collection = cardConnection.collection(set);
@@ -115,7 +115,7 @@ app.get('/api/cards/:set/:number', async (req, res) => {
     // Ensure number is treated as a string
     const card = await collection.findOne({ number: String(number) });
     if (card) {
-      console.log('Card found:', card);
+      // console.log('Card found:', card);
       res.status(200).json(card);
     } else {
       console.error(`Card not found in set: ${set}, number: ${number}`);
@@ -143,7 +143,7 @@ app.get('/api/cards/:collectionName', async (req, res) => {
 
 app.get('/api/cards', async (req, res) => {
   const format = req.query.format;
-  console.log(`Fetching cards for format: ${format}`);
+  // console.log(`Fetching cards for format: ${format}`);
 
   if (!format) {
       console.error('Format is missing');
@@ -152,24 +152,24 @@ app.get('/api/cards', async (req, res) => {
 
   try {
       const setsToQuery = format.split(',');
-      console.log('Sets to query:', setsToQuery);
+      // console.log('Sets to query:', setsToQuery);
 
       const cardPromises = setsToQuery.map(async set => {
-          console.log(`Fetching cards for set: ${set}`);
+          // console.log(`Fetching cards for set: ${set}`);
           const collection = cardConnection.collection(set);
           if (!collection) {
               console.error(`Collection ${set} not found`);
               return [];
           }
           const cards = await collection.find({}).toArray();
-          console.log(`Fetched ${cards.length} cards for set: ${set}`);
+          // console.log(`Fetched ${cards.length} cards for set: ${set}`);
           return cards;
       });
 
       const allCards = await Promise.all(cardPromises);
       const flattenedCards = allCards.flat();
 
-      console.log('Fetched cards:', flattenedCards.length);
+      // console.log('Fetched cards:', flattenedCards.length);
       res.json(flattenedCards);
   } catch (err) {
       console.error('Error fetching cards:', err);

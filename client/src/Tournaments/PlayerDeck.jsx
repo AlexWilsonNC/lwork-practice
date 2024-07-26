@@ -50,9 +50,129 @@ const orderedSets = [
     "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
     "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
 
-    "SK", "AQ", "EX", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "LC", "TR", "B2",
+    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
     "FO", "JU", "BS", "PR-BS",
 ];
+
+const promoSets = {
+    "TWM": "PR-SV",
+    "TEF": "PR-SV",
+    "PAF": "PR-SV",
+    "PAR": "PR-SV",
+    "MEW": "PR-SV",
+    "OBF": "PR-SV",
+    "PAL": "PR-SV",
+    "SVI": "PR-SV",
+    "SVE": "PR-SV",
+    "CRZ": "PR-SW",
+    "SIT": "PR-SW",
+    "LOR": "PR-SW",
+    "PGO": "PR-SW",
+    "ASR": "PR-SW",
+    "BRS": "PR-SW",
+    "CEC": "PR-SM",
+    "HIF": "PR-SM",
+    "UNM": "PR-SM",
+    "UNB": "PR-SM",
+    "DPI": "PR-SM",
+    "TEU": "PR-SM",
+    "LOT": "PR-SM",
+    "DRM": "PR-SM",
+    "CES": "PR-SM",
+    "FLI": "PR-SM",
+    "UPR": "PR-SM",
+    "CIN": "PR-SM",
+    "SLG": "PR-SM",
+    "BUS": "PR-SM",
+    "GRI": "PR-SM",
+    "SUM": "PR-SM",
+    "EVO": "PR-XY",
+    "STS": "PR-XY",
+    "FCO": "PR-XY",
+    "GEN": "PR-XY",
+    "BKP": "PR-XY",
+    "BKT": "PR-XY",
+    "AOR": "PR-XY",
+    "ROS": "PR-XY",
+    "DCE": "PR-XY",
+    "PRC": "PR-XY",
+    "PHF": "PR-XY",
+    "FFI": "PR-XY",
+    "FLF": "PR-XY",
+    "XY": "PR-XY",
+    "KSS": "PR-XY",
+    "LTR": "PR-BLW",
+    "PLB": "PR-BLW",
+    "PLF": "PR-BLW",
+    "PLS": "PR-BLW",
+    "BCR": "PR-BLW",
+    "DRV": "PR-BLW",
+    "DRX": "PR-BLW",
+    "DEX": "PR-BLW",
+    "NXD": "PR-BLW",
+    "NVI": "PR-BLW",
+    "EPO": "PR-BLW",
+    "BLW": "PR-BLW",
+    "CL": "PR-HS",
+    "TM": "PR-HS",
+    "UD": "PR-HS",
+    "UL": "PR-HS",
+    "HS": "PR-HS",
+    "AR": "PR-DP",
+    "SV": "PR-DP",
+    "RR": "PR-DP",
+    "P9": "PR-DP",
+    "PL": "PR-DP",
+    "SF": "PR-DP",
+    "P8": "PR-DP",
+    "LA": "PR-DP",
+    "MD": "PR-DP",
+    "P7": "PR-DP",
+    "GE": "PR-DP",
+    "SW": "PR-DP",
+    "P6": "PR-DP",
+    "MT": "PR-DP",
+    "DP": "PR-DP",
+    "P5": "PR-EX",
+    "PK": "PR-EX",
+    "DF": "PR-EX",
+    "CG": "PR-EX",
+    "P4": "PR-EX",
+    "HP": "PR-EX",
+    "P3": "PR-EX",
+    "TK2": "PR-EX",
+    "LM": "PR-EX",
+    "DS": "PR-EX",
+    "P2": "PR-EX",
+    "UF": "PR-EX",
+    "EM": "PR-EX",
+    "DX": "PR-EX",
+    "TRR": "PR-EX",
+    "P1": "PR-EX",
+    "FL": "PR-EX",
+    "HL": "PR-EX",
+    "TK1": "PR-EX",
+    "MA": "PR-EX",
+    "DR": "PR-EX",
+    "SS": "PR-EX",
+    "RS": "PR-EX",
+    "SK": "PR-BS",
+    "AQ": "PR-BS",
+    "EX": "PR-BS",
+    "N4": "PR-BS",
+    "N3": "PR-BS",
+    "SI": "PR-BS",
+    "N2": "PR-BS",
+    "N1": ["PR-BS", "BS", "TR"],
+    "G2": "PR-BS",
+    "G1": "PR-BS",
+    "LC": "PR-BS",
+    "TR": "PR-BS",
+    "B2": "PR-BS",
+    "FO": "PR-BS",
+    "JU": "PR-BS",
+    "BS": "PR-BS"
+};
 
 const cleanCardName = (name) => {
     return name.replace(" - ACESPEC", "").replace(" - Basic", "");
@@ -67,6 +187,7 @@ const normalizeString = (str) => {
 };
 
 const getPlacementSuffix = (number) => {
+    if (number === null || number === 0) return '';
     const j = number % 10;
     const k = number % 100;
     if (j === 1 && k !== 11) {
@@ -103,7 +224,7 @@ const getPlacementSuffix = (number) => {
 
 const formatName = (name) => {
     const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jr', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii'];
 
     return name
         .toLowerCase()
@@ -143,6 +264,13 @@ const formatToCollections = (format) => {
 
     const [actualStart, actualEnd] = startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
     const collections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+
+    Object.keys(promoSets).forEach((set) => {
+        if (collections.includes(set) && !collections.includes(promoSets[set])) {
+            collections.push(promoSets[set]);
+        }
+    });
+    
     return collections;
 };
 
@@ -157,7 +285,7 @@ const PlayerDeck = () => {
     const [cardData, setCardData] = useState(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
-    
+
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
@@ -200,19 +328,20 @@ const PlayerDeck = () => {
                 const eventData = await response.json();
                 setEventData(eventData);
                 const divisionData = eventData[division];
+        
                 if (divisionData) {
                     const decodedPlayerId = decodeURIComponent(playerId);
-                    const playerIndex = divisionData.findIndex(p => `${encodeURIComponent(p.name)}-${p.flag}` === playerId);
-                    const player = divisionData.find(p => {
-                        const normalizedPlayerName = p.name;
-                        const normalizedPlayerFlag = p.flag;
-                        const normalizedPlayerId = `${normalizedPlayerName}-${normalizedPlayerFlag}`;
-                        return normalizedPlayerId === decodedPlayerId;
-                    });
-                    if (player) {
+                    const [playerName, playerFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
+                    const normalizedPlayerName = normalizeString(playerName);
+        
+                    const playerIndex = divisionData.findIndex(p => normalizeString(p.name) === normalizedPlayerName && p.flag === playerFlag);
+        
+                    if (playerIndex !== -1) {
+                        const player = divisionData[playerIndex];
                         setPlayerData(player);
                         setPlacement(playerIndex + 1);
-                        fetchCardData(eventData.format);
+                        const format = division === 'professors' ? eventData.formatProfessors : eventData.format;
+                        fetchCardData(format);
                     } else {
                         console.error('Player not found in division data');
                     }
@@ -223,9 +352,12 @@ const PlayerDeck = () => {
                 console.error('Failed to fetch player data');
             }
         };
+                        
         fetchPlayerData();
     }, [eventId, division, playerId]);
-
+    
+    {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+    
     useEffect(() => {
         if (cardData) {
             const totalImages = playerData.decklist.pokemon.length + playerData.decklist.trainer.length + playerData.decklist.energy.length;
@@ -310,9 +442,9 @@ const PlayerDeck = () => {
                     <div>
                         <h2>{formatName(playerData.name)}</h2>
                         <hr className='playerdeck-hr'></hr>
-                        <p>{getPlacementSuffix(placement)} Place ({capitalizeFirstLetter(division)})</p>
+                        <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
                         {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-                        {eventData && <p>{eventData.date} ({eventData.format})</p>}
+                        {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
                     </div>
                     <div className='deck-top-right-options'>
                         <DecklistOptions decklist={playerData.decklist} />
@@ -329,32 +461,20 @@ const PlayerDeck = () => {
                 {viewMode === 'grid' ? (
                     <div className="deck-cards">
                         {playerData.decklist.pokemon.map((card, index) => (
-                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
-                                <img
-                                    src={cardImageUrl(card)}
-                                    alt={card.name}
-                                    onLoad={handleImageLoad}
-                                />
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
                         {playerData.decklist.trainer.map((card, index) => (
-                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
-                                <img
-                                    src={cardImageUrl(card)}
-                                    alt={card.name}
-                                    onLoad={handleImageLoad}
-                                />
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
                         {playerData.decklist.energy.map((card, index) => (
-                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
-                                <img
-                                    src={cardImageUrl(card)}
-                                    alt={card.name}
-                                    onLoad={handleImageLoad}
-                                />
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
@@ -364,45 +484,30 @@ const PlayerDeck = () => {
                         <div className='column-section'>
                             <div className='list-category'><h2>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
-                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img
-                                        className='pokemon-list-img'
-                                        src={cardImageUrl(card)}
-                                        alt={card.name}
-                                        onLoad={handleImageLoad}
-                                    />
+                                    <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} />
                                 </div>
                             ))}</div>
                         </div>
                         <div className='column-section'>
                             <div className='list-category'><h2>Trainer ({countCards(playerData.decklist, 'trainer')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
-                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img
-                                        className='trainer-list-img'
-                                        src={cardImageUrl(card)}
-                                        alt={card.name}
-                                        onLoad={handleImageLoad}
-                                    />
+                                    <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} />
                                 </div>
                             ))}</div>
                         </div>
                         <div className='column-section'>
                             <div className='list-category'><h2>Energy ({countCards(playerData.decklist, 'energy')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
-                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img
-                                        className='energy-list-img'
-                                        src={cardImageUrl(card)}
-                                        alt={card.name}
-                                        onLoad={handleImageLoad}
-                                    />
+                                    <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} />
                                 </div>
                             ))}</div>
                         </div>
