@@ -17,19 +17,36 @@ const CardsContainer = styled.div`
   }
 `;
 
+const SearchBarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+`;
+
+const SearchInput = styled.input`
+  padding: 14px;
+  width: 450px;
+  border: 1px solid rgba(150,150,150,0.5);
+  border-radius: 2px;
+  margin: 0 10px;
+  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.setChangeBtn};
+`;
+
 const DropdownButton = styled.button`
-  padding: 10px;
-  width: 500px;
+  padding: 10px 14px;
+  width: 480px;
   border: 1px solid rgba(150,150,150,0.5);
   background-color: ${({ theme }) => theme.setChangeBtn};
   color: ${({ theme }) => theme.text};
   cursor: pointer;
-  margin: 25px 0;
+  margin-bottom: 25px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-weight: 600;
+  border-radius: 2px;
 `;
 
 const DropdownOverlay = styled.div`
@@ -329,10 +346,22 @@ const CardsPage = () => {
         <meta property="og:description" content={`Browse all cards from the ${setName} collection.`} />
       </Helmet>
       <div className='card-set-container'>
-        <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <p>Change Set</p>
-          <span class="material-symbols-outlined">keyboard_arrow_down</span>
-        </DropdownButton>
+        <div className='align-column'>
+          <SearchBarContainer>
+            <SearchInput
+              className='serchbtrn not-ready'
+              type="text"
+              // value={searchQuery}
+              // onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for a card name..."
+            />
+            {/* onClick={handleSearch} */}
+          </SearchBarContainer>
+          <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
+            <p>Change Set</p>
+            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+          </DropdownButton>
+        </div>
         <DropdownOverlay show={dropdownOpen} />
         <DropdownContent className='dropdowncontent' ref={dropdownRef} show={dropdownOpen} theme={theme}>
           <p className='small-disclaimer-text'>~ Special sets marked with symbol *</p>

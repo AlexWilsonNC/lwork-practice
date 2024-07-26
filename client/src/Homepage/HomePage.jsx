@@ -98,7 +98,7 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box'>
+                        <div className='homepage-box not-ready'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
                                 <a href='./articles/all' className='blue'>View All</a>
@@ -122,7 +122,7 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box'>
+                        <div className='homepage-box not-ready'>
                             <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
                             <a href='./archive-updates/all'>
                                 <WrappedFeature className='wrapped-feature'>
@@ -169,7 +169,7 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
-                            <a href='./card-database'>
+                            <a href='./cards/TWM'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
@@ -181,7 +181,7 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box'>
+                        <div className='homepage-box not-ready'>
                             <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
                             <a href='/deckbuilder'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
@@ -195,7 +195,7 @@ const Homepage = () => {
                         </div>
                     </div>
 
-                    <div className='top-featured-row'>
+                    <div className='top-featured-row not-ready'>
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Recent Articles</FeaturedHeaders>
@@ -346,7 +346,7 @@ const Homepage = () => {
                             </WrappedFeature>
                         </a>
                     </div>
-                    <div className='homepage-box'>
+                    <div className='homepage-box not-ready'>
                         <div className='flex-row-wide'>
                             <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
                             <a href='./articles/all' className='blue'>View All</a>
@@ -395,7 +395,7 @@ const Homepage = () => {
                             </ul>
                         </UpcomingEventsHome>
                     </div>
-                    <div className='homepage-box'>
+                    <div className='homepage-box not-ready'>
                         <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
                         <a href='./archive-updates/all'>
                             <WrappedFeature className='wrapped-feature'>
@@ -426,7 +426,7 @@ const Homepage = () => {
                             </WrappedFeature>
                         </a>
                     </div>
-                    <div className='homepage-box lessmarginbottomsmall footerupon-mobile'>
+                    <div className='homepage-box lessmarginbottomsmall footerupon-mobile not-ready'>
                         <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
                         <a href='/deckbuilder'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>

@@ -56,6 +56,8 @@
     width: calc(100% / 1 - 7px);
     transition: ease-in-out all 0.2s;
     margin: 2px 0;
+    background-color: grey;
+    height: 130px;
 }
 .card-container:hover {
     cursor: pointer;

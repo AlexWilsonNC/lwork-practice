@@ -61,7 +61,7 @@ function Footer() {
                             <img src={patreonIcon} alt="social-icon" />
                             <p>Support us on Patreon</p>
                         </a>
-                        <a href='' target='_blank' rel="noopener noreferrer">
+                        <a href='' target='_blank' rel="noopener noreferrer" className='not-ready'>
                             <img src={tiktokIcon} alt="social-icon" />
                             <p>Watch us on Tiktok</p>
                         </a>

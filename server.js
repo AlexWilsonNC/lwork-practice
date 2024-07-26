@@ -173,48 +173,37 @@ app.get('/api/cards', async (req, res) => {
   console.log(`Fetching cards for format: ${format}`);
 
   if (!format) {
-    console.error('Format is missing');
-    return res.status(400).json({ message: 'Format is required' });
+      console.error('Format is missing');
+      return res.status(400).json({ message: 'Format is required' });
   }
 
   try {
-    const [startSet, endSet] = format.split('-');
-    const startIndex = orderedSets.indexOf(startSet);
-    const endIndex = orderedSets.indexOf(endSet);
+      const setsToQuery = format.split(',');
+      console.log('Sets to query:', setsToQuery);
 
-    console.log(`startSet: ${startSet}, endSet: ${endSet}`);
-    console.log(`startIndex: ${startIndex}, endIndex: ${endIndex}`);
+      const cardPromises = setsToQuery.map(async set => {
+          console.log(`Fetching cards for set: ${set}`);
+          const collection = cardConnection.collection(set);
+          if (!collection) {
+              console.error(`Collection ${set} not found`);
+              return [];
+          }
+          const cards = await collection.find({}).toArray();
+          console.log(`Fetched ${cards.length} cards for set: ${set}`);
+          return cards;
+      });
 
-    if (startIndex === -1 || endIndex === -1) {
-      console.error('Start or end set not found in orderedSets');
-      return res.status(400).json({ message: 'Invalid format' });
-    }
+      const allCards = await Promise.all(cardPromises);
+      const flattenedCards = allCards.flat();
 
-    if (startIndex > endIndex) {
-      console.error('Start index is greater than end index');
-      return res.status(400).json({ message: 'Invalid format range' });
-    }
-
-    const setsToQuery = orderedSets.slice(startIndex, endIndex + 1);
-    console.log('Sets to query:', setsToQuery);
-
-    const cardPromises = setsToQuery.map(async set => {
-      console.log(`Fetching cards for set: ${set}`);
-      const cards = await cardConnection.db.collection(set).find({}).toArray();
-      console.log(`Fetched ${cards.length} cards for set: ${set}`);
-      return cards;
-    });
-
-    const allCards = await Promise.all(cardPromises);
-    const flattenedCards = allCards.flat();
-
-    console.log('Fetched cards:', flattenedCards.length);
-    res.json(flattenedCards);
+      console.log('Fetched cards:', flattenedCards.length);
+      res.json(flattenedCards);
   } catch (err) {
-    console.error('Error fetching cards:', err);
-    res.status(500).json({ message: 'Failed to fetch cards' });
+      console.error('Error fetching cards:', err);
+      res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));

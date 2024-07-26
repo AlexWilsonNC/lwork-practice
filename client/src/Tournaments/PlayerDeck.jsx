@@ -28,6 +28,24 @@ const PlayerDeckCenter = styled.div`
     }
 `;
 
+const orderedSets = [
+    "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+    "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+    "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+    "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+    "FLF", "XY", "KSS", "PR-XY",
+    "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+    "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+    "MT", "DP", "PR-DP",
+    "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+    "SK", "AQ", "EX", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "LC", "TR", "B2",
+    "FO", "JU", "BS", "PR-BS",
+];
+
 const cleanCardName = (name) => {
     return name.replace(" - ACESPEC", "").replace(" - Basic", "");
 };
@@ -76,8 +94,8 @@ const getPlacementSuffix = (number) => {
 };
 
 const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jr', 'jt', 'jz', 'pj', 'sj', 'pk'];
+    const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jr', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.'];
 
     return name
         .toLowerCase()
@@ -106,6 +124,20 @@ const formatName = (name) => {
         .join(' ');
 };
 
+const formatToCollections = (format) => {
+    const [startSet, endSet] = format.split('-');
+    const startIndex = orderedSets.indexOf(startSet);
+    const endIndex = orderedSets.indexOf(endSet);
+
+    if (startIndex === -1 || endIndex === -1) {
+        throw new Error('Invalid format range');
+    }
+
+    const [actualStart, actualEnd] = startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
+    const collections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+    return collections;
+};
+
 const PlayerDeck = () => {
     const { theme } = useTheme();
     const { eventId, division, playerId } = useParams();
@@ -115,24 +147,26 @@ const PlayerDeck = () => {
     const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
     const navigate = useNavigate();
     const [cardData, setCardData] = useState(null);
-
+    
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
-                console.log('Fetching cards from API with format:', format);
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${format}`);
-                console.log('API response:', response);
+                const collections = formatToCollections(format);
+                const collectionsParam = collections.join(',');
+                console.log('Fetching cards from API with collections:', collectionsParam);
+        
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`);
                 if (response.ok) {
                     const cards = await response.json();
                     console.log('Fetched card data:', cards);
                     const newCardData = {};
                     const cardMap = {};
                     const cardNameMap = {};
-
+        
                     cards.forEach(card => {
                         const key = `${card.setAbbrev}-${card.number}`;
                         cardMap[key] = card;
-
+        
                         const nameKey = normalizeString(card.name);
                         if (!cardNameMap[nameKey]) {
                             cardNameMap[nameKey] = [];
@@ -149,7 +183,7 @@ const PlayerDeck = () => {
                 console.error('Error fetching card data:', error);
             }
         };
-
+                        
         const fetchPlayerData = async () => {
             const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
             if (response.ok) {
@@ -181,7 +215,7 @@ const PlayerDeck = () => {
         };
         fetchPlayerData();
     }, [eventId, division, playerId]);
-
+      
     const cardImageUrl = (card) => {
         let key = `${card.set}-${card.number}`;
 

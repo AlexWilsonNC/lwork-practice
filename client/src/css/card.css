@@ -22,6 +22,12 @@
     height: 95%;
     width: 100%;
 }
+.align-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
 .card-and-setinfo {
     display: flex;
     flex-direction: column;
@@ -346,6 +352,7 @@
 .card-display-area img:hover {
     transform: scale(1.1);
 }
+.serchbtrn:hover,
 .dropdownbutton:hover {
     border: 1px solid #1290eb;
 }
