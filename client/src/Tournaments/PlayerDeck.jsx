@@ -30,18 +30,26 @@ const PlayerDeckCenter = styled.div`
 
 const orderedSets = [
     "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+
     "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
     "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+
     "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
     "FLF", "XY", "KSS", "PR-XY",
+
     "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+
     "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+
     "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
     "MT", "DP", "PR-DP",
+
     "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
     "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+
     "SK", "AQ", "EX", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "LC", "TR", "B2",
     "FO", "JU", "BS", "PR-BS",
 ];
@@ -147,18 +155,20 @@ const PlayerDeck = () => {
     const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
     const navigate = useNavigate();
     const [cardData, setCardData] = useState(null);
+    const [loadingImages, setLoadingImages] = useState(true);
+    const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
     
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
                 const collections = formatToCollections(format);
                 const collectionsParam = collections.join(',');
-                console.log('Fetching cards from API with collections:', collectionsParam);
+                const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
         
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`);
+                const response = await fetch(url);
+        
                 if (response.ok) {
                     const cards = await response.json();
-                    console.log('Fetched card data:', cards);
                     const newCardData = {};
                     const cardMap = {};
                     const cardNameMap = {};
@@ -177,7 +187,7 @@ const PlayerDeck = () => {
                     newCardData.cardNameMap = cardNameMap;
                     setCardData(newCardData);
                 } else {
-                    console.error('Failed to fetch card data');
+                    console.error('Failed to fetch card data, status:', response.status);
                 }
             } catch (error) {
                 console.error('Error fetching card data:', error);
@@ -215,6 +225,19 @@ const PlayerDeck = () => {
         };
         fetchPlayerData();
     }, [eventId, division, playerId]);
+
+    useEffect(() => {
+        if (cardData) {
+            const totalImages = playerData.decklist.pokemon.length + playerData.decklist.trainer.length + playerData.decklist.energy.length;
+            if (imagesLoadedCount === totalImages) {
+                setLoadingImages(false);
+            }
+        }
+    }, [imagesLoadedCount, cardData, playerData]);
+
+    const handleImageLoad = () => {
+        setImagesLoadedCount(prevCount => prevCount + 1);
+    };
       
     const cardImageUrl = (card) => {
         let key = `${card.set}-${card.number}`;
@@ -306,20 +329,32 @@ const PlayerDeck = () => {
                 {viewMode === 'grid' ? (
                     <div className="deck-cards">
                         {playerData.decklist.pokemon.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
+                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <img
+                                    src={cardImageUrl(card)}
+                                    alt={card.name}
+                                    onLoad={handleImageLoad}
+                                />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
                         {playerData.decklist.trainer.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
+                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <img
+                                    src={cardImageUrl(card)}
+                                    alt={card.name}
+                                    onLoad={handleImageLoad}
+                                />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
                         {playerData.decklist.energy.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
+                            <div key={index} className={`card-container ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
+                                <img
+                                    src={cardImageUrl(card)}
+                                    alt={card.name}
+                                    onLoad={handleImageLoad}
+                                />
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}
@@ -329,30 +364,45 @@ const PlayerDeck = () => {
                         <div className='column-section'>
                             <div className='list-category'><h2>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} />
+                                    <img
+                                        className='pokemon-list-img'
+                                        src={cardImageUrl(card)}
+                                        alt={card.name}
+                                        onLoad={handleImageLoad}
+                                    />
                                 </div>
                             ))}</div>
                         </div>
                         <div className='column-section'>
                             <div className='list-category'><h2>Trainer ({countCards(playerData.decklist, 'trainer')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} />
+                                    <img
+                                        className='trainer-list-img'
+                                        src={cardImageUrl(card)}
+                                        alt={card.name}
+                                        onLoad={handleImageLoad}
+                                    />
                                 </div>
                             ))}</div>
                         </div>
                         <div className='column-section'>
                             <div className='list-category'><h2>Energy ({countCards(playerData.decklist, 'energy')})</h2></div>
                             <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                <div key={index} className={`list-item ${loadingImages ? 'hidden' : ''}`} onClick={() => handleCardClick(card)}>
                                     <p className='list-card-count'>{card.count}</p>
                                     <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} />
+                                    <img
+                                        className='energy-list-img'
+                                        src={cardImageUrl(card)}
+                                        alt={card.name}
+                                        onLoad={handleImageLoad}
+                                    />
                                 </div>
                             ))}</div>
                         </div>
