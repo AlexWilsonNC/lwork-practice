@@ -80,7 +80,6 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: -30px 0 15px 0;
   }
   .burger:hover {
     cursor: pointer;
@@ -92,12 +91,13 @@ nav {
   .burgered-links,
   .burgered-links-more {
     list-style: none;
-    /* background-color: rgb(60, 65, 71); */
   }
   .burgered-links li,
   .burgered-links-more li {
-    margin-bottom: 30px;
     transition: ease-in-out 0.3s;
+  }
+  .burgered-links-more li {
+    margin-bottom: 30px;
   }
   .burgered-links li:hover,
   .burgered-links-more li:hover {
@@ -129,7 +129,6 @@ nav {
     background-color: rgba(255, 255, 255, 0.837);
     border-radius: 15px;
     height: 65px;
-    margin-top: 25px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -194,4 +193,17 @@ nav {
     .left-nav {
       margin-left: 10px;
     }
+}
+@media screen and (max-height: 750px) {
+  .burdered-socials img {
+    width: 42px;
+  }
+  .burdered-socials {
+    border-radius: 10px;
+    height: 55px;
+  }
+  .burger-resources li,
+  .burgered-links li {
+    font-size: 20px;
+  }
 }
