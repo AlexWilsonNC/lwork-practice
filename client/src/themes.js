@@ -34,13 +34,13 @@ export const lightTheme = {
     searchTxt: '#000',
     setChangeBtn: 'rgb(240, 240, 240)',
     setChangeHover: '#0721b5 !important',
-    
+    setinfodark: 'rgb(236, 240, 244)',
 };
 
 export const darkTheme = {
     body: '#27292c',
     text: '#FAFAFA',
-    burgerMenu: '#145d91',
+    burgerMenu: 'rgb(60, 65, 71)',
     toggleBorder: '#6B8096',
     burgerTxt: '#FAFAFA !important',
     background: '#999',
@@ -53,9 +53,9 @@ export const darkTheme = {
     lightBurgerColor: '#FFF',
     darkBurgerColor: '#FFF',
     themeName: 'dark',
-    themeBorder: '2px solid rgb(0, 47, 89)',
+    themeBorder: '2px solid #000',
     themeBg: '#FFF',
-    themeColor: 'rgb(0, 47, 89)',
+    themeColor: '#000',
     buttonBackground: '#333',
     buttonText: '#FFF',
     playerlisthover: 'rgba(101, 127, 153, 0.15)',
@@ -74,5 +74,6 @@ export const darkTheme = {
     searchTxt: '#FFF',
     setChangeBtn: '#1d1e21',
     setChangeHover: '#FFF !important',
+    setinfodark: 'rgb(48, 55, 65)',
 
 };

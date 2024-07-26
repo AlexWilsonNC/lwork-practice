@@ -216,46 +216,6 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-// Updated search endpoint with additional logging and error checks
-app.get('/api/cards/search', async (req, res) => {
-  const { name } = req.query;
-  console.log(`Searching for cards with name: ${name}`);
-
-  if (!name) {
-    console.error('Name parameter is missing');
-    return res.status(400).json({ message: 'Name parameter is required' });
-  }
-
-  try {
-    const collections = await cardConnection.db.listCollections().toArray();
-    console.log(`Collections found: ${collections.map(col => col.name).join(', ')}`);
-
-    const searchResults = [];
-    for (let collection of collections) {
-      console.log(`Searching in collection: ${collection.name}`);
-      const col = cardConnection.collection(collection.name);
-
-      // Check if collection has documents
-      const count = await col.countDocuments();
-      console.log(`Collection ${collection.name} has ${count} documents`);
-
-      if (count > 0) {
-        const query = { name: { $regex: new RegExp(name, 'i') } };
-        console.log(`Query: ${JSON.stringify(query)}`);
-        const results = await col.find(query).toArray();
-        console.log(`Found ${results.length} results in collection ${collection.name}`);
-        searchResults.push(...results);
-      }
-    }
-
-    console.log(`Total results found: ${searchResults.length}`);
-    res.status(200).json(searchResults);
-  } catch (error) {
-    console.error('Error searching for cards:', error);
-    res.status(500).send('Error searching for cards');
-  }
-});
-
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
 

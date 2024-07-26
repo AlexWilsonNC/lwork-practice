@@ -9,21 +9,6 @@
     border-radius: 10px;
     margin-top: 25px;
 }
-/* .navigation-links {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 60%;
-    height: 5%;
-    margin-bottom: -15px;
-    margin-top: 15px;
-}
-.navigation-links a {
-    color:#1290eb;
-    display: flex;
-    align-items: center;
-} */
 .column-align {
     display: flex;
     flex-direction: column;
@@ -49,7 +34,6 @@
     flex-direction: column;
     align-items: center;
     margin-top: 15px;
-    background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     padding: 5px 20px;
@@ -329,10 +313,17 @@
     height:100px;
     margin: 15px 0;
 }
+.whole-set-view-area {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
 .set-info-area {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 .set-info-area img {
     width: auto;
@@ -342,7 +333,7 @@
 .card-display-area {
     text-align: center;
     flex-wrap: wrap;
-    margin: 15px 0;
+    margin: 15px 0 0 0;
 }
 .card-display-area img {
     width: 150px;
@@ -378,6 +369,31 @@
     margin: 5px 0 0 5px;
     opacity: 0.5;
 }
+
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.fullscreen-image {
+    max-width: 90%;
+    max-height: 90%;
+}
+.the-card-img {
+    cursor: zoom-in;
+}
+.the-card-img.full-screen {
+    cursor: zoom-out;
+}
+
+
 @media screen and (max-width: 1400px) {
     .card-view {
         padding: 50px 0;
@@ -498,6 +514,12 @@
         height: auto;
         border-radius: 27px !important;
         box-shadow: 0 0 12px black;
+    }
+    .the-card-img {
+        cursor: none;
+    }
+    .the-card-img.full-screen {
+        cursor: none;
     }
     .dropdownbutton {
         width: 60% !important;

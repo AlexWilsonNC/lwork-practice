@@ -91,6 +91,7 @@ const CardView = () => {
     const [eventsScanned, setEventsScanned] = useState(false);
     const [cardData, setCardData] = useState({ cardMap: {}, cardNameMap: {} });
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+    const [isFullScreen, setIsFullScreen] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -122,7 +123,7 @@ const CardView = () => {
 
         fetchCardData();
     }, [set, number]);
-    
+
     useEffect(() => {
         if (!cardInfo) {
             console.log('Card info is not set, skipping event fetch');
@@ -164,17 +165,17 @@ const CardView = () => {
         const parseDate = (dateString) => {
             const regexRange = /(\w+ \d+) - (\d+), (\d+)/;
             const regexSingle = /(\w+ \d+), (\d+)/;
-        
+
             let match = regexRange.exec(dateString);
             if (match) {
                 return new Date(`${match[1]}, ${match[3]}`);
             }
-        
+
             match = regexSingle.exec(dateString);
             if (match) {
                 return new Date(`${match[1]}, ${match[2]}`);
             }
-        
+
             return new Date(dateString);
         };
 
@@ -205,7 +206,7 @@ const CardView = () => {
 
                                     if (cardInfo.supertype === 'Pokémon') {
                                         hasCard = player.decklist.pokemon?.some(p => {
-                                            const isMatch = 
+                                            const isMatch =
                                                 p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
                                                 p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
                                                 String(p.number).trim() === String(cardInfo.number).trim();
@@ -213,7 +214,7 @@ const CardView = () => {
                                         });
                                     } else {
                                         hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
-                                                player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
+                                            player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
                                     }
 
                                     if (hasCard) {
@@ -241,7 +242,6 @@ const CardView = () => {
 
             console.log('Before sorting:', allResults.map(result => result.eventDate));
 
-            // Sort results by eventDate from latest to oldest using the custom parseDate function
             allResults.sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate));
 
             console.log('After sorting:', allResults.map(result => result.eventDate));
@@ -302,8 +302,8 @@ const CardView = () => {
         if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
             return true;
         }
-        if (card.supertype !== 'Pokémon' && 
-            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) && 
+        if (card.supertype !== 'Pokémon' &&
+            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) &&
             !(card.supertype === 'Energy' && ['Darkness Energy', 'Metal Energy'].includes(card.name))) {
             const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
                 otherCard.name && otherCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -325,8 +325,8 @@ const CardView = () => {
                 return true;
             }
         }
-        if (card.supertype !== 'Pokémon' && 
-            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) && 
+        if (card.supertype !== 'Pokémon' &&
+            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) &&
             !(card.supertype === 'Energy' && ['Darkness Energy', 'Metal Energy'].includes(card.name))) {
             const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
                 otherCard.name && otherCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -337,7 +337,7 @@ const CardView = () => {
                     bannedCard.number === otherCard.number
                 )
             );
-    
+
             return otherVersions.length > 0;
         }
         return false;
@@ -350,15 +350,15 @@ const CardView = () => {
         );
     };
 
-    const otherVersions = cardInfo ? Object.values(cardData.cardMap).filter(otherCard => 
+    const otherVersions = cardInfo ? Object.values(cardData.cardMap).filter(otherCard =>
         otherCard.name?.toLowerCase() === cardInfo.name?.toLowerCase() &&
         otherCard.supertype === cardInfo.supertype &&
         (otherCard.supertype !== 'Pokémon') &&
-        (cardInfo.supertype === 'Trainer' || 
-        (cardInfo.supertype === 'Energy' && 
-        (otherCard.subtypes && !otherCard.subtypes.includes('Basic'))))
+        (cardInfo.supertype === 'Trainer' ||
+            (cardInfo.supertype === 'Energy' &&
+                (otherCard.subtypes && !otherCard.subtypes.includes('Basic'))))
     ) : [];
-    
+
     const otherVersionsToShow = otherVersions.filter(otherCard =>
         otherCard.setAbbrev !== cardInfo.setAbbrev || otherCard.number !== cardInfo.number
     );
@@ -399,6 +399,12 @@ const CardView = () => {
         );
     };
 
+    const handleImageClick = () => {
+        if (viewportWidth >= 600) {
+            setIsFullScreen(!isFullScreen);
+        }
+    };
+
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
             <Helmet>
@@ -437,7 +443,13 @@ const CardView = () => {
                 )}
                 <div className='card-data-all'>
                     <div className='card-and-setinfo'>
-                        <img className='the-card-img' src={cardInfo.images.large} alt={cardInfo.name} />
+                        <img
+                            className={`the-card-img ${isFullScreen ? 'full-screen' : ''}`}
+                            src={cardInfo.images.large}
+                            alt={cardInfo.name}
+                            onClick={handleImageClick}
+                            style={{ cursor: viewportWidth >= 600 ? 'zoom-in' : 'auto' }}
+                        />
                         {cardInfo.set && (
                             <div>
                                 <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
@@ -560,7 +572,7 @@ const CardView = () => {
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
                         {cardInfo.artist && <p>Illustrator: <span className='italic'>{cardInfo.artist}</span></p>}
                         <hr className='blue-hr'></hr>
-                        {!isBasicEnergy && ( <>
+                        {!isBasicEnergy && (<>
                             <p className='marginthree'>Modern Legality:</p>
                             {cardInfo.regulationMark && (
                                 <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
@@ -572,7 +584,7 @@ const CardView = () => {
                                 </p>
                             </div>
                             <div className='show-cardinfo-on-small'>
-                            <hr className='small-grey-hr'></hr>
+                                <hr className='small-grey-hr'></hr>
                                 <div>
                                     <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
                                     <p className='show-ninefifty'>
@@ -652,7 +664,6 @@ const CardView = () => {
                                     return acc;
                                 }, {})
                             ).sort((a, b) => {
-                                // Sort events by date from latest to oldest
                                 const dateA = new Date(a[1][0].eventDate);
                                 const dateB = new Date(b[1][0].eventDate);
                                 return dateB - dateA;
@@ -698,6 +709,11 @@ const CardView = () => {
                     )
                 )}
             </div>
+            {isFullScreen && viewportWidth >= 600 && (
+                <div className="fullscreen-overlay" onClick={handleImageClick}>
+                    <img className="fullscreen-image" src={cardInfo.images.large} alt={cardInfo.name} />
+                </div>
+            )}
         </CardViewTheme>
     );
 };

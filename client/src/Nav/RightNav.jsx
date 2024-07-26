@@ -48,7 +48,7 @@ const RightNav = ({ open }) => {
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href=''>Decks</a></li>
-        <li><a href='/cards'>Cards</a></li>
+        <li><a href='/cards/TWM'>Cards</a></li>
         <li><a href=''>Players</a></li>
         <li><a href=''><span className="material-symbols-outlined">search</span></a></li>
       </ul>
@@ -56,19 +56,18 @@ const RightNav = ({ open }) => {
         <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
           <span className="material-symbols-outlined"></span>
         </ToggleButton>
-        <li><a href='/tournaments/completed'><span className='burg-tourney'>Tournaments</span>Completed</a></li>
-        <li><a href='/tournaments/upcoming'><span className='burg-tourney'>Tournaments</span>Upcoming</a></li>
+        <li><a href='/tournaments/completed'>Completed Events</a></li>
+        <li><a href='/tournaments/upcoming'>Upcoming Events</a></li>
         <li><a href=''>Decks</a></li>
+        <li><a href='./cards/TWM'>Cards</a></li>
         <li><a href=''>Players</a></li>
-        <li><a href=''>Articles</a></li>
         <div className='burger-resources'>
           <p>Resources:</p>
           <ul className='burgered-links-more'>
             <li><a href=''><span className='new-resource'>New</span> Deck Builder</a></li>
             <li><a href=''>Archive Updates</a></li>
-            <li><a href=''>Card Database</a></li>
+            <li><a href=''>Articles</a></li>
             <li><a href=''>Rules by Era</a></li>
-            <li><a href=''>TCG Expansions</a></li>
             <li><a href=''>Worlds Booklets</a></li>
           </ul>
         </div>

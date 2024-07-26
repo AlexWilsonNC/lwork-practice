@@ -11,27 +11,10 @@ const CardsContainer = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
-`;
 
-const SearchBarContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-`;
-const SearchInput = styled.input`
-  padding: 10px;
-  width: 400px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
-`;
-const SearchButton = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: ${({ theme }) => theme.setChangeBtn};
-  color: ${({ theme }) => theme.text};
-  cursor: pointer;
+  .whole-set-view-area {
+      background: ${({ theme }) => theme.setinfodark};
+  }
 `;
 
 const DropdownButton = styled.button`
@@ -48,6 +31,7 @@ const DropdownButton = styled.button`
   justify-content: space-between;
   font-weight: 600;
 `;
+
 const DropdownOverlay = styled.div`
   display: ${({ show }) => (show ? 'block' : 'none')};
   position: fixed;
@@ -58,6 +42,7 @@ const DropdownOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 10000;
 `;
+
 const DropdownContent = styled.div`
   display: ${({ show }) => (show ? 'block' : 'none')};
   position: absolute;
@@ -69,6 +54,7 @@ const DropdownContent = styled.div`
   top: 0;
   border: 2px solid black;
 `;
+
 const DropdownTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -78,16 +64,19 @@ const DropdownTable = styled.table`
    padding: 8px;
   }
 `;
+
 const DropdownTableRow = styled.tr`
 `;
+
 const DropdownTableCell = styled.td`
   padding: 8px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
 
   .settobechanged:hover {
     color: ${({ theme }) => theme.setChangeHover};
   }
 `;
+
 const SeparatorRow = styled.tr`
   background-color: #1290eb !important;
   color: white;
@@ -115,7 +104,6 @@ const CardsPage = () => {
   const [setTotal, setSetTotal] = useState(''); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
@@ -320,23 +308,6 @@ const CardsPage = () => {
     }
   }, []);
 
-  const handleSearch = async () => {
-    if (searchQuery.trim() === '') return;
-
-    try {
-      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/search?name=${searchQuery}`);
-      if (response.ok) {
-        const data = await response.json();
-        setCards(data);
-        setDropdownOpen(false);
-      } else {
-        console.error('Failed to fetch search results');
-      }
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
-
   useEffect(() => {
     if (dropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -358,15 +329,6 @@ const CardsPage = () => {
         <meta property="og:description" content={`Browse all cards from the ${setName} collection.`} />
       </Helmet>
       <div className='card-set-container'>
-        <SearchBarContainer>
-          <SearchInput
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for a card name..."
-          />
-          <SearchButton onClick={handleSearch}>Search</SearchButton>
-        </SearchBarContainer>
         <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
           <p>Change Set</p>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
@@ -405,24 +367,26 @@ const CardsPage = () => {
             </tbody>
           </DropdownTable>
         </DropdownContent>
-        <div className='set-info-area'>
-          {logoUrl && <img src={logoUrl} alt="Set Logo" />}
-          <div className='setinfotext'>
-            {nameText && <p>{nameText}</p>}
-            {setRelease && <p>{setRelease}</p>}
-            {setTotal && <p>Cards: {setTotal}</p>}
+        <div className='whole-set-view-area'>
+          <div className='set-info-area'>
+            {logoUrl && <img src={logoUrl} alt="Set Logo" />}
+            <div className='setinfotext'>
+              {nameText && <p>{nameText}</p>}
+              {setRelease && <p>{setRelease}</p>}
+              {setTotal && <p>Cards: {setTotal}</p>}
+            </div>
           </div>
-        </div>
-        <div className='card-display-area'>
-          {cards.map((card, index) => (
-            <Link key={index} to={`/card/${card.setAbbrev}/${card.number}`}>
-              <img
-                src={card.images.small}
-                loading="lazy"
-                alt={`${card.setAbbrev} ${card.number}`}
-              />
-            </Link>
-          ))}
+          <div className='card-display-area'>
+            {cards.map((card, index) => (
+              <Link key={index} to={`/card/${card.setAbbrev}/${card.number}`}>
+                <img
+                  src={card.images.small}
+                  loading="lazy"
+                  alt={`${card.setAbbrev} ${card.number}`}
+                />
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </CardsContainer>

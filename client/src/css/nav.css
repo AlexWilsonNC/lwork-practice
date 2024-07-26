@@ -92,6 +92,7 @@ nav {
   .burgered-links,
   .burgered-links-more {
     list-style: none;
+    /* background-color: rgb(60, 65, 71); */
   }
   .burgered-links li,
   .burgered-links-more li {
@@ -102,15 +103,9 @@ nav {
   .burgered-links-more li:hover {
     margin-left: 10px;
   }
-  .burg-tourney {
-    font-size: 10px;
-    display: block;
-    color: rgb(0, 31, 58);
-    font-weight: bolder;
-  }
   .burger-resources {
     width: 93%;
-    background-color: rgba(255, 255, 255, 0.344);
+    background-color: rgba(255, 255, 255, 0.25);
     border-radius: 15px;
   }
   .burger-resources p {
@@ -118,6 +113,7 @@ nav {
     padding: 5px 15px 10px 15px;
     font-size: 16px;
     color: rgb(0, 47, 89);
+    opacity: 0;
   }
   .burger-resources ul {
     padding-left: 15px;
