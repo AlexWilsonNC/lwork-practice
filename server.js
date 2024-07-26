@@ -256,6 +256,7 @@ app.get('/api/cards/search', async (req, res) => {
 });
 
 
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
