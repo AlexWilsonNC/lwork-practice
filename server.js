@@ -216,6 +216,7 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
+// Updated search endpoint with additional logging and error checks
 app.get('/api/cards/search', async (req, res) => {
   const { name } = req.query;
   console.log(`Searching for cards with name: ${name}`);
@@ -254,8 +255,6 @@ app.get('/api/cards/search', async (req, res) => {
     res.status(500).send('Error searching for cards');
   }
 });
-
-
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
