@@ -35,6 +35,14 @@
     height: 5%;
     width: 40%;
 }
+.unknown-card {
+    background-color: black;
+    width: 150px; /* adjust as needed */
+    height: 220px; /* adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .card-and-setinfo div {
     display: flex;
     flex-direction: column;

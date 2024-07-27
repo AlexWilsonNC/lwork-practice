@@ -38,7 +38,7 @@ const orderedSets = [
     "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
 
     "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
-    "FLF", "XY", "KSS", "PR-XY",
+    "FLF", "KSS", "XY", "PR-XY",
 
     "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
 
@@ -105,11 +105,11 @@ const promoSets = {
     "PLB": "PR-BLW",
     "PLF": "PR-BLW",
     "PLS": "PR-BLW",
-    "BCR": "PR-BLW",
+    "BCR": ["PR-BLW", "EPO"],
     "DRV": "PR-BLW",
     "DRX": "PR-BLW",
     "DEX": "PR-BLW",
-    "NXD": "PR-BLW",
+    "NXD": ["PR-BLW", "EPO"],
     "NVI": "PR-BLW",
     "EPO": "PR-BLW",
     "BLW": "PR-BLW",
@@ -150,7 +150,7 @@ const promoSets = {
     "TRR": "PR-EX",
     "P1": "PR-EX",
     "FL": "PR-EX",
-    "HL": "PR-EX",
+    "HL": ["PR-EX", "RS"],
     "TK1": "PR-EX",
     "MA": "PR-EX",
     "DR": "PR-EX",
@@ -224,7 +224,7 @@ const getPlacementSuffix = (number) => {
 
 const formatName = (name) => {
     const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.'];
 
     return name
         .toLowerCase()
