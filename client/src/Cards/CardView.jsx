@@ -195,7 +195,7 @@ const CardView = () => {
             for (const eventId of eventIds) {
                 const eventData = await fetchEventData(eventId);
                 if (eventData) {
-                    const divisions = ['masters', 'seniors', 'juniors'];
+                    const divisions = ['masters', 'seniors', 'juniors', 'professors'];
                     const results = [];
 
                     divisions.forEach(division => {
@@ -404,6 +404,13 @@ const CardView = () => {
             setIsFullScreen(!isFullScreen);
         }
     };
+
+    const getEventLink = (eventId, eventName) => {
+        if (eventName === "Worlds 2002") {
+          return `/tournaments/${eventId}/seniors`;
+        }
+        return `/tournaments/${eventId}`;
+      };
 
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
@@ -669,7 +676,7 @@ const CardView = () => {
                                 return dateB - dateA;
                             }).map(([eventId, results]) => {
                                 const sortedResults = results.sort((a, b) => {
-                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2 };
+                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2, professors: 3 };
                                     const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
                                     if (divisionComparison !== 0) return divisionComparison;
                                     return a.placement - b.placement;
@@ -689,7 +696,11 @@ const CardView = () => {
                                                 <td>{getPlacementSuffix(result.placement)}</td>
                                                 <td>{formatName(result.playerName)}</td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>
-                                                <td><Link className='blue-link' to={`/tournaments/${result.eventId}`}>{result.eventName}</Link></td>
+                                                <td>
+                                                    <Link className='blue-link' to={getEventLink(result.eventId, result.eventName)}>
+                                                        {result.eventName}
+                                                    </Link>
+                                                </td>
                                                 <td className='player-deck-icons pushright'>
                                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
                                                     <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
