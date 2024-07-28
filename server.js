@@ -11,7 +11,7 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
-const playersMongoURI = process.env.PLAYERS_MONGODB_URI;
+const playersUri = process.env.PLAYERS_MONGODB_URI; // New URI for players database
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -19,6 +19,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
+const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true }); // New connection for players
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
@@ -30,11 +31,10 @@ cardConnection.once('open', () => {
   // console.log('Connected to cardConnection');
 });
 
-const Player = mongoose.model('Player', new mongoose.Schema({
-  name: String,
-  results: Array,
-  // Add any other fields you have in your Player schema
-}));
+playersConnection.on('error', console.error.bind(console, 'MongoDB connection error for playersConnection:'));
+playersConnection.once('open', () => {
+  console.log('Connected to playersConnection');
+});
 
 const eventSchema = new mongoose.Schema({
   id: String,
@@ -81,7 +81,14 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
+const playerSchema = new mongoose.Schema({ // New schema for players
+  name: String,
+  results: Array,
+  // Add any other fields you have in your Player schema
+});
+
 const Event = eventConnection.model('Event', eventSchema);
+const Player = playersConnection.model('Player', playerSchema); // New model for players
 
 // Define API routes before static files and catch-all route
 app.get('/events/:id', async (req, res) => {
@@ -184,6 +191,7 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
+// New route to get all players
 app.get('/api/players', async (req, res) => {
   try {
     const players = await Player.find({});
