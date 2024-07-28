@@ -18,7 +18,7 @@ function Footer() {
                         <h1>PTCG <span className='legends-font-footer'>Legends</span></h1>
                     </a>
                     <div className='hide-footer'>
-                        <p>The literal and graphical information presented on this website about the Pokémon Trading Card Game, including card text and images and tournament-related content, are copyrights of The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, and/or Wizards of the Coast. This website is not produced by, endorsed by, supported by, or affiliated with The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, nor Wizards of the Coast.</p>
+                        <p>The literal and graphical information presented on this website about the Pokémon Trading Card Game, including sprites, card text, images and tournament-related content, are copyrights of The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, and/or Wizards of the Coast. This website is not produced by, endorsed by, supported by, or affiliated with The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, nor Wizards of the Coast.</p>
                         <br></br>
                         <p>This website is simply a place for Pokémon TCG fans to look at events and results from the greatest game in history!</p>
                     </div>
@@ -72,14 +72,14 @@ function Footer() {
                     </div>
                 </div>
                 <div className='unhide-footer'>
-                    <p>The literal and graphical information presented on this website about the Pokémon Trading Card Game, including card text and images and tournament-related content, are copyrights of The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, and/or Wizards of the Coast. This website is not produced by, endorsed by, supported by, or affiliated with The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, nor Wizards of the Coast.</p>
+                    <p>The literal and graphical information presented on this website about the Pokémon Trading Card Game, including sprites, card text, images and tournament-related content, are copyrights of The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, and/or Wizards of the Coast. This website is not produced by, endorsed by, supported by, or affiliated with The Pokémon Company (Pokémon), Nintendo, Game Freak, Creatures, Play! Pokémon, nor Wizards of the Coast.</p>
                     <br></br>
                     <p>This website is simply a place for Pokémon TCG fans to look at events and results from the greatest game in history!</p>
                 </div>
             </div>
             <div className='bottom-footer'>
                 <img src={totodileSprite}></img>
-                <p>2024&nbsp;&nbsp;|&nbsp;&nbsp;Website Design: Alex Wilson&nbsp;&nbsp;|&nbsp;&nbsp;Find me on X / Twitter: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>
+                <p>PTCG Legends 3.0 - 2024&nbsp;&nbsp;|&nbsp;&nbsp;Website Design: Alex Wilson&nbsp;&nbsp;|&nbsp;&nbsp;Find me on X / Twitter: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>
                 <img src={feraligatrSprite}></img>
             </div>
         </footer>

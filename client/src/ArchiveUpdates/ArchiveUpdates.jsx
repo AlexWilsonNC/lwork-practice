@@ -10,16 +10,17 @@ import archiveImage from '../assets/archive-updates/july-archive.jpg';
 
 const ArticleContainer = styled.div`
     width: 100%;
+    color: ${({ theme }) => theme.text};
     
-  .top-article-image {
-    background-image: url(${archiveImage});
-    width: 80%;height:300px;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-  }
+    .top-article-image {
+      background-image: url(${archiveImage});
+      width: 80%;height:300px;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
 `;
 
 const ArchiveUpdates = () => {

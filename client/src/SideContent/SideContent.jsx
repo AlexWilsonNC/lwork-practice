@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
+import styled from 'styled-components';
+
+const SideContainer = styled.div`
+  h4 {color: ${({ theme }) => theme.text};}
+  p {color: ${({ theme }) => theme.text};}
+  li {color: ${({ theme }) => theme.text};}
+`;
 
 const SidebarComponent = () => {
   return (
-    <div className='homepage-side'>
+    <SideContainer className='homepage-side'>
       <div className='side-section'>
         <h4>Helpful Resources:</h4>
         <ul>
@@ -42,7 +49,7 @@ const SidebarComponent = () => {
       </div>
 
       <TwitterWidget />
-    </div>
+    </SideContainer>
   );
 };
 

@@ -458,65 +458,65 @@ const PlayerDeck = () => {
                     </div>
                 </div>
             </div>
-            {cardData && playerData ? (
-                viewMode === 'grid' ? (
-                    <div className="deck-cards">
-                        {playerData.decklist.pokemon.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
-                        {playerData.decklist.trainer.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
-                        {playerData.decklist.energy.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} />
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
+            {!playerData ? (
+                null
+                ) : !cardData ? (
+                <div className="spinner"></div>
+                ) : viewMode === 'grid' ? (
+                <div className="deck-cards">
+                    {playerData.decklist.pokemon.map((card, index) => (
+                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                        <img src={cardImageUrl(card)} alt={card.name} />
+                        <div className="card-count">{card.count}</div>
                     </div>
+                    ))}
+                    {playerData.decklist.trainer.map((card, index) => (
+                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                        <img src={cardImageUrl(card)} alt={card.name} />
+                        <div className="card-count">{card.count}</div>
+                    </div>
+                    ))}
+                    {playerData.decklist.energy.map((card, index) => (
+                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                        <img src={cardImageUrl(card)} alt={card.name} />
+                        <div className="card-count">{card.count}</div>
+                    </div>
+                    ))}
+                </div>
                 ) : (
-                    <div className="deck-list">
-                        <div className='column-section'>
-                            <div className='list-category'><h2>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h2></div>
-                            <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} />
-                                </div>
-                            ))}</div>
+                <div className="deck-list">
+                    <div className='column-section'>
+                    <div className='list-category'><h2>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h2></div>
+                    <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
+                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                        <p className='list-card-count'>{card.count}</p>
+                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                        <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} />
                         </div>
-                        <div className='column-section'>
-                            <div className='list-category'><h2>Trainer ({countCards(playerData.decklist, 'trainer')})</h2></div>
-                            <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} />
-                                </div>
-                            ))}</div>
-                        </div>
-                        <div className='column-section'>
-                            <div className='list-category'><h2>Energy ({countCards(playerData.decklist, 'energy')})</h2></div>
-                            <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} />
-                                </div>
-                            ))}</div>
-                        </div>
+                    ))}</div>
                     </div>
-                )
-            ) : (
-                <p>Loading decklist...</p>
-            )}
+                    <div className='column-section'>
+                    <div className='list-category'><h2>Trainer ({countCards(playerData.decklist, 'trainer')})</h2></div>
+                    <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
+                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                        <p className='list-card-count'>{card.count}</p>
+                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                        <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} />
+                        </div>
+                    ))}</div>
+                    </div>
+                    <div className='column-section'>
+                    <div className='list-category'><h2>Energy ({countCards(playerData.decklist, 'energy')})</h2></div>
+                    <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
+                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                        <p className='list-card-count'>{card.count}</p>
+                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                        <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} />
+                        </div>
+                    ))}</div>
+                    </div>
+                </div>
+                )}
         </div>
     </PlayerDeckCenter>
     );
