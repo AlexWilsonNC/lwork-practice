@@ -373,7 +373,7 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall'>
                         <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
-                        <a href='./card-database'>
+                        <a href='/cards/TWM'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
