@@ -423,42 +423,43 @@ const PlayerDeck = () => {
 
     return (
         <PlayerDeckCenter className='center' theme={theme}>
-            <Helmet>
-                <title>{formatName(playerData.name)}'s Decklist</title>
-                <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-                <meta property="og:title" content={eventData.name} />
-                <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-                <meta property="og:image" content={eventData.thumbnail} />
-                <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
-                <meta property="og:type" content="website" />
-                <meta name="author" content="PTCG Legends" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={eventData.name} />
-                <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-                <meta name="twitter:image" content={eventData.thumbnail} />
-            </Helmet>
-            <div className="player-deck">
-                <div className='player-deck-top'>
-                    <div>
-                        <h2>{formatName(playerData.name)}</h2>
-                        <hr className='playerdeck-hr'></hr>
-                        <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
-                        {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-                        {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
-                    </div>
-                    <div className='deck-top-right-options'>
-                        <DecklistOptions decklist={playerData.decklist} />
-                        <div className='deckview-switcher'>
-                            <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
-                                <span className="material-symbols-outlined">reorder</span>
-                            </div>
-                            <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
-                                <span className="material-symbols-outlined">grid_view</span>
-                            </div>
+        <Helmet>
+            <title>{formatName(playerData.name)}'s Decklist</title>
+            <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+            <meta property="og:title" content={eventData.name} />
+            <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+            <meta property="og:image" content={eventData.thumbnail} />
+            <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
+            <meta property="og:type" content="website" />
+            <meta name="author" content="PTCG Legends" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content={eventData.name} />
+            <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+            <meta name="twitter:image" content={eventData.thumbnail} />
+        </Helmet>
+        <div className="player-deck">
+            <div className='player-deck-top'>
+                <div>
+                    <h2>{formatName(playerData.name)}</h2>
+                    <hr className='playerdeck-hr'></hr>
+                    <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
+                    {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
+                    {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+                </div>
+                <div className='deck-top-right-options'>
+                    <DecklistOptions decklist={playerData.decklist} />
+                    <div className='deckview-switcher'>
+                        <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
+                            <span className="material-symbols-outlined">reorder</span>
+                        </div>
+                        <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
+                            <span className="material-symbols-outlined">grid_view</span>
                         </div>
                     </div>
                 </div>
-                {viewMode === 'grid' ? (
+            </div>
+            {cardData && playerData ? (
+                viewMode === 'grid' ? (
                     <div className="deck-cards">
                         {playerData.decklist.pokemon.map((card, index) => (
                             <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
@@ -512,9 +513,12 @@ const PlayerDeck = () => {
                             ))}</div>
                         </div>
                     </div>
-                )}
-            </div>
-        </PlayerDeckCenter>
+                )
+            ) : (
+                <p>Loading decklist...</p>
+            )}
+        </div>
+    </PlayerDeckCenter>
     );
 };
 

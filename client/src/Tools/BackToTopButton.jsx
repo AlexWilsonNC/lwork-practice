@@ -13,7 +13,7 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   display: ${({ show }) => (show ? 'block' : 'none')};
-  z-index: 100000001;
+  z-index: 999;
   opacity: 0.7;
   &:hover {
     opacity: 1;
