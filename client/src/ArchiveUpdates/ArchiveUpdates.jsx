@@ -25,7 +25,7 @@ const ArticleContainer = styled.div`
 const ArchiveUpdates = () => {
   return (
     <div className='new-homepage'>
-      <ArticleContainer>
+      <ArticleContainer className='article-container'>
         <Helmet>
           <title>List of Documented Archive Updates</title>
         </Helmet>
@@ -130,7 +130,7 @@ const ArchiveUpdates = () => {
                     <p>&nbsp;&nbsp;&nbsp;- Wrong Carbink</p>
                     <br />
                     <br />
-                    <p><i>( HUGE shout out and a massive thank you to <a href='https://twitter.com/Pkmn_RubyRetro' target='_blank'>Ruby Retro</a> for finding the 2002 World Championship results above! )</i></p>
+                    <p><i>( HUGE shout out and a massive thank you to <a href='https://twitter.com/Pkmn_RubyRetro' target='_blank' rel='noopener noreferrer'>Ruby Retro</a> for finding the 2002 World Championship results above! )</i></p>
             <hr className='title-hr' />
             <br />
             <h3 class='boxxed'>April 2024</h3>
@@ -236,7 +236,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../decks-by-era/2017/prc-bus#eyezma' className='not-ready'>2017 PRC - BUS</a> Decidueye Necrozma (Level Ball instead of Heavy Ball)</p>
 
 <br />
-                    <p><i>( HUGE shout out and a massive thank you to <a href='https://www.youtube.com/@rubyretro' target='_blank'>Ruby Retro</a> for uncovering all the 2001-2002 results above! )</i></p>
+                    <p><i>( HUGE shout out and a massive thank you to <a href='https://www.youtube.com/@rubyretro' target='_blank' rel='noopener noreferrer'>Ruby Retro</a> for uncovering all the 2001-2002 results above! )</i></p>
 
                 <hr className='title-hr' />
                 <br />

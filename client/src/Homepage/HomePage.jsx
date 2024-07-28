@@ -174,20 +174,21 @@ const Homepage = () => {
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
                                         <h3>View All Cards from <span className='new-color'>Twilight Masquerade</span> in
-                                            our Card Database!</h3>
+                                            our Database!</h3>
                                         <p>You can view every Pokémon card and TCG expansion in history within our database
                                             here! From Base Set through the latest release, we have them all!</p>
                                     </div>
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box not-ready'>
+                        <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                            <a href='/deckbuilder'>
+                            <div className='overlay'>Coming Soon</div>
+                            <a href='/deckbuilder' className='not-ready'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={deckBuilder} />
                                     <div className='homepage-box-content'>
-                                        <h3>Our <span className='new-color'>NEW</span> Deck Builder is Live!</h3>
+                                        <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
                                         <p>Try our new deck builder! From Base Set to Scarlet & Violet, our app has every card ever printed for your modern & retro deck building needs! Customize decks from our archive and share 'em with your friends!</p>
                                     </div>
                                 </WrappedFeature>
@@ -377,20 +378,21 @@ const Homepage = () => {
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
                                     <h3>View All Cards from <span className='new-color'>Twilight Masquerade</span> in
-                                        our Card Database!</h3>
+                                        our Database!</h3>
                                     <p>You can view every Pokémon card and TCG expansion in history within our database
                                         here! From Base Set through the latest release, we have them all!</p>
                                 </div>
                             </WrappedFeature>
                         </a>
                     </div>
-                    <div className='homepage-box lessmarginbottomsmall footerupon-mobile not-ready'>
+                    <div className='homepage-box lessmarginbottomsmall footerupon-mobile'>
                         <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                        <a href='/deckbuilder'>
+                        <div className='overlay'>Coming Soon</div>
+                        <a href='/deckbuilder' className='not-ready'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={deckBuilder} />
                                 <div className='homepage-box-content'>
-                                    <h3>Our <span className='new-color'>NEW</span> Deck Builder is Live!</h3>
+                                    <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
                                     <p>Try our new deck builder! From Base Set to Scarlet & Violet, our app has every card ever printed for your modern & retro deck building needs! Customize decks from our archive and share 'em with your friends!</p>
                                 </div>
                             </WrappedFeature>

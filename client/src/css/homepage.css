@@ -49,6 +49,7 @@
     height: 330px;
     width: 30%;
     margin-bottom: 50px;
+    position: relative;
 }
 .homepage-box2 {
     height: 240px;
@@ -265,12 +266,27 @@
 }
 .side-section a {
     color: #1290eb;
+    font-weight: 600;
 }
 .side-section a:hover {
     color: #1290eb;
 }
 .hide-on-small {
     display: none;
+}
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 98.5%;
+    background-color: #04162384;
+    top: 31px;
+    z-index: 10;
+    color:white;
+    font-size: 32px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 @media screen and (max-width: 1700px) {
     .homepage-box {
@@ -333,6 +349,11 @@
     }
     .event-date p {
         font-size: 11px;
+    }
+    .overlay {
+        width: 100%;
+        height: 97.8%;
+        top: 25px;
     }
 }
 @media screen and (min-width: 1903px) {
@@ -459,6 +480,11 @@
     .flag-place img {
         width: 15px;
     }
+    .overlay {
+        height: 81%;
+        top: 25px;
+        font-size: 26px;
+    }
 }
 @media screen and (max-width: 1100px) {
     .new-homepage {
@@ -525,6 +551,10 @@
     .event-date p {
         font-size: 12px;
     }
+    .overlay {
+        width: 100%;
+        height: 103.5%;
+    }
 }
 @media screen and (max-width: 1000px) {
     .card-profile-author {
@@ -570,6 +600,9 @@
     }
     .smaller-homepage-card .homepage-box-content p {
         margin-top: -4px;
+    }
+    .overlay {
+        height: 98.5%;
     }
 }
 @media screen and (max-width: 820px) {
@@ -643,6 +676,9 @@
     .card-profile-author {
         top: 51%;
     }
+    .overlay {
+        height: 106.8%;
+    }
 }
 @media screen and (max-width: 570px) {
     .homepage-box {
@@ -672,6 +708,10 @@
     }
     .lessmarginbottomsmall {
         margin-bottom: 60px;
+    }
+    .overlay {
+        height: 143%;
+        top: 22px;
     }
 }
 @media screen and (max-width: 520px) {
@@ -720,6 +760,11 @@
     }
     .footerupon-mobile {
         margin-bottom: -75px;
+    }
+    .overlay {
+        height: 80%;
+        top: 25px;
+        font-size: 26px;
     }
 }
 @media screen and (max-width: 390px) {
