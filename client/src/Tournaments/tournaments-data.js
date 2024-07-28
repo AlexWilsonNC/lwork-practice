@@ -119,7 +119,7 @@ const tournamentList = [
         "location": "Honolulu, Hawaii"
     },
     {
-        "id": '',
+        "id": '2025_BALTIMORE',
         "name": "Baltimore Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -128,7 +128,7 @@ const tournamentList = [
         "location": "Baltimore, Maryland"
     },
     {
-        "id": '',
+        "id": '2025_DORTMUND',
         "name": "Dortmund Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -137,7 +137,7 @@ const tournamentList = [
         "location": "Dortmund, Germany"
     },
     {
-        "id": '',
+        "id": '2025_JOINVILLE',
         "name": "Joinville Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -146,16 +146,16 @@ const tournamentList = [
         "location": "Joinville, Brazil"
     },
     {
-        "id": '',
+        "id": '2025_LIMA',
         "name": "Lima Special Event",
-        "eventType": "spe",
+        "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "Oct 5, 2024",
         "flag": peru,
         "location": "Lime, Peru"
     },
     {
-        "id": '',
+        "id": '2025_LOUISVILLE',
         "name": "Louisville Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -164,7 +164,7 @@ const tournamentList = [
         "location": "Louisville, Kentucky"
     },
     {
-        "id": '',
+        "id": '2025_LILLE',
         "name": "Lille Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -173,7 +173,7 @@ const tournamentList = [
         "location": "Lille, France"
     },
     {
-        "id": '',
+        "id": '2025_GDASNK',
         "name": "Gdańsk Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -182,16 +182,16 @@ const tournamentList = [
         "location": "Gdańsk, Poland"
     },
     {
-        "id": '',
+        "id": '2025_BUENOS_AIRES',
         "name": "Buenos Aires Special Event",
-        "eventType": "spe",
+        "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "Nov 9, 2024",
         "flag": argentina,
         "location": "Buenos Aires, Argentina"
     },
     {
-        "id": '',
+        "id": '2025_SACRAMENTO',
         "name": "Sacramento Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -200,7 +200,7 @@ const tournamentList = [
         "location": "Sacramento, California"
     },
     {
-        "id": '',
+        "id": '2025_STUTTGART',
         "name": "Stuttgart Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -209,16 +209,16 @@ const tournamentList = [
         "location": "Stuttgart, Germany"
     },
     {
-        "id": '',
+        "id": '2025_BOGOTA',
         "name": "Bogotá Special Event",
-        "eventType": "spe",
+        "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "Dec 7, 2024",
         "flag": colombia,
         "location": "Bogotá, Colombia"
     },
     {
-        "id": '',
+        "id": '2025_TORONTO',
         "name": "Toronto Regionals",
         "eventType": "regional",
         "eventLogo": regional25,
@@ -227,25 +227,25 @@ const tournamentList = [
         "location": "Toronto, Canada"
     },
     {
-        "id": '',
+        "id": '2025_LAIC',
         "name": "LAIC 2025",
         "eventType": "international",
         "eventLogo": internats25,
         "date": "Nov 15, 2024",
         "flag": brazil,
-        "location": ""
+        "location": "São Paulo, Brazil"
     },
     {
-        "id": '',
+        "id": '2025_EUIC',
         "name": "EUIC 2025",
         "eventType": "international",
         "eventLogo": internats25,
         "date": "Feb 21, 2025",
         "flag": uk,
-        "location": ""
+        "location": "London, United Kingdom"
     },
     {
-        "id": '',
+        "id": '2025_NAIC',
         "name": "NAIC 2025",
         "eventType": "international",
         "eventLogo": internats25,
