@@ -13,6 +13,6 @@ code {
 }
 
 .not-ready {
-  opacity: 0.1;
+  opacity: 0.3;
   pointer-events: none;
 }

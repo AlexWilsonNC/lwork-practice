@@ -11,7 +11,7 @@ import singaporeChampionships from '../assets/event-logo/ch-singapore.png';
 import taiwanChampionships from '../assets/event-logo/ch-taiwan.png';
 import thailandChampionships from '../assets/event-logo/ch-thailand.png';
 import japanChampionships from '../assets/event-logo/jp-nationals.png';
-import ogInternats from '../assets/event-logo/internats-logo-hd.png';
+import ogInternats from '../assets/event-logo/internats-logo.png';
 import koreaLeague from '../assets/event-logo/korean-league.png';
 import wotcWorlds from '../assets/event-logo/worlds-2002.png';
 import worldsOten from '../assets/event-logo/2010worlds.png';

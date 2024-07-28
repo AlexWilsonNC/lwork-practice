@@ -8,6 +8,7 @@ import EventPage from './Tournaments/EventPage';
 import PlayerDeck from './Tournaments/PlayerDeck';
 import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
+import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
+        <Route path="/archive-updates" element={<ArchiveUpdates />} />
       </Routes>
       <BackToTopButton />
       <Footer />

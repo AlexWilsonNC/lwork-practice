@@ -68,7 +68,7 @@ const RightNav = ({ open }) => {
           <p>Resources:</p>
           <ul className='burgered-links-more'>
             <li className='not-ready'><a href=''><span className='new-resource'>New</span> Deck Builder</a></li>
-            <li className='not-ready'><a href=''>Archive Updates</a></li>
+            <li><a href='/archive-updates'>Archive Updates</a></li>
             <li className='not-ready'><a href=''>Articles</a></li>
             <li className='not-ready'><a href=''>Rules by Era</a></li>
             <li className='not-ready'><a href=''>Worlds Booklets</a></li>

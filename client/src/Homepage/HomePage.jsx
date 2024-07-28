@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/homepage.css';
 import { sortedEvents } from '../Tournaments/tournaments-data';
-import TwitterWidget from '../Twitter/TweetFeed';
+import SidebarComponent from '../SideContent/SideContent';
 
 import ogInternats from '../assets/archive-updates/july-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
@@ -122,18 +122,18 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box not-ready'>
+                        <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
-                            <a href='./archive-updates/all'>
+                            <a href='/archive-updates'>
                                 <WrappedFeature className='wrapped-feature'>
                                     <img className='card-image' src={ogInternats} />
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
                                         <h3><span className='new-color'>Long-lost</span> Decks & Results Discovered!</h3>
-                                        <p>A ton of results and lists, once lost to time, were archived throughout the month of May, from 2002 Worlds to 2013, check 'em all out!</p>
+                                        <p>We found a bunch of long-lost decklists and results from many events, spanning from 2002 Worlds to a Top 4 list from 2008 Nationals and more!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Jun 2, 2024</p>
+                                        <p>June 30, 2024</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -279,49 +279,7 @@ const Homepage = () => {
                     </div>
                 </HomepageMainContent>
 
-                <div className='homepage-side'>
-                    <div className='side-section'>
-                        <h4>Helpful Resources:</h4>
-                        <ul>
-                            {/* <li><a href=''>Deck Builder</a></li>
-                            <li><a href='./tournaments/completed'>Completed Tournaments</a></li>
-                            <li><a href='./tournaments/upcoming'>Upcoming Tournaments</a></li>
-                            <li><a href=''>Decks by Era</a></li>
-                            <li><a href=''>Player Search</a></li>
-                            <li><a href=''>Pokémon Card Database</a></li>
-                            <li><a href=''>TCG Expansions</a></li>
-                            <li><a href=''>World's Booklets</a></li>
-                            <li><a href=''>Rules by Era</a></li> */}
-                        </ul>
-                    </div>
-                    <div className='side-section'>
-                        <h4>Popular Pages:</h4>
-                        <ol>
-                            {/* <li><a href='./decks-by-era/2010/dp-ul'>2010 Decks by Era (DP - UL)</a></li>
-                            <li><a href='./worlds/2023/summary'>2023 World Championships</a></li>
-                            <li><a href='./decks-by-era/2018/sum-lot'>2018 Decks by Era (SUM - LOT)</a></li>
-                            <li><a href='./articles/other/greatest-players-in-history'>Greatest Players in History</a></li>
-                            <li><a href='./decks-by-era/2006/hl-hp'>2006 Decks by Era (HL - HP)</a></li>
-                            <li><a href='./articles/retro/blastoise-mega-battle'>1st Ever Pokémon Tournament Footage (1998)</a></li>
-                            <li><a href='./worlds/2002/summary'>2002 World Championships</a></li>
-                            <li><a href='./decks-by-era/1999/bs-fossil'>1999 Decks by Era (Base - Fossil)</a></li>
-                            <li><a href='./worlds/2010/summary'>2010 World Championships</a></li>
-                            <li><a href='./decks-by-era/2017/prc-gri'>2017 Decks by Era (PRC - GRI)</a></li> */}
-                        </ol>
-                    </div>
-                    <div className='side-section'>
-                        <div className='flex-row'>
-                            <img className='side-icon' src='https://cdn-icons-png.freepik.com/512/8716/8716450.png' />
-                            <h4>Help us Archive:</h4>
-                        </div>
-                        <p>Don't see a certain deck listed under a format? Have a missing decklist or information from a past
-                            tournament? Would you like to write articles? Spot a mistake? Please submit all inquiries to our
-                            email address here: <a className='one-more-link'
-                                href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>. Thank you!</p>
-                    </div>
-
-                    <TwitterWidget />
-                </div>
+                <SidebarComponent></SidebarComponent>
 
                 <HomepageMainContent className='homepage-main-content hide-on-small'>
                     <div className='homepage-box'>
@@ -395,18 +353,18 @@ const Homepage = () => {
                             </ul>
                         </UpcomingEventsHome>
                     </div>
-                    <div className='homepage-box not-ready'>
+                    <div className='homepage-box'>
                         <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
-                        <a href='./archive-updates/all'>
+                        <a href='/archive-updates'>
                             <WrappedFeature className='wrapped-feature'>
                                 <img className='card-image' src={ogInternats} />
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
                                     <h3><span className='new-color'>Long-lost</span> Decks & Results Discovered!</h3>
-                                    <p>A ton of results and lists, once lost to time, were archived throughout the month of May, from 2002 Worlds to 2013, check 'em all out!</p>
+                                    <p>We found a bunch of long-lost decklists and results from many events, spanning from 2002 Worlds to a Top 4 list from 2008 Nationals and more!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Jun 2, 2024</p>
+                                    <p>June 30, 2024</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>
