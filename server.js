@@ -11,6 +11,7 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
+const playersMongoURI = process.env.PLAYERS_MONGODB_URI;
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -28,6 +29,12 @@ cardConnection.on('error', console.error.bind(console, 'MongoDB connection error
 cardConnection.once('open', () => {
   // console.log('Connected to cardConnection');
 });
+
+const Player = mongoose.model('Player', new mongoose.Schema({
+  name: String,
+  results: Array,
+  // Add any other fields you have in your Player schema
+}));
 
 const eventSchema = new mongoose.Schema({
   id: String,
@@ -177,6 +184,14 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
+app.get('/api/players', async (req, res) => {
+  try {
+    const players = await Player.find({});
+    res.json(players);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));

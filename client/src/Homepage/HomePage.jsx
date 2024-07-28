@@ -335,24 +335,24 @@ const Homepage = () => {
                             <a href='/tournaments/upcoming' className='blue'>View All</a>
                         </div>
                         <UpcomingEventsHome className='upcoming-events-home'>
-                            <ul>
-                                {upcomingEvents.map((event, index) => (
-                                    <li key={index}>
-                                        <img className='event-type-logo' src={event.eventLogo} alt="Event logo" />
-                                        <div className='event-date'>
-                                            <h4><a className='white-letters' href={event.link}>{event.name}</a></h4>
-                                            <div className='upcoming-loc'>
-                                                <div className='flag-place'>
-                                                    <img src={event.flag} alt="Country flag" />
-                                                    <p className='white-letters'>{event.location}</p>
+                                <ul>
+                                    {upcomingEvents.map((event, index) => (
+                                        <li key={index}>
+                                            <img className='event-type-logo' src={event.eventLogo} alt="Event logo" />
+                                            <div className='event-date'>
+                                                <h4><a className='white-letters' href={`/tournaments/${event.id}`}>{event.name}</a></h4>
+                                                <div className='upcoming-loc'>
+                                                    <div className='flag-place'>
+                                                        <img src={event.flag} alt="Country flag" />
+                                                        <p className='white-letters'>{event.location}</p>
+                                                    </div>
+                                                    <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                                                 </div>
-                                                <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                                             </div>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </UpcomingEventsHome>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </UpcomingEventsHome>
                     </div>
                     <div className='homepage-box'>
                         <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
