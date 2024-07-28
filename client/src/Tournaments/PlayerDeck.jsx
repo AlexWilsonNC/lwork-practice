@@ -80,7 +80,7 @@ const promoSets = {
     "DRM": "PR-SM",
     "CES": "PR-SM",
     "FLI": "PR-SM",
-    "UPR": "PR-SM",
+    "UPR": ["PR-SM", "CIN", "SUM", "GRI"],
     "CIN": "PR-SM",
     "SLG": "PR-SM",
     "BUS": "PR-SM",
