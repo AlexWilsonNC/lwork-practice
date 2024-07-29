@@ -203,7 +203,7 @@ const EventList = () => {
                             <option value="LA">Latin America</option>
                             <option value="MS">Middle East / South Africa</option>
                             <option value="NA">North America</option>
-                            <option value="OC">Oceania</option>
+                            <option value="OC">oc</option>
                         </select>
                     </div>
                     {!showUpcoming && (
