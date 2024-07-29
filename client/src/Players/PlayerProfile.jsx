@@ -5,6 +5,34 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
 
+import regional25 from '../assets/event-logo/regionals-2025.png';
+import regionals from '../assets/event-logo/regionals-hd.png';
+import internats25 from '../assets/event-logo/internats-2025.png';
+import speSeries from '../assets/event-logo/spe.png';
+import worlds from '../assets/event-logo/worlds-hd.png';
+import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
+import hongkongChampionships from '../assets/event-logo/ch-hongkong.png';
+import indonesiaChampionships from '../assets/event-logo/ch-indonesia.png';
+import philippenesChampionships from '../assets/event-logo/ch-philippenes.png';
+import singaporeChampionships from '../assets/event-logo/ch-singapore.png';
+import taiwanChampionships from '../assets/event-logo/ch-taiwan.png';
+import thailandChampionships from '../assets/event-logo/ch-thailand.png';
+import japanChampionships from '../assets/event-logo/jp-nationals.png';
+import ogInternats from '../assets/event-logo/internats-logo.png';
+import koreaLeague from '../assets/event-logo/korean-league.png';
+import wotcWorlds from '../assets/event-logo/worlds-2002.png';
+import worldsOten from '../assets/event-logo/2010worlds.png';
+import worldsOnine from '../assets/event-logo/2009worlds.jpg';
+import worldsOeight from '../assets/event-logo/2008worlds.png';
+import worldsOSeven from '../assets/event-logo/2007worlds.png';
+import worldsOsix from '../assets/event-logo/2006worlds.png';
+import worldsOfive from '../assets/event-logo/2005worlds.png';
+import worldsOfour from '../assets/event-logo/2004worlds.png';
+import nationals from '../assets/event-logo/nats-logo.png';
+import oldNationals from '../assets/event-logo/old-nats-logo.png';
+import oFourNationals from '../assets/event-logo/nats-logo-04.png';
+import retro from '../assets/event-logo/retro.png';
+
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
 import austria from '../assets/flags/austria.png';
@@ -62,6 +90,36 @@ import thailand from '../assets/flags/thailand.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
+
+const logos = {
+    retro: retro,
+    regionals: regionals,
+    speSeries: speSeries,
+    ogInternats: ogInternats,
+    worlds: worlds,
+    indonesiaChampionships: indonesiaChampionships,
+    japanChampionships: japanChampionships,
+    philippenesChampionships: philippenesChampionships,
+    thailandChampionships: thailandChampionships,
+    singaporeChampionships: singaporeChampionships,
+    koreaLeague: koreaLeague,
+    regional25: regional25,
+    internats25: internats25,
+    malaysiaChampionships: malaysiaChampionships,
+    hongkongChampionships: hongkongChampionships,
+    taiwanChampionships: taiwanChampionships,
+    wotcWorlds: wotcWorlds,
+    nationals: nationals,
+    worldsOten: worldsOten,
+    worldsOnine: worldsOnine,
+    worldsOeight: worldsOeight,
+    worldsOSeven: worldsOSeven,
+    worldsOsix: worldsOsix,
+    worldsOfive: worldsOfive,
+    worldsOfour: worldsOfour,
+    oldNationals: oldNationals,
+    oFourNationals: oFourNationals,
+}
 
 const flags = {
     AR: argentina,
@@ -154,7 +212,10 @@ const PlayerProfileContainer = styled.div`
     .white-link {
         color: ${({ theme }) => theme.text};
     }
-
+.search-input .searcheventsfield {
+        background: ${({ theme }) => theme.searchBg};
+        color: ${({ theme }) => theme.searchTxt};
+    }
   .player-deck-icons .material-symbols-outlined {
     opacity: 1;
     transition: opacity 0.3s;
@@ -212,6 +273,7 @@ const PlayerProfile = () => {
     const [player, setPlayer] = useState(null);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortCriteria, setSortCriteria] = useState('date'); // Default sorting by date
 
     useEffect(() => {
         const fetchPlayerData = async () => {
@@ -238,11 +300,18 @@ const PlayerProfile = () => {
         return;
     }
 
-    const filteredResults = player.results
-        .sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate))
-        .filter(result =>
-            result.eventId.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+    const sortedResults = player.results.sort((a, b) => {
+        if (sortCriteria === 'date') {
+            return parseDate(b.eventDate) - parseDate(a.eventDate);
+        } else if (sortCriteria === 'placement') {
+            return a.placement - b.placement;
+        }
+        return 0;
+    });
+
+    const filteredResults = sortedResults.filter(result =>
+        result.eventId.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const getEventLink = (eventId, eventName) => {
         if (eventName === "Worlds 2002") {
@@ -272,6 +341,10 @@ const PlayerProfile = () => {
                     />
                 </div>
             </div>
+            <div className='sort-buttons'>
+                <button onClick={() => setSortCriteria('date')}>Sort by Date</button>
+                <button onClick={() => setSortCriteria('placement')}>Sort by Placement</button>
+            </div>
             <table className='results-table'>
                 <thead>
                     <tr>
@@ -285,13 +358,14 @@ const PlayerProfile = () => {
                     {filteredResults.map((result, index) => (
                         <tr key={index}>
                             <td>{formatDate(result.eventDate)}</td>
-                            <td>
+                            <td className='center-content'>
+                                <img src={logos[result.eventLogo]} className='event-type-logo3' alt="Event type" />
                                 <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
                                     {result.eventName}
                                 </Link>
                             </td>
                             <td>{getPlacementSuffix(result.placement)}</td>
-                            <td className='player-deck-icons'>
+                            <td className='player-deck-icons center-content'>
                                 <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
                                 <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`} className={result.hasDecklist ? '' : 'no-decklist'}>
                                     <span className={`material-symbols-outlined ${result.hasDecklist ? '' : 'no-decklist'}`}>format_list_bulleted</span>
@@ -301,6 +375,7 @@ const PlayerProfile = () => {
                     ))}
                 </tbody>
             </table>
+            <p className='center-me marginbottom italic small-text'>~ Player may have additional results not yet documented on the site.</p>
         </PlayerProfileContainer>
     );
 };

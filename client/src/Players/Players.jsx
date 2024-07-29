@@ -215,6 +215,9 @@ const PlayerListContainer = styled.div`
     .results-table td a {
       color: ${({ theme }) => theme.text};
     }
+    .results-table td:nth-child(3) {
+        text-align: center;
+    }
 `;
 
 const formatName = (name) => {
@@ -383,23 +386,23 @@ const Players = () => {
                     <table className='results-table'>
                         <thead>
                             <tr>
-                                <th>Rank</th>
+                                <th></th>
                                 <th>Player</th>
-                                <th>Result Count</th>
+                                <th>Results</th>
                             </tr>
                         </thead>
                         <tbody>
                             {sortedPlayers.map((player, index) => (
                                 <tr key={player._id}>
-                                    <td className="center-content">{index + 1}</td>
+                                    <td>{index + 1}</td>
                                     <td className="center-content">
                                         <Link to={`/player/${player.id}`}>
-                                            <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                                            <img className='flag-size-players' src={flags[player.flag]} alt="flag" />
                                             {formatName(player.name)}
                                         </Link>
                                     </td>
-                                    <td className="center-content">
-                                        {player.results.length} results
+                                    <td>
+                                        {player.results.length}
                                     </td>
                                 </tr>
                             ))}

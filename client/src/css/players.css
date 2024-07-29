@@ -9,6 +9,7 @@
 }
 .results-table {
     width: 100%;
+    margin-bottom: 25px;
 }
 .results-table th {
     text-align: start;
@@ -30,6 +31,10 @@
     height: 40px !important;
     text-align: start;
 }
+.center-content {
+    display: flex;
+    align-items: center;
+}
 .center-content a {
     display: flex;
     align-items: center;
@@ -38,9 +43,10 @@
 .results-table td a:hover {
     color: #1290eb !important;
 }
-.center-content img {
+.flag-size-players {
     width: 23px;
     height: auto;
+    margin-right: 10px;
 }
 .bts-in img {
     width: 27px;
@@ -53,4 +59,93 @@
 }
 .results-table .second-sprite {
     margin-left: -28px;
+}
+.event-type-logo3 {
+    width: 35px;
+    height: auto;
+    margin-right: 10px;
+}
+.sort-buttons {
+    display: flex;
+    justify-content: flex-start;
+    width: 60%;
+    margin-top: 15px;
+}
+.sort-buttons button {
+    background-color: #1290eb;
+    padding: 7px 10px;
+    border-radius: 2px;
+    border: none;
+    color:#fff;
+    margin-right: 10px;
+    font-size: 16px;
+}
+.sort-buttons button:hover {
+    background-color: #1d5177;
+    cursor: pointer;
+}
+@media screen and (max-width: 1600px) {
+    .player-results-container {
+        width: 70%;
+    }
+}
+@media screen and (max-width: 1350px) {
+    .player-results-container {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .player-results-container {
+        width: 85%;
+    }
+}
+@media screen and (max-width: 950px) {
+    .player-results-container th {
+        font-size: 12px;
+    }
+    .player-results-container td {
+        font-size: 13px;
+    }
+    .flag-size-players {
+        width: 20px;
+    }
+}
+@media screen and (max-width: 700px) {
+    .player-results-container {
+        width: 100%;
+    }
+    .filters-top {
+        margin-left: 25px;
+    }
+    .results-table td:nth-child(1) {
+        padding-left: 15px;
+    }
+    .results-table th:nth-child(3) {
+        padding-right: 10px;
+    }
+    .results-table td:nth-child(3) {
+        padding-right: 15px;
+    }
+}
+@media screen and (max-width: 530px) {
+    .player-results-container th {
+        font-size: 10px;
+    }
+    .player-results-container td {
+        font-size: 12px;
+    }
+    .flag-size-players {
+        width: 16px;
+    }
+}
+@media screen and (max-width: 430px) {
+    .player-results-container th {
+        font-size:8px;
+    }
+    .player-results-container td {
+        font-size: 11px;
+    }
+    .flag-size-players {
+        width: 14px;
+    }
 }
