@@ -208,14 +208,15 @@ app.get('/api/players', async (req, res) => {
 app.get('/api/players/:id', async (req, res) => {
   try {
       const { id } = req.params;
-      const player = await Player.findOne({ id: id });
+      const decodedId = decodeURIComponent(id); // Decode the URL-encoded player ID
+      const player = await Player.findOne({ id: decodedId }); // Assuming 'id' is the field in your database
       if (player) {
           res.json(player);
       } else {
-          res.status(404).send('Player not found');
+          res.status(404).json({ message: 'Player not found' });
       }
   } catch (error) {
-      res.status(500).send(error.message);
+      res.status(500).json({ message: error.message });
   }
 });
 
