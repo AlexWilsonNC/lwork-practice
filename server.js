@@ -96,6 +96,7 @@ const Player = playersConnection.model('Player', playerSchema); // New model for
 
 // Define API routes before static files and catch-all route
 app.get('/events/:id', async (req, res) => {
+  // console.log(req.params.id)
   try {
     const event = await Event.findOne({ id: req.params.id });
     if (event) {
@@ -104,8 +105,7 @@ app.get('/events/:id', async (req, res) => {
       res.status(404).send('Event not found');
     }
   } catch (error) {
-    console.error('Error fetching event:', error);
-    res.status(500).send({ message: 'Error fetching event', error: error.message });
+    res.status(500).send(error.message);
   }
 });
 
@@ -201,8 +201,7 @@ app.get('/api/players', async (req, res) => {
     const players = await Player.find({});
     res.json(players);
   } catch (err) {
-    console.error('Error fetching players:', err);
-    res.status(500).send({ message: 'Error fetching players', error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
