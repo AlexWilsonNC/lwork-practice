@@ -26,8 +26,10 @@ app.get('/api/players/:id', async (req, res) => {
     console.log('Received player ID:', playerId); // Log the received player ID
     const player = await Player.findOne({ id: playerId });
     if (player) {
+      console.log('Player found:', player); // Log the found player
       res.json(player);
     } else {
+      console.log('Player not found'); // Log when player is not found
       res.status(404).json({ message: 'Player not found' });
     }
   } catch (error) {
