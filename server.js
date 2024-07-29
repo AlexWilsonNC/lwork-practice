@@ -185,6 +185,8 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
+//test
+
 app.get('/api/players', async (req, res) => {
   try {
     const players = await Player.find({});
