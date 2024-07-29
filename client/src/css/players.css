@@ -12,19 +12,36 @@
     margin-bottom: 25px;
 }
 .results-table th {
-    text-align: start;
     padding: 0 0 6px 0;
     font-size: 14px;
+}
+.results-table th:nth-child(1),
+.results-table th:nth-child(4),
+.results-table th:nth-child(2) {
+    text-align: start;
 }
 .results-table th:nth-child(2) {
     padding-left: 20px;
 }
-.results-table th:nth-child(1),
-.results-table th:nth-child(3) {
+.results-table th:nth-child(1) {
     padding-left: 5px;
 }
+.results-table th:nth-child(3),
+.results-table td:nth-child(3) {
+    text-align: center;
+}
+.player-results-container .sprite:nth-child(1) {
+    margin-left: 55px;
+}
+.results-table .second-sprite {
+    margin-left: -28px;
+    margin-right: -10px;
+}
+.player-results-container .results-table th:nth-child(3) {
+    padding-right: 15px;
+}
 .results-table th:nth-child(4) {
-    padding-left: 15px;
+    text-align: center;
 }
 .results-table td {
     padding: 2px 5px;
@@ -56,9 +73,7 @@
 .bts-in h1 {
     font-size: 24px;
     padding: 10px 0;
-}
-.results-table .second-sprite {
-    margin-left: -28px;
+    color: #FFF;
 }
 .event-type-logo3 {
     width: 35px;
@@ -68,21 +83,49 @@
 .sort-buttons {
     display: flex;
     justify-content: flex-start;
-    width: 60%;
+    width: 70%;
     margin-top: 15px;
 }
+.playermayhavemore {
+    margin: -10px 0 15px 0;
+}
 .sort-buttons button {
-    background-color: #1290eb;
+    background-color: rgb(225, 225, 225);
     padding: 7px 10px;
     border-radius: 2px;
     border: none;
     color:#fff;
     margin-right: 10px;
     font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .sort-buttons button:hover {
-    background-color: #1d5177;
+    background-color: #1290eb;
     cursor: pointer;
+}
+.player-results-container .sprite {
+    width: 50px;
+    height: auto;
+}
+.meep .results-table th:nth-child(1),
+.meep .results-table td:nth-child(1) {
+    width: 30%;
+    padding-right: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.results-table td:nth-child(2),
+.results-table th:nth-child(2) {
+    width: 100%;
+}
+.results-table td:nth-child(3),
+.results-table th:nth-child(3) {
+    width: 10%;
+}
+.results-table td:nth-child(4),
+.results-table th:nth-child(4) {
+    width: 32%;
 }
 @media screen and (max-width: 1600px) {
     .player-results-container {
@@ -93,10 +136,21 @@
     .player-results-container {
         width: 80%;
     }
+    .playerprofilecontainer table {
+        width: 90%;
+    }
 }
 @media screen and (max-width: 1200px) {
     .player-results-container {
         width: 85%;
+    }
+}
+@media screen and (max-width: 1115px) {
+    .sort-buttons button {
+        font-size: 13px;
+    }
+    .bts-in h1 {
+        font-size: 18px;
     }
 }
 @media screen and (max-width: 950px) {
@@ -109,6 +163,10 @@
     .flag-size-players {
         width: 20px;
     }
+    .event-type-logo3 {
+        width: 32px;
+        margin-right: 0px;
+    }
 }
 @media screen and (max-width: 700px) {
     .player-results-container {
@@ -117,14 +175,80 @@
     .filters-top {
         margin-left: 25px;
     }
+    .results-table th:nth-child(1),
     .results-table td:nth-child(1) {
         padding-left: 15px;
     }
-    .results-table th:nth-child(3) {
-        padding-right: 10px;
+    .sort-buttons {
+        margin-left: 20px;
     }
-    .results-table td:nth-child(3) {
-        padding-right: 15px;
+    .meep th {
+        font-size: 10px;
+    }
+    .meep td {
+        font-size: 11px;
+    }
+    .event-type-logo3 {
+        width: 30px;
+    }
+    .meep .results-table th:nth-child(1),
+    .meep .results-table td:nth-child(1) {
+        width: 30%;
+        padding-right: 0px;
+    }
+    .meep .results-table td:nth-child(2),
+    .meep .results-table th:nth-child(2) {
+        padding-right: 50px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .meep th,
+    .meep td {
+        font-size: 10px !important;
+    }
+        .sort-buttons button {
+            font-size: 11px;
+        }
+        .sort-buttons {
+            margin-left: 10px;
+        }
+    .bts-in h1 {
+        font-size: 16px;
+    }
+    .bts-in img {
+        width: 23px;
+    }
+    .player-results-container .sprite {
+        width: 44px;
+    }
+    .player-results-container .material-symbols-outlined {
+        font-size: 22px;
+    }
+}
+@media screen and (max-width: 550px) {
+    .meep .results-table th:nth-child(1),
+    .meep .results-table td:nth-child(1) {
+        width: 30%;
+        padding-right: 0px;
+    }
+    .results-table td:nth-child(2),
+    .results-table th:nth-child(2) {
+        width: 100%;
+    }
+    .results-table td:nth-child(3),
+    .results-table th:nth-child(3) {
+        width: 10%;
+    }
+    .results-table td:nth-child(4),
+    .results-table th:nth-child(4) {
+        width: 32%;
+    }
+    .player-results-container .sprite:nth-child(1) {
+        margin-left: 0px;
+    }
+    .results-table .second-sprite {
+        margin-left: -24px;
+        margin-right: -10px;
     }
 }
 @media screen and (max-width: 530px) {
@@ -136,6 +260,20 @@
     }
     .flag-size-players {
         width: 16px;
+    }
+}
+@media screen and (max-width: 480px) {
+    .meep th {
+        font-size: 8px !important;
+    }
+    .meep td {
+        font-size: 9px !important;
+    }
+    .player-results-container .sprite {
+        width: 40px;
+    }
+    .player-results-container .material-symbols-outlined {
+        font-size: 18px;
     }
 }
 @media screen and (max-width: 430px) {

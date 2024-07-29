@@ -186,21 +186,15 @@ const PlayerProfileContainer = styled.div`
   color: ${({ theme }) => theme.text};
 
   .completed-n-upcoming {
-    width: 60%;
-    margin-top: 1px;
+    // margin-top: 1px;
   }
 .search-input .searcheventsfield {
         background: ${({ theme }) => theme.searchBg};
         color: ${({ theme }) => theme.searchTxt};
     }
   table {
-    width: 60%;
     margin-top: 15px;
     font-size: 14px;
-  }
-
-  .bts-in h1 {
-    color: #FFF;
   }
   .results-table th:nth-child(2) {
     padding-left: 5px;
@@ -211,10 +205,6 @@ const PlayerProfileContainer = styled.div`
   }
     .white-link {
         color: ${({ theme }) => theme.text};
-    }
-.search-input .searcheventsfield {
-        background: ${({ theme }) => theme.searchBg};
-        color: ${({ theme }) => theme.searchTxt};
     }
   .player-deck-icons .material-symbols-outlined {
     opacity: 1;
@@ -325,57 +315,59 @@ const PlayerProfile = () => {
             <Helmet>
                 <title>{player.name}</title>
             </Helmet>
-            <div className='completed-n-upcoming'>
-                <div className='bts-in'>
-                    <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                    <h1>{player.name}</h1>
+            <div className='player-results-container meep'>
+                <div className='completed-n-upcoming'>
+                    <div className='bts-in'>
+                        <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                        <h1>{player.name}</h1>
+                    </div>
+                    {/* <div className='search-input'>
+                        <span className="material-symbols-outlined">search</span>
+                        <input
+                            type="text"
+                            className='searcheventsfield'
+                            placeholder="Search results..."
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                        />
+                    </div> */}
                 </div>
-                <div className='search-input'>
-                    <span className="material-symbols-outlined">search</span>
-                    <input
-                        type="text"
-                        className='searcheventsfield'
-                        placeholder="Search results..."
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                    />
+                <div className='sort-buttons'>
+                    <button onClick={() => setSortCriteria('date')}>Sort by Date</button>
+                    <button onClick={() => setSortCriteria('placement')}>Sort by Placement</button>
                 </div>
-            </div>
-            <div className='sort-buttons'>
-                <button onClick={() => setSortCriteria('date')}>Sort by Date</button>
-                <button onClick={() => setSortCriteria('placement')}>Sort by Placement</button>
-            </div>
-            <table className='results-table'>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Event</th>
-                        <th>Place</th>
-                        <th>Deck</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredResults.map((result, index) => (
-                        <tr key={index}>
-                            <td>{formatDate(result.eventDate)}</td>
-                            <td className='center-content'>
-                                <img src={logos[result.eventLogo]} className='event-type-logo3' alt="Event type" />
-                                <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
-                                    {result.eventName}
-                                </Link>
-                            </td>
-                            <td>{getPlacementSuffix(result.placement)}</td>
-                            <td className='player-deck-icons center-content'>
-                                <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                                <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`} className={result.hasDecklist ? '' : 'no-decklist'}>
-                                    <span className={`material-symbols-outlined ${result.hasDecklist ? '' : 'no-decklist'}`}>format_list_bulleted</span>
-                                </Link>
-                            </td>
+                <table className='results-table'>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Event</th>
+                            <th>Placement</th>
+                            <th>Deck</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            <p className='center-me marginbottom italic small-text'>~ Player may have additional results not yet documented on the site.</p>
+                    </thead>
+                    <tbody>
+                        {filteredResults.map((result, index) => (
+                            <tr key={index}>
+                                <td>{formatDate(result.eventDate)}</td>
+                                <td className='center-content'>
+                                    <img src={logos[result.eventLogo]} className='event-type-logo3' alt="Event type" />
+                                    <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
+                                        {result.eventName}
+                                    </Link>
+                                </td>
+                                <td>{getPlacementSuffix(result.placement)}</td>
+                                <td className='player-deck-icons center-content'>
+                                    <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
+                                    <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`} className={result.hasDecklist ? '' : 'no-decklist'}>
+                                        <span className={`material-symbols-outlined ${result.hasDecklist ? '' : 'no-decklist'}`}>format_list_bulleted</span>
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                </div>
+            <p className='center-me italic small-text playermayhavemore'>~ Player may have additional results not yet documented on the site.</p>
         </PlayerProfileContainer>
     );
 };

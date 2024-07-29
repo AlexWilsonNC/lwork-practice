@@ -237,7 +237,7 @@ ${a(e.trainer)}
 
 Energy:
 ${a(e.energy)}
-        `;navigator.clipboard.writeText(l.trim()).then(()=>{console.log("Decklist copied to clipboard")}).catch(o=>{console.error("Failed to copy decklist:",o)})},r=()=>{console.log("Opened in deckbuilder")};return s.jsxs("div",{className:"deck-top-right-options",children:[s.jsxs("div",{className:"copy-decklist-btn",onClick:n,children:[s.jsx("span",{className:"material-symbols-outlined",children:"content_copy"}),s.jsx("span",{className:"tooltip-text",children:"Copy to Clipboard"})]}),s.jsxs("div",{className:"open-in-deckbuilder-btn",onClick:r,children:[s.jsx("span",{className:"material-symbols-outlined",children:"build_circle"}),s.jsx("span",{className:"tooltip-text",children:"Open in Deckbuilder"})]})]})},Gy=V.div`
+        `;navigator.clipboard.writeText(l.trim()).then(()=>{console.log("Decklist copied to clipboard")}).catch(o=>{console.error("Failed to copy decklist:",o)})},r=()=>{console.log("Opened in deckbuilder")};return s.jsxs("div",{className:"deck-top-right-options",children:[s.jsxs("div",{className:"copy-decklist-btn",onClick:n,children:[s.jsx("span",{className:"material-symbols-outlined",children:"content_copy"}),s.jsx("span",{className:"tooltip-text",children:"Copy to Clipboard"})]}),s.jsxs("div",{className:"open-in-deckbuilder-btn not-ready",onClick:r,children:[s.jsx("span",{className:"material-symbols-outlined",children:"build_circle"}),s.jsx("span",{className:"tooltip-text",children:"Open in Deckbuilder"})]})]})},Gy=V.div`
     background: ${({theme:e})=>e.body};
     .player-deck {
         background: ${({theme:e})=>e.deckBg};
@@ -383,21 +383,15 @@ ${a(e.energy)}
   color: ${({theme:e})=>e.text};
 
   .completed-n-upcoming {
-    width: 60%;
-    margin-top: 1px;
+    // margin-top: 1px;
   }
 .search-input .searcheventsfield {
         background: ${({theme:e})=>e.searchBg};
         color: ${({theme:e})=>e.searchTxt};
     }
   table {
-    width: 60%;
     margin-top: 15px;
     font-size: 14px;
-  }
-
-  .bts-in h1 {
-    color: #FFF;
   }
   .results-table th:nth-child(2) {
     padding-left: 5px;
@@ -408,10 +402,6 @@ ${a(e.energy)}
   }
     .white-link {
         color: ${({theme:e})=>e.text};
-    }
-.search-input .searcheventsfield {
-        background: ${({theme:e})=>e.searchBg};
-        color: ${({theme:e})=>e.searchTxt};
     }
   .player-deck-icons .material-symbols-outlined {
     opacity: 1;
@@ -429,7 +419,7 @@ ${a(e.energy)}
 .player-deck-icons a.no-decklist {
   pointer-events: none;
 }
-`,yh=e=>{const t=e.split(", ")[1],n=e.split(", ")[0].split(" - ")[0];return new Date(`${n}, ${t}`)},fx=e=>{const t=e.split(", ")[1];return`${e.split(", ")[0].split(" - ")[0]}, ${t}`},mx=e=>{const t=e%10,n=e%100;let r;return t===1&&n!==11?r="st":t===2&&n!==12?r="nd":t===3&&n!==13?r="rd":r="th",s.jsxs("span",{children:[e,s.jsx("span",{className:"small-suffix",children:r})]})},gx=()=>{const{id:e}=va(),{theme:t}=Pt(),[n,r]=S.useState(null),[a,l]=S.useState(null),[o,i]=S.useState(""),[c,u]=S.useState("date");if(S.useEffect(()=>{(async()=>{try{const x=await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players/${e}`);if(!x.ok)throw new Error("Player not found");const w=await x.json();r(w)}catch(x){l(x.message)}})()},[e]),a)return s.jsx("div",{children:a});if(!n)return;const d=n.results.sort((A,x)=>c==="date"?yh(x.eventDate)-yh(A.eventDate):c==="placement"?A.placement-x.placement:0).filter(A=>A.eventId.toLowerCase().includes(o.toLowerCase())),m=(A,x)=>x==="Worlds 2002"?`/tournaments/${A}/seniors`:`/tournaments/${A}`;return s.jsxs(px,{theme:t,className:"center-me",children:[s.jsx(yt,{children:s.jsx("title",{children:n.name})}),s.jsxs("div",{className:"completed-n-upcoming",children:[s.jsxs("div",{className:"bts-in",children:[s.jsx("img",{className:"flag-size",src:hx[n.flag],alt:"flag"}),s.jsx("h1",{children:n.name})]}),s.jsxs("div",{className:"search-input",children:[s.jsx("span",{className:"material-symbols-outlined",children:"search"}),s.jsx("input",{type:"text",className:"searcheventsfield",placeholder:"Search results...",value:o,onChange:A=>i(A.target.value)})]})]}),s.jsxs("div",{className:"sort-buttons",children:[s.jsx("button",{onClick:()=>u("date"),children:"Sort by Date"}),s.jsx("button",{onClick:()=>u("placement"),children:"Sort by Placement"})]}),s.jsxs("table",{className:"results-table",children:[s.jsx("thead",{children:s.jsxs("tr",{children:[s.jsx("th",{children:"Date"}),s.jsx("th",{children:"Event"}),s.jsx("th",{children:"Place"}),s.jsx("th",{children:"Deck"})]})}),s.jsx("tbody",{children:d.map((A,x)=>s.jsxs("tr",{children:[s.jsx("td",{children:fx(A.eventDate)}),s.jsxs("td",{className:"center-content",children:[s.jsx("img",{src:dx[A.eventLogo],className:"event-type-logo3",alt:"Event type"}),s.jsx(X,{className:"white-link",to:m(A.eventId,A.eventName),children:A.eventName})]}),s.jsx("td",{children:mx(A.placement)}),s.jsxs("td",{className:"player-deck-icons center-content",children:[s.jsx(pu,{decklist:A.decklist,sprite1:A.sprite1,sprite2:A.sprite2}),s.jsx(X,{to:`/tournaments/${A.eventId}/${A.division}/${encodeURIComponent(n.name)}-${encodeURIComponent(n.flag)}`,className:A.hasDecklist?"":"no-decklist",children:s.jsx("span",{className:`material-symbols-outlined ${A.hasDecklist?"":"no-decklist"}`,children:"format_list_bulleted"})})]})]},x))})]}),s.jsx("p",{className:"center-me marginbottom italic small-text",children:"~ Player may have additional results not yet documented on the site."})]})},xh="/assets/facebook-CGipNCQA.webp",Ax=V.div`
+`,yh=e=>{const t=e.split(", ")[1],n=e.split(", ")[0].split(" - ")[0];return new Date(`${n}, ${t}`)},fx=e=>{const t=e.split(", ")[1];return`${e.split(", ")[0].split(" - ")[0]}, ${t}`},mx=e=>{const t=e%10,n=e%100;let r;return t===1&&n!==11?r="st":t===2&&n!==12?r="nd":t===3&&n!==13?r="rd":r="th",s.jsxs("span",{children:[e,s.jsx("span",{className:"small-suffix",children:r})]})},gx=()=>{const{id:e}=va(),{theme:t}=Pt(),[n,r]=S.useState(null),[a,l]=S.useState(null),[o,i]=S.useState(""),[c,u]=S.useState("date");if(S.useEffect(()=>{(async()=>{try{const x=await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players/${e}`);if(!x.ok)throw new Error("Player not found");const w=await x.json();r(w)}catch(x){l(x.message)}})()},[e]),a)return s.jsx("div",{children:a});if(!n)return;const d=n.results.sort((A,x)=>c==="date"?yh(x.eventDate)-yh(A.eventDate):c==="placement"?A.placement-x.placement:0).filter(A=>A.eventId.toLowerCase().includes(o.toLowerCase())),m=(A,x)=>x==="Worlds 2002"?`/tournaments/${A}/seniors`:`/tournaments/${A}`;return s.jsxs(px,{theme:t,className:"center-me",children:[s.jsx(yt,{children:s.jsx("title",{children:n.name})}),s.jsxs("div",{className:"player-results-container meep",children:[s.jsx("div",{className:"completed-n-upcoming",children:s.jsxs("div",{className:"bts-in",children:[s.jsx("img",{className:"flag-size",src:hx[n.flag],alt:"flag"}),s.jsx("h1",{children:n.name})]})}),s.jsxs("div",{className:"sort-buttons",children:[s.jsx("button",{onClick:()=>u("date"),children:"Sort by Date"}),s.jsx("button",{onClick:()=>u("placement"),children:"Sort by Placement"})]}),s.jsxs("table",{className:"results-table",children:[s.jsx("thead",{children:s.jsxs("tr",{children:[s.jsx("th",{children:"Date"}),s.jsx("th",{children:"Event"}),s.jsx("th",{children:"Placement"}),s.jsx("th",{children:"Deck"})]})}),s.jsx("tbody",{children:d.map((A,x)=>s.jsxs("tr",{children:[s.jsx("td",{children:fx(A.eventDate)}),s.jsxs("td",{className:"center-content",children:[s.jsx("img",{src:dx[A.eventLogo],className:"event-type-logo3",alt:"Event type"}),s.jsx(X,{className:"white-link",to:m(A.eventId,A.eventName),children:A.eventName})]}),s.jsx("td",{children:mx(A.placement)}),s.jsxs("td",{className:"player-deck-icons center-content",children:[s.jsx(pu,{decklist:A.decklist,sprite1:A.sprite1,sprite2:A.sprite2}),s.jsx(X,{to:`/tournaments/${A.eventId}/${A.division}/${encodeURIComponent(n.name)}-${encodeURIComponent(n.flag)}`,className:A.hasDecklist?"":"no-decklist",children:s.jsx("span",{className:`material-symbols-outlined ${A.hasDecklist?"":"no-decklist"}`,children:"format_list_bulleted"})})]})]},x))})]})]}),s.jsx("p",{className:"center-me italic small-text playermayhavemore",children:"~ Player may have additional results not yet documented on the site."})]})},xh="/assets/facebook-CGipNCQA.webp",Ax=V.div`
     width: 100%;
     color: ${({theme:e})=>e.text};
     

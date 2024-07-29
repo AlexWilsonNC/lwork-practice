@@ -38,7 +38,7 @@ ${formatCards(decklist.energy)}
             <span className="material-symbols-outlined">content_copy</span>
             <span className="tooltip-text">Copy to Clipboard</span>
         </div>
-        <div className='open-in-deckbuilder-btn' onClick={openInDeckbuilder}>
+        <div className='open-in-deckbuilder-btn not-ready' onClick={openInDeckbuilder}>
             <span className="material-symbols-outlined">build_circle</span>
             <span className="tooltip-text">Open in Deckbuilder</span>
         </div>
