@@ -31,4 +31,5 @@
 .center-content img {
     width: 23px;
     height: auto;
+    background-color: red;
 }
