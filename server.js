@@ -81,10 +81,14 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
-const playerSchema = new mongoose.Schema({ // New schema for players
+const playerSchema = new mongoose.Schema({
+  id: String,
   name: String,
-  results: Array,
-  // Add any other fields you have in your Player schema
+  flag: String,
+  results: [{
+      eventId: String,
+      decklist: String
+  }]
 });
 
 const Event = eventConnection.model('Event', eventSchema);
@@ -204,7 +208,7 @@ app.get('/api/players', async (req, res) => {
 app.get('/api/players/:id', async (req, res) => {
   try {
       const { id } = req.params;
-      const player = await Player.findById(id);
+      const player = await Player.findOne({ id: id });
       if (player) {
           res.json(player);
       } else {
