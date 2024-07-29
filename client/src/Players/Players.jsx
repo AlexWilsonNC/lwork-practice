@@ -387,10 +387,10 @@ const Players = () => {
                             <tr key={player._id}>
                                 <td className="center-content">{index + 1}</td>
                                 <td className="center-content">
-                                    <Link to={`/player/${player.id}`}>
-                                        <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                                        {formatName(player.name)}
-                                    </Link>
+                                <Link to={`/players/${player.id}`}>
+                                    <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                                    {formatName(player.name)}
+                                </Link>
                                 </td>
                                 <td className="center-content">
                                     {player.results.length} results

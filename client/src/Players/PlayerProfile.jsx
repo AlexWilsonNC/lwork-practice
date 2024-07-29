@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
+import { useTheme } from '../contexts/ThemeContext';
+
+const PlayerProfileContainer = styled.div`
+  background: ${({ theme }) => theme.body};
+  color: ${({ theme }) => theme.text};
+`;
 
 const PlayerProfile = () => {
   const { id } = useParams();
+  const { theme } = useTheme();
   const [player, setPlayer] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
@@ -32,16 +41,21 @@ const PlayerProfile = () => {
   }
 
   return (
-    <div>
+    <PlayerProfileContainer theme={theme}>
+      <Helmet>
+        <title>{player.name}</title>
+      </Helmet>
       <h1>{player.name}</h1>
       <p>Flag: {player.flag}</p>
-      <p>Results:</p>
+      <h2>Results</h2>
       <ul>
-        {player.results.map((result, index) => (
-          <li key={index}>{result}</li>
+        {player.results.map(result => (
+          <li key={result.eventId}>
+            Event: {result.eventId}, Sprite 1: {result.sprite1}, Sprite 2: {result.sprite2}
+          </li>
         ))}
       </ul>
-    </div>
+    </PlayerProfileContainer>
   );
 };
 

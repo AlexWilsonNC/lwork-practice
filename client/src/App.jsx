@@ -28,7 +28,7 @@ function App() {
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
         <Route path="/players" element={<Players />} />
-        <Route path="/player/:playerId" element={<PlayerProfile />} />
+        <Route path="/player/:id" element={<PlayerProfile />} />
         <Route path="/archive-updates" element={<ArchiveUpdates />} />
       </Routes>
       <BackToTopButton />
