@@ -10,13 +10,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-console.log('MONGODB_URI:', process.env.MONGODB_URI);
-console.log('CARD_MONGODB_URI:', process.env.CARD_MONGODB_URI);
-console.log('PLAYERS_MONGODB_URI:', process.env.PLAYERS_MONGODB_URI);
-
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
 const playersUri = process.env.PLAYERS_MONGODB_URI;
+
+console.log('MONGODB_URI:', uri); // Debugging line
+console.log('CARD_MONGODB_URI:', cardUri); // Debugging line
+console.log('PLAYERS_MONGODB_URI:', playersUri); // Debugging line
 
 if (!uri || !cardUri || !playersUri) {
   console.error('Error: One or more MongoDB URIs are not defined in the environment variables.');
