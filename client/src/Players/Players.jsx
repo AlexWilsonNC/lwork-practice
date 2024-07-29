@@ -280,13 +280,15 @@ const Players = () => {
                 <table className='results-table'>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Player</th>
                             <th>Result Count</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedPlayers.map((player) => (
+                        {sortedPlayers.map((player, index) => (
                             <tr key={player._id}>
+                                <td className="center-content">{index + 1}</td>
                                 <td className="center-content">
                                     <Link to={`/players/${player.id}`}>
                                         <img className='flag-size' src={flags[player.flag]} alt="flag" />
