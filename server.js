@@ -13,13 +13,21 @@ const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
 const playersUri = process.env.PLAYERS_MONGODB_URI; // New URI for players database
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri, { 
+  // useNewUrlParser: true, useUnifiedTopology: true 
+})
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true }); // New connection for players
+const eventConnection = mongoose.createConnection(uri, {
+  //  useNewUrlParser: true, useUnifiedTopology: true
+   });
+const cardConnection = mongoose.createConnection(cardUri, { 
+  // useNewUrlParser: true, useUnifiedTopology: true 
+});
+const playersConnection = mongoose.createConnection(playersUri, { 
+  // useNewUrlParser: true, useUnifiedTopology: true 
+}); // New connection for players
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
