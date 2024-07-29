@@ -9,6 +9,7 @@ import PlayerDeck from './Tournaments/PlayerDeck';
 import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
 import Players from './Players/Players';
+import PlayerProfile from './Players/PlayerProfile';
 import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
         <Route path="/players" element={<Players />} />
+        <Route path="/player/:playerId" element={<PlayerProfile />} />
         <Route path="/archive-updates" element={<ArchiveUpdates />} />
       </Routes>
       <BackToTopButton />

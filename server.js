@@ -201,6 +201,20 @@ app.get('/api/players', async (req, res) => {
   }
 });
 
+app.get('/api/players/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const player = await Player.findById(id);
+      if (player) {
+          res.json(player);
+      } else {
+          res.status(404).send('Player not found');
+      }
+  } catch (error) {
+      res.status(500).send(error.message);
+  }
+});
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
 

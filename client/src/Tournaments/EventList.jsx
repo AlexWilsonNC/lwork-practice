@@ -219,7 +219,7 @@ const EventList = () => {
                     )}
                     {!showUpcoming && (
                         <div className='indiv-filter'>
-                            <p className='sort-events'>Sort:</p>
+                            <p className='sort-events'>Order:</p>
                             <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
                                 <option value="newest">New - Old</option>
                                 <option value="oldest">Old - New</option>

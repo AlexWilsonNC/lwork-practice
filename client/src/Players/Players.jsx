@@ -123,6 +123,66 @@ const flags = {
     unknown: unknown
 }
 
+const countryNames = {
+    AR: 'Argentina',
+    AU: 'Australia',
+    AT: 'Austria',
+    BY: 'Belarus',
+    BE: 'Belgium',
+    BR: 'Brazil',
+    CA: 'Canada',
+    CL: 'Chile',
+    CN: 'China',
+    CO: 'Colombia',
+    HR: 'Croatia',
+    CZ: 'Czechia',
+    DK: 'Denmark',
+    EC: 'Ecuador',
+    SV: 'El Salvador',
+    FI: 'Finland',
+    FR: 'France',
+    DE: 'Germany',
+    GR: 'Greece',
+    HK: 'Hong Kong',
+    HU: 'Hungary',
+    IS: 'Iceland',
+    ID: 'Indonesia',
+    IE: 'Ireland',
+    IL: 'Israel',
+    IM: 'Isle of Man',
+    IT: 'Italy',
+    JP: 'Japan',
+    KR: 'South Korea',
+    LT: 'Lithuania',
+    MY: 'Malaysia',
+    MT: 'Malta',
+    MX: 'Mexico',
+    MA: 'Morocco',
+    NL: 'Netherlands',
+    NZ: 'New Zealand',
+    NI: 'Nicaragua',
+    NO: 'Norway',
+    PE: 'Peru',
+    PH: 'Philippines',
+    PL: 'Poland',
+    PT: 'Portugal',
+    PR: 'Puerto Rico',
+    RU: 'Russia',
+    SG: 'Singapore',
+    SK: 'Slovakia',
+    SI: 'Slovenia',
+    SO: 'Somalia',
+    ZA: 'South Africa',
+    ES: 'Spain',
+    SE: 'Sweden',
+    CH: 'Switzerland',
+    TW: 'Taiwan',
+    TH: 'Thailand',
+    US: 'USA',
+    UK: 'UK',
+    unknown: 'Unknown'
+};
+
 const regionFlags = {
     'NA': [usa, canada, puertoRico],
     'LA': [brazil, argentina, peru, colombia, mexico, chile, elSalvador, ecuador],
@@ -136,26 +196,22 @@ const PlayerListContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
 
-  .filter-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
+    .filter-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        select {background: ${({ theme }) => theme.body};}
+        select {color: ${({ theme }) => theme.text};}
+        button {background: ${({ theme }) => theme.body};}
+        button {color: ${({ theme }) => theme.text};}
     }
-
-    .filter-container button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-left: 10px;
+    .search-input .searcheventsfield {
+        background: ${({ theme }) => theme.searchBg};
+        color: ${({ theme }) => theme.searchTxt};
     }
-
-    .filter-container button:hover {
-    background-color: #0056b3;
+    .filter-container .sort-events {
+        color: ${({ theme }) => theme.text};
     }
-
     .results-table td a {
       color: ${({ theme }) => theme.text};
     }
@@ -195,9 +251,11 @@ const formatName = (name) => {
 const Players = () => {
     const { theme } = useTheme();
     const [players, setPlayers] = useState([]);
-    const [sortOrder, setSortOrder] = useState('asc');
+    const [sortOrder, setSortOrder] = useState('desc');
     const [sortType, setSortType] = useState('results');
     const [regionFilter, setRegionFilter] = useState('');
+    const [countryFilter, setCountryFilter] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchPlayers = async () => {
@@ -220,31 +278,45 @@ const Players = () => {
 
     const setSortByName = () => {
         setSortType('name');
-        setSortOrder('desc'); // Reset to ascending by default when switching to name sort
+        setSortOrder('asc');
     };
 
     const setSortByResults = () => {
         setSortType('results');
-        setSortOrder('asc'); // Reset to descending by default when switching to results sort
+        setSortOrder('desc');
     };
 
     const filteredPlayers = players.filter(player => {
-        if (regionFilter) {
-            return regionFlags[regionFilter].some(flag => flag === flags[player.flag]);
-        }
-        return true;
+        const isRegionMatch = regionFilter ? regionFlags[regionFilter].some(flag => flag === flags[player.flag]) : true;
+        const isCountryMatch = countryFilter ? player.flag === countryFilter : true;
+        const isSearchMatch = searchTerm ? player.name.toLowerCase().includes(searchTerm.toLowerCase()) : true;
+        return isRegionMatch && isCountryMatch && isSearchMatch;
     });
 
     const sortedPlayers = filteredPlayers.sort((a, b) => {
         if (sortType === 'name') {
-            return sortOrder === 'desc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+            return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
         } else {
-            return sortOrder === 'DESC' ? a.results.length - b.results.length : b.results.length - a.results.length;
+            return sortOrder === 'asc' ? a.results.length - b.results.length : b.results.length - a.results.length;
         }
+    });
+
+    const sortedCountryCodes = Object.keys(countryNames).sort((a, b) => {
+        if (countryNames[a] < countryNames[b]) {
+            return -1;
+        }
+        if (countryNames[a] > countryNames[b]) {
+            return 1;
+        }
+        return 0;
     });
 
     const resetFilters = () => {
         setRegionFilter('');
+        setCountryFilter('');
+        setSortType('results');
+        setSortOrder('desc');
+        setSearchTerm('');
     };
 
     return (
@@ -260,27 +332,52 @@ const Players = () => {
                     </div>
                     <div className='search-input'>
                         <span className="material-symbols-outlined">search</span>
-                        <input type="text" className='searcheventsfield' placeholder="Search events..." />
+                        <input 
+                            type="text" 
+                            className='searcheventsfield' 
+                            placeholder="Search players..." 
+                            value={searchTerm} 
+                            onChange={e => setSearchTerm(e.target.value)} 
+                        />
                     </div>
                 </div>
                 <div className='filter-container'>
                     <div className='filters-top'>
-                    <select value={regionFilter} onChange={e => setRegionFilter(e.target.value)}>
-                            <option value="">All Regions</option>
-                            <option value="NA">North America</option>
-                            <option value="LA">Latin America</option>
-                            <option value="EU">Europe</option>
-                            <option value="OC">Oceania</option>
-                            <option value="AP">Asia-Pacific</option>
-                            <option value="MS">Middle East / South Africa</option>
-                        </select>
-                        <button onClick={resetFilters}>Reset</button>
+                        <div className='indiv-filter'>
+                            <p className='sort-events'>Region:</p>
+                            <select value={regionFilter} onChange={e => setRegionFilter(e.target.value)}>
+                                <option value="">All Regions</option>
+                                <option value="NA">North America</option>
+                                <option value="LA">Latin America</option>
+                                <option value="EU">Europe</option>
+                                <option value="OC">Oceania</option>
+                                <option value="AP">Asia-Pacific</option>
+                                <option value="MS">Middle East / South Africa</option>
+                            </select>
+                        </div>
+                        <div className='indiv-filter'>
+                            <p className='sort-events'>Country:</p>
+                            <select value={countryFilter} onChange={e => setCountryFilter(e.target.value)}>
+                                <option value="">All Countries</option>
+                                {sortedCountryCodes.map(countryCode => (
+                                    <option key={countryCode} value={countryCode}>{countryNames[countryCode]}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='indiv-filter'>
+                            <p className='sort-events'>Order:</p>
+                            <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+                                <option value="asc">Sort Ascending</option>
+                                <option value="desc">Sort Descending</option>
+                            </select>
+                        </div>
+                        <button onClick={resetFilters} className="reset-btn">Reset</button>
                     </div>
                 </div>
                 <table className='results-table'>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Rank</th>
                             <th>Player</th>
                             <th>Result Count</th>
                         </tr>
@@ -290,7 +387,7 @@ const Players = () => {
                             <tr key={player._id}>
                                 <td className="center-content">{index + 1}</td>
                                 <td className="center-content">
-                                    <Link to={`/players/${player.id}`}>
+                                    <Link to={`/player/${player.id}`}>
                                         <img className='flag-size' src={flags[player.flag]} alt="flag" />
                                         {formatName(player.name)}
                                     </Link>
