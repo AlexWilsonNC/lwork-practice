@@ -1,0 +1,33 @@
+.player-results-container {
+    width: 60%;
+    min-width: 60%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.results-table {
+    width: 100%;
+}
+.results-table th {
+    text-align: start;
+    padding: 0 20px 6px 20px;
+    font-size: 14px;
+}
+.results-table td {
+    padding: 2px 5px;
+    height: 40px !important;
+    text-align: start;
+}
+.center-content a {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+.results-table td a:hover {
+    color: #1290eb !important;
+}
+.center-content img {
+    width: 23px;
+    height: auto;
+}
