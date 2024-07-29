@@ -18,8 +18,12 @@
 .results-table th:nth-child(2) {
     padding-left: 20px;
 }
+.results-table th:nth-child(1),
 .results-table th:nth-child(3) {
     padding-left: 5px;
+}
+.results-table th:nth-child(4) {
+    padding-left: 15px;
 }
 .results-table td {
     padding: 2px 5px;
@@ -37,4 +41,16 @@
 .center-content img {
     width: 23px;
     height: auto;
+}
+.bts-in img {
+    width: 27px;
+    height: auto;
+    padding-left: 15px;
+}
+.bts-in h1 {
+    font-size: 24px;
+    padding: 10px 0;
+}
+.results-table .second-sprite {
+    margin-left: -28px;
 }

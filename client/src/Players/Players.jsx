@@ -256,6 +256,7 @@ const Players = () => {
     const [regionFilter, setRegionFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true); // New state for loading
 
     useEffect(() => {
         const fetchPlayers = async () => {
@@ -266,6 +267,8 @@ const Players = () => {
                 setPlayers(filteredData);
             } catch (error) {
                 console.error('Error fetching players:', error);
+            } finally {
+                setLoading(false); // Set loading to false when data is fetched
             }
         };
 
@@ -374,31 +377,35 @@ const Players = () => {
                         <button onClick={resetFilters} className="reset-btn">Reset</button>
                     </div>
                 </div>
-                <table className='results-table'>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Result Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedPlayers.map((player, index) => (
-                            <tr key={player._id}>
-                                <td className="center-content">{index + 1}</td>
-                                <td className="center-content">
-                                <Link to={`/players/${player.id}`}>
-                                    <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                                    {formatName(player.name)}
-                                </Link>
-                                </td>
-                                <td className="center-content">
-                                    {player.results.length} results
-                                </td>
+                {loading ? (
+                    <div className="spinner"></div>
+                ) : (
+                    <table className='results-table'>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Result Count</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {sortedPlayers.map((player, index) => (
+                                <tr key={player._id}>
+                                    <td className="center-content">{index + 1}</td>
+                                    <td className="center-content">
+                                        <Link to={`/player/${player.id}`}>
+                                            <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                                            {formatName(player.name)}
+                                        </Link>
+                                    </td>
+                                    <td className="center-content">
+                                        {player.results.length} results
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </PlayerListContainer>
     );
