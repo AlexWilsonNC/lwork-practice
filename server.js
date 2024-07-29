@@ -208,6 +208,7 @@ app.get('/api/players', async (req, res) => {
 app.get('/api/players/:id', async (req, res) => {
   try {
     const playerId = decodeURIComponent(req.params.id);
+    console.log('Received player ID:', playerId); // Add this line for logging
     const player = await Player.findOne({ id: playerId });
     if (player) {
       res.json(player);
@@ -215,6 +216,7 @@ app.get('/api/players/:id', async (req, res) => {
       res.status(404).json({ message: 'Player not found' });
     }
   } catch (error) {
+    console.error('Error fetching player:', error); // Add this line for error logging
     res.status(500).json({ message: error.message });
   }
 });
