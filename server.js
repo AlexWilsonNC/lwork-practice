@@ -2,7 +2,8 @@ const express = require('express');
 const path = require("path");
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables
+
 const port = process.env.PORT || 5000;
 
 const app = express();
@@ -11,7 +12,12 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
-const playersUri = process.env.PLAYERS_MONGODB_URI; // New URI for players database
+const playersUri = process.env.PLAYERS_MONGODB_URI;
+
+if (!uri || !cardUri || !playersUri) {
+  console.error('Error: One or more MongoDB URIs are not defined in the environment variables.');
+  process.exit(1); // Exit the application with an error code
+}
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -19,16 +25,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true }); // New connection for players
+const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
-  // console.log('Connected to eventConnection');
+  console.log('Connected to eventConnection');
 });
 
 cardConnection.on('error', console.error.bind(console, 'MongoDB connection error for cardConnection:'));
 cardConnection.once('open', () => {
-  // console.log('Connected to cardConnection');
+  console.log('Connected to cardConnection');
 });
 
 playersConnection.on('error', console.error.bind(console, 'MongoDB connection error for playersConnection:'));
@@ -81,18 +87,15 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
-const playerSchema = new mongoose.Schema({ // New schema for players
+const playerSchema = new mongoose.Schema({
   name: String,
   results: Array,
-  // Add any other fields you have in your Player schema
 });
 
 const Event = eventConnection.model('Event', eventSchema);
-const Player = playersConnection.model('Player', playerSchema); // New model for players
+const Player = playersConnection.model('Player', playerSchema);
 
-// Define API routes before static files and catch-all route
 app.get('/events/:id', async (req, res) => {
-  // console.log(req.params.id)
   try {
     const event = await Event.findOne({ id: req.params.id });
     if (event) {
@@ -117,7 +120,6 @@ app.get('/event-ids', async (req, res) => {
 
 app.get('/api/cards/:set/:number', async (req, res) => {
   const { set, number } = req.params;
-  // console.log(`Fetching card from set: ${set}, number: ${number}`);
 
   try {
     const collection = cardConnection.collection(set);
@@ -126,10 +128,8 @@ app.get('/api/cards/:set/:number', async (req, res) => {
       return res.status(404).json({ message: `Collection ${set} not found` });
     }
 
-    // Ensure number is treated as a string
     const card = await collection.findOne({ number: String(number) });
     if (card) {
-      // console.log('Card found:', card);
       res.status(200).json(card);
     } else {
       console.error(`Card not found in set: ${set}, number: ${number}`);
@@ -157,41 +157,34 @@ app.get('/api/cards/:collectionName', async (req, res) => {
 
 app.get('/api/cards', async (req, res) => {
   const format = req.query.format;
-  // console.log(`Fetching cards for format: ${format}`);
 
   if (!format) {
-      console.error('Format is missing');
-      return res.status(400).json({ message: 'Format is required' });
+    console.error('Format is missing');
+    return res.status(400).json({ message: 'Format is required' });
   }
 
   try {
-      const setsToQuery = format.split(',');
-      // console.log('Sets to query:', setsToQuery);
+    const setsToQuery = format.split(',');
+    const cardPromises = setsToQuery.map(async set => {
+      const collection = cardConnection.collection(set);
+      if (!collection) {
+        console.error(`Collection ${set} not found`);
+        return [];
+      }
+      const cards = await collection.find({}).toArray();
+      return cards;
+    });
 
-      const cardPromises = setsToQuery.map(async set => {
-          // console.log(`Fetching cards for set: ${set}`);
-          const collection = cardConnection.collection(set);
-          if (!collection) {
-              console.error(`Collection ${set} not found`);
-              return [];
-          }
-          const cards = await collection.find({}).toArray();
-          // console.log(`Fetched ${cards.length} cards for set: ${set}`);
-          return cards;
-      });
+    const allCards = await Promise.all(cardPromises);
+    const flattenedCards = allCards.flat();
 
-      const allCards = await Promise.all(cardPromises);
-      const flattenedCards = allCards.flat();
-
-      // console.log('Fetched cards:', flattenedCards.length);
-      res.json(flattenedCards);
+    res.json(flattenedCards);
   } catch (err) {
-      console.error('Error fetching cards:', err);
-      res.status(500).json({ message: 'Failed to fetch cards' });
+    console.error('Error fetching cards:', err);
+    res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
 
-// New route to get all players
 app.get('/api/players', async (req, res) => {
   try {
     const players = await Player.find({});
@@ -201,10 +194,8 @@ app.get('/api/players', async (req, res) => {
   }
 });
 
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
-// Catch-all route to serve the React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
