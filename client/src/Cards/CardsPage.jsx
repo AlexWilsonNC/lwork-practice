@@ -280,7 +280,33 @@ const CardsPage = () => {
           const data = await response.json();
   
           if (setName !== "CEL") {
-            data.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+            data.sort((a, b) => {
+              const isSpecial = (number) => /^(RC|SH|GG)/.test(number);
+              const extractNumber = (number) => {
+                const match = number.match(/(\d+)(a?)/i);
+                return match ? [parseInt(match[1], 10), match[2] || ''] : [NaN, ''];
+              };
+  
+              const [aNum, aSuffix] = extractNumber(a.number);
+              const [bNum, bSuffix] = extractNumber(b.number);
+              const aIsSpecial = isSpecial(a.number);
+              const bIsSpecial = isSpecial(b.number);
+  
+              // Separate "RC" and "SH" cards to the end
+              if (aIsSpecial && !bIsSpecial) return 1;
+              if (!aIsSpecial && bIsSpecial) return -1;
+              if (aIsSpecial && bIsSpecial) {
+                // Both are "RC" or "SH" cards
+                return aNum - bNum;
+              }
+  
+              // Sort regular cards
+              if (aNum === bNum) {
+                return aSuffix.localeCompare(bSuffix);
+              }
+  
+              return aNum - bNum;
+            });
           }
   
           setCards(data);
@@ -301,7 +327,7 @@ const CardsPage = () => {
   
     fetchCards();
   }, [setName]);
-
+    
   const observer = useRef();
 
   const lastCardElementRef = useCallback(node => {
