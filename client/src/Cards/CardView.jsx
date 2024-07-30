@@ -349,7 +349,7 @@ const CardView = () => {
                 otherCard.regulationMark &&
                 regulationMarks.includes(otherCard.regulationMark)
             );
-            return true;
+            return otherVersions.length > 0;
         }
         return false;
     };

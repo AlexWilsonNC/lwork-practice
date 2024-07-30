@@ -541,10 +541,14 @@
         cursor: none;
     }
     .dropdownbutton {
-        width: 60% !important;
+        width: 310px !important;
         padding: 7px !important;
         font-weight: 400 !important;
         font-size: 12px !important;
+    }
+    .serchbtrn {
+        width: 295px !important;
+        padding: 7px !important;
     }
     .dropdownbutton span {
         font-size: 16px !important;
@@ -665,7 +669,12 @@
         border-radius: 22px !important;
     }
     .dropdownbutton {
-        width: 75% !important;
+        width: 292px !important;
+        padding: 5px !important;
+    }
+    .seartcjbarcontainer {margin: 10px 0;}
+    .serchbtrn {
+        width: 280px !important;
         padding: 5px !important;
     }
     .setinfotext {

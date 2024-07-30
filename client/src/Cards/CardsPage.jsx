@@ -348,7 +348,7 @@ const CardsPage = () => {
       </Helmet>
       <div className='card-set-container'>
         <div className='align-column'>
-          <SearchBarContainer>
+          <SearchBarContainer className='seartcjbarcontainer'>
             <SearchInput
               className='serchbtrn not-ready'
               type="text"
