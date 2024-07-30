@@ -91,6 +91,7 @@ const CardView = () => {
     const [loading, setLoading] = useState(false);
     const [isBasicEnergy, setIsBasicEnergy] = useState(false);
     const [showAllVersions, setShowAllVersions] = useState(false);
+    const [otherVersions, setOtherVersions] = useState([]);
     const [eventsScanned, setEventsScanned] = useState(false);
     const [cardData, setCardData] = useState({ cardMap: {}, cardNameMap: {} });
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -127,6 +128,29 @@ const CardView = () => {
         fetchCardData();
     }, [set, number]);
 
+    useEffect(() => {
+        if (!cardInfo) return;
+    
+        const fetchOtherVersions = async () => {
+            try {
+                console.log(`Fetching other versions for card: ${cardInfo.name}`);
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/otherversions/${encodeURIComponent(cardInfo.name)}`);
+                console.log(`Response status: ${response.status}`);
+                if (response.ok) {
+                    const otherVersionsData = await response.json();
+                    console.log('Other versions data:', otherVersionsData);
+                    setOtherVersions(otherVersionsData);
+                } else {
+                    console.error('Failed to fetch other versions data:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error fetching other versions data:', error);
+            }
+        };
+    
+        fetchOtherVersions();
+    }, [cardInfo]);
+    
     useEffect(() => {
         if (!cardInfo) {
             console.log('Card info is not set, skipping event fetch');
@@ -388,15 +412,6 @@ const CardView = () => {
             bannedCard.number === card.number
         );
     };
-
-    const otherVersions = cardInfo ? Object.values(cardData.cardMap).filter(otherCard =>
-        otherCard.name?.toLowerCase() === cardInfo.name?.toLowerCase() &&
-        otherCard.supertype === cardInfo.supertype &&
-        (otherCard.supertype !== 'Pokémon') &&
-        (cardInfo.supertype === 'Trainer' ||
-            (cardInfo.supertype === 'Energy' &&
-                (otherCard.subtypes && !otherCard.subtypes.includes('Basic'))))
-    ) : [];
 
     const otherVersionsToShow = otherVersions.filter(otherCard =>
         otherCard.setAbbrev !== cardInfo.setAbbrev || otherCard.number !== cardInfo.number
