@@ -199,17 +199,21 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.toLowerCase();
   try {
     const collections = await cardConnection.db.listCollections().toArray();
+    console.log(`Found collections: ${collections.map(col => col.name)}`);
     let foundCards = [];
 
     for (const collectionInfo of collections) {
+      console.log(`Searching in collection: ${collectionInfo.name}`);
       const collection = cardConnection.collection(collectionInfo.name);
       const cards = await collection.find({ name: new RegExp(`^${cardName}$`, 'i') }).toArray();
       foundCards = foundCards.concat(cards);
     }
 
     if (foundCards.length > 0) {
+      console.log(`Total found cards: ${foundCards.length}`);
       res.status(200).json(foundCards);
     } else {
+      console.log(`Card not found with name: ${cardName}`);
       res.status(404).json({ message: `Card not found with name: ${cardName}` });
     }
   } catch (error) {
@@ -217,7 +221,6 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
     res.status(500).json({ message: 'Error fetching card by name' });
   }
 });
-
 
 // New route to get all players
 app.get('/api/players', async (req, res) => {
