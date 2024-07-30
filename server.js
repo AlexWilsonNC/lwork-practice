@@ -208,11 +208,14 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
       const cards = await collection.find({ name: new RegExp(`^${cardName}$`, 'i') }).toArray(); // Case-insensitive search
       if (cards.length > 0) {
         console.log(`Found in collection ${collectionInfo.name}:`, cards);
+        foundCards = foundCards.concat(cards);
+      } else {
+        console.log(`No matches found in collection: ${collectionInfo.name}`);
       }
-      foundCards = foundCards.concat(cards);
     }
 
     if (foundCards.length > 0) {
+      console.log('Found cards:', foundCards);
       res.status(200).json(foundCards);
     } else {
       console.log(`No cards found with name: ${req.params.name}`);
@@ -223,6 +226,7 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
     res.status(500).json({ message: 'Error fetching card by name' });
   }
 });
+
 
 
 // New route to get all players
