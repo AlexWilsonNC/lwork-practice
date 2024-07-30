@@ -300,6 +300,42 @@ const CardView = () => {
         { name: 'Unown', set: 'LOT', number: '90' },
         { name: 'Unown', set: 'LOT', number: '91' },
     ];
+    const bannedInGLC = [
+        { name: 'Chip-Chip Ice Axe', set: 'UNB', number: '165' },
+        { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
+        { name: 'Hiker', set: 'CES', number: '133' },
+        { name: 'Hiker', set: 'HIF', number: 'SV85' },
+        { name: 'Kyogre', set: 'SHF', number: '21' },
+        { name: "Lysandre's Trump Card", set: 'PHF', number: '99' },
+        { name: "Lysandre's Trump Card", set: 'PHF', number: '118' },
+        { name: 'Oranguru', set: 'UPR', number: '114' },
+        { name: 'Pokémon Research Lab', set: 'UNM', number: '205' },
+    ];
+    const isGLCLegal = (card) => {
+        const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+        const excludedSubtypes = ["EX", "GX", "ex", "V", "VSTAR", "Prism Star", "Radiant", "ACE SPEC"];
+    
+        const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
+        const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
+    
+        if (isFromAllowedSet && !hasExcludedSubtype) {
+            const isBanned = bannedInGLC.some(bannedCard =>
+                bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
+                bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
+                bannedCard.number === card.number
+            );
+    
+            return !isBanned;
+        }
+        return false;
+    };
+    const isBannedInGLC = (card) => {
+        return bannedInGLC.some(bannedCard =>
+            bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
+            bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
+            bannedCard.number === card.number
+        );
+    };
     const isStandardLegal = (card) => {
         const regulationMarks = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
         if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
@@ -588,9 +624,45 @@ const CardView = () => {
                                 <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
                             )}
                             <div className='legality-checks'>
-                                <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
-                                <p>Expanded: {isExpandedLegal(cardInfo) ? <span className="material-symbols-outlined" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}
-                                    {isBannedInExpanded(cardInfo) && <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>}
+                                <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
+                                <p>
+                                    Expanded: 
+                                    {cardInfo.set.releaseDate === "N/A" ? (
+                                        <>
+                                        <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                        {isExpandedLegal(cardInfo) ? (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                        ) : (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                        )}
+                                        {isBannedInExpanded(cardInfo) && (
+                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                        )}
+                                        </>
+                                    )}
+                                </p>
+                                <p>
+                                    GLC: 
+                                    {cardInfo.set.releaseDate === "N/A" ? (
+                                        <>
+                                        <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                        <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                        {isGLCLegal(cardInfo) ? (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                        ) : (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                        )}
+                                        {isBannedInGLC(cardInfo) && (
+                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                        )}
+                                        </>
+                                    )}
                                 </p>
                             </div>
                             <div className='show-cardinfo-on-small'>

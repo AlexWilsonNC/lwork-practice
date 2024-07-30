@@ -510,6 +510,10 @@
     .cards-specific-results .second-sprite {
         margin-left: -28px;
     }
+    .legality-mark {
+        font-size: 21px;
+        margin-left: 1px;
+    }
 }
 @media screen and (max-width: 675px) {
     .card-view {
@@ -688,6 +692,10 @@
     .other-versions,
     .showmoreversions {
         width: 110%;
+    }
+    .legality-mark {
+        font-size: 20px;
+        margin-left: 3px;
     }
     .cards-specific-results th:nth-child(3),
     .cards-specific-results td:nth-child(3),
