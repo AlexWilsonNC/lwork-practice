@@ -195,29 +195,29 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-app.get('/api/cards/otherversions/:name', async (req, res) => {
-  const cardName = req.params.name;
+app.get('/api/cards/searchbyname/:name', async (req, res) => {
+  const cardName = decodeURIComponent(req.params.name).toLowerCase();
+
   try {
-    // Get the list of all collection names in the card database
+    // Fetch all collections in the card database
     const collections = await cardConnection.db.listCollections().toArray();
-    // Map through all collections and fetch cards with the matching name
-    const otherVersionsPromises = collections.map(async (collectionInfo) => {
-      const collection = cardConnection.collection(collectionInfo.name);
-      // Fetch cards with matching name
-      return collection.find({ name: cardName }).toArray();
+    
+    const cardSearchPromises = collections.map(async (collection) => {
+      // Search for the card by name in each collection
+      return cardConnection.collection(collection.name).find({ name: { $regex: new RegExp(`^${cardName}$`, 'i') } }).toArray();
     });
 
-    // Wait for all promises to resolve and flatten the results
-    const otherVersions = (await Promise.all(otherVersionsPromises)).flat();
+    // Resolve all promises and flatten the results
+    const cardResults = (await Promise.all(cardSearchPromises)).flat();
 
-    if (otherVersions.length > 0) {
-      res.status(200).json(otherVersions);
+    if (cardResults.length > 0) {
+      res.status(200).json(cardResults);
     } else {
-      res.status(404).json({ message: `No other versions found for card: ${cardName}` });
+      res.status(404).json({ message: `No versions found for card name: ${cardName}` });
     }
   } catch (error) {
-    console.error('Error fetching other versions:', error);
-    res.status(500).send('Error fetching other versions');
+    console.error('Error searching for card by name:', error);
+    res.status(500).json({ message: 'Server error while searching for card' });
   }
 });
 

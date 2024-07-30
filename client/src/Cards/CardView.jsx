@@ -132,25 +132,28 @@ const CardView = () => {
         if (!cardInfo) return;
     
         const fetchOtherVersions = async () => {
+            if (!cardInfo) return;
+            console.log(`Fetching other versions for card: ${cardInfo.name}`);
+          
             try {
-                console.log(`Fetching other versions for card: ${cardInfo.name}`);
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/otherversions/${encodeURIComponent(cardInfo.name)}`);
-                console.log(`Response status: ${response.status}`);
-                if (response.ok) {
-                    const otherVersionsData = await response.json();
-                    console.log('Other versions data:', otherVersionsData);
-                    setOtherVersions(otherVersionsData);
-                } else {
-                    console.error('Failed to fetch other versions data:', await response.text());
-                }
+              const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+              console.log('Response status:', response.status);
+          
+              if (response.ok) {
+                const data = await response.json();
+                console.log('Fetched other versions data:', data);
+                setOtherVersions(data);
+              } else {
+                console.error('Failed to fetch other versions data:', await response.json());
+              }
             } catch (error) {
-                console.error('Error fetching other versions data:', error);
+              console.error('Error fetching other versions:', error);
             }
-        };
+          };          
     
         fetchOtherVersions();
     }, [cardInfo]);
-    
+
     useEffect(() => {
         if (!cardInfo) {
             console.log('Card info is not set, skipping event fetch');
