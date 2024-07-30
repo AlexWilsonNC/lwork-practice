@@ -22,6 +22,9 @@ const CardViewTheme = styled.div`
     .player-deck-icons a:hover {
         color: #1290eb;
     }
+    .spinner {
+        border-left-color: ${({ theme }) => theme.searchTxt};
+    }
 `;
 
 const energyIcons = {
@@ -647,7 +650,7 @@ const CardView = () => {
                 <p className='decks-that-contain'>Decklists that contain <span className='italic'>{cardInfo.name}</span></p>
                 <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
                 {loading && !eventsScanned ? (
-                    <p className='margintop'>Loading...</p>
+                    <div className="spinner margintop"></div>
                 ) : isBasicEnergy ? (
                     <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
                 ) : eventResults.length > 0 ? (
@@ -716,7 +719,7 @@ const CardView = () => {
                     </table>
                 ) : (
                     eventsScanned && (
-                        <p className='margintop'>Looks like this card has never seen success... at least not from what we've documented.<br /><br /><span className='smaller-txt italic'>Have a list featuring {cardInfo.name}? Send it in to <a href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</span></p>
+                        <p className='margintop'>Looks like this card has never seen success... at least not from what we've documented.<br /><br /><span className='smaller-txt italic'>Have a list featuring {cardInfo.name}? Send it in to <a className='blue' href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</span></p>
                     )
                 )}
             </div>

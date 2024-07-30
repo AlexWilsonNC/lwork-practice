@@ -26,6 +26,9 @@ const PlayerDeckCenter = styled.div`
         background: ${({ theme }) => theme.listCardBg};
         color: ${({ theme }) => theme.listCardText};
     }
+    .spinner {
+        border-left-color: ${({ theme }) => theme.searchTxt};
+    }
 `;
 
 const orderedSets = [

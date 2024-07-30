@@ -218,6 +218,9 @@ const PlayerListContainer = styled.div`
     .results-table td:nth-child(3) {
         text-align: center;
     }
+    .spinner {
+        border-left-color: ${({ theme }) => theme.searchTxt};
+    }
 `;
 
 const formatName = (name) => {
