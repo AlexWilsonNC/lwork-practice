@@ -135,7 +135,7 @@ const CardsPage = () => {
     { name: "SV Energy", abbrev: "SVE", releaseDate: "Mar 31, 2023", total: "8" },
     { name: "SV Black Star Promos", abbrev: "PR-SV", releaseDate: "-", total: "75" },
     { separator: true, text: "Sword & Shield"},
-    { name: "Crown Zenith", abbrev: "CRZ", releaseDate: "Jan 20, 2023", total: "160" },
+    { name: "Crown Zenith *", abbrev: "CRZ", releaseDate: "Jan 20, 2023", total: "160" },
     { name: "Silver Tempest", abbrev: "SIT", releaseDate: "Nov 11, 2022", total: "215" },
     { name: "Lost Origin", abbrev: "LOR", releaseDate: "Sep 9, 2022", total: "217" },
     { name: "Pokémon GO *", abbrev: "PGO", releaseDate: "Jul 1, 2022", total: "88" },
@@ -172,7 +172,7 @@ const CardsPage = () => {
     { name: "Sun & Moon", abbrev: "SUM", releaseDate: "Feb 3, 2017", total: "173" },
     { name: "SM Black Star Promos", abbrev: "PR-SM", releaseDate: "-", total: "250" },
     { separator: true, text: "XY"},
-    { name: "Evolutions *", abbrev: "EVO", releaseDate: "Nov 2, 2016", total: "113" },
+    { name: "Evolutions", abbrev: "EVO", releaseDate: "Nov 2, 2016", total: "113" },
     { name: "Steam Siege", abbrev: "STS", releaseDate: "Aug 3, 2016", total: "116" },
     { name: "Fates Collide", abbrev: "FCO", releaseDate: "May 2, 2016", total: "129" },
     { name: "Generations *", abbrev: "GEN", releaseDate: "Feb 22, 2016", total: "117" },
@@ -278,8 +278,13 @@ const CardsPage = () => {
         const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${setName}`);
         if (response.ok) {
           const data = await response.json();
-          data.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+  
+          if (setName !== "CEL") {
+            data.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+          }
+  
           setCards(data);
+  
           if (data.length > 0) {
             setLogoUrl(data[0].set.images.logo);
             setNameText(data[0].set.name);
@@ -293,7 +298,7 @@ const CardsPage = () => {
         console.error('Error fetching cards:', error);
       }
     };
-
+  
     fetchCards();
   }, [setName]);
 

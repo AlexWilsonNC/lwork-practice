@@ -130,27 +130,27 @@ const CardView = () => {
 
     useEffect(() => {
         if (!cardInfo) return;
-    
+
         const fetchOtherVersions = async () => {
             if (!cardInfo) return;
             console.log(`Fetching other versions for card: ${cardInfo.name}`);
-          
+
             try {
-              const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
-              console.log('Response status:', response.status);
-          
-              if (response.ok) {
-                const data = await response.json();
-                console.log('Fetched other versions data:', data);
-                setOtherVersions(data);
-              } else {
-                console.error('Failed to fetch other versions data:', await response.json());
-              }
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+                console.log('Response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Fetched other versions data:', data);
+                    setOtherVersions(data);
+                } else {
+                    console.error('Failed to fetch other versions data:', await response.json());
+                }
             } catch (error) {
-              console.error('Error fetching other versions:', error);
+                console.error('Error fetching other versions:', error);
             }
-          };          
-    
+        };
+
         fetchOtherVersions();
     }, [cardInfo]);
 
@@ -341,17 +341,23 @@ const CardView = () => {
     const isGLCLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
         const excludedSubtypes = ["EX", "GX", "ex", "V", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
-    
+
+        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number))) {
+            return false;
+        } if (card.setAbbrev === "HS" && card.number === "72") {
+            return true;
+        }
+
         const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
         const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
-    
+
         if (isFromAllowedSet && !hasExcludedSubtype) {
             const isBanned = bannedInGLC.some(bannedCard =>
                 bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
                 bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
                 bannedCard.number === card.number
             );
-    
+
             return !isBanned;
         }
         return false;
@@ -366,6 +372,8 @@ const CardView = () => {
     const isStandardLegal = (card) => {
         const regulationMarks = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
         if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
+            return true;
+        } if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
         if (card.supertype !== 'Pokémon' &&
@@ -382,6 +390,12 @@ const CardView = () => {
     };
     const isExpandedLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+
+        if (card.setAbbrev === "CEL" && /^CC(1[0-9]|[1-9])$/.test(card.number)) {
+            return false;
+        } if (card.setAbbrev === "HS" && card.number === "72") {
+            return true;
+        }
         if (card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase())) {
             if (!bannedInExpanded.some(bannedCard =>
                 bannedCard.name && bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -464,10 +478,10 @@ const CardView = () => {
 
     const getEventLink = (eventId, eventName) => {
         if (eventName === "Worlds 2002") {
-          return `/tournaments/${eventId}/seniors`;
+            return `/tournaments/${eventId}/seniors`;
         }
         return `/tournaments/${eventId}`;
-      };
+    };
 
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
@@ -644,41 +658,41 @@ const CardView = () => {
                             <div className='legality-checks'>
                                 <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
                                 <p>
-                                    Expanded: 
+                                    Expanded:
                                     {cardInfo.set.releaseDate === "N/A" ? (
                                         <>
-                                        <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
                                         </>
                                     ) : (
                                         <>
-                                        {isExpandedLegal(cardInfo) ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                        ) : (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                        )}
-                                        {isBannedInExpanded(cardInfo) && (
-                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                        )}
+                                            {isExpandedLegal(cardInfo) ? (
+                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                            ) : (
+                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                            )}
+                                            {isBannedInExpanded(cardInfo) && (
+                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                            )}
                                         </>
                                     )}
                                 </p>
                                 <p>
-                                    GLC: 
+                                    GLC:
                                     {cardInfo.set.releaseDate === "N/A" ? (
                                         <>
-                                        <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                        <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
                                         </>
                                     ) : (
                                         <>
-                                        {isGLCLegal(cardInfo) ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                        ) : (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                        )}
-                                        {isBannedInGLC(cardInfo) && (
-                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                        )}
+                                            {isGLCLegal(cardInfo) ? (
+                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                            ) : (
+                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                            )}
+                                            {isBannedInGLC(cardInfo) && (
+                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                            )}
                                         </>
                                     )}
                                 </p>
