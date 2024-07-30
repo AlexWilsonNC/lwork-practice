@@ -196,30 +196,28 @@ app.get('/api/cards', async (req, res) => {
 });
 
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
-  const cardName = decodeURIComponent(req.params.name).toLowerCase();
-
+  const cardName = req.params.name.toLowerCase();
   try {
-    // Fetch all collections in the card database
     const collections = await cardConnection.db.listCollections().toArray();
-    
-    const cardSearchPromises = collections.map(async (collection) => {
-      // Search for the card by name in each collection
-      return cardConnection.collection(collection.name).find({ name: { $regex: new RegExp(`^${cardName}$`, 'i') } }).toArray();
-    });
+    let foundCards = [];
 
-    // Resolve all promises and flatten the results
-    const cardResults = (await Promise.all(cardSearchPromises)).flat();
+    for (const collectionInfo of collections) {
+      const collection = cardConnection.collection(collectionInfo.name);
+      const cards = await collection.find({ name: new RegExp(`^${cardName}$`, 'i') }).toArray();
+      foundCards = foundCards.concat(cards);
+    }
 
-    if (cardResults.length > 0) {
-      res.status(200).json(cardResults);
+    if (foundCards.length > 0) {
+      res.status(200).json(foundCards);
     } else {
-      res.status(404).json({ message: `No versions found for card name: ${cardName}` });
+      res.status(404).json({ message: `Card not found with name: ${cardName}` });
     }
   } catch (error) {
-    console.error('Error searching for card by name:', error);
-    res.status(500).json({ message: 'Server error while searching for card' });
+    console.error('Error fetching card by name:', error);
+    res.status(500).json({ message: 'Error fetching card by name' });
   }
 });
+
 
 // New route to get all players
 app.get('/api/players', async (req, res) => {
