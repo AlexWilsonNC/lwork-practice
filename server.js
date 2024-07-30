@@ -196,9 +196,12 @@ app.get('/api/cards', async (req, res) => {
 });
 
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
-  const cardName = req.params.name;
+  const cardName = decodeURIComponent(req.params.name);
+  console.log(`Searching for card with name: ${cardName}`);
   try {
-      const cards = await CardModel.find({ name: new RegExp(cardName, 'i') }); // Case-insensitive search
+      // Use a case-insensitive search
+      const cards = await Card.find({ name: new RegExp(`^${cardName}$`, 'i') });
+      console.log(`Found ${cards.length} cards`);
       if (cards.length === 0) {
           return res.status(404).json({ message: `Card not found with name: ${cardName}` });
       }
