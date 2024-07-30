@@ -273,6 +273,9 @@
         left: 80%;
         top: 17%;
     }
+    .pushed-logo {
+        left: 73%;
+      }
     .left-regional-info {
         display: flex;
         flex-direction: column;

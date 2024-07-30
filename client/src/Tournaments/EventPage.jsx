@@ -329,7 +329,13 @@ const EventPage = () => {
                             </p>
                         )}
                     </div>
-                    <img className='regional-info-bg-logo' src={logos[eventData.eventLogo]} alt='event logo' />
+                    <img
+                        className={`regional-info-bg-logo ${
+                            ['worldsOfour', 'oFourNationals', 'oldNationals'].includes(eventData.eventLogo) ? 'pushed-logo' : ''
+                        }`}                        
+                        src={logos[eventData.eventLogo]}
+                        alt="event logo"
+                    />                    
                     <hr className='reg-hr'></hr>
                     <div className='outer-links'>
                         {eventData.organizer && (
