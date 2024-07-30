@@ -279,9 +279,9 @@ const CardsPage = () => {
         if (response.ok) {
           const data = await response.json();
   
-          if (setName !== "CEL") {
+          if (setName !== "BOB") {
             data.sort((a, b) => {
-              const isSpecial = (number) => /^(RC|SH|GG)/.test(number);
+              const isSpecial = (number) => /^(RC|SH|GG|TG|CC|SV)/.test(number);
               const extractNumber = (number) => {
                 const match = number.match(/(\d+)(a?)/i);
                 return match ? [parseInt(match[1], 10), match[2] || ''] : [NaN, ''];
@@ -292,11 +292,11 @@ const CardsPage = () => {
               const aIsSpecial = isSpecial(a.number);
               const bIsSpecial = isSpecial(b.number);
   
-              // Separate "RC" and "SH" cards to the end
+              // Separate "RC", "SH", "GG", "TG", and "CC" cards to the end
               if (aIsSpecial && !bIsSpecial) return 1;
               if (!aIsSpecial && bIsSpecial) return -1;
               if (aIsSpecial && bIsSpecial) {
-                // Both are "RC" or "SH" cards
+                // Both are special cards
                 return aNum - bNum;
               }
   
@@ -327,7 +327,7 @@ const CardsPage = () => {
   
     fetchCards();
   }, [setName]);
-    
+      
   const observer = useRef();
 
   const lastCardElementRef = useCallback(node => {
