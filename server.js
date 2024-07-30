@@ -199,25 +199,23 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);
   try {
-    await client.connect();
-    const db = client.db(databaseName);
-    const collection = db.collection(collectionName);
+      // Using case-insensitive regex for the search
+      const regex = new RegExp(cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      const cards = await client.db('legends-cluster').collection('card-database').find({ name: regex }).toArray();
 
-    // Ensure case-insensitive and name normalization search
-    const regex = new RegExp(`^${cardName}$`, 'i');
-    const cards = await collection.find({ name: regex }).toArray();
+      if (cards.length === 0) {
+          console.log(`No cards found for name: ${cardName}`);
+          return res.status(404).json({ message: `Card not found with name: ${cardName}` });
+      }
 
-    if (cards.length === 0) {
-      return res.status(404).json({ message: `Card not found with name: ${cardName}` });
-    }
-    res.json(cards);
+      console.log(`Found cards: ${cards.length}`);
+      res.json(cards);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  } finally {
-    await client.close();
+      console.error('Error occurred while searching for card:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // New route to get all players
 app.get('/api/players', async (req, res) => {
