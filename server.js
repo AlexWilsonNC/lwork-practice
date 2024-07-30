@@ -197,14 +197,13 @@ app.get('/api/cards', async (req, res) => {
 
 app.get('/api/cards/otherversions/:name', async (req, res) => {
   const cardName = req.params.name;
-
   try {
     // Get the list of all collection names in the card database
-    const collectionNames = await cardConnection.db.listCollections().toArray();
-
+    const collections = await cardConnection.db.listCollections().toArray();
     // Map through all collections and fetch cards with the matching name
-    const otherVersionsPromises = collectionNames.map(async (collectionInfo) => {
+    const otherVersionsPromises = collections.map(async (collectionInfo) => {
       const collection = cardConnection.collection(collectionInfo.name);
+      // Fetch cards with matching name
       return collection.find({ name: cardName }).toArray();
     });
 
@@ -221,7 +220,6 @@ app.get('/api/cards/otherversions/:name', async (req, res) => {
     res.status(500).send('Error fetching other versions');
   }
 });
-
 
 // New route to get all players
 app.get('/api/players', async (req, res) => {
