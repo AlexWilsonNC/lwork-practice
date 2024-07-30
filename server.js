@@ -196,19 +196,26 @@ app.get('/api/cards', async (req, res) => {
 });
 
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
-  const cardName = decodeURIComponent(req.params.name);
+  const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);
   try {
-      // Use a case-insensitive search
-      const cards = await Card.find({ name: new RegExp(`^${cardName}$`, 'i') });
-      console.log(`Found ${cards.length} cards`);
-      if (cards.length === 0) {
-          return res.status(404).json({ message: `Card not found with name: ${cardName}` });
-      }
-      res.json(cards);
+    await client.connect();
+    const db = client.db(databaseName);
+    const collection = db.collection(collectionName);
+
+    // Ensure case-insensitive and name normalization search
+    const regex = new RegExp(`^${cardName}$`, 'i');
+    const cards = await collection.find({ name: regex }).toArray();
+
+    if (cards.length === 0) {
+      return res.status(404).json({ message: `Card not found with name: ${cardName}` });
+    }
+    res.json(cards);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  } finally {
+    await client.close();
   }
 });
 
