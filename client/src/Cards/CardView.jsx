@@ -134,11 +134,11 @@ const CardView = () => {
         const fetchOtherVersions = async () => {
             if (!cardInfo) return;
             console.log(`Fetching other versions for card: ${cardInfo.name}`);
-
+        
             try {
                 const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
                 console.log('Response status:', response.status);
-
+        
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Fetched other versions data:', data);
@@ -150,6 +150,7 @@ const CardView = () => {
                 console.error('Error fetching other versions:', error);
             }
         };
+        
 
         fetchOtherVersions();
     }, [cardInfo]);
@@ -341,23 +342,38 @@ const CardView = () => {
     const isGLCLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
         const excludedSubtypes = ["EX", "GX", "ex", "V", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
-
+    
+        // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number))) {
             return false;
-        } if (card.setAbbrev === "HS" && card.number === "72") {
+        }
+    
+        // Exception for "HS/72"
+        if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
-
+    
+        // Check if any version of this Trainer or Energy card is legal in Standard
+        if (card.supertype !== 'Pokémon') {
+            const hasLegalVersion = otherVersions.some(otherCard =>
+                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
+                isStandardLegal(otherCard)
+            );
+            if (hasLegalVersion) {
+                return true;
+            }
+        }
+    
         const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
         const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
-
+    
         if (isFromAllowedSet && !hasExcludedSubtype) {
             const isBanned = bannedInGLC.some(bannedCard =>
                 bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
                 bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
                 bannedCard.number === card.number
             );
-
+    
             return !isBanned;
         }
         return false;
@@ -371,55 +387,60 @@ const CardView = () => {
     };
     const isStandardLegal = (card) => {
         const regulationMarks = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+    
         if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
             return true;
-        } if (card.setAbbrev === "HS" && card.number === "72") {
+        }
+    
+        if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
-        if (card.supertype !== 'Pokémon' &&
-            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) &&
-            !(card.supertype === 'Energy' && ['Darkness Energy', 'Metal Energy'].includes(card.name))) {
+    
+        if (card.supertype !== 'Pokémon') {
             const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
-                otherCard.name && otherCard.name.toLowerCase() === card.name.toLowerCase() &&
+                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
                 otherCard.regulationMark &&
                 regulationMarks.includes(otherCard.regulationMark)
             );
             return otherVersions.length > 0;
         }
+    
         return false;
     };
     const isExpandedLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-
-        if (card.setAbbrev === "CEL" && /^CC(1[0-9]|[1-9])$/.test(card.number)) {
+    
+        // Check for banned CC cards in CEL set
+        if (card.setAbbrev === "CEL" && /^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number)) {
             return false;
-        } if (card.setAbbrev === "HS" && card.number === "72") {
+        }
+    
+        // Exception for "HS/72"
+        if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
+    
+        // Check if any version of this Trainer or Energy card is legal in Standard
+        if (card.supertype !== 'Pokémon') {
+            const hasLegalVersion = otherVersions.some(otherCard =>
+                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
+                isStandardLegal(otherCard)
+            );
+            if (hasLegalVersion) {
+                return true;
+            }
+        }
+    
         if (card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase())) {
             if (!bannedInExpanded.some(bannedCard =>
-                bannedCard.name && bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-                bannedCard.set && bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
+                bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
+                bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
                 bannedCard.number === card.number
             )) {
                 return true;
             }
         }
-        if (card.supertype !== 'Pokémon' &&
-            !(card.supertype === 'Energy' && card.subtypes.includes('Basic')) &&
-            !(card.supertype === 'Energy' && ['Darkness Energy', 'Metal Energy'].includes(card.name))) {
-            const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
-                otherCard.name && otherCard.name.toLowerCase() === card.name.toLowerCase() &&
-                otherCard.set && otherCard.set.series && expandedSets.includes(otherCard.set.series.toLowerCase()) &&
-                !bannedInExpanded.some(bannedCard =>
-                    bannedCard.name && bannedCard.name.toLowerCase() === otherCard.name.toLowerCase() &&
-                    bannedCard.set && bannedCard.set.toLowerCase() === otherCard.setAbbrev.toLowerCase() &&
-                    bannedCard.number === otherCard.number
-                )
-            );
-
-            return otherVersions.length > 0;
-        }
+    
         return false;
     };
     const isBannedInExpanded = (card) => {
