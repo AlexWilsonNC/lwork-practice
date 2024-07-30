@@ -5,6 +5,7 @@ import '../css/decklist.css';
 import DecklistOptions from '../Tools/DecklistOptions';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
+import DisplayPokemonSprites from './pokemon-sprites';
 
 const PlayerDeckCenter = styled.div`
     background: ${({ theme }) => theme.body};
@@ -28,6 +29,16 @@ const PlayerDeckCenter = styled.div`
     }
     .spinner {
         border-left-color: ${({ theme }) => theme.searchTxt};
+    }
+    .link-to-playerprofile {
+        color: ${({ theme }) => theme.text};
+    }
+    .link-to-playerprofile:hover,
+    .link-to-playerprofile:hover .turned-link {
+        color: #1290eb;
+    }
+    .turned-link {
+        color: ${({ theme }) => theme.text};
     }
 `;
 
@@ -443,7 +454,13 @@ const PlayerDeck = () => {
         <div className="player-deck">
             <div className='player-deck-top'>
                 <div>
-                    <h2>{formatName(playerData.name)}</h2>
+                    <Link className='link-to-playerprofile' to={`/player/${playerData.name.replace(/\s+/g, '')}-${playerData.flag}`}>
+                        <h2>
+                            {formatName(playerData.name)}
+                            &nbsp;
+                            <span className="material-symbols-outlined turned-link">link</span>      
+                        </h2>
+                    </Link> 
                     <hr className='playerdeck-hr'></hr>
                     <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
                     {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
@@ -489,7 +506,7 @@ const PlayerDeck = () => {
                 ) : (
                 <div className="deck-list">
                     <div className='column-section'>
-                    <div className='list-category'><h2>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h2></div>
+                    <div className='list-category'><h3>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h3></div>
                     <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
                         <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                         <p className='list-card-count'>{card.count}</p>
@@ -499,7 +516,7 @@ const PlayerDeck = () => {
                     ))}</div>
                     </div>
                     <div className='column-section'>
-                    <div className='list-category'><h2>Trainer ({countCards(playerData.decklist, 'trainer')})</h2></div>
+                    <div className='list-category'><h3>Trainer ({countCards(playerData.decklist, 'trainer')})</h3></div>
                     <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
                         <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                         <p className='list-card-count'>{card.count}</p>
@@ -509,7 +526,7 @@ const PlayerDeck = () => {
                     ))}</div>
                     </div>
                     <div className='column-section'>
-                    <div className='list-category'><h2>Energy ({countCards(playerData.decklist, 'energy')})</h2></div>
+                    <div className='list-category'><h3>Energy ({countCards(playerData.decklist, 'energy')})</h3></div>
                     <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
                         <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
                         <p className='list-card-count'>{card.count}</p>

@@ -310,6 +310,21 @@ const PlayerProfile = () => {
         return `/tournaments/${eventId}`;
     };
 
+    const getDivisionAbbreviation = (division) => {
+        switch (division.toLowerCase()) {
+          case 'masters':
+            return 'Ma';
+          case 'seniors':
+            return 'Sr';
+          case 'juniors':
+            return 'Jr';
+          case 'professors':
+            return 'Prof';
+          default:
+            return division;
+        }
+      };
+
     return (
         <PlayerProfileContainer theme={theme} className='center-me'>
             <Helmet>
@@ -355,7 +370,7 @@ const PlayerProfile = () => {
                                         {result.eventName}
                                     </Link>
                                 </td>
-                                <td>{getPlacementSuffix(result.placement)}</td>
+                                <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>({getDivisionAbbreviation(result.division)})</span></td>
                                 <td className='player-deck-icons center-content'>
                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
                                     <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`} className={result.hasDecklist ? '' : 'no-decklist'}>

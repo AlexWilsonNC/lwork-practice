@@ -25,6 +25,12 @@ const CardViewTheme = styled.div`
     .spinner {
         border-left-color: ${({ theme }) => theme.searchTxt};
     }
+    .link-to-playerprofile {
+        color: ${({ theme }) => theme.text};
+    }
+    .link-to-playerprofile:hover {
+        color: #1290eb;
+    }
 `;
 
 const energyIcons = {
@@ -815,7 +821,7 @@ const CardView = () => {
                                         {sortedResults.map((result, index) => (
                                             <tr key={index} style={{ marginBottom: '5px' }}>
                                                 <td>{getPlacementSuffix(result.placement)}</td>
-                                                <td>{formatName(result.playerName)}</td>
+                                                <td><Link className='link-to-playerprofile' to={`/player/${result.playerName.replace(/\s+/g, '')}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>
                                                 <td>
                                                     <Link className='blue-link' to={getEventLink(result.eventId, result.eventName)}>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams, Link } from 'react-router-dom';
 import DisplayPokemonSprites from './pokemon-sprites';
 import styled from 'styled-components';
 
@@ -127,6 +128,12 @@ const OlResults = styled.ol`
     .player-deck-icons a:hover {
         color: #1290eb;
     }
+    .link-to-playerprofile {
+        color: ${({ theme }) => theme.text};
+    }
+    .link-to-playerprofile:hover {
+        color: #1290eb;
+    }
 `;
 
 const formatName = (name) => {
@@ -170,7 +177,7 @@ export const displayResults = (players, eventId, division) => {
                         <div className='name-n-flag'>
                             <div className='player-placement'>{index + 1}.</div>
                             <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                            <div>{formatName(player.name)}</div>
+                            <Link className='link-to-playerprofile' to={`/player/${player.name.replace(/\s+/g, '')}-${player.flag}`}>{formatName(player.name)}</Link>         
                         </div>
                         <div className="player-deck-icons">
                             <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />

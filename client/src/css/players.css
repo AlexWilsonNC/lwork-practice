@@ -15,6 +15,9 @@
     padding: 0 0 6px 0;
     font-size: 14px;
 }
+.divisionplacementopaque {
+    opacity: 0.5;
+}
 .results-table th:nth-child(1),
 .results-table th:nth-child(4),
 .results-table th:nth-child(2) {
@@ -28,7 +31,7 @@
 }
 .results-table th:nth-child(3),
 .results-table td:nth-child(3) {
-    text-align: center;
+    text-align: start;
 }
 .player-results-container .sprite:nth-child(1) {
     margin-left: 55px;
