@@ -33,6 +33,7 @@ import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
 import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
+import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -121,6 +122,7 @@ const logos = {
     oldNationals: oldNationals,
     oFourNationals: oFourNationals,
     stadiumChallenge: stadiumChallenge,
+    superTrainerShowdown: superTrainerShowdown,
 }
 
 const flags = {

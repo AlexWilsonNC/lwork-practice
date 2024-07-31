@@ -26,6 +26,7 @@ import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
 import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
+import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -117,7 +118,10 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "Aug 16, 2024",
         "flag": usa,
-        "location": "Honolulu, Hawaii"
+        "location": "Honolulu, Hawaii",
+        "registrationTime": "2024-07-01T19:00:00-05:00",
+        "registrationLink": "https://worlds.pokemon.com/en-us/",
+
     },
     {
         "id": '2025_BALTIMORE',
@@ -126,7 +130,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 14, 2024",
         "flag": usa,
-        "location": "Baltimore, Maryland"
+        "location": "Baltimore, Maryland",
+        "registrationTime": "2024-07-31T19:00:00-05:00",
+        "registrationLink": "https://rk9.gg/tournament/BA01mbRvSKoISiCU7cBJ",
     },
     {
         "id": '2025_DORTMUND',
@@ -135,7 +141,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": germany,
-        "location": "Dortmund, Germany"
+        "location": "Dortmund, Germany",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_JOINVILLE',
@@ -144,7 +152,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": brazil,
-        "location": "Joinville, Brazil"
+        "location": "Joinville, Brazil",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_LIMA',
@@ -153,7 +163,9 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Oct 5, 2024",
         "flag": peru,
-        "location": "Lime, Peru"
+        "location": "Lime, Peru",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_LOUISVILLE',
@@ -162,7 +174,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Oct 11, 2024",
         "flag": usa,
-        "location": "Louisville, Kentucky"
+        "location": "Louisville, Kentucky",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_LILLE',
@@ -171,7 +185,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Oct 19, 2024",
         "flag": france,
-        "location": "Lille, France"
+        "location": "Lille, France",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_GDASNK',
@@ -180,7 +196,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 2, 2024",
         "flag": poland,
-        "location": "Gdańsk, Poland"
+        "location": "Gdańsk, Poland",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_BUENOS_AIRES',
@@ -189,7 +207,9 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Nov 9, 2024",
         "flag": argentina,
-        "location": "Buenos Aires, Argentina"
+        "location": "Buenos Aires, Argentina",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_SACRAMENTO',
@@ -198,7 +218,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 22, 2024",
         "flag": usa,
-        "location": "Sacramento, California"
+        "location": "Sacramento, California",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_STUTTGART',
@@ -207,7 +229,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 30, 2024",
         "flag": germany,
-        "location": "Stuttgart, Germany"
+        "location": "Stuttgart, Germany",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_BOGOTA',
@@ -216,7 +240,9 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Dec 7, 2024",
         "flag": colombia,
-        "location": "Bogotá, Colombia"
+        "location": "Bogotá, Colombia",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_TORONTO',
@@ -225,7 +251,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Dec 13, 2024",
         "flag": canada,
-        "location": "Toronto, Canada"
+        "location": "Toronto, Canada",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_LAIC',
@@ -234,7 +262,9 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Nov 15, 2024",
         "flag": brazil,
-        "location": "São Paulo, Brazil"
+        "location": "São Paulo, Brazil",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_EUIC',
@@ -243,7 +273,9 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Feb 21, 2025",
         "flag": uk,
-        "location": "London, United Kingdom"
+        "location": "London, United Kingdom",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '2025_NAIC',
@@ -252,7 +284,9 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Jun 13, 2025",
         "flag": usa,
-        "location": "New Orleans, Louisiana"
+        "location": "New Orleans, Louisiana",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     {
         "id": '',
@@ -261,7 +295,9 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "TBA 2025",
         "flag": unknown,
-        "location": ""
+        "location": "",
+        "registrationTime": "",
+        "registrationLink": "",
     },
     // {
     //     "id": '2024_BOLOGNA',

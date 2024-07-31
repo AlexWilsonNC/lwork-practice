@@ -80,6 +80,10 @@ const regionFlags = {
     'MS': [southAfrica]
 };
 
+const parseRegistrationTime = (timeStr) => {
+    return new Date(timeStr);
+  };
+
 const EventList = () => {
     const { theme } = useTheme();
     const location = useLocation();
@@ -171,8 +175,10 @@ const EventList = () => {
                         <p className='sort-events'>Event Type:</p>
                         <select value={eventTypeFilter} onChange={e => setEventTypeFilter(e.target.value)}>
                             <option value="">All Events</option>
-                            <optgroup label="TPCi Events">
+                            <optgroup label="Worlds">
                                 <option value="worlds">World Championships</option>
+                            </optgroup>
+                            <optgroup label="TPCi Events">
                                 <option value="internationals">Internationals</option>
                                 <option value="regionals">Regionals</option>
                                 <option value="speSeries">Special Events</option>
@@ -186,7 +192,7 @@ const EventList = () => {
                             {!showUpcoming && (
                             <optgroup label="WotC Era">
                                 <option value="stadiumChallenge">Stadium Challenge</option>
-                                <option value="eeeeee">Super Trainer Showdown</option>
+                                <option value="superTrainerShowdown">Super Trainer Showdown</option>
                             </optgroup>
                                 )}
                             <optgroup label="Other">
@@ -239,6 +245,9 @@ const EventList = () => {
                                     <th>Results</th>
                                 )}
                                 {showUpcoming && (
+                                    <th>Registration</th>
+                                )}
+                                {showUpcoming && (
                                     <th>Information</th>
                                 )}
                             </tr>
@@ -260,8 +269,16 @@ const EventList = () => {
                                         </div>
                                     </td>
                                     {showUpcoming && (
-                                        <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
-                                    )}
+                                        <td>
+                                            {event.registrationTime ? (
+                                            <a href={event.registrationLink} className='event-icon-links'>
+                                                <span className="material-symbols-outlined reg-icon">
+                                                {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
+                                                </span>
+                                            </a>
+                                            ) : null}
+                                        </td>
+                                        )}
                                     {!showUpcoming && (
                                         <td>
                                             {event.results !== false && event.id ? (
@@ -269,11 +286,16 @@ const EventList = () => {
                                             ) : null}
                                         </td>
                                     )}
+                                    {showUpcoming && (
+                                        <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                <p className='marginbottom italic aligncenter'><span className="material-symbols-outlined reg-icon smallersmaller">schedule</span> &nbsp;Registration time is scheduled</p>
+                <p className='marginbottom italic aligncenter'><span className="material-symbols-outlined reg-icon smallersmaller">edit_note</span> &nbsp;Registration open (caps unaccounted for)</p>
             </div>
         </UpcomingEvents>
     );

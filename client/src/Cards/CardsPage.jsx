@@ -281,7 +281,7 @@ const CardsPage = () => {
   
           if (setName !== "BOB") {
             data.sort((a, b) => {
-              const isSpecial = (number) => /^(RC|SH|GG|TG|CC|SV)/.test(number);
+              const isSpecial = (number) => /^(RC|SH|GG|TG|CC|SV|SL|ONE|TWO|THREE|FOUR)/.test(number);
               const extractNumber = (number) => {
                 const match = number.match(/(\d+)(a?)/i);
                 return match ? [parseInt(match[1], 10), match[2] || ''] : [NaN, ''];
