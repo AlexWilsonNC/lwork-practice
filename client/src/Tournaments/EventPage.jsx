@@ -217,11 +217,15 @@ const EventPage = () => {
     const seniorsResults = eventData.seniors || [];
     const juniorsResults = eventData.juniors || [];
     const professorsResults = eventData.professors || [];
+    const olderSeniorsResults = eventData.olderSeniors || [];
+    const youngSeniorsResults = eventData.youngSeniors || [];
 
     const results = division === 'masters' ? mastersResults :
                 division === 'seniors' ? seniorsResults :
                 division === 'juniors' ? juniorsResults :
-                division === 'professors' ? professorsResults : [];
+                division === 'professors' ? professorsResults :
+                division === 'olderSeniors' ? olderSeniorsResults :
+                division === 'youngSeniors' ? youngSeniorsResults : [];
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -256,6 +260,22 @@ const EventPage = () => {
                     </>
                 );
             case 'juniors':
+                return (
+                    <>
+                        {eventData.dayOneJuniors && (
+                            <p><strong>Day 1:</strong> {eventData.dayOneJuniors}</p>
+                        )}
+                    </>
+                );
+            case 'olderSeniors':
+                return (
+                    <>
+                        {eventData.dayOneSeniors && (
+                            <p><strong>Day 1:</strong> {eventData.dayOneSeniors}</p>
+                        )}
+                    </>
+                );
+            case 'youngSeniors':
                 return (
                     <>
                         {eventData.dayOneJuniors && (
@@ -358,11 +378,36 @@ const EventPage = () => {
                             style={{ opacity: 1, pointerEvents: 'all' }}
                         >Professors</Link>
                     ) : null}
-                    <Link
-                        className={`seniorsBtn ${division === 'seniors' ? 'active-division' : 'other-division'}`}
-                        to={`/tournaments/${eventId}/seniors`}
-                        style={{ opacity: eventData.seniors ? 1 : 0.1, pointerEvents: eventData.seniors ? 'all' : 'none' }}
-                    >Seniors</Link>
+                       {eventData.olderSeniors || eventData.youngSeniors ? (
+                    <>
+                    {eventData.olderSeniors && (
+                        <Link
+                                className={`olderSeniorsBtn ${division === 'olderSeniors' ? 'active-division' : 'other-division'}`}
+                                to={`/tournaments/${eventId}/olderSeniors`}
+                                style={{ opacity: 1, pointerEvents: 'all' }}
+                            >
+                                Older Seniors
+                            </Link>
+                        )}
+                        {eventData.youngSeniors && (
+                            <Link
+                                className={`youngSeniorsBtn ${division === 'youngSeniors' ? 'active-division' : 'other-division'}`}
+                                to={`/tournaments/${eventId}/youngSeniors`}
+                                style={{ opacity: 1, pointerEvents: 'all' }}
+                            >
+                                Young Seniors
+                            </Link>
+                        )}
+                    </>
+                    ) : (
+                        <Link
+                            className={`seniorsBtn ${division === 'seniors' ? 'active-division' : 'other-division'}`}
+                            to={`/tournaments/${eventId}/seniors`}
+                            style={{ opacity: eventData.seniors ? 1 : 0.1, pointerEvents: eventData.seniors ? 'all' : 'none' }}
+                        >
+                            Seniors
+                        </Link>
+                    )}
                     <Link
                         className={`juniorsBtn ${division === 'juniors' ? 'active-division' : 'other-division'}`}
                         to={`/tournaments/${eventId}/juniors`}
@@ -391,11 +436,14 @@ const EventPage = () => {
                         )}
                     </div>
                     <img
-                        className={`regional-info-bg-logo ${['worldsOfour', 'oFourNationals', 'oldNationals', 'stadiumChallenge'].includes(eventData.eventLogo) ? 'pushed-logo' : ''
-                            }`}
+                        className={`regional-info-bg-logo ${
+                            ['worldsOfour', 'oFourNationals', 'oldNationals', 'stadiumChallenge'].includes(eventData.eventLogo) 
+                            ? 'pushed-logo' 
+                            : ''
+                        } ${eventData.eventLogo === 'superTrainerShowdown' ? 'sts-logo' : ''}`}
                         src={logos[eventData.eventLogo]}
                         alt="event logo"
-                    />
+                        />
                     <hr className='reg-hr'></hr>
                     <div className='outer-links'>
                         {eventData.organizer && (

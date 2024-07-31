@@ -294,8 +294,6 @@ const EventList = () => {
                         </tbody>
                     </table>
                 </div>
-                <p className='marginbottom italic aligncenter'><span className="material-symbols-outlined reg-icon smallersmaller">schedule</span> &nbsp;Registration time is scheduled</p>
-                <p className='marginbottom italic aligncenter'><span className="material-symbols-outlined reg-icon smallersmaller">edit_note</span> &nbsp;Registration open (caps unaccounted for)</p>
             </div>
         </UpcomingEvents>
     );

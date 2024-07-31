@@ -324,6 +324,10 @@ const PlayerProfile = () => {
                 return 'Jr';
             case 'professors':
                 return 'Prof';
+            case 'olderseniors':
+                return 'Sr';
+            case 'youngseniors':
+                return 'Sr';
             default:
                 return division;
         }

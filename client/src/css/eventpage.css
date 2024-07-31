@@ -203,6 +203,10 @@
     opacity: 0.1;
     pointer-events: none;
 }
+.sts-logo {
+    height: 50px !important;
+    width: auto;
+  }
 
 @media screen and (max-width: 1500px) {
     .regional-container {
@@ -276,6 +280,11 @@
     .pushed-logo {
         left: 73%;
       }
+      .sts-logo {
+        height: 40px !important;
+        top: 19% !important;
+        left: 68% !important;
+    }
     .left-regional-info {
         display: flex;
         flex-direction: column;
