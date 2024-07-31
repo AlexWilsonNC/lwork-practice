@@ -460,6 +460,8 @@ const CardView = () => {
         return <div>Card not found</div>;
     }
 
+    const isPromoSet = cardInfo.set.name.toLowerCase().includes('promo');
+
     const renderEnergyIcons = (cost) => {
         if (!cost || cost.length === 0) {
             return <img src={energyIcons.NoCost} alt="No Cost" className="energy-icon" />;
@@ -558,7 +560,9 @@ const CardView = () => {
                                         &nbsp;
                                         <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
                                     </span>
-                                    Released {cardInfo.set && formatDate(cardInfo.set.releaseDate)}
+                                    {!isPromoSet && cardInfo.set.releaseDate && (
+                                        <>Released {formatDate(cardInfo.set.releaseDate)}</>
+                                    )}                                
                                 </p>
                             </div>
                         )}

@@ -433,7 +433,7 @@ const CardsPage = () => {
             {logoUrl && <img src={logoUrl} alt="Set Logo" />}
             <div className='setinfotext'>
               {nameText && <p>{nameText}</p>}
-              {setRelease && <p>{setRelease}</p>}
+              {setRelease && !nameText.toLowerCase().includes('promo') && <p>{setRelease}</p>}
               {setTotal && <p>Cards: {setTotal}</p>}
             </div>
           </div>
