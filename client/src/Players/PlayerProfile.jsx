@@ -32,6 +32,7 @@ import nationals from '../assets/event-logo/nats-logo.png';
 import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
+import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -119,6 +120,7 @@ const logos = {
     worldsOfour: worldsOfour,
     oldNationals: oldNationals,
     oFourNationals: oFourNationals,
+    stadiumChallenge: stadiumChallenge,
 }
 
 const flags = {
@@ -184,11 +186,10 @@ const flags = {
 const PlayerProfileContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
-
   .completed-n-upcoming {
     // margin-top: 1px;
   }
-.search-input .searcheventsfield {
+    .search-input .searcheventsfield {
         background: ${({ theme }) => theme.searchBg};
         color: ${({ theme }) => theme.searchTxt};
     }
@@ -199,7 +200,6 @@ const PlayerProfileContainer = styled.div`
   .results-table th:nth-child(2) {
     padding-left: 5px;
   }
-
   .small-suffix {
     font-size: 10px;
   }
@@ -211,17 +211,19 @@ const PlayerProfileContainer = styled.div`
     transition: opacity 0.3s;
     color: ${({ theme }) => theme.text};
   }
-      .player-deck-icons .material-symbols-outlined:hover {
+    .player-deck-icons .material-symbols-outlined:hover {
     color: #1290eb;
-}
+    }
   .player-deck-icons .material-symbols-outlined.no-decklist {
   opacity: 0;
   pointer-events: none;
-}
-
+    }
 .player-deck-icons a.no-decklist {
   pointer-events: none;
 }
+//   .player-deck-icons {
+//     margin-top: 0px;
+// }
 `;
 
 const parseDate = (dateString) => {
@@ -312,18 +314,18 @@ const PlayerProfile = () => {
 
     const getDivisionAbbreviation = (division) => {
         switch (division.toLowerCase()) {
-          case 'masters':
-            return 'Ma';
-          case 'seniors':
-            return 'Sr';
-          case 'juniors':
-            return 'Jr';
-          case 'professors':
-            return 'Prof';
-          default:
-            return division;
+            case 'masters':
+                return 'Ma';
+            case 'seniors':
+                return 'Sr';
+            case 'juniors':
+                return 'Jr';
+            case 'professors':
+                return 'Prof';
+            default:
+                return division;
         }
-      };
+    };
 
     return (
         <PlayerProfileContainer theme={theme} className='center-me'>
@@ -381,7 +383,7 @@ const PlayerProfile = () => {
                         ))}
                     </tbody>
                 </table>
-                </div>
+            </div>
             <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on the site.</p>
         </PlayerProfileContainer>
     );

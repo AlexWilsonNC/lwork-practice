@@ -177,7 +177,7 @@ const promoSets = {
     "N3": "PR-BS",
     "SI": "PR-BS",
     "N2": "PR-BS",
-    "N1": ["PR-BS", "BS", "TR"],
+    "N1": ["PR-BS", "BS", "TR", "LC"],
     "G2": "PR-BS",
     "G1": "PR-BS",
     "LC": "PR-BS",
