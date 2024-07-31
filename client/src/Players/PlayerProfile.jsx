@@ -234,6 +234,48 @@ const parseDate = (dateString) => {
     return new Date(`${monthDay}, ${year}`);
 };
 
+const formatName = (name) => {
+    const lowercaseWords = ['de', 'da', 'of', 'the', 'van', 'der'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
+    
+    // Define the special case with capital "De"
+    const specialCases = {
+        'de haes damien': 'De Haes Damien'
+    };
+
+    // Check for special case match
+    const lowerCaseName = name.toLowerCase();
+    if (specialCases[lowerCaseName]) {
+        return specialCases[lowerCaseName];
+    }
+
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word =>
+            word
+                .split('-')
+                .map(part =>
+                    part
+                        .split("'")
+                        .map(subPart => {
+                            if (lowercaseWords.includes(subPart.toLowerCase())) {
+                                return subPart.toLowerCase();
+                            } else if (uppercaseWords.includes(subPart.toLowerCase())) {
+                                return subPart.toUpperCase();
+                            } else if (subPart.startsWith('mc')) {
+                                return subPart.charAt(0).toUpperCase() + 'c' + subPart.charAt(2).toUpperCase() + subPart.slice(3);
+                            } else {
+                                return subPart.charAt(0).toUpperCase() + subPart.slice(1);
+                            }
+                        })
+                        .join("'")
+                )
+                .join("-")
+        )
+        .join(' ');
+};
+
 const formatDate = (dateString) => {
     const year = dateString.split(', ')[1];
     const monthDay = dateString.split(', ')[0].split(' - ')[0];
@@ -336,13 +378,13 @@ const PlayerProfile = () => {
     return (
         <PlayerProfileContainer theme={theme} className='center-me'>
             <Helmet>
-                <title>{player.name}</title>
+                <title>{formatName(player.name)}</title>
             </Helmet>
             <div className='player-results-container meep'>
                 <div className='completed-n-upcoming'>
                     <div className='bts-in'>
                         <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                        <h1>{player.name}</h1>
+                        <h1>{formatName(player.name)}</h1>
                     </div>
                     {/* <div className='search-input'>
                         <span className="material-symbols-outlined">search</span>

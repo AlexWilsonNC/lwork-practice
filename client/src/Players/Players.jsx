@@ -224,8 +224,19 @@ const PlayerListContainer = styled.div`
 `;
 
 const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.'];
+    const lowercaseWords = ['de', 'da', 'of', 'the', 'van', 'der'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
+    
+    // Define the special case with capital "De"
+    const specialCases = {
+        'de haes damien': 'De Haes Damien'
+    };
+
+    // Check for special case match
+    const lowerCaseName = name.toLowerCase();
+    if (specialCases[lowerCaseName]) {
+        return specialCases[lowerCaseName];
+    }
 
     return name
         .toLowerCase()
