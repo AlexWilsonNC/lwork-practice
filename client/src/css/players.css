@@ -180,6 +180,9 @@
     .results-table td:nth-child(1) {
         padding-left: 15px;
     }
+    .sort-buttons {
+        margin-left: 15px;
+    }
 }
 @media screen and (max-width: 700px) {
     .player-results-container {
@@ -187,9 +190,6 @@
     }
     .filters-top {
         margin-left: 25px;
-    }
-    .sort-buttons {
-        margin-left: 20px;
     }
     .meep th {
         font-size: 10px;
@@ -217,9 +217,6 @@
     }
         .sort-buttons button {
             font-size: 11px;
-        }
-        .sort-buttons {
-            margin-left: 10px;
         }
     .bts-in h1 {
         font-size: 16px;

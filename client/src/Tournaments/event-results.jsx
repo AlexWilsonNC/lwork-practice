@@ -136,6 +136,16 @@ const OlResults = styled.ol`
     }
 `;
 
+const normalizeName = (name) => {
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+      .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
+      .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
+  };
+
 const formatName = (name) => {
     const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.'];
@@ -177,7 +187,9 @@ export const displayResults = (players, eventId, division) => {
                         <div className='name-n-flag'>
                             <div className='player-placement'>{index + 1}.</div>
                             <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                            <Link className='link-to-playerprofile' to={`/player/${player.name.replace(/\s+/g, '')}-${player.flag}`}>{formatName(player.name)}</Link>         
+                            <Link className='link-to-playerprofile' to={`/player/${normalizeName(player.name)}-${player.flag}`}>
+                                {formatName(player.name)}
+                            </Link>
                         </div>
                         <div className="player-deck-icons">
                             <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />

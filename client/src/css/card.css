@@ -187,6 +187,7 @@
 .cards-specific-results th {
     font-size: 12px;
     text-align: start;
+    padding-bottom: 4px;
 }
 .cards-specific-results th:nth-child(5) {
     text-align: end;
@@ -208,13 +209,20 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    color: white;
+}
+.event-separator-content:hover {
+    color: rgb(10, 65, 175);
 }
 .event-separator td {
     background-color: #1290eb;
     text-align: left;
     font-weight: bold;
     padding: 2px 0 2px 15px;
-    color: white;
+}
+.formatsmallertxt {
+    font-weight: 600;
+    font-size: 13px;
 }
 .turned-link {
     color:white;
@@ -482,6 +490,9 @@
     .other-versions {
         width: 100%;
     }
+    .formatsmallertxt {
+        font-size: 10px;
+    }
     .turned-link {
         font-size: 18px;
     }
@@ -534,6 +545,9 @@
         height: auto;
         border-radius: 27px !important;
         box-shadow: 0 0 12px black;
+    }
+    .formatsmallertxt {
+        font-size: 8px;
     }
     .the-card-img {
         cursor: none;

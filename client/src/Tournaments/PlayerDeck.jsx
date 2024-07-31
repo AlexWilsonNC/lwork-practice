@@ -236,6 +236,16 @@ const getPlacementSuffix = (number) => {
     );
 };
 
+const normalizeName = (name) => {
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+      .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
+      .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
+  };
+
 const formatName = (name) => {
     const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.'];
@@ -454,7 +464,7 @@ const PlayerDeck = () => {
         <div className="player-deck">
             <div className='player-deck-top'>
                 <div>
-                    <Link className='link-to-playerprofile' to={`/player/${playerData.name.replace(/\s+/g, '')}-${playerData.flag}`}>
+                    <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
                         <h2>
                             {formatName(playerData.name)}
                             &nbsp;

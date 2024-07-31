@@ -323,7 +323,7 @@ const PlayerProfile = () => {
             case 'juniors':
                 return 'Jr';
             case 'professors':
-                return 'Prof';
+                return 'Ma';
             case 'olderseniors':
                 return 'Sr';
             case 'youngseniors':

@@ -25,10 +25,12 @@ const CardViewTheme = styled.div`
     .spinner {
         border-left-color: ${({ theme }) => theme.searchTxt};
     }
-    .link-to-playerprofile {
+    .link-to-playerprofile,
+    .white-link {
         color: ${({ theme }) => theme.text};
     }
-    .link-to-playerprofile:hover {
+    .link-to-playerprofile:hover,
+    .white-link:hover {
         color: #1290eb;
     }
 `;
@@ -57,6 +59,16 @@ const formatDate = (dateString) => {
     const date = new Date(dateString.replace(/-/g, '/'));
     return date.toLocaleDateString('en-US', options);
 };
+
+const normalizeName = (name) => {
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
 
 const formatName = (name) => {
     const lowercaseWords = ['de', 'da', 'of', 'the'];
@@ -251,6 +263,7 @@ const CardView = () => {
                                         results.push({
                                             eventId: eventData.id,
                                             eventName: eventData.name,
+                                            eventFormat: eventData.format,
                                             eventDate: eventData.date,
                                             playerName: player.name,
                                             division,
@@ -505,6 +518,10 @@ const CardView = () => {
         return `/tournaments/${eventId}`;
     };
 
+    const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+
+const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.includes(cardInfo.set.series.toLowerCase());
+
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
             <Helmet>
@@ -674,103 +691,105 @@ const CardView = () => {
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
                         {cardInfo.artist && <p>Illustrator: <span className='italic'>{cardInfo.artist}</span></p>}
                         <hr className='blue-hr'></hr>
-                        {!isBasicEnergy && (<>
-                            <p className='marginthree'>Modern Legality:</p>
-                            {cardInfo.regulationMark && (
-                                <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
-                            )}
-                            <div className='legality-checks'>
-                                <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
-                                <p>
-                                    Expanded:
-                                    {cardInfo.set.releaseDate === "N/A" ? (
-                                        <>
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {isExpandedLegal(cardInfo) ? (
-                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                            ) : (
+                        {isFromAllowedSet && !isBasicEnergy && (
+                            <>
+                                <p className='marginthree'>Modern Legality:</p>
+                                {cardInfo.regulationMark && (
+                                    <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
+                                )}
+                                <div className='legality-checks'>
+                                    <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
+                                    <p>
+                                        Expanded:
+                                        {cardInfo.set.releaseDate === "N/A" ? (
+                                            <>
                                                 <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                            )}
-                                            {isBannedInExpanded(cardInfo) && (
-                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                            )}
-                                        </>
-                                    )}
-                                </p>
-                                <p>
-                                    GLC:
-                                    {cardInfo.set.releaseDate === "N/A" ? (
-                                        <>
-                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                            <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {isGLCLegal(cardInfo) ? (
-                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                            ) : (
+                                            </>
+                                        ) : (
+                                            <>
+                                                {isExpandedLegal(cardInfo) ? (
+                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                                ) : (
+                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                                )}
+                                                {isBannedInExpanded(cardInfo) && (
+                                                    <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                                )}
+                                            </>
+                                        )}
+                                    </p>
+                                    <p>
+                                        GLC:
+                                        {cardInfo.set.releaseDate === "N/A" ? (
+                                            <>
                                                 <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                            )}
-                                            {isBannedInGLC(cardInfo) && (
-                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                            )}
-                                        </>
-                                    )}
-                                </p>
-                            </div>
-                            <div className='show-cardinfo-on-small'>
-                                <hr className='small-grey-hr'></hr>
-                                <div>
-                                    <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
-                                    <p className='show-ninefifty'>
-                                        <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
-                                        <span className='align-center'>
-                                            <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
-                                            &nbsp;
-                                            <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
-                                        </span>
-                                        Released {cardInfo.set && formatDate(cardInfo.set.releaseDate)}
+                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {isGLCLegal(cardInfo) ? (
+                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
+                                                ) : (
+                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
+                                                )}
+                                                {isBannedInGLC(cardInfo) && (
+                                                    <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
+                                                )}
+                                            </>
+                                        )}
                                     </p>
                                 </div>
-                            </div>
-                            <hr className='blue-hr'></hr>
-                            {showOtherVersions && (
-                                <div>
-                                    <p>Other Prints:</p>
-                                    <table className='other-versions'>
-                                        <tbody>
-                                            {displayedOtherVersions.map((otherCard, index) => (
-                                                <tr key={index}>
-                                                    <td className='linktoother'>
-                                                        <Link to={`/card/${otherCard.setAbbrev}/${otherCard.number}`}>
-                                                            {otherCard.set.name}
-                                                        </Link>
-                                                    </td>
-                                                    <td>#{otherCard.number}</td>
-                                                    <td>{otherCard.set && formatDate(otherCard.set.releaseDate)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    {otherVersionsToShow.length > 5 && (
-                                        <button onClick={() => setShowAllVersions(!showAllVersions)} className='showmoreversions'>
-                                            {showAllVersions ? (
-                                                <>
-                                                    See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
-                                                </>
-                                            )}
-                                        </button>
-                                    )}
+                                <div className='show-cardinfo-on-small'>
+                                    <hr className='small-grey-hr'></hr>
+                                    <div>
+                                        <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
+                                        <p className='show-ninefifty'>
+                                            <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
+                                            <span className='align-center'>
+                                                <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
+                                                &nbsp;
+                                                <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
+                                            </span>
+                                            Released {cardInfo.set && formatDate(cardInfo.set.releaseDate)}
+                                        </p>
+                                    </div>
                                 </div>
-                            )}
-                        </>)}
+                                <hr className='blue-hr'></hr>
+                                {showOtherVersions && (
+                                    <div>
+                                        <p>Other Prints:</p>
+                                        <table className='other-versions'>
+                                            <tbody>
+                                                {displayedOtherVersions.map((otherCard, index) => (
+                                                    <tr key={index}>
+                                                        <td className='linktoother'>
+                                                            <Link to={`/card/${otherCard.setAbbrev}/${otherCard.number}`}>
+                                                                {otherCard.set.name}
+                                                            </Link>
+                                                        </td>
+                                                        <td>#{otherCard.number}</td>
+                                                        <td>{otherCard.set && formatDate(otherCard.set.releaseDate)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        {otherVersionsToShow.length > 5 && (
+                                            <button onClick={() => setShowAllVersions(!showAllVersions)} className='showmoreversions'>
+                                                {showAllVersions ? (
+                                                    <>
+                                                        See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -812,23 +831,23 @@ const CardView = () => {
                                     if (divisionComparison !== 0) return divisionComparison;
                                     return a.placement - b.placement;
                                 });
-                                const { eventName, eventDate } = results[0];
+                                const { eventName, eventDate, eventFormat } = results[0];
                                 return (
                                     <React.Fragment key={eventId}>
                                         <tr className="event-separator">
                                             <td colSpan="5">
-                                                <div className="event-separator-content">
-                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp;&nbsp; {eventDate} &nbsp;&nbsp; <Link className='blue-link' to={`/tournaments/${eventId}`}><span className="material-symbols-outlined turned-link">link</span></Link>
-                                                </div>
+                                                <Link className="event-separator-content" to={`/tournaments/${eventId}`}>
+                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;<span className='formatsmallertxt'>({eventFormat})</span>
+                                                </Link>
                                             </td>
                                         </tr>
                                         {sortedResults.map((result, index) => (
                                             <tr key={index} style={{ marginBottom: '5px' }}>
                                                 <td>{getPlacementSuffix(result.placement)}</td>
-                                                <td><Link className='link-to-playerprofile' to={`/player/${result.playerName.replace(/\s+/g, '')}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
+                                                <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>
                                                 <td>
-                                                    <Link className='blue-link' to={getEventLink(result.eventId, result.eventName)}>
+                                                    <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
                                                         {result.eventName}
                                                     </Link>
                                                 </td>
