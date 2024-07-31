@@ -330,6 +330,10 @@
     .name-n-flag {
         font-size: 12px;
     }
+    .notavailable{
+        margin: 75px 50px;
+        text-align: center;
+    }
 }
 @media screen and (max-width: 410px) {
     .event-option {

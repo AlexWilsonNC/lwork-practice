@@ -185,7 +185,7 @@ const EventList = () => {
                             </optgroup>
                             {!showUpcoming && (
                             <optgroup label="WotC Era">
-                                <option value="eeeee">Stadium Challenge</option>
+                                <option value="stadiumChallenge">Stadium Challenge</option>
                                 <option value="eeeeee">Super Trainer Showdown</option>
                             </optgroup>
                                 )}

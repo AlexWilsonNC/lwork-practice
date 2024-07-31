@@ -25,6 +25,7 @@ import nationals from '../assets/event-logo/nats-logo.png';
 import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
+import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -779,24 +780,25 @@ const tournamentList = [
         "flag": usa,
         "location": "Columbus, Ohio",
     },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
+    {
+        "id": "2002_EU_SC",
+        "name": "Europe Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": stadiumChallenge,
+        "date": "Jun - 2002",
+        "flag": netherlands,
+        "location": "Netherlands",
+        "results": false
+          },
+    {
+        "id": "2002_WCSC/seniors",
+        "name": "West Coast Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": stadiumChallenge,
+        "date": "Jun 8, 2002",
+        "flag": usa,
+        "location": "San Diego, California",
+          },
     // {
     //     "id": "eee",
     //     "name": "eee",

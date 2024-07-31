@@ -33,6 +33,7 @@ import nationals from '../assets/event-logo/nats-hd.png';
 import oldNationals from '../assets/event-logo/old-nats-logo-hd.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04-hd.png';
 import retro from '../assets/event-logo/retro.png';
+import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -154,6 +155,7 @@ const logos = {
     worldsOfour: worldsOfour,
     oldNationals: oldNationals,
     oFourNationals: oFourNationals,
+    stadiumChallenge: stadiumChallenge,
 }
 
 const EventPageContent = styled.div`
@@ -209,10 +211,15 @@ const EventPage = () => {
         return <div></div>;
     }
 
-    const results = division === 'masters' ? eventData.masters :
-                    division === 'seniors' ? eventData.seniors :
-                    division === 'juniors' ? eventData.juniors :
-                    division === 'professors' ? eventData.professors : [];
+    const mastersResults = eventData.masters || [];
+    const seniorsResults = eventData.seniors || [];
+    const juniorsResults = eventData.juniors || [];
+    const professorsResults = eventData.professors || [];
+
+    const results = division === 'masters' ? mastersResults :
+                division === 'seniors' ? seniorsResults :
+                division === 'juniors' ? juniorsResults :
+                division === 'professors' ? professorsResults : [];
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -265,6 +272,53 @@ const EventPage = () => {
         }
         return eventData.format;
     }
+    const currentDate = new Date();
+    const [startDateStr] = eventData.date.split(' - ');
+
+    // Parse the provided date string
+    let eventYear, eventMonth, eventDay;
+    let hasEventOccurred = false;
+
+    const dateParts = startDateStr.trim().split(' ');
+    if (dateParts.length === 3) {
+        // Format: "Month Day, Year"
+        [eventMonth, eventDay, eventYear] = dateParts;
+    } else if (dateParts.length === 2) {
+        // Format: "Month Year"
+        [eventMonth, eventYear] = dateParts;
+    } else if (dateParts.length === 1) {
+        // Format: "Year"
+        [eventYear] = dateParts;
+    }
+
+    eventYear = parseInt(eventYear, 10);
+    eventDay = eventDay ? parseInt(eventDay.replace(',', ''), 10) : null;
+    eventMonth = eventMonth ? new Date(`${eventMonth} 1`).getMonth() : null;
+
+    // Determine if the event has occurred
+    if (eventYear && eventMonth !== null && eventDay !== null) {
+        // Full date is provided
+        const eventDate = new Date(eventYear, eventMonth, eventDay);
+        hasEventOccurred = currentDate > eventDate;
+    } else if (eventYear && eventMonth !== null) {
+        // Only month and year provided
+        const eventDate = new Date(eventYear, eventMonth + 1); // End of the month
+        hasEventOccurred = currentDate > eventDate;
+    } else if (eventYear) {
+        // Only year provided
+        hasEventOccurred = currentDate.getFullYear() > eventYear;
+    }
+
+    // Determine the appropriate message
+    const eventOccurredWithinThreeDays = eventYear && eventMonth !== null && eventDay !== null && currentDate - new Date(eventYear, eventMonth, eventDay) <= 3 * 24 * 60 * 60 * 1000;
+    const message = hasEventOccurred
+        ? eventOccurredWithinThreeDays
+            ? "Results from this event are not yet available."
+            : "We don't have results from this event. If you have any, please send them to us at <a className='blue-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>."
+        : 'This event has not yet happened, results will appear here once available.';
+
+        const isMastersEmpty = mastersResults.length === 0;
+        const otherDivisionsHaveResults = seniorsResults.length > 0 || juniorsResults.length > 0 || professorsResults.length > 0;
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -288,8 +342,13 @@ const EventPage = () => {
                         <Link
                             className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'}`}
                             to={`/tournaments/${eventId}/masters`}
-                            style={{ opacity: 1, pointerEvents: 'all' }}
-                        >Masters</Link>
+                            style={{
+                                opacity: isMastersEmpty && otherDivisionsHaveResults ? 0.1 : 1,
+                                pointerEvents: isMastersEmpty && otherDivisionsHaveResults ? 'none' : 'all',
+                            }}
+                        >
+                            Masters
+                        </Link>
                     ) : eventData.professors ? (
                         <Link
                             className={`professorsBtn ${division === 'professors' ? 'active-division' : 'other-division'}`}
@@ -330,12 +389,11 @@ const EventPage = () => {
                         )}
                     </div>
                     <img
-                        className={`regional-info-bg-logo ${
-                            ['worldsOfour', 'oFourNationals', 'oldNationals'].includes(eventData.eventLogo) ? 'pushed-logo' : ''
-                        }`}                        
+                        className={`regional-info-bg-logo ${['worldsOfour', 'oFourNationals', 'oldNationals', 'stadiumChallenge'].includes(eventData.eventLogo) ? 'pushed-logo' : ''
+                            }`}
                         src={logos[eventData.eventLogo]}
                         alt="event logo"
-                    />                    
+                    />
                     <hr className='reg-hr'></hr>
                     <div className='outer-links'>
                         {eventData.organizer && (
@@ -348,18 +406,32 @@ const EventPage = () => {
                     </div>
                 </div>
                 <div className='bottom-options'>
-                     <a className='event-option active-option'>Results</a>
-                     <a className='event-option' style={{opacity: 0.1, pointerEvents: 'none'}}>Statistics</a>
-                     <a className='event-option' style={{opacity: 0.1, pointerEvents: 'none'}}>Photos</a>
-                     {/* <a className='event-option'>Info</a> */}
-                 </div>
-                 <div className='contain-event'>
-                     <div className='event-content'>
+                    <a className='event-option active-option'>Results</a>
+                    <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Statistics</a>
+                    <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Photos</a>
+                    {/* <a className='event-option'>Info</a> */}
+                </div>
+                <div className='contain-event'>
+                    <div className='event-content'>
                         <div className='event-results'>
-                            {results?.length > 0 ? displayResults(results, eventId, division) : <p className='notavailable'>Results from this event are not yet available.</p>}
+                            {results?.length > 0 ? (
+                                displayResults(results, eventId, division)
+                            ) : (
+                                <p className='notavailable'>
+                                    {hasEventOccurred ? (
+                                        eventOccurredWithinThreeDays ? (
+                                            "Results from this event are not yet available."
+                                        ) : (
+                                            <>We don't have results from this event. If you have any, please send them to us at <a className='blue-link' href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a>.</>
+                                        )
+                                    ) : (
+                                        'This event has not yet happened, results will appear here once available.'
+                                    )}
+                                </p>
+                            )}
                         </div>
                     </div>
-                 </div>
+                </div>
             </div>
         </EventPageContent>
     );
