@@ -24,6 +24,12 @@
 .regional-info p {
     font-size: 15px;
 }
+.event-statistics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
 .place-n-flag {
     display: flex;
     flex-direction: row;
