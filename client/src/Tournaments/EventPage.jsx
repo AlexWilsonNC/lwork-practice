@@ -247,16 +247,11 @@ const EventPage = () => {
                                 ? youngSeniorsResults
                                 : [];
 
-                                const getDeckTypeLabel = (player) => {
-                                    if (player.sprite2 === 'hyphen') return null;
-                                    if (player.sprite1 !== 'blank') {
-                                        return `${player.sprite1}${player.sprite2 !== 'blank' ? `-${player.sprite2}` : ''}`;
-                                    } else if (player.sprite2 !== 'blank') {
-                                        return player.sprite2;
-                                    } else {
-                                        return 'No Sprite';
-                                    }
-                                };
+    // Limit Chart data from additional decks
+    const chartResults =
+        eventId === '2018_NAIC' && division === 'masters'
+            ? mastersResults.slice(0, 64)
+            : results;
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -392,37 +387,36 @@ const EventPage = () => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-    const deckTypeCount = results.reduce((acc, player) => {
+    const deckTypeCount = chartResults.reduce((acc, player) => {
         let sprite1 = player.sprite1 || '';
         let sprite2 = player.sprite2 || '';
-    
+
         if (!sprite1 && !sprite2) {
-            // Get sprites dynamically from the decklist
             const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
             sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
             sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
         }
-    
+
         if (sprite2 === 'hyphen') return acc; // Skip if sprite2 is 'hyphen'
-    
+
         let key;
         let spriteToShow;
-    
+
         if (sprite1 !== 'blank' && sprite1) {
             key = getCustomLabel(eventId, sprite1, sprite2);
             spriteToShow = sprite1;
-          } else if (sprite2 !== 'blank' && sprite2) {
+        } else if (sprite2 !== 'blank' && sprite2) {
             key = getCustomLabel(eventId, '', sprite2);
             spriteToShow = sprite2;
-          } else {
+        } else {
             return acc; // Skip if both sprites are blank or empty
-          }
-    
+        }
+
         if (!acc[key]) {
             acc[key] = { count: 0, sprite: spriteToShow };
         }
         acc[key].count += 1;
-    
+
         return acc;
     }, {});
 
@@ -458,12 +452,12 @@ const EventPage = () => {
         maintainAspectRatio: false,
         aspectRatio: 1.5,
         events: [],
-        animation: false, 
+        animation: false,
         layout: {
             padding: {
-              top: 30,
+                top: 30,
             },
-          },
+        },
         animation: {
             onComplete: () => {
                 if (chartRef.current) {
@@ -471,6 +465,7 @@ const EventPage = () => {
                     const ctx = chartInstance.ctx;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    console.log("Chart Labels:", chartInstance.data.labels);
                     chartInstance.data.labels.forEach((label, index) => {
                         const meta = chartInstance.getDatasetMeta(0);
                         const sprite = deckTypeCount[label]?.sprite;

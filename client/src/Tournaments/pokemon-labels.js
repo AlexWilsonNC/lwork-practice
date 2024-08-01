@@ -23,15 +23,17 @@ const customLabelsConfig = {
         'froslass-munkidori': 'Froslass',
         'raging-bolt-sandy-shocks': 'Raging Bolt',
         'klawf-brute-bonnet': 'Klawf',
-        'eeee': 'eee',
     },
     '2023': {
+        'eeee': '',
 
     },
     '2022': {
+        'eeee': '',
 
     },
     '2021': {
+        'eeee': '',
 
     },
     '2020': {
@@ -47,12 +49,12 @@ const customLabelsConfig = {
         '-reshiram-charizard-tagteam': 'ReshiZard',
         '-obstagoon': 'Obstagoon',
         'magcargo-oranguru': 'Magcargo Mill',
-        'lucario-melmetal-tagteam-zacian-crowned': 'LucMetal',
+        'lucario-melmetal-tagteam-zacian-crowned': 'LucMetal Zacian',
         'oranguru-pidgeotto': 'Oranguru Mill',
         'adp-keldeo': 'ADP',
         '-adp': 'ADP',
         'blacephalon-pidgeotto': 'Baby Blowns',
-        'blacephalon-naganadel': 'Blowns',
+        'blacephalon-naganadel': 'Blacephalon Naganadel',
         'florges-munchlax': 'Florges Stall',
         'guzzlord-naganadel-tagteam-mismagius': 'Guzzlord & Naganadel',
         'giratina-garchomp-tagteam-mismagius': 'Giratina & Garchomp',
@@ -65,18 +67,142 @@ const customLabelsConfig = {
         '-charizard-braixen-tagteam': 'Charizard & Braixen',
     },
     '2019': {
-
+        '-pikachu-zekrom-tagteam': 'PikaRom',
+        '-reshiram-charizard-tagteam': 'ReshiZard',
+        '-mewtwo-mew-tagteam': 'Mewtwo & Mew',
+        'reshiram-charizard-tagteam-volcanion-right': 'GreensZard',
+        'oranguru-pidgeotto': 'Oranguru Mill',
+        'gardevoir-sylveon-tagteam-xerneas-active': 'Gardevoir & Sylveon',
+        'blacephalon-naganadel': 'Blacephalon Naganadel',
+        'malamar-giratina': 'Malamar',
+        '-gardevoir-sylveon-tagteam': 'Gardevoir & Sylveon',
+        'malamar-necrozma-ultra': 'Malamar',
+        'malamar-necrozma': 'Malamar',
+        'blacephalon-persian': 'Blacephalon GX',
+        'weavile-naganadel': 'Dark Box',
+        'keldeo-bronzong': 'Wall Stall',
+        'blacephalon-volcanion': 'Blacephalon GX',
+        'gardevoir-sylveon-tagteam-mismagius': 'Gardevoir & Sylveon',
+        '-spiritomb': 'Spiritomb',
+        'gengar-mimikyu-tagteam-omastar': 'MimiGar Omastar',
+        '-giratina-garchomp-tagteam': 'Giratina & Garchomp',
+        '-exeggutor-alola-rowlet-tagteam': 'RowEggs',
+        'mewtwo-mew-tagteam-blastoise': 'Mewtwo & Mew (Water)',
+        'rampardos-omastar': 'Fossils',
+        'quagsire-naganadel': 'QuagNag',
+        'spiritomb-umbreon': 'Spiritomb',
+        'hoopa-unbound-regigigas': 'Wall Stall',
+        'zoroark-dewgong': 'Checkmate',
+        'pikachu-zekrom-tagteam-zapdos': 'PikaRom Zapdos',
+        'zapdos-buzzwole': 'ZapBeasts',
+        'reshiram-charizard-tagteam-snorlax-eevee-tagteam': 'ReshiZard',
+        '-blacephalon': 'Baby Blowns',
+        'zoroark-persian': 'Zoroark Persian',
+        '-weezing': 'Weezing',
+        '-zapdos': 'Zapdos',
+        'lucario-melmetal-tagteam-vileplume': 'LucMetal Vileplume',
+        'spiritomb-stunfisk': 'Spiritomb',
+        'reshiram-charizard-tagteam-volcanion': 'GreensZard',
+        '-blissey': 'Blissey',
+        'nidoqueen-meganium': 'Nidoqueen Meganium',
+        'gardevoir-ninetales-alola': 'Gardevoir GX',
+        'zoroark-silvally': 'Zoroark Silvally',
+        '-doublade': 'Doublade',
+        'zoroark-lycanroc-midnight': 'Zoroark Lycanroc',
+        'hoopa-unbound-lucario-melmetal-tagteam': 'Wall Stall',
+        'zapdos-jolteon': 'Zapdos',
+        'rayquaza-vikavolt': 'Rayquaza GX',
+        '-tapu-koko': 'Tapu Koko Spread',
+        'stakataka-naganadel': 'Ultra Beasts',
+        'zapdos-lycanroc-midnight': 'Zapdos',
+        "tapu-koko-greninja": 'Tapu Koko Spread',
+        'zapdos-lucario': 'Zapdos',
+        'buzzwole-weavile': 'Buzzwole Weavile',
+        '-venusaur': 'Celebi & Venusaur',
+        'shedinja-oranguru': 'Sheninja Control',
+        'regigigas-hoopa-unbound': 'Wall Stall',
+        'zoroark-oranguru': 'Zoroark Control',
+        'passimian-tapu-koko': 'Passimian',
+        'jumpluff-weavile': 'Lost March',
+        'buzzwole-lycanroc-midnight': 'Buzzwole Lycanroc',
+        '-granbull': 'Granbull',
+        'malamar-tapu-koko': 'Malamar',
+        'zoroark-decidueye': 'Zoroark Decidueye',
+        'zoroark-ninetales-alola': 'Zoroark Nintales',
+        'gardevoir-swampert': 'Gardevoir GX',
+        'zoroark-glaceon': 'Zoroark Glaceon',
+        'buzzwole-ninetales-alola': 'Buzzwole Ninetales',
+        'steelix-hoopa-unbound': 'Wall Stall',
+        'zoroark-weavile': 'Zoroark Weavile',
+        'decidueye-ninetales-alola': 'DeciTales',
+        'regigigas-genesect': 'Wall Stall',
+        'zoroark-buzzwole': 'Zoroark Buzzwole',
+        'jumpluff-natu': 'Lost March',
+        'exeggutor-alola-grovyle': 'Tropical Shake',
+        'malamar-marshadow': 'Malamar',
     },
     '2018': {
+        'zoroark-garbodor': 'Zoroark Garbodor',
+        '-rayquaza': 'Rayquaza GX',
+        'buzzwole-garbodor': 'Buzzwole Garbodor',
+        '-greninja': 'Greninja',
+        'buzzwole-lycanroc-midnight': 'Buzzwole Lycanroc',
+        'zoroark-gallade': 'Zoroark Gallade',
+        'malamar-necrozma': 'Malamar',
+        'zygarde-complete-lycanroc-midnight': 'Zygarde GX',
+        'zoroark-golisopod': 'Zoroark Golisopod',
+        'banette-garbodor': 'Banette Garbodor',
+        'buzzwole-magcargo': 'Buzzwole',
+        'zoroark-lycanroc-midnight': 'Zoroark Lycanroc',
+        'malamar-hoopa-unbound': 'Malamar',
+        'yveltal-hoopa-unbound': 'Yveltal BREAK',
+        '-yveltal': 'Yveltal BREAK',
+        'golisopod-garbodor': 'Golisopod Garbodor',
+        'naganadel-stakataka': 'Ultra Beasts',
+        'malamar-necrozma-ultra': 'Malamar',
+        '-zoroark': 'Zoroark',
+        '-hoopa-unbound': 'Hoopa',
+        '-sylveon': 'Sylveon GX',
+        'malamar-lugia-shiny': 'Malamar',
+        'necrozma-dusk-mane-magnezone': 'Dusk Mane Magnezone',
+        '-buzzwole': 'Buzzwole GX',
+        '-volcanion': 'Volcanion',
+        '-lapras': 'Lapras',
+        'buzzwole-lucario': 'Buzzwole GX',
+        'zoroark-mewtwo': 'Zoroark Mewtwo',
+        'malamar-marshadow': 'Malamar',
+        'zoroark-lucario': 'Zoroark Lucario',
+        'tapu-bulu-vikavolt': 'VikaBulu',
+        'espeon-garbodor': 'Espeon Garbodor',
+        'lucario-buzzwole': 'Lucario GX',
+        'gardevoir-talonflame': 'Gardevoir GX',
+        'zoroark-glaceon': 'Zoroark Glaceon',
+        'lurantis-tapu-bulu': 'Lurantis',
+        '-ho-oh': 'Ho-oh GX',
+        'lucario-lycanroc-midnight': 'Lucario GX',
+        'lucario-garbodor': 'Lucario GX',
+        'zoroark-necrozma-dusk-mane': 'Zoroark Magnezone',
+        'zoroark-gardevoir': 'Zoroark Gardevoir',
+        'gardevoir-sylveon': 'Gardevoir GX',
+        '-gardevoir': 'Gardevoir GX',
+        '-xerneas-active': 'Xerneas BREAK',
+        'wishiwashi-school-hoopa-unbound': 'Wall Stall',
+        'eeee': '',
+        'eeee': '',
+        'eeee': '',
+        'eeee': '',
 
     },
     '2017': {
+        'eeee': '',
 
     },
     '2016': {
+        'eeee': '',
 
     },
     '2015': {
+        'eeee': '',
 
     },
     '2014': {
@@ -94,15 +220,17 @@ const customLabelsConfig = {
         'empoleon-dusknoir': 'Empoleon',
         'aromatisse-deoxys': 'Fairy Box',
         '-ninetales': 'Ninetales',
-        'eeee': 'eee',
     },
     '2013': {
+        'eeee': '',
 
     },
     '2012': {
+        'eeee': '',
 
     },
     '2011': {
+        'eeee': '',
 
     },
     '2010': {
@@ -119,40 +247,51 @@ const customLabelsConfig = {
         '-gyarados': 'Gyarados',
         'kingdra-donphan': 'Kingdra PRIME',
         'abomasnow-ampharos': 'Abomasnow Ampharos',
-        'eeee': 'eee',
-        'eeee': 'eee',
+        'eeee': '',
+        'eeee': '',
     },
     '2009': {
+        'eeee': '',
 
     },
     '2008': {
+        'eeee': '',
 
     },
     '2007': {
+        'eeee': '',
 
     },
     '2006': {
+        'eeee': '',
 
     },
     '2005': {
+        'eeee': '',
 
     },
     '2004': {
+        'eeee': '',
 
     },
     '2003': {
+        'eeee': '',
 
     },
     '2002': {
+        'eeee': '',
 
     },
     '2001': {
+        'eeee': '',
 
     },
     '2000': {
+        'eeee': '',
 
     },
     '1999': {
+        'eeee': '',
 
     },
 };
@@ -163,6 +302,10 @@ const getCustomLabel = (eventId, sprite1, sprite2) => {
       eventYearKey = '2014';
     } else if (eventId.includes('2010')) {
       eventYearKey = '2010';
+    } else if (eventId.includes('2018')) {
+        eventYearKey = '2018';
+    } else if (eventId.includes('2019')) {
+        eventYearKey = '2019';
     } else if (eventId.includes('2020')) {
         eventYearKey = '2020';
       } else if (eventId.includes('2024')) {
