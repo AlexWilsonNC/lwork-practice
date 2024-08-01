@@ -30,38 +30,46 @@
     align-items: center;
     margin-top: 25px;
     position: relative;
+    width: 100%; /* Ensure full width */
+    overflow: hidden; /* Prevent any unintended overflow */
 }
+
 .chart-container-wrapper {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Disable vertical scrolling */
     width: 100%;
 }
+
 .chart-container {
     position: relative;
-    width: 60vw;
+    min-width: 60vw; /* Minimum width for larger screens */
     height: 460px;
-    margin: 0 0 15px -25px;
+    margin: 0 auto; /* Center the container */
 }
+
 @media (max-width: 1500px) {
     .chart-container {
-        width: 80vw;
+        min-width: 80vw; /* Adjust for medium screens */
     }
 }
+
 @media (max-width: 950px) {
     .chart-container {
-        width: 95vw;
-        margin: 0 0 15px -15px;
+        min-width: 95vw; /* Adjust for smaller screens */
     }
 }
+
 @media (max-width: 630px) {
     .chart-container-wrapper {
         overflow-x: auto;
         overflow-y: hidden;
     }
     .chart-container {
-        width: 1000px; /* Set a fixed width larger than the viewport */
+        min-width: 1000px; /* Set a fixed width larger than the viewport */
+        margin: 0; /* Remove margins to prevent overflow */
     }
 }
+
 .place-n-flag {
     display: flex;
     flex-direction: row;
