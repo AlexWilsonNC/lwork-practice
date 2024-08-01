@@ -245,15 +245,16 @@ const EventPage = () => {
                                 ? youngSeniorsResults
                                 : [];
 
-    const getDeckTypeLabel = (player) => {
-        if (player.sprite1 !== 'blank') {
-            return `${player.sprite1}${player.sprite2 !== 'blank' ? `-${player.sprite2}` : ''}`;
-        } else if (player.sprite2 !== 'blank') {
-            return player.sprite2;
-        } else {
-            return 'No Sprite';
-        }
-    };
+                                const getDeckTypeLabel = (player) => {
+                                    if (player.sprite2 === 'hyphen') return null; // Exclude decks with sprite2 as "-"
+                                    if (player.sprite1 !== 'blank') {
+                                        return `${player.sprite1}${player.sprite2 !== 'blank' ? `-${player.sprite2}` : ''}`;
+                                    } else if (player.sprite2 !== 'blank') {
+                                        return player.sprite2;
+                                    } else {
+                                        return 'No Sprite';
+                                    }
+                                };
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -389,15 +390,17 @@ const EventPage = () => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-    const deckTypeCount = results.reduce((acc, player) => {
-        const key = getDeckTypeLabel(player);
-        const spriteToShow = player.sprite1 !== 'blank' ? player.sprite1 : player.sprite2;
-        if (!acc[key]) {
-            acc[key] = { count: 0, sprite: spriteToShow };
-        }
-        acc[key].count += 1;
-        return acc;
-    }, {});
+        const deckTypeCount = results.reduce((acc, player) => {
+            const key = getDeckTypeLabel(player);
+            if (key) { // Only process if key is not null
+                const spriteToShow = player.sprite1 !== 'blank' ? player.sprite1 : player.sprite2;
+                if (!acc[key]) {
+                    acc[key] = { count: 0, sprite: spriteToShow };
+                }
+                acc[key].count += 1;
+            }
+            return acc;
+        }, {});
 
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
@@ -410,12 +413,12 @@ const EventPage = () => {
                 label: 'Deck Count',
                 data: deckTypeCountArray.map((entry) => entry.count),
                 backgroundColor: deckTypeCountArray.map((_, index) =>
-                    index % 2 === 0 ? 'rgba(0, 0, 0, 0.6)' : 'rgba(128, 128, 128, 0.6)'
+                    index % 2 === 0 ? '#1291eb8b' : '#1291eb8b'
                 ),
-                borderColor: deckTypeCountArray.map((_, index) =>
-                    index % 2 === 0 ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'
-                ),
-                borderWidth: 1,
+                // borderColor: deckTypeCountArray.map((_, index) =>
+                //     index % 2 === 0 ? 'rgba(100, 100, 100, 1)' : 'rgba(128, 128, 128, 1)'
+                // ),
+                // borderWidth: 1,
             },
         ],
     };
@@ -432,16 +435,16 @@ const EventPage = () => {
         hover: {
             mode: null, // Disable hover interactions
         },
-        scales: {
-            y: {
-                title: {
-                    display: true,
-                    text: 'Deck Count',
-                    color: theme.text,
-                },
-                beginAtZero: true,
-            },
-        },
+        // scales: {
+        //     y: {
+        //         title: {
+        //             display: true,
+        //             text: 'Deck Count',
+        //             color: theme.text,
+        //         },
+        //         beginAtZero: true,
+        //     },
+        // },
         maintainAspectRatio: false,
         aspectRatio: 1.5,
         events: [], // Disable all events to prevent any re-rendering
@@ -689,9 +692,11 @@ const EventPage = () => {
                                 )}
                             </div>
                         ) : (
-                            <div className='event-statistics' style={{ position: 'relative' }}>
-                                <div className='chart-container'>
-                                    <Bar ref={chartRef} data={chartData} options={chartOptions} />
+                            <div className='event-statistics'>
+                                <div className='chart-container-wrapper'>
+                                    <div className='chart-container'>
+                                        <Bar ref={chartRef} data={chartData} options={chartOptions} />
+                                    </div>
                                 </div>
                             </div>
                         )}
