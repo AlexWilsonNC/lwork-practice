@@ -455,7 +455,7 @@ const EventPage = () => {
         animation: false,
         layout: {
             padding: {
-                top: 30,
+                top: 40,
             },
         },
         animation: {
@@ -475,7 +475,11 @@ const EventPage = () => {
                             const img = new Image();
                             img.src = `/assets/sprites/${sprite}.png`;
                             img.onload = () => {
-                                ctx.drawImage(img, x - 18.5, y - 35, 37, 35);
+                                const aspectRatio = img.width / img.height;
+                                const displayWidth = 45;
+                                const displayHeight = displayWidth / aspectRatio;
+                            
+                                ctx.drawImage(img, x - displayWidth / 2, y - displayHeight, displayWidth, displayHeight);
                             };
                         }
                     });
@@ -699,6 +703,10 @@ const EventPage = () => {
                         ) : (
                             <div className='event-statistics'>
                                 <div className='chart-container-wrapper'>
+                                    <div className='chart-btns-container'>
+                                        <p className='chart-bold'>{division.charAt(0).toUpperCase() + division.slice(1)} Deck Share:</p>
+                                        <p className='chart-button'>Top {chartResults.length}</p>
+                                    </div>
                                     <div className='chart-container'>
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>

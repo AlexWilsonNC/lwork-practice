@@ -187,39 +187,92 @@ const customLabelsConfig = {
         '-gardevoir': 'Gardevoir GX',
         '-xerneas-active': 'Xerneas BREAK',
         'wishiwashi-school-hoopa-unbound': 'Wall Stall',
-        'eeee': '',
-        'eeee': '',
-        'eeee': '',
-        'eeee': '',
-
+        'decidueye-zoroark': 'Decidueye Zoroark',
+        'silvally-zoroark': 'Silvally GX',
+        'drampa-garbodor': 'Drampa Garbodor',
+        'silvally-registeel': 'Silvally Metal Box',
+        '-metagross': 'Metagross GX',
+        'heatmor-raichu': 'Heatmor Raichu',
+        'zoroark-drampa': 'Zoroark BREAK',
+        'buzzwole-silvally': 'Buzzwole GX',
+        'volcanion-silvally': 'Volcanion',
+        'zoroark-bisharp': 'Zoroark GX',
+        'zoroark-buzzwole': 'Zoroark Buzzwole',
+        'genesect-zoroark': 'Metal Box',
+        'tapu-koko-meowstic': 'Tapu Koko Spread',
+        'registeel-scizor': 'Metal Box',
+        'gardevoir-xerneas-active': 'Gardevoir GX',
     },
     '2017': {
         'eeee': '',
 
     },
     '2016': {
-        'eeee': '',
-
+        'joltik-pumpkaboo': 'Night March',
+        '-greninja': 'Greninja',
+        'bronzong-aegislash': 'Metal Box',
+        'seismitoad-manaphy': 'Water Box',
+        '-audino-mega': 'Mega Audino',
+        '-volcanion': 'Volcanion',
+        'vespiquen-vileplume': 'Vespiquen Vileplume',
+        'vileplume-jolteon': 'Plume Box',
+        'yveltal-vespiquen': 'Yveltal Vespiquen',
+        'joltik-vespiquen': 'Night March Vespiquen',
+        'bronzong-genesect': 'Metal Box',
+        'vespiquen-excadrill': 'Vespiquen Excadrill',
+        'zygarde-complete-vileplume': 'Zygarde Vileplume',
+        '-sceptile-mega': 'Mega Sceptile',
+        'yanmega-vespiquen': 'Yanmega BREAK',
+        'seismitoad-crobat': 'Toad Bats',
+        '-trevenant': 'Trevenant',
+        'manectric-mega-garbodor': 'Mega Manectric Garbodor',
+        'yveltal-zoroark': 'Yveltal Zoroark',
+        'darkrai-giratina-origin': 'Darkrai Giratina',
     },
     '2015': {
-        'eeee': '',
-
+        'joltik-pumpkaboo': 'Night March',
+        'keldeo-resolute-blastoise': 'ArchieStoise',
+        'trevenant-gengar': 'Trevenant',
+        'seismitoad-manectric': 'Toad Bats',
+        'raichu-crobat': 'Raichu Bats',
+        'seismitoad-crobat': 'Toad Bats',
+        '-donphan': 'Donphan',
+        'aegislash-bronzong': 'Metal Box',
+        'aromatisse-seismitoad': 'Fairy Box',
+        'groudon-primal-wobbuffet': 'Primal Groudon',
+        'manectric-mega-genesect': 'Mega Manectric (Plasma)',
+        'landorus-therian-crobat': 'Landy Bats',
+        'manectric-mega-yanmega': 'Mega Manectric Yanmega',
+        'seismitoad-garbodor': 'Seismitoad Garbodor',
+        '-groudon-primal': 'Primal Groudon',
+        'manectric-mega-keldeo-resolute': 'Mega Manectric',
+        'klinklang-bronzong': 'Klinklang',
+        'manectric-mega-terrakion': 'Mega Manectric',
+        'landorus-therian-leafeon': 'Landorus-EX',
     },
     '2014': {
         'yveltal-darkrai': 'Yveltal',
-        'yveltal-garbodor': 'Yveltal',
+        'yveltal-garbodor': 'Yveltal Garbodor',
         'virizion-genesect': 'VirGen',
         'kyurem-deoxys': 'TDK',
         'flygon-dusknoir': 'Flygon',
         'lugia-deoxys': 'Plasma',
         'weavile-lopunny': 'Weavile Lopunny',
         '-pyroar': 'Pyroar',
-        'landorus-therian-raichu': 'Landorus',
+        'landorus-therian-raichu': 'Landorus Raichu',
         'yveltal-raticate': 'Yveltal',
         'keldeo-resolute-blastoise': 'Keldeo Blastoise',
         'empoleon-dusknoir': 'Empoleon',
         'aromatisse-deoxys': 'Fairy Box',
         '-ninetales': 'Ninetales',
+        'kangaskhan-aromatisse': 'Mega Kangaskhan',
+        'yveltal-dusknoir': 'Yveltal Dusknoir',
+        'accelgor-trevenant': 'Accelgor Trevenant',
+        'toxicroak-landorus-therian': 'Toxic Haymaker',
+        'yveltal-raichu': 'Yveltal Raichu',
+        '-yveltal': 'Yveltal',
+        'virizion-raichu': 'VirGen Raichu',
+      
     },
     '2013': {
         'eeee': '',
@@ -298,19 +351,61 @@ const customLabelsConfig = {
 
 const getCustomLabel = (eventId, sprite1, sprite2) => {
     let eventYearKey = '';
-    if (eventId.includes('2014')) {
-      eventYearKey = '2014';
+    if (eventId.includes('1999')) {
+      eventYearKey = '1999';
+    } else if (eventId.includes('2000')) {
+      eventYearKey = '2000';
+    } else if (eventId.includes('2001')) {
+      eventYearKey = '2001';
+    } else if (eventId.includes('2002')) {
+      eventYearKey = '2002';
+    } else if (eventId.includes('2003')) {
+      eventYearKey = '2003';
+    } else if (eventId.includes('2004')) {
+      eventYearKey = '2004';
+    } else if (eventId.includes('2005')) {
+      eventYearKey = '2005';
+    } else if (eventId.includes('2006')) {
+      eventYearKey = '2006';
+    } else if (eventId.includes('2007')) {
+      eventYearKey = '2007';
+    } else if (eventId.includes('2008')) {
+      eventYearKey = '2008';
+    } else if (eventId.includes('2009')) {
+      eventYearKey = '2009';
     } else if (eventId.includes('2010')) {
       eventYearKey = '2010';
+    } else if (eventId.includes('2011')) {
+        eventYearKey = '2011';
+    } else if (eventId.includes('2012')) {
+        eventYearKey = '2012';
+    } else if (eventId.includes('2013')) {
+        eventYearKey = '2013';
+    } else if (eventId.includes('2014')) {
+        eventYearKey = '2014';
+    } else if (eventId.includes('2015')) {
+        eventYearKey = '2015';
+    } else if (eventId.includes('2016')) {
+        eventYearKey = '2016';
+    } else if (eventId.includes('2017')) {
+        eventYearKey = '2017';
     } else if (eventId.includes('2018')) {
         eventYearKey = '2018';
     } else if (eventId.includes('2019')) {
         eventYearKey = '2019';
     } else if (eventId.includes('2020')) {
         eventYearKey = '2020';
-      } else if (eventId.includes('2024')) {
-        eventYearKey = '2024';
-      }
+    } else if (eventId.includes('2021')) {
+        eventYearKey = '2021';
+    } else if (eventId.includes('2022')) {
+        eventYearKey = '2022';
+    } else if (eventId.includes('2023')) {
+        eventYearKey = '2023';
+    } else if (eventId.includes('2024')) {
+    eventYearKey = '2024';
+    } else if (eventId.includes('2025')) {
+    eventYearKey = '2025';
+    }
     const eventLabels = customLabelsConfig[eventYearKey];
     if (eventLabels) {
       const key = sprite1 !== 'blank' ? `${sprite1}-${sprite2}` : sprite2;
