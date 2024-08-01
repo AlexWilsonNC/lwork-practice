@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
+import { getCustomLabel } from './pokemon-labels';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -246,7 +248,7 @@ const EventPage = () => {
                                 : [];
 
                                 const getDeckTypeLabel = (player) => {
-                                    if (player.sprite2 === 'hyphen') return null; // Exclude decks with sprite2 as "-"
+                                    if (player.sprite2 === 'hyphen') return null;
                                     if (player.sprite1 !== 'blank') {
                                         return `${player.sprite1}${player.sprite2 !== 'blank' ? `-${player.sprite2}` : ''}`;
                                     } else if (player.sprite2 !== 'blank') {
@@ -390,21 +392,43 @@ const EventPage = () => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-        const deckTypeCount = results.reduce((acc, player) => {
-            const key = getDeckTypeLabel(player);
-            if (key) { // Only process if key is not null
-                const spriteToShow = player.sprite1 !== 'blank' ? player.sprite1 : player.sprite2;
-                if (!acc[key]) {
-                    acc[key] = { count: 0, sprite: spriteToShow };
-                }
-                acc[key].count += 1;
-            }
-            return acc;
-        }, {});
+    const deckTypeCount = results.reduce((acc, player) => {
+        let sprite1 = player.sprite1 || '';
+        let sprite2 = player.sprite2 || '';
+    
+        if (!sprite1 && !sprite2) {
+            // Get sprites dynamically from the decklist
+            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+            sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+            sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+        }
+    
+        if (sprite2 === 'hyphen') return acc; // Skip if sprite2 is 'hyphen'
+    
+        let key;
+        let spriteToShow;
+    
+        if (sprite1 !== 'blank' && sprite1) {
+            key = getCustomLabel(eventId, sprite1, sprite2);
+            spriteToShow = sprite1;
+          } else if (sprite2 !== 'blank' && sprite2) {
+            key = getCustomLabel(eventId, '', sprite2);
+            spriteToShow = sprite2;
+          } else {
+            return acc; // Skip if both sprites are blank or empty
+          }
+    
+        if (!acc[key]) {
+            acc[key] = { count: 0, sprite: spriteToShow };
+        }
+        acc[key].count += 1;
+    
+        return acc;
+    }, {});
 
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
-        .sort((a, b) => b.count - a.count); // Sort by count descending
+        .sort((a, b) => b.count - a.count);
 
     const chartData = {
         labels: deckTypeCountArray.map((entry) => entry.key),
@@ -414,44 +438,30 @@ const EventPage = () => {
                 data: deckTypeCountArray.map((entry) => entry.count),
                 backgroundColor: deckTypeCountArray.map((_, index) =>
                     index % 2 === 0 ? '#1291eb8b' : '#1291eb8b'
-                ),
-                // borderColor: deckTypeCountArray.map((_, index) =>
-                //     index % 2 === 0 ? 'rgba(100, 100, 100, 1)' : 'rgba(128, 128, 128, 1)'
-                // ),
-                // borderWidth: 1,
-            },
-        ],
+                )
+            }
+        ]
     };
 
     const chartOptions = {
         plugins: {
             tooltip: {
-                enabled: false, // Disable tooltips
+                enabled: false,
             },
             legend: {
-                display: false, // Disable legend
+                display: false,
             },
         },
         hover: {
-            mode: null, // Disable hover interactions
+            mode: null,
         },
-        // scales: {
-        //     y: {
-        //         title: {
-        //             display: true,
-        //             text: 'Deck Count',
-        //             color: theme.text,
-        //         },
-        //         beginAtZero: true,
-        //     },
-        // },
         maintainAspectRatio: false,
         aspectRatio: 1.5,
-        events: [], // Disable all events to prevent any re-rendering
-        animation: false, // Disable animations to avoid flickering      
+        events: [],
+        animation: false, 
         layout: {
             padding: {
-              top: 30, // Adjust this value to provide enough space for sprites
+              top: 30,
             },
           },
         animation: {
@@ -470,7 +480,7 @@ const EventPage = () => {
                             const img = new Image();
                             img.src = `/assets/sprites/${sprite}.png`;
                             img.onload = () => {
-                                ctx.drawImage(img, x - 18.5, y - 35, 37, 37); // Adjust size as needed
+                                ctx.drawImage(img, x - 18.5, y - 35, 37, 35);
                             };
                         }
                     });

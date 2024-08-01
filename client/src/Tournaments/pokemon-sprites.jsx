@@ -13,7 +13,7 @@ const getPokemonSpriteURL = (name) => {
     return `/assets/sprites/${normalizedName}.png`;
 };
 
-const getPokemonSprites = (decklist, sprite1, sprite2) => {
+export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     let firstSprite = '';
     let secondSprite = '';
 
