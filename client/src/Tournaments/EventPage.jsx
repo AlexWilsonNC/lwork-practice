@@ -612,6 +612,8 @@ const EventPage = () => {
                 },
               };
 
+    const hasChartData = chartData.labels && chartData.labels.length > 0;
+
     return (
         <EventPageContent className='center' theme={theme}>
             <Helmet>
@@ -827,23 +829,23 @@ const EventPage = () => {
                         ) : (
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>
-                                    <p className='chart-bold'>
+                                    {/* <p className='chart-bold'>
                                         {division.charAt(0).toUpperCase() + division.slice(1)} Deck Share:
-                                    </p>
+                                    </p> */}
                                     <p>
                                         {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 ? (
                                             <div className='alignrow'>
-                                                <button
-                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayOneClick}
-                                                >
-                                                    Day 1
-                                                </button>
                                                 <button
                                                     className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
                                                     onClick={handleDayTwoClick}
                                                 >
                                                     Day 2
+                                                </button>
+                                                <button
+                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleDayOneClick}
+                                                >
+                                                    Day 1
                                                 </button>
                                                 <button
                                                     className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
@@ -858,17 +860,20 @@ const EventPage = () => {
                                     </p>
                                 </div>
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
-                                <div className='chart-description'>
-                                    {showDayOneMeta && !showConversionRate && (
-                                        <p>* Most played decks from Day 1 (data collected from event stream)</p>
-                                    )}
-                                    {!showDayOneMeta && !showConversionRate && (
-                                        <p>* Total count for each deck archetype from Day 2</p>
-                                    )}
-                                    {showConversionRate && (
-                                        <p>* Percentage of the top Day 1 decks that made Day 2</p>
-                                    )}
-                                </div>
+                                    <div className='chart-description'>
+                                        {showDayOneMeta && !showConversionRate && (
+                                            <p>* Most played decks from Day 1 (data collected from event stream)</p>
+                                        )}
+                                        {!showDayOneMeta && !showConversionRate && (
+                                            <p>* Total count for each deck archetype from Day 2</p>
+                                        )}
+                                        {showConversionRate && (
+                                            <p>* Percentage of the top Day 1 decks that made Day 2</p>
+                                        )}
+                                    </div>
+                                )}
+                                {!hasChartData && (
+                                    <div className='chart-description'><p>* No known decks available for this division</p></div>
                                 )}
                                 <div className='chart-container-wrapper'>
                                     <div className='chart-container'>

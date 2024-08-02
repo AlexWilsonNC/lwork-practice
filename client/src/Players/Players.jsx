@@ -347,7 +347,7 @@ const Players = () => {
             <div className='player-results-container'>
                 <div className='completed-n-upcoming'>
                     <div className='bts-in'>
-                        <a onClick={setSortByResults} className={`completed-btn ${sortType === 'results' ? 'active-evt-btn' : ''}`}>Sort by Result</a>
+                        <a onClick={setSortByResults} className={`completed-btn ${sortType === 'results' ? 'active-evt-btn' : ''}`}>Sort by Results</a>
                         <a onClick={setSortByName} className={`upcoming-btn ${sortType === 'name' ? 'active-evt-btn' : ''}`}>Sort by Name</a>
                     </div>
                     <div className='search-input'>
