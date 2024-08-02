@@ -525,8 +525,10 @@ const EventPage = () => {
             : showConversionRate
             ? conversionChartData
             : {
-                labels: deckTypeCountArray.map((entry) => entry.key),
-                datasets: [
+                labels: deckTypeCountArray.map((entry) => {
+                    console.log("Day 2 Label:", entry.key); // Log Day 2 labels
+                    return entry.key;
+                  }),                datasets: [
                   {
                     label: 'Deck Count',
                     data: deckTypeCountArray.map((entry) => entry.count),
