@@ -35,6 +35,9 @@ export const lightTheme = {
     setChangeBtn: 'rgb(240, 240, 240)',
     setChangeHover: '#0721b5 !important',
     setinfodark: 'rgb(236, 240, 244)',
+    day1btn: 'rgb(180, 180, 180)',
+    chartNumber: '#FFF',
+    chartdescrip: '#000',
 };
 
 export const darkTheme = {
@@ -75,5 +78,8 @@ export const darkTheme = {
     setChangeBtn: '#1d1e21',
     setChangeHover: '#FFF !important',
     setinfodark: 'rgb(48, 55, 65)',
+    day1btn: 'rgb(80, 80, 80)',
+    chartNumber: 'rgb(200, 200, 200)',
+    chartdescrip: 'grey',
 
 };

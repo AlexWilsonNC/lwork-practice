@@ -185,14 +185,20 @@ const EventPageContent = styled.div`
   .player-list-hover:nth-of-type(odd) {
     background-color: ${({ theme }) => theme.playerlisthover};
   }
-  .notavailable {
+  .notavailable,
+  .chart-bold,
+  .active-option,
+  h3 {
     color: ${({ theme }) => theme.text};
   }
-  .active-option {
-    color: ${({ theme }) => theme.text};
-  } 
-h3 {
-    color: ${({ theme }) => theme.text};
+  .chart-description {
+      color: ${({ theme }) => theme.chartdescrip};
+  }
+  .day1btn, .day2btn, .conversbtn {
+    background-color: ${({ theme }) => theme.day1btn};
+  }
+.chart-button.active {
+  background-color: #1290eb;
 }
 `;
 
@@ -203,6 +209,8 @@ const EventPage = () => {
     const [division, setDivision] = useState('masters');
     const [activeTab, setActiveTab] = useState('Results');
     const chartRef = useRef(null);
+    const [showDayOneMeta, setShowDayOneMeta] = useState(false);
+    const [showConversionRate, setShowConversionRate] = useState(false); // Moved here
 
     useEffect(() => {
         const fetchData = async () => {
@@ -224,6 +232,12 @@ const EventPage = () => {
             setDivision(divisionParam);
         }
     }, [divisionParam]);
+
+    useEffect(() => {
+        // Reset the chart state when division changes
+        setShowDayOneMeta(false);
+        setShowConversionRate(false);
+    }, [division]);
 
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -378,7 +392,12 @@ const EventPage = () => {
     const message = hasEventOccurred
         ? eventOccurredWithinThreeDays
             ? 'Results from this event are not yet available.'
-            : "We don't have results from this event. If you have any, please send them to us at <a className='blue-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>."
+            : <span>
+                We don't have results from this event. If you have any, please send them to us at{' '}
+                <a className='blue-link' href='mailto:ptcglegends@gmail.com'>
+                    ptcglegends@gmail.com
+                </a>.
+            </span>
         : 'This event has not yet happened, results will appear here once available.';
 
     const isMastersEmpty = mastersResults.length === 0;
@@ -387,106 +406,209 @@ const EventPage = () => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-    const deckTypeCount = chartResults.reduce((acc, player) => {
-        let sprite1 = player.sprite1 || '';
-        let sprite2 = player.sprite2 || '';
-
-        if (!sprite1 && !sprite2) {
-            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-            sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-            sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-        }
-
-        if (sprite2 === 'hyphen') return acc; // Skip if sprite2 is 'hyphen'
-
-        let key;
-        let spriteToShow;
-
-        if (sprite1 !== 'blank' && sprite1) {
-            key = getCustomLabel(eventId, sprite1, sprite2);
-            spriteToShow = sprite1;
-        } else if (sprite2 !== 'blank' && sprite2) {
-            key = getCustomLabel(eventId, '', sprite2);
-            spriteToShow = sprite2;
-        } else {
-            return acc; // Skip if both sprites are blank or empty
-        }
-
-        if (!acc[key]) {
-            acc[key] = { count: 0, sprite: spriteToShow };
-        }
-        acc[key].count += 1;
-
-        return acc;
-    }, {});
-
-    const deckTypeCountArray = Object.entries(deckTypeCount)
-        .map(([key, value]) => ({ key, ...value }))
-        .sort((a, b) => b.count - a.count);
-
-    const chartData = {
-        labels: deckTypeCountArray.map((entry) => entry.key),
-        datasets: [
-            {
-                label: 'Deck Count',
-                data: deckTypeCountArray.map((entry) => entry.count),
-                backgroundColor: deckTypeCountArray.map((_, index) =>
-                    index % 2 === 0 ? '#1291eb8b' : '#1291eb8b'
-                )
+        const deckTypeCount = chartResults.reduce((acc, player) => {
+            let sprite1 = player.sprite1 || '';
+            let sprite2 = player.sprite2 || '';
+        
+            if (!sprite1 && !sprite2) {
+              const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+              sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+              sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
             }
-        ]
-    };
+        
+            if (sprite2 === 'hyphen') return acc;
+        
+            let key;
+            let spriteToShow;
+        
+            if (sprite1 !== 'blank' && sprite1) {
+              key = getCustomLabel(eventId, sprite1, sprite2);
+              spriteToShow = sprite1;
+            } else if (sprite2 !== 'blank' && sprite2) {
+              key = getCustomLabel(eventId, '', sprite2);
+              spriteToShow = sprite2;
+            } else {
+              return acc;
+            }
+        
+            if (!acc[key]) {
+              acc[key] = { count: 0, sprite: spriteToShow };
+            }
+            acc[key].count += 1;
+        
+            return acc;
+          }, {});
+        
+          const deckTypeCountArray = Object.entries(deckTypeCount)
+            .map(([key, value]) => ({ key, ...value }))
+            .sort((a, b) => b.count - a.count);
 
-    const chartOptions = {
-        plugins: {
-            tooltip: {
-                enabled: false,
-            },
-            legend: {
-                display: false,
-            },
-        },
-        hover: {
-            mode: null,
-        },
-        maintainAspectRatio: false,
-        aspectRatio: 1.5,
-        events: [],
-        animation: false,
-        layout: {
-            padding: {
-                top: 40,
-            },
-        },
-        animation: {
-            onComplete: () => {
-                if (chartRef.current) {
-                    const chartInstance = chartRef.current;
-                    const ctx = chartInstance.ctx;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    console.log("Chart Labels:", chartInstance.data.labels);
-                    chartInstance.data.labels.forEach((label, index) => {
-                        const meta = chartInstance.getDatasetMeta(0);
-                        const sprite = deckTypeCount[label]?.sprite;
-                        const bar = meta.data[index];
-                        if (sprite && bar) {
-                            const { x, y } = bar.tooltipPosition();
-                            const img = new Image();
-                            img.src = `/assets/sprites/${sprite}.png`;
-                            img.onload = () => {
-                                const aspectRatio = img.width / img.height;
-                                const displayWidth = 45;
-                                const displayHeight = displayWidth / aspectRatio;
-                            
-                                ctx.drawImage(img, x - displayWidth / 2, y - displayHeight, displayWidth, displayHeight);
-                            };
-                        }
+            const dayOneData = eventData.dayOneMeta || [];
+            const dayTwoData = chartResults;
+            
+            const combinedData = dayOneData.reduce((acc, dayOneDeck) => {
+                const dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
+            
+                const dayTwoDeck = dayTwoData.find(dayTwoDeck => {
+                    const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
+                    const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+                    const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+                    
+                    const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+                    return dayOneLabel === dayTwoLabel;
+                });
+            
+                if (dayTwoDeck) {
+                    const dayTwoCount = dayTwoData.filter(dayTwoDeck => {
+                        const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
+                        const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+                        const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+            
+                        const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+                        return dayTwoLabel === dayOneLabel;
+                    }).length;
+            
+                    acc.push({
+                        label: dayOneLabel,
+                        conversionRate: ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2),
+                    });
+                } else {
+                    acc.push({
+                        label: dayOneLabel,
+                        conversionRate: '0.00%',
                     });
                 }
+            
+                return acc;
+            }, []);
+            
+              const conversionChartData = {
+                labels: combinedData.map(data => data.label),
+                datasets: [
+                  {
+                    label: 'Conversion Rate (%)',
+                    data: combinedData.map(data => data.conversionRate),
+                    backgroundColor: '#1291eb8b'
+                  }
+                ]
+              };
+              
+        
+            const handleDayOneClick = () => {
+                setShowDayOneMeta(true);
+                setShowConversionRate(false);
+            };
+        
+            const handleDayTwoClick = () => {
+                setShowDayOneMeta(false);
+                setShowConversionRate(false);
+            };
+            const handleConversionRateClick = () => {
+                setShowDayOneMeta(false);
+                setShowConversionRate(true);
+            };
+        
+            const chartData = showDayOneMeta
+            ? {
+                labels: eventData.dayOneMeta.map(meta => {
+                  const { sprite1, sprite2 } = meta;
+                  return getCustomLabel(eventId, sprite1, sprite2);
+                }),
+                datasets: [
+                  {
+                    label: 'Deck Count',
+                    data: eventData.dayOneMeta.map(meta => meta.deckcount),
+                    backgroundColor: '#1291eb8b'
+                  }
+                ]
+              }
+            : showConversionRate
+            ? conversionChartData
+            : {
+                labels: deckTypeCountArray.map((entry) => entry.key),
+                datasets: [
+                  {
+                    label: 'Deck Count',
+                    data: deckTypeCountArray.map((entry) => entry.count),
+                    backgroundColor: '#1291eb8b'
+                  }
+                ]
+              };
+          
+            const getDayOneMetaSprites = (meta) => {
+                return {
+                    firstSprite: meta.sprite1 || '',
+                    secondSprite: meta.sprite2
+                };
+            };
+
+          const chartOptions = {
+            plugins: {
+              tooltip: {
+                enabled: false,
+              },
+              legend: {
+                display: false,
+              },
             },
-        },
-    };
+            hover: {
+              mode: null,
+            },
+            maintainAspectRatio: false,
+            aspectRatio: 1.5,
+            events: [],
+            animation: false,
+            layout: {
+              padding: {
+                top: 40,
+              },
+            },
+            animation: {
+                onComplete: () => {
+                    if (chartRef.current) {
+                      const chartInstance = chartRef.current;
+                      const ctx = chartInstance.ctx;
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'middle';
+                      ctx.fillStyle = theme.chartNumber;
+              
+                      chartInstance.data.labels.forEach((label, index) => {
+                        const meta = chartInstance.getDatasetMeta(0);
+                        const dataset = chartInstance.data.datasets[0];
+                        const data = dataset.data[index];
+              
+                        let sprite;
+              
+                        if (showDayOneMeta) {
+                          const metaKey = eventData.dayOneMeta[index];
+                          const { firstSprite, secondSprite } = getDayOneMetaSprites(metaKey);
+                          sprite = firstSprite !== '' ? firstSprite : secondSprite;
+                        } else {
+                          sprite = deckTypeCount[label]?.sprite;
+                        }
+              
+                        const bar = meta.data[index];
+                        if (sprite && bar) {
+                          const { x, y } = bar.tooltipPosition();
+                          const img = new Image();
+                          img.src = `/assets/sprites/${sprite}.png`;
+                          img.onload = () => {
+                            const aspectRatio = img.width / img.height;
+                            const displayWidth = 45;
+                            const displayHeight = displayWidth / aspectRatio;
+              
+                            ctx.drawImage(img, x - displayWidth / 2, y - displayHeight - 0, displayWidth, displayHeight);
+                          };
+                        }
+                        if (data >= 4) {
+                            const textYPosition = bar.y + 10;
+                            ctx.fillText(data, bar.x, textYPosition);
+                        }
+                      });
+                    }
+                  },
+                },
+              };
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -702,11 +824,51 @@ const EventPage = () => {
                             </div>
                         ) : (
                             <div className='event-statistics'>
+                                <div className='chart-btns-container'>
+                                    <p className='chart-bold'>
+                                        {division.charAt(0).toUpperCase() + division.slice(1)} Deck Share:
+                                    </p>
+                                    <p>
+                                        {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 ? (
+                                            <div className='alignrow'>
+                                                <button
+                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleDayOneClick}
+                                                >
+                                                    Day 1
+                                                </button>
+                                                <button
+                                                    className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleDayTwoClick}
+                                                >
+                                                    Day 2
+                                                </button>
+                                                <button
+                                                    className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleConversionRateClick}
+                                                >
+                                                    % Conversion
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <p className='chart-button'>Top {chartResults.length}</p>
+                                        )}
+                                    </p>
+                                </div>
+                                {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
+                                <div className='chart-description'>
+                                    {showDayOneMeta && !showConversionRate && (
+                                        <p>* Most played decks from Day 1 (data collected from event stream)</p>
+                                    )}
+                                    {!showDayOneMeta && !showConversionRate && (
+                                        <p>* Total count for each deck archetype from Day 2</p>
+                                    )}
+                                    {showConversionRate && (
+                                        <p>* Percentage of the top Day 1 decks that made Day 2</p>
+                                    )}
+                                </div>
+                                )}
                                 <div className='chart-container-wrapper'>
-                                    <div className='chart-btns-container'>
-                                        <p className='chart-bold'>{division.charAt(0).toUpperCase() + division.slice(1)} Deck Share:</p>
-                                        <p className='chart-button'>Top {chartResults.length}</p>
-                                    </div>
                                     <div className='chart-container'>
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>

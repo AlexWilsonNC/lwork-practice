@@ -35,6 +35,11 @@
     font-weight: bold;
     margin-right: 10px;
 }
+.alignrow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 .chart-button {
     background-color: #1290eb;
     padding: 5px 7px;
@@ -46,10 +51,21 @@
     white-space: nowrap;
     overflow: hidden;
 }
+.chart-button:hover {
+    cursor: pointer;
+}
+.chart-description {
+    margin-top: 7px;
+    font-style: italic;
+    text-align: start;
+}
+.chart-description p {
+    font-size: 10px !important;
+}
 .event-statistics {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     margin: 25px;
     position: relative;
     width: 100%;
@@ -79,7 +95,7 @@
         overflow-y: hidden;
     }
     .chart-container {
-        min-width: 1000px;
+        min-width: 600px;
         margin: 0;
     }
 }
@@ -119,7 +135,7 @@
     margin-bottom: 5px;
 }
 .regional-info a {
-    color: #1291eb8b;
+    color: #1290eb;
 }
 .regional-info a:hover {
     color: #7cc8ff;

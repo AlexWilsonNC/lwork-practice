@@ -406,7 +406,7 @@ const getCustomLabel = (eventId, sprite1, sprite2) => {
     } else if (eventId.includes('2025')) {
     eventYearKey = '2025';
     }
-    const eventLabels = customLabelsConfig[eventYearKey];
+const eventLabels = customLabelsConfig[eventYearKey];
     if (eventLabels) {
       const key = sprite1 !== 'blank' ? `${sprite1}-${sprite2}` : sprite2;
       return eventLabels[key] || key;
