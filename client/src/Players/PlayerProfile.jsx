@@ -349,10 +349,7 @@ const PlayerProfile = () => {
         result.eventId.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const getEventLink = (eventId, eventName) => {
-        if (eventName === "Worlds 2002") {
-            return `/tournaments/${eventId}/seniors`;
-        }
+    const getEventLink = (eventId) => {
         return `/tournaments/${eventId}`;
     };
 
@@ -416,7 +413,7 @@ const PlayerProfile = () => {
                                 <td>{formatDate(result.eventDate)}</td>
                                 <td className='center-content'>
                                     <img src={logos[result.eventLogo]} className='event-type-logo3' alt="Event type" />
-                                    <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
+                                    <Link className='white-link' to={`${getEventLink(result.eventId, result.eventName)}/${result.division}`}>
                                         {result.eventName}
                                     </Link>
                                 </td>

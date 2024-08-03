@@ -169,11 +169,11 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
-                            <a href='./cards/TWM'>
+                            <a href='./cards/SFA'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View All Cards from <span className='new-color'>Twilight Masquerade</span> in
+                                        <h3>View All Cards from <span className='new-color'>Shrouded Fable</span> in
                                             our Database!</h3>
                                         <p>You can view every Pokémon card and TCG expansion in history within our database
                                             here! From Base Set through the latest release, we have them all!</p>
@@ -373,11 +373,11 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall'>
                         <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
-                        <a href='/cards/TWM'>
+                        <a href='/cards/SFA'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                    <h3>View All Cards from <span className='new-color'>Twilight Masquerade</span> in
+                                    <h3>View All Cards from <span className='new-color'>Shrouded Fable</span> in
                                         our Database!</h3>
                                     <p>You can view every Pokémon card and TCG expansion in history within our database
                                         here! From Base Set through the latest release, we have them all!</p>

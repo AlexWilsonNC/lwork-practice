@@ -279,7 +279,7 @@
     pointer-events: none;
 }
 .sts-logo {
-    height: 50px !important;
+    height: 90px !important;
     width: auto;
   }
 
@@ -357,9 +357,9 @@
         left: 73%;
       }
       .sts-logo {
-        height: 40px !important;
-        top: 19% !important;
-        left: 68% !important;
+        height: 80px !important;
+        top: 13% !important;
+        left: 74% !important;
     }
     .left-regional-info {
         display: flex;

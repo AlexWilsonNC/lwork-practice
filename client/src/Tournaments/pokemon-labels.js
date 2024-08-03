@@ -620,6 +620,11 @@ const customLabelsConfig = {
         'arcanine-ho-oh': 'Arcanine',
         'slowking-golduck': 'Slowking',
         'blastoise-steelix': 'Blastoise Steelix',
+        '-arcanine': 'Arcanine',
+        'sandslash-dugtrio': 'Sandslash Dugtrio',
+        'typhlosion-charizard': 'Typhlosion',
+        'steelix-slowking': 'Steelix',
+        '-dewgong': 'Dewgong',
     },
     '2000': {
         'eeee': '',

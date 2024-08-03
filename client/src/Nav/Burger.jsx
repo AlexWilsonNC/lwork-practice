@@ -40,7 +40,7 @@ const Burger = ({ darkMode }) => {
 
   return (
     <div className='push-right-nav-together'>
-      <RightNav open={open} dark={darkMode} />
+      <RightNav open={open} setOpen={setOpen} dark={darkMode} />
       <StyledBurger open={open} dark={darkMode} onClick={() => setOpen(!open)} className='burger'>
         <div className='burger-line' />
         <div className='burger-line' />

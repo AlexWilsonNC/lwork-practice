@@ -522,10 +522,7 @@ const CardView = () => {
         }
     };
 
-    const getEventLink = (eventId, eventName) => {
-        if (eventName === "Worlds 2002") {
-            return `/tournaments/${eventId}/seniors`;
-        }
+    const getEventLink = (eventId) => {
         return `/tournaments/${eventId}`;
     };
 
@@ -858,9 +855,9 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                                 <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>
                                                 <td>
-                                                    <Link className='white-link' to={getEventLink(result.eventId, result.eventName)}>
-                                                        {result.eventName}
-                                                    </Link>
+                                                <Link className='white-link' to={`${getEventLink(result.eventId, result.eventName)}/${result.division}`}>
+                                                    {result.eventName}
+                                                </Link>
                                                 </td>
                                                 <td className='player-deck-icons pushright'>
                                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />

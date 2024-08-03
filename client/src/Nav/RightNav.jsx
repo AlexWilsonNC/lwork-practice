@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
@@ -43,26 +43,42 @@ const ToggleButton = styled.div`
   }
 `;
 
-const RightNav = ({ open }) => {
+const RightNav = ({ open, setOpen }) => {
   const { theme, toggleTheme } = useTheme();
+  const burgerRef = useRef();
+
+  // Close the menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (burgerRef.current && !burgerRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setOpen]);
 
   return (
     <div className='right-nav'>
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li className='not-ready'><a href=''>Decks</a></li>
-        <li><a href='/cards/TWM'>Cards</a></li>
+        <li><a href='/cards/SFA'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
         <li className='not-ready'><a href=''><span className="material-symbols-outlined">search</span></a></li>
       </ul>
-      <BurgerOpen open={open} theme={theme} className='burgered-links'>
+      <BurgerOpen open={open} theme={theme} className='burgered-links' ref={burgerRef}>
         <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
           <span className="material-symbols-outlined"></span>
         </ToggleButton>
         <li><a href='/tournaments/completed'>Completed Events</a></li>
         <li><a href='/tournaments/upcoming'>Upcoming Events</a></li>
         <li className='not-ready'><a href=''>Decks</a></li>
-        <li><a href='/cards/TWM'>Cards</a></li>
+        <li><a href='/cards/SFA'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
         <div className='burger-resources'>
           <p>Resources:</p>
@@ -83,6 +99,6 @@ const RightNav = ({ open }) => {
       </BurgerOpen>
     </div>
   );
-}
+};
 
 export default RightNav;

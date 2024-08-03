@@ -124,6 +124,9 @@ const CardsPage = () => {
 
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
+    { name: "Surging Sparks", abbrev: "--", releaseDate: "Nov -, 2024", total: "--", notavailable: true },
+    { name: "Stellar Crown", abbrev: "--", releaseDate: "Sep 13, 2024", total: "170+", notavailable: true },
+    { name: "Shrouded Fable", abbrev: "SFA", releaseDate: "Aug 2, 2024", total: "99" },
     { name: "Twilight Masquerade", abbrev: "TWM", releaseDate: "May 24, 2024", total: "226" },
     { name: "Temporal Forces", abbrev: "TEF", releaseDate: "Mar 22, 2024", total: "218" },
     { name: "Paldean Fates *", abbrev: "PAF", releaseDate: "Jan 26, 2024", total: "245" },
@@ -413,7 +416,15 @@ const CardsPage = () => {
                     <td colSpan="4">{set.text}</td>
                   </SeparatorRow>
                 ) : (
-                <DropdownTableRow key={index} onClick={() => handleSetChange(set.abbrev)} theme={theme}>
+                  <DropdownTableRow
+                  key={index}
+                  onClick={() => !set.notavailable && handleSetChange(set.abbrev)}
+                  theme={theme}
+                  style={{
+                    opacity: set.notavailable ? 0.5 : 1,
+                    pointerEvents: set.notavailable ? 'none' : 'auto',
+                  }}
+                >
                   <DropdownTableCell>
                     <Link className='settobechanged' to={`/cards/${set.abbrev}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                       {set.name}
