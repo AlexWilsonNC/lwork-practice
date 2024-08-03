@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import RightNav from './RightNav';
 import '../css/nav.css';
@@ -37,17 +37,40 @@ const StyledBurger = styled.div`
 
 const Burger = ({ darkMode }) => {
   const [open, setOpen] = useState(false);
+  const burgerRef = useRef(null);
+  const navRef = useRef(null);
+
+  const toggleMenu = () => {
+    setOpen(!open);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      burgerRef.current && !burgerRef.current.contains(event.target) &&
+      navRef.current && !navRef.current.contains(event.target)
+    ) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className='push-right-nav-together'>
-      <RightNav open={open} setOpen={setOpen} dark={darkMode} />
-      <StyledBurger open={open} dark={darkMode} onClick={() => setOpen(!open)} className='burger'>
+      <RightNav open={open} setOpen={setOpen} dark={darkMode} ref={navRef} />
+      <StyledBurger ref={burgerRef} open={open} dark={darkMode} onClick={toggleMenu} className='burger'>
         <div className='burger-line' />
         <div className='burger-line' />
         <div className='burger-line' />
       </StyledBurger>
     </div>
-  )
+  );
 }
 
 export default Burger

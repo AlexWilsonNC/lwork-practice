@@ -109,7 +109,7 @@ const promoSets = {
     "AOR": "PR-XY",
     "ROS": "PR-XY",
     "DCE": "PR-XY",
-    "PRC": "PR-XY",
+    "PRC": ["PR-XY", "PHF"],
     "PHF": "PR-XY",
     "FFI": "PR-XY",
     "FLF": "PR-XY",

@@ -454,7 +454,7 @@ const tournamentList = [
     //     "location": "Buenos Aires, Argentina",
     // },
     {
-        "id": "2023_WORLDS/masters",
+        "id": "2023_WORLDS",
         "name": "World Championships 2023",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -464,7 +464,7 @@ const tournamentList = [
         "results": false
     },
     {
-        "id": "2022_WORLDS/masters",
+        "id": "2022_WORLDS",
         "name": "World Championships 2022",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -474,7 +474,7 @@ const tournamentList = [
         "results": false
     },
     {
-        "id": "2019_WORLDS/masters",
+        "id": "2019_WORLDS",
         "name": "World Championships 2019",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -483,7 +483,7 @@ const tournamentList = [
         "location": "Washington DC, USA",
     },
     {
-        "id": "2018_WORLDS/masters",
+        "id": "2018_WORLDS",
         "name": "World Championships 2018",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -492,17 +492,16 @@ const tournamentList = [
         "location": "Nashville, Tennessee",
     },
     {
-        "id": "2017_WORLDS/masters",
+        "id": "2017_WORLDS",
         "name": "World Championships 2017",
         "eventType": "worlds",
         "eventLogo": worlds,
         "date": "Aug 18, 2017",
         "flag": usa,
-        "location": "Anaheim, California",
-        "results": false
+        "location": "Anaheim, California"
     },
     {
-        "id": "2016_WORLDS/masters",
+        "id": "2016_WORLDS",
         "name": "World Championships 2016",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -511,7 +510,7 @@ const tournamentList = [
         "location": "San Fransisco, California",
     },
     {
-        "id": "2015_WORLDS/masters",
+        "id": "2015_WORLDS",
         "name": "World Championships 2015",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -520,7 +519,7 @@ const tournamentList = [
         "location": "Boston, Massachusetts",
     },
     {
-        "id": "2014_WORLDS/masters",
+        "id": "2014_WORLDS",
         "name": "World Championships 2014",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -529,7 +528,7 @@ const tournamentList = [
         "location": "Washington DC, USA",
     },
     {
-        "id": "2013_WORLDS/masters",
+        "id": "2013_WORLDS",
         "name": "World Championships 2013",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -538,7 +537,7 @@ const tournamentList = [
         "location": "Vancouver, British Columbia",
     },
     {
-        "id": "2012_WORLDS/masters",
+        "id": "2012_WORLDS",
         "name": "World Championships 2012",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -547,7 +546,7 @@ const tournamentList = [
         "location": "Waikōloa Village, Hawaii",
     },
     {
-        "id": "2011_WORLDS/masters",
+        "id": "2011_WORLDS",
         "name": "World Championships 2011",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -556,7 +555,7 @@ const tournamentList = [
         "location": "San Diego, California",
     },
     {
-        "id": "2010_WORLDS/masters",
+        "id": "2010_WORLDS",
         "name": "World Championships 2010",
         "eventType": "worlds",
         "eventLogo": worldsOten,
@@ -565,7 +564,7 @@ const tournamentList = [
         "location": "Waikōloa Village, Hawaii",
     },
     {
-        "id": "2009_WORLDS/masters",
+        "id": "2009_WORLDS",
         "name": "World Championships 2009",
         "eventType": "worlds",
         "eventLogo": worldsOnine,
@@ -574,7 +573,7 @@ const tournamentList = [
         "location": "San Diego, California",
     },
     {
-        "id": "2008_WORLDS/masters",
+        "id": "2008_WORLDS",
         "name": "World Championships 2008",
         "eventType": "worlds",
         "eventLogo": worldsOeight,
@@ -583,7 +582,7 @@ const tournamentList = [
         "location": "Orlando, Florida",
     },
     {
-        "id": "2007_WORLDS/masters",
+        "id": "2007_WORLDS",
         "name": "World Championships 2007",
         "eventType": "worlds",
         "eventLogo": worldsOSeven,
@@ -592,7 +591,7 @@ const tournamentList = [
         "location": "Waikōloa Village, Hawaii",
     },
     {
-        "id": "2006_WORLDS/masters",
+        "id": "2006_WORLDS",
         "name": "World Championships 2006",
         "eventType": "worlds",
         "eventLogo": worldsOsix,
@@ -601,7 +600,7 @@ const tournamentList = [
         "location": "Anaheim, California",
     },
     {
-        "id": "2005_WORLDS/masters",
+        "id": "2005_WORLDS",
         "name": "World Championships 2005",
         "eventType": "worlds",
         "eventLogo": worldsOfive,
@@ -610,7 +609,7 @@ const tournamentList = [
         "location": "San Diego, California",
     },
     {
-        "id": "2004_WORLDS/masters",
+        "id": "2004_WORLDS",
         "name": "World Championships 2004",
         "eventType": "worlds",
         "eventLogo": worldsOfour,
@@ -619,7 +618,7 @@ const tournamentList = [
         "location": "Orlando, Florida",
     },
     {
-        "id": "2020_LAIC/masters",
+        "id": "2020_LAIC",
         "name": "LAIC 2020",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -628,7 +627,7 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
     },
     {
-        "id": "2020_OCIC/masters",
+        "id": "2020_OCIC",
         "name": "OCIC 2020",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -646,7 +645,7 @@ const tournamentList = [
         "location": "Seattle, Washington",
     },
     {
-        "id": "2019_EUIC/masters",
+        "id": "2019_EUIC",
         "name": "EUIC 2019",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -655,7 +654,7 @@ const tournamentList = [
         "location": "Berlin, Germany",
     },
     {
-        "id": "2019_LAIC/masters",
+        "id": "2019_LAIC",
         "name": "LAIC 2019",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -664,7 +663,7 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
     },
     {
-        "id": "2019_OCIC/masters",
+        "id": "2019_OCIC",
         "name": "OCIC 2019",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -673,7 +672,7 @@ const tournamentList = [
         "location": "Melbourne, Australia",
     },
     {
-        "id": "2019_NAIC/masters",
+        "id": "2019_NAIC",
         "name": "NAIC 2019",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -682,7 +681,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2018_EUIC/masters",
+        "id": "2018_EUIC",
         "name": "EUIC 2018",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -691,7 +690,7 @@ const tournamentList = [
         "location": "London, United Kingdom",
     },
     {
-        "id": "2018_LAIC/masters",
+        "id": "2018_LAIC",
         "name": "LAIC 2018",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -700,7 +699,7 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
     },
     {
-        "id": "2018_NAIC/masters",
+        "id": "2018_NAIC",
         "name": "NAIC 2018",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -709,7 +708,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2018_OCIC/masters",
+        "id": "2018_OCIC",
         "name": "OCIC 2018",
         "eventType": "internationals",
         "eventLogo": ogInternats,
@@ -718,7 +717,7 @@ const tournamentList = [
         "location": "Sydney, Australia",
     },
     {
-        "id": "2014_NATS_US/masters",
+        "id": "2014_NATS_US",
         "name": "US Nationals 2014",
         "eventType": "nationals",
         "eventLogo": nationals,
@@ -727,7 +726,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2013_NATS_US/masters",
+        "id": "2013_NATS_US",
         "name": "US Nationals 2013",
         "eventType": "nationals",
         "eventLogo": nationals,
@@ -736,7 +735,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2012_NATS_US/masters",
+        "id": "2012_NATS_US",
         "name": "US Nationals 2012",
         "eventType": "nationals",
         "eventLogo": nationals,
@@ -745,7 +744,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2011_NATS_US/masters",
+        "id": "2011_NATS_US",
         "name": "US Nationals 2011",
         "eventType": "nationals",
         "eventLogo": nationals,
@@ -754,7 +753,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2010_NATS_US/masters",
+        "id": "2010_NATS_US",
         "name": "US Nationals 2010",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -763,7 +762,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2009_NATS_US/masters",
+        "id": "2009_NATS_US",
         "name": "US Nationals 2009",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -772,7 +771,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2008_NATS_US/masters",
+        "id": "2008_NATS_US",
         "name": "US Nationals 2008",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -781,7 +780,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2007_NATS_US/masters",
+        "id": "2007_NATS_US",
         "name": "US Nationals 2007",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -790,7 +789,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2006_NATS_US/masters",
+        "id": "2006_NATS_US",
         "name": "US Nationals 2006",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -799,7 +798,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2005_NATS_US/masters",
+        "id": "2005_NATS_US",
         "name": "US Nationals 2005",
         "eventType": "nationals",
         "eventLogo": oldNationals,
@@ -808,7 +807,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2004_NATS_US/masters",
+        "id": "2004_NATS_US",
         "name": "US Nationals 2004",
         "eventType": "nationals",
         "eventLogo": oFourNationals,
@@ -817,7 +816,7 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
-        "id": "2002_EU_SC/masters",
+        "id": "2002_EU_SC",
         "name": "Europe Stadium Challenge",
         "eventType": "stadiumChallenge",
         "eventLogo": stadiumChallenge,
@@ -836,7 +835,7 @@ const tournamentList = [
         "location": "San Diego, California",
     },
     {
-        "id": "2002_CSC/masters",
+        "id": "2002_CSC",
         "name": "Central Stadium Challenge",
         "eventType": "stadiumChallenge",
         "eventLogo": stadiumChallenge,
@@ -854,7 +853,7 @@ const tournamentList = [
         "location": "Secaucus, New Jersey",
     },
     {
-        "id": "2001_CA_STS_DAY2/masters",
+        "id": "2001_CA_STS_DAY2",
         "name": "California Super Trainer Showdown Day 2",
         "eventType": "superTrainerShowdown",
         "eventLogo": superTrainerShowdown,
@@ -863,7 +862,7 @@ const tournamentList = [
         "location": "San Diego, California",
     },
     {
-        "id": "2001_CA_STS_DAY1/masters",
+        "id": "2001_CA_STS_DAY1",
         "name": "California Super Trainer Showdown Day 1",
         "eventType": "superTrainerShowdown",
         "eventLogo": superTrainerShowdown,
@@ -899,24 +898,24 @@ const tournamentList = [
         "flag": usa,
         "location": "Secaucus, New Jersey",
           },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
+    {
+        "id": "2000_NJ_STS",
+        "name": "New Jersey Super Trainer Showdown",
+        "eventType": "superTrainerShowdown",
+        "eventLogo": superTrainerShowdown,
+        "date": "Nov 8, 2000",
+        "flag": usa,
+        "location": "Secaucus, New Jersey",
+          },
+    {
+        "id": "2000_CA_STS",
+        "name": "California Super Trainer Showdown",
+        "eventType": "superTrainerShowdown",
+        "eventLogo": superTrainerShowdown,
+        "date": "Jul 22, 2000",
+        "flag": usa,
+        "location": "Long Beach, California",
+          },
     // {
     //     "id": "eee",
     //     "name": "eee",

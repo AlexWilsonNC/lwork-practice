@@ -406,215 +406,215 @@ const EventPage = () => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-        const deckTypeCount = chartResults.reduce((acc, player) => {
-            let sprite1 = player.sprite1 || '';
-            let sprite2 = player.sprite2 || '';
-        
-            if (!sprite1 && !sprite2) {
-              const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-              sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-              sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-            }
-        
-            if (sprite2 === 'hyphen') return acc;
-        
-            let key;
-            let spriteToShow;
-        
-            if (sprite1 !== 'blank' && sprite1) {
-              key = getCustomLabel(eventId, sprite1, sprite2);
-              spriteToShow = sprite1;
-            } else if (sprite2 !== 'blank' && sprite2) {
-              key = getCustomLabel(eventId, '', sprite2);
-              spriteToShow = sprite2;
-            } else {
-              return acc;
-            }
-        
-            if (!acc[key]) {
-              acc[key] = { count: 0, sprite: spriteToShow };
-            }
-            acc[key].count += 1;
-        
-            return acc;
-          }, {});
-        
-          const deckTypeCountArray = Object.entries(deckTypeCount)
-            .map(([key, value]) => ({ key, ...value }))
-            .sort((a, b) => b.count - a.count);
+    const deckTypeCount = chartResults.reduce((acc, player) => {
+        let sprite1 = player.sprite1 || '';
+        let sprite2 = player.sprite2 || '';
 
-            const dayOneData = eventData.dayOneMeta || [];
-            const dayTwoData = chartResults;
-            
-            const combinedData = dayOneData.reduce((acc, dayOneDeck) => {
-                const dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
-            
-                const dayTwoDeck = dayTwoData.find(dayTwoDeck => {
-                    const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-                    const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-                    const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-                    
-                    const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
-                    return dayOneLabel === dayTwoLabel;
-                });
-            
-                if (dayTwoDeck) {
-                    const dayTwoCount = dayTwoData.filter(dayTwoDeck => {
-                        const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-                        const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-                        const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-            
-                        const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
-                        return dayTwoLabel === dayOneLabel;
-                    }).length;
-            
-                    acc.push({
-                        label: dayOneLabel,
-                        conversionRate: ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2),
-                    });
-                } else {
-                    acc.push({
-                        label: dayOneLabel,
-                        conversionRate: '0.00%',
-                    });
-                }
-            
-                return acc;
-            }, []);
-            
-              const conversionChartData = {
-                labels: combinedData.map(data => data.label),
-                datasets: [
-                  {
-                    label: 'Conversion Rate (%)',
-                    data: combinedData.map(data => data.conversionRate),
-                    backgroundColor: '#1291eb8b'
-                  }
-                ]
-              };
-              
-        
-            const handleDayOneClick = () => {
-                setShowDayOneMeta(true);
-                setShowConversionRate(false);
-            };
-        
-            const handleDayTwoClick = () => {
-                setShowDayOneMeta(false);
-                setShowConversionRate(false);
-            };
-            const handleConversionRateClick = () => {
-                setShowDayOneMeta(false);
-                setShowConversionRate(true);
-            };
-        
-            const chartData = showDayOneMeta
-            ? {
-                labels: eventData.dayOneMeta.map(meta => {
-                  const { sprite1, sprite2 } = meta;
-                  return getCustomLabel(eventId, sprite1, sprite2);
-                }),
-                datasets: [
-                  {
+        if (!sprite1 && !sprite2) {
+            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+            sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+            sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+        }
+
+        if (sprite2 === 'hyphen') return acc;
+
+        let key;
+        let spriteToShow;
+
+        if (sprite1 !== 'blank' && sprite1) {
+            key = getCustomLabel(eventId, sprite1, sprite2);
+            spriteToShow = sprite1;
+        } else if (sprite2 !== 'blank' && sprite2) {
+            key = getCustomLabel(eventId, '', sprite2);
+            spriteToShow = sprite2;
+        } else {
+            return acc;
+        }
+
+        if (!acc[key]) {
+            acc[key] = { count: 0, sprite: spriteToShow };
+        }
+        acc[key].count += 1;
+
+        return acc;
+    }, {});
+
+    const deckTypeCountArray = Object.entries(deckTypeCount)
+        .map(([key, value]) => ({ key, ...value }))
+        .sort((a, b) => b.count - a.count);
+
+    const dayOneData = eventData.dayOneMeta || [];
+    const dayTwoData = chartResults;
+
+    const combinedData = dayOneData.reduce((acc, dayOneDeck) => {
+        const dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
+
+        const dayTwoDeck = dayTwoData.find(dayTwoDeck => {
+            const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
+            const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+            const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+
+            const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+            return dayOneLabel === dayTwoLabel;
+        });
+
+        if (dayTwoDeck) {
+            const dayTwoCount = dayTwoData.filter(dayTwoDeck => {
+                const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
+                const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+                const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+
+                const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+                return dayTwoLabel === dayOneLabel;
+            }).length;
+
+            acc.push({
+                label: dayOneLabel,
+                conversionRate: ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2),
+            });
+        } else {
+            acc.push({
+                label: dayOneLabel,
+                conversionRate: '0.00%',
+            });
+        }
+
+        return acc;
+    }, []);
+
+    const conversionChartData = {
+        labels: combinedData.map(data => data.label),
+        datasets: [
+            {
+                label: 'Conversion Rate (%)',
+                data: combinedData.map(data => data.conversionRate),
+                backgroundColor: '#1291eb8b'
+            }
+        ]
+    };
+
+
+    const handleDayOneClick = () => {
+        setShowDayOneMeta(true);
+        setShowConversionRate(false);
+    };
+
+    const handleDayTwoClick = () => {
+        setShowDayOneMeta(false);
+        setShowConversionRate(false);
+    };
+    const handleConversionRateClick = () => {
+        setShowDayOneMeta(false);
+        setShowConversionRate(true);
+    };
+
+    const chartData = showDayOneMeta
+        ? {
+            labels: eventData.dayOneMeta.map(meta => {
+                const { sprite1, sprite2 } = meta;
+                return getCustomLabel(eventId, sprite1, sprite2);
+            }),
+            datasets: [
+                {
                     label: 'Deck Count',
                     data: eventData.dayOneMeta.map(meta => meta.deckcount),
                     backgroundColor: '#1291eb8b'
-                  }
-                ]
-              }
-            : showConversionRate
+                }
+            ]
+        }
+        : showConversionRate
             ? conversionChartData
             : {
                 labels: deckTypeCountArray.map((entry) => {
                     console.log("Day 2 Label:", entry.key); // Log Day 2 labels
                     return entry.key;
-                  }),                datasets: [
-                  {
-                    label: 'Deck Count',
-                    data: deckTypeCountArray.map((entry) => entry.count),
-                    backgroundColor: '#1291eb8b'
-                  }
+                }), datasets: [
+                    {
+                        label: 'Deck Count',
+                        data: deckTypeCountArray.map((entry) => entry.count),
+                        backgroundColor: '#1291eb8b'
+                    }
                 ]
-              };
-          
-            const getDayOneMetaSprites = (meta) => {
-                return {
-                    firstSprite: meta.sprite1 || '',
-                    secondSprite: meta.sprite2
-                };
             };
 
-          const chartOptions = {
-            plugins: {
-              tooltip: {
+    const getDayOneMetaSprites = (meta) => {
+        return {
+            firstSprite: meta.sprite1 || '',
+            secondSprite: meta.sprite2
+        };
+    };
+
+    const chartOptions = {
+        plugins: {
+            tooltip: {
                 enabled: false,
-              },
-              legend: {
+            },
+            legend: {
                 display: false,
-              },
             },
-            hover: {
-              mode: null,
-            },
-            maintainAspectRatio: false,
-            aspectRatio: 1.5,
-            events: [],
-            animation: false,
-            layout: {
-              padding: {
+        },
+        hover: {
+            mode: null,
+        },
+        maintainAspectRatio: false,
+        aspectRatio: 1.5,
+        events: [],
+        animation: false,
+        layout: {
+            padding: {
                 top: 40,
-              },
             },
-            animation: {
-                onComplete: () => {
-                    if (chartRef.current) {
-                      const chartInstance = chartRef.current;
-                      const ctx = chartInstance.ctx;
-                      ctx.textAlign = 'center';
-                      ctx.textBaseline = 'middle';
-                      ctx.fillStyle = theme.chartNumber;
-              
-                      chartInstance.data.labels.forEach((label, index) => {
+        },
+        animation: {
+            onComplete: () => {
+                if (chartRef.current) {
+                    const chartInstance = chartRef.current;
+                    const ctx = chartInstance.ctx;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = theme.chartNumber;
+
+                    chartInstance.data.labels.forEach((label, index) => {
                         const meta = chartInstance.getDatasetMeta(0);
                         const dataset = chartInstance.data.datasets[0];
                         const data = dataset.data[index];
-              
+
                         let sprite;
-              
+
                         if (showDayOneMeta) {
-                          const metaKey = eventData.dayOneMeta[index];
-                          const { firstSprite, secondSprite } = getDayOneMetaSprites(metaKey);
-                          sprite = firstSprite !== '' ? firstSprite : secondSprite;
+                            const metaKey = eventData.dayOneMeta[index];
+                            const { firstSprite, secondSprite } = getDayOneMetaSprites(metaKey);
+                            sprite = firstSprite !== '' ? firstSprite : secondSprite;
                         } else {
-                          sprite = deckTypeCount[label]?.sprite;
+                            sprite = deckTypeCount[label]?.sprite;
                         }
-              
+
                         const bar = meta.data[index];
                         if (sprite && bar) {
-                          const { x, y } = bar.tooltipPosition();
-                          const img = new Image();
-                          img.src = `/assets/sprites/${sprite}.png`;
-                          img.onload = () => {
-                            const aspectRatio = img.width / img.height;
-                            const displayWidth = 45;
-                            const displayHeight = displayWidth / aspectRatio;
-              
-                            ctx.drawImage(img, x - displayWidth / 2, y - displayHeight - 0, displayWidth, displayHeight);
-                          };
+                            const { x, y } = bar.tooltipPosition();
+                            const img = new Image();
+                            img.src = `/assets/sprites/${sprite}.png`;
+                            img.onload = () => {
+                                const aspectRatio = img.width / img.height;
+                                const displayWidth = 45;
+                                const displayHeight = displayWidth / aspectRatio;
+
+                                ctx.drawImage(img, x - displayWidth / 2, y - displayHeight - 0, displayWidth, displayHeight);
+                            };
                         }
                         if (data >= 4) {
                             const textYPosition = bar.y + 10;
                             ctx.fillText(data, bar.x, textYPosition);
                         }
-                      });
-                    }
-                  },
-                },
-              };
+                    });
+                }
+            },
+        },
+    };
 
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
-    const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};  
+    const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -795,8 +795,14 @@ const EventPage = () => {
                         {eventData.format && (
                             <p>
                                 <strong>Format:</strong> {getEventFormat(division)}
+                                {eventData.formatAdd && (
+                                    <span>
+                                        &nbsp;{eventData.formatAdd}
+                                    </span>
+                                )}
                             </p>
                         )}
+
                         {getPlayerCount(division)}
                     </div>
                 </div>
@@ -809,12 +815,12 @@ const EventPage = () => {
                         Results
                     </a>
                     <a
-          className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
-          onClick={() => resultsAvailable && setActiveTab('Statistics')}
-          style={statisticsTabStyle}
-        >
-          Statistics
-        </a>
+                        className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
+                        onClick={() => resultsAvailable && setActiveTab('Statistics')}
+                        style={statisticsTabStyle}
+                    >
+                        Statistics
+                    </a>
                     <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Photos</a>
                     {/* <a className='event-option'>Info</a> */}
                 </div>

@@ -220,12 +220,15 @@ const PlayerProfileContainer = styled.div`
   opacity: 0;
   pointer-events: none;
     }
-.player-deck-icons a.no-decklist {
-  pointer-events: none;
+    .player-deck-icons a.no-decklist {
+    pointer-events: none;
+    }
+     .day1btn, .day2btn, .conversbtn {
+    background-color: ${({ theme }) => theme.day1btn};
+  }
+.chart-button.active {
+  background-color: #1290eb;
 }
-//   .player-deck-icons {
-//     margin-top: 0px;
-// }
 `;
 
 const parseDate = (dateString) => {
@@ -395,8 +398,18 @@ const PlayerProfile = () => {
                     </div> */}
                 </div>
                 <div className='sort-buttons'>
-                    <button onClick={() => setSortCriteria('date')}>Sort by Date</button>
-                    <button onClick={() => setSortCriteria('placement')}>Sort by Placement</button>
+                    <button
+                        className={`chart-button day2btn ${sortCriteria === 'date' ? 'active' : ''}`}
+                        onClick={() => setSortCriteria('date')}
+                    >
+                        Sort by Date
+                    </button>
+                    <button
+                        className={`chart-button day1btn ${sortCriteria === 'placement' ? 'active' : ''}`}
+                        onClick={() => setSortCriteria('placement')}
+                    >
+                        Sort by Placement
+                    </button>
                 </div>
                 <table className='results-table'>
                     <thead>

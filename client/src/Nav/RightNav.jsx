@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
@@ -43,27 +43,11 @@ const ToggleButton = styled.div`
   }
 `;
 
-const RightNav = ({ open, setOpen }) => {
+const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
   const { theme, toggleTheme } = useTheme();
-  const burgerRef = useRef();
-
-  // Close the menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (burgerRef.current && !burgerRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [setOpen]);
 
   return (
-    <div className='right-nav'>
+    <div className='right-nav' ref={ref}>
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li className='not-ready'><a href=''>Decks</a></li>
@@ -71,7 +55,7 @@ const RightNav = ({ open, setOpen }) => {
         <li><a href='/players'>Players</a></li>
         <li className='not-ready'><a href=''><span className="material-symbols-outlined">search</span></a></li>
       </ul>
-      <BurgerOpen open={open} theme={theme} className='burgered-links' ref={burgerRef}>
+      <BurgerOpen open={open} theme={theme} className='burgered-links'>
         <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
           <span className="material-symbols-outlined"></span>
         </ToggleButton>
@@ -99,6 +83,6 @@ const RightNav = ({ open, setOpen }) => {
       </BurgerOpen>
     </div>
   );
-};
+});
 
 export default RightNav;
