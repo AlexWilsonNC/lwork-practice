@@ -613,6 +613,8 @@ const EventPage = () => {
               };
 
     const hasChartData = chartData.labels && chartData.labels.length > 0;
+    const resultsAvailable = results.length > 0;
+    const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};  
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -807,12 +809,12 @@ const EventPage = () => {
                         Results
                     </a>
                     <a
-                        className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''
-                            }`}
-                        onClick={() => setActiveTab('Statistics')}
-                    >
-                        Statistics
-                    </a>
+          className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
+          onClick={() => resultsAvailable && setActiveTab('Statistics')}
+          style={statisticsTabStyle}
+        >
+          Statistics
+        </a>
                     <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Photos</a>
                     {/* <a className='event-option'>Info</a> */}
                 </div>
