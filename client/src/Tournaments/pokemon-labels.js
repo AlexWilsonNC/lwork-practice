@@ -625,6 +625,9 @@ const customLabelsConfig = {
         'typhlosion-charizard': 'Typhlosion',
         'steelix-slowking': 'Steelix',
         '-dewgong': 'Dewgong',
+        'steelix-zapdos': 'Steelix',
+        'arcanine-slowking': 'Arcanine',
+        'arcanine-rapidash': 'Arcanine',
     },
     '2000': {
         'eeee': '',

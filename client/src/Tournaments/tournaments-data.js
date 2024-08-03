@@ -890,6 +890,15 @@ const tournamentList = [
         "flag": usa,
         "location": "Secaucus, New Jersey",
           },
+    {
+        "id": "2001_NJ_STS_DAY1",
+        "name": "New Jersey Super Trainer Showdown Day 1",
+        "eventType": "superTrainerShowdown",
+        "eventLogo": superTrainerShowdown,
+        "date": "Jun 23, 2001",
+        "flag": usa,
+        "location": "Secaucus, New Jersey",
+          },
     // {
     //     "id": "eee",
     //     "name": "eee",
