@@ -470,8 +470,7 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "Aug 18, 2022",
         "flag": uk,
-        "location": "London, United Kingdom",
-        "results": false
+        "location": "London, United Kingdom"
     },
     {
         "id": "2019_WORLDS",
@@ -913,8 +912,7 @@ const tournamentList = [
         "eventLogo": superTrainerShowdown,
         "date": "Jun 30, 2001",
         "flag": sweden,
-        "location": "Liseberg, Sweden",
-        "results": false
+        "location": "Liseberg, Sweden"
     },
     {
         "id": "2001_NJ_STS",

@@ -28,7 +28,7 @@ const PlayerDeckCenter = styled.div`
         color: ${({ theme }) => theme.listCardText};
     }
     .spinner {
-        border-left-color: ${({ theme }) => theme.searchTxt};
+        border-left-color: ${({ theme }) => theme.spinner};
     }
     .link-to-playerprofile {
         color: ${({ theme }) => theme.text};

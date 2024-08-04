@@ -720,9 +720,17 @@ const EventPage = () => {
                                     )}
                                     {eventData.streamsDay2 && eventData.streamsDay3 && ' | '}
                                     {eventData.streamsDay3 && (
-                                        <a href={eventData.streamsDay3} target='_blank'>
-                                            Finals
+                                        <a href={eventData.streamsDay3} target='_blank' rel='noopener noreferrer'>
+                                            Day 3
                                         </a>
+                                    )}
+                                    {eventData.streamsDay4 && (
+                                        <>
+                                            {eventData.streamsDay3 && " | "}
+                                            <a href={eventData.streamsDay4} target='_blank' rel='noopener noreferrer'>
+                                                Finals
+                                            </a>
+                                        </>
                                     )}
                                 </p>
                             )}

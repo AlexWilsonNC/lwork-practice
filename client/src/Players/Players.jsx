@@ -219,7 +219,7 @@ const PlayerListContainer = styled.div`
         text-align: center;
     }
     .spinner {
-        border-left-color: ${({ theme }) => theme.searchTxt};
+        border-left-color: ${({ theme }) => theme.spinner};
     }
 `;
 

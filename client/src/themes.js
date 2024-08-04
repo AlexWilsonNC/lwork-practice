@@ -38,6 +38,7 @@ export const lightTheme = {
     day1btn: 'rgb(180, 180, 180)',
     chartNumber: '#FFF',
     chartdescrip: '#000',
+    spinner: '#000',
 };
 
 export const darkTheme = {
@@ -81,5 +82,6 @@ export const darkTheme = {
     day1btn: 'rgb(80, 80, 80)',
     chartNumber: 'rgb(200, 200, 200)',
     chartdescrip: 'grey',
+    spinner: '#1290eb',
 
 };

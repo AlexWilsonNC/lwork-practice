@@ -23,7 +23,7 @@ const CardViewTheme = styled.div`
         color: #1290eb;
     }
     .spinner {
-        border-left-color: ${({ theme }) => theme.searchTxt};
+        border-left-color: ${({ theme }) => theme.spinner};
     }
     .link-to-playerprofile,
     .white-link {

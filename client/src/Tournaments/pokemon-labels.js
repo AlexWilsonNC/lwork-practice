@@ -29,8 +29,24 @@ const customLabelsConfig = {
 
     },
     '2022': {
-        'eeee': '',
-
+        'palkia-origin-inteleon': 'Palkia VSTAR',
+        'arceus-pikachu-gmax': 'Arceus Flying Pikachu',
+        'palkia-origin-calyrex-ice-rider': 'Plakia Ice Rider Calyrex',
+        'mew-vmax-genesect': 'Mew VMAX',
+        'palkia-origin-jolteon': 'Palkia VSTAR',
+        'arceus-inteleon': 'Arceus Inteleon',
+        'charizard-shiny-inteleon': 'Radiant Charizard',
+        '-regigigas': 'Regis',
+        'arceus-aggron-vmax': 'Arceus Aggron',
+        'arceus-duraludon-gmax': 'Arceus Duraludon',
+        'vikavolt-moltres-galar': 'Vikavolt Moltres',
+        'arceus-lucario': 'Arceus Lucario',
+        'mewtwo-snorlax': 'Mewtwo V-UNION',
+        'calyrex-ice-rider-inteleon': 'Ice Rider Calyrex',
+        '-stonjourner': 'Stonjourner VMAX',
+        'urshifu-rapid-strike-gmax-inteleon': 'Rapid Strike Urshifu Inteleon',
+        'arceus-mewtwo': 'Arceus Mewtwo V-UNION',
+        'arceus-beedrill': 'Arceus Beedrill',
     },
     '2021': {
         'eeee': '',
@@ -671,6 +687,11 @@ const customLabelsConfig = {
         'steelix-zapdos': 'Steelix',
         'arcanine-slowking': 'Arcanine',
         'arcanine-rapidash': 'Arcanine',
+        'slowking-sneasel': 'Slowking Sneasel',
+        '-zapdos': 'Zapdos',
+        'zapdos-steelix': 'Zapdos',
+        '-wigglytuff': 'Wigglytuff',
+        'blastoise-feraligatr': 'Rain Dance',
     },
     '2000': {
         'blastoise-articuno': 'Rain Dance',
