@@ -40,7 +40,9 @@ import oldNationals from '../assets/event-logo/old-nats-logo-hd.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04-hd.png';
 import retro from '../assets/event-logo/retro.png';
 import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
+import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png';
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
+import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -55,6 +57,7 @@ import colombia from '../assets/flags/colombia.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
 import denmark from '../assets/flags/denmark.png';
+import dominicanRepublic from '../assets/flags/dominican-republic.png';
 import ecuador from '../assets/flags/ecuador.png';
 import elSalvador from '../assets/flags/el-salvador.png';
 import finland from '../assets/flags/finland.png';
@@ -115,6 +118,7 @@ const flags = {
     croatia: croatia,
     czechia: czechia,
     denmark: denmark,
+    dominicanRepublic: dominicanRepublic,
     ecuador: ecuador,
     elSalvador: elSalvador,
     finland: finland,
@@ -165,7 +169,9 @@ const logos = {
     oldNationals: oldNationals,
     oFourNationals: oFourNationals,
     stadiumChallenge: stadiumChallenge,
+    fourStadiumChallenge: fourStadiumChallenge,
     superTrainerShowdown: superTrainerShowdown,
+    megaTropicalBattle: megaTropicalBattle,
 };
 
 const EventPageContent = styled.div`
@@ -741,10 +747,11 @@ const EventPage = () => {
                             'oFourNationals',
                             'oldNationals',
                             'stadiumChallenge',
+                            'stadiumChallenge',
                         ].includes(eventData.eventLogo)
                             ? 'pushed-logo'
                             : ''
-                            } ${eventData.eventLogo === 'superTrainerShowdown' ? 'sts-logo' : ''}`}
+                            } ${eventData.eventLogo === 'superTrainerShowdown' || 'megaTropicalBattle' ? 'sts-logo' : ''}`}
                         src={logos[eventData.eventLogo]}
                         alt='event logo'
                     />

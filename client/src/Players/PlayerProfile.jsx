@@ -48,6 +48,7 @@ import colombia from '../assets/flags/colombia.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
 import denmark from '../assets/flags/denmark.png';
+import dominicanRepublic from '../assets/flags/dominican-republic.png';
 import ecuador from '../assets/flags/ecuador.png';
 import elSalvador from '../assets/flags/el-salvador.png';
 import finland from '../assets/flags/finland.png';
@@ -143,6 +144,7 @@ const flags = {
     SV: elSalvador,
     FI: finland,
     FR: france,
+    DR: dominicanRepublic,
     DE: germany,
     GR: greece,
     HK: hongKong,

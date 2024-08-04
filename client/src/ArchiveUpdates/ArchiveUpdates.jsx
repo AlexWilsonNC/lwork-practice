@@ -56,6 +56,9 @@ const ArchiveUpdates = () => {
           <br />
           <h3 className='boxxed'>August 2024</h3>
                     <br />
+                    <p style={{ fontWeight: 600 }}>New Event Archived:</p>
+                    <p>• <a href='/tournaments/2000_MEGA_TROPICAL_BATTLE/seniors'>2000 Tropical Mega Battle</a></p>
+                    <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p>• <a href='/tournaments/2010_NATS_US/seniors/Michael%20Diaz-US'>2010 US Nationals</a> 1<sup>st</sup> Place (Seniors) - LuxChomp <span className='small-text-archive' style={{ color: 'rgb(33, 175, 38)' }}>(list)</span></p>
                     <p>• <a href='/tournaments/2015_WORLDS/masters/Jason%20Martinez-US'>2015 World Championships</a> 10<sup>th</sup> Place (Masters) - Toad Manectric Bats <span className='small-text-archive' style={{ color: 'rgb(33, 175, 38)' }}>(list)</span></p>

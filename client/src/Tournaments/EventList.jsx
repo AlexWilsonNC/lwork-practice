@@ -193,6 +193,7 @@ const EventList = () => {
                             <optgroup label="WotC Era">
                                 <option value="stadiumChallenge">Stadium Challenge</option>
                                 <option value="superTrainerShowdown">Super Trainer Showdown</option>
+                                <option value="megaTropicalBattle">Tropical Mega Battle</option>
                             </optgroup>
                                 )}
                             <optgroup label="Other">

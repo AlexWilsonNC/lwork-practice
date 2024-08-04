@@ -26,7 +26,9 @@ import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
 import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
+import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png';
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
+import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -534,7 +536,7 @@ const tournamentList = [
         "date": "Mar 10, 2017",
         "flag": australia,
         "location": "Melbourne, Australia",
-          },
+    },
     {
         "id": "2016_WORLDS",
         "name": "World Championships 2016",
@@ -950,6 +952,52 @@ const tournamentList = [
         "flag": usa,
         "location": "Long Beach, California",
     },
+    {
+        "id": "2000_MEGA_TROPICAL_BATTLE/seniors",
+        "name": "Tropical Mega Battle",
+        "eventType": "megaTropicalBattle",
+        "eventLogo": megaTropicalBattle,
+        "date": "Aug 26, 2000",
+        "flag": usa,
+        "location": "Honolulu, Hawaii",
+    },
+    {
+        "id": "2004_EU_SC",
+        "name": "Europe Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": fourStadiumChallenge,
+        "date": "Jun 2004",
+        "flag": germany,
+        "location": "Germany",
+        "results": false
+          },
+    {
+        "id": "2004_S_SC",
+        "name": "South Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": fourStadiumChallenge,
+        "date": "Jul 10, 2004",
+        "flag": usa,
+        "location": "Arlington, Texas",
+          },
+    {
+        "id": "2004_EC_SC",
+        "name": "East Coast Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": fourStadiumChallenge,
+        "date": "Jul 17, 2004",
+        "flag": usa,
+        "location": "Rockville, Maryland",
+          },
+    {
+        "id": "2004_WC_SC",
+        "name": "West Coast Stadium Challenge",
+        "eventType": "stadiumChallenge",
+        "eventLogo": fourStadiumChallenge,
+        "date": "Jul 17, 2004",
+        "flag": usa,
+        "location": "Berkeley, California",
+          },
     // {
     //     "id": "eee",
     //     "name": "eee",
