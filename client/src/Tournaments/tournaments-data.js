@@ -501,6 +501,42 @@ const tournamentList = [
         "location": "Anaheim, California"
     },
     {
+        "id": "2017_NAIC",
+        "name": "NAIC 2017",
+        "eventType": "internationals",
+        "eventLogo": ogInternats,
+        "date": "Jun 30, 2017",
+        "flag": usa,
+        "location": "Indianapolis, Indiana",
+    },
+    {
+        "id": "2017_LAIC",
+        "name": "LAIC 2017",
+        "eventType": "internationals",
+        "eventLogo": ogInternats,
+        "date": "Apr 21, 2017",
+        "flag": brazil,
+        "location": "São Paulo, Brazil",
+    },
+    {
+        "id": "2017_EUIC",
+        "name": "EUIC 2017",
+        "eventType": "internationals",
+        "eventLogo": ogInternats,
+        "date": "Dec 9, 2016",
+        "flag": uk,
+        "location": "London, United Kingdom",
+    },
+    {
+        "id": "2017_OCIC",
+        "name": "OCIC 2017",
+        "eventType": "internationals",
+        "eventLogo": ogInternats,
+        "date": "Mar 10, 2017",
+        "flag": australia,
+        "location": "Melbourne, Australia",
+          },
+    {
         "id": "2016_WORLDS",
         "name": "World Championships 2016",
         "eventType": "worlds",
@@ -879,7 +915,7 @@ const tournamentList = [
         "flag": sweden,
         "location": "Liseberg, Sweden",
         "results": false
-          },
+    },
     {
         "id": "2001_NJ_STS",
         "name": "New Jersey Super Trainer Showdown Day 2",
@@ -888,7 +924,7 @@ const tournamentList = [
         "date": "Jun 24, 2001",
         "flag": usa,
         "location": "Secaucus, New Jersey",
-          },
+    },
     {
         "id": "2001_NJ_STS_DAY1",
         "name": "New Jersey Super Trainer Showdown Day 1",
@@ -897,7 +933,7 @@ const tournamentList = [
         "date": "Jun 23, 2001",
         "flag": usa,
         "location": "Secaucus, New Jersey",
-          },
+    },
     {
         "id": "2000_NJ_STS",
         "name": "New Jersey Super Trainer Showdown",
@@ -906,7 +942,7 @@ const tournamentList = [
         "date": "Nov 8, 2000",
         "flag": usa,
         "location": "Secaucus, New Jersey",
-          },
+    },
     {
         "id": "2000_CA_STS",
         "name": "California Super Trainer Showdown",
@@ -915,7 +951,7 @@ const tournamentList = [
         "date": "Jul 22, 2000",
         "flag": usa,
         "location": "Long Beach, California",
-          },
+    },
     // {
     //     "id": "eee",
     //     "name": "eee",

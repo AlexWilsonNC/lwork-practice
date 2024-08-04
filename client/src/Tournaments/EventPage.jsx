@@ -212,6 +212,8 @@ const EventPage = () => {
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false); // Moved here
 
+    const [hasEventOccurred, setHasEventOccurred] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(
@@ -261,7 +263,6 @@ const EventPage = () => {
                                 ? youngSeniorsResults
                                 : [];
 
-    // Limit Chart data from additional decks
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
             ? mastersResults.slice(0, 64)
@@ -354,52 +355,7 @@ const EventPage = () => {
     if (!eventData) {
         return <div>Loading...</div>;
     }
-
-    const currentDate = new Date();
-    const [startDateStr] = eventData.date.split(' - ');
-
-    let eventYear, eventMonth, eventDay;
-    let hasEventOccurred = false;
-
-    const dateParts = startDateStr.trim().split(' ');
-    if (dateParts.length === 3) {
-        [eventMonth, eventDay, eventYear] = dateParts;
-    } else if (dateParts.length === 2) {
-        [eventMonth, eventYear] = dateParts;
-    } else if (dateParts.length === 1) {
-        [eventYear] = dateParts;
-    }
-
-    eventYear = parseInt(eventYear, 10);
-    eventDay = eventDay ? parseInt(eventDay.replace(',', ''), 10) : null;
-    eventMonth = eventMonth ? new Date(`${eventMonth} 1`).getMonth() : null;
-
-    if (eventYear && eventMonth !== null && eventDay !== null) {
-        const eventDate = new Date(eventYear, eventMonth, eventDay);
-        hasEventOccurred = currentDate > eventDate;
-    } else if (eventYear && eventMonth !== null) {
-        const eventDate = new Date(eventYear, eventMonth + 1);
-        hasEventOccurred = currentDate > eventDate;
-    } else if (eventYear) {
-        hasEventOccurred = currentDate.getFullYear() > eventYear;
-    }
-
-    const eventOccurredWithinThreeDays =
-        eventYear &&
-        eventMonth !== null &&
-        eventDay !== null &&
-        currentDate - new Date(eventYear, eventMonth, eventDay) <= 3 * 24 * 60 * 60 * 1000;
-    const message = hasEventOccurred
-        ? eventOccurredWithinThreeDays
-            ? 'Results from this event are not yet available.'
-            : <span>
-                We don't have results from this event. If you have any, please send them to us at{' '}
-                <a className='blue-link' href='mailto:ptcglegends@gmail.com'>
-                    ptcglegends@gmail.com
-                </a>.
-            </span>
-        : 'This event has not yet happened, results will appear here once available.';
-
+    
     const isMastersEmpty = mastersResults.length === 0;
     const otherDivisionsHaveResults =
         seniorsResults.length > 0 ||
@@ -615,6 +571,8 @@ const EventPage = () => {
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
+    const isNAIC2024 = eventId === '2024_NAIC';
+    const is2024Event = eventId.includes('2024');
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -831,41 +789,44 @@ const EventPage = () => {
                                 {results.length > 0 ? (
                                     displayResults(results, eventId, division)
                                 ) : (
-                                    <p className='notavailable'>{message}</p>
+                                    <p className='notavailable'>Results not yet available for this event.</p>
                                 )}
                             </div>
                         ) : (
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>
-                                    {/* <p className='chart-bold'>
-                                        {division.charAt(0).toUpperCase() + division.slice(1)} Deck Share:
-                                    </p> */}
-                                    <p>
-                                        {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 ? (
-                                            <div className='alignrow'>
-                                                <button
-                                                    className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayTwoClick}
-                                                >
-                                                    Day 2
-                                                </button>
-                                                <button
-                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayOneClick}
-                                                >
-                                                    Day 1
-                                                </button>
-                                                <button
-                                                    className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleConversionRateClick}
-                                                >
-                                                    % Conversion
-                                                </button>
-                                            </div>
+                                    <div className='alignrow'>
+                                        {isNAIC2024 ? (
+                                        <>
+                                            <button
+                                            className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                            onClick={handleDayTwoClick}
+                                            >
+                                            Day 2
+                                            </button>
+                                            <button
+                                            className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                            onClick={handleDayOneClick}
+                                            >
+                                            Day 1
+                                            </button>
+                                            <button
+                                            className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                            onClick={handleConversionRateClick}
+                                            >
+                                            % Conversion
+                                            </button>
+                                        </>
+                                        ) : is2024Event ? (
+                                        <button
+                                            className={`chart-button day2btn active`}
+                                        >
+                                            Day 2
+                                        </button>
                                         ) : (
                                             <p className='chart-button'>Top {chartResults.length}</p>
                                         )}
-                                    </p>
+                                    </div>
                                 </div>
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
                                     <div className='chart-description'>

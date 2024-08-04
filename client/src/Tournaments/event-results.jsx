@@ -189,11 +189,10 @@ const normalizeName = (name) => {
 };
 
 export const displayResults = (players, eventId, division) => {
-
     return (
         <OlResults className='result-list-ol'>
             {players.map((player, index) => (
-            <li key={`${player.name}-${index}`} className='player-list-hover'>
+                <li key={`${player.name}-${index}`} className='player-list-hover'>
                     <div className='results-list-item'>
                         <div className='name-n-flag'>
                             <div className='player-placement'>{index + 1}.</div>
@@ -204,14 +203,16 @@ export const displayResults = (players, eventId, division) => {
                         </div>
                         <div className="player-deck-icons">
                             <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />
-                            <a href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}>
-                                <span
-                                    className="material-symbols-outlined"
-                                    style={{
-                                        opacity: player.decklist && (player.decklist.pokemon || player.decklist.trainer || player.decklist.energy) ? 1 : 0,
-                                        pointerEvents: player.decklist && (player.decklist.pokemon || player.decklist.trainer || player.decklist.energy) ? 'auto' : 'none'
-                                    }}
-                                >format_list_bulleted</span>
+                            <a
+                                href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}
+                                style={{
+                                    opacity: player.decklist ? 1 : 0,
+                                    pointerEvents: player.decklist ? 'auto' : 'none'
+                                }}
+                            >
+                                <span className="material-symbols-outlined">
+                                    format_list_bulleted
+                                </span>
                             </a>
                         </div>
                     </div>
