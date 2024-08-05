@@ -582,7 +582,13 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                 <p className='show-ninefifty'>
                                     <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
                                     <span className='align-center'>
-                                        <img className='cardview-setsymbol' src={cardInfo.set.images.symbol} alt={`${cardInfo.set.images.symbol} logo`} />
+                                    {cardInfo.set && cardInfo.set.images && cardInfo.set.images.symbol && (
+                                        <img
+                                            className='cardview-setsymbol'
+                                            src={cardInfo.set.images.symbol}
+                                            alt={`${cardInfo.set.images.symbol} logo`}
+                                        />
+                                        )}                                        
                                         &nbsp;
                                         <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
                                     </span>

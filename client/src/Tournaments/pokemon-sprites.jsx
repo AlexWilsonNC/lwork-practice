@@ -227,9 +227,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if (hasPokemon('Gardevoir ex')) {
             secondSprite = getPokemonSpriteURL('gardevoir');
         }
-        else if (hasPokemon('Gardevoir ex')) {
-            secondSprite = getPokemonSpriteURL('gardevoir');
-        }
         else if(hasPokemon('Comfey')) {
             firstSprite = getPokemonSpriteURL('comfey');
         }

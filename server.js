@@ -12,6 +12,7 @@ app.use(express.json());
 const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
 const playersUri = process.env.PLAYERS_MONGODB_URI;
+const decksUri = process.env.DECKS_MONGODB_URI;
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -20,20 +21,23 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true });
+const decksConnection = mongoose.createConnection(decksUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
   // console.log('Connected to eventConnection');
 });
-
 cardConnection.on('error', console.error.bind(console, 'MongoDB connection error for cardConnection:'));
 cardConnection.once('open', () => {
   // console.log('Connected to cardConnection');
 });
-
 playersConnection.on('error', console.error.bind(console, 'MongoDB connection error for playersConnection:'));
 playersConnection.once('open', () => {
-  console.log('Connected to playersConnection');
+  // console.log('Connected to playersConnection');
+});
+decksConnection.on('error', console.error.bind(console, 'MongoDB connection error for decksConnection:'));
+decksConnection.once('open', () => {
+  console.log('Connected to decksConnection');
 });
 
 const eventSchema = new mongoose.Schema({
@@ -91,8 +95,27 @@ const playerSchema = new mongoose.Schema({
   }]
 });
 
+const deckSchema = new mongoose.Schema({
+  label: String,
+  year: String,
+  decks: [{
+    playerId: String,
+    playerName: String,
+    eventId: String,
+    eventName: String,
+    eventDate: String,
+    division: String,
+    placement: Number,
+    decklist: Object,
+    sprite1: String,
+    sprite2: String,
+    format: String,
+  }]
+});
+
 const Event = eventConnection.model('Event', eventSchema);
 const Player = playersConnection.model('Player', playerSchema);
+const Deck = decksConnection.model('Deck', deckSchema);
 
 app.get('/events/:id', async (req, res) => {
   try {
@@ -226,6 +249,15 @@ app.get('/api/players/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching player:', error);
     res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/decks', async (req, res) => {
+  try {
+    const decks = await Deck.find({});
+    res.json(decks);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

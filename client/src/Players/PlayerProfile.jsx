@@ -382,6 +382,21 @@ const PlayerProfile = () => {
         }
     };
 
+    const isSpecialEvent = (name, flag, eventId) => {
+        const specialCases = [
+          { name: 'igor costa', flag: 'US', events: ['2012_WORLDS', '2014_WORLDS', '2015_WORLDS'], newFlag: 'PT' },
+          { name: 'james cox', flag: 'NL', events: ['2019_WORLDS', '2020_LAIC', '2022_WORLDS'], newFlag: 'AU' },
+        ];
+    
+        for (const specialCase of specialCases) {
+          if (name.toLowerCase() === specialCase.name && flag === specialCase.flag && specialCase.events.includes(eventId)) {
+            return specialCase.newFlag;
+          }
+        }
+    
+        return flag; // Return the original flag if no special case matches
+      };  
+
     return (
         <PlayerProfileContainer theme={theme} className='center-me'>
             <Helmet>
@@ -440,7 +455,10 @@ const PlayerProfile = () => {
                                 <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>({getDivisionAbbreviation(result.division)})</span></td>
                                 <td className='player-deck-icons center-content'>
                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                                    <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`} className={result.hasDecklist ? '' : 'no-decklist'}>
+                                    <Link
+                                        to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${isSpecialEvent(player.name, player.flag, result.eventId)}`}
+                                        className={result.hasDecklist ? '' : 'no-decklist'}
+                                    >
                                         <span className={`material-symbols-outlined ${result.hasDecklist ? '' : 'no-decklist'}`}>format_list_bulleted</span>
                                     </Link>
                                 </td>

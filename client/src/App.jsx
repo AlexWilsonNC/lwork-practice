@@ -6,6 +6,7 @@ import HomePage from './Homepage/HomePage';
 import EventList from './Tournaments/EventList';
 import EventPage from './Tournaments/EventPage';
 import PlayerDeck from './Tournaments/PlayerDeck';
+import DecksPage from './Decks/DecksPage';
 import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
 import Players from './Players/Players';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
         <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
+        <Route path="/decks" element={<DecksPage />} />
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
         <Route path="/players" element={<Players />} />

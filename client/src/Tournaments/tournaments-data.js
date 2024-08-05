@@ -462,8 +462,7 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "Aug 11, 2023",
         "flag": japan,
-        "location": "Yokohama, Japan",
-        "results": false
+        "location": "Yokohama, Japan"
     },
     {
         "id": "2022_WORLDS",
