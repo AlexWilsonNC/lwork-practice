@@ -71,12 +71,13 @@ const normalizeName = (name) => {
   };
 
   const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the', 'van', 'der'];
+    const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
     
     // Define the special case with capital "De"
     const specialCases = {
-        'de haes damien': 'De Haes Damien'
+        'de haes damien': 'De Haes Damien',
+        'jamie depamphilis': 'Jamie DePamphilis',
     };
 
     // Check for special case match

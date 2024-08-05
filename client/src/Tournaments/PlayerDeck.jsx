@@ -119,7 +119,7 @@ const promoSets = {
     "PLB": "PR-BLW",
     "PLF": "PR-BLW",
     "PLS": "PR-BLW",
-    "BCR": ["PR-BLW", "EPO"],
+    "BCR": ["PR-BLW", "EPO", "DEX"],
     "DRV": "PR-BLW",
     "DRX": "PR-BLW",
     "DEX": "PR-BLW",
@@ -246,10 +246,19 @@ const normalizeName = (name) => {
       .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
   };
 
-const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the', 'van'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.'];
+  const formatName = (name) => {
+    const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
+    
+    const specialCases = {
+        'de haes damien': 'De Haes Damien',
+        'jamie depamphilis': 'Jamie DePamphilis',
+    };
 
+    const lowerCaseName = name.toLowerCase();
+    if (specialCases[lowerCaseName]) {
+        return specialCases[lowerCaseName];
+    }
     return name
         .toLowerCase()
         .split(' ')

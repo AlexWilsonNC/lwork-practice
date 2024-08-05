@@ -38,7 +38,8 @@ export const lightTheme = {
     day1btn: 'rgb(180, 180, 180)',
     chartNumber: '#FFF',
     chartdescrip: '#000',
-    spinner: '#000',
+    spinner: '#1290eb',
+
 };
 
 export const darkTheme = {

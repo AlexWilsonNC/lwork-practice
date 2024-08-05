@@ -33,7 +33,9 @@ import oldNationals from '../assets/event-logo/old-nats-logo.png';
 import oFourNationals from '../assets/event-logo/nats-logo-04.png';
 import retro from '../assets/event-logo/retro.png';
 import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
+import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png';
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
+import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -124,6 +126,8 @@ const logos = {
     oFourNationals: oFourNationals,
     stadiumChallenge: stadiumChallenge,
     superTrainerShowdown: superTrainerShowdown,
+    fourStadiumChallenge: fourStadiumChallenge,
+    megaTropicalBattle: megaTropicalBattle,
 }
 
 const flags = {
@@ -240,12 +244,13 @@ const parseDate = (dateString) => {
 };
 
 const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the', 'van', 'der'];
+    const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
     
     // Define the special case with capital "De"
     const specialCases = {
-        'de haes damien': 'De Haes Damien'
+        'de haes damien': 'De Haes Damien',
+        'jamie depamphilis': 'Jamie DePamphilis',
     };
 
     // Check for special case match

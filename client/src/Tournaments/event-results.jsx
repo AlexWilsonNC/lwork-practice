@@ -140,22 +140,21 @@ const normalizeName = (name) => {
     return name
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-      .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
-      .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/(^-|-$)/g, '');
   };
 
   const formatName = (name) => {
-    const lowercaseWords = ['de', 'da', 'of', 'the', 'van', 'der'];
+    const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
     
-    // Define the special case with capital "De"
     const specialCases = {
-        'de haes damien': 'De Haes Damien'
+        'de haes damien': 'De Haes Damien',
+        'jamie depamphilis': 'Jamie DePamphilis'
     };
 
-    // Check for special case match
     const lowerCaseName = name.toLowerCase();
     if (specialCases[lowerCaseName]) {
         return specialCases[lowerCaseName];
