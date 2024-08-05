@@ -134,7 +134,7 @@ const tournamentList = [
         "flag": usa,
         "location": "Baltimore, Maryland",
         "registrationTime": "2024-07-31T19:00:00-05:00",
-        "registrationLink": "https://rk9.gg/tournament/BA01mbRvSKoISiCU7cBJ",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_DORTMUND/masters',
@@ -144,8 +144,8 @@ const tournamentList = [
         "date": "Sep 28, 2024",
         "flag": germany,
         "location": "Dortmund, Germany",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-08-07T19:00:00+02:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_JOINVILLE/masters',
@@ -155,8 +155,8 @@ const tournamentList = [
         "date": "Sep 28, 2024",
         "flag": brazil,
         "location": "Joinville, Brazil",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-08-07T19:00:00-03:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_LIMA/masters',

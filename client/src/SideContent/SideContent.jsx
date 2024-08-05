@@ -17,12 +17,12 @@ const SidebarComponent = () => {
         <ul>
           <li><Link to='/tournaments/completed'>Completed Events</Link></li>
           <li><Link to='/tournaments/upcoming'>Upcoming Events</Link></li>
-          <li><Link to='../decks-by-era/main' className='not-ready'>Decks by Era</Link></li>
-          <li><Link to='../other/rules-by-era' className='not-ready'>Rules by Era</Link></li>
+          <li><Link to='' className='not-ready'>Decks by Era</Link></li>
+          <li><Link to='' className='not-ready'>Rules by Era</Link></li>
           <li><Link to='/cards/SFA'>Pokémon Card Database</Link></li>
-          <li><Link to='../other/expansions' className='not-ready'>TCG Expansions</Link></li>
-          <li><Link to='../other/timeline' className='not-ready'>Historic Timeline</Link></li>
-          <li><Link to='../other/worlds-booklets' className='not-ready'>World's Booklets</Link></li>
+          <li><Link to='/cards/SFA'>TCG Expansions</Link></li>
+          <li><Link to='' className='not-ready'>Historic Timeline</Link></li>
+          <li><Link to='' className='not-ready'>World's Booklets</Link></li>
           <li><a href='https://www.seagrovetcg.com/event-finder' target='_blank' rel='noopener noreferrer'>Local Event Finder</a></li>
         </ul>
       </div>

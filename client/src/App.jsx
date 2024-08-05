@@ -11,6 +11,8 @@ import CardView from './Cards/CardView';
 import Players from './Players/Players';
 import PlayerProfile from './Players/PlayerProfile';
 import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
+import AllArticlesPage from './ArticleComponents/AllArticlesPage';
+import ArticleComponent from './ArticleComponents/ArticleComponent';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 
@@ -30,6 +32,8 @@ function App() {
         <Route path="/players" element={<Players />} />
         <Route path="/player/:id" element={<PlayerProfile />} />
         <Route path="/archive-updates" element={<ArchiveUpdates />} />
+        <Route path="/articles/all" element={<AllArticlesPage />} />
+        <Route path="/articles/:articleId" element={<ArticleComponent />} />
       </Routes>
       <BackToTopButton />
       <Footer />

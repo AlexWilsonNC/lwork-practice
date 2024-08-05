@@ -9,10 +9,11 @@ import SidebarComponent from '../SideContent/SideContent';
 import ogInternats from '../assets/archive-updates/july-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
 import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
-import dragonsExaltedThubmnail from '../assets/article-thumbnails/dragons-exalted.jpg';
-import simonBoschert from '../assets/profile-pics/simon-boschert.jpg';
 import latestSet from '../assets/homepage/latest-expansion.webp';
 import deckBuilder from '../assets/homepage/deckbuilder.png';
+
+import article1 from '../Articles/whenModernBecomesRetro';
+import article2 from '../Articles/forgottenFormat';
 
 const Container = styled.div`
   background: ${({ theme }) => theme.body};
@@ -52,6 +53,14 @@ const ArticleType = styled.div`
 
 const Homepage = () => {
     const { theme } = useTheme();
+
+    const articles = [article1, article2 /* Add more articles as needed */];
+
+    // Find the latest article
+    const latestArticle = articles.reduce((latest, article) => {
+      return new Date(article.date) > new Date(latest.date) ? article : latest;
+    }, articles[0]);
+  
     const upcomingEvents = sortedEvents
         .filter(event => new Date(event.date) >= new Date())
         .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -98,25 +107,32 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                         </div>
-                        <div className='homepage-box not-ready'>
+                        <div className='homepage-box'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
-                                <a href='./articles/all' className='blue'>View All</a>
-                            </div>
-                            <a href='./articles/retro/when-modern-becomes-retro'>
-                                <WrappedFeature className='wrapped-feature'>
-                                    <div className='article-thumbnail'>
-                                        <img src={dragonsExaltedThubmnail} />
-                                        <ArticleType className='article-type retro-article'>Retro</ArticleType>
+                                <div className='article-overlay overlay'>Coming Soon</div>
+                                <a href='/articles/all' className='blue not-ready'>View All</a>
+                                </div>
+                            <a href={`/articles/${latestArticle.id}`}>
+                                <WrappedFeature className="wrapped-feature">
+                                    <div className="article-thumbnail">
+                                        <img src={latestArticle.headerImage} alt={latestArticle.title} />
+                                        <ArticleType className="article-type retro-article">
+                                        {latestArticle.type || 'Article'}
+                                        </ArticleType>
                                     </div>
-                                    <p className='card-profile-author'>Simon Boschert</p>
-                                    <img className='card-profile-pic' src={simonBoschert} />
-                                    <div className='homepage-box-content'>
-                                        <h3>A Forgotten Format: BW - DRX</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo ad, quibusdam eligendi architecto dolor maiores non soluta exercitationem.</p>
+                                    <p className="card-profile-author">{latestArticle.author}</p>
+                                    <img
+                                        className="card-profile-pic"
+                                        src={latestArticle.authorImage}
+                                        alt={latestArticle.author}
+                                    />
+                                    <div className="homepage-box-content">
+                                        <h3>{latestArticle.title}</h3>
+                                        <p>{latestArticle.sneakPeakText}</p>
                                     </div>
-                                    <div className='card-date-plus-read'>
-                                        <p>Aug 1, 2024</p>
+                                    <div className="card-date-plus-read">
+                                        <p>{latestArticle.date}</p>
                                         <p>Read More</p>
                                     </div>
                                 </WrappedFeature>
@@ -196,7 +212,8 @@ const Homepage = () => {
                         </div>
                     </div>
 
-                    <div className='top-featured-row not-ready'>
+                    <h3 className='alignstart not-ready'>Articles Will Return Soon</h3>
+                    {/* <div className='top-featured-row not-ready'>
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Recent Articles</FeaturedHeaders>
@@ -222,8 +239,6 @@ const Homepage = () => {
                                     </div>
                                 </div>
                             </a>
-
-
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>.</FeaturedHeaders>
@@ -276,8 +291,8 @@ const Homepage = () => {
                                     </div>
                                 </div>
                             </a>
-                        </div>
-                    </div>
+                        </div> 
+                    </div>*/}
                 </HomepageMainContent>
 
                 <SidebarComponent></SidebarComponent>
@@ -305,29 +320,36 @@ const Homepage = () => {
                             </WrappedFeature>
                         </a>
                     </div>
-                    <div className='homepage-box not-ready'>
+                    <div className='homepage-box'>
                         <div className='flex-row-wide'>
                             <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
-                            <a href='./articles/all' className='blue'>View All</a>
+                            <a href='/articles/all' className='blue not-ready'>View All</a>
                         </div>
-                        <a href='./articles/retro/when-modern-becomes-retro'>
-                            <WrappedFeature className='wrapped-feature'>
-                                <div className='article-thumbnail'>
-                                    <img src={dragonsExaltedThubmnail} />
-                                    <p className='article-type retro-article'>Retro</p>
-                                </div>
-                                <p className='card-profile-author'>Simon Boschert</p>
-                                <img className='card-profile-pic' src={simonBoschert} />
-                                <div className='homepage-box-content'>
-                                    <h3>A Forgotten Format: BW - DRX</h3>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo ad, quibusdam eligendi architecto dolor maiores non soluta exercitationem.</p>
-                                </div>
-                                <div className='card-date-plus-read'>
-                                    <p>Aug 1, 2024</p>
-                                    <p>Read More</p>
-                                </div>
-                            </WrappedFeature>
-                        </a>
+                        <div className='article-overlay overlay'>Coming Soon</div>
+                        <a href={`/articles/${latestArticle.id}`}>
+                                <WrappedFeature className="wrapped-feature">
+                                    <div className="article-thumbnail">
+                                        <img src={latestArticle.headerImage} alt={latestArticle.title} />
+                                        <ArticleType className="article-type retro-article">
+                                        {latestArticle.type || 'Article'}
+                                        </ArticleType>
+                                    </div>
+                                    <p className="card-profile-author">{latestArticle.author}</p>
+                                    <img
+                                        className="card-profile-pic"
+                                        src={latestArticle.authorImage}
+                                        alt={latestArticle.author}
+                                    />
+                                    <div className="homepage-box-content">
+                                        <h3>{latestArticle.title}</h3>
+                                        <p>{latestArticle.sneakPeakText}</p>
+                                    </div>
+                                    <div className="card-date-plus-read">
+                                        <p>{latestArticle.date}</p>
+                                        <p>Read More</p>
+                                    </div>
+                                </WrappedFeature>
+                            </a>
                     </div>
                     <div className='homepage-box3'>
                         <div className='flex-row-wide'>
