@@ -29,7 +29,7 @@ const Decks = () => {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const response = await fetch('https://your-api-url.com/api/decks');
+        const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/decks');
         const data = await response.json();
         setDecks(data);
       } catch (error) {
