@@ -218,7 +218,7 @@ const EventList = () => {
                             <p className='sort-events'>Year:</p>
                             <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
                                 <option value="">All Years</option>
-                                {uniqueYears.map(year => (
+                                {uniqueYears.slice().reverse().map(year => (
                                     <option key={year} value={year}>{year}</option>
                                 ))}
                             </select>
@@ -228,8 +228,8 @@ const EventList = () => {
                         <div className='indiv-filter'>
                             <p className='sort-events'>Order:</p>
                             <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
-                                <option value="newest">New - Old</option>
-                                <option value="oldest">Old - New</option>
+                                <option value="newest">Newest - Oldest</option>
+                                <option value="oldest">Oldest - Newest</option>
                             </select>
                         </div>
                     )}

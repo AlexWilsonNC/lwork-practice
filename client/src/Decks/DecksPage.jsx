@@ -86,12 +86,25 @@ const DeckListContainer = styled.div`
   .filter-container .sort-events {
       color: ${({ theme }) => theme.text};
   }
+  .paddingfive {
+      height: 27px !important;
+  }
 `;
 const FormatSeparator = styled.tr`
   background-color: #1290eb !important;
   color: white !important;
   font-weight: bold;
   text-align: left;
+  @media screen and (max-width: 950px) {
+    .paddingfive {
+        height: 28px !important;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .paddingfive {
+        height: 20px !important;
+    }
+  }
 `;
 
 const Decks = () => {
@@ -156,10 +169,10 @@ const Decks = () => {
 
   const resetFilters = () => {
     setSortType('format');
+    setSortOrder('desc');
     setSelectedFormat('');
     setSearchTerm('');
   };
-
 
   return (
     <DeckListContainer theme={theme} className='center-me'>
@@ -184,20 +197,131 @@ const Decks = () => {
         </div>
         <div className='filter-container'>
           <div className='filters-top'>
-          <div className='indiv-filter'>
+            <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
               <select value={selectedFormat} onChange={handleFormatChange}>
                 <option value="">All Formats</option>
-                {formatOrder.map(format => (
-                  <option key={format} value={format}>{format}</option>
-                ))}
+
+              <optgroup label="2024">
+              <option value="BRS-TWM">BRS-TWM</option>
+                <option value="BRS-TEF">BRS-TEF</option>
+              </optgroup>
+
+              <optgroup label="2023">
+                <option value="BST-PAL">BST-PAL</option>
+              </optgroup>
+              
+              <optgroup label="2022">
+                <option value="SSH-PGO">SSH-PGO</option>
+                <option value="SSH-ASR">SSH-ASR</option>
+                <option value="SSH-BRS">SSH-BRS</option>
+              </optgroup>
+              
+              <optgroup label="2020">
+                <option value="UPR-SSH">UPR-SSH</option>
+                <option value="UPR-CEC">UPR-CEC</option>
+                <option value="UPR-UNM">UPR-UNM</option>
+              </optgroup>
+              
+              <optgroup label="2019">
+                <option value="SUM-UNB">SUM-UNB</option>
+                <option value="SUM-TEU">SUM-TEU</option>
+                <option value="SUM-LOT">SUM-LOT</option>
+              </optgroup>
+
+              <optgroup label="2018">
+                <option value="BKT-CES">BKT-CES</option>
+                <option value="BKT-FLI">BKT-FLI</option>
+                <option value="BKT-UPR">BKT-UPR</option>
+                <option value="BKT-UPR">BKT-CIN</option>
+              </optgroup>
+
+              <optgroup label="2017">
+                <option value="PRC-BUS">PRC-BUS</option>
+                <option value="PRC-GRI">PRC-GRI</option>
+                <option value="PRC-SUM">PRC-SUM</option>
+                <option value="PRC-EVO">PRC-EVO</option>
+              </optgroup>
+
+              <optgroup label="2016">
+                <option value="XY-STS">XY-STS</option>
+                <option value="XY-FCO">XY-FCO</option>
+              </optgroup>
+
+              <optgroup label="2015">
+                <option value="BCR-ROS">BCR-ROS</option>
+              </optgroup>
+
+              <optgroup label="2014">
+                <option value="NXD-FLF">NXD-FLF</option>
+              </optgroup>
+
+              <optgroup label="2013">
+                <option value="BLW-PLF">BLW-PLF</option>
+              </optgroup>
+
+              <optgroup label="2012">
+                <option value="HS-DEX">HS-DEX</option>
+              </optgroup>
+
+              <optgroup label="2011">
+                <option value="HS-BLW">HS-BLW</option>
+              </optgroup>
+
+              <optgroup label="2010">
+                <option value="DP-UL">DP-UL</option>
+              </optgroup>
+
+              <optgroup label="2009">
+                <option value="DP-RR">DP-RR</option>
+              </optgroup>
+
+              <optgroup label="2008">
+                <option value="HP-MD">HP-MD</option>
+              </optgroup>
+
+              <optgroup label="2007">
+                <option value="DX-DP">DX-DP</option>
+              </optgroup>
+
+              <optgroup label="2006">
+                <option value="HL-HP">HL-HP</option>
+              </optgroup>
+
+              <optgroup label="2005">
+                <option value="RS-EM">RS-EM</option>
+              </optgroup>
+
+              <optgroup label="2004">
+                <option value="EX-HL">EX-HL</option>
+              </optgroup>
+
+              <optgroup label="2002">
+                <option value="TR-LC">TR-LC</option>
+                <option value="N1-LC">N1-LC</option>
+                <option value="TR-N4">TR-N4</option>
+              </optgroup>
+
+              <optgroup label="2001">
+                <option value="TR-N3">TR-N3</option>
+                <option value="TR-N1">TR-N1</option>
+                <option value="BS-N2">BS-N2</option>
+              </optgroup>
+
+              <optgroup label="2000">
+                <option value="BS-G2">BS-G2</option>
+                <option value="BS-TR">BS-TR</option>
+                <option value="BS-TR">BS-TR</option>
+                <option value="BS-FO">BS-FO</option>
+              </optgroup>
+
               </select>
             </div>
             <div className='indiv-filter'>
               <p className='sort-events'>Order:</p>
               <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
-                <option value="asc">Sort Ascending</option>
-                <option value="desc">Sort Descending</option>
+                <option value="asc">Oldest - Newest</option>
+                <option value="desc">Newest - Oldest</option>
               </select>
             </div>
             <button onClick={resetFilters} className="reset-btn">Reset</button>
@@ -212,8 +336,9 @@ const Decks = () => {
                 <th></th>
                 <th>Deck</th>
                 <th></th>
+                <th></th>
                 <th>Share</th>
-                <th>Lists</th>
+                <th className='hideforfifty'>Lists</th>
               </tr>
             </thead>
             <tbody>
@@ -221,9 +346,9 @@ const Decks = () => {
               (selectedFormat === '' || selectedFormat === format) && decksByFormat[format]?.length > 0 && (
                 <React.Fragment key={format}>
                   <FormatSeparator>
-                  <td colSpan="5" className='paddingfive'>
-                        {decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown'} - {format}
-                      </td>
+                    <td colSpan="6" className='paddingfive'>
+                      {decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown'} - {format}
+                    </td>
                   </FormatSeparator>
                   {decksByFormat[format]
                     .map((deck) => {
@@ -244,34 +369,34 @@ const Decks = () => {
 
                       return (
                         <tr key={deck._id} className='deck-table'>
-                          <td>{index + 1}</td> {/* Number each deck */}
+                          <td>{index + 1}</td>
                           <td>
                             {sprite1 && sprite1 !== 'blank' ? (
                               <img 
                                 src={`/assets/sprites/${sprite1}.png`} 
                                 alt={`${deck.label} sprite`} 
-                                style={{height: '50px' }}
+                                style={{width: '55px' }}
                               />
                             ) : sprite2 ? (
                               <img 
                                 src={`/assets/sprites/${sprite2}.png`} 
                                 alt={`${deck.label} sprite`} 
-                                style={{height: '50px' }}
+                                style={{width: '55px' }}
                               />
                             ) : (
                               <img 
                                 src={`/assets/sprites/blank.png`} 
                                 alt={`${deck.label} sprite`} 
-                                style={{height: '50px' }}
+                                style={{width: '55px' }}
                               />
                             )}
                           </td>
                           <td>
                             {sprite2 && sprite1 !== 'blank' && (
-                              <img 
+                              <img className='movesecondspritedecks' 
                                 src={`/assets/sprites/${sprite2}.png`} 
                                 alt={`${deck.label} sprite`} 
-                                style={{height: '50px' }}
+                                style={{width: '55px' }}
                               />
                             )}
                           </td>
@@ -281,7 +406,7 @@ const Decks = () => {
                             </Link>
                           </td>
                           <td>{percentage}%</td>
-                          <td>{deckCount}</td>
+                          <td className='hideforfifty'>{deckCount}</td>
                         </tr>
                       );
                     })}

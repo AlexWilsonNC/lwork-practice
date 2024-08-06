@@ -245,7 +245,7 @@ const parseDate = (dateString) => {
 
 const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
     
     // Define the special case with capital "De"
     const specialCases = {
@@ -366,17 +366,19 @@ const PlayerProfile = () => {
     const getDivisionAbbreviation = (division) => {
         switch (division.toLowerCase()) {
             case 'masters':
-                return 'Ma';
+                return '(Ma)';
             case 'seniors':
-                return 'Sr';
+                return '(Sr)';
             case 'juniors':
-                return 'Jr';
+                return '(Jr)';
             case 'professors':
-                return 'Ma';
+                return '(Ma)';
             case 'olderseniors':
-                return 'Sr';
+                return '(Sr)';
             case 'youngseniors':
-                return 'Sr';
+                return '(Sr)';
+            case 'all':
+                return '';
             default:
                 return division;
         }
@@ -452,7 +454,7 @@ const PlayerProfile = () => {
                                         {result.eventName}
                                     </Link>
                                 </td>
-                                <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>({getDivisionAbbreviation(result.division)})</span></td>
+                                <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>{getDivisionAbbreviation(result.division)}</span></td>
                                 <td className='player-deck-icons center-content'>
                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
                                     <Link

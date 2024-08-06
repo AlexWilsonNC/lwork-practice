@@ -253,6 +253,7 @@ const EventPage = () => {
     const professorsResults = eventData?.professors || [];
     const olderSeniorsResults = eventData?.olderSeniors || [];
     const youngSeniorsResults = eventData?.youngSeniors || [];
+    const allResults = eventData?.all || [];
 
     const results =
         division === 'masters'
@@ -267,6 +268,8 @@ const EventPage = () => {
                             ? olderSeniorsResults
                             : division === 'youngSeniors'
                                 ? youngSeniorsResults
+                            : division === 'all'
+                                ? allResults
                                 : [];
 
     const chartResults =
@@ -282,6 +285,21 @@ const EventPage = () => {
                         {eventData?.dayOneMasters && (
                             <p>
                                 <strong>Day 1:</strong> {eventData.dayOneMasters}
+                            </p>
+                        )}
+                        {eventData?.dayTwoMasters && (
+                            <p>
+                                <strong>Day 2:</strong> {eventData.dayTwoMasters}
+                            </p>
+                        )}
+                    </>
+                );
+            case 'all':
+                return (
+                    <>
+                        {eventData?.dayOneMasters && (
+                            <p>
+                                {eventData.dayOneMasters} Players
                             </p>
                         )}
                         {eventData?.dayTwoMasters && (
@@ -635,6 +653,17 @@ const EventPage = () => {
                             style={{ opacity: 1, pointerEvents: 'all' }}
                         >
                             Professors
+                        </Link>
+                    ) : eventData.all ? (
+                        <Link
+                            className={`professorsBtn ${division === 'all'
+                                ? 'active-division'
+                                : 'other-division'
+                                }`}
+                            to={`/tournaments/${eventId}/all`}
+                            style={{ opacity: 1, pointerEvents: 'all' }}
+                        >
+                            Combined
                         </Link>
                     ) : null}
                     {eventData.olderSeniors || eventData.youngSeniors ? (

@@ -306,7 +306,7 @@ td div a {
             margin-left: 15px;
         }
         .filters-top {
-            margin-left: 15px;
+            margin-left: 15px !important;
         }
         .search-input span {
             margin-right: 7px;

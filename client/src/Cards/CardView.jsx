@@ -72,7 +72,7 @@ const normalizeName = (name) => {
 
   const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
-    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
     
     // Define the special case with capital "De"
     const specialCases = {
@@ -249,7 +249,7 @@ const CardView = () => {
             for (const eventId of eventIds) {
                 const eventData = await fetchEventData(eventId);
                 if (eventData) {
-                    const divisions = ['masters', 'seniors', 'juniors', 'professors'];
+                    const divisions = ['masters', 'all', 'seniors', 'olderseniors', 'youngseniors', 'juniors', 'professors'];
                     const results = [];
 
                     divisions.forEach(division => {
@@ -841,7 +841,7 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                 return dateB - dateA;
                             }).map(([eventId, results]) => {
                                 const sortedResults = results.sort((a, b) => {
-                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2, professors: 3 };
+                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2, professors: 3, all: 4 };
                                     const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
                                     if (divisionComparison !== 0) return divisionComparison;
                                     return a.placement - b.placement;

@@ -96,7 +96,7 @@ const tournamentList = [
         "location": ""
     },
     {
-        "id": '2024_NAIC_2014_RETRO/masters',
+        "id": '2024_NAIC_2014_RETRO/all',
         "name": "NAIC Retro Celebration (2014)",
         "eventType": "retro",
         "eventLogo": retro,
@@ -105,7 +105,7 @@ const tournamentList = [
         "location": ""
     },
     {
-        "id": '2024_NAIC_2010_RETRO/masters',
+        "id": '2024_NAIC_2010_RETRO/all',
         "name": "NAIC Retro Celebration (2010)",
         "eventType": "retro",
         "eventLogo": retro,
