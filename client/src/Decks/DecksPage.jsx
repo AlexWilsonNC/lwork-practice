@@ -182,7 +182,7 @@ const Decks = () => {
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Sort by Format</a>
+            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Decks by Format</a>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
@@ -400,11 +400,7 @@ const Decks = () => {
                               />
                             )}
                           </td>
-                          <td>
-                            <Link to={`/deck/${deck._id}`}>
-                              {deck.label}
-                            </Link>
-                          </td>
+                          <td><Link to={`/deck/${deck._id}`}>{deck.label}</Link></td>
                           <td>{percentage}%</td>
                           <td className='hideforfifty'>{deckCount}</td>
                         </tr>

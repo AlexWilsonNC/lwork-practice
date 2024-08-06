@@ -389,7 +389,7 @@ td div a {
             margin: 0 5px 0 7px;
         }
         .filters-top {
-            margin-left: 5px;
+            margin-left: 7px !important;
         }
     }
 }
