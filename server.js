@@ -261,6 +261,22 @@ app.get('/api/decks', async (req, res) => {
   }
 });
 
+app.get('/api/decks/:id', async (req, res) => {
+  try {
+    const deckId = req.params.id;
+    console.log('Received deck ID:', deckId);
+    const deck = await Deck.findById(deckId);
+    if (deck) {
+      res.json(deck);
+    } else {
+      res.status(404).json({ message: 'Deck not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching deck:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
 app.get('*', (req, res) => {
