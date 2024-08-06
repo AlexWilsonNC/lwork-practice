@@ -23,7 +23,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         return { firstSprite, secondSprite };
     }
 
-    if (!decklist || !decklist.pokemon) {
+    if (!decklist) {
+        firstSprite = getPokemonSpriteURL('blank');
+        secondSprite = getPokemonSpriteURL('hyphen');
         return { firstSprite, secondSprite };
     }
 

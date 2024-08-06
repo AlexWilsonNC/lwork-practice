@@ -1,0 +1,10 @@
+.deck-table {
+    height: 55px;
+}
+.paddingfive {
+    padding-left: 15px !important;
+}
+/* deck */
+.deck-table th:nth-child(1) {
+    padding-left: 50px !important;
+}
