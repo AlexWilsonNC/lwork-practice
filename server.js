@@ -263,17 +263,19 @@ app.get('/api/decks', async (req, res) => {
 
 app.get('/api/decks/:label', async (req, res) => {
   try {
-    const label = req.params.label.toLowerCase().replace(/-/g, ' ');
-    const deck = await Deck.findOne({ label });
-
+    const label = decodeURIComponent(req.params.label);
+    console.log('Searching for deck with label:', label);
+    const deck = await Deck.findOne({ label: new RegExp(`^${label}$`, 'i') });
     if (deck) {
+      console.log('Deck found:', deck);
       res.json(deck);
     } else {
+      console.log('Deck not found');
       res.status(404).json({ message: 'Deck not found' });
     }
   } catch (error) {
     console.error('Error fetching deck:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: error.message });
   }
 });
 
