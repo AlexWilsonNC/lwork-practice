@@ -144,11 +144,8 @@ const Decks = () => {
   const normalizeLabel = (label) => {
     return label
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/(^-|-$)/g, '');
+      .replace(/[\s\W-]+/g, '-')
+      .replace(/^-|-$/g, ''); // Replace spaces/special chars with hyphens
   };
 
   const filteredDecks = decks.filter(deck => 

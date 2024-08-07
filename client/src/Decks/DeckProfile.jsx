@@ -30,8 +30,12 @@ const DeckProfileContainer = styled.div`
   .results-table td a:hover {
     color: #1290eb;
   }
+  .bts-in h1 {
+    padding-left: 25px;
+  }
 `;
- const EventSeparator = styled.tr`
+
+const EventSeparator = styled.tr`
   background-color: #1290eb !important;
   color: white !important;
   font-weight: bold;
@@ -63,13 +67,11 @@ const formatName = (name) => {
   const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
   const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
 
-  // Define the special case with capital "De"
   const specialCases = {
     'de haes damien': 'De Haes Damien',
     'jamie depamphilis': 'Jamie DePamphilis',
   };
 
-  // Check for special case match
   const lowerCaseName = name.toLowerCase();
   if (specialCases[lowerCaseName]) {
     return specialCases[lowerCaseName];
@@ -109,48 +111,47 @@ const getEventLink = (eventId) => {
 const DeckProfile = () => {
   const { theme } = useTheme();
   const { id } = useParams();
-  const [deck, setDeck] = useState(null);
+  const [decks, setDecks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
 
   useEffect(() => {
-    const fetchDeck = async () => {
+    const fetchDecks = async () => {
       try {
-        // Ensure `id` or `label` is correctly passed from the URL params or other source
         const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
+        if (!response.ok) {
+          throw new Error('Deck not found');
+        }
         const data = await response.json();
-        setDeck(data);
+        setDecks(data);
       } catch (error) {
-        console.error('Error fetching deck:', error);
+        console.error('Error fetching decks:', error);
       } finally {
         setLoading(false);
       }
     };
-  
-    fetchDeck();
+
+    fetchDecks();
   }, [id]);
 
   if (loading) {
     return <div className="spinner"></div>;
   }
 
-  if (!deck) {
+  if (!decks.length) {
     return <div>No data found for this deck.</div>;
   }
 
-  // Function to parse date from the format used in eventDate
   const parseDate = (dateString) => {
     return new Date(dateString.split(' - ')[0] + ', ' + dateString.split(', ')[1]);
   };
 
-  // Get unique formats and divisions from deck data
-  const uniqueFormats = [...new Set(deck.decks.map(d => d.eventFormat))];
-  const uniqueDivisions = ['All', ...new Set(deck.decks.map(d => d.division))];
+  const uniqueFormats = [...new Set(decks.flatMap(d => d.decks.map(deck => deck.eventFormat)))];
+  const uniqueDivisions = ['All', ...new Set(decks.flatMap(d => d.decks.map(deck => deck.division)))];
 
-  // Sort decks by event date and apply filters
-  const filteredDecks = deck.decks
+  const filteredDecks = decks.flatMap(d => d.decks)
     .filter(result =>
       (selectedFormat === '' || result.eventFormat === selectedFormat) &&
       (selectedDivision === 'All' || selectedDivision === '' || result.division === selectedDivision) &&
@@ -168,11 +169,13 @@ const DeckProfile = () => {
   return (
     <DeckProfileContainer theme={theme} className='center-me'>
       <Helmet>
-        <title>{deck.label}</title>
+        <title>{id} Decks</title>
       </Helmet>
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
-          <div className='bts-in'></div>
+          <div className='bts-in'>
+            <h1>{decks[0].label}</h1>
+          </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
             <input
@@ -218,7 +221,6 @@ const DeckProfile = () => {
           </thead>
           <tbody>
             {filteredDecks.map((result, index) => {
-              // Check if the previous result is from a different event
               const isDifferentEvent =
                 index === 0 ||
                 result.eventId !== filteredDecks[index - 1].eventId;
@@ -229,14 +231,14 @@ const DeckProfile = () => {
                     <EventSeparator>
                       <td colSpan="6" className='paddingfive'>
                         <Link className="event-separator-content" to={`/tournaments/${result.eventId}`}>
-                            <strong>{result.eventName}</strong> &nbsp;&nbsp;-&nbsp; {result.eventDate} &nbsp;({result.eventFormat})
+                          <strong>{result.eventName}</strong> &nbsp;&nbsp;-&nbsp; {result.eventDate} &nbsp;({result.eventFormat})
                         </Link>
                       </td>
                     </EventSeparator>
                   )}
                   <tr>
                     <td>{result.placement}</td>
-                    <td><Link className='link-to-playerprofile' to={`/player/${result.playerId}`}>{formatName(result.playerName)}</Link></td>
+                    <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
                     <td><span className='grey'>{formatName(result.division)}</span></td>
                     <td></td>
                     <td className='player-deck-icons center-content'>

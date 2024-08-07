@@ -263,8 +263,7 @@ app.get('/api/decks', async (req, res) => {
 
 app.get('/api/decks/:label', async (req, res) => {
   try {
-    const { label } = req.params;
-    // Find all decks with the given label
+    const label = req.params.label.replace(/-/g, ' ').toLowerCase();
     const decks = await Deck.find({ label: new RegExp(`^${label}$`, 'i') });
     if (!decks || decks.length === 0) {
       return res.status(404).json({ message: 'No decks found for the given label' });
