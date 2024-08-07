@@ -261,7 +261,7 @@ app.get('/api/decks', async (req, res) => {
   }
 });
 
-router.get('/api/decks/:label', async (req, res) => {
+app.get('/api/decks/:label', async (req, res) => {
   try {
     const label = req.params.label.toLowerCase().replace(/-/g, ' ');
     const deck = await Deck.findOne({ label });
