@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/deckspage.css';
 
+const express = require('express');
+const router = express.Router(); // Define router
+
 const DeckProfileContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
