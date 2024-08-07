@@ -277,8 +277,6 @@ app.get('/api/decks/:label', async (req, res) => {
   }
 });
 
-module.exports = router;
-
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
 app.get('*', (req, res) => {
