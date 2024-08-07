@@ -92,11 +92,10 @@ const DeckListContainer = styled.div`
 `;
 
 const FormatSeparator = styled.tr`
-  background-color: #1290eb !important;
+  background-color: #1291eba4 !important;
   color: white !important;
   font-weight: bold;
   text-align: left;
-  text-shadow: 1px 1px 4px black;
   @media screen and (max-width: 950px) {
     .paddingfive {
         height: 28px !important;
@@ -108,6 +107,43 @@ const FormatSeparator = styled.tr`
     }
   }
 `;
+
+const archetypeSpriteOverrides = {
+  "Haymaker": { sprite1: "hitmonchan", sprite2: "scyther" },
+  "Clefable": { sprite1: "blank", sprite2: "clefable" },
+  "Nidoqueen": { sprite1: "blank", sprite2: "nidoqueen" },
+  "Mr. Mime": { sprite1: "blank", sprite2: "mr-mime" },
+  "Wigglytuff": { sprite1: "blank", sprite2: "wigglytuff" },
+  "Arcanine": { sprite1: "blank", sprite2: "arcanine" },
+  "Typhlosion": { sprite1: "blank", sprite2: "typhlosion" },
+  "Sandslash": { sprite1: "blank", sprite2: "sandslash" },
+  "Raichu": { sprite1: "blank", sprite2: "raichu" },
+  "Slowking": { sprite1: "blank", sprite2: "slowking" },
+  "Steelix": { sprite1: "blank", sprite2: "steelix" },
+  "Espeon": { sprite1: "blank", sprite2: "espeon" },
+  "Tyranitar": { sprite1: "blank", sprite2: "tyranitar" },
+  "Meganium": { sprite1: "blank", sprite2: "meganium" },
+  "Kingdra": { sprite1: "blank", sprite2: "kingdra" },
+  "Lanturn": { sprite1: "blank", sprite2: "lanturn" },
+  "Sneasel": { sprite1: "blank", sprite2: "sneasel" },
+  "Donphan": { sprite1: "blank", sprite2: "donphan" },
+  "Dark Blastoise": { sprite1: "blank", sprite2: "blastoise" },
+  "Golduck": { sprite1: "blank", sprite2: "golduck" },
+  "Team Aqua": { sprite1: "blank", sprite2: "kyogre" },
+  "Sceptile": { sprite1: "blank", sprite2: "sceptile" },
+  "Gorebyss": { sprite1: "blank", sprite2: "gorebyss" },
+  "Machamp": { sprite1: "blank", sprite2: "machamp" },
+  "Shiftry": { sprite1: "blank", sprite2: "shiftry" },
+  "Blaziken": { sprite1: "blank", sprite2: "blaziken" },
+  "Metagross": { sprite1: "blank", sprite2: "metagross" },
+  "Empoleon": { sprite1: "blank", sprite2: "empoleon" },
+  "Banette Eeveelutions": { sprite1: "banette", sprite2: "eevee" },
+  "Gallade Lock": { sprite1: "gallade", sprite2: "absol" },
+  "Scizor": { sprite1: "blank", sprite2: "scizor" },
+  "Gengar": { sprite1: "blank", sprite2: "gengar" },
+  "QueenGar": { sprite1: "gengar", sprite2: "nidoqueen" },
+  "Froslass": { sprite1: "blank", sprite2: "froslass" },
+};
 
 const Decks = () => {
   const { theme } = useTheme();
@@ -194,8 +230,31 @@ const Decks = () => {
 
   return (
     <DeckListContainer theme={theme} className='center-me'>
-      <Helmet>
-        <title>Decks</title>
+       <Helmet>
+          <title>Decks</title>
+          <meta
+              name='description'
+              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+          />
+          <meta property='og:title' Decks />
+          <meta
+              property='og:description'
+              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+          />
+          {/* <meta property='og:image' content={eventData.thumbnail} /> */}
+          <meta
+              property='og:url'
+              content={`https://www.ptcglegends.com/decks`}
+          />
+          <meta property='og:type' content='website' />
+          <meta name='author' content='PTCG Legends' />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:title' Decks />
+          <meta
+              name='twitter:description'
+              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+          />
+          {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
       </Helmet>
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
@@ -270,8 +329,9 @@ const Decks = () => {
                     .map((deck, index) => {
                       const { deckCount } = deck;
                       const firstResult = deck.decks[0];
-                      const sprite1 = firstResult.sprite1;
-                      const sprite2 = firstResult.sprite2;
+                      const overriddenSprites = archetypeSpriteOverrides[deck.label];
+                      const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : firstResult.sprite1;
+                      const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : firstResult.sprite2;
                       const totalDecksInFormat = totalDecksPerFormat[format]; // Total decks in the format
                       const percentage = ((deckCount / totalDecksInFormat) * 100).toFixed(2);
 

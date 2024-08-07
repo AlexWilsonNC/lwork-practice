@@ -28,10 +28,19 @@ const ArchiveUpdates = () => {
     <div className='new-homepage'>
       <ArticleContainer className='article-container'>
         <Helmet>
-          <title>List of Documented Archive Updates</title>
+          <title>Documented Archive Updates</title>
+          <meta name="description" content="All documented additions and updates to our site - updated monthly." />
+          <meta property="og:title" content="Documented Archive Updates" />
+          <meta property="og:description" content="All documented additions and updates to our site - updated monthly." />
+          {/* <meta property='og:image' content='https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png' /> */}
+          <meta property="og:url" content="https://www.ptcglegends.com/" />
+          <meta property="og:type" content="website" />
+          <meta name="author" content="PTCG Legends" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Documented Archive Updates" />
+          <meta name="twitter:description" content="All documented additions and updates to our site - updated monthly." />
+          {/* <meta name="twitter:image" content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" /> */}
         </Helmet>
-        
-        {/* Title */}
         <div className='article-title'>
           <h2>List of Documented Archive Updates</h2>
           <p>Lastest Updated: Aug 1, 2024</p>

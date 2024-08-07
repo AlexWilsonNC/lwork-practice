@@ -95,7 +95,7 @@ const DropdownTableCell = styled.td`
 `;
 
 const SeparatorRow = styled.tr`
-  background-color: #1290eb !important;
+  background-color: #1291eba4 !important;
   color: white;
   font-weight: bold;
 

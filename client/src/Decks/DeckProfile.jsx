@@ -6,7 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import '../css/deckspage.css';
 
 const DeckProfileContainer = styled.div`
-  background: ${({ theme }) => theme.body};
+ background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
   .results-table td a {
     color: ${({ theme }) => theme.text};
@@ -14,42 +14,57 @@ const DeckProfileContainer = styled.div`
   .results-table td:nth-child(3) {
     text-align: center;
   }
+  .results-table td a:hover {
+    color: #1290eb;
+  }
+  .filter-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    select {background: ${({ theme }) => theme.body};}
+    select {color: ${({ theme }) => theme.text};}
+    button {background: ${({ theme }) => theme.body};}
+    button {color: ${({ theme }) => theme.text};}
+  }
+  .sort-events {
+    color: ${({ theme }) => theme.text};
+  }
   .spinner {
     border-left-color: ${({ theme }) => theme.spinner};
   }
-    .filter-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 20px;
-      select {background: ${({ theme }) => theme.body};}
-      select {color: ${({ theme }) => theme.text};}
-      button {background: ${({ theme }) => theme.body};}
-      button {color: ${({ theme }) => theme.text};}
-  }
   .search-input .searcheventsfield {
-      background: ${({ theme }) => theme.searchBg};
-      color: ${({ theme }) => theme.searchTxt};
+    background: ${({ theme }) => theme.searchBg};
+    color: ${({ theme }) => theme.searchTxt};
   }
   .filter-container .sort-events {
-      color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.text};
   }
   .paddingfive {
-      height: 27px !important;
-  }
-  .results-table td a:hover {
-    color: #1290eb;
+    height: 27px !important;
   }
   .bts-in h1 {
     padding-left: 25px;
   }
+  .player-deck-icons .material-symbols-outlined.no-decklist {
+     opacity: 0;
+     pointer-events: none;
+    }
+  .player-deck-icons .material-symbols-outlined {
+     opacity: 1;
+    }
+    .player-deck-icons a.no-decklist {
+    pointer-events: none;
+    }
 `;
 
 const EventSeparator = styled.tr`
-  background-color: #1290eb !important;
+  background-color: #1291eba4 !important;
   color: white !important;
   font-weight: bold;
   text-align: left;
-  text-shadow: 1px 1px 4px black;
+  & a {
+    color: white !important;
+  }
   @media screen and (max-width: 950px) {
     .paddingfive {
         height: 28px !important;
@@ -175,10 +190,54 @@ const DeckProfile = () => {
     setSelectedDivision('');
   };
 
+  const getPlacementSuffix = (number) => {
+    const j = number % 10;
+    const k = number % 100;
+    let suffix;
+    if (j === 1 && k !== 11) {
+        suffix = 'st';
+    } else if (j === 2 && k !== 12) {
+        suffix = 'nd';
+    } else if (j === 3 && k !== 13) {
+        suffix = 'rd';
+    } else {
+        suffix = 'th';
+    }
+    return (
+        <>
+            {number}
+            <sup className='sup'>{suffix}</sup>
+        </>
+    );
+  };
+
   return (
     <DeckProfileContainer theme={theme} className='center-me'>
       <Helmet>
-        <title>{id} Decks</title>
+          <title>Decks - {decks[0].label}</title>
+          <meta
+              name='description'
+              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+          />
+          <meta property='og:title' content="Deck Profile" />
+          <meta
+              property='og:description'
+              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+          />
+          {/* <meta property='og:image' content={eventData.thumbnail} /> */}
+          <meta
+              property='og:url'
+              content={`https://www.ptcglegends.com/decks/${id}`}
+          />
+          <meta property='og:type' content='website' />
+          <meta name='author' content='PTCG Legends' />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:title' content="Deck Profile" />
+          <meta
+              name='twitter:description'
+              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+          />
+          {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
       </Helmet>
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
@@ -247,8 +306,8 @@ const DeckProfile = () => {
                     </EventSeparator>
                   )}
                   <tr>
-                    <td>{result.placement}</td>
-                    <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
+                  <td>{getPlacementSuffix(result.placement)}</td>
+                  <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
                     <td><span className='grey'>{formatName(result.division)}</span></td>
                     <td></td>
                     <td className='player-deck-icons center-content'>
@@ -267,9 +326,9 @@ const DeckProfile = () => {
                       )}
                       <Link
                         to={`/tournaments/${result.eventId}/${result.division}/${result.playerName}-${result.playerFlag}`}
-                        className={result.decklist && result.decklist.length ? '' : 'no-decklist'}
+                        className={result.decklist ? '' : 'no-decklist'}
                       >
-                        <span className={`material-symbols-outlined ${result.decklist && result.decklist.length ? '' : 'no-decklist'}`}>
+                        <span className={`material-symbols-outlined ${result.decklist ? '' : 'no-decklist'}`}>
                           format_list_bulleted
                         </span>
                       </Link>

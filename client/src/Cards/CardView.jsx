@@ -365,7 +365,7 @@ const CardView = () => {
     ];
     const isGLCLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-        const excludedSubtypes = ["EX", "GX", "ex", "V", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
+        const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
     
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number))) {

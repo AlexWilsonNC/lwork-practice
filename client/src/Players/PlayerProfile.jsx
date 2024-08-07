@@ -222,9 +222,9 @@ const PlayerProfileContainer = styled.div`
     .player-deck-icons .material-symbols-outlined:hover {
     color: #1290eb;
     }
-  .player-deck-icons .material-symbols-outlined.no-decklist {
-  opacity: 0;
-  pointer-events: none;
+    .player-deck-icons .material-symbols-outlined.no-decklist {
+     opacity: 0;
+     pointer-events: none;
     }
     .player-deck-icons a.no-decklist {
     pointer-events: none;
@@ -406,6 +406,29 @@ const PlayerProfile = () => {
         <PlayerProfileContainer theme={theme} className='center-me'>
             <Helmet>
                 <title>{formatName(player.name)}</title>
+                <meta
+                name='description'
+                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                />
+                <meta property='og:title' content="Player Profile" />
+                <meta
+                    property='og:description'
+                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                />
+                {/* <meta property='og:image' content={eventData.thumbnail} /> */}
+                {/* <meta
+                    property='og:url'
+                    content={`https://www.ptcglegends.com/player/${normalizeName(result.playerName)}-${result.playerFlag}`}
+                /> */}
+                <meta property='og:type' content='website' />
+                <meta name='author' content='PTCG Legends' />
+                <meta name='twitter:card' content='summary_large_image' />
+                <meta name='twitter:title' content="Player Profile" />
+                <meta
+                    name='twitter:description'
+                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                />
+                {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
             </Helmet>
             <div className='player-results-container meep'>
                 <div className='completed-n-upcoming'>

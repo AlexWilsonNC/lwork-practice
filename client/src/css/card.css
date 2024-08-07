@@ -137,9 +137,6 @@
 .grey {
     color:rgb(134, 134, 134);
 }
-.grey:hover {
-    color: #1290eb;
-}
 .shrink {
     font-size: 12px;
 }
@@ -213,14 +210,13 @@
     flex-direction: row;
     align-items: center;
     color: white;
-    text-shadow: 1px 1px 4px black;
+    /* text-shadow: 1px 1px 4px black; */
 }
 .event-separator-content:hover {
     text-shadow: 1px 1px 1px black !important;
-    color: rgb(188, 218, 237) !important;
 }
 .event-separator td {
-    background-color: #1290eb;
+    background-color: #1291eba4;
     text-align: left;
     font-weight: bold;
     padding: 2px 0 2px 15px;

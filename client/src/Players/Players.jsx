@@ -349,6 +349,29 @@ const Players = () => {
         <PlayerListContainer theme={theme} className='center-me'>
             <Helmet>
                 <title>Players</title>
+                <meta
+                    name='description'
+                    content={`List of all players from all events documented on PTCG Legends across all eras.`}
+                />
+                <meta property='og:title' Players />
+                <meta
+                    property='og:description'
+                    content={`List of all players from all events documented on PTCG Legends across all eras.`}
+                />
+                {/* <meta property='og:image' content={eventData.thumbnail} /> */}
+                <meta
+                    property='og:url'
+                    content={`https://www.ptcglegends.com/players`}
+                />
+                <meta property='og:type' content='website' />
+                <meta name='author' content='PTCG Legends' />
+                <meta name='twitter:card' content='summary_large_image' />
+                <meta name='twitter:title' Players />
+                <meta
+                    name='twitter:description'
+                    content={`List of all players from all events documented on PTCG Legends across all eras.`}
+                />
+                {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
             </Helmet>
             <div className='player-results-container'>
                 <div className='completed-n-upcoming'>
