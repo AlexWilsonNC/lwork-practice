@@ -286,7 +286,11 @@ const normalizeName = (name) => {
         .join(' ');
 };
 
+const isFeaturedEvent = (eventId) => eventId.includes("FEATURED");
+
 const formatToCollections = (format) => {
+    if (format === "BS-BS") return ["BS"];
+
     const [startSet, endSet] = format.split('-');
     const startIndex = orderedSets.indexOf(startSet);
     const endIndex = orderedSets.indexOf(endSet);
@@ -303,7 +307,7 @@ const formatToCollections = (format) => {
             collections.push(promoSets[set]);
         }
     });
-    
+
     return collections;
 };
 
@@ -318,6 +322,8 @@ const PlayerDeck = () => {
     const [cardData, setCardData] = useState(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
+
+    const isFeatured = isFeaturedEvent(eventId);
 
     useEffect(() => {
         const fetchCardData = async (format) => {
@@ -354,7 +360,7 @@ const PlayerDeck = () => {
                 console.error('Error fetching card data:', error);
             }
         };
-                        
+
         const fetchPlayerData = async () => {
             const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
             if (response.ok) {
@@ -385,12 +391,10 @@ const PlayerDeck = () => {
                 console.error('Failed to fetch player data');
             }
         };
-                        
+        
         fetchPlayerData();
     }, [eventId, division, playerId]);
-    
-    {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
-    
+
     useEffect(() => {
         if (cardData) {
             const totalImages = playerData.decklist.pokemon.length + playerData.decklist.trainer.length + playerData.decklist.energy.length;
@@ -456,109 +460,121 @@ const PlayerDeck = () => {
 
     return (
         <PlayerDeckCenter className='center' theme={theme}>
-        <Helmet>
-            <title>{formatName(playerData.name)}'s Decklist</title>
-            <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta property="og:title" content={eventData.name} />
-            <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta property="og:image" content={eventData.thumbnail} />
-            <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
-            <meta property="og:type" content="website" />
-            <meta name="author" content="PTCG Legends" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={eventData.name} />
-            <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta name="twitter:image" content={eventData.thumbnail} />
-        </Helmet>
-        <div className="player-deck">
-            <div className='player-deck-top'>
+            <Helmet>
+                <title>{isFeatured ? `${formatName(playerData.name)}'s Featured Deck` : `${formatName(playerData.name)}'s Decklist`}</title>
+                <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+                <meta property="og:title" content={eventData.name} />
+                <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+                <meta property="og:image" content={eventData.thumbnail} />
+                <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
+                <meta property="og:type" content="website" />
+                <meta name="author" content="PTCG Legends" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={eventData.name} />
+                <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+                <meta name="twitter:image" content={eventData.thumbnail} />
+            </Helmet>
+            <div className="player-deck">
+                <div className='player-deck-top'>
                 <div>
-                    <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
-                        <h2>
-                            {formatName(playerData.name)}
-                            &nbsp;
-                            <span className="material-symbols-outlined turned-link">link</span>      
-                        </h2>
-                    </Link> 
-                    <hr className='playerdeck-hr'></hr>
-                    <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
-                    {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-                    {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
-                </div>
-                <div className='deck-top-right-options'>
-                    <DecklistOptions decklist={playerData.decklist} />
-                    <div className='deckview-switcher'>
-                        <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
-                            <span className="material-symbols-outlined">reorder</span>
-                        </div>
-                        <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
-                            <span className="material-symbols-outlined">grid_view</span>
+    {!isFeatured && (
+        <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
+            <h2>
+                {formatName(playerData.name)}
+                &nbsp;
+                <span className="material-symbols-outlined turned-link">link</span>      
+            </h2>
+        </Link>
+    )}
+    <hr className='playerdeck-hr'></hr>
+    {isFeatured ? (
+        <>
+            {eventData && <p><Link className='blue-link' to={`/decks-by-era`}>{eventData.name}</Link></p>}
+            {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+        </>
+    ) : (
+        <>
+            <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
+            {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
+            {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+        </>
+    )}
+</div>
+                    <div className='deck-top-right-options'>
+                        <DecklistOptions decklist={playerData.decklist} />
+                        <div className='deckview-switcher'>
+                            <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
+                                <span className="material-symbols-outlined">reorder</span>
+                            </div>
+                            <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
+                                <span className="material-symbols-outlined">grid_view</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {!playerData ? (
-                null
+                {!playerData ? (
+                    null
                 ) : !cardData ? (
-                <div className="spinner"></div>
+                    <div className="spinner"></div>
                 ) : viewMode === 'grid' ? (
-                <div className="deck-cards">
-                    {playerData.decklist.pokemon.map((card, index) => (
-                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                        <img src={cardImageUrl(card)} alt={card.name} />
-                        <div className="card-count">{card.count}</div>
+                    <div className="deck-cards">
+                        {playerData.decklist.pokemon.map((card, index) => (
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                <div className="card-count">{card.count}</div>
+                            </div>
+                        ))}
+                        {playerData.decklist.trainer.map((card, index) => (
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                <div className="card-count">{card.count}</div>
+                            </div>
+                        ))}
+                        {playerData.decklist.energy.map((card, index) => (
+                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                <div className="card-count">{card.count}</div>
+                            </div>
+                        ))}
                     </div>
-                    ))}
-                    {playerData.decklist.trainer.map((card, index) => (
-                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                        <img src={cardImageUrl(card)} alt={card.name} />
-                        <div className="card-count">{card.count}</div>
-                    </div>
-                    ))}
-                    {playerData.decklist.energy.map((card, index) => (
-                    <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                        <img src={cardImageUrl(card)} alt={card.name} />
-                        <div className="card-count">{card.count}</div>
-                    </div>
-                    ))}
-                </div>
                 ) : (
-                <div className="deck-list">
-                    <div className='column-section'>
-                    <div className='list-category'><h3>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h3></div>
-                    <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
-                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                        <p className='list-card-count'>{card.count}</p>
-                        <p className='bold-name'>{cleanCardName(card.name)}</p>
-                        <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} />
+                    <div className="deck-list">
+                        <div className='column-section'>
+                            <div className='list-category'><h3>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h3></div>
+                            <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                    <p className='list-card-count'>{card.count}</p>
+                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                    <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                </div>
+                            ))}</div>
                         </div>
-                    ))}</div>
-                    </div>
-                    <div className='column-section'>
-                    <div className='list-category'><h3>Trainer ({countCards(playerData.decklist, 'trainer')})</h3></div>
-                    <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
-                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                        <p className='list-card-count'>{card.count}</p>
-                        <p className='bold-name'>{cleanCardName(card.name)}</p>
-                        <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} />
+                        <div className='column-section'>
+                            <div className='list-category'><h3>Trainer ({countCards(playerData.decklist, 'trainer')})</h3></div>
+                            <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                    <p className='list-card-count'>{card.count}</p>
+                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                    <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                </div>
+                            ))}</div>
                         </div>
-                    ))}</div>
-                    </div>
-                    <div className='column-section'>
-                    <div className='list-category'><h3>Energy ({countCards(playerData.decklist, 'energy')})</h3></div>
-                    <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
-                        <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                        <p className='list-card-count'>{card.count}</p>
-                        <p className='bold-name'>{cleanCardName(card.name)}</p>
-                        <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} />
+                        <div className='column-section'>
+                            <div className='list-category'><h3>Energy ({countCards(playerData.decklist, 'energy')})</h3></div>
+                            <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
+                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                    <p className='list-card-count'>{card.count}</p>
+                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                    <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                </div>
+                            ))}</div>
                         </div>
-                    ))}</div>
                     </div>
-                </div>
                 )}
-        </div>
-    </PlayerDeckCenter>
+            </div>
+        </PlayerDeckCenter>
     );
 };
 
 export default PlayerDeck;
+

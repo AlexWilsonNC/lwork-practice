@@ -3,7 +3,7 @@ const customLabelsConfig = {
         '-gardevoir': 'Gardevoir',
         'chien-pao-baxcalibur': 'Chien-Pao',
         'comfey-sableye': 'Lost Box',
-        'lugia-archeops': 'Lugia',
+        'lugia-archeops': 'Lugia Archeops',
         'raging-bolt-ogerpon': 'Raging Bolt',
         '-miraidon': 'Miraidon',
         'snorlax-rotom': 'Snorlax Stall',

@@ -8,6 +8,7 @@ import EventPage from './Tournaments/EventPage';
 import PlayerDeck from './Tournaments/PlayerDeck';
 import DecksPage from './Decks/DecksPage';
 import DeckProfile from './Decks/DeckProfile';
+import FeaturedDecks from './Decks/FeaturedDecks';
 import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
 import Players from './Players/Players';
@@ -30,6 +31,7 @@ function App() {
         <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
         <Route path="/decks" element={<DecksPage />} />
+        <Route path="/decks-by-era" element={<FeaturedDecks />} />
         <Route path="/deck/:id" element={<DeckProfile />}  />
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />

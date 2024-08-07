@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/players.css';
@@ -110,6 +110,7 @@ const FormatSeparator = styled.tr`
 
 const archetypeSpriteOverrides = {
   "Haymaker": { sprite1: "hitmonchan", sprite2: "scyther" },
+  "Haymaker Articuno": { sprite1: "hitmonchan", sprite2: "articuno" },
   "Clefable": { sprite1: "blank", sprite2: "clefable" },
   "Nidoqueen": { sprite1: "blank", sprite2: "nidoqueen" },
   "Mr. Mime": { sprite1: "blank", sprite2: "mr-mime" },
@@ -153,6 +154,7 @@ const Decks = () => {
   const [sortOrder, setSortOrder] = useState('desc');
   const [sortType, setSortType] = useState('format');
   const [selectedFormat, setSelectedFormat] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDecks = async () => {
@@ -173,6 +175,10 @@ const Decks = () => {
   const setSortByFormat = () => {
     setSortType('format');
     setSortOrder('desc');
+  };
+
+  const navigateToFeaturedDecks = () => {
+    navigate('/decks-by-era');
   };
 
   const normalizeLabel = (label) => {
@@ -260,7 +266,9 @@ const Decks = () => {
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
             <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Decks by Event Results</a>
-            <a onClick={setSortByFormat} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Decks by Era</a>
+            <span className='not-ready'>
+            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Decks by Era</a>
+            </span>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
@@ -274,14 +282,125 @@ const Decks = () => {
           </div>
         </div>
         <div className='filter-container'>
-          <div className='filters-top'>
+        <div className='filters-top'>
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
               <select value={selectedFormat} onChange={handleFormatChange}>
                 <option value="">All Formats</option>
-                {sortedFormatOrder.map((format, index) => (
-                  <option key={index} value={format}>{format}</option>
-                ))}
+
+              <optgroup label="2024">
+              <option value="BRS-TWM">BRS-TWM</option>
+                <option value="BRS-TEF">BRS-TEF</option>
+              </optgroup>
+
+              <optgroup label="2023">
+                <option value="BST-PAL">BST-PAL</option>
+              </optgroup>
+              
+              <optgroup label="2022">
+                <option value="SSH-PGO">SSH-PGO</option>
+                <option value="SSH-ASR">SSH-ASR</option>
+                <option value="SSH-BRS">SSH-BRS</option>
+              </optgroup>
+              
+              <optgroup label="2020">
+                <option value="UPR-SSH">UPR-SSH</option>
+                <option value="UPR-CEC">UPR-CEC</option>
+                <option value="UPR-UNM">UPR-UNM</option>
+              </optgroup>
+              
+              <optgroup label="2019">
+                <option value="SUM-UNB">SUM-UNB</option>
+                <option value="SUM-TEU">SUM-TEU</option>
+                <option value="SUM-LOT">SUM-LOT</option>
+              </optgroup>
+
+              <optgroup label="2018">
+                <option value="BKT-CES">BKT-CES</option>
+                <option value="BKT-FLI">BKT-FLI</option>
+                <option value="BKT-UPR">BKT-UPR</option>
+                <option value="BKT-UPR">BKT-CIN</option>
+              </optgroup>
+
+              <optgroup label="2017">
+                <option value="PRC-BUS">PRC-BUS</option>
+                <option value="PRC-GRI">PRC-GRI</option>
+                <option value="PRC-SUM">PRC-SUM</option>
+                <option value="PRC-EVO">PRC-EVO</option>
+              </optgroup>
+
+              <optgroup label="2016">
+                <option value="XY-STS">XY-STS</option>
+                <option value="XY-FCO">XY-FCO</option>
+              </optgroup>
+
+              <optgroup label="2015">
+                <option value="BCR-ROS">BCR-ROS</option>
+              </optgroup>
+
+              <optgroup label="2014">
+                <option value="NXD-FLF">NXD-FLF</option>
+              </optgroup>
+
+              <optgroup label="2013">
+                <option value="BLW-PLF">BLW-PLF</option>
+              </optgroup>
+
+              <optgroup label="2012">
+                <option value="HS-DEX">HS-DEX</option>
+              </optgroup>
+
+              <optgroup label="2011">
+                <option value="HS-BLW">HS-BLW</option>
+              </optgroup>
+
+              <optgroup label="2010">
+                <option value="DP-UL">DP-UL</option>
+              </optgroup>
+
+              <optgroup label="2009">
+                <option value="DP-RR">DP-RR</option>
+              </optgroup>
+
+              <optgroup label="2008">
+                <option value="HP-MD">HP-MD</option>
+              </optgroup>
+
+              <optgroup label="2007">
+                <option value="DX-DP">DX-DP</option>
+              </optgroup>
+
+              <optgroup label="2006">
+                <option value="HL-HP">HL-HP</option>
+              </optgroup>
+
+              <optgroup label="2005">
+                <option value="RS-EM">RS-EM</option>
+              </optgroup>
+
+              <optgroup label="2004">
+                <option value="EX-HL">EX-HL</option>
+              </optgroup>
+
+              <optgroup label="2002">
+                <option value="TR-LC">TR-LC</option>
+                <option value="N1-LC">N1-LC</option>
+                <option value="TR-N4">TR-N4</option>
+              </optgroup>
+
+              <optgroup label="2001">
+                <option value="TR-N3">TR-N3</option>
+                <option value="TR-N1">TR-N1</option>
+                <option value="BS-N2">BS-N2</option>
+              </optgroup>
+
+              <optgroup label="2000">
+                <option value="BS-G2">BS-G2</option>
+                <option value="BS-TR">BS-TR</option>
+                <option value="BS-TR">BS-TR</option>
+                <option value="BS-FO">BS-FO</option>
+              </optgroup>
+
               </select>
             </div>
             <div className='indiv-filter'>
