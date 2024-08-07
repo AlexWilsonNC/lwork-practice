@@ -261,11 +261,11 @@ app.get('/api/decks', async (req, res) => {
   }
 });
 
-app.get('/api/decks/:id', async (req, res) => {
+router.get('/api/decks/:label', async (req, res) => {
   try {
-    const deckId = req.params.id;
-    console.log('Received deck ID:', deckId);
-    const deck = await Deck.findById(deckId);
+    const label = req.params.label.toLowerCase().replace(/-/g, ' ');
+    const deck = await Deck.findOne({ label });
+
     if (deck) {
       res.json(deck);
     } else {
@@ -273,9 +273,11 @@ app.get('/api/decks/:id', async (req, res) => {
     }
   } catch (error) {
     console.error('Error fetching deck:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
+module.exports = router;
 
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
