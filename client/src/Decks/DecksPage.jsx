@@ -64,6 +64,9 @@ const DeckListContainer = styled.div`
   .filter-container {
     margin-bottom: 15px;
   }
+    .results-table td a:hover {
+    color: #1290eb;
+  }
   .filter-container {
       display: flex;
       justify-content: flex-end;
@@ -95,6 +98,7 @@ const FormatSeparator = styled.tr`
   color: white !important;
   font-weight: bold;
   text-align: left;
+  text-shadow: 1px 1px 4px black;
   @media screen and (max-width: 950px) {
     .paddingfive {
         height: 28px !important;
@@ -135,6 +139,16 @@ const Decks = () => {
   const setSortByFormat = () => {
     setSortType('format');
     setSortOrder('desc');
+  };
+
+  const normalizeLabel = (label) => {
+    return label
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/(^-|-$)/g, '');
   };
 
   const filteredDecks = decks.filter(deck => 
@@ -182,7 +196,8 @@ const Decks = () => {
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Decks by Format</a>
+            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Decks by Event Results</a>
+            <a onClick={setSortByFormat} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Decks by Era</a>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
@@ -347,7 +362,7 @@ const Decks = () => {
                 <React.Fragment key={format}>
                   <FormatSeparator>
                     <td colSpan="6" className='paddingfive'>
-                      {decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown'} - {format}
+                      {decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown'}&nbsp; -&nbsp; {format}
                     </td>
                   </FormatSeparator>
                   {decksByFormat[format]
@@ -400,7 +415,11 @@ const Decks = () => {
                               />
                             )}
                           </td>
-                          <td><Link to={`/deck/${deck._id}`}>{deck.label}</Link></td>
+                          <td>
+                            <Link to={`/deck/${normalizeLabel(deck.label)}`}>
+                              {deck.label}
+                            </Link>
+                            </td>
                           <td>{percentage}%</td>
                           <td className='hideforfifty'>{deckCount}</td>
                         </tr>

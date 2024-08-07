@@ -232,6 +232,9 @@ const PlayerProfileContainer = styled.div`
      .day1btn, .day2btn, .conversbtn {
     background-color: ${({ theme }) => theme.day1btn};
   }
+    .results-table td a:hover {
+    color: #1290eb;
+  }
 .chart-button.active {
   background-color: #1290eb;
 }

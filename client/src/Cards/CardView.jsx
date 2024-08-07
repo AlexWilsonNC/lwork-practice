@@ -822,7 +822,7 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                 <th style={{ width: '1%' }}>Place</th>
                                 <th style={{ width: '1%' }}>Player</th>
                                 <th style={{ width: '1%' }}>Division</th>
-                                <th style={{ width: '1%' }}>Event</th>
+                                <th style={{ width: '1%' }}></th>
                                 <th style={{ width: '1%' }}>Decklist</th>
                             </tr>
                         </thead>
@@ -852,7 +852,7 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                         <tr className="event-separator">
                                             <td colSpan="5">
                                                 <Link className="event-separator-content" to={`/tournaments/${eventId}`}>
-                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;<span className='formatsmallertxt'>({eventFormat})</span>
+                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;({eventFormat})
                                                 </Link>
                                             </td>
                                         </tr>
@@ -862,9 +862,9 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                                 <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
                                                 <td><span className='grey'>{formatName(result.division)}</span></td>
                                                 <td>
-                                                <Link className='white-link' to={`${getEventLink(result.eventId, result.eventName)}/${result.division}`}>
+                                                {/* <Link className='grey' to={`${getEventLink(result.eventId, result.eventName)}/${result.division}`}>
                                                     {result.eventName}
-                                                </Link>
+                                                </Link> */}
                                                 </td>
                                                 <td className='player-deck-icons pushright'>
                                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />

@@ -211,6 +211,9 @@ const PlayerListContainer = styled.div`
         background: ${({ theme }) => theme.searchBg};
         color: ${({ theme }) => theme.searchTxt};
     }
+        .results-table td a:hover {
+    color: #1290eb;
+  }
     .filter-container .sort-events {
         color: ${({ theme }) => theme.text};
     }

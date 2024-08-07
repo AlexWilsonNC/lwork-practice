@@ -30,7 +30,7 @@ function App() {
         <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
         <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
         <Route path="/decks" element={<DecksPage />} />
-        <Route path="/deck/:id" component={DeckProfile} />
+        <Route path="/deck/:id" element={<DeckProfile />}  />
         <Route path="/cards/:setName" element={<CardsPage />} />
         <Route path="/card/:set/:number" element={<CardView />} />
         <Route path="/players" element={<Players />} />

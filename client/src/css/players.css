@@ -60,9 +60,6 @@
     align-items: center;
     padding: 0 15px;
 }
-.results-table td a:hover {
-    color: #1290eb !important;
-}
 .flag-size-players {
     width: 23px;
     height: auto;

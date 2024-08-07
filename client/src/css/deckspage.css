@@ -33,6 +33,33 @@
 .movesecondspritedecks {
     margin-left: -25px;
 }
+/* .deck-profile-table */
+.deck-profile-table th:nth-child(1) {
+    padding-left: 0px !important;
+}
+.deck-profile-table th:nth-child(4),
+.deck-profile-table th:nth-child(5),
+.deck-table th:nth-child(6) {
+    text-align: start;
+}
+.deck-profile-table th:nth-child(1),
+.deck-profile-table td:nth-child(1) {
+    width: 20%;
+}
+.deck-profile-table td:nth-child(2),
+.deck-profile-table th:nth-child(2) {
+    width: 25%;
+    padding-left: 0px;
+}
+.deck-profile-table td:nth-child(3),
+.deck-profile-table th:nth-child(3) {
+    width: 20%;
+}
+.deck-profile-table th:nth-child(3),
+.deck-profile-table th:nth-child(5) {
+    text-align: center;
+    padding-left: 10px;
+}
 @media screen and (max-width: 950px) {
     .deck-table {
         height: 45px;

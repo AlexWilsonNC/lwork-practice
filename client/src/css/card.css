@@ -137,6 +137,9 @@
 .grey {
     color:rgb(134, 134, 134);
 }
+.grey:hover {
+    color: #1290eb;
+}
 .shrink {
     font-size: 12px;
 }
@@ -210,19 +213,18 @@
     flex-direction: row;
     align-items: center;
     color: white;
+    text-shadow: 1px 1px 4px black;
 }
 .event-separator-content:hover {
-    color: rgb(10, 65, 175);
+    text-shadow: 1px 1px 1px black !important;
+    color: rgb(188, 218, 237) !important;
 }
 .event-separator td {
     background-color: #1290eb;
     text-align: left;
     font-weight: bold;
     padding: 2px 0 2px 15px;
-}
-.formatsmallertxt {
-    font-weight: 600;
-    font-size: 13px;
+    height: 27px !important;
 }
 .turned-link {
     color:white;
@@ -485,13 +487,13 @@
     .navigation-links a span {
         font-size: 14px;
     }
+    .event-separator td {
+        height: 28px !important;
+    }
 }
 @media screen and (max-width: 800px) {
     .other-versions {
         width: 100%;
-    }
-    .formatsmallertxt {
-        font-size: 10px;
     }
     .turned-link {
         font-size: 18px;
@@ -545,9 +547,6 @@
         height: auto;
         border-radius: 27px !important;
         box-shadow: 0 0 12px black;
-    }
-    .formatsmallertxt {
-        font-size: 8px;
     }
     .the-card-img {
         cursor: none;
@@ -754,6 +753,9 @@
     }
     .cardview-setsymbol {
         width: 15px;
+    }
+    .event-separator td {
+        height: 20px !important;
     }
 }
 @media screen and (max-width: 440px) {
