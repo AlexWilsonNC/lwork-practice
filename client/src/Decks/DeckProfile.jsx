@@ -118,7 +118,8 @@ const DeckProfile = () => {
   useEffect(() => {
     const fetchDeck = async () => {
       try {
-        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${label}`);
+        // Ensure `id` or `label` is correctly passed from the URL params or other source
+        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
         const data = await response.json();
         setDeck(data);
       } catch (error) {
@@ -127,7 +128,7 @@ const DeckProfile = () => {
         setLoading(false);
       }
     };
-
+  
     fetchDeck();
   }, [id]);
 

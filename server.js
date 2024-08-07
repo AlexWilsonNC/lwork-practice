@@ -263,19 +263,16 @@ app.get('/api/decks', async (req, res) => {
 
 app.get('/api/decks/:label', async (req, res) => {
   try {
-    const label = decodeURIComponent(req.params.label);
-    console.log('Searching for deck with label:', label);
-    const deck = await Deck.findOne({ label: new RegExp(`^${label}$`, 'i') });
-    if (deck) {
-      console.log('Deck found:', deck);
-      res.json(deck);
-    } else {
-      console.log('Deck not found');
-      res.status(404).json({ message: 'Deck not found' });
+    const { label } = req.params;
+    // Find all decks with the given label
+    const decks = await Deck.find({ label: new RegExp(`^${label}$`, 'i') });
+    if (!decks || decks.length === 0) {
+      return res.status(404).json({ message: 'No decks found for the given label' });
     }
+    res.json(decks);
   } catch (error) {
-    console.error('Error fetching deck:', error);
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching decks:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
