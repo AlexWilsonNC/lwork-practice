@@ -31,16 +31,16 @@ function Footer() {
                             <a href='/'>Home</a>
                             <a href='/tournaments/completed'><span>Tournaments</span>Completed</a>
                             <a href='/tournaments/upcoming'><span>Tournaments</span>Upcoming</a>
-                            <a href='' className='not-ready'>Decks</a>
+                            <a href='/decks'>Decks</a>
+                            <a href='/cards'>Cards</a>
                             <a href='/players'>Players</a>
-                            <a href='' className='not-ready'>Articles</a>
                         </div>
                         <div className='useful-row2'>
+                            <a href='' className='not-ready'>About</a>
                             <a href=''>Archive Updates</a>
-                            <a href=''>Card Database</a>
+                            <a href='' className='not-ready'>Articles</a>
                             <a href='' className='not-ready'>Deck Builder</a>
                             <a href='' className='not-ready'>Rules by Era</a>
-                            <a href='' className='not-ready'>--</a>
                             <a href='' className='not-ready'>Worlds Booklets</a>
                         </div>
                     </div>

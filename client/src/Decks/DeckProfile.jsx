@@ -17,12 +17,21 @@ const DeckProfileContainer = styled.div`
   .spinner {
     border-left-color: ${({ theme }) => theme.spinner};
   }
+    .filter-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+      select {background: ${({ theme }) => theme.body};}
+      select {color: ${({ theme }) => theme.text};}
+      button {background: ${({ theme }) => theme.body};}
+      button {color: ${({ theme }) => theme.text};}
+  }
   .search-input .searcheventsfield {
-    background: ${({ theme }) => theme.searchBg};
-    color: ${({ theme }) => theme.searchTxt};
+      background: ${({ theme }) => theme.searchBg};
+      color: ${({ theme }) => theme.searchTxt};
   }
   .filter-container .sort-events {
-    color: ${({ theme }) => theme.text};
+      color: ${({ theme }) => theme.text};
   }
   .paddingfive {
       height: 27px !important;
@@ -199,12 +208,13 @@ const DeckProfile = () => {
               </select>
             </div>
             <div className='indiv-filter'>
-              <p className='sort-events'>Division:</p>
-              <select value={selectedDivision} onChange={e => setSelectedDivision(e.target.value)}>
-                {uniqueDivisions.map((division, index) => (
-                  <option key={index} value={division}>{division}</option>
-                ))}
-              </select>
+            <p className='sort-events'>Division:</p>
+            <select value={selectedDivision} onChange={(e) => setSelectedDivision(e.target.value)}>
+                <option value="All">All</option>
+                <option value="masters">Masters</option>
+                <option value="seniors">Seniors</option>
+                <option value="juniors">Juniors</option>
+            </select>
             </div>
             <button onClick={resetFilters} className="reset-btn">Reset</button>
           </div>

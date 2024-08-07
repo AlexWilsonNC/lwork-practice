@@ -24,7 +24,7 @@ const customLabelsConfig = {
         'roaring-moon-koraidon': 'Ancient Box',
         'roaring-moon-great-tusk': 'Ancient Box',
         'froslass-munkidori': 'Froslass',
-        'raging-bolt-sandy-shocks': 'Raging Bolt',
+        'raging-bolt-sandy-shocks': 'Raging Bolt Sandy Shocks',
         'klawf-brute-bonnet': 'Klawf',
         'giratina-origin-comfey': 'Giratina LZB',
         'arceus-giratina-origin': 'Arceus Giratina',
