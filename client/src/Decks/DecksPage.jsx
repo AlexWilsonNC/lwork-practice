@@ -424,7 +424,7 @@ const Decks = () => {
                 <th></th>
                 <th></th>
                 <th>Share</th>
-                <th className='hideforfifty'>Lists</th>
+                <th className='hideforfifty'>Results</th>
               </tr>
             </thead>
             <tbody>
