@@ -165,7 +165,7 @@ const CardView = () => {
           try {
             console.log('cardinfooooo', cardInfo.name)
             console.log(encodeURIComponent(cardInfo.name))
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${encodeURIComponent(cardInfo.name)}`);
+            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
             if (response.ok) {
               const data = await response.json();
               console.log('data', data)

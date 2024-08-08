@@ -177,6 +177,26 @@ app.get('/api/cards/:collectionName', async (req, res) => {
   }
 });
 
+app.get('/api/cards/searchbyname/:name', async (req, res) => {
+  const cardName = req.params.name.trim();
+  console.log(`Searching for card with name: ${cardName}`);
+  try {
+      const regex = new RegExp(`^${cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
+      const cards = await client.db('legends-cluster').collection('card-database').find({ name: regex }).toArray();
+      
+      if (cards.length === 0) {
+          console.log(`No cards found for name: ${cardName}`);
+          return res.status(404).json({ message: `Card not found with name: ${cardName}` });
+      }
+
+      console.log(`Found ${cards.length} cards for name: ${cardName}`);
+      res.json(cards);
+  } catch (error) {
+      console.error('Error occurred while searching for card:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.get('/api/cards', async (req, res) => {
   const format = req.query.format;
 
@@ -204,26 +224,6 @@ app.get('/api/cards', async (req, res) => {
       res.json(flattenedCards);
   } catch (err) {
       res.status(500).json({ message: 'Failed to fetch cards' });
-  }
-});
-
-app.get('/api/cards/:name', async (req, res) => {
-  const cardName = req.params.name.trim();
-  console.log(`Searching for card with name: ${cardName}`);
-  try {
-      const regex = new RegExp(`^${cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
-      const cards = await client.db('legends-cluster').collection('card-database').find({ name: regex }).toArray();
-      
-      if (cards.length === 0) {
-          console.log(`No cards found for name: ${cardName}`);
-          return res.status(404).json({ message: `Card not found with name: ${cardName}` });
-      }
-
-      console.log(`Found ${cards.length} cards for name: ${cardName}`);
-      res.json(cards);
-  } catch (error) {
-      console.error('Error occurred while searching for card:', error);
-      res.status(500).json({ message: 'Server error' });
   }
 });
 
