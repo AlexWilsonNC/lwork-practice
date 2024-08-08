@@ -62,18 +62,18 @@ const formatDate = (dateString) => {
 
 const normalizeName = (name) => {
     return name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/(^-|-$)/g, '');
-  };
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/(^-|-$)/g, '');
+};
 
-  const formatName = (name) => {
+const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
-    
+
     // Define the special case with capital "De"
     const specialCases = {
         'de haes damien': 'De Haes Damien',
@@ -159,28 +159,51 @@ const CardView = () => {
     }, [set, number]);
 
     useEffect(() => {
-        if (!cardInfo) return;
-    
+        if (!cardInfo || cardInfo.supertype !== 'Pokémon') return;
+
         const fetchOtherVersions = async () => {
-          try {
-            console.log('Featured card name for our sanity', cardInfo.name)
-            console.log(encodeURIComponent(cardInfo.name))
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
-            if (response.ok) {
-              const data = await response.json();
-              console.log('data', data)
-              setOtherVersions(data);
-            } else {
-              console.error('Failed to fetch other versions data:', await response.json());
+            try {
+                console.log('Featured card name for our sanity', cardInfo.name)
+                console.log(encodeURIComponent(cardInfo.name))
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+                if (response.ok) {
+                    const data = await response.json();
+
+                    const matchingCards = data.filter(p => {
+                        console.log('ashton', p, cardInfo)
+                        const isMatch =
+                            p.hp === cardInfo.hp &&
+                            p.types[0] === cardInfo.types[0] &&
+                            p.attacks[0]?.name === cardInfo.attacks[0]?.name &&
+                            p.attacks[1]?.name === cardInfo.attacks[1]?.name &&
+                            p.attacks[2]?.name === cardInfo.attacks[2]?.name &&
+                            p.attacks[3]?.name === cardInfo.attacks[3]?.name &&
+                            p.abilities[0]?.name === cardInfo.abilities[0]?.name &&
+                            p.retreatCost === cardInfo.retreatCost
+                        return isMatch;
+                    });
+
+                    console.log('data', data)
+                    console.log('matchingCards', matchingCards)
+                    setOtherVersions(matchingCards);
+                } else {
+                    console.error('Failed to fetch other versions data:', await response.json());
+                }
+            } catch (error) {
+                console.error('Error fetching other versions:', error);
             }
-          } catch (error) {
-            console.error('Error fetching other versions:', error);
-          }
         };
-    
+
         fetchOtherVersions();
     }, [cardInfo]);
-    
+
+    useEffect(() => {
+        const hasOtherArtseses = () => {
+            console.log('pikac', otherVersions)
+        }
+        hasOtherArtseses()
+    }, [otherVersions])
+
     useEffect(() => {
         if (!cardInfo) {
             console.log('Card info is not set, skipping event fetch');
@@ -261,18 +284,20 @@ const CardView = () => {
                                 if (player.decklist) {
                                     let hasCard = false;
 
-                                    if (cardInfo.supertype === 'Pokémon') {
-                                        hasCard = player.decklist.pokemon?.some(p => {
-                                            const isMatch =
-                                                p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
-                                                p.set.trim().toLowerCase() === cardInfo.setAbbrev.trim().toLowerCase() &&
-                                                String(p.number).trim() === String(cardInfo.number).trim();
-                                            return isMatch;
-                                        });
-                                    } else {
-                                        hasCard = player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
-                                            player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
-                                    }
+                                    hasCard = (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
+                                        p.set === cardInfo.setAbbrev &&
+                                        p.number === cardInfo.number
+                                    )) ||
+                                        player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
+                                        player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
+
+                                        otherVersions.forEach(version => {
+                                            if (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === version.name.trim().toLowerCase() &&
+                                            p.set === version.setAbbrev &&
+                                            p.number === version.number
+                                        )) {hasCard = true}
+                                            
+                                })
 
                                     if (hasCard) {
                                         results.push({
@@ -312,7 +337,7 @@ const CardView = () => {
         };
 
         fetchAndFilterEvents();
-    }, [cardInfo]);
+    }, [cardInfo, otherVersions]);
 
     const bannedInExpanded = [
         { name: 'Archeops', set: 'DEX', number: '110' },
@@ -370,17 +395,17 @@ const CardView = () => {
     const isGLCLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
         const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
-    
+
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number))) {
             return false;
         }
-    
+
         // Exception for "HS/72"
         if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
-    
+
         // Check if any version of this Trainer or Energy card is legal in Standard
         if (card.supertype !== 'Pokémon') {
             const hasLegalVersion = otherVersions.some(otherCard =>
@@ -391,17 +416,17 @@ const CardView = () => {
                 return true;
             }
         }
-    
+
         const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
         const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
-    
+
         if (isFromAllowedSet && !hasExcludedSubtype) {
             const isBanned = bannedInGLC.some(bannedCard =>
                 bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
                 bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
                 bannedCard.number === card.number
             );
-    
+
             return !isBanned;
         }
         return false;
@@ -415,15 +440,15 @@ const CardView = () => {
     };
     const isStandardLegal = (card) => {
         const regulationMarks = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
-    
+
         if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
             return true;
         }
-    
+
         if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
-    
+
         if (card.supertype !== 'Pokémon') {
             const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
                 otherCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -432,22 +457,22 @@ const CardView = () => {
             );
             return otherVersions.length > 0;
         }
-    
+
         return false;
     };
     const isExpandedLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-    
+
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && /^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number)) {
             return false;
         }
-    
+
         // Exception for "HS/72"
         if (card.setAbbrev === "HS" && card.number === "72") {
             return true;
         }
-    
+
         // Check if any version of this Trainer or Energy card is legal in Standard
         if (card.supertype !== 'Pokémon') {
             const hasLegalVersion = otherVersions.some(otherCard =>
@@ -458,7 +483,7 @@ const CardView = () => {
                 return true;
             }
         }
-    
+
         if (card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase())) {
             if (!bannedInExpanded.some(bannedCard =>
                 bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -468,7 +493,7 @@ const CardView = () => {
                 return true;
             }
         }
-    
+
         return false;
     };
     const isBannedInExpanded = (card) => {
@@ -533,7 +558,7 @@ const CardView = () => {
 
     const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
 
-const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.includes(cardInfo.set.series.toLowerCase());
+    const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.includes(cardInfo.set.series.toLowerCase());
 
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
@@ -586,19 +611,19 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                 <p className='show-ninefifty'>
                                     <Link to={`/cards/${cardInfo.setAbbrev}`}>{cardInfo.set.name}</Link>
                                     <span className='align-center'>
-                                    {cardInfo.set && cardInfo.set.images && cardInfo.set.images.symbol && (
-                                        <img
-                                            className='cardview-setsymbol'
-                                            src={cardInfo.set.images.symbol}
-                                            alt={`${cardInfo.set.images.symbol} logo`}
-                                        />
-                                        )}                                        
+                                        {cardInfo.set && cardInfo.set.images && cardInfo.set.images.symbol && (
+                                            <img
+                                                className='cardview-setsymbol'
+                                                src={cardInfo.set.images.symbol}
+                                                alt={`${cardInfo.set.images.symbol} logo`}
+                                            />
+                                        )}
                                         &nbsp;
                                         <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
                                     </span>
                                     {!isPromoSet && cardInfo.set.releaseDate && (
                                         <>Released {formatDate(cardInfo.set.releaseDate)}</>
-                                    )}                                
+                                    )}
                                 </p>
                             </div>
                         )}
@@ -886,7 +911,7 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                                 </td>
                                             </tr>
                                         ))}
-                                        </React.Fragment>
+                                    </React.Fragment>
                                 );
                             })}
                         </tbody>
