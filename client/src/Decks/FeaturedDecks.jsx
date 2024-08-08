@@ -14,27 +14,175 @@ const featuredDecksByFormat = [
         format: 'Base Set',
         decks: [
             {
-                label: 'Alakazam Fighting',
-                sprite1: 'alakazam',
-                sprite2: 'onix',
-                source: 'Enigma',
+                label: "Alakazam Fighting",
+                sprite1: "alakazam",
+                sprite2: "onix",
+                source: "Enigma",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Alakazam Gyarados",
+                sprite1: "alakazam",
+                sprite2: "gyarados",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-gyarados',
+            },
+            {
+                label: "Arcanine Charizard",
+                sprite1: "arcanine",
+                sprite2: "charizard",
+                source: "Unknown",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/arcanine-charizard',
+            },
+            {
+                label: "Arcanine Electrode",
+                sprite1: "arcanine",
+                sprite2: "electrode",
+                source: "@BeebeTCG",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/arcanine-electrode',
+            },
+            {
+                label: "Beedrill",
+                sprite1: "blank",
+                sprite2: "beedrill",
+                source: "Enigma",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Buzzapdos",
+                sprite1: "zapdos",
+                sprite2: "electrode",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/buzzapdos-1',
+            },
+            {
+                label: "Fighting Basics",
+                sprite1: "hitmonchan",
+                sprite2: "machop",
+                source: "Grandrew",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/fighting-basics',
+            },
+            {
+                label: "Haymaker",
+                sprite1: "hitmonchan",
+                sprite2: "electabuzz",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/haymaker-1',
+            },
+            {
+                label: "Machamp Alakazam",
+                sprite1: "machamp",
+                sprite2: "alakazam",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/machamp-alakazam',
+            },
+            {
+                label: "Rain Dance",
+                sprite1: "blastoise",
+                sprite2: "gyarados",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/rain-dance',
+            },
+        ],
+    },
+    {
+        year: '1999',
+        format: 'Base Set - Jungle',
+        decks: [
+            {
+                label: "Alakazam Mr. Mime",
+                sprite1: "alakazam",
+                sprite2: "mr-mime",
+                source: "PTCGArchive",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Clefable Electabuzz",
+                sprite1: "clefable",
+                sprite2: "electabuzz",
+                source: "PTCGArchive",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Clefable Hitmonchan",
+                sprite1: "clefable",
+                sprite2: "hitmonchan",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Haymaker",
+                sprite1: "hitmonchan",
+                sprite2: "scyther",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Haymaker Rapidash",
+                sprite1: "hitmonchan",
+                sprite2: "rapidash",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Hitmonchan Charmander",
+                sprite1: "hitmonchan",
+                sprite2: "charmander",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Hitmonchan Mr. Mime",
+                sprite1: "hitmonchan",
+                sprite2: "mr-mime",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Lickitung Stall",
+                sprite1: "blank",
+                sprite2: "lickitung",
+                source: "Jason Klaczynski's Blog",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Mr. Mime Electabuzz",
+                sprite1: "mr-mime",
+                sprite2: "electabuzz",
+                source: "PTCGArchive",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "The Cleaner 2",
+                sprite1: "jigglypuff",
+                sprite2: "arcanine",
+                source: "\"I-Man\" Henry-Michael Brown",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Venusaur",
+                sprite1: "venusaur",
+                sprite2: "kangaskhan",
+                source: "PTCGArchive",
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+            },
+            {
+                label: "Wigglytuff",
+                sprite1: "blank",
+                sprite2: "wigglytuff",
+                source: "Jason Klaczynski's Blog",
                 deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
             },
         ],
     },
-    // {
-    //     format: '2001',
-    //     decks: [
-    //         {
-    //             label: 'Slowking',
-    //             sprite1: 'scyther',
-    //             sprite2: 'slowking',
-    //             source: 'John Doe',
-    //             deckListLink: '/deck/haymaker-world-championship-john-doe',
-    //         },
-    //     ],
-    // },
 ];
+// {
+//     label: "eee",
+//     sprite1: "eee",
+//     sprite2: "eee",
+//     source: "eee",
+//     deckListLink: '/tournaments/FEATURED_BS/decksbyera/eeeeeee',
+// },
 
 
 const DeckListContainer = styled.div`
@@ -193,8 +341,7 @@ const FeaturedDecks = () => {
                                                 </td>
                                                 <td>
                                                 {deck.sprite2 && deck.sprite2 !== 'blank' ? (
-                                                    <img
-                                                    // <img className='movesecondspritedecks'
+                                                    <img className='movesecondspritedecks'
                                                     src={`/${spriteFolder}/${deck.sprite2}.png`} 
                                                     alt={`${deck.label} sprite`} 
                                                     style={{width: spriteWidth }}

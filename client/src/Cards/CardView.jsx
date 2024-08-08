@@ -249,7 +249,7 @@ const CardView = () => {
             for (const eventId of eventIds) {
                 const eventData = await fetchEventData(eventId);
                 if (eventData) {
-                    const divisions = ['masters', 'all', 'seniors', 'olderseniors', 'youngseniors', 'juniors', 'professors'];
+                    const divisions = ['masters', 'all', 'seniors', 'olderseniors', 'youngseniors', 'juniors', 'professors', 'decksbyera'];
                     const results = [];
 
                     divisions.forEach(division => {
@@ -278,6 +278,7 @@ const CardView = () => {
                                             eventFormat: eventData.format,
                                             eventDate: eventData.date,
                                             playerName: player.name,
+                                            playerLabel: player.source,
                                             division,
                                             flag: player.flag,
                                             placement: playerIndex + 1,
@@ -858,23 +859,31 @@ const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.inc
                                         </tr>
                                         {sortedResults.map((result, index) => (
                                             <tr key={index} style={{ marginBottom: '5px' }}>
-                                                <td>{getPlacementSuffix(result.placement)}</td>
-                                                <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
-                                                <td><span className='grey'>{formatName(result.division)}</span></td>
-                                                <td>
-                                                {/* <Link className='grey' to={`${getEventLink(result.eventId, result.eventName)}/${result.division}`}>
-                                                    {result.eventName}
-                                                </Link> */}
-                                                </td>
+                                                {result.division !== 'decksbyera' && (
+                                                    <>
+                                                        <td>{getPlacementSuffix(result.placement)}</td>
+                                                        <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
+                                                        <td><span className='grey'>{formatName(result.division)}</span></td>
+                                                        <td></td>
+                                                    </>
+                                                )}
+                                                {result.division === 'decksbyera' && (
+                                                    <>
+                                                        <td></td>
+                                                        <td>{result.playerLabel}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </>
+                                                )}
                                                 <td className='player-deck-icons pushright'>
                                                     <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                                                    <Link to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
+                                                    <Link to={eventId.includes('FEATURED') ? `/tournaments/${eventId}/decksbyera/${encodeURIComponent(result.decklist.label)}` : `/tournaments/${eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
                                                         <span className="material-symbols-outlined">format_list_bulleted</span>
                                                     </Link>
                                                 </td>
                                             </tr>
                                         ))}
-                                    </React.Fragment>
+                                        </React.Fragment>
                                 );
                             })}
                         </tbody>

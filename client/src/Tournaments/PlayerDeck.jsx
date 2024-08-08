@@ -307,7 +307,7 @@ const formatToCollections = (format) => {
             collections.push(promoSets[set]);
         }
     });
-
+    
     return collections;
 };
 
@@ -476,40 +476,32 @@ const PlayerDeck = () => {
             </Helmet>
             <div className="player-deck">
                 <div className='player-deck-top'>
-                <div>
-    {!isFeatured && (
-        <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
-            <h2>
-                {formatName(playerData.name)}
-                &nbsp;
-                <span className="material-symbols-outlined turned-link">link</span>      
-            </h2>
-        </Link>
-    )}
-    <hr className='playerdeck-hr'></hr>
-    {isFeatured ? (
-        <>
-            {eventData && <p><Link className='blue-link' to={`/decks-by-era`}>{eventData.name}</Link></p>}
-            {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
-        </>
-    ) : (
-        <>
-            <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
-            {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-            {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
-        </>
-    )}
-</div>
-                    <div className='deck-top-right-options'>
-                        <DecklistOptions decklist={playerData.decklist} />
-                        <div className='deckview-switcher'>
-                            <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
-                                <span className="material-symbols-outlined">reorder</span>
-                            </div>
-                            <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
-                                <span className="material-symbols-outlined">grid_view</span>
-                            </div>
-                        </div>
+                    <div>
+                        {!isFeatured && (
+                            <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
+                                <h2>
+                                    {playerData.label ? formatName(playerData.label) : formatName(playerData.name)}
+                                    &nbsp;
+                                    <span className="material-symbols-outlined turned-link">link</span>      
+                                </h2>
+                            </Link>
+                        )}
+                        {isFeatured ? (
+                            <>
+                                <h2>{playerData && playerData.label && <p>{playerData.label}</p>}</h2>
+                                <hr className='playerdeck-hr'></hr>
+                                {playerData && playerData.source && <p>Source:  {playerData.source}</p>}
+                                {eventData && <p><Link className='blue-link' to={`/decks-by-era`}>{eventData.name}</Link></p>}
+                                {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+                            </>
+                        ) : (
+                            <>
+                                <hr className='playerdeck-hr'></hr>
+                                <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
+                                {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
+                                {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+                            </>
+                        )}
                     </div>
                 </div>
                 {!playerData ? (
