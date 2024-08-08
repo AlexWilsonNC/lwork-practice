@@ -163,7 +163,7 @@ const CardView = () => {
     
         const fetchOtherVersions = async () => {
           try {
-            console.log('cardinfooooo', cardInfo.name)
+            console.log('Featured card name for our sanity', cardInfo.name)
             console.log(encodeURIComponent(cardInfo.name))
             const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
             if (response.ok) {
