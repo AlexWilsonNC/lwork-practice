@@ -145,9 +145,8 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);
   try {
-      const collection = cardConnection.collection('card-database');
-      const cards = await collection.find({ name: cardName });
-      
+    const collection = cardConnection.collection('card-database');
+      const cards = await collection.find({ name: cardName }).toArray();      
       if (cards.length === 0) {
           return res.status(404).json({ message: `Card not found with name: ${cardName}` });
       }
