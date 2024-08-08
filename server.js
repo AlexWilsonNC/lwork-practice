@@ -207,13 +207,13 @@ app.get('/api/cards', async (req, res) => {
   }
 });
 
-app.get('/api/cards/searchbyname/:name', async (req, res) => {
+app.get('/api/cards/:name', async (req, res) => {
   const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);
   try {
       const regex = new RegExp(`^${cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
       const cards = await client.db('legends-cluster').collection('card-database').find({ name: regex }).toArray();
-
+      
       if (cards.length === 0) {
           console.log(`No cards found for name: ${cardName}`);
           return res.status(404).json({ message: `Card not found with name: ${cardName}` });

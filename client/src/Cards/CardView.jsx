@@ -163,9 +163,12 @@ const CardView = () => {
     
         const fetchOtherVersions = async () => {
           try {
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+            console.log('cardinfooooo', cardInfo.name)
+            console.log(encodeURIComponent(cardInfo.name))
+            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${encodeURIComponent(cardInfo.name)}`);
             if (response.ok) {
               const data = await response.json();
+              console.log('data', data)
               setOtherVersions(data);
             } else {
               console.error('Failed to fetch other versions data:', await response.json());
