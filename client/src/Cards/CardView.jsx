@@ -163,26 +163,109 @@ const CardView = () => {
 
         const fetchOtherVersions = async () => {
             try {
-                console.log('Featured card name for our sanity', cardInfo.name)
-                console.log(encodeURIComponent(cardInfo.name))
                 const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
                 if (response.ok) {
                     const data = await response.json();
 
-                    const matchingCards = data.filter(p => {
-                        console.log('ashton', p, cardInfo)
-                        const isMatch =
-                            p.hp === cardInfo.hp &&
-                            p.types[0] === cardInfo.types[0] &&
-                            p.attacks[0]?.name === cardInfo.attacks[0]?.name &&
-                            p.attacks[1]?.name === cardInfo.attacks[1]?.name &&
-                            p.attacks[2]?.name === cardInfo.attacks[2]?.name &&
-                            p.attacks[3]?.name === cardInfo.attacks[3]?.name &&
-                            p.abilities[0]?.name === cardInfo.abilities[0]?.name &&
-                            p.retreatCost === cardInfo.retreatCost
-                        return isMatch;
-                    });
+                    const arraysEqual = (arr1, arr2) => {
+                        if (!arr1 || !arr2 || arr1.length !== arr2.length) {
+                            return false;
+                        }
+                        return arr1.every((element, index) => {
+                            if (typeof element === 'object' && element !== null) {
+                                return JSON.stringify(element) === JSON.stringify(arr2[index]);
+                            }
+                            return element === arr2[index];
+                        });
+                    };
 
+                    const compareAttacks = (attacks1, attacks2) => {
+                        if (!attacks1 || !attacks2 || attacks1.length !== attacks2.length) {
+                            return false;
+                        }
+                        return attacks1.every((attack1) => {
+                            return attacks2.some((attack2) => {
+                                const costsMatch = compareRetreatCost(attack1.cost, attack2.cost);
+                                return (
+                                    attack1.name === attack2.name &&
+                                    costsMatch &&
+                                    attack1.convertedEnergyCost === attack2.convertedEnergyCost &&
+                                    attack1.damage === attack2.damage &&
+                                    attack1.text === attack2.text
+                                );
+                            });
+                        });
+                    };                    
+                    
+                    const compareWeaknesses = (weaknesses1, weaknesses2) => {
+                        if (!weaknesses1 || !weaknesses2 || weaknesses1.length !== weaknesses2.length) {
+                            return false;
+                        }
+                        return weaknesses1.every((weakness1) => {
+                            return weaknesses2.some((weakness2) => {
+                                return (
+                                    weakness1.type === weakness2.type &&
+                                    weakness1.value === weakness2.value
+                                );
+                            });
+                        });
+                    };
+                    
+                    const compareRetreatCost = (cost1, cost2) => {
+                        if (!cost1 && !cost2) {
+                            return true;
+                        }
+                        if ((!cost1 && !cardInfo.convertedRetreatCost) || (!cost2 && !p.convertedRetreatCost)) {
+                            // Ignore retreat cost comparison if neither has a retreatCost or convertedRetreatCost
+                            return true;
+                        }
+                        if (!cost1 || !cost2) {
+                            // If one has a retreatCost and the other doesn't, compare their convertedRetreatCost values instead
+                            return cardInfo.convertedRetreatCost === (cost1 ? cardInfo.convertedRetreatCost : p.convertedRetreatCost);
+                        }
+                        return arraysEqual(cost1, cost2);
+                    };
+                    
+                    const isMatch = (p) => {
+                        const typesMatch = arraysEqual(p.types, cardInfo.types);
+                        const attacksMatch = compareAttacks(p.attacks, cardInfo.attacks);
+                        const weaknessesMatch = compareWeaknesses(p.weaknesses, cardInfo.weaknesses);
+                        const retreatCostMatch = compareRetreatCost(p.retreatCost, cardInfo.retreatCost);
+                        const supertypeMatch = p.supertype === cardInfo.supertype;
+                        const subtypesMatch = arraysEqual(p.subtypes, cardInfo.subtypes);
+                        const abilitiesMatch = (p.abilities || []).length === (cardInfo.abilities || []).length &&
+                            (p.abilities || []).every((ability, index) => {
+                                const otherAbility = (cardInfo.abilities || [])[index];
+                                return (
+                                    ability.name === otherAbility.name &&
+                                    ability.type === otherAbility.type &&
+                                    ability.text === otherAbility.text
+                                );
+                            });
+                                                            
+                        console.log('Comparing card:', p.name, p.setAbbrev, p.number);
+                        console.log('Types match:', typesMatch);
+                        console.log('Attacks match:', attacksMatch);
+                        console.log('Weaknesses match:', weaknessesMatch);
+                        console.log('Retreat cost match:', retreatCostMatch);
+                        console.log('Supertype match:', supertypeMatch);
+                        console.log('Subtypes match:', subtypesMatch);
+                        console.log('Abilities match:', abilitiesMatch);
+                    
+                        return (
+                            p.hp === cardInfo.hp &&
+                            typesMatch &&
+                            attacksMatch &&
+                            weaknessesMatch &&
+                            retreatCostMatch &&
+                            supertypeMatch &&
+                            subtypesMatch &&
+                            abilitiesMatch
+                        );
+                    };
+                                                                                    
+                    const matchingCards = data.filter(isMatch);
+    
                     console.log('data', data)
                     console.log('matchingCards', matchingCards)
                     setOtherVersions(matchingCards);
@@ -296,8 +379,7 @@ const CardView = () => {
                                             p.set === version.setAbbrev &&
                                             p.number === version.number
                                         )) {hasCard = true}
-                                            
-                                })
+                                    })
 
                                     if (hasCard) {
                                         results.push({
