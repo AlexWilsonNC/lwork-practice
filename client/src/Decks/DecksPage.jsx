@@ -92,6 +92,10 @@ const DeckListContainer = styled.div`
   .paddingfive {
     height: 27px !important;
   }
+    .upcoming-btn {
+    opacity: 0.3;
+    pointer-events: none;
+    }
 `;
 
 const FormatSeparator = styled.tr`
@@ -269,9 +273,7 @@ const Decks = () => {
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
             <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
-            <span className='not-ready'>
             <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a>
-            </span>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>

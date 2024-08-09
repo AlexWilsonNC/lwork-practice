@@ -140,6 +140,28 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
+app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
+  const cardName = req.params.name.trim();
+  console.log(`Searching for cards with names containing: ${cardName}`);
+  
+  try {
+    const collection = cardConnection.collection('card-database');
+
+    // Use a regular expression for a case-insensitive partial match
+    const cards = await collection.find({ name: new RegExp(cardName, 'i') }).toArray();      
+
+    if (cards.length === 0) {
+      return res.status(404).json({ message: `No cards found containing: ${cardName}` });
+    }
+
+    console.log(`Found ${cards.length} cards containing name: ${cardName}`);
+    res.json(cards);
+  } catch (error) {
+    console.error('Error occurred while searching for cards:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
+});
+
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);

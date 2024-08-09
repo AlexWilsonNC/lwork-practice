@@ -296,15 +296,12 @@ const CardsPage = () => {
               const aIsSpecial = isSpecial(a.number);
               const bIsSpecial = isSpecial(b.number);
   
-              // Separate "RC", "SH", "GG", "TG", and "CC" cards to the end
               if (aIsSpecial && !bIsSpecial) return 1;
               if (!aIsSpecial && bIsSpecial) return -1;
               if (aIsSpecial && bIsSpecial) {
-                // Both are special cards
                 return aNum - bNum;
               }
   
-              // Sort regular cards
               if (aNum === bNum) {
                 return aSuffix.localeCompare(bSuffix);
               }
@@ -331,7 +328,33 @@ const CardsPage = () => {
   
     fetchCards();
   }, [setName]);
-      
+
+  const handleSearch = async () => {
+    try {
+      let query = searchQuery.trim();
+  
+      // Capitalize the first letter of each word (assuming your database follows this pattern)
+      query = query.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  
+      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query)}`);
+      if (response.ok) {
+        const searchData = await response.json();
+        setFilteredCards(searchData);
+        console.log(searchData); // Log the results for debugging
+      } else {
+        console.error('Failed to fetch search results');
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   const observer = useRef();
 
   const lastCardElementRef = useCallback(node => {
@@ -385,17 +408,17 @@ const CardsPage = () => {
         <div className='align-column'>
           <SearchBarContainer className='seartcjbarcontainer'>
             <SearchInput
-              className='serchbtrn not-ready'
+              className='serchbtrn'
               type="text"
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key
               placeholder="Search card name..."
             />
-            {/* onClick={handleSearch} */}
           </SearchBarContainer>
           <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
             <p>Change Set</p>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <span className="material-symbols-outlined">keyboard_arrow_down</span>
           </DropdownButton>
         </div>
         <DropdownOverlay show={dropdownOpen} />
@@ -418,23 +441,23 @@ const CardsPage = () => {
                   </SeparatorRow>
                 ) : (
                   <DropdownTableRow
-                  key={index}
-                  onClick={() => !set.notavailable && handleSetChange(set.abbrev)}
-                  theme={theme}
-                  style={{
-                    opacity: set.notavailable ? 0.5 : 1,
-                    pointerEvents: set.notavailable ? 'none' : 'auto',
-                  }}
-                >
-                  <DropdownTableCell>
-                    <Link className='settobechanged' to={`/cards/${set.abbrev}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {set.name}
-                    </Link>
-                  </DropdownTableCell>
-                  <DropdownTableCell className='setabbrevopacque'>{set.abbrev}</DropdownTableCell>
-                  <DropdownTableCell className='hidetdonsmall'>{set.total}</DropdownTableCell>
-                  <DropdownTableCell>{set.releaseDate}</DropdownTableCell>
-                </DropdownTableRow>
+                    key={index}
+                    onClick={() => !set.notavailable && handleSetChange(set.abbrev)}
+                    theme={theme}
+                    style={{
+                      opacity: set.notavailable ? 0.5 : 1,
+                      pointerEvents: set.notavailable ? 'none' : 'auto',
+                    }}
+                  >
+                    <DropdownTableCell>
+                      <Link className='settobechanged' to={`/cards/${set.abbrev}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {set.name}
+                      </Link>
+                    </DropdownTableCell>
+                    <DropdownTableCell className='setabbrevopacque'>{set.abbrev}</DropdownTableCell>
+                    <DropdownTableCell className='hidetdonsmall'>{set.total}</DropdownTableCell>
+                    <DropdownTableCell>{set.releaseDate}</DropdownTableCell>
+                  </DropdownTableRow>
                 )
               ))}
             </tbody>
@@ -450,7 +473,7 @@ const CardsPage = () => {
             </div>
           </div>
           <div className='card-display-area'>
-            {cards.map((card, index) => (
+            {(filteredCards.length > 0 ? filteredCards : cards).map((card, index) => (
               <Link key={index} to={`/card/${card.setAbbrev}/${card.number}`}>
                 <img
                   src={card.images.small}
