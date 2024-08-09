@@ -3,7 +3,6 @@ import React from 'react';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
 import discordIcon from '../assets/social-media-icons/discord-icon.png';
 import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
-import tiktokIcon from '../assets/social-media-icons/tiktok-icon.webp';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
 import totodileSprite from '../assets/footer/footerspriteleft.png';
 import feraligatrSprite from '../assets/footer/footersprite.png';
@@ -60,10 +59,6 @@ function Footer() {
                         <a href='https://www.patreon.com/PTCGLegends' target='_blank' rel="noopener noreferrer">
                             <img src={patreonIcon} alt="social-icon" />
                             <p>Support us on Patreon</p>
-                        </a>
-                        <a href='' target='_blank' rel="noopener noreferrer" className='not-ready'>
-                            <img src={tiktokIcon} alt="social-icon" />
-                            <p>Watch us on Tiktok</p>
                         </a>
                         <a href='mailto:ptcglegends@gmail.com'>
                             <img src={emailIcon} alt="social-icon" />

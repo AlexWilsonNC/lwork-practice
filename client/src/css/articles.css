@@ -9,6 +9,9 @@
     width: 800px;
     height: 480px;
 } */
+ .margin-top-article {
+    margin-top: 25px !important;
+ }
 .article-title {
     margin-bottom: 10px;
     display: flex;

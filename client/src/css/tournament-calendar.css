@@ -250,6 +250,9 @@ td div a {
         .upcoming-events-table {
             width: 98%;
         }
+        .event-type-logo2 {
+            width: 35px;
+        }
     }
     @media screen and (max-width: 630px) {
         .indiv-filter select {
@@ -264,6 +267,9 @@ td div a {
     @media screen and (max-width: 530px) {
         .sort-events {
             font-size: 10px;
+        }
+        .event-type-logo2 {
+            width: 25px;
         }
         .indiv-filter select {
             width: 80px;
@@ -291,9 +297,6 @@ td div a {
         table div img {
             margin: 3px 5px 0 0;
             width: 16px;
-        }
-        .event-type-logo2 {
-            width: 35px;
         }
         .event-icon-links span {
             font-size: 19px;
@@ -374,9 +377,6 @@ td div a {
             font-size: 8px;
             height: 38px !important;
             max-height: 38px !important;
-        }
-        .event-type-logo2 {
-            width: 30px;
         }
         table div img {
             margin: 2px 5px 0 0;

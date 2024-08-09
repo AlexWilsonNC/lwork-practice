@@ -43,7 +43,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>List of Documented Archive Updates</h2>
-          <p>Lastest Updated: Aug 1, 2024</p>
+          <p>Lastest Updated: Aug 9, 2024</p>
           <p className='share'>
             <i className="material-symbols-outlined">ios_share</i>&nbsp;Share Page:&nbsp;&nbsp;
             <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-show-count="false">Tweet</a>
@@ -60,6 +60,8 @@ const ArchiveUpdates = () => {
 
         {/* Article Content */}
         <div className='article-content archive-updates'>
+
+          <p className='margin-top-article smaller-txt italic'>* Opaque links are pages yet to be converted on the new site, check back on them soon.</p>
 
           <hr className='title-hr' />
           <br />
@@ -84,7 +86,6 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p className='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
-                    <p>• <a href='../major-events/2001/nj-super-trainer-showdown/day2-results' className='not-ready'>2001 NJ Super Trainer Showdown</a> 8<sup>th</sup> Place (middle division) - Arcanine Typhlosion <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/seniors'>2002 World Championships</a> 31<sup>st</sup> Place (older division) - Donphan Slowking <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/juniors'>2002 World Championships</a> 16<sup>th</sup> Place (younger division) - Kingdra <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/juniors'>2002 World Championships</a> 24<sup>th</sup> Place (younger division) - Dark Feraligatr <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
@@ -158,7 +159,6 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p class='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
-                    <p>• <a href='../major-events/2002/west-coast-stadium-challenge/results' className='not-ready'>2002 West Coast Stadium Challenge</a> 1<sup>st</sup> Place - Feraligatr <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/seniors'>2002 World Championships</a> 13<sup>th</sup> Place - Feraligatr Parasect <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2005_WORLDS/masters/Jaime%20Guerrero-US'>2005 World Championships</a> 5<sup>th</sup> Place - Jaime Guerrero's Rock Lock</p>
                     <p>• <a href='/tournaments/2006_WORLDS/masters/Jaime%20Guerrero-US'>2006 World Championships</a> 9<sup>th</sup> Place - Jaime Guerrero's Rock Lock</p>
@@ -185,11 +185,11 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p class='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
-                    <p>• <a href='../major-events/2002/west-coast-stadium-challenge/results' className='not-ready'>2002 WC Stadium Challenge</a> 2<sup>nd</sup> Place - Kingdra Slowking <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
-                    <p>• <a href='../major-events/2002/west-coast-stadium-challenge/results' className='not-ready'>2002 WC Stadium Challenge</a> 1<sup>st</sup> Place - Feraligatr <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
-                    <p>• <a href='../major-events/2002/west-coast-stadium-challenge/results' className='not-ready'>2002 WC Stadium Challenge</a> 8<sup>th</sup> Place - Kingdra <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
-                    <p>• <a href='../major-events/2002/central-stadium-challenge/results' className='not-ready'>2002 Central Stadium Challenge</a> 5<sup>th</sup> Place - Pooka - Meganium <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
-                    <p>• <a href='/tournaments/2018_NAIC/masters/Jeremiah%20Schmutz-US'>2018 NAIC</a> 66<sup>th</sup> Place - Jeremiah Schmutz</p>
+                    <p>• <a href='/tournaments/2002_WCSC/seniors'>2002 WC Stadium Challenge</a> 2<sup>nd</sup> Place - Kingdra Slowking <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
+                    <p>• <a href='/tournaments/2002_WCSC/seniors'>2002 WC Stadium Challenge</a> 1<sup>st</sup> Place - Feraligatr <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
+                    <p>• <a href='/tournaments/2002_WCSC/seniors'>2002 WC Stadium Challenge</a> 8<sup>th</sup> Place - Kingdra <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
+                    <p>• <a href='/tournaments/2002_CSC/masters'>2002 Central Stadium Challenge</a> 5<sup>th</sup> Place - Pooka - Meganium <span class='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
+                    <p>• <a href='/tournaments/2018_NAIC/masters/Jeremiah%20Schmutz-US'>2018 NAIC</a> 66<sup>th</sup> Place - Jeremiah Schmutz <span className='small-text-archive' style={{ color: 'rgb(33, 175, 38)' }}>(list)</span></p>
 
             <hr className='title-hr' />
             <br />
@@ -197,7 +197,7 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>New Event Page:</p>
                     <p class='small-text-archive'>(The below page(s), have been added to the completed tournaments page.)</p>
-                    <p>• <a href='./tournaments/year/2001/sweden-sts-qualifier/results' className='not-ready'>2001 Super Trainer Showdown Qualifier</a> 600+ player event documented</p>
+                    <p>• <a href='/tournaments/2001_STS_QUALIFIER_SE'>2001 Super Trainer Showdown Qualifier</a> 600+ player event documented</p>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p class='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
@@ -235,8 +235,8 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p class='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
-                    <p>• <a href='../major-events/2001/ca-super-trainer-showdown/day1-results' className='not-ready'>2001 CA Super Trainer Showdown</a> Muliple decks confirmed</p>
-                    <p>• <a href='../major-events/2002/east-coast-stadium-challenge/results' className='not-ready'>2002 EC Stadium Challenge</a> Professor Event results added</p>
+                    <p>• <a href='/tournaments/2001_CA_STS_DAY2'>2001 CA Super Trainer Showdown</a> Muliple decks confirmed</p>
+                    <p>• <a href='/tournaments/2002_ECSC/seniors'>2002 EC Stadium Challenge</a> Professor Event results added</p>
                     <p>• <a href='/tournaments/2002_WORLDS/seniors'>2002 World Championships</a> Top 8 - Kevin Cheng (Kingdra) - <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/seniors'>2002 World Championships</a> Top 16 - Drew Holton (Dark Blastoise) - <span className='small-text-archive' style={{ color: 'rgb(255, 80, 80)' }}>(no list)</span></p>
                     <p>• <a href='/tournaments/2002_WORLDS/seniors/Yi-An%20Lu-UK'>2002 World Championships</a> Top 32 - Yi-An Lu (Kingdra)</p>
@@ -276,7 +276,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../decks-by-era/1999/bs-fossil#alakazam' className='not-ready'>1999 BS - FO</a> Alakazam</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#electabuzz-magmar' className='not-ready'>1999 BS - FO</a> Magmar Electabuzz</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#venusaur' className='not-ready'>1999 BS - FO</a> Venusaur</p>
-                    <p>• <a href='../decks-by-era/2011/hgss-bw#truth' className='not-ready'>2011 Worlds</a> Ross Cawthon's The Truth - Link to his Event Report added</p>
+                    {/* <p>• <a href='../decks-by-era/2011/hgss-bw#truth' className='not-ready'>2011 Worlds</a> Ross Cawthon's The Truth - Link to his Event Report added</p> */}
                     <br />
                     <p style={{ fontWeight: 600 }}>Corrections:</p>
                     <p class='small-text-archive'>(The below list(s) had some form of correction.)</p>
@@ -307,7 +307,7 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Corrections:</p>
                     <p class='small-text-archive'>(The below list(s) had some form of correction.)</p>
-                    <p>• <a href='../decks-by-era/2010/dp-ul#shupp' className='not-ready'>2010 DP-UL</a> Shuppet Donk - Credited to Azul Griego</p>
+                    <p>• <a href='../decks-by-era/2010/dp-ul#shupp' className='not-ready'>2010 DP-UL</a> Shuppet Donk - Credited to Azul Garcia Griego</p>
 
                 <hr className='title-hr' />
                 <br />
@@ -341,7 +341,7 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Corrections:</p>
                     <p class='small-text-archive'>(The below list(s) had some form of correction.)</p>
-                    <p>• <a href='../major-events/2000/nj-super-trainer-showdown/results' className='not-ready'>2000 NJ STS</a> Andrew Daly's Top 8 - Haymaker Arcanine</p>
+                    <p>• <a href='/tournaments/2000_NJ_STS/seniors/Andrew%20Daly-unknown'>2000 NJ STS</a> Andrew Daly's Top 8 - Haymaker Arcanine</p>
 
             <hr className='title-hr' />
             <br />
@@ -390,8 +390,8 @@ const ArchiveUpdates = () => {
                     <br /><p style={{ fontWeight: 600 }}>Corrections:</p>
                     <p class='small-text-archive'>(The below list(s) had some form of correction.)</p>
                     <p>• <a href='/tournaments/2009_WORLDS/masters/Jay%20Hornung-US'>2009 Worlds</a> Jay Hornung's 3<sup>rd</sup> Place - Flygon Machamp</p>
-                    <p>• <a href='/' className='not-ready'>2017 NAIC</a> Regan Retzloff's 1<sup>st</sup> Place (jr) - Rainbow Road</p>
-                    <p>• <a href='/' className='not-ready'>2017 NAIC</a> Ciaran Farah's Top 64 - Mega Gardevoir</p>
+                    <p>• <a href='/tournaments/2017_NAIC/juniors/Regan%20Retzloff-US'>2017 NAIC</a> Regan Retzloff's 1<sup>st</sup> Place (jr) - Rainbow Road</p>
+                    <p>• <a href='/tournaments/2017_NAIC/masters/Ciaran%20Farah-CA'>2017 NAIC</a> Ciaran Farah's Top 64 - Mega Gardevoir</p>
 
 <br />
                     <p><i>( HUGE shout out and a massive thank you to Richard Pietrek for discovering nearly every global Nationals result and list above! )</i></p>
@@ -402,8 +402,8 @@ const ArchiveUpdates = () => {
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
                     <p class='small-text-archive'>(The below result(s), (some with lists), have been added to their respective event pages.)</p>
-                    <p>• <a href='../major-events/2001/nj-super-trainer-showdown/day2-results' className='not-ready'>2001 NJ Super Trainer Showdown</a> Top 8 Arcanine - Bruce Long</p>
-                    <p>• <a href='../major-events/2001/nj-super-trainer-showdown/day1-results' className='not-ready'>2001 NJ Super Trainer Showdown</a> Top 8 Victreebel - Bruce Long</p>
+                    <p>• <a href='/tournaments/2001_NJ_STS/masters/Bruce%20Long-unknown'>2001 NJ Super Trainer Showdown</a> Top 8 Arcanine - Bruce Long</p>
+                    <p>• <a href='/tournaments/2001_NJ_STS_DAY1/masters/Bruce%20Long-unknown'>2001 NJ Super Trainer Showdown</a> Top 8 Victreebel - Bruce Long</p>
                     <p>• <a href='/tournaments/2004_NATS_US/masters/Kyle%20Sucevich-US'>2004 US Nationals</a> 2<sup>nd</sup> Place Walrein - Kyle "Pooka" Sucevich</p>
                     <p>• <a href='/tournaments/2005_NATS_US/masters/Kyle%20Sucevich-US'>2005 US Nationals</a> Top 8 Metagross - Kyle "Pooka" Sucevich</p>
                     <p>• <a href='/tournaments/2011_WORLDS/masters/Dylan%20Lefavour-US'>2011 World Championships</a> Top 8 Reshiphlosion - Dylan Lefavour</p>

@@ -10,6 +10,9 @@ const formatOrder = [
   "BRS-TWM",
   "BRS-TEF",
   "BST-PAL",
+  "BST-SVI",
+  "SSH-CRZ",
+  "SSH-SIT",
   "SSH-PGO",
   "SSH-ASR",
   "SSH-BRS",
@@ -265,10 +268,9 @@ const Decks = () => {
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <h3>Decks by: </h3>
             <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
             <span className='not-ready'>
-            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Era</a>
+            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a>
             </span>
           </div>
           <div className='search-input'>
@@ -290,7 +292,7 @@ const Decks = () => {
                 <option value="">All Formats</option>
 
               <optgroup label="2024">
-              <option value="BRS-TWM">BRS-TWM</option>
+                <option value="BRS-TWM">BRS-TWM</option>
                 <option value="BRS-TEF">BRS-TEF</option>
               </optgroup>
 

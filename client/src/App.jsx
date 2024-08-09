@@ -18,32 +18,37 @@ import AllArticlesPage from './ArticleComponents/AllArticlesPage';
 import ArticleComponent from './ArticleComponents/ArticleComponent';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
+import NotFound from './Catch/NotFound';
 
 function App() {
 
   return (
-    <>
+    <div className="all-app-container">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
-        <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
-        <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
-        <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
-        <Route path="/decks" element={<DecksPage />} />
-        <Route path="/decks-by-era" element={<FeaturedDecks />} />
-        <Route path="/deck/:id" element={<DeckProfile />}  />
-        <Route path="/cards/:setName" element={<CardsPage />} />
-        <Route path="/card/:set/:number" element={<CardView />} />
-        <Route path="/players" element={<Players />} />
-        <Route path="/player/:id" element={<PlayerProfile />} />
-        <Route path="/archive-updates" element={<ArchiveUpdates />} />
-        <Route path="/articles/all" element={<AllArticlesPage />} />
-        <Route path="/articles/:articleId" element={<ArticleComponent />} />
-      </Routes>
-      <BackToTopButton />
+      <main className='mainwrapedcontainer'>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
+          <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
+          <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
+          <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
+          <Route path="/decks" element={<DecksPage />} />
+          {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
+          <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />
+          <Route path="/deck/:id" element={<DeckProfile />} />
+          <Route path="/cards/:setName" element={<CardsPage />} />
+          <Route path="/card/:set/:number" element={<CardView />} />
+          <Route path="/players" element={<Players />} />
+          <Route path="/player/:id" element={<PlayerProfile />} />
+          <Route path="/archive-updates" element={<ArchiveUpdates />} />
+          <Route path="/articles/all" element={<AllArticlesPage />} />
+          <Route path="/articles/:articleId" element={<ArticleComponent />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <BackToTopButton />
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

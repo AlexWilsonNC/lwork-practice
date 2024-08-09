@@ -140,7 +140,6 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
-
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.trim();
   console.log(`Searching for card with name: ${cardName}`);

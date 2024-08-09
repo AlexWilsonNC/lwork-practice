@@ -18,3 +18,13 @@
 html,body{
   overflow-x: hidden;
 }
+.all-app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.mainwrapedcontainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

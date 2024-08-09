@@ -113,15 +113,16 @@ const formatDate = (dateString) => {
 const CardsPage = () => {
   const { theme } = useTheme();
   const { setName } = useParams();
-  const navigate = useNavigate(); // Add navigate hook
+  const navigate = useNavigate(); 
   const [cards, setCards] = useState([]);
   const [logoUrl, setLogoUrl] = useState('');
   const [nameText, setNameText] = useState(''); 
   const [setRelease, setSetRelease] = useState(''); 
   const [setTotal, setSetTotal] = useState(''); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredCards, setFilteredCards] = useState([]);
   const dropdownRef = useRef(null);
-
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
     { name: "Surging Sparks", abbrev: "--", releaseDate: "Nov -, 2024", total: "--", notavailable: true },
@@ -388,7 +389,7 @@ const CardsPage = () => {
               type="text"
               // value={searchQuery}
               // onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for a card name..."
+              placeholder="Search card name..."
             />
             {/* onClick={handleSearch} */}
           </SearchBarContainer>

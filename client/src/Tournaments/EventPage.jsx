@@ -377,7 +377,7 @@ const EventPage = () => {
     };
 
     if (!eventData) {
-        return <div>Loading...</div>;
+        return;
     }
     
     const isMastersEmpty = mastersResults.length === 0;
