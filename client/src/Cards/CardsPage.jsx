@@ -365,7 +365,7 @@ const CardsPage = () => {
     } catch (error) {
         console.error('Error fetching search results:', error);
     }
-};
+  };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
