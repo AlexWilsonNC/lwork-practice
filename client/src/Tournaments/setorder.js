@@ -1,5 +1,6 @@
 const orderedSets = [
 // sv
+    "SFA", 
     "TWM", 
     "TEF",
     "PAF",

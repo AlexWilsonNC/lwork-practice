@@ -123,6 +123,8 @@ const CardsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCards, setFilteredCards] = useState([]);
   const dropdownRef = useRef(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
     { name: "Surging Sparks", abbrev: "--", releaseDate: "Nov -, 2024", total: "--", notavailable: true },
@@ -331,23 +333,39 @@ const CardsPage = () => {
 
   const handleSearch = async () => {
     try {
-      let query = searchQuery.trim();
-  
-      // Capitalize the first letter of each word (assuming your database follows this pattern)
-      query = query.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-  
-      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query)}`);
-      if (response.ok) {
-        const searchData = await response.json();
-        setFilteredCards(searchData);
-        console.log(searchData); // Log the results for debugging
-      } else {
-        console.error('Failed to fetch search results');
-      }
+        let query = searchQuery.trim().toLowerCase();
+
+        // Remove special characters from the query
+        query = query.replace(/[^a-z0-9\s]/gi, '');
+
+        // Check if the query is exactly "n" (case-insensitive)
+        let url;
+        if (query === "n") {
+            // Use the exact match API endpoint
+            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query.toUpperCase())}`;
+        } else {
+            // Use the partial match API endpoint
+            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/partial/${encodeURIComponent(query)}`;
+        }
+
+        const response = await fetch(url);
+
+        if (response.ok) {
+            const searchData = await response.json();
+
+            // Sort cards by release date (newest first)
+            const sortedData = searchData.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+
+            setFilteredCards(sortedData);
+            setHasSearched(true); // Set hasSearched to true when a search is performed
+            console.log(sortedData); // Log the sorted results for debugging
+        } else {
+            console.error('Failed to fetch search results');
+        }
     } catch (error) {
-      console.error('Error fetching search results:', error);
+        console.error('Error fetching search results:', error);
     }
-  };
+};
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -376,6 +394,9 @@ const CardsPage = () => {
   const handleSetChange = (abbrev) => {
     navigate(`/cards/${abbrev}`);
     setDropdownOpen(false);
+    setHasSearched(false); // Reset the search state
+    setSearchQuery(''); // Clear the search query
+    setFilteredCards([]); // Clear the filtered cards
   };
 
   const handleClickOutside = useCallback((event) => {
@@ -413,7 +434,7 @@ const CardsPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress} // Listen for Enter key
-              placeholder="Search card name..."
+              placeholder="Search any card name..."
             />
           </SearchBarContainer>
           <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -464,14 +485,16 @@ const CardsPage = () => {
           </DropdownTable>
         </DropdownContent>
         <div className='whole-set-view-area'>
-          <div className='set-info-area'>
-            {logoUrl && <img src={logoUrl} alt="Set Logo" />}
-            <div className='setinfotext'>
-              {nameText && <p>{nameText}</p>}
-              {setRelease && !nameText.toLowerCase().includes('promo') && <p>{setRelease}</p>}
-              {setTotal && <p>Cards: {setTotal}</p>}
+          {!hasSearched && (
+            <div className='set-info-area'>
+              {logoUrl && <img src={logoUrl} alt="Set Logo" />}
+              <div className='setinfotext'>
+                {nameText && <p>{nameText}</p>}
+                {setRelease && !nameText.toLowerCase().includes('promo') && <p>{setRelease}</p>}
+                {setTotal && <p>Cards: {setTotal}</p>}
+              </div>
             </div>
-          </div>
+          )}
           <div className='card-display-area'>
             {(filteredCards.length > 0 ? filteredCards : cards).map((card, index) => (
               <Link key={index} to={`/card/${card.setAbbrev}/${card.number}`}>
