@@ -147,13 +147,14 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
   try {
       const collection = cardConnection.collection('card-database');
 
-      // Normalize the query by removing special characters
-      cardName = cardName.replace(/[^a-z0-9\s]/gi, '');
+      // Normalize the search query by removing non-alphanumeric characters
+      const normalizedCardName = cardName.replace(/[^a-z0-9]/gi, '');
 
-      // Use a regular expression for a case-insensitive partial match
+      // Use a regular expression to find matches, ignoring special characters
       const cards = await collection.find({
+          // Remove special characters from card names in the database for comparison
           name: {
-              $regex: new RegExp(cardName.replace(/[^a-z0-9\s]/gi, ''), 'i')
+              $regex: new RegExp(normalizedCardName.replace(/[^a-z0-9]/gi, ''), 'i')
           }
       }).toArray();
 
@@ -168,6 +169,7 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
       res.status(500).json({ message: 'Server error occurred' });
   }
 });
+
 
 app.get('/api/cards/searchbyname/:name', async (req, res) => {
   const cardName = req.params.name.trim();
