@@ -261,13 +261,32 @@
     color: #1290eb;
     font-weight: 600;
 }
-.showmoreversions {
+.top-players-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.top-players-table {
     width: 100%;
-    text-align: center;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.top-players-table th,
+.top-players-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.top-players-table th {
+    text-align: left;
+}
+.showmoreversions {
+    width: 100% !important;
     background-color: #1290eb;
     color:white;
     border: none;
-    padding: 2px 0;
+    padding: 0 0 0 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -275,6 +294,7 @@
 }
 .showmoreversions:hover {
     cursor: pointer;
+    text-shadow: 1px 1px 5px black;
 }
 .show-cardinfo-on-small {
     display: none;
@@ -477,6 +497,9 @@
     .other-versions td {
         font-size: 11px;
     }
+    .showmoreversions {
+        width: 110% !important;
+    }
     .navigation-links a {
         font-size: 12px;
     }
@@ -490,6 +513,9 @@
 @media screen and (max-width: 800px) {
     .other-versions {
         width: 100%;
+    }
+    .showmoreversions {
+        width: 100% !important;
     }
     .turned-link {
         font-size: 18px;
@@ -580,9 +606,11 @@
     .card-and-setinfo div {
         display: none;
     }
-    .other-versions,
-    .showmoreversions {
+    .other-versions{
         width: 125%;
+    }
+    .showmoreversions {
+        width: 125% !important;
     }
     .other-versions td,
     .card-art-td {
@@ -708,9 +736,11 @@
     }
 }
 @media screen and (max-width: 450px) {
-    .other-versions,
-    .showmoreversions {
+    .other-versions {
         width: 110%;
+    }
+    .showmoreversions {
+        width: 110% !important;
     }
     .legality-mark {
         font-size: 20px;
@@ -769,9 +799,11 @@
     }
 }
 @media screen and (max-width: 380px) {
-    .other-versions,
-    .showmoreversions {
+    .other-versions {
         width: 100%;
+    }
+    .showmoreversions {
+        width: 100% !important;
     }
     .the-card-img {
         border-radius: 16px !important;

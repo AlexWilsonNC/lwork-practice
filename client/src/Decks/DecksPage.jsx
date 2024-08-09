@@ -265,9 +265,10 @@ const Decks = () => {
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Decks by Event Results</a>
+            <h3>Decks by: </h3>
+            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
             <span className='not-ready'>
-            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Decks by Era</a>
+            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Featured Era</a>
             </span>
           </div>
           <div className='search-input'>
@@ -295,6 +296,9 @@ const Decks = () => {
 
               <optgroup label="2023">
                 <option value="BST-PAL">BST-PAL</option>
+                <option value="BST-SVI">BST-SVI</option>
+                <option value="SSH-CRZ">SSH-CRZ</option>
+                <option value="SSH-SIT">SSH-SIT</option>
               </optgroup>
               
               <optgroup label="2022">

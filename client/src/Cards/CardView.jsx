@@ -126,6 +126,7 @@ const CardView = () => {
     const [cardData, setCardData] = useState({ cardMap: {}, cardNameMap: {} });
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
     const [isFullScreen, setIsFullScreen] = useState(false);
+    const [showAllResults, setShowAllResults] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -167,72 +168,12 @@ const CardView = () => {
                 if (response.ok) {
                     const data = await response.json();
 
-                    const arraysEqual = (arr1, arr2) => {
-                        if (!arr1 || !arr2 || arr1.length !== arr2.length) {
-                            return false;
-                        }
-                        return arr1.every((element, index) => {
-                            if (typeof element === 'object' && element !== null) {
-                                return JSON.stringify(element) === JSON.stringify(arr2[index]);
-                            }
-                            return element === arr2[index];
-                        });
-                    };
-
-                    const compareAttacks = (attacks1, attacks2) => {
-                        if (!attacks1 || !attacks2 || attacks1.length !== attacks2.length) {
-                            return false;
-                        }
-                        return attacks1.every((attack1) => {
-                            return attacks2.some((attack2) => {
-                                const costsMatch = compareRetreatCost(attack1.cost, attack2.cost);
-                                return (
-                                    attack1.name === attack2.name &&
-                                    costsMatch &&
-                                    attack1.convertedEnergyCost === attack2.convertedEnergyCost &&
-                                    attack1.damage === attack2.damage &&
-                                    attack1.text === attack2.text
-                                );
-                            });
-                        });
-                    };                    
-                    
-                    const compareWeaknesses = (weaknesses1, weaknesses2) => {
-                        if (!weaknesses1 || !weaknesses2 || weaknesses1.length !== weaknesses2.length) {
-                            return false;
-                        }
-                        return weaknesses1.every((weakness1) => {
-                            return weaknesses2.some((weakness2) => {
-                                return (
-                                    weakness1.type === weakness2.type &&
-                                    weakness1.value === weakness2.value
-                                );
-                            });
-                        });
-                    };
-                    
-                    const compareRetreatCost = (cost1, cost2) => {
-                        if (!cost1 && !cost2) {
-                            return true;
-                        }
-                        if ((!cost1 && !cardInfo.convertedRetreatCost) || (!cost2 && !p.convertedRetreatCost)) {
-                            // Ignore retreat cost comparison if neither has a retreatCost or convertedRetreatCost
-                            return true;
-                        }
-                        if (!cost1 || !cost2) {
-                            // If one has a retreatCost and the other doesn't, compare their convertedRetreatCost values instead
-                            return cardInfo.convertedRetreatCost === (cost1 ? cardInfo.convertedRetreatCost : p.convertedRetreatCost);
-                        }
-                        return arraysEqual(cost1, cost2);
-                    };
-                    
                     const isMatch = (p) => {
                         const typesMatch = arraysEqual(p.types, cardInfo.types);
                         const attacksMatch = compareAttacks(p.attacks, cardInfo.attacks);
                         const weaknessesMatch = compareWeaknesses(p.weaknesses, cardInfo.weaknesses);
-                        const retreatCostMatch = compareRetreatCost(p.retreatCost, cardInfo.retreatCost);
-                        const supertypeMatch = p.supertype === cardInfo.supertype;
-                        const subtypesMatch = arraysEqual(p.subtypes, cardInfo.subtypes);
+                        const resistancesMatch = compareWeaknesses(p.resistances, cardInfo.resistances);
+                        const retreatCostMatch = compareRetreatCost(p, cardInfo);
                         const abilitiesMatch = (p.abilities || []).length === (cardInfo.abilities || []).length &&
                             (p.abilities || []).every((ability, index) => {
                                 const otherAbility = (cardInfo.abilities || [])[index];
@@ -242,28 +183,79 @@ const CardView = () => {
                                     ability.text === otherAbility.text
                                 );
                             });
-                                                            
-                        console.log('Comparing card:', p.name, p.setAbbrev, p.number);
-                        console.log('Types match:', typesMatch);
-                        console.log('Attacks match:', attacksMatch);
-                        console.log('Weaknesses match:', weaknessesMatch);
-                        console.log('Retreat cost match:', retreatCostMatch);
-                        console.log('Supertype match:', supertypeMatch);
-                        console.log('Subtypes match:', subtypesMatch);
-                        console.log('Abilities match:', abilitiesMatch);
+
+                            const ancientTraitMatch = p.ancientTrait?.name === cardInfo.ancientTrait?.name &&
+                            p.ancientTrait?.text === cardInfo.ancientTrait?.text;                    
+                    
+                        // console.log('Comparing card:', p.name);
+                        // console.log('Types match:', typesMatch);
+                        // console.log('Attacks match:', attacksMatch);
+                        // console.log('Weaknesses match:', weaknessesMatch);
+                        // console.log('Resistances match:', resistancesMatch);
+                        // console.log('Retreat cost match:', retreatCostMatch);
+                        // console.log('Abilities match:', abilitiesMatch);
+                        // console.log('Ancient Trait match:', ancientTraitMatch);
                     
                         return (
                             p.hp === cardInfo.hp &&
                             typesMatch &&
                             attacksMatch &&
                             weaknessesMatch &&
+                            resistancesMatch &&
                             retreatCostMatch &&
-                            supertypeMatch &&
-                            subtypesMatch &&
-                            abilitiesMatch
+                            abilitiesMatch &&
+                            ancientTraitMatch &&
+                            p.name === cardInfo.name
                         );
                     };
-                                                                                    
+                    
+                    const compareRetreatCost = (card1, card2) => {
+                        const retreat1 = card1.retreatCost || card1.convertedRetreatCost || 0;
+                        const retreat2 = card2.retreatCost || card2.convertedRetreatCost || 0;
+                    
+                        if (retreat1 === 0 && retreat2 === 0) {
+                            return true;
+                        }
+                    
+                        if (typeof retreat1 === 'number' && typeof retreat2 === 'number') {
+                            return retreat1 === retreat2;
+                        }
+                    
+                        if (Array.isArray(retreat1) && Array.isArray(retreat2)) {
+                            return retreat1.length === retreat2.length;
+                        }
+                    
+                        return false;
+                    };
+                    
+                    const compareWeaknesses = (weaknesses1 = [], weaknesses2 = []) => {
+                        if (weaknesses1.length !== weaknesses2.length) return false;
+                        return weaknesses1.every((weakness, index) => {
+                            const otherWeakness = weaknesses2[index];
+                            return weakness.type === otherWeakness.type;
+                        });
+                    };
+                    
+                    const compareAttacks = (attacks1 = [], attacks2 = []) => {
+                        if (attacks1.length !== attacks2.length) return false;
+                        return attacks1.every((attack, index) => {
+                            const otherAttack = attacks2[index];
+                            return (
+                                attack.name === otherAttack.name &&
+                                arraysEqual(attack.cost, otherAttack.cost) &&
+                                attack.convertedEnergyCost === otherAttack.convertedEnergyCost &&
+                                attack.damage === otherAttack.damage &&
+                                attack.text === otherAttack.text
+                            );
+                        });
+                    };
+                    
+                    const arraysEqual = (arr1 = [], arr2 = []) => {
+                        if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+                        if (arr1.length !== arr2.length) return false;
+                        return arr1.every((val, index) => val === arr2[index]);
+                    };
+                                                                                                                            
                     const matchingCards = data.filter(isMatch);
     
                     console.log('data', data)
@@ -639,7 +631,7 @@ const CardView = () => {
     };
 
     const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-
+    const displayedEventResults = showAllResults ? eventResults : eventResults.slice(0, 5);
     const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.includes(cardInfo.set.series.toLowerCase());
 
     return (
@@ -920,90 +912,107 @@ const CardView = () => {
                 </div>
             </div>
             <div className="event-results marginbottom">
-                <p className='decks-that-contain'>Decklists that contain <span className='italic'>{cardInfo.name}</span></p>
-                <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
-                {loading && !eventsScanned ? (
-                    <div className="spinner margintop"></div>
-                ) : isBasicEnergy ? (
-                    <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
-                ) : eventResults.length > 0 ? (
-                    <table className='cards-specific-results'>
-                        <thead>
-                            <tr>
-                                <th style={{ width: '1%' }}>Place</th>
-                                <th style={{ width: '1%' }}>Player</th>
-                                <th style={{ width: '1%' }}>Division</th>
-                                <th style={{ width: '1%' }}></th>
-                                <th style={{ width: '1%' }}>Decklist</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Object.entries(
-                                eventResults.reduce((acc, result) => {
-                                    if (!acc[result.eventId]) {
-                                        acc[result.eventId] = [];
-                                    }
-                                    acc[result.eventId].push(result);
-                                    return acc;
-                                }, {})
-                            ).sort((a, b) => {
-                                const dateA = new Date(a[1][0].eventDate);
-                                const dateB = new Date(b[1][0].eventDate);
-                                return dateB - dateA;
-                            }).map(([eventId, results]) => {
-                                const sortedResults = results.sort((a, b) => {
-                                    const divisionOrder = { masters: 0, seniors: 1, juniors: 2, professors: 3, all: 4 };
-                                    const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
-                                    if (divisionComparison !== 0) return divisionComparison;
-                                    return a.placement - b.placement;
-                                });
-                                const { eventName, eventDate, eventFormat } = results[0];
-                                return (
-                                    <React.Fragment key={eventId}>
-                                        <tr className="event-separator">
-                                            <td colSpan="5">
-                                                <Link className="event-separator-content" to={`/tournaments/${eventId}`}>
-                                                    <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;({eventFormat})
+        <p className='decks-that-contain'>Decklists that contain <span className='italic'>{cardInfo.name}</span></p>
+        <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
+        {loading && !eventsScanned ? (
+            <div className="spinner margintop"></div>
+        ) : isBasicEnergy ? (
+            <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
+        ) : eventResults.length > 0 ? (
+            <>
+                <table className='cards-specific-results'>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '1%' }}>Place</th>
+                            <th style={{ width: '1%' }}>Player</th>
+                            <th style={{ width: '1%' }}>Division</th>
+                            <th style={{ width: '1%' }}></th>
+                            <th style={{ width: '1%' }}>Decklist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(
+                            displayedEventResults.reduce((acc, result) => {
+                                if (!acc[result.eventId]) {
+                                    acc[result.eventId] = [];
+                                }
+                                acc[result.eventId].push(result);
+                                return acc;
+                            }, {})
+                        ).sort((a, b) => {
+                            const dateA = new Date(a[1][0].eventDate);
+                            const dateB = new Date(b[1][0].eventDate);
+                            return dateB - dateA;
+                        }).map(([eventId, results]) => {
+                            const sortedResults = results.sort((a, b) => {
+                                const divisionOrder = { masters: 0, seniors: 1, juniors: 2, professors: 3, all: 4 };
+                                const divisionComparison = divisionOrder[a.division] - divisionOrder[b.division];
+                                if (divisionComparison !== 0) return divisionComparison;
+                                return a.placement - b.placement;
+                            });
+                            const { eventName, eventDate, eventFormat } = results[0];
+                            return (
+                                <React.Fragment key={eventId}>
+                                    <tr className="event-separator">
+                                        <td colSpan="5">
+                                            <Link className="event-separator-content" to={`/tournaments/${eventId}`}>
+                                                <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;({eventFormat})
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                    {sortedResults.map((result, index) => (
+                                        <tr key={index} style={{ marginBottom: '5px' }}>
+                                            {result.division !== 'decksbyera' && (
+                                                <>
+                                                    <td>{getPlacementSuffix(result.placement)}</td>
+                                                    <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
+                                                    <td><span className='grey'>{formatName(result.division)}</span></td>
+                                                    <td></td>
+                                                </>
+                                            )}
+                                            {result.division === 'decksbyera' && (
+                                                <>
+                                                    <td></td>
+                                                    <td>{result.playerLabel}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </>
+                                            )}
+                                            <td className='player-deck-icons pushright'>
+                                                <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
+                                                <Link to={eventId.includes('FEATURED') ? `/tournaments/${eventId}/decksbyera/${encodeURIComponent(result.decklist.label)}` : `/tournaments/${eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
+                                                    <span className="material-symbols-outlined">format_list_bulleted</span>
                                                 </Link>
                                             </td>
                                         </tr>
-                                        {sortedResults.map((result, index) => (
-                                            <tr key={index} style={{ marginBottom: '5px' }}>
-                                                {result.division !== 'decksbyera' && (
-                                                    <>
-                                                        <td>{getPlacementSuffix(result.placement)}</td>
-                                                        <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.flag}`}>{formatName(result.playerName)}</Link></td>
-                                                        <td><span className='grey'>{formatName(result.division)}</span></td>
-                                                        <td></td>
-                                                    </>
-                                                )}
-                                                {result.division === 'decksbyera' && (
-                                                    <>
-                                                        <td></td>
-                                                        <td>{result.playerLabel}</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </>
-                                                )}
-                                                <td className='player-deck-icons pushright'>
-                                                    <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
-                                                    <Link to={eventId.includes('FEATURED') ? `/tournaments/${eventId}/decksbyera/${encodeURIComponent(result.decklist.label)}` : `/tournaments/${eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.flag)}`}>
-                                                        <span className="material-symbols-outlined">format_list_bulleted</span>
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </React.Fragment>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                ) : (
-                    eventsScanned && (
-                        <p className='margintop'>Looks like this card has never seen success... at least not from what we've documented.<br /><br /><span className='smaller-txt italic'>Have a list featuring {cardInfo.name}? Send it in to <a className='blue' href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</span></p>
-                    )
+                                    ))}
+                                </React.Fragment>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                {eventResults.length > 5 && (
+                    <button onClick={() => setShowAllResults(!showAllResults)} className='showmoreversions'>
+                        {showAllResults ? (
+                            <>
+                                See Less <span className="material-symbols-outlined">keyboard_arrow_up</span>
+                            </>
+                        ) : (
+                            <>
+                                See More <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                            </>
+                        )}
+                    </button>
                 )}
-            </div>
+            </>
+        ) : (
+            eventsScanned && (
+                <p className='margintop'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.</p>
+            )
+        )}
+        <br></br>
+        <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name}? Or spot a mistake? Send it in to <a className='blue' href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
+    </div>
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>
                     <img className="fullscreen-image" src={cardInfo.images.large} alt={cardInfo.name} />

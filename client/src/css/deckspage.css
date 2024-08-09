@@ -89,6 +89,19 @@
 .featured-decks-table th:nth-child(4) {
     width: 50%;
 }
+.bts-in h3 {
+    padding-left: 15px;
+}
+@media screen and (max-width: 1115px) {
+    .bts-in h3 {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 650px) {
+    .bts-in h3 {
+        display: none;
+    }
+}
 @media screen and (max-width: 950px) {
     .deck-table {
         height: 45px;
