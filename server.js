@@ -150,13 +150,25 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
       // Normalize the search query by removing non-alphanumeric characters
       const normalizedCardName = cardName.replace(/[^a-z0-9]/gi, '');
 
-      // Use a regular expression to find matches, ignoring special characters
-      const cards = await collection.find({
-          // Remove special characters from card names in the database for comparison
-          name: {
-              $regex: new RegExp(normalizedCardName.replace(/[^a-z0-9]/gi, ''), 'i')
+      // Use an aggregation pipeline to normalize and match card names
+      const cards = await collection.aggregate([
+          {
+              $addFields: {
+                  normalizedCardName: {
+                      $replaceAll: {
+                          input: { $toLower: "$name" },
+                          find: /[^a-z0-9]/g,
+                          replacement: ""
+                      }
+                  }
+              }
+          },
+          {
+              $match: {
+                  normalizedCardName: { $regex: new RegExp(normalizedCardName, 'i') }
+              }
           }
-      }).toArray();
+      ]).toArray();
 
       if (cards.length === 0) {
           return res.status(404).json({ message: `No cards found containing: ${cardName}` });
