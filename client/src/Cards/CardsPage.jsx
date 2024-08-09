@@ -336,36 +336,33 @@ const CardsPage = () => {
         let query = searchQuery.trim().toLowerCase();
 
         // Remove special characters from the query
-        query = query.replace(/[^a-z0-9\s]/gi, '');
+        const normalizedQuery = query.replace(/[^a-z0-9\s]/gi, '');
 
-        // Check if the query is exactly "n" (case-insensitive)
-        let url;
-        if (query === "n") {
-            // Use the exact match API endpoint
-            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query.toUpperCase())}`;
-        } else {
-            // Use the partial match API endpoint
-            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/partial/${encodeURIComponent(query)}`;
-        }
-
+        // Use the partial match API endpoint
+        const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/partial/${encodeURIComponent(normalizedQuery)}`;
+        
         const response = await fetch(url);
 
         if (response.ok) {
             const searchData = await response.json();
 
-            // Sort cards by release date (newest first)
-            const sortedData = searchData.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+            // Filter and sort cards by release date (newest first)
+            const filteredData = searchData.filter(card => {
+                // Normalize card names by removing special characters
+                const normalizedCardName = card.name.toLowerCase().replace(/[^a-z0-9\s]/gi, '');
+                return normalizedCardName.includes(normalizedQuery);
+            }).sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
 
-            setFilteredCards(sortedData);
+            setFilteredCards(filteredData);
             setHasSearched(true); // Set hasSearched to true when a search is performed
-            console.log(sortedData); // Log the sorted results for debugging
+            console.log(filteredData); // Log the filtered and sorted results for debugging
         } else {
             console.error('Failed to fetch search results');
         }
     } catch (error) {
         console.error('Error fetching search results:', error);
     }
-  };
+};
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
