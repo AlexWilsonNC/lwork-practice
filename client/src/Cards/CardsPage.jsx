@@ -281,7 +281,7 @@ const CardsPage = () => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch(`https://www.ptcglegends.com/api/cards/${setName}`);
+        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${setName}`);
         if (response.ok) {
           const data = await response.json();
   
@@ -339,10 +339,10 @@ const handleSearch = async () => {
         let url;
         if (query === "n") {
             // Use the exact match API endpoint
-            url = `https://www.ptcglegends.com/api/cards/searchbyname/${encodeURIComponent(query.toUpperCase())}`;
+            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query.toUpperCase())}`;
         } else {
             // Use the partial match API endpoint
-            url = `https://www.ptcglegends.com/api/cards/searchbyname/partial/${encodeURIComponent(query)}`;
+            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/partial/${encodeURIComponent(query)}`;
         }
 
         const response = await fetch(url);
