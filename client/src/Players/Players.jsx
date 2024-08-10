@@ -284,7 +284,7 @@ const Players = () => {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const response = await fetch('https://ptcglegends-6abc11783376.herokuapp.com/api/players');
+                const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/players');
                 const data = await response.json();
                 const filteredData = data.filter(player => player.name !== '--');
                 setPlayers(filteredData);
