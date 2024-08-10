@@ -141,7 +141,7 @@ const CardView = () => {
         const fetchCardData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`https://ptcglegends.com/api/cards/${set}/${number}`);
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
                 if (response.ok) {
                     const card = await response.json();
                     console.log('Fetched card data:', card);
@@ -164,7 +164,7 @@ const CardView = () => {
 
         const fetchOtherVersions = async () => {
             try {
-                const response = await fetch(`https://ptcglegends.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
                 if (response.ok) {
                     const data = await response.json();
 
@@ -287,7 +287,7 @@ const CardView = () => {
 
         const fetchEventIds = async () => {
             try {
-                const response = await fetch('https://ptcglegends.com/event-ids');
+                const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/event-ids');
                 if (response.ok) {
                     const data = await response.json();
                     return data;
@@ -303,7 +303,7 @@ const CardView = () => {
 
         const fetchEventData = async (eventId) => {
             try {
-                const response = await fetch(`https://ptcglegends.com/events/${eventId}`);
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
                 if (response.ok) {
                     const data = await response.json();
                     return data;

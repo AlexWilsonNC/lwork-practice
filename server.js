@@ -6,13 +6,7 @@ require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 const app = express();
-
-const corsOptions = {
-  origin: ['https://www.ptcglegends.com', 'https://ptcglegends.com'], // Allowed origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
