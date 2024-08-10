@@ -1007,7 +1007,7 @@ const CardView = () => {
             </>
         ) : (
             eventsScanned && (
-                <p className='margintop'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.</p>
+                <p className='margintop'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.<br></br>There's also a chance that you may need to refresh and try again while optimize this new site's logic...</p>
             )
         )}
         <br></br>

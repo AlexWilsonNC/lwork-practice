@@ -52,7 +52,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/SFA'>Cards</a></li>
-        <li><a href='/players'>Players</a></li>
+        <li><a href='/players' className='not-ready'>Players</a></li>
         {/* <li className='not-ready'><a href=''><span className="material-symbols-outlined">search</span></a></li> */}
       </ul>
       <BurgerOpen open={open} theme={theme} className='burgered-links'>
@@ -63,7 +63,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <li><a href='/tournaments/upcoming'>Upcoming Events</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/SFA'>Cards</a></li>
-        <li><a href='/players'>Players</a></li>
+        <li><a href='/players' className='not-ready'>Players</a></li>
         <div className='burger-resources'>
           <p>Resources:</p>
           <ul className='burgered-links-more'>

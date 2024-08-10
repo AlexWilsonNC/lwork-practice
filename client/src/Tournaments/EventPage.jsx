@@ -191,6 +191,10 @@ const EventPageContent = styled.div`
   .player-list-hover:nth-of-type(odd) {
     background-color: ${({ theme }) => theme.playerlisthover};
   }
+  .spinner {
+    margin-top: 25px;
+    border-left-color: ${({ theme }) => theme.spinner};
+  }
   .notavailable,
   .chart-bold,
   .active-option,
@@ -246,6 +250,14 @@ const EventPage = () => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
     }, [division]);
+
+    if (!eventData) {
+        return (
+            <EventPageContent className='center' theme={theme}>
+                <div className="spinner"></div>
+            </EventPageContent>
+        );
+    }
 
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
