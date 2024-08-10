@@ -144,7 +144,7 @@ const DeckProfile = () => {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
+        const response = await fetch(`https://www.ptcglegends.com/api/decks/${id}`);
         if (!response.ok) {
           throw new Error('Deck not found');
         }

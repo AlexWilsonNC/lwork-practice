@@ -223,7 +223,7 @@ const EventPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(
-                `https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`
+                `https://www.ptcglegends.com/events/${eventId}`
             );
             if (response.ok) {
                 const data = await response.json();
@@ -539,7 +539,7 @@ const EventPage = () => {
         maintainAspectRatio: false,
         aspectRatio: 1.5,
         events: [],
-        animation: false,
+        // animation: false,
         layout: {
             padding: {
                 top: 40,
