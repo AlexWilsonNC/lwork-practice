@@ -127,6 +127,9 @@ const CardView = () => {
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [showAllResults, setShowAllResults] = useState(false);
+    const [isStandardLegalAny, setIsStandardLegalAny] = useState(false);
+    const [isExpandedLegalAny, setIsExpandedLegalAny] = useState(false);
+    const [isGLCLegalAny, setIsGLCLegalAny] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -144,7 +147,6 @@ const CardView = () => {
                 const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
                 if (response.ok) {
                     const card = await response.json();
-                    console.log('Fetched card data:', card);
                     setCardInfo(card);
                 } else {
                     console.error('Failed to fetch card data');
@@ -160,7 +162,7 @@ const CardView = () => {
     }, [set, number]);
 
     useEffect(() => {
-        if (!cardInfo || cardInfo.supertype !== 'Pokémon') return;
+        if (!cardInfo) return;
 
         const fetchOtherVersions = async () => {
             try {
@@ -169,65 +171,63 @@ const CardView = () => {
                     const data = await response.json();
 
                     const isMatch = (p) => {
-                        const typesMatch = arraysEqual(p.types, cardInfo.types);
-                        const attacksMatch = compareAttacks(p.attacks, cardInfo.attacks);
-                        const weaknessesMatch = compareWeaknesses(p.weaknesses, cardInfo.weaknesses);
-                        const resistancesMatch = compareWeaknesses(p.resistances, cardInfo.resistances);
-                        const retreatCostMatch = compareRetreatCost(p, cardInfo);
-                        const abilitiesMatch = (p.abilities || []).length === (cardInfo.abilities || []).length &&
-                            (p.abilities || []).every((ability, index) => {
-                                const otherAbility = (cardInfo.abilities || [])[index];
-                                return (
-                                    ability.name === otherAbility.name &&
-                                    ability.type === otherAbility.type &&
-                                    ability.text === otherAbility.text
-                                );
-                            });
+                        if (cardInfo.supertype === 'Pokémon') {
+                            const typesMatch = arraysEqual(p.types, cardInfo.types);
+                            const attacksMatch = compareAttacks(p.attacks, cardInfo.attacks);
+                            const weaknessesMatch = compareWeaknesses(p.weaknesses, cardInfo.weaknesses);
+                            const resistancesMatch = compareWeaknesses(p.resistances, cardInfo.resistances);
+                            const retreatCostMatch = compareRetreatCost(p, cardInfo);
+                            const abilitiesMatch = (p.abilities || []).length === (cardInfo.abilities || []).length &&
+                                (p.abilities || []).every((ability, index) => {
+                                    const otherAbility = (cardInfo.abilities || [])[index];
+                                    return (
+                                        ability.name === otherAbility.name &&
+                                        ability.type === otherAbility.type &&
+                                        ability.text === otherAbility.text
+                                    );
+                                });
 
                             const ancientTraitMatch = p.ancientTrait?.name === cardInfo.ancientTrait?.name &&
-                            p.ancientTrait?.text === cardInfo.ancientTrait?.text;                    
-                    
-                        // console.log('Comparing card:', p.name);
-                        // console.log('Types match:', typesMatch);
-                        // console.log('Attacks match:', attacksMatch);
-                        // console.log('Weaknesses match:', weaknessesMatch);
-                        // console.log('Resistances match:', resistancesMatch);
-                        // console.log('Retreat cost match:', retreatCostMatch);
-                        // console.log('Abilities match:', abilitiesMatch);
-                        // console.log('Ancient Trait match:', ancientTraitMatch);
-                    
-                        return (
-                            p.hp === cardInfo.hp &&
-                            typesMatch &&
-                            attacksMatch &&
-                            weaknessesMatch &&
-                            resistancesMatch &&
-                            retreatCostMatch &&
-                            abilitiesMatch &&
-                            ancientTraitMatch &&
-                            p.name === cardInfo.name
-                        );
+                                p.ancientTrait?.text === cardInfo.ancientTrait?.text;
+
+                            return (
+                                p.hp === cardInfo.hp &&
+                                typesMatch &&
+                                attacksMatch &&
+                                weaknessesMatch &&
+                                resistancesMatch &&
+                                retreatCostMatch &&
+                                abilitiesMatch &&
+                                ancientTraitMatch &&
+                                p.name === cardInfo.name
+                            );
+                        } else {
+                            return (
+                                p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
+                                p.supertype === cardInfo.supertype
+                            );
+                        }
                     };
-                    
+
                     const compareRetreatCost = (card1, card2) => {
                         const retreat1 = card1.retreatCost || card1.convertedRetreatCost || 0;
                         const retreat2 = card2.retreatCost || card2.convertedRetreatCost || 0;
-                    
+
                         if (retreat1 === 0 && retreat2 === 0) {
                             return true;
                         }
-                    
+
                         if (typeof retreat1 === 'number' && typeof retreat2 === 'number') {
                             return retreat1 === retreat2;
                         }
-                    
+
                         if (Array.isArray(retreat1) && Array.isArray(retreat2)) {
                             return retreat1.length === retreat2.length;
                         }
-                    
+
                         return false;
                     };
-                    
+
                     const compareWeaknesses = (weaknesses1 = [], weaknesses2 = []) => {
                         if (weaknesses1.length !== weaknesses2.length) return false;
                         return weaknesses1.every((weakness, index) => {
@@ -235,7 +235,7 @@ const CardView = () => {
                             return weakness.type === otherWeakness.type;
                         });
                     };
-                    
+
                     const compareAttacks = (attacks1 = [], attacks2 = []) => {
                         if (attacks1.length !== attacks2.length) return false;
                         return attacks1.every((attack, index) => {
@@ -249,18 +249,29 @@ const CardView = () => {
                             );
                         });
                     };
-                    
+
                     const arraysEqual = (arr1 = [], arr2 = []) => {
                         if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
                         if (arr1.length !== arr2.length) return false;
                         return arr1.every((val, index) => val === arr2[index]);
                     };
-                                                                                                                            
+
                     const matchingCards = data.filter(isMatch);
-    
-                    console.log('data', data)
-                    console.log('matchingCards', matchingCards)
+
                     setOtherVersions(matchingCards);
+
+                    // Check legality across all versions
+                    const isLegalInAnyFormat = (card, otherVersions, legalityCheck) => {
+                        if (legalityCheck(card)) {
+                            return true;
+                        }
+                        return otherVersions.some(legalityCheck);
+                    };
+
+                    setIsStandardLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isStandardLegal));
+                    setIsExpandedLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isExpandedLegal));
+                    setIsGLCLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isGLCLegal));
+
                 } else {
                     console.error('Failed to fetch other versions data:', await response.json());
                 }
@@ -274,14 +285,13 @@ const CardView = () => {
 
     useEffect(() => {
         const hasOtherArtseses = () => {
-            console.log('pikac', otherVersions)
-        }
-        hasOtherArtseses()
-    }, [otherVersions])
+            // Debugging log
+        };
+        hasOtherArtseses();
+    }, [otherVersions]);
 
     useEffect(() => {
         if (!cardInfo) {
-            console.log('Card info is not set, skipping event fetch');
             return;
         }
 
@@ -366,11 +376,11 @@ const CardView = () => {
                                         player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
                                         player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
 
-                                        otherVersions.forEach(version => {
-                                            if (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === version.name.trim().toLowerCase() &&
+                                    otherVersions.forEach(version => {
+                                        if (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === version.name.trim().toLowerCase() &&
                                             p.set === version.setAbbrev &&
                                             p.number === version.number
-                                        )) {hasCard = true}
+                                        )) { hasCard = true }
                                     })
 
                                     if (hasCard) {
@@ -471,13 +481,8 @@ const CardView = () => {
         const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
 
         // Check for banned CC cards in CEL set
-        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number))) {
+        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
             return false;
-        }
-
-        // Exception for "HS/72"
-        if (card.setAbbrev === "HS" && card.number === "72") {
-            return true;
         }
 
         // Check if any version of this Trainer or Energy card is legal in Standard
@@ -519,10 +524,6 @@ const CardView = () => {
             return true;
         }
 
-        if (card.setAbbrev === "HS" && card.number === "72") {
-            return true;
-        }
-
         if (card.supertype !== 'Pokémon') {
             const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
                 otherCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -538,13 +539,8 @@ const CardView = () => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
 
         // Check for banned CC cards in CEL set
-        if (card.setAbbrev === "CEL" && /^CC(1[0-9]|[1-9]|2[2-5])$/.test(card.number)) {
+        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
             return false;
-        }
-
-        // Exception for "HS/72"
-        if (card.setAbbrev === "HS" && card.number === "72") {
-            return true;
         }
 
         // Check if any version of this Trainer or Energy card is legal in Standard
@@ -581,9 +577,9 @@ const CardView = () => {
     const otherVersionsToShow = otherVersions.filter(otherCard =>
         otherCard.setAbbrev !== cardInfo.setAbbrev || otherCard.number !== cardInfo.number
     );
-    const showOtherVersions = otherVersionsToShow.length > 0;
+    const showOtherVersions = otherVersionsToShow.length > 0 && (cardInfo.supertype === 'Pokémon' || cardInfo.supertype === 'Trainer' || cardInfo.supertype === 'Energy');
     const displayedOtherVersions = showAllVersions ? otherVersionsToShow : otherVersionsToShow.slice(0, 5);
-
+    
     if (!cardInfo) {
         return <div>Card not found</div>;
     }
@@ -632,7 +628,6 @@ const CardView = () => {
 
     const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
     const displayedEventResults = showAllResults ? eventResults : eventResults.slice(0, 5);
-    const isFromAllowedSet = cardInfo.set && cardInfo.set.series && expandedSets.includes(cardInfo.set.series.toLowerCase());
 
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
@@ -809,14 +804,14 @@ const CardView = () => {
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
                         {cardInfo.artist && <p>Illustrator: <span className='italic'>{cardInfo.artist}</span></p>}
                         <hr className='blue-hr'></hr>
-                        {isFromAllowedSet && !isBasicEnergy && (
+                        {!isBasicEnergy && (
                             <>
                                 <p className='marginthree'>Modern Legality:</p>
                                 {cardInfo.regulationMark && (
                                     <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
                                 )}
                                 <div className='legality-checks'>
-                                    <p>Standard: {isStandardLegal(cardInfo) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
+                                    <p>Standard: {(isStandardLegal(cardInfo) || isStandardLegalAny) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
                                     <p>
                                         Expanded:
                                         {cardInfo.set.releaseDate === "N/A" ? (
@@ -825,7 +820,7 @@ const CardView = () => {
                                             </>
                                         ) : (
                                             <>
-                                                {isExpandedLegal(cardInfo) ? (
+                                                {(isExpandedLegal(cardInfo) || isExpandedLegalAny) ? (
                                                     <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
                                                 ) : (
                                                     <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
@@ -845,7 +840,7 @@ const CardView = () => {
                                             </>
                                         ) : (
                                             <>
-                                                {isGLCLegal(cardInfo) ? (
+                                                {(isGLCLegal(cardInfo) || isGLCLegalAny) ? (
                                                     <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
                                                 ) : (
                                                     <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
@@ -975,7 +970,6 @@ const CardView = () => {
                                                     <td></td>
                                                     <td>{result.playerLabel}</td>
                                                     <td></td>
-                                                    <td></td>
                                                 </>
                                             )}
                                             <td className='player-deck-icons pushright'>
@@ -1007,7 +1001,7 @@ const CardView = () => {
             </>
         ) : (
             eventsScanned && (
-                <p className='margintop'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.<br></br>There's also a chance that you may need to refresh and try again while optimize this new site's logic...</p>
+                <p className='margintop italic'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.</p>
             )
         )}
         <br></br>
