@@ -19,6 +19,7 @@
     justify-content: space-between;
     background-color: rgb(27, 27, 29);
     color: #E1E1E1;
+    position: relative; /* Add relative positioning here */
     z-index: 0;
 }
 .regional-info p {

@@ -503,6 +503,17 @@ const PlayerDeck = () => {
                             </>
                         )}
                     </div>
+                    <div className='deck-top-right-options'>
+                        <DecklistOptions decklist={playerData.decklist} />
+                        <div className='deckview-switcher'>
+                            <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
+                                <span className="material-symbols-outlined">reorder</span>
+                            </div>
+                            <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
+                                <span className="material-symbols-outlined">grid_view</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {!playerData ? (
                     null
