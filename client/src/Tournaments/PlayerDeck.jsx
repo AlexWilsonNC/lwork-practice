@@ -330,7 +330,7 @@ const PlayerDeck = () => {
             try {
                 const collections = formatToCollections(format);
                 const collectionsParam = collections.join(',');
-                const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+                const url = `https://ptcglegends.com/api/cards?format=${collectionsParam}`;
         
                 const response = await fetch(url);
         
@@ -362,7 +362,7 @@ const PlayerDeck = () => {
         };
 
         const fetchPlayerData = async () => {
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+            const response = await fetch(`https://ptcglegends.com/events/${eventId}`);
             if (response.ok) {
                 const eventData = await response.json();
                 setEventData(eventData);

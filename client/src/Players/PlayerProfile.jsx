@@ -327,7 +327,7 @@ const PlayerProfile = () => {
     useEffect(() => {
         const fetchPlayerData = async () => {
             try {
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players/${id}`);
+                const response = await fetch(`https://ptcglegends.com/api/players/${id}`);
                 if (!response.ok) {
                     throw new Error('Player not found');
                 }
