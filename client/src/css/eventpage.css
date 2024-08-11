@@ -25,6 +25,9 @@
 .regional-info p {
     font-size: 15px;
 }
+.filtered-results {
+    width: 100%;
+}
 .chart-btns-container {
     display: flex;
     flex-direction: row;

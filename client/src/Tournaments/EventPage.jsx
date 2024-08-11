@@ -220,9 +220,8 @@ const EventPage = () => {
     const [activeTab, setActiveTab] = useState('Results');
     const chartRef = useRef(null);
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
-    const [showConversionRate, setShowConversionRate] = useState(false); // Moved here
-
-    const [hasEventOccurred, setHasEventOccurred] = useState(false);
+    const [showConversionRate, setShowConversionRate] = useState(false);
+    const [selectedArchetype, setSelectedArchetype] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -280,9 +279,9 @@ const EventPage = () => {
                             ? olderSeniorsResults
                             : division === 'youngSeniors'
                                 ? youngSeniorsResults
-                            : division === 'all'
-                                ? allResults
-                                : [];
+                                : division === 'all'
+                                    ? allResults
+                                    : [];
 
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
@@ -391,7 +390,7 @@ const EventPage = () => {
     if (!eventData) {
         return;
     }
-    
+
     const isMastersEmpty = mastersResults.length === 0;
     const otherDivisionsHaveResults =
         seniorsResults.length > 0 ||
@@ -608,7 +607,7 @@ const EventPage = () => {
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
     const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2023_WORLDS';
-    const is2024Event = eventId.includes('2024');
+    const is2024Event = eventId.includes('2024') && !eventId.toLowerCase().includes('retro');
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -908,6 +907,41 @@ const EventPage = () => {
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>
                                 </div>
+                                {/* <div className='deck-archetypes'>
+                                    <h3>Deck Archetypes</h3>
+                                    <select 
+                                        value={selectedArchetype} 
+                                        onChange={(e) => setSelectedArchetype(e.target.value)} 
+                                        className="archetype-dropdown"
+                                    >
+                                        {deckTypeCountArray.map((archetype, index) => (
+                                            <option key={index} value={archetype.key}>
+                                                {archetype.key} ({archetype.count})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='filtered-results'>
+                                    <div className='results-table'>
+                                        {results.filter((result) => {
+                                            let sprite1 = result.sprite1 || '';
+                                            let sprite2 = result.sprite2 || '';
+
+                                            if (!sprite1 && !sprite2) {
+                                                const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
+                                                sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                                                sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                                            }
+
+                                            const key = getCustomLabel(eventId, sprite1, sprite2);
+                                            return key === selectedArchetype;
+                                        }).map((filteredResult, index) => (
+                                            <React.Fragment key={index}>
+                                                {displayResults([filteredResult], eventId, division)}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                </div> */}
                             </div>
                         )}
                     </div>
