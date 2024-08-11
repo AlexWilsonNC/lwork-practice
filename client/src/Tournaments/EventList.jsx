@@ -186,7 +186,7 @@ const EventList = () => {
                             </optgroup>
                             <optgroup label="Asia-Pacific">
                                 <option value="asiachampionship">Countries Championship</option>
-                                <option value="ee">Champions League</option>
+                                <option value="championsLeague">Champions League</option>
                                 <option value="eee">Regional League</option>
                             </optgroup>
                             {!showUpcoming && (
@@ -264,7 +264,11 @@ const EventList = () => {
                                             <div className='country-name-tournaments'></div>
                                         </div>
                                         <div>
-                                            <a href={event.id} className='event-wth-link'>
+                                            <a
+                                                href={event.results === false ? '#' : event.id}
+                                                className={`event-wth-link ${event.results === false ? 'disabled-link' : ''}`}
+                                                style={{ pointerEvents: event.results === false ? 'none' : 'auto' }}
+                                            >
                                                 {event.name}
                                             </a>
                                         </div>
@@ -272,14 +276,14 @@ const EventList = () => {
                                     {showUpcoming && (
                                         <td>
                                             {event.registrationTime ? (
-                                            <a href={event.registrationLink} className='event-icon-links'>
-                                                <span className="material-symbols-outlined reg-icon">
-                                                {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
-                                                </span>
-                                            </a>
+                                                <a href={event.registrationLink} className='event-icon-links'>
+                                                    <span className="material-symbols-outlined reg-icon">
+                                                        {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
+                                                    </span>
+                                                </a>
                                             ) : null}
                                         </td>
-                                        )}
+                                    )}
                                     {!showUpcoming && (
                                         <td>
                                             {event.results !== false && event.id ? (

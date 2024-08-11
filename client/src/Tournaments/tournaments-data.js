@@ -29,6 +29,7 @@ import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
 import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png';
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
 import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
+import championsLeague from '../assets/event-logo/champions-league.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -128,7 +129,7 @@ const tournamentList = [
     {
         "id": '2025_BALTIMORE/masters',
         "name": "Baltimore Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Sep 14, 2024",
         "flag": usa,
@@ -139,7 +140,7 @@ const tournamentList = [
     {
         "id": '2025_DORTMUND/masters',
         "name": "Dortmund Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": germany,
@@ -150,7 +151,7 @@ const tournamentList = [
     {
         "id": '2025_JOINVILLE/masters',
         "name": "Joinville Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": brazil,
@@ -172,7 +173,7 @@ const tournamentList = [
     {
         "id": '2025_LOUISVILLE/masters',
         "name": "Louisville Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Oct 11, 2024",
         "flag": usa,
@@ -183,7 +184,7 @@ const tournamentList = [
     {
         "id": '2025_LILLE/masters',
         "name": "Lille Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Oct 19, 2024",
         "flag": france,
@@ -194,7 +195,7 @@ const tournamentList = [
     {
         "id": '2025_GDASNK/masters',
         "name": "Gdańsk Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Nov 2, 2024",
         "flag": poland,
@@ -216,7 +217,7 @@ const tournamentList = [
     {
         "id": '2025_SACRAMENTO/masters',
         "name": "Sacramento Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Nov 22, 2024",
         "flag": usa,
@@ -227,7 +228,7 @@ const tournamentList = [
     {
         "id": '2025_STUTTGART/masters',
         "name": "Stuttgart Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Nov 30, 2024",
         "flag": germany,
@@ -249,7 +250,7 @@ const tournamentList = [
     {
         "id": '2025_TORONTO/masters',
         "name": "Toronto Regionals",
-        "eventType": "regional",
+        "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Dec 13, 2024",
         "flag": canada,
@@ -260,7 +261,7 @@ const tournamentList = [
     {
         "id": '2025_LAIC/masters',
         "name": "LAIC 2025",
-        "eventType": "international",
+        "eventType": "internationals",
         "eventLogo": internats25,
         "date": "Nov 15, 2024",
         "flag": brazil,
@@ -271,7 +272,7 @@ const tournamentList = [
     {
         "id": '2025_EUIC/masters',
         "name": "EUIC 2025",
-        "eventType": "international",
+        "eventType": "internationals",
         "eventLogo": internats25,
         "date": "Feb 21, 2025",
         "flag": uk,
@@ -282,7 +283,7 @@ const tournamentList = [
     {
         "id": '2025_NAIC/masters',
         "name": "NAIC 2025",
-        "eventType": "international",
+        "eventType": "internationals",
         "eventLogo": internats25,
         "date": "Jun 13, 2025",
         "flag": usa,
@@ -291,7 +292,7 @@ const tournamentList = [
         "registrationLink": "",
     },
     {
-        "id": '/masters',
+        "id": '',
         "name": "World Championships 2025",
         "eventType": "worlds",
         "eventLogo": worlds,
@@ -300,6 +301,19 @@ const tournamentList = [
         "location": "",
         "registrationTime": "",
         "registrationLink": "",
+        "results": false
+    },
+    {
+        "id": '',
+        "name": "Tokyo Champions League",
+        "eventType": "championsLeague",
+        "eventLogo": championsLeague,
+        "date": "Sep 22, 2024",
+        "flag": japan,
+        "location": "Tokyo, Japan",
+        "registrationTime": "",
+        "registrationLink": "",
+        "results": false
     },
     {
         "id": '2024_BOLOGNA',
