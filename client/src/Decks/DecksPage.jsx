@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/players.css';
@@ -160,10 +160,14 @@ const Decks = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
   const [sortType, setSortType] = useState('format');
-  const [selectedFormat, setSelectedFormat] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('BRS-TWM');
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    const formatParam = searchParams.get('format') || 'BRS-TWM';
+    setSelectedFormat(formatParam);
+
     const fetchDecks = async () => {
       try {
         const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/decks');
@@ -178,6 +182,12 @@ const Decks = () => {
 
     fetchDecks();
   }, []);
+
+  const handleFormatChange = (event) => {
+    const newFormat = event.target.value;
+    setSelectedFormat(newFormat);
+    setSearchParams({ format: newFormat });
+  };
 
   const setSortByFormat = () => {
     setSortType('format');
@@ -205,8 +215,16 @@ const Decks = () => {
   };
 
   const extractYear = (deck) => {
-    return deck.year || '';
-  };
+    // Get the first deck object in the array to extract the year
+    const firstDeck = deck.decks[0];
+
+    if (firstDeck && firstDeck.eventDate) {
+        const year = firstDeck.eventDate.split(', ')[1]; // Extract the year part
+        return year || 'Unknown';
+    }
+
+    return 'Unknown';
+};
 
   const sortedFormatOrder = sortOrder === 'asc' ? [...formatOrder].reverse() : formatOrder;
 
@@ -220,20 +238,13 @@ const Decks = () => {
   }, {});
 
   const decksByFormat = sortedFormatOrder.reduce((acc, format) => {
-    acc[format] = [];
-    filteredDecks.forEach(deck => {
+    acc[format] = filteredDecks.filter(deck => {
       const deckFormats = extractFormats(deck.decks);
-      if (deckFormats.includes(format)) {
-        acc[format].push(deck);
-      }
+      return deckFormats.includes(format);
     });
     return acc;
   }, {});
-
-  const handleFormatChange = (event) => {
-    setSelectedFormat(event.target.value);
-  };
-
+  
   const resetFilters = () => {
     setSortType('format');
     setSortOrder('desc');
@@ -427,7 +438,7 @@ const Decks = () => {
           <table className='results-table deck-table'>
             <thead>
               <tr>
-                <th></th>
+                <th>Rank</th>
                 <th>Deck</th>
                 <th></th>
                 <th></th>

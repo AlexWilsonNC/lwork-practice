@@ -7,7 +7,7 @@
 }
 /* deck */
 .deck-table th:nth-child(1) {
-    padding-left: 50px !important;
+    padding-left: 0px !important;
 }
 .deck-table th:nth-child(4),
 .deck-table th:nth-child(5),

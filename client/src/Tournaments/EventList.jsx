@@ -84,224 +84,278 @@ const parseRegistrationTime = (timeStr) => {
     return new Date(timeStr);
   };
 
-const EventList = () => {
+  const EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
+
+const saveFiltersWithExpiration = (key, filters) => {
+  const now = new Date().getTime();
+  const data = { filters, timestamp: now };
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+const loadFiltersWithExpiration = (key) => {
+  try {
+    const data = JSON.parse(localStorage.getItem(key));
+    if (data) {
+      const now = new Date().getTime();
+      if (now - data.timestamp < EXPIRATION_TIME) {
+        return data.filters;
+      } else {
+        console.log(`Filters for ${key} expired and removed.`);
+        localStorage.removeItem(key); // Remove expired filters
+      }
+    }
+  } catch (error) {
+    console.error(`Error parsing localStorage data for ${key}:`, error);
+    localStorage.removeItem(key); // Remove invalid or corrupted data
+  }
+  return null;
+};
+
+  const EventList = () => {
     const { theme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
     const isUpcomingInitially = !location.pathname.includes("/completed");
     const [showUpcoming, setShowUpcoming] = useState(isUpcomingInitially);
-    const [eventTypeFilter, setEventTypeFilter] = useState('');
+    const [eventTypeFilter, setEventTypeFilter] = useState(() => loadFiltersWithExpiration('eventTypeFilter') || '');
     const [countryFilter, setCountryFilter] = useState('');
-    const [yearFilter, setYearFilter] = useState('');
-    const [sortOrder, setSortOrder] = useState('newest');
+    const [yearFilter, setYearFilter] = useState(() => loadFiltersWithExpiration('yearFilter') || '');
+    const [sortOrder, setSortOrder] = useState(() => loadFiltersWithExpiration('sortOrder') || 'newest');
     const [viewType, setViewType] = useState('upcoming');
-    const [regionFilter, setRegionFilter] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
-
+    const [regionFilter, setRegionFilter] = useState(() => loadFiltersWithExpiration('regionFilter') || '');
+    const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');  
+  
     const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
-
+  
     useEffect(() => {
-        const isCompleted = location.pathname.includes("/completed");
-        setShowUpcoming(!isCompleted);
-        setViewType(isCompleted ? 'completed' : 'upcoming');
+      const isCompleted = location.pathname.includes("/completed");
+      setShowUpcoming(!isCompleted);
+      setViewType(isCompleted ? 'completed' : 'upcoming');
     }, [location.pathname]);
-
+  
+    useEffect(() => {
+      saveFiltersWithExpiration('eventTypeFilter', eventTypeFilter);
+      saveFiltersWithExpiration('yearFilter', yearFilter);
+      saveFiltersWithExpiration('sortOrder', sortOrder);
+      saveFiltersWithExpiration('regionFilter', regionFilter);
+      saveFiltersWithExpiration('searchTerm', searchTerm);
+    }, [eventTypeFilter, yearFilter, sortOrder, regionFilter, searchTerm]);
+    
     const filteredEvents = sortedEvents.filter(event => {
-        const eventDate = new Date(event.date);
-        const eventYear = eventDate.getFullYear().toString();
-        const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
-        const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
-
-        return isInRegion  // Checks if the event's flag is in the selected region
-        && matchesSearchTerm // Checks if the event name or type matches the search term
-            && (eventTypeFilter ? event.eventType === eventTypeFilter : true) // Event type filter
-            && (countryFilter ? event.flag === countryFilter : true) // Country filter
-            && (yearFilter ? eventYear === yearFilter : true) // Year filter
-            && (showUpcoming ? eventDate >= new Date() : eventDate < new Date()); // Date filter for upcoming or completed
+      const eventDate = new Date(event.date);
+      const eventYear = eventDate.getFullYear().toString();
+      const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
+      const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
+  
+      return isInRegion &&
+        matchesSearchTerm &&
+        (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
+        (countryFilter ? event.flag === countryFilter : true) &&
+        (yearFilter ? eventYear === yearFilter : true) &&
+        (showUpcoming ? eventDate >= new Date() : eventDate < new Date());
     });
-
+    
+    const sortedFilteredEvents = filteredEvents.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+  
+      if (showUpcoming) {
+          return sortOrder === 'oldest' ? dateB - dateA : dateA - dateB;
+      } else {
+          return sortOrder === 'oldest' ? dateA - dateB : dateB - dateA;
+      }
+  });
+      
     const handleButtonClick = (path) => {
-        navigate(path);
-        setEventTypeFilter('');
-        setRegionFilter('');
-        setYearFilter('');
+      navigate(path);
+      setEventTypeFilter('');
+      setRegionFilter('');
+      setYearFilter('');
     };
+  
     const resetFilters = () => {
-        setEventTypeFilter('');
-        setRegionFilter('');
-        setYearFilter('');
-        setSortOrder('newest');
-        setSearchTerm('');
+      setEventTypeFilter('');
+      setRegionFilter('');
+      setYearFilter('');
+      setSortOrder('newest');
+      setSearchTerm('');
     };
-    const sortedFilteredEvents = !showUpcoming ? filteredEvents.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-    }) : filteredEvents;
-
+  
     return (
-        <UpcomingEvents className='center-me' theme={theme}>
-            <Helmet>
-                <title>Pokémon TCG Tournaments</title>
-                <meta name="description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
-                <meta property="og:title" content="PTCG Legends" />
-                <meta property="og:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
-                <meta property='og:image' content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" />
-                <meta property="og:url" content="https://www.ptcglegends.com/tournaments" />
-                <meta property="og:type" content="website" />
-                <meta name="author" content="PTCG Legends" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="PTCG Legends" />
-                <meta name="twitter:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
-                <meta name="twitter:image" content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" />
-            </Helmet>
-            <div className='upcoming-events'>
-                <div className='completed-n-upcoming'>
-                    <div className='bts-in'>
-                        <a onClick={() => handleButtonClick("/tournaments/completed", false)} className={`completed-btn ${!showUpcoming ? 'active-evt-btn' : ''}`}>
-                            Completed
-                        </a>
-                        <a onClick={() => handleButtonClick("/tournaments/upcoming", true)} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
-                            Upcoming
-                        </a>
-                    </div>
-                    <div className='search-input'>
-                        <span className="material-symbols-outlined">search</span>
-                        <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                    </div>
-                </div>
-                <FilterTop className='filters-top'>
-                    <div className='indiv-filter'>
-                        <p className='sort-events'>Event Type:</p>
-                        <select value={eventTypeFilter} onChange={e => setEventTypeFilter(e.target.value)}>
-                            <option value="">All Events</option>
-                            <optgroup label="Worlds">
-                                <option value="worlds">World Championships</option>
-                            </optgroup>
-                            <optgroup label="TPCi Events">
-                                <option value="internationals">Internationals</option>
-                                <option value="regionals">Regionals</option>
-                                <option value="speSeries">Special Events</option>
-                                {viewType === 'completed' && (<option value="nationals">Nationals</option>)}
-                            </optgroup>
-                            <optgroup label="Asia-Pacific">
-                                <option value="asiachampionship">Countries Championship</option>
-                                <option value="championsLeague">Champions League</option>
-                                <option value="eee">Regional League</option>
-                            </optgroup>
-                            {!showUpcoming && (
-                            <optgroup label="WotC Era">
-                                <option value="stadiumChallenge">Stadium Challenge</option>
-                                <option value="superTrainerShowdown">Super Trainer Showdown</option>
-                                <option value="megaTropicalBattle">Tropical Mega Battle</option>
-                            </optgroup>
-                                )}
-                            <optgroup label="Other">
-                                <option value="retro">Modern-Retro Events</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div className='indiv-filter'>
-                        <p className='sort-events'>Region:</p>
-                        <select value={regionFilter} onChange={e => setRegionFilter(e.target.value)}>
-                            <option value="">All Regions</option>
-                            <option value="AP">Asia-Pacific</option>
-                            <option value="EU">Europe</option>
-                            <option value="LA">Latin America</option>
-                            <option value="MS">Middle East / South Africa</option>
-                            <option value="NA">North America</option>
-                            <option value="OC">Oceania</option>
-                        </select>
-                    </div>
-                    {!showUpcoming && (
-                        <div className='indiv-filter'>
-                            <p className='sort-events'>Year:</p>
-                            <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
-                                <option value="">All Years</option>
-                                {uniqueYears.slice().reverse().map(year => (
-                                    <option key={year} value={year}>{year}</option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
-                    {!showUpcoming && (
-                        <div className='indiv-filter'>
-                            <p className='sort-events'>Order:</p>
-                            <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
-                                <option value="newest">Newest - Oldest</option>
-                                <option value="oldest">Oldest - Newest</option>
-                            </select>
-                        </div>
-                    )}
-                    <button onClick={resetFilters} className="reset-btn">Reset</button>
-                </FilterTop>
-                <div className='center'>
-                    <table className='upcoming-events-table'>
-                        <thead>
-                            <tr>
-                                <th>Start Date</th>
-                                <th></th>
-                                <th>Event</th>
-                                {!showUpcoming && (
-                                    <th>Results</th>
-                                )}
-                                {showUpcoming && (
-                                    <th>Registration</th>
-                                )}
-                                {showUpcoming && (
-                                    <th>Information</th>
-                                )}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredEvents.map((event, index) => (
-                                <tr key={index} className='event-row'>
-                                    <td>{event.date}</td>
-                                    <td><img src={event.eventLogo} className='event-type-logo2' alt="Event type" /></td>
-                                    <td>
-                                        <div className='tournament-flags-container'>
-                                            <img className='tournament-flags' src={event.flag} alt="Country flag" />
-                                            <div className='country-name-tournaments'></div>
-                                        </div>
-                                        <div>
-                                            <a
-                                                href={event.results === false ? '#' : event.id}
-                                                className={`event-wth-link ${event.results === false ? 'disabled-link' : ''}`}
-                                                style={{ pointerEvents: event.results === false ? 'none' : 'auto' }}
-                                            >
-                                                {event.name}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    {showUpcoming && (
-                                        <td>
-                                            {event.registrationTime ? (
-                                                <a href={event.registrationLink} className='event-icon-links'>
-                                                    <span className="material-symbols-outlined reg-icon">
-                                                        {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
-                                                    </span>
-                                                </a>
-                                            ) : null}
-                                        </td>
-                                    )}
-                                    {!showUpcoming && (
-                                        <td>
-                                            {event.results !== false && event.id ? (
-                                                <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">format_list_bulleted</span></a>
-                                            ) : null}
-                                        </td>
-                                    )}
-                                    {showUpcoming && (
-                                        <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
-                                    )}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+      <UpcomingEvents className='center-me' theme={theme}>
+        <Helmet>
+          <title>Pokémon TCG Tournaments</title>
+          <meta name="description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
+          <meta property="og:title" content="PTCG Legends" />
+          <meta property="og:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
+          <meta property='og:image' content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" />
+          <meta property="og:url" content="https://www.ptcglegends.com/tournaments" />
+          <meta property="og:type" content="website" />
+          <meta name="author" content="PTCG Legends" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="PTCG Legends" />
+          <meta name="twitter:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
+          <meta name="twitter:image" content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" />
+        </Helmet>
+        <div className='upcoming-events'>
+          <div className='completed-n-upcoming'>
+            <div className='bts-in'>
+              <a onClick={() => handleButtonClick("/tournaments/completed")} className={`completed-btn ${!showUpcoming ? 'active-evt-btn' : ''}`}>
+                Completed
+              </a>
+              <a onClick={() => handleButtonClick("/tournaments/upcoming")} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
+                Upcoming
+              </a>
             </div>
-        </UpcomingEvents>
-    );
-};
+            <div className='search-input'>
+              <span className="material-symbols-outlined">search</span>
+              <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            </div>
+          </div>
+          <FilterTop className='filters-top'>
+            <div className='indiv-filter'>
+              <p className='sort-events'>Event Type:</p>
+              <select value={eventTypeFilter} onChange={e => setEventTypeFilter(e.target.value)}>
+                <option value="">All Events</option>
+                <optgroup label="Worlds">
+                  <option value="worlds">World Championships</option>
+                </optgroup>
+                <optgroup label="TPCi Events">
+                  <option value="internationals">Internationals</option>
+                  <option value="regionals">Regionals</option>
+                  <option value="speSeries">Special Events</option>
+                  {viewType === 'completed' && (<option value="nationals">Nationals</option>)}
+                </optgroup>
+                <optgroup label="Asia-Pacific">
+                  <option value="asiachampionship">Countries Championship</option>
+                  <option value="championsLeague">Champions League</option>
+                  <option value="eee">Regional League</option>
+                </optgroup>
+                {!showUpcoming && (
+                  <optgroup label="WotC Era">
+                    <option value="stadiumChallenge">Stadium Challenge</option>
+                    <option value="superTrainerShowdown">Super Trainer Showdown</option>
+                    <option value="megaTropicalBattle">Tropical Mega Battle</option>
+                  </optgroup>
+                )}
+                <optgroup label="Other">
+                  <option value="retro">Modern-Retro Events</option>
+                </optgroup>
+              </select>
+            </div>
+            <div className='indiv-filter'>
+              <p className='sort-events'>Region:</p>
+              <select value={regionFilter} onChange={e => setRegionFilter(e.target.value)}>
+                <option value="">All Regions</option>
+                <option value="AP">Asia-Pacific</option>
+                <option value="EU">Europe</option>
+                <option value="LA">Latin America</option>
+                <option value="MS">Middle East / South Africa</option>
+                <option value="NA">North America</option>
+                <option value="OC">Oceania</option>
+              </select>
+            </div>
+            {!showUpcoming && (
+              <div className='indiv-filter'>
+                <p className='sort-events'>Year:</p>
+                <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
+                  <option value="">All Years</option>
+                  {uniqueYears.slice().reverse().map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+                {!showUpcoming && (
+                    <div className='indiv-filter'>
+                    <p className='sort-events'>Order:</p>
+                        <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+                            <option value="newest">Newest - Oldest</option>
+                            <option value="oldest">Oldest - Newest</option>
+                        </select>
+                  </div>
+                )}
+                {showUpcoming && (
+                    <div className='indiv-filter'>
+                    <p className='sort-events'>Order:</p>
+                        <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+                            <option value="newest">Soonest - Latest</option>
+                            <option value="oldest">Latest - Soonest</option>
+                        </select>
+                  </div>
+                )}
 
-export default EventList;
+              
+            <button onClick={resetFilters} className="reset-btn">Reset</button>
+          </FilterTop>
+          <div className='center'>
+            <table className='upcoming-events-table'>
+              <thead>
+                <tr>
+                  <th>Start Date</th>
+                  <th></th>
+                  <th>Event</th>
+                  {!showUpcoming && (
+                    <th>Results</th>
+                  )}
+                  {showUpcoming && (
+                    <th>Registration</th>
+                  )}
+                  {showUpcoming && (
+                    <th>Information</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {sortedFilteredEvents.map((event, index) => (
+                  <tr key={index} className='event-row'>
+                    <td>{event.date}</td>
+                    <td><img src={event.eventLogo} className='event-type-logo2' alt="Event type" /></td>
+                    <td>
+                      <div className='tournament-flags-container'>
+                        <img className='tournament-flags' src={event.flag} alt="Country flag" />
+                        <div className='country-name-tournaments'></div>
+                      </div>
+                      <div>
+                        <a 
+                            href={event.id ? event.id : '#'} 
+                            className='event-wth-link'
+                            style={{ pointerEvents: event.id ? 'auto' : 'none' }}
+                        >
+                            {event.name}
+                        </a>
+                      </div>                    
+                    </td>
+                    {showUpcoming && (
+                      <td>
+                        {event.registrationTime ? (
+                          <a href={event.registrationLink} className='event-icon-links' target='_blank'>
+                            <span className="material-symbols-outlined reg-icon">
+                              {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
+                            </span>
+                          </a>
+                        ) : null}
+                      </td>
+                    )}
+                    {!showUpcoming && (
+                      <td>
+                        {event.results !== false && event.id ? (
+                          <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">format_list_bulleted</span></a>
+                        ) : null}
+                      </td>
+                    )}
+                    {showUpcoming && (
+                      <td>{event.id ? <a href={event.id} className='event-icon-links'><span className="material-symbols-outlined">note_stack</span></a> : null}</td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </UpcomingEvents>
+    );
+  };
+  
+  export default EventList;
+  

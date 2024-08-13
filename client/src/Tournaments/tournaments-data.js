@@ -167,8 +167,8 @@ const tournamentList = [
         "date": "Oct 5, 2024",
         "flag": peru,
         "location": "Lime, Peru",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-08-07T19:00:00-03:00",
+        "registrationLink": "https://playlatam.net/tournaments/LIM25-TCG-MA",
     },
     {
         "id": '2025_LOUISVILLE/masters',
@@ -296,7 +296,7 @@ const tournamentList = [
         "name": "World Championships 2025",
         "eventType": "worlds",
         "eventLogo": worlds,
-        "date": "TBA 2025",
+        "date": "Aug 2025 ?",
         "flag": unknown,
         "location": "",
         "registrationTime": "",
@@ -687,7 +687,7 @@ const tournamentList = [
     },
     {
         "id": "2002_WORLDS/seniors",
-        "name": "Worlds 2002",
+        "name": "World Championships 2002",
         "eventType": "worlds",
         "eventLogo": wotcWorlds,
         "date": "Aug 2, 2002",
