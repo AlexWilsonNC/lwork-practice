@@ -132,6 +132,7 @@ const flags = {
     poland: poland,
     portugal: portugal,
     russia: russia,
+    singapore: singapore,
     slovakia: slovakia,
     spain: spain,
     switzerland: switzerland,
@@ -191,6 +192,16 @@ const EventPageContent = styled.div`
   .player-list-hover:nth-of-type(odd) {
     background-color: ${({ theme }) => theme.playerlisthover};
   }
+  .filter-container {
+    margin-top: -15px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    select {background: ${({ theme }) => theme.body};}
+    select {color: ${({ theme }) => theme.text};}
+    button {background: ${({ theme }) => theme.body};}
+    button {color: ${({ theme }) => theme.text};}
+  }
   .spinner {
     margin-top: 25px;
     border-left-color: ${({ theme }) => theme.spinner};
@@ -207,9 +218,24 @@ const EventPageContent = styled.div`
   .day1btn, .day2btn, .conversbtn {
     background-color: ${({ theme }) => theme.day1btn};
   }
-.chart-button.active {
-  background-color: #1290eb;
-}
+  .chart-button.active {
+    background-color: #1290eb;
+  }
+  @media screen and (max-width: 1115px) {
+    .filters-top {
+        margin-top: 15px;
+        margin-left: 0px !important;
+    }
+    .indiv-filter select {
+        width: 150px;
+    }
+    .indiv-filter select {
+        width: 175px;
+        height: 24px;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+  }
 `;
 
 const EventPage = () => {
@@ -907,41 +933,58 @@ const EventPage = () => {
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>
                                 </div>
-                                {/* <div className='deck-archetypes'>
-                                    <h3>Deck Archetypes</h3>
-                                    <select 
-                                        value={selectedArchetype} 
-                                        onChange={(e) => setSelectedArchetype(e.target.value)} 
-                                        className="archetype-dropdown"
-                                    >
-                                        {deckTypeCountArray.map((archetype, index) => (
-                                            <option key={index} value={archetype.key}>
-                                                {archetype.key} ({archetype.count})
-                                            </option>
-                                        ))}
-                                    </select>
+                                <div className='deck-archetypes'>
+                                    <h3>All Results per Deck</h3>
+                                    <div className='filter-container'>
+                                        <div className='filters-top'>
+                                            <div className='indiv-filter'>
+                                                <select 
+                                                    value={selectedArchetype} 
+                                                    onChange={(e) => setSelectedArchetype(e.target.value)} 
+                                                    className="archetype-dropdown"
+                                                >
+                                                    <option value="">Select Deck</option> {/* Default option */}
+                                                    {deckTypeCountArray.map((archetype, index) => (
+                                                        <option key={index} value={archetype.key}>
+                                                            {archetype.key} ({archetype.count})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className='filtered-results'>
-                                    <div className='results-table'>
-                                        {results.filter((result) => {
-                                            let sprite1 = result.sprite1 || '';
-                                            let sprite2 = result.sprite2 || '';
+                                    <div className='results-table charted-decks'>
+                                        {results
+                                            .map((result, idx) => ({ result, originalIndex: idx + 1 }))
+                                            .filter(({ result }) => {
+                                                let sprite1 = result.sprite1 || '';
+                                                let sprite2 = result.sprite2 || '';
 
-                                            if (!sprite1 && !sprite2) {
-                                                const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
-                                                sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                                sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                            }
+                                                if (!sprite1 && !sprite2) {
+                                                    const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
+                                                    sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                                                    sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                                                }
 
-                                            const key = getCustomLabel(eventId, sprite1, sprite2);
-                                            return key === selectedArchetype;
-                                        }).map((filteredResult, index) => (
-                                            <React.Fragment key={index}>
-                                                {displayResults([filteredResult], eventId, division)}
-                                            </React.Fragment>
-                                        ))}
+                                                if (sprite1 === 'blank') {
+                                                    sprite1 = '';
+                                                }
+
+                                                const key = getCustomLabel(eventId, sprite1, sprite2);
+                                                return key === selectedArchetype;
+                                            })
+                                            .map(({ result, originalIndex }, index) => {
+                                                const backgroundColor = index % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
+                                                return (
+                                                    <div key={index} style={{ backgroundColor }}>
+                                                        {displayResults([result], eventId, division, originalIndex)}
+                                                    </div>
+                                                );
+                                            })}
                                     </div>
-                                </div> */}
+                                </div>
                             </div>
                         )}
                     </div>

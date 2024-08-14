@@ -187,36 +187,40 @@ const normalizeName = (name) => {
         .join(' ');
 };
 
-export const displayResults = (players, eventId, division) => {
+export const displayResults = (players, eventId, division, customPlacement) => {
     return (
         <OlResults className='result-list-ol'>
-            {players.map((player, index) => (
-                <li key={`${player.name}-${index}`} className='player-list-hover'>
-                    <div className='results-list-item'>
-                        <div className='name-n-flag'>
-                            <div className='player-placement'>{index + 1}.</div>
-                            <img className='flag-size' src={flags[player.flag]} alt="flag" />
-                            <Link className='link-to-playerprofile' to={`/player/${normalizeName(player.name)}-${player.flag}`}>
-                                {formatName(player.name)}
-                            </Link>
+            {players.map((player, index) => {
+                const placement = customPlacement !== undefined ? customPlacement : index + 1;
+
+                return (
+                    <li key={`${player.name}-${index}`} className='player-list-hover'>
+                        <div className='results-list-item'>
+                            <div className='name-n-flag'>
+                                <div className='player-placement'>{placement}.</div>
+                                <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                                <Link className='link-to-playerprofile' to={`/player/${normalizeName(player.name)}-${player.flag}`}>
+                                    {formatName(player.name)}
+                                </Link>
+                            </div>
+                            <div className="player-deck-icons">
+                                <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />
+                                <a
+                                    href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}
+                                    style={{
+                                        opacity: player.decklist ? 1 : 0,
+                                        pointerEvents: player.decklist ? 'auto' : 'none'
+                                    }}
+                                >
+                                    <span className="material-symbols-outlined">
+                                        format_list_bulleted
+                                    </span>
+                                </a>
+                            </div>
                         </div>
-                        <div className="player-deck-icons">
-                            <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />
-                            <a
-                                href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}
-                                style={{
-                                    opacity: player.decklist ? 1 : 0,
-                                    pointerEvents: player.decklist ? 'auto' : 'none'
-                                }}
-                            >
-                                <span className="material-symbols-outlined">
-                                    format_list_bulleted
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </li>
-            ))}
+                    </li>
+                );
+            })}
         </OlResults>
     );
 };

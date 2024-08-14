@@ -949,11 +949,20 @@ const CardView = () => {
                             return (
                                 <React.Fragment key={eventId}>
                                     <tr className="event-separator">
-                                        <td colSpan="5">
-                                            <Link className="event-separator-content" to={`/tournaments/${eventId}`}>
-                                                <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;({eventFormat})
-                                            </Link>
-                                        </td>
+                                    <td colSpan="5">
+                                        <Link 
+                                            className="event-separator-content" 
+                                            to={`/tournaments/${eventId}${
+                                                eventId === '2002_WORLDS' || eventId === '2000_MEGA_TROPICAL_BATTLE' || eventId === '2002_ECSC' || eventId === '2002_WCSC'
+                                                    ? '/seniors' 
+                                                    : eventId.toLowerCase().includes('retro') 
+                                                        ? '/all' 
+                                                        : ''
+                                            }`}
+                                        >
+                                            <strong>{eventName}</strong> &nbsp;&nbsp;-&nbsp; {eventDate} &nbsp;({eventFormat})
+                                        </Link>
+                                    </td>
                                     </tr>
                                     {sortedResults.map((result, index) => (
                                         <tr key={index} style={{ marginBottom: '5px' }}>

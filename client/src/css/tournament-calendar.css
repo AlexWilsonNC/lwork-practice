@@ -278,6 +278,9 @@ td div a {
             font-size: 10px;
             padding-left: 0px;
         }
+        .deck-archetypes h3 {
+            font-size: 14px;
+        }
         .indiv-filter {
             margin-right: 8px;
         }

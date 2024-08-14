@@ -19,7 +19,7 @@
     justify-content: space-between;
     background-color: rgb(27, 27, 29);
     color: #E1E1E1;
-    position: relative; /* Add relative positioning here */
+    position: relative;
     z-index: 0;
 }
 .regional-info p {
@@ -82,6 +82,9 @@
     min-width: 60vw;
     height: 460px;
     margin: 0 auto;
+}
+.deck-archetypes {
+    margin-top: 15px;
 }
 @media (max-width: 1500px) {
     .chart-container {
@@ -234,6 +237,11 @@
 .result-list-ol {
     position: relative;
     margin-top: 25px;
+    list-style-type: none;
+}
+.charted-decks .result-list-ol {
+    position: relative;
+    margin-top: 5px;
     list-style-type: none;
 }
 .player-list-hover {

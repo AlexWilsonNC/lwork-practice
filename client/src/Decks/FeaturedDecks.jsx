@@ -46,7 +46,7 @@ const featuredDecksByFormat = [
                 sprite1: "blank",
                 sprite2: "beedrill",
                 source: "Enigma",
-                deckListLink: '/tournaments/FEATURED_BS/decksbyera/alakazam-fighting',
+                deckListLink: '/tournaments/FEATURED_BS/decksbyera/beedrill-1',
             },
             {
                 label: "Buzzapdos",
@@ -245,24 +245,44 @@ const FeaturedDecks = () => {
     const { theme } = useTheme();
     const [searchTerm, setSearchTerm] = React.useState('');
     const [sortOrder, setSortOrder] = React.useState('desc');
+    const [selectedFormat, setSelectedFormat] = React.useState(''); // State for selected format
     const navigate = useNavigate();
+
+    const getSourceLink = (source) => {
+        switch (source) {
+            case 'Jason Klaczynski\'s Blog':
+                return 'https://jklaczpokemon.com';
+            case 'PTCGArchive':
+                return 'https://ptcgarchive.com';
+            default:
+                return null;
+        }
+    };
 
     const filteredDecksByFormat = featuredDecksByFormat.map(formatObj => ({
         ...formatObj,
         decks: formatObj.decks.filter(deck =>
             deck.label.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        ).map(deck => ({
+            ...deck,
+            sourceLink: getSourceLink(deck.source)
+        }))
     }));
 
     const setSortByFormat = () => {
         navigate('/decks');
     };
 
-    const sortedDecksByFormat = sortOrder === 'asc' ? [...filteredDecksByFormat].reverse() : filteredDecksByFormat;
+    const filteredFormats = selectedFormat
+    ? filteredDecksByFormat.filter(format => format.format === selectedFormat)
+    : filteredDecksByFormat;
+
+    const sortedDecksByFormat = sortOrder === 'asc' ? [...filteredFormats].reverse() : filteredFormats;
 
     const resetFilters = () => {
         setSortOrder('desc');
         setSearchTerm('');
+        setSelectedFormat(''); // Reset the selected format
     };
 
     return (
@@ -273,8 +293,8 @@ const FeaturedDecks = () => {
             <div className='player-results-container'>
                 <div className='completed-n-upcoming'>
                     <div className='bts-in'>
-                        <a onClick={setSortByFormat} className={`completed-btn inactive-evt-btn`}>Decks by Event Results</a>
-                        <a className={`upcoming-btn active-evt-btn`}>Featured Decks by Era</a>
+                        <a onClick={setSortByFormat} className={`completed-btn inactive-evt-btn`}>Event Results</a>
+                        <a className={`upcoming-btn active-evt-btn`}>Decks by Era</a>
                     </div>
                     <div className='search-input'>
                         <span className="material-symbols-outlined">search</span>
@@ -289,6 +309,20 @@ const FeaturedDecks = () => {
                 </div>
                 <div className='filter-container'>
                     <div className='filters-top'>
+                        <div className='indiv-filter'>
+                            <p className='sort-events'>Format:</p>
+                            <select
+                                value={selectedFormat}
+                                onChange={e => setSelectedFormat(e.target.value)}
+                            >
+                                <option value="">All Formats</option>
+                                {featuredDecksByFormat.map(format => (
+                                    <option key={format.format} value={format.format}>
+                                        {format.year} - {format.format}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <div className='indiv-filter'>
                             <p className='sort-events'>Order:</p>
                             <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
@@ -320,42 +354,48 @@ const FeaturedDecks = () => {
                                     </FormatSeparator>
                                     {
                                         formatObj.decks.map((deck, index) => {
-                                            const spriteFolder = formatObj.year === '1999' ? 'assets/sprites-gen1' : 'assets/sprites';
-                                            const spriteWidth = formatObj.year === '1999' ? '33px' : '55px';
                                             return (
                                             <tr key={index} className='deck-table'>
                                                 <td>
                                                 {deck.sprite1 && deck.sprite1 !== 'blank' ? (
                                                     <img 
-                                                    src={`/${spriteFolder}/${deck.sprite1}.png`} 
+                                                    src={`/assets/sprites/${deck.sprite1}.png`} 
                                                     alt={`${deck.label} sprite`} 
-                                                    style={{width: spriteWidth }}
+                                                    style={{width: '55px' }}
                                                     />
                                                 ) : (
                                                     <img 
-                                                    src={`/${spriteFolder}/blank.png`} 
+                                                    src={`/assets/sprites/blank.png`} 
                                                     alt={`${deck.label} sprite`} 
-                                                    style={{width: spriteWidth }}
+                                                    style={{width: '55px' }}
                                                     />
                                                 )}
                                                 </td>
                                                 <td>
                                                 {deck.sprite2 && deck.sprite2 !== 'blank' ? (
                                                     <img className='movesecondspritedecks'
-                                                    src={`/${spriteFolder}/${deck.sprite2}.png`} 
+                                                    src={`/assets/sprites/${deck.sprite2}.png`} 
                                                     alt={`${deck.label} sprite`} 
-                                                    style={{width: spriteWidth }}
+                                                    style={{width: '55px' }}
                                                     />
                                                 ) : (
                                                     <img 
-                                                    src={`/${spriteFolder}/blank.png`} 
+                                                    src={`/assets/sprites/blank.png`} 
                                                     alt={`${deck.label} sprite`} 
-                                                    style={{width: spriteWidth }}
+                                                    style={{width: '55px' }}
                                                     />
                                                 )}
                                                 </td>
                                                 <td>{deck.label}</td>
-                                                <td>{deck.source}</td>
+                                                <td class='fontsource'>
+                                                    {deck.sourceLink ? (
+                                                        <a href={deck.sourceLink} target="_blank" className='blue' rel="noopener noreferrer">
+                                                            {deck.source}
+                                                        </a>
+                                                    ) : (
+                                                        deck.source
+                                                    )}
+                                                </td>
                                                 <td>
                                                     <Link to={deck.deckListLink}>
                                                         <span className="material-symbols-outlined">format_list_bulleted</span>
