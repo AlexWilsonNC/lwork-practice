@@ -42,6 +42,9 @@ const customLabelsConfig = {
         'arceus-vulpix-alola': 'Arceus Vulpix',
         'roaring-moon-darkrai': 'Roaring Moon',
         'miraidon-regieliki-vmax': 'Miraidon',
+        'armarouge-chi-yu': 'Armarouge Box',
+        '-gouging-fire': 'Gouging Fire',
+        'roaring-moon-flutter-mane': 'Ancient Box',
     },
     '2023': {
         'comfey-sableye': 'Lost Box',

@@ -78,15 +78,15 @@ import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
 
 const tournamentList = [
-    // {
-    //     "id": 'event2',
-    //     "name": "Malaysia Championships",
-    //     "eventType": "asiachampionship",
-    //     "eventLogo": malaysiaChampionships,
-    //     "date": "Jun 29, 2024",
-    //     "flag": usa,
-    //     "location": ""
-    // },
+    {
+        "id": "2024_MALAYSIA_CH",
+        "name": "Malaysia Championships",
+        "eventType": "asiachampionship",
+        "eventLogo": malaysiaChampionships,
+        "date": "Jun 29, 2024",
+        "flag": malaysia,
+        "location": "Malaysia",
+          },
     {
         "id": '2024_NAIC/masters',
         "name": "NAIC 2024",
@@ -557,7 +557,7 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "Aug 19, 2016",
         "flag": usa,
-        "location": "San Fransisco, California",
+        "location": "San Francisco, California",
     },
     {
         "id": "2015_WORLDS",
