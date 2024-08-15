@@ -646,6 +646,9 @@ const customLabelsConfig = {
         '-weezing': "Weezing",
         'medicham-houndoom': 'Medicham',
         'arcanine-ninetales': 'Arcanine',
+        'dustox-houndoom': 'Dustox Houndoom',
+        'azumarill-crobat': 'Azumarill Crobat',
+        'eevee-pidgeot': 'Eeveelutions',
     },
     '2005': {
         'ludicolo-magcargo': 'LudiCargo',

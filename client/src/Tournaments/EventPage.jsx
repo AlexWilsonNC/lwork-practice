@@ -243,7 +243,7 @@ const EventPage = () => {
     const { eventId, division: divisionParam } = useParams();
     const [eventData, setEventData] = useState(null);
     const [division, setDivision] = useState('masters');
-    const [activeTab, setActiveTab] = useState('Results');
+    const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
     const chartRef = useRef(null);
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
@@ -271,7 +271,10 @@ const EventPage = () => {
     }, [divisionParam]);
 
     useEffect(() => {
-        // Reset the chart state when division changes
+        sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
+    }, [activeTab, eventId]);
+
+    useEffect(() => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
     }, [division]);
@@ -847,21 +850,25 @@ const EventPage = () => {
                 </div>
                 <div className='bottom-options'>
                     <a
-                        className={`event-option ${activeTab === 'Results' ? 'active-option' : ''
-                            }`}
-                        onClick={() => setActiveTab('Results')}
+                        className={`event-option ${activeTab === 'Results' ? 'active-option' : ''}`}
+                        onClick={() => {
+                            setActiveTab('Results');
+                        }}
                     >
                         Results
                     </a>
                     <a
                         className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
-                        onClick={() => resultsAvailable && setActiveTab('Statistics')}
+                        onClick={() => {
+                            if (resultsAvailable) {
+                                setActiveTab('Statistics');
+                            }
+                        }}
                         style={statisticsTabStyle}
                     >
                         Statistics
                     </a>
                     <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Photos</a>
-                    {/* <a className='event-option'>Info</a> */}
                 </div>
                 <div className='contain-event'>
                     <div className='event-content'>

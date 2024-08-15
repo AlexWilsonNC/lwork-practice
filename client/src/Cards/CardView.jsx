@@ -578,7 +578,9 @@ const CardView = () => {
         otherCard.setAbbrev !== cardInfo.setAbbrev || otherCard.number !== cardInfo.number
     );
     const showOtherVersions = otherVersionsToShow.length > 0 && (cardInfo.supertype === 'Pokémon' || cardInfo.supertype === 'Trainer' || cardInfo.supertype === 'Energy');
-    const displayedOtherVersions = showAllVersions ? otherVersionsToShow : otherVersionsToShow.slice(0, 5);
+    const displayedOtherVersions = showAllVersions 
+    ? otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)) 
+    : otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)).slice(0, 5);
     
     if (!cardInfo) {
         return <div>Card not found</div>;
