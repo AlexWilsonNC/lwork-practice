@@ -1102,7 +1102,7 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
           },
     {
-        "id": "2024_BREWCITY_RETRO_1999/all",
+        "id": "2024_BREWCITY_1999_RETRO/all",
         "name": "Brew City BS-FO Retro Event",
         "eventType": "retro",
         "eventLogo": retro,
