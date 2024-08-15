@@ -853,8 +853,15 @@ const customLabelsConfig = {
         'mr-mime-onix': 'Psychic Fighting',
     },
     '1999': {
-        'eeee': '',
-
+        'lickitung-scyther': 'Lickitung Stall',
+        'wigglytuff-hitmonchan': 'Wigglytuff',
+        'lickitung-moltres': 'Lickitung Stall',
+        'electabuzz-magmar': 'Haymaker',
+        'mewtwo-chansey': 'Mewtwo',
+        'lickitung-magmar': 'Lickitung Stall',
+        'blastoise-articuno': 'Rain Dance',
+        '-dodrio': 'Dodrio',
+        '-wigglytuff': 'Wigglytuff',
     },
 };
 
