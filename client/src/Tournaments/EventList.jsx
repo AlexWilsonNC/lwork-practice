@@ -63,6 +63,11 @@ const UpcomingEvents = styled.div`
         background: ${({ theme }) => theme.searchBg};
         color: ${({ theme }) => theme.searchTxt};
     }
+    @media screen and (max-width: 375px) {
+      .searcheventsfield {
+          width: 75px;
+      }
+    }
 `;
 const FilterTop = styled.div`
     select {background: ${({ theme }) => theme.body};}
@@ -111,28 +116,31 @@ const loadFiltersWithExpiration = (key) => {
   return null;
 };
 
-  const EventList = () => {
+const EventList = () => {
     const { theme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
-    const isUpcomingInitially = !location.pathname.includes("/completed");
+    const isUpcomingInitially = !location.pathname.includes("/completed") && !location.pathname.includes("/retro");
     const [showUpcoming, setShowUpcoming] = useState(isUpcomingInitially);
+    const [showRetro, setShowRetro] = useState(location.pathname.includes("/retro"));
     const [eventTypeFilter, setEventTypeFilter] = useState(() => loadFiltersWithExpiration('eventTypeFilter') || '');
     const [countryFilter, setCountryFilter] = useState('');
     const [yearFilter, setYearFilter] = useState(() => loadFiltersWithExpiration('yearFilter') || '');
     const [sortOrder, setSortOrder] = useState(() => loadFiltersWithExpiration('sortOrder') || 'newest');
     const [viewType, setViewType] = useState('upcoming');
     const [regionFilter, setRegionFilter] = useState(() => loadFiltersWithExpiration('regionFilter') || '');
-    const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');  
+    const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');
   
     const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
   
     useEffect(() => {
       const isCompleted = location.pathname.includes("/completed");
-      setShowUpcoming(!isCompleted);
-      setViewType(isCompleted ? 'completed' : 'upcoming');
-    }, [location.pathname]);
-  
+      const isRetro = location.pathname.includes("/retro");
+      setShowUpcoming(!isCompleted && !isRetro);
+      setShowRetro(isRetro);
+      setViewType(isRetro ? 'retro' : (isCompleted ? 'completed' : 'upcoming'));
+  }, [location.pathname]);
+
     useEffect(() => {
       saveFiltersWithExpiration('eventTypeFilter', eventTypeFilter);
       saveFiltersWithExpiration('yearFilter', yearFilter);
@@ -146,16 +154,26 @@ const loadFiltersWithExpiration = (key) => {
       const eventYear = eventDate.getFullYear().toString();
       const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
       const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
-  
-      return isInRegion &&
-        matchesSearchTerm &&
-        (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
-        (countryFilter ? event.flag === countryFilter : true) &&
-        (yearFilter ? eventYear === yearFilter : true) &&
-        (showUpcoming ? eventDate >= new Date() : eventDate < new Date());
-    });
-    
-    const sortedFilteredEvents = filteredEvents.sort((a, b) => {
+
+      if (showRetro) {
+        return event.eventType === 'retro' &&
+            isInRegion &&
+            matchesSearchTerm &&
+            (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
+            (countryFilter ? event.flag === countryFilter : true) &&
+            (yearFilter ? eventYear === yearFilter : true);
+    } else {
+        return isInRegion &&
+            matchesSearchTerm &&
+            (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
+            (countryFilter ? event.flag === countryFilter : true) &&
+            (yearFilter ? eventYear === yearFilter : true) &&
+            (showUpcoming ? eventDate >= new Date() : eventDate < new Date()) &&
+            event.eventType !== 'retro';
+    }
+  });
+
+  const sortedFilteredEvents = filteredEvents.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
   
@@ -200,19 +218,23 @@ const loadFiltersWithExpiration = (key) => {
         <div className='upcoming-events'>
           <div className='completed-n-upcoming'>
             <div className='bts-in'>
-              <a onClick={() => handleButtonClick("/tournaments/completed")} className={`completed-btn ${!showUpcoming ? 'active-evt-btn' : ''}`}>
-                Completed
-              </a>
-              <a onClick={() => handleButtonClick("/tournaments/upcoming")} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
-                Upcoming
-              </a>
+                <a onClick={() => handleButtonClick("/tournaments/completed")} className={`completed-btn ${!showUpcoming && !showRetro ? 'active-evt-btn' : ''}`}>
+                    Completed
+                </a>
+                <a onClick={() => handleButtonClick("/tournaments/upcoming")} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
+                    Upcoming
+                </a>
+                <a onClick={() => handleButtonClick("/tournaments/retro")} className={`retro-btn  ${showRetro ? 'active-evt-btn' : ''}`}>
+                    Retro
+                </a>
             </div>
             <div className='search-input'>
-              <span className="material-symbols-outlined">search</span>
+              <span className="material-symbols-outlined hide-small-event-page">search</span>
               <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
           </div>
           <FilterTop className='filters-top'>
+          {!showRetro && (
             <div className='indiv-filter'>
               <p className='sort-events'>Event Type:</p>
               <select value={eventTypeFilter} onChange={e => setEventTypeFilter(e.target.value)}>
@@ -238,11 +260,9 @@ const loadFiltersWithExpiration = (key) => {
                     <option value="megaTropicalBattle">Tropical Mega Battle</option>
                   </optgroup>
                 )}
-                <optgroup label="Other">
-                  <option value="retro">Modern-Retro Events</option>
-                </optgroup>
               </select>
             </div>
+          )}
             <div className='indiv-filter'>
               <p className='sort-events'>Region:</p>
               <select value={regionFilter} onChange={e => setRegionFilter(e.target.value)}>

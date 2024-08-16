@@ -884,7 +884,7 @@ const EventPage = () => {
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>
                                     <div className='alignrow'>
-                                        {isNAIC2024 ? (
+                                        {isNAIC2024 && division === 'masters' ? (
                                             <>
                                                 <button
                                                     className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
@@ -892,31 +892,28 @@ const EventPage = () => {
                                                 >
                                                     Day 2
                                                 </button>
-                                                {division === 'masters' && (
-                                                    <>
-                                                        <button
-                                                            className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                            onClick={handleDayOneClick}
-                                                        >
-                                                            Day 1
-                                                        </button>
-                                                        <button
-                                                            className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                            onClick={handleConversionRateClick}
-                                                        >
-                                                            % Conversion
-                                                        </button>
-                                                    </>
-                                                )}
+                                                <>
+                                                    <button
+                                                        className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                        onClick={handleDayOneClick}
+                                                    >
+                                                        Day 1
+                                                    </button>
+                                                    <button
+                                                        className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                                        onClick={handleConversionRateClick}
+                                                    >
+                                                        % Conversion
+                                                    </button>
+                                                </>
                                             </>
-                                            ) : is2024Event ? (
-                                                <button className={`chart-button day2btn active`}>
-                                                    Day 2
-                                                </button>
-                                            ) : (
-                                                <p className='chart-button'>Top {chartResults.length}</p>
-                                            )
-                                        }
+                                        ) : (is2024Event && division === 'masters') ? (
+                                            <button className={`chart-button day2btn active`}>
+                                                Day 2
+                                            </button>
+                                        ) : (
+                                            <p className='chart-button'>Top {chartResults.length}</p>
+                                        )}
                                     </div>
                                 </div>
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (

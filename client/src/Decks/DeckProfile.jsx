@@ -173,12 +173,12 @@ const DeckProfile = () => {
   };
 
   const uniqueFormats = [...new Set(decks.flatMap(d => d.decks.map(deck => deck.eventFormat)))];
-  const uniqueDivisions = ['All', ...new Set(decks.flatMap(d => d.decks.map(deck => deck.division)))];
+  const uniqueDivisions = ['All Divisions', ...new Set(decks.flatMap(d => d.decks.map(deck => deck.division)))];
 
   const filteredDecks = decks.flatMap(d => d.decks)
     .filter(result =>
       (selectedFormat === '' || result.eventFormat === selectedFormat) &&
-      (selectedDivision === 'All' || selectedDivision === '' || result.division === selectedDivision) &&
+      (selectedDivision === 'All Divisions' || selectedDivision === '' || result.division === selectedDivision) &&
       (result.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         result.playerName.toLowerCase().includes(searchTerm.toLowerCase()))
     )
@@ -269,10 +269,9 @@ const DeckProfile = () => {
             <div className='indiv-filter'>
             <p className='sort-events'>Division:</p>
             <select value={selectedDivision} onChange={(e) => setSelectedDivision(e.target.value)}>
-                <option value="All">All</option>
-                <option value="masters">Masters</option>
-                <option value="seniors">Seniors</option>
-                <option value="juniors">Juniors</option>
+              {uniqueDivisions.map((division, index) => (
+                <option key={index} value={division}>{division.charAt(0).toUpperCase() + division.slice(1)}</option>
+              ))}
             </select>
             </div>
             <button onClick={resetFilters} className="reset-btn">Reset</button>

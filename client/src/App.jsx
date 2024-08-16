@@ -30,6 +30,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
           <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
+          <Route path="/tournaments/retro" element={<EventList showCompleted={false} />} />
           <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
           <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
           <Route path="/decks" element={<DecksPage />} />

@@ -116,8 +116,10 @@ const FormatSeparator = styled.tr`
 `;
 
 const archetypeSpriteOverrides = {
-  "Haymaker": { sprite1: "hitmonchan", sprite2: "scyther" },
+  "Haymaker": { sprite1: "hitmonchan", sprite2: "electabuzz" },
   "Haymaker Articuno": { sprite1: "hitmonchan", sprite2: "articuno" },
+  "Lickitung Stall": { sprite1: "blank", sprite2: "lickitung" },
+  "Mewtwo": { sprite1: "blank", sprite2: "mewtwo" },
   "Clefable": { sprite1: "blank", sprite2: "clefable" },
   "Nidoqueen": { sprite1: "blank", sprite2: "nidoqueen" },
   "Mr. Mime": { sprite1: "blank", sprite2: "mr-mime" },
@@ -206,9 +208,9 @@ const Decks = () => {
   };
 
   const filteredDecks = decks.filter(deck =>
-    deck.label.toLowerCase().includes(searchTerm.toLowerCase())
+    deck.label.toLowerCase().includes(searchTerm.toLowerCase()) && deck.label !== '-'
   );
-
+  
   const extractFormats = (results) => {
     if (!results || results.length === 0) return [];
     return results.map(result => result.eventFormat || 'Unknown');
@@ -325,16 +327,16 @@ const Decks = () => {
                 <optgroup label="2020">
                   <option value="UPR-SSH">UPR-SSH</option>
                   <option value="UPR-CEC">UPR-CEC</option>
-                  <option value="UPR-UNM">UPR-UNM</option>
                 </optgroup>
                 
                 <optgroup label="2019">
+                  <option value="UPR-UNM">UPR-UNM</option>
                   <option value="SUM-UNB">SUM-UNB</option>
                   <option value="SUM-TEU">SUM-TEU</option>
-                  <option value="SUM-LOT">SUM-LOT</option>
                 </optgroup>
 
                 <optgroup label="2018">
+                  <option value="SUM-LOT">SUM-LOT</option>
                   <option value="BKT-CES">BKT-CES</option>
                   <option value="BKT-FLI">BKT-FLI</option>
                   <option value="BKT-UPR">BKT-UPR</option>
@@ -402,8 +404,8 @@ const Decks = () => {
                 </optgroup>
 
                 <optgroup label="2002">
-                  <option value="TR-LC">TR-LC</option>
                   <option value="N1-LC">N1-LC</option>
+                  <option value="TR-LC">TR-LC</option>
                   <option value="TR-N4">TR-N4</option>
                 </optgroup>
 
@@ -414,9 +416,11 @@ const Decks = () => {
                 </optgroup>
 
                 <optgroup label="2000">
-                  <option value="BS-G2">BS-G2</option>
+                  <option value="BS-G2">Prop 15/3</option>
                   <option value="BS-TR">BS-TR</option>
-                  <option value="BS-TR">BS-TR</option>
+                </optgroup>
+
+                <optgroup label="1999">
                   <option value="BS-FO">BS-FO</option>
                 </optgroup>
 
