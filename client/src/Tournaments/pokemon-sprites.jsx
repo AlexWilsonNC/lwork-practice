@@ -29,7 +29,13 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         return { firstSprite, secondSprite };
     }
 
-    const hasPokemon = (name) => decklist.pokemon.some(p => p.name === name);
+    const getPokemonCount = (pokemonName) => {
+        const pokemon = decklist.pokemon.find(pokemon => pokemon.name === pokemonName);
+        return pokemon ? parseInt(pokemon.count, 10) : 0;
+    };
+
+    // Function to check if a specific Pokémon is in the deck
+    const hasPokemon = (pokemonName) => getPokemonCount(pokemonName) > 0;
 
     // Multiple checks
     if (hasPokemon('Regidrago VSTAR') && hasPokemon('Teal Mask Ogerpon ex')) {
@@ -72,6 +78,14 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('goodra-hisui');
         secondSprite = getPokemonSpriteURL('comfey');
     }
+    else if (hasPokemon('Comfey') && hasPokemon('Dragapult ex')) {
+        firstSprite = getPokemonSpriteURL('dragapult');
+        secondSprite = getPokemonSpriteURL('comfey');
+    }
+    else if (hasPokemon('Comfey') && hasPokemon('Radiant Charizard')) {
+        firstSprite = getPokemonSpriteURL('comfey');
+        secondSprite = getPokemonSpriteURL('charizard-shiny');
+    }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Hisuian Goodra VSTAR')) {
         firstSprite = getPokemonSpriteURL('arceus');
         secondSprite = getPokemonSpriteURL('goodra-hisui');
@@ -110,8 +124,15 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite = getPokemonSpriteURL('archeops');
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Dragapult ex')) {
-        firstSprite = getPokemonSpriteURL('charizard');
-        secondSprite = getPokemonSpriteURL('dragapult');
+        const dragapultCount = getPokemonCount('Dragapult ex');
+        
+        if (dragapultCount > 1) {
+            firstSprite = getPokemonSpriteURL('dragapult');
+            secondSprite = getPokemonSpriteURL('charizard');
+        } else {
+            firstSprite = getPokemonSpriteURL('charizard');
+            secondSprite = getPokemonSpriteURL('pidgeot');
+        }
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Pidgeot ex')) {
         firstSprite = getPokemonSpriteURL('dragapult');

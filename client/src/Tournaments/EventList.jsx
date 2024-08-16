@@ -224,6 +224,7 @@ const EventList = () => {
                 <a onClick={() => handleButtonClick("/tournaments/upcoming")} className={`upcoming-btn ${showUpcoming ? 'active-evt-btn' : ''}`}>
                     Upcoming
                 </a>
+                {/* <span className='grey-line'>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span> */}
                 <a onClick={() => handleButtonClick("/tournaments/retro")} className={`retro-btn  ${showRetro ? 'active-evt-btn' : ''}`}>
                     Retro
                 </a>
