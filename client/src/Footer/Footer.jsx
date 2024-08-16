@@ -36,7 +36,7 @@ function Footer() {
                             <a href='/players'>Players</a>
                         </div>
                         <div className='useful-row2'>
-                            <a href='' className='not-ready'>About</a>
+                            <a href='/about'>About</a>
                             <a href=''>Archive Updates</a>
                             <a href='' className='not-ready'>Articles</a>
                             <a href='' className='not-ready'>Deck Builder</a>

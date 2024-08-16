@@ -16,6 +16,7 @@ import PlayerProfile from './Players/PlayerProfile';
 import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
 import AllArticlesPage from './ArticleComponents/AllArticlesPage';
 import ArticleComponent from './ArticleComponents/ArticleComponent';
+import About from './About/About';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
@@ -44,6 +45,7 @@ function App() {
           <Route path="/archive-updates" element={<ArchiveUpdates />} />
           <Route path="/articles/all" element={<AllArticlesPage />} />
           <Route path="/articles/:articleId" element={<ArticleComponent />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BackToTopButton />

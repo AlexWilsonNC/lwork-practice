@@ -39,6 +39,8 @@ export const lightTheme = {
     chartNumber: '#FFF',
     chartdescrip: '#000',
     spinner: '#1290eb',
+    aboutbg: '#f5f5f5',
+    abouttxt: '#333',
 
 };
 
@@ -84,5 +86,7 @@ export const darkTheme = {
     chartNumber: 'rgb(200, 200, 200)',
     chartdescrip: 'grey',
     spinner: '#1290eb',
+    aboutbg: 'rgb(27, 27, 29)',
+    abouttxt: 'rgb(210, 210, 210)',
 
 };
