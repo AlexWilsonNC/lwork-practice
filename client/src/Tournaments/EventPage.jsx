@@ -256,13 +256,20 @@ const EventPage = () => {
         const fetchLiveStandings = async () => {
             try {
                 const response = await fetch('http://localhost:3000/proxy?url=https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json?');
-                const data = await response.json();
-                setLiveStandings(data);
+                const contentType = response.headers.get('content-type');
+        
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    setLiveStandings(data);
+                } else {
+                    const text = await response.text();
+                    console.error('Unexpected response format:', text);
+                }
             } catch (error) {
                 console.error('Failed to fetch live standings:', error);
             }
         };
-                
+                        
         // Fetch live standings immediately and then every 5 minutes
         fetchLiveStandings();
         const intervalId = setInterval(fetchLiveStandings, 5 * 60 * 1000);

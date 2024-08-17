@@ -430,6 +430,7 @@ const CardView = () => {
         { name: 'Delinquent', set: 'BKP', number: '98' },
         { name: 'Delinquent', set: 'BKP', number: '98a' },
         { name: 'Delinquent', set: 'BKP', number: '98b' },
+        { name: 'Duskull', set: 'CEC', number: '83' },
         { name: 'Flabébé', set: 'FLI', number: '83' },
         { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
         { name: 'Ghetsis', set: 'PLF', number: '101' },
