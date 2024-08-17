@@ -191,6 +191,66 @@ const flags = {
     unknown: unknown
 }
 
+const countryNames = {
+    AR: 'Argentina (Latin America)',
+    AU: 'Australia (Oceania)',
+    AT: 'Austria (Europe)',
+    BY: 'Belarus (Europe)',
+    BE: 'Belgium (Europe)',
+    BR: 'Brazil (Latin America)',
+    CA: 'Canada (North America)',
+    CL: 'Chile (Latin America)',
+    CN: 'China (Asia-Pacific)',
+    CO: 'Colombia (Latin America)',
+    HR: 'Croatia (Europe)',
+    CZ: 'Czechia (Europe)',
+    DK: 'Denmark (Europe)',
+    SV: 'El Salvador (Latin America)',
+    FI: 'Finland (Europe)',
+    FR: 'France (Europe)',
+    DE: 'Germany (Europe)',
+    GR: 'Greece (Europe)',
+    HK: 'Hong Kong (Asia-Pacific)',
+    HU: 'Hungary (Europe)',
+    IS: 'Iceland (Europe)',
+    ID: 'Indonesia (Asia-Pacific)',
+    IE: 'Ireland (Europe)',
+    IM: 'Isle of Man (Europe)',
+    IL: 'Israel (Middle East-South Africa)',
+    IT: 'Italy (Europe)',
+    JP: 'Japan (Asia-Pacific)',
+    SO: 'Somalia (Middle East-South Africa)',
+    KR: 'South Korea (Asia-Pacific)',
+    LT: 'Lithuania (Europe)',
+    MY: 'Malaysia (Asia-Pacific)',
+    MT: 'Malta (Europe)',
+    MX: 'Mexico (Latin America)',
+    MA: 'Moroco (Europe)',
+    NL: 'Netherlands (Europe)',
+    NZ: 'New Zealand (Oceania)',
+    NI: 'Nicaragua (Latin America)',
+    NO: 'Norway (Europe)',
+    PE: 'Peru (Latin America)',
+    PH: 'Philippines (Asia-Pacific)',
+    PL: 'Poland (Europe)',
+    PT: 'Portugal (Europe)',
+    PR: 'Puerto Rico (North America)',
+    RU: 'Russia (Russia)',
+    SG: 'Singapore (Asia-Pacific)',
+    SK: 'Slovakia (Europe)',
+    ZA: 'South Africa (Middle East-South Africa)',
+    ES: 'Spain (Europe)',
+    SE: 'Sweden (Europe)',
+    CH: 'Switzerland (Europe)',
+    TW: 'Taiwan (Asia-Pacific)',
+    TH: 'Thailand (Asia-Pacific)',
+    UK: 'United Kingdom (Europe)',
+    US: 'USA (North America)',
+    unknown: 'Unknown',
+    SI: 'Slovenia (Europe)',
+    EC: 'Ecuador (Latin America)'
+};
+
 const PlayerProfileContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
@@ -238,7 +298,36 @@ const PlayerProfileContainer = styled.div`
 .chart-button.active {
   background-color: #1290eb;
 }
+    .flag-container {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        margin-top: 5px;
+    }
+    .flag-tooltip {
+        visibility: hidden;
+        background-color: #1290eb;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 10px;
+        position: absolute;
+        z-index: 9999 !important;
+        bottom: 95%;
+        left: 140%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        display: block;
+    }
+    .flag-container:hover .flag-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
 `;
+const getCountryName = (code) => {
+    return countryNames[code] || 'Unknown';
+};
 
 const parseDate = (dateString) => {
     const year = dateString.split(', ')[1];
@@ -433,7 +522,16 @@ const PlayerProfile = () => {
             <div className='player-results-container meep'>
                 <div className='completed-n-upcoming'>
                     <div className='bts-in'>
-                        <img className='flag-size' src={flags[player.flag]} alt="flag" />
+                        <div className="flag-container">
+                            <img 
+                                className='flag-size' 
+                                src={flags[player.flag]} 
+                                alt="flag" 
+                            />
+                            <div className="flag-tooltip">
+                                {getCountryName(player.flag)}
+                            </div>
+                        </div>
                         <h1>{formatName(player.name)}</h1>
                     </div>
                     {/* <div className='search-input'>

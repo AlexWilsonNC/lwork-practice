@@ -231,7 +231,7 @@
     align-items: center;
     padding-left: 15px;
     font-size: 18px;
-    overflow: hidden;
+    overflow: visible;
     white-space: wrap;
 }
 .result-list-ol {
