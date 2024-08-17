@@ -140,29 +140,6 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
-app.get('/proxy', async (req, res) => {
-  try {
-      const url = req.query.url;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-          throw new Error(`Failed to fetch data from ${url}`);
-      }
-
-      const contentType = response.headers.get('content-type');
-
-      if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          res.json(data);
-      } else {
-          const text = await response.text();
-          res.status(500).send('Unexpected response format: ' + text);
-      }
-  } catch (error) {
-      res.status(500).send('Error fetching data: ' + error.message);
-  }
-});
-
 app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
   let cardName = req.params.name.trim().toLowerCase();
   console.log(`Searching for cards with names containing: ${cardName}`);

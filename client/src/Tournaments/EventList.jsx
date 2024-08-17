@@ -81,7 +81,7 @@ const countryNames = {
   '/src/assets/flags/isreal.png': 'Israel (Middle East-South Africa)',
   '/src/assets/flags/italy.png': 'Italy (Europe)',
   '/src/assets/flags/japan.png': 'Japan (Asia-Pacific)',
-  '/src/assets/flags/korea.png': 'Somalia (Middle East-South Africa)',
+  '/src/assets/flags/somalia.png': 'Somalia (Middle East-South Africa)',
   '/src/assets/flags/korea.png': 'South Korea (Asia-Pacific)',
   '/src/assets/flags/lithuania.png': 'Lithuania (Europe)',
   '/src/assets/flags/malaysia.png': 'Malaysia (Asia-Pacific)',
