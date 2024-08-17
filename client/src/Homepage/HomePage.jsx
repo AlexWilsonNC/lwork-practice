@@ -90,18 +90,19 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/2024_NAIC'>
+                            <a href='./tournaments/2024_WORLDS'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/04/NAIC-scaled.jpg' />
+                                    <img className='card-image' src='https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/championship/2024-worlds/2024-worlds-banner.png' />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Results from NAIC are Here!</h3>
+                                        <h3>Results from 2024 Worlds are Coming in!</h3>
                                         <p>
-                                            View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                            {/* View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream. */}
+                                            Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics.
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Jun 10, 2024</p>
+                                        <p>Aug 17, 2024</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -303,18 +304,19 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/2024_NAIC'>
+                        <a href='./tournaments/2024_WORLDS'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/04/NAIC-scaled.jpg' />
+                                <img className='card-image' src='https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/championship/2024-worlds/2024-worlds-banner.png' />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Results from NAIC are Here!</h3>
+                                    <h3>Results from 2024 Worlds are Coming in!</h3>
                                     <p>
-                                        View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                        {/* View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream. */}
+                                        Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics.
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Jun 10, 2024</p>
+                                    <p>Aug 17, 2024</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>

@@ -108,7 +108,7 @@ const countryNames = {
   '/src/assets/flags/taiwan.png': 'Taiwan (Asia-Pacific)',
   '/src/assets/flags/thailand.png': 'Thailand (Asia-Pacific)',
   '/src/assets/flags/uk.png': 'United Kingdom (Europe)',
-  '/src/assets/flags/usa.png': 'USA (North America)',
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAS1BMVEUAAACIAwBrEySJBACJBACJBAAeMHfu8/jG0OzF0OzEz+yJmKOCkZ0taMvcJRwnW8MmW8MkVsAkVcAhULwOQJMMOI0MNYsLMYiJBACTUGqQAAAAB3RSTlMATV3l6On7xaKrswAAAHdJREFUeNrdkzkSxDAIBJHt9YlPjJj/v3RTRCAHG3m7aiJ6qiaB6A00fc6qLjccXaLeAorCoGzzJOJyDg5myjaNIi5XENSKvsixOQBSK/oiexD+Z0NB3HDreR27yxoEXoYKzM8CsFUAnoXfN3So0lL6VO/pFZ/3BWhOJ0CD0exFAAAAAElFTkSuQmCC': 'USA (North America)',
   '/src/assets/flags/unknown.png': 'Unknown',
 };
 
