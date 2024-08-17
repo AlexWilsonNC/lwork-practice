@@ -244,12 +244,31 @@ const EventPage = () => {
     const { theme } = useTheme();
     const { eventId, division: divisionParam } = useParams();
     const [eventData, setEventData] = useState(null);
+    const [liveStandings, setLiveStandings] = useState([]);
     const [division, setDivision] = useState('masters');
     const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
     const chartRef = useRef(null);
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
     const [selectedArchetype, setSelectedArchetype] = useState('');
+
+    useEffect(() => {
+        const fetchLiveStandings = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/proxy?url=https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json?');
+                const data = await response.json();
+                setLiveStandings(data);
+            } catch (error) {
+                console.error('Failed to fetch live standings:', error);
+            }
+        };
+                
+        // Fetch live standings immediately and then every 5 minutes
+        fetchLiveStandings();
+        const intervalId = setInterval(fetchLiveStandings, 5 * 60 * 1000);
+
+        return () => clearInterval(intervalId); // Cleanup interval on unmount
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -874,123 +893,23 @@ const EventPage = () => {
                 </div>
                 <div className='contain-event'>
                     <div className='event-content'>
-                        {activeTab === 'Results' ? (
+                    {activeTab === 'Results' ? (
                             <div className='event-results'>
-                                {results.length > 0 ? (
-                                    displayResults(results, eventId, division)
+                                {liveStandings.length > 0 ? (
+                                    // Display live standings here
+                                    liveStandings.map((player, index) => (
+                                        <div key={player.id || index}>
+                                            <p>{index + 1}. {player.name} - {player.points} Points</p>
+                                            {/* Add more player data as needed */}
+                                        </div>
+                                    ))
                                 ) : (
                                     <p className='notavailable'>Results not yet available for this event.</p>
                                 )}
                             </div>
                         ) : (
                             <div className='event-statistics'>
-                                <div className='chart-btns-container'>
-                                    <div className='alignrow'>
-                                        {isNAIC2024 && division === 'masters' ? (
-                                            <>
-                                                <button
-                                                    className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayTwoClick}
-                                                >
-                                                    Day 2
-                                                </button>
-                                                <>
-                                                    <button
-                                                        className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                        onClick={handleDayOneClick}
-                                                    >
-                                                        Day 1
-                                                    </button>
-                                                    <button
-                                                        className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                        onClick={handleConversionRateClick}
-                                                    >
-                                                        % Conversion
-                                                    </button>
-                                                </>
-                                            </>
-                                        ) : (is2024Event && division === 'masters') ? (
-                                            <button className={`chart-button day2btn active`}>
-                                                Day 2
-                                            </button>
-                                        ) : (
-                                            <p className='chart-button'>Top {chartResults.length}</p>
-                                        )}
-                                    </div>
-                                </div>
-                                {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
-                                    <div className='chart-description'>
-                                        {showDayOneMeta && !showConversionRate && (
-                                            <p>* Most played decks from Day 1 (data collected from event stream)</p>
-                                        )}
-                                        {!showDayOneMeta && !showConversionRate && (
-                                            <p>* Total count for each deck archetype from Day 2</p>
-                                        )}
-                                        {showConversionRate && (
-                                            <p>* Percentage of the top Day 1 decks that made Day 2</p>
-                                        )}
-                                    </div>
-                                )}
-                                {!hasChartData && (
-                                    <div className='chart-description'><p>* No known decks available for this division</p></div>
-                                )}
-                                <div className='chart-container-wrapper'>
-                                    <div className='chart-container'>
-                                        <Bar ref={chartRef} data={chartData} options={chartOptions} />
-                                    </div>
-                                </div>
-                                <div className='deck-archetypes'>
-                                    <h3>All Results per Deck</h3>
-                                    <div className='filter-container'>
-                                        <div className='filters-top'>
-                                            <div className='indiv-filter'>
-                                                <select 
-                                                    value={selectedArchetype} 
-                                                    onChange={(e) => setSelectedArchetype(e.target.value)} 
-                                                    className="archetype-dropdown"
-                                                >
-                                                    <option value="">Select Deck</option> {/* Default option */}
-                                                    {deckTypeCountArray.map((archetype, index) => (
-                                                        <option key={index} value={archetype.key}>
-                                                            {archetype.key} ({archetype.count})
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='filtered-results'>
-                                    <div className='results-table charted-decks'>
-                                        {results
-                                            .map((result, idx) => ({ result, originalIndex: idx + 1 }))
-                                            .filter(({ result }) => {
-                                                let sprite1 = result.sprite1 || '';
-                                                let sprite2 = result.sprite2 || '';
-
-                                                if (!sprite1 && !sprite2) {
-                                                    const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
-                                                    sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                                    sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                                }
-
-                                                if (sprite1 === 'blank') {
-                                                    sprite1 = '';
-                                                }
-
-                                                const key = getCustomLabel(eventId, sprite1, sprite2);
-                                                return key === selectedArchetype;
-                                            })
-                                            .map(({ result, originalIndex }, index) => {
-                                                const backgroundColor = index % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
-                                                return (
-                                                    <div key={index} style={{ backgroundColor }}>
-                                                        {displayResults([result], eventId, division, originalIndex)}
-                                                    </div>
-                                                );
-                                            })}
-                                    </div>
-                                </div>
+                                {/* Chart and Statistics */}
                             </div>
                         )}
                     </div>

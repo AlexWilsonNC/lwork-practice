@@ -140,6 +140,16 @@ app.get('/event-ids', async (req, res) => {
   }
 });
 
+app.get('/proxy', async (req, res) => {
+  try {
+      const response = await fetch(req.query.url);
+      const data = await response.json();
+      res.json(data);
+  } catch (error) {
+      res.status(500).send('Error fetching data');
+  }
+});
+
 app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
   let cardName = req.params.name.trim().toLowerCase();
   console.log(`Searching for cards with names containing: ${cardName}`);
