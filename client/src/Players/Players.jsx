@@ -15,6 +15,7 @@ import canada from '../assets/flags/canada.png';
 import chile from '../assets/flags/chile.png';
 import china from '../assets/flags/china.png';
 import colombia from '../assets/flags/colombia.png';
+import costaRica from '../assets/flags/costa-rica.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
 import denmark from '../assets/flags/denmark.png';
@@ -75,6 +76,7 @@ const flags = {
     CL: chile,
     CN: china,
     CO: colombia,
+    CR: costaRica,
     HR: croatia,
     CZ: czechia,
     DK: denmark,
@@ -136,6 +138,7 @@ const countryNames = {
     CL: 'Chile',
     CN: 'China',
     CO: 'Colombia',
+    CR: 'Costa Rica',
     HR: 'Croatia',
     CZ: 'Czechia',
     DK: 'Denmark',
@@ -196,6 +199,7 @@ const countryNamesAdtl = {
     CL: 'Chile (Latin America)',
     CN: 'China (Asia-Pacific)',
     CO: 'Colombia (Latin America)',
+    CR: 'Costa Rica (Latin America)',
     HR: 'Croatia (Europe)',
     CZ: 'Czechia (Europe)',
     DK: 'Denmark (Europe)',

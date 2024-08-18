@@ -49,6 +49,7 @@ import china from '../assets/flags/china.png';
 import colombia from '../assets/flags/colombia.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
+import costaRica from '../assets/flags/costa-rica.png';
 import denmark from '../assets/flags/denmark.png';
 import dominicanRepublic from '../assets/flags/dominican-republic.png';
 import ecuador from '../assets/flags/ecuador.png';
@@ -141,6 +142,7 @@ const flags = {
     CL: chile,
     CN: china,
     CO: colombia,
+    CR: costaRica,
     HR: croatia,
     CZ: czechia,
     DK: denmark,
@@ -202,6 +204,7 @@ const countryNames = {
     CL: 'Chile (Latin America)',
     CN: 'China (Asia-Pacific)',
     CO: 'Colombia (Latin America)',
+    CR: 'Costa Rica (Latin America)',
     HR: 'Croatia (Europe)',
     CZ: 'Czechia (Europe)',
     DK: 'Denmark (Europe)',
