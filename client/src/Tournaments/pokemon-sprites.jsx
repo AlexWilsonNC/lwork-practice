@@ -50,6 +50,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('mew-vmax');
         secondSprite = getPokemonSpriteURL('genesect');
     }
+    else if (hasPokemon('Chien-Pao ex') && hasPokemon('Baxcalibur')) {
+        firstSprite = getPokemonSpriteURL('chien-pao');
+        secondSprite = getPokemonSpriteURL('baxcalibur');
+    }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Chien-Pao ex')) {
         firstSprite = getPokemonSpriteURL('palkia-origin');
         secondSprite = getPokemonSpriteURL('chien-pao');
@@ -86,6 +90,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('comfey');
         secondSprite = getPokemonSpriteURL('charizard-shiny');
     }
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Regidrago VSTAR')) {
+        firstSprite = getPokemonSpriteURL('arceus');
+        secondSprite = getPokemonSpriteURL('regidrago');
+    }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Hisuian Goodra VSTAR')) {
         firstSprite = getPokemonSpriteURL('arceus');
         secondSprite = getPokemonSpriteURL('goodra-hisui');
@@ -104,10 +112,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }
     else if (hasPokemon('Zoroark') && hasPokemon('Kirlia')) {
         secondSprite = getPokemonSpriteURL('zoroark');
-    }
-    else if (hasPokemon('Chien-Pao ex') && hasPokemon('Baxcalibur')) {
-        firstSprite = getPokemonSpriteURL('chien-pao');
-        secondSprite = getPokemonSpriteURL('baxcalibur');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Zapdos')) {
         secondSprite = getPokemonSpriteURL('miraidon');

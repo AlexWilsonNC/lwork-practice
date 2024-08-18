@@ -60,6 +60,7 @@ const customLabelsConfig = {
         'urshifu-rapid-strike-gmax-inteleon-vmax': 'Rapid Strike',
         '-miraidon': 'Miraidon',
         'goodra-hisui-comfey': 'Goodra LZB',
+        'arceus-regidrago': 'Arceus Regidrago',
         'arceus-goodra-hisui': 'Arceus Goodra',
         'miraidon-regieliki-vmax': 'Miraidon',
         'arceus-aggron-vmax': 'Arceus Aggron',
