@@ -53,63 +53,63 @@ import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
 
 const countryNames = {
-  '/src/assets/flags/argentina.png': 'Argentina (Latin America)',
-  '/src/assets/flags/australia.png': 'Australia (Oceania)',
-  '/src/assets/flags/austria.png': 'Austria (Europe)',
-  '/src/assets/flags/belarus.png': 'Belarus (Europe)',
-  '/src/assets/flags/belgium.png': 'Belgium (Europe)',
-  '/src/assets/flags/brazil.png': 'Brazil (Latin America)',
-  '/src/assets/flags/canada.png': 'Canada (North America)',
-  '/src/assets/flags/chile.png': 'Chile (Latin America)',
-  '/src/assets/flags/china.png': 'China (Asia-Pacific)',
-  '/src/assets/flags/colombia.png': 'Colombia (Latin America)',
-  '/src/assets/flags/croatia.png': 'Croatia (Europe)',
-  '/src/assets/flags/czech-republic.png': 'Czechia (Europe)',
-  '/src/assets/flags/denmark.png': 'Denmark (Europe)',
-  '/src/assets/flags/ecuador.png': 'Ecuador (Latin America)',
-  '/src/assets/flags/el-salvador.png': 'El Salvador (Latin America)',
-  '/src/assets/flags/finland.png': 'Finland (Europe)',
-  '/src/assets/flags/france.png': 'France (Europe)',
-  '/src/assets/flags/germany.png': 'Germany (Europe)',
-  '/src/assets/flags/greece.png': 'Greece (Europe)',
-  '/src/assets/flags/hong-kong.png': 'Hong Kong (Asia-Pacific)',
-  '/src/assets/flags/hungary.png': 'Hungary (Europe)',
-  '/src/assets/flags/iceland.png': 'Iceland (Europe)',
-  '/src/assets/flags/indonesia.png': 'Indonesia (Asia-Pacific)',
-  '/src/assets/flags/ireland.png': 'Ireland (Europe)',
-  '/src/assets/flags/im.png': 'Isle of Man (Europe)',
-  '/src/assets/flags/isreal.png': 'Israel (Middle East-South Africa)',
-  '/src/assets/flags/italy.png': 'Italy (Europe)',
-  '/src/assets/flags/japan.png': 'Japan (Asia-Pacific)',
-  '/src/assets/flags/somalia.png': 'Somalia (Middle East-South Africa)',
-  '/src/assets/flags/korea.png': 'South Korea (Asia-Pacific)',
-  '/src/assets/flags/lithuania.png': 'Lithuania (Europe)',
-  '/src/assets/flags/malaysia.png': 'Malaysia (Asia-Pacific)',
-  '/src/assets/flags/malta.png': 'Malta (Europe)',
-  '/src/assets/flags/mexico.png': 'Mexico (Latin America)',
-  '/src/assets/flags/morocco.png': 'Moroco (Europe)',
-  '/src/assets/flags/netherlands.png': 'Netherlands (Europe)',
-  '/src/assets/flags/new-zealand.png': 'New Zealand (Oceania)',
-  '/src/assets/flags/nicaragua.png': 'Nicaragua (Latin America)',
-  '/src/assets/flags/norway.png': 'Norway (Europe)',
-  '/src/assets/flags/peru.png': 'Peru (Latin America)',
-  '/src/assets/flags/philippines.png': 'Philippines (Asia-Pacific)',
-  '/src/assets/flags/poland.png': 'Poland (Europe)',
-  '/src/assets/flags/portugal.png': 'Portugal (Europe)',
-  '/src/assets/flags/puerto-rico.png': 'Puerto Rico (North America)',
-  '/src/assets/flags/russia.png': 'Russia (Russia)',
-  '/src/assets/flags/singapore.png': 'Singapore (Asia-Pacific)',
-  '/src/assets/flags/slovakia.png': 'Slovakia (Europe)',
-  '/src/assets/flags/slovenia.png': 'Slovenia (Europe)',
-  '/src/assets/flags/south-africa.png': 'South Africa (Middle East-South Africa)',
-  '/src/assets/flags/spain.png': 'Spain (Europe)',
-  '/src/assets/flags/sweden.png': 'Sweden (Europe)',
-  '/src/assets/flags/switzerland.png': 'Switzerland (Europe)',
-  '/src/assets/flags/taiwan.png': 'Taiwan (Asia-Pacific)',
-  '/src/assets/flags/thailand.png': 'Thailand (Asia-Pacific)',
-  '/src/assets/flags/uk.png': 'United Kingdom (Europe)',
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAS1BMVEUAAACIAwBrEySJBACJBACJBAAeMHfu8/jG0OzF0OzEz+yJmKOCkZ0taMvcJRwnW8MmW8MkVsAkVcAhULwOQJMMOI0MNYsLMYiJBACTUGqQAAAAB3RSTlMATV3l6On7xaKrswAAAHdJREFUeNrdkzkSxDAIBJHt9YlPjJj/v3RTRCAHG3m7aiJ6qiaB6A00fc6qLjccXaLeAorCoGzzJOJyDg5myjaNIi5XENSKvsixOQBSK/oiexD+Z0NB3HDreR27yxoEXoYKzM8CsFUAnoXfN3So0lL6VO/pFZ/3BWhOJ0CD0exFAAAAAElFTkSuQmCC': 'USA (North America)',
-  '/src/assets/flags/unknown.png': 'Unknown',
+  argentina: 'Argentina (Latin America)',
+  australia: 'Australia (Oceania)',
+  austria: 'Austria (Europe)',
+  belarus: 'Belarus (Europe)',
+  belgium: 'Belgium (Europe)',
+  brazil: 'Brazil (Latin America)',
+  canada: 'Canada (North America)',
+  chile: 'Chile (Latin America)',
+  china: 'China (Asia-Pacific)',
+  colombia: 'Colombia (Latin America)',
+  croatia: 'Croatia (Europe)',
+  czechia: 'Czechia (Europe)',
+  denmark: 'Denmark (Europe)',
+  ecuador: 'Ecuador (Latin America)',
+  elSalvador: 'El Salvador (Latin America)',
+  finland: 'Finland (Europe)',
+  france: 'France (Europe)',
+  germany: 'Germany (Europe)',
+  greece: 'Greece (Europe)',
+  hongKong: 'Hong Kong (Asia-Pacific)',
+  // '/src/assets/flags/hungary.png': 'Hungary (Europe)',
+  // '/src/assets/flags/iceland.png': 'Iceland (Europe)',
+  indonesia: 'Indonesia (Asia-Pacific)',
+  // '/src/assets/flags/ireland.png': 'Ireland (Europe)',
+  // '/src/assets/flags/im.png': 'Isle of Man (Europe)',
+  // '/src/assets/flags/isreal.png': 'Israel (Middle East-South Africa)',
+  italy: 'Italy (Europe)',
+  japan: 'Japan (Asia-Pacific)',
+  // '/src/assets/flags/somalia.png': 'Somalia (Middle East-South Africa)',
+  southKorea: 'South Korea (Asia-Pacific)',
+  // '/src/assets/flags/lithuania.png': 'Lithuania (Europe)',
+  malaysia: 'Malaysia (Asia-Pacific)',
+  // '/src/assets/flags/malta.png': 'Malta (Europe)',
+  mexico: 'Mexico (Latin America)',
+  // '/src/assets/flags/morocco.png': 'Moroco (Europe)',
+  netherlands: 'Netherlands (Europe)',
+  newZealand: 'New Zealand (Oceania)',
+  // '/src/assets/flags/nicaragua.png': 'Nicaragua (Latin America)',
+  norway: 'Norway (Europe)',
+  peru: 'Peru (Latin America)',
+  philippines: 'Philippines (Asia-Pacific)',
+  poland: 'Poland (Europe)',
+  portugal: 'Portugal (Europe)',
+  puertoRico: 'Puerto Rico (North America)',
+  russia: 'Russia (Russia)',
+  singapore: 'Singapore (Asia-Pacific)',
+  slovakia: 'Slovakia (Europe)',
+  // '/src/assets/flags/slovenia.png': 'Slovenia (Europe)',
+  southAfrica: 'South Africa (Middle East-South Africa)',
+  spain: 'Spain (Europe)',
+  sweden: 'Sweden (Europe)',
+  switzerland: 'Switzerland (Europe)',
+  taiwan: 'Taiwan (Asia-Pacific)',
+  thailand: 'Thailand (Asia-Pacific)',
+  uk: 'United Kingdom (Europe)',
+  unknown: 'Unknown',
+  usa: 'USA (North America)',
 };
 
 const UpcomingEvents = styled.div`
@@ -171,10 +171,10 @@ const regionFlags = {
     'MS': [southAfrica]
 };
 
-const getCountryName = (code) => {
-  console.log("Flag code:", code); // Add this line
-  return countryNames[code] || 'Unknown';
-};
+// const getCountryName = (code) => {
+//   console.log("Flag code:", code); // Add this line
+//   return countryNames[code] || 'Unknown';
+// };
 
 const parseRegistrationTime = (timeStr) => {
     return new Date(timeStr);
@@ -426,13 +426,13 @@ const EventList = () => {
                     <td>
                       <div className='tournament-flags-container'>
                         <div className="flag-container">
-                            <img 
+                        <img 
                                 className='tournament-flags' 
                                 src={event.flag} 
-                                alt="flag" 
+                                alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
                             />
                             <div className="flag-tooltip">
-                                {getCountryName(event.flag)}
+                                {countryNames[event.flag.split('/').pop().split('.')[0]]}
                             </div>
                         </div>
                         <div className='country-name-tournaments'></div>
