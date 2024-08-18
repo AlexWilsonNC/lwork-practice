@@ -398,8 +398,11 @@ const PlayerDeck = () => {
 
     useEffect(() => {
         if (cardData) {
-            const totalImages = playerData.decklist.pokemon.length + playerData.decklist.trainer.length + playerData.decklist.energy.length;
-            if (imagesLoadedCount === totalImages) {
+            const totalImages = 
+            Number(playerData.decklist.pokemon.length) + 
+            Number(playerData.decklist.trainer.length) + 
+            Number(playerData.decklist.energy.length);
+                if (imagesLoadedCount === totalImages) {
                 setLoadingImages(false);
             }
         }
@@ -408,7 +411,7 @@ const PlayerDeck = () => {
     const handleImageLoad = () => {
         setImagesLoadedCount(prevCount => prevCount + 1);
     };
-      
+          
     const cardImageUrl = (card) => {
         let key = `${card.set}-${card.number}`;
 
@@ -439,9 +442,9 @@ const PlayerDeck = () => {
     };
 
     const countCards = (decklist, type) => {
-        return decklist[type].reduce((total, card) => total + card.count, 0);
+        return decklist[type].reduce((total, card) => total + Number(card.count), 0);
     };
-
+    
     const switchToGridView = () => {
         setViewMode('grid');
         localStorage.setItem('viewMode', 'grid');
