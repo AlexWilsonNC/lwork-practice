@@ -566,6 +566,10 @@ const EventPage = () => {
         };
     };
 
+    {eventId === '2024_WORLDS' && (
+        <p className="unofficial-message">*unofficial final standings</p>
+    )}    
+
     const chartOptions = {
         plugins: {
             tooltip: {
@@ -876,6 +880,9 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
+                                {eventId === '2024_WORLDS' && (
+                                    <p className="unofficial-message">* Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.</p>
+                                )}
                                 {results.length > 0 ? (
                                     displayResults(results, eventId, division)
                                 ) : (

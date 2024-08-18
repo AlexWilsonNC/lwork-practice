@@ -323,6 +323,7 @@ const PlayerDeck = () => {
     const [cardData, setCardData] = useState(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
+    const [totalCardCount, setTotalCardCount] = useState(0);
 
     const isFeatured = isFeaturedEvent(eventId);
 
@@ -395,6 +396,17 @@ const PlayerDeck = () => {
         
         fetchPlayerData();
     }, [eventId, division, playerId]);
+
+    useEffect(() => {
+        if (playerData) {
+            const pokemonCount = countCards(playerData.decklist, 'pokemon');
+            const trainerCount = countCards(playerData.decklist, 'trainer');
+            const energyCount = countCards(playerData.decklist, 'energy');
+            const totalCount = pokemonCount + trainerCount + energyCount;
+
+            setTotalCardCount(totalCount);
+        }
+    }, [playerData]);
 
     useEffect(() => {
         if (cardData) {
@@ -519,6 +531,11 @@ const PlayerDeck = () => {
                         </div>
                     </div>
                 </div>
+                {totalCardCount !== 60 && (
+                    <div className="warning-message">
+                        Warning: Deck contains {totalCardCount} cards.
+                    </div>
+                )}
                 {!playerData ? (
                     null
                 ) : !cardData ? (
