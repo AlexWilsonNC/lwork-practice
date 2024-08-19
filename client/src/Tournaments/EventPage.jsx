@@ -374,6 +374,11 @@ const EventPage = () => {
                                 <strong>Day 1:</strong> {eventData.dayOneSeniors}
                             </p>
                         )}
+                        {eventData?.dayTwoSeniors && (
+                            <p>
+                                <strong>Day 2:</strong> {eventData.dayTwoSeniors}
+                            </p>
+                        )}
                     </>
                 );
             case 'juniors':
@@ -382,6 +387,11 @@ const EventPage = () => {
                         {eventData?.dayOneJuniors && (
                             <p>
                                 <strong>Day 1:</strong> {eventData.dayOneJuniors}
+                            </p>
+                        )}
+                        {eventData?.dayTwoJuniors && (
+                            <p>
+                                <strong>Day 2:</strong> {eventData.dayTwoJuniors}
                             </p>
                         )}
                     </>
