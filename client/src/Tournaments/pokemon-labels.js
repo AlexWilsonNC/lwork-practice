@@ -1,7 +1,7 @@
 const customLabelsConfig = {
     '2024': {
         '-gardevoir': 'Gardevoir ex',
-        'chien-pao-baxcalibur': 'Chien-Pao',
+        'chien-pao-baxcalibur': 'Chien-Pao Baxcalibur',
         'comfey-sableye': 'Lost Box',
         'lugia-archeops': 'Lugia Archeops',
         'raging-bolt-ogerpon': 'Raging Bolt',
@@ -54,9 +54,9 @@ const customLabelsConfig = {
         'lugia-archeops': 'Lugia Archeops',
         'giratina-origin-comfey': 'Giratina LZB',
         'arceus-giratina-origin': 'Arceus Giratina',
-        'chien-pao-baxcalibur': 'Chien-Pao',
+        'chien-pao-baxcalibur': 'Chien Pao Baxcalibur',
         'arceus-umbreon-vmax': 'Arceus Umbreon',
-        'palkia-origin-chien-pao': 'Palkia Chien-Pao',
+        'palkia-origin-chien-pao': 'Palkia Chien Pao',
         'urshifu-rapid-strike-gmax-inteleon-vmax': 'Rapid Strike',
         '-miraidon': 'Miraidon',
         'goodra-hisui-comfey': 'Goodra LZB',
