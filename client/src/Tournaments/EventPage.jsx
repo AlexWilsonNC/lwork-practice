@@ -469,27 +469,44 @@ const EventPage = () => {
     const dayTwoData = chartResults;
 
     const combinedData = dayOneData.reduce((acc, dayOneDeck) => {
-        const dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
-
+        let dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
+    
+        // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 1 data
+        if (dayOneLabel === 'Radiant Charizard LZB') {
+            dayOneLabel = 'Lost Box';
+        }
+    
         const dayTwoDeck = dayTwoData.find(dayTwoDeck => {
             const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-            const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-            const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-
-            const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+            let normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+            let normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+    
+            let dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+    
+            // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 2 data
+            if (dayTwoLabel === 'Radiant Charizard LZB') {
+                dayTwoLabel = 'Lost Box';
+            }
+    
             return dayOneLabel === dayTwoLabel;
         });
-
+    
         if (dayTwoDeck) {
             const dayTwoCount = dayTwoData.filter(dayTwoDeck => {
                 const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-                const normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-                const normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-
-                const dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+                let normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+                let normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+    
+                let dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
+    
+                // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 2 data
+                if (dayTwoLabel === 'Radiant Charizard LZB') {
+                    dayTwoLabel = 'Lost Box';
+                }
+    
                 return dayTwoLabel === dayOneLabel;
             }).length;
-
+    
             acc.push({
                 label: dayOneLabel,
                 conversionRate: ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2),
@@ -500,9 +517,10 @@ const EventPage = () => {
                 conversionRate: '0.00%',
             });
         }
-
+    
         return acc;
     }, []);
+    
 
     const conversionChartData = {
         labels: combinedData.map(data => data.label),
@@ -624,7 +642,7 @@ const EventPage = () => {
                                 ctx.drawImage(img, x - displayWidth / 2, y - displayHeight - 0, displayWidth, displayHeight);
                             };
                         }
-                        if (data >= 4) {
+                        if (data >= 0) {
                             const textYPosition = bar.y + 10;
                             ctx.fillText(data, bar.x, textYPosition);
                         }
