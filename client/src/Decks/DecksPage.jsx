@@ -7,6 +7,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  "BRS-SFA",
   "BRS-TWM",
   "BRS-TEF",
   "BST-PAL",
@@ -153,6 +154,8 @@ const archetypeSpriteOverrides = {
   "Gengar": { sprite1: "blank", sprite2: "gengar" },
   "QueenGar": { sprite1: "gengar", sprite2: "nidoqueen" },
   "Froslass": { sprite1: "blank", sprite2: "froslass" },
+  "Dragapult": { sprite1: "blank", sprite2: "dragapult" },
+  "Gholdengo": { sprite1: "blank", sprite2: "gholdengo" },
 };
 
 const Decks = () => {
@@ -162,12 +165,12 @@ const Decks = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
   const [sortType, setSortType] = useState('format');
-  const [selectedFormat, setSelectedFormat] = useState('BRS-TWM');
+  const [selectedFormat, setSelectedFormat] = useState('BRS-SFA');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const formatParam = searchParams.get('format') || 'BRS-TWM';
+    const formatParam = searchParams.get('format') || 'BRS-SFA';
     setSelectedFormat(formatParam);
 
     const fetchDecks = async () => {
@@ -307,6 +310,7 @@ const Decks = () => {
                   <option value="">All Formats</option>
 
                 <optgroup label="2024">
+                  <option value="BRS-SFA">BRS-SFA</option>
                   <option value="BRS-TWM">BRS-TWM</option>
                   <option value="BRS-TEF">BRS-TEF</option>
                 </optgroup>
