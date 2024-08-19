@@ -119,6 +119,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Miraidon ex') && hasPokemon('Raichu V')) {
         secondSprite = getPokemonSpriteURL('miraidon');
     }
+    else if (hasPokemon('Miraidon ex') && hasPokemon('Iron Valiant ex')) {
+        firstSprite = getPokemonSpriteURL('blank');
+        secondSprite = getPokemonSpriteURL('miraidon');
+    }    
     else if (hasPokemon('Iron Crown ex') && hasPokemon('Iron Hands ex')) {
         firstSprite = getPokemonSpriteURL('iron-hands');
         secondSprite = getPokemonSpriteURL('iron-crown');
@@ -142,6 +146,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('dragapult');
         secondSprite = getPokemonSpriteURL('pidgeot');
     }
+    else if (hasPokemon('Dragapult ex') && hasPokemon('Bibarel')) {
+        firstSprite = getPokemonSpriteURL('blank');
+        secondSprite = getPokemonSpriteURL('dragapult');
+    }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Xatu')) {
         firstSprite = getPokemonSpriteURL('dragapult');
         secondSprite = getPokemonSpriteURL('xatu');
@@ -157,8 +165,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('charizard');
         secondSprite = getPokemonSpriteURL('bibarel');
     }
-    else if (hasPokemon('Roaring Moon') && hasPokemon('Walking Wake')) {
-        secondSprite = getPokemonSpriteURL('roaring-moon');
+    else if (hasPokemon('Roaring Moon') && hasPokemon('Flutter Mane')) {
+        firstSprite = getPokemonSpriteURL('roaring-moon');
+        secondSprite = getPokemonSpriteURL('flutter-mane');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Koraidon')) {
         firstSprite = getPokemonSpriteURL('roaring-moon');
