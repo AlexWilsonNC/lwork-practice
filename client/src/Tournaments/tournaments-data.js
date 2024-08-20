@@ -304,15 +304,15 @@ const tournamentList = [
         "results": false
     },
     {
-        "id": '',
+        "id": "2025_TOKYO_CL",
         "name": "Tokyo Champions League",
         "eventType": "championsLeague",
         "eventLogo": championsLeague,
         "date": "Sep 22, 2024",
         "flag": japan,
         "location": "Tokyo, Japan",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-08-16T19:00:00+03:00",
+        "registrationLink": "https://www.pokemon-card.com/info/004574.html",
         "results": false
     },
     {

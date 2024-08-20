@@ -941,7 +941,7 @@ const EventPage = () => {
                                                     </button>
                                                 </>
                                             </>
-                                        ) : (is2024Event && division === 'masters') ? (
+                                        ) : (is2024Event && division === 'masters' || eventId.includes("2024_WORLDS")) ? (
                                             <button className={`chart-button day2btn active`}>
                                                 Day 2
                                             </button>
