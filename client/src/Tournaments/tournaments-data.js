@@ -178,8 +178,8 @@ const tournamentList = [
         "date": "Oct 11, 2024",
         "flag": usa,
         "location": "Louisville, Kentucky",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-08-28T19:00:00-05:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_LILLE/masters',
