@@ -155,6 +155,11 @@ const UpcomingEvents = styled.div`
         visibility: visible;
         opacity: 1;
     }
+    @media screen and (max-width: 950px) {
+      .flag-container {
+          margin-top: 0px;
+      }
+    }
 `;
 const FilterTop = styled.div`
     select {background: ${({ theme }) => theme.body};}
@@ -422,14 +427,14 @@ const EventList = () => {
                     <td>
                       <div className='tournament-flags-container'>
                         <div className="flag-container">
-                        <img 
-                                className='tournament-flags' 
-                                src={event.flag} 
-                                alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
-                            />
-                            <div className="flag-tooltip">
-                                {countryNames[event.flag.split('/').pop().split('.')[0]]}
-                            </div>
+                          <img 
+                            className='tournament-flags' 
+                            src={event.flag} 
+                            alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
+                          />
+                          <div className="flag-tooltip">
+                              {countryNames[event.flag.split('/').pop().split('.')[0]]}
+                          </div>
                         </div>
                         <div className='country-name-tournaments'></div>
                       </div>
