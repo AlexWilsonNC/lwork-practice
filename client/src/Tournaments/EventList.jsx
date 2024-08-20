@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Helmet } from 'react-helmet';
 import '../css/tournament-calendar.css';
 import { sortedEvents } from './tournaments-data';
+import CountdownTooltip from '../Tools/RegCountdown';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -170,11 +171,6 @@ const regionFlags = {
     'AP': [china, hongKong, indonesia, japan, southKorea, malaysia, philippines, singapore, taiwan, thailand],
     'MS': [southAfrica]
 };
-
-// const getCountryName = (code) => {
-//   console.log("Flag code:", code); // Add this line
-//   return countryNames[code] || 'Unknown';
-// };
 
 const parseRegistrationTime = (timeStr) => {
     return new Date(timeStr);
@@ -450,10 +446,8 @@ const EventList = () => {
                     {showUpcoming && (
                       <td>
                         {event.registrationTime ? (
-                          <a href={event.registrationLink} className='event-icon-links' target='_blank'>
-                            <span className="material-symbols-outlined reg-icon">
-                              {parseRegistrationTime(event.registrationTime) > new Date() ? 'schedule' : 'edit_note'}
-                            </span>
+                          <a href={event.registrationLink} className='event-icon-links' target='_blank' style={{ position: 'relative', display: 'inline-block' }}>
+                            <CountdownTooltip registrationTime={event.registrationTime} />
                           </a>
                         ) : null}
                       </td>

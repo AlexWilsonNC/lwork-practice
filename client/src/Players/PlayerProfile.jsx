@@ -596,7 +596,7 @@ const PlayerProfile = () => {
                     </tbody>
                 </table>
             </div>
-            <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on the site.</p>
+            <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on the site, like Regionals.</p>
         </PlayerProfileContainer>
     );
 };

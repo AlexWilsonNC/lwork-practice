@@ -64,7 +64,7 @@ tbody tr:nth-of-type(odd) {
     margin-right: 15px;
 }
 .retro-btn {
-    padding: 10px 25px;
+    padding: 10px;
     border-radius: 3px;
 }
 .completed-btn:hover,
@@ -198,9 +198,6 @@ td div a {
     .filters-top {
         margin-top: 10px;
     }
-    .retro-btn {
-        padding: 10px 15px;
-    }
     .indiv-filter {
         margin-right: 15px;
     }
@@ -328,9 +325,6 @@ td div a {
         .upcoming-btn {
             margin-right: 5px;
         }
-        .retro-btn {
-            padding: 10px 15px;
-        }
         .filters-top {
             margin-left: 15px !important;
         }
@@ -414,9 +408,6 @@ td div a {
         }
         .upcoming-btn {
             margin-right: 2px;
-        }
-        .retro-btn {
-            padding: 10px;
         }
         .filters-top {
             margin-left: 7px !important;
