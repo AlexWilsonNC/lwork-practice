@@ -155,9 +155,41 @@ const UpcomingEvents = styled.div`
         visibility: visible;
         opacity: 1;
     }
+    .event-list-key {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 14px;
+      margin-top: -5px;
+    }
+    .event-list-key span {
+      margin-right: 5px;
+      font-size: 20px;
+    }
     @media screen and (max-width: 950px) {
       .flag-container {
           margin-top: 0px;
+      }
+      .event-list-key {
+        font-size: 10px;
+        margin-top: -10px;
+      }
+      .event-list-key span {
+        font-size: 16px;
+      }
+    }
+    @media screen and (max-width: 700px) {
+      .event-list-key {
+        margin-left: 10px;
+      }
+    }
+    @media screen and (max-width: 530px) {
+      .event-list-key {
+        font-size: 8px;
+        margin-top: -15px;
+      }
+      .event-list-key span {
+        font-size: 12px;
       }
     }
 `;
@@ -472,6 +504,18 @@ const EventList = () => {
               </tbody>
             </table>
           </div>
+          {showUpcoming && (
+            <p className='marginbottom event-list-key'>
+              <span className="material-symbols-outlined reg-icon">edit_note</span>
+              represents that an event's registration is / was live (not taking into account if capped or closed).
+            </p>
+          )}
+          {showUpcoming && (
+            <p className='marginbottom event-list-key'>
+            <span className="material-symbols-outlined reg-icon">schedule</span>
+            signifies that the event's registration has been scheduled + countdown timer for your convenience. 
+            </p>          
+          )}
         </div>
       </UpcomingEvents>
     );

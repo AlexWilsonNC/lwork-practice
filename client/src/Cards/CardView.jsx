@@ -347,12 +347,12 @@ const CardView = () => {
         const fetchAndFilterEvents = async () => {
             if (!cardInfo) return;
 
-            if (cardInfo.supertype === "Energy" && cardInfo.subtypes.includes("Basic")) {
+            if (cardInfo.supertype === "Energy" && cardInfo.subtypes && cardInfo.subtypes.includes("Basic")) {
                 setIsBasicEnergy(true);
                 setLoading(false);
                 return;
             }
-
+            
             setLoading(true);
             const eventIds = await fetchEventIds();
             const allResults = [];
@@ -803,7 +803,7 @@ const CardView = () => {
                         {cardInfo.supertype === 'Pokémon' && (
                             <p>Retreat Cost: &nbsp;{cardInfo.convertedRetreatCost || 0}</p>
                         )}
-                        {cardInfo.supertype !== 'Energy' || cardInfo.subtypes[0] !== 'Basic' ? <hr className='small-grey-hr'></hr> : null}
+                        <hr className='small-grey-hr'></hr>
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
                         {cardInfo.artist && <p>Illustrator: <span className='italic'>{cardInfo.artist}</span></p>}
                         <hr className='blue-hr'></hr>
