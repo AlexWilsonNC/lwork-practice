@@ -72,23 +72,30 @@
     padding: 35px 25px;
     border-radius: 10px;
 }
-.card-container {
+.card-container,
+.card-container-avg {
     position: relative;
     width: calc(100% / 1 - 7px);
     transition: ease-in-out all 0.2s;
     margin: 2px 0;
 }
-.card-container:hover {
+.card-container:hover,
+.card-container-avg:hover {
     cursor: pointer;
     transform: scale(1.1);
     z-index: 10;
 }
-.card-container img {
+.card-container img,
+.card-container-avg img {
     width: 100%;
     box-shadow: 2px 2px 10px black;
     border-radius: 7px;
 }
-.card-count {
+.card-container-avg img {
+    border-radius: 4px !important;
+}
+.card-count,
+.card-count-avg {
     position: absolute;
     bottom: 18px;
     left: 50%;
@@ -104,6 +111,9 @@
     justify-content: center;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.card-count-avg {
+    width: 80% !important;
 }
 .deck-top-right-options {
     display: flex;
@@ -537,6 +547,13 @@
         height: 30px;
         font-size: 10px;
         width: 300px;
+    }
+}
+@media screen and (max-width: 500px){
+    .card-count-avg {
+        bottom: 10px;
+        font-size: 13px;
+        padding: 2px 0;
     }
 }
 @media screen and (max-width: 450px){

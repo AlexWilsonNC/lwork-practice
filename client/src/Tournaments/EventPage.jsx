@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import '../css/eventpage.css';
 import { displayResults } from './event-results';
@@ -177,6 +177,168 @@ const logos = {
     championsLeague: championsLeague,
 };
 
+const orderedSets = [
+    "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+    "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+    "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+    "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+    "FLF", "KSS", "XY", "PR-XY",
+    "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+    "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+    "MT", "DP", "PR-DP",
+    "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
+    "FO", "JU", "BS", "PR-BS",
+];
+
+const promoSets = {
+    "SFA": "PR-SV",
+    "TWM": "PR-SV",
+    "TEF": "PR-SV",
+    "PAF": "PR-SV",
+    "PAR": "PR-SV",
+    "MEW": "PR-SV",
+    "OBF": "PR-SV",
+    "PAL": "PR-SV",
+    "SVI": "PR-SV",
+    "SVE": "PR-SV",
+    "CRZ": "PR-SW",
+    "SIT": "PR-SW",
+    "LOR": "PR-SW",
+    "PGO": "PR-SW",
+    "ASR": "PR-SW",
+    "BRS": "PR-SW",
+    "CEC": "PR-SM",
+    "HIF": "PR-SM",
+    "UNM": "PR-SM",
+    "UNB": "PR-SM",
+    "DPI": "PR-SM",
+    "TEU": "PR-SM",
+    "LOT": "PR-SM",
+    "DRM": "PR-SM",
+    "CES": "PR-SM",
+    "FLI": "PR-SM",
+    "UPR": ["PR-SM", "CIN", "SUM", "GRI"],
+    "CIN": "PR-SM",
+    "SLG": "PR-SM",
+    "BUS": "PR-SM",
+    "GRI": "PR-SM",
+    "SUM": "PR-SM",
+    "EVO": "PR-XY",
+    "STS": "PR-XY",
+    "FCO": "PR-XY",
+    "GEN": "PR-XY",
+    "BKP": "PR-XY",
+    "BKT": "PR-XY",
+    "AOR": "PR-XY",
+    "ROS": "PR-XY",
+    "DCE": "PR-XY",
+    "PRC": ["PR-XY", "PHF"],
+    "PHF": "PR-XY",
+    "FFI": "PR-XY",
+    "FLF": "PR-XY",
+    "XY": "PR-XY",
+    "KSS": "PR-XY",
+    "LTR": "PR-BLW",
+    "PLB": "PR-BLW",
+    "PLF": "PR-BLW",
+    "PLS": "PR-BLW",
+    "BCR": ["PR-BLW", "EPO", "DEX"],
+    "DRV": "PR-BLW",
+    "DRX": "PR-BLW",
+    "DEX": "PR-BLW",
+    "NXD": ["PR-BLW", "EPO"],
+    "NVI": "PR-BLW",
+    "EPO": "PR-BLW",
+    "BLW": "PR-BLW",
+    "CL": "PR-HS",
+    "TM": "PR-HS",
+    "UD": "PR-HS",
+    "UL": "PR-HS",
+    "HS": "PR-HS",
+    "AR": "PR-DP",
+    "SV": "PR-DP",
+    "RR": "PR-DP",
+    "P9": "PR-DP",
+    "PL": "PR-DP",
+    "SF": "PR-DP",
+    "P8": "PR-DP",
+    "LA": "PR-DP",
+    "MD": "PR-DP",
+    "P7": "PR-DP",
+    "GE": "PR-DP",
+    "SW": "PR-DP",
+    "P6": "PR-DP",
+    "MT": "PR-DP",
+    "DP": "PR-DP",
+    "P5": "PR-EX",
+    "PK": "PR-EX",
+    "DF": "PR-EX",
+    "CG": "PR-EX",
+    "P4": "PR-EX",
+    "HP": "PR-EX",
+    "P3": "PR-EX",
+    "TK2": "PR-EX",
+    "LM": "PR-EX",
+    "DS": "PR-EX",
+    "P2": "PR-EX",
+    "UF": "PR-EX",
+    "EM": "PR-EX",
+    "DX": "PR-EX",
+    "TRR": "PR-EX",
+    "P1": "PR-EX",
+    "FL": "PR-EX",
+    "HL": ["PR-EX", "RS"],
+    "TK1": "PR-EX",
+    "MA": "PR-EX",
+    "DR": "PR-EX",
+    "SS": "PR-EX",
+    "RS": "PR-EX",
+    "SK": "PR-BS",
+    "AQ": "PR-BS",
+    "EX": "PR-BS",
+    "N4": "PR-BS",
+    "N3": "PR-BS",
+    "SI": "PR-BS",
+    "N2": "PR-BS",
+    "N1": ["PR-BS", "BS", "TR", "LC"],
+    "G2": "PR-BS",
+    "G1": "PR-BS",
+    "LC": "PR-BS",
+    "TR": "PR-BS",
+    "B2": "PR-BS",
+    "FO": "PR-BS",
+    "JU": "PR-BS",
+    "BS": "PR-BS"
+};
+
+const formatToCollections = (format) => {
+    if (format === "BS-BS") return ["BS"];
+
+    const [startSet, endSet] = format.split('-');
+    const startIndex = orderedSets.indexOf(startSet);
+    const endIndex = orderedSets.indexOf(endSet);
+
+    if (startIndex === -1 || endIndex === -1) {
+        throw new Error('Invalid format range');
+    }
+
+    const [actualStart, actualEnd] = startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
+    const collections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+
+    Object.keys(promoSets).forEach((set) => {
+        if (collections.includes(set) && !collections.includes(promoSets[set])) {
+            collections.push(promoSets[set]);
+        }
+    });
+    
+    return collections;
+};
+
 const EventPageContent = styled.div`
   position: relative;
   background: ${({ theme }) => theme.body};
@@ -203,6 +365,9 @@ const EventPageContent = styled.div`
     select {color: ${({ theme }) => theme.text};}
     button {background: ${({ theme }) => theme.body};}
     button {color: ${({ theme }) => theme.text};}
+  }
+  .average-card-counts p {
+    color: ${({ theme }) => theme.text};
   }
   .spinner {
     margin-top: 25px;
@@ -238,7 +403,78 @@ const EventPageContent = styled.div`
         margin-top: 5px;
     }
   }
+    .button-container button {
+        margin: 7px 7px -7px 0;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        color: white;
+    }
+    .button-container button:not(.active-button) {
+        background-color: rgb(80, 80, 80);
+    }
+    .active-button {
+        background-color: #1290eb !important;
+        border: 1px solid #007bff;
+    }
 `;
+
+const normalizeAttacks = (attacks) => {
+    return attacks.map(attack => ({
+        ...attack,
+        cost: attack.cost.slice().sort()
+    })).sort((a, b) => a.name.localeCompare(b.name));
+};
+
+const normalizeAbilities = (abilities) => {
+    if (!abilities) return [];
+    return abilities.map(ability => ({
+        ...ability
+    })).sort((a, b) => a.name.localeCompare(b.name));
+};
+
+const normalizeWeaknesses = (weaknesses) => {
+    if (!weaknesses) return [];
+    return weaknesses.map(weakness => ({
+        ...weakness
+    })).sort((a, b) => a.type.localeCompare(b.type));
+};
+
+const normalizeResistances = (resistances) => {
+    if (!resistances) return [];
+    return resistances.map(resistance => ({
+        ...resistance
+    })).sort((a, b) => a.type.localeCompare(b.type));
+};
+
+const comparePokemonCards = (card1, card2) => {
+    const typesMatch = JSON.stringify(card1.types) === JSON.stringify(card2.types);
+    const hpMatch = card1.hp === card2.hp;
+    const attacksMatch = JSON.stringify(normalizeAttacks(card1.attacks || [])) === JSON.stringify(normalizeAttacks(card2.attacks || []));
+    const abilitiesMatch = JSON.stringify(normalizeAbilities(card1.abilities || [])) === JSON.stringify(normalizeAbilities(card2.abilities || []));
+    const retreatCostMatch = JSON.stringify(card1.convertedRetreatCost || []) === JSON.stringify(card2.convertedRetreatCost || []);
+    const weaknessesMatch = JSON.stringify(normalizeWeaknesses(card1.weaknesses || [])) === JSON.stringify(normalizeWeaknesses(card2.weaknesses || []));
+    const resistancesMatch = JSON.stringify(normalizeResistances(card1.resistances || [])) === JSON.stringify(normalizeResistances(card2.resistances || []));
+
+    return typesMatch && hpMatch && attacksMatch && abilitiesMatch && retreatCostMatch && weaknessesMatch && resistancesMatch;
+};
+
+const normalizeEnergyCardName = (name) => {
+    // Normalize common variations in energy card names
+    return name
+        .toLowerCase()
+        .replace("basic ", "")
+        .replace(" - basic", "")
+        .replace(" energy", "");
+};
+const compareEnergyCards = (card1, card2) => {
+    // Normalize both energy card names
+    const normalizedCard1Name = normalizeEnergyCardName(card1.name);
+    const normalizedCard2Name = normalizeEnergyCardName(card2.name);
+
+    // Compare based on normalized names, set, and number
+    return normalizedCard1Name === normalizedCard2Name && card1.set === card2.set && card1.number === card2.number;
+};
 
 const EventPage = () => {
     const { theme } = useTheme();
@@ -247,10 +483,13 @@ const EventPage = () => {
     const [division, setDivision] = useState('masters');
     const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
     const chartRef = useRef(null);
+    const navigate = useNavigate();
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
     const [selectedArchetype, setSelectedArchetype] = useState('');
     const [averageCardCounts, setAverageCardCounts] = useState([]);
+    const [top30CardCounts, setTop30CardCounts] = useState([]);
+    const [showTop30, setShowTop30] = useState(true);
     const [cardData, setCardData] = useState(null);
     
     const mastersResults = eventData?.masters || [];
@@ -286,20 +525,18 @@ const EventPage = () => {
                                         try {
                                             const collectionsParam = formatToCollections(format).join(',');
                                             const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
-                                
+                                    
                                             const response = await fetch(url);
-                                
+                                    
                                             if (response.ok) {
                                                 const cards = await response.json();
                                                 const cardMap = {};
-                                
-                                                // Create a map with keys as `${card.setAbbrev}-${card.number}`
+                                    
                                                 cards.forEach(card => {
                                                     const key = `${card.setAbbrev}-${card.number}`;
-                                                    console.log(`Mapping card: Key=${key}, Name=${card.name}`);
                                                     cardMap[key] = card;
                                                 });
-                                
+                                    
                                                 setCardData(cardMap);
                                             } else {
                                                 console.error('Failed to fetch card data, status:', response.status);
@@ -308,7 +545,7 @@ const EventPage = () => {
                                             console.error('Error fetching card data:', error);
                                         }
                                     };
-                                                                                                        
+                                                                                                                                                                                
                                     useEffect(() => {
                                         const fetchData = async () => {
                                             try {
@@ -318,7 +555,7 @@ const EventPage = () => {
                                                     setEventData(data);
                                                     
                                                     const format = data.format || '';
-                                                    await fetchCardData(format); // Fetch card data based on format
+                                                    await fetchCardData(format);
                                                 } else {
                                                     console.error('Failed to fetch event data');
                                                 }
@@ -346,90 +583,142 @@ const EventPage = () => {
     }, [division]);
 
     useEffect(() => {
+        // Initialize selectedArchetype from sessionStorage
+        const savedArchetype = sessionStorage.getItem(`selectedArchetype_${eventId}`);
+        if (savedArchetype) {
+            setSelectedArchetype(savedArchetype);
+        }
+    
+        // Initialize showTop30 from sessionStorage
+        const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
+        if (savedShowTop30 !== null) {
+            setShowTop30(JSON.parse(savedShowTop30));
+        }
+    }, [eventId]);
+    
+    useEffect(() => {
+        const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
+        if (savedShowTop30 !== null) {
+            setShowTop30(JSON.parse(savedShowTop30));
+        }
+    
         if (selectedArchetype) {
             const filteredDecks = results.filter(result => {
                 let sprite1 = result.sprite1 || '';
                 let sprite2 = result.sprite2 || '';
-
+            
                 if (!sprite1 && !sprite2) {
                     const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
                     sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
                     sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
                 }
-
+            
                 const key = getCustomLabel(eventId, sprite1, sprite2);
                 return key === selectedArchetype;
             });
-
+            
             const cardSets = {
                 pokemon: new Map(),
                 trainer: new Map(),
                 energy: new Map(),
             };
-
+            
             filteredDecks.forEach(({ decklist }) => {
-                ['pokemon', 'trainer', 'energy'].forEach((category) => {
-                    if (decklist[category]) {
-                        decklist[category].forEach(card => {
-                            const cardKey = `${card.set}-${card.number}`;
-                            console.log(`Processing card: Name=${card.name}, Set=${card.set}, Number=${card.number}, Key=${cardKey}`); // Log card info
-
-                            if (!cardSets[category].has(cardKey)) {
-                                cardSets[category].set(cardKey, {
-                                    cardInfo: card,
-                                    count: parseInt(card.count, 10),
-                                    occurrences: 1,
+                if (decklist) {
+                    ['pokemon', 'trainer', 'energy'].forEach((category) => {
+                        if (decklist[category]) {
+                            decklist[category].forEach(card => {
+                                const existingCardKey = Array.from(cardSets[category].keys()).find(key => {
+                                    const existingCard = cardSets[category].get(key).cardInfo;
+                                    if (category === 'pokemon') {
+                                        return normalizeString(existingCard.name) === normalizeString(card.name) &&
+                                            comparePokemonCards(existingCard, card);
+                                    } else if (category === 'energy') {
+                                        return compareEnergyCards(existingCard, card);
+                                    } else {
+                                        return normalizeString(existingCard.name) === normalizeString(card.name);
+                                    }
                                 });
-                            } else {
-                                const cardData = cardSets[category].get(cardKey);
-                                cardData.count += parseInt(card.count, 10);
-                                cardData.occurrences += 1;
-                                cardSets[category].set(cardKey, cardData);
-                            }
-                        });
-                    }
-                });
+            
+                                if (existingCardKey) {
+                                    const cardData = cardSets[category].get(existingCardKey);
+                                    cardData.count += parseInt(card.count, 10);
+                                    cardData.occurrences += 1;
+                                    cardSets[category].set(existingCardKey, cardData);
+                                } else {
+                                    const cardKey = `${card.set}-${card.number}`;
+                                    cardSets[category].set(cardKey, {
+                                        cardInfo: card,
+                                        count: parseInt(card.count, 10),
+                                        occurrences: 1,
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
             });
-
+                            
             const commonCards = {
                 pokemon: [],
                 trainer: [],
                 energy: [],
             };
-
+    
             ['pokemon', 'trainer', 'energy'].forEach((category) => {
-                cardSets[category].forEach((cardData, cardKey) => {
-                    if (cardData.occurrences === filteredDecks.length) {
+                cardSets[category].forEach((cardData) => {
+                    if (!showTop30 && cardData.occurrences === filteredDecks.length) {
                         commonCards[category].push({
                             ...cardData.cardInfo,
                             averageCount: (cardData.count / cardData.occurrences).toFixed(2),
                         });
+                    } else if (showTop30) {
+                        commonCards[category].push({
+                            ...cardData.cardInfo,
+                            averageCount: (cardData.count / filteredDecks.length).toFixed(2),
+                        });
                     }
                 });
             });
-
-            setAverageCardCounts([...commonCards.pokemon, ...commonCards.trainer, ...commonCards.energy]);
+    
+            const allCommonCards = [
+                ...commonCards.pokemon,
+                ...commonCards.trainer,
+                ...commonCards.energy
+            ];
+    
+            setAverageCardCounts(allCommonCards);
         } else {
             setAverageCardCounts([]);
         }
-    }, [selectedArchetype, results]);
-
+    }, [selectedArchetype, showTop30, eventId, results]);
+                        
     const cardImageUrl = (card) => {
         if (!cardData) {
-            return 'https://via.placeholder.com/150';  // Placeholder image as fallback
+            return 'https://via.placeholder.com/150';
         }
-
+    
         const key = `${card.set}-${card.number}`;
+    
         const cardInfo = cardData[key];
-
+    
         if (cardInfo && cardInfo.images) {
-            return cardInfo.images.small;  // Use the small image URL
+            return cardInfo.images.small;
         } else {
-            console.log(`Card not found in DB for key=${key}`);
-            return 'https://via.placeholder.com/150';  // Placeholder image as fallback
+            return 'https://via.placeholder.com/150';
         }
     };
-                        
+
+    const handleShowTop30 = () => {
+        setShowTop30(true);
+        sessionStorage.setItem(`showTop30_${eventId}`, true);
+    };
+    
+    const handleShowAllCommonCards = () => {
+        setShowTop30(false);
+        sessionStorage.setItem(`showTop30_${eventId}`, false);
+    };
+                                    
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
             ? mastersResults.slice(0, 64)
@@ -778,6 +1067,16 @@ const EventPage = () => {
         },
     };
 
+    const handleCardClick = (card) => {
+        navigate(`/card/${card.set}/${card.number}`);
+    };
+
+    const handleArchetypeChange = (e) => {
+        const archetype = e.target.value;
+        setSelectedArchetype(archetype);
+        sessionStorage.setItem(`selectedArchetype_${eventId}`, archetype);
+    };   
+    
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
@@ -1087,47 +1386,58 @@ const EventPage = () => {
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>
                                 </div>
-                                {/* {selectedArchetype && (
-                                    <div className='average-card-counts'>
-                                        <h3>Cards Found in Every {selectedArchetype} Deck</h3>
-                                        <div className="deck-cards">
-                                            {averageCardCounts.length > 0 ? (
-                                                averageCardCounts.map((card, index) => (
-                                                    <div key={index} className="card-container">
-                                                        <img src={cardImageUrl(card)} alt={card.name} />
-                                                        <div className="card-info">
-                                                            <p>{card.name}</p>
-                                                            <p>Average Count: {card.averageCount}</p>
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <p>No common cards found in this archetype.</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                )} */}
                                 <div className='deck-archetypes'>
                                     <h3>All Results per Deck</h3>
                                     <div className='filter-container'>
                                         <div className='filters-top'>
                                             <div className='indiv-filter'>
-                                                <select 
-                                                    value={selectedArchetype} 
-                                                    onChange={(e) => setSelectedArchetype(e.target.value)} 
-                                                    className="archetype-dropdown"
-                                                >
-                                                    <option value="">Select Deck</option> {/* Default option */}
-                                                    {deckTypeCountArray.map((archetype, index) => (
-                                                        <option key={index} value={archetype.key}>
-                                                            {archetype.key} ({archetype.count})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                            <select 
+                                                value={selectedArchetype} 
+                                                onChange={handleArchetypeChange} 
+                                                className="archetype-dropdown"
+                                            >
+                                                <option value="">Select Deck</option>
+                                                {deckTypeCountArray.map((archetype, index) => (
+                                                    <option key={index} value={archetype.key}>
+                                                        {archetype.key} ({archetype.count})
+                                                    </option>
+                                                ))}
+                                            </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                {selectedArchetype && (
+                                    <div className='average-card-counts'>
+                                        <p>Avg. Card Count in <strong>{selectedArchetype}</strong> from {eventData.name}</p>
+                                        {/* <div className='button-container'>
+                                            <button
+                                                onClick={() => setShowTop30(true)}
+                                                className={showTop30 ? 'active-button' : ''}
+                                            >
+                                                Show All Cards %
+                                            </button>
+                                            <button
+                                                onClick={() => setShowTop30(false)}
+                                                className={!showTop30 ? 'active-button' : ''}
+                                            >
+                                                Only Cards in All Lists
+                                            </button>
+                                        </div> */}
+                                        <div className="deck-cards">
+                                        {averageCardCounts.length > 0 ? (
+                                            averageCardCounts.map((card, index) => (
+                                                <div key={index} className="card-container-avg" onClick={() => handleCardClick(card)}>
+                                                    <img src={cardImageUrl(card)} alt={card.name} />
+                                                    <div className="card-count-avg">{card.averageCount}</div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>No common cards found in this archetype.</p>
+                                        )}
+                                        </div>
+                                    </div>
+                                )}
                                 <div className='filtered-results'>
                                     <div className='results-table charted-decks'>
                                         {results
