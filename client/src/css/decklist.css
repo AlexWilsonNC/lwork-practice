@@ -555,6 +555,9 @@
         font-size: 12px;
         width: 70% !important;
     }
+    .card-container-avg img {
+        border-radius: 2px !important;
+    }
 }
 @media screen and (max-width: 450px){
     .card-count {
