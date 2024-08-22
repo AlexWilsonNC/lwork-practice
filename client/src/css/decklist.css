@@ -552,7 +552,7 @@
 @media screen and (max-width: 500px){
     .card-count-avg {
         bottom: 10px;
-        font-size: 13px;
+        font-size: 12px;
         padding: 2px 0;
     }
 }
