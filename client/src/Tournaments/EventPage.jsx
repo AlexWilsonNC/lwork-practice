@@ -250,45 +250,9 @@ const EventPage = () => {
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
     const [selectedArchetype, setSelectedArchetype] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(
-                `https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`
-            );
-            if (response.ok) {
-                const data = await response.json();
-                setEventData(data);
-            } else {
-                console.error('Failed to fetch data');
-            }
-        };
-        fetchData();
-    }, [eventId]);
-
-    useEffect(() => {
-        if (divisionParam) {
-            setDivision(divisionParam);
-        }
-    }, [divisionParam]);
-
-    useEffect(() => {
-        sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
-    }, [activeTab, eventId]);
-
-    useEffect(() => {
-        setShowDayOneMeta(false);
-        setShowConversionRate(false);
-    }, [division]);
-
-    if (!eventData) {
-        return (
-            <EventPageContent className='center' theme={theme}>
-                <div className="spinner"></div>
-            </EventPageContent>
-        );
-    }
-
+    const [averageCardCounts, setAverageCardCounts] = useState([]);
+    const [cardData, setCardData] = useState(null);
+    
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
     const juniorsResults = eventData?.juniors || [];
@@ -314,6 +278,158 @@ const EventPage = () => {
                                     ? allResults
                                     : [];
 
+                                    const normalizeString = (str) => {
+                                        return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                                    };
+
+                                    const fetchCardData = async (format) => {
+                                        try {
+                                            const collectionsParam = formatToCollections(format).join(',');
+                                            const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+                                
+                                            const response = await fetch(url);
+                                
+                                            if (response.ok) {
+                                                const cards = await response.json();
+                                                const cardMap = {};
+                                
+                                                // Create a map with keys as `${card.setAbbrev}-${card.number}`
+                                                cards.forEach(card => {
+                                                    const key = `${card.setAbbrev}-${card.number}`;
+                                                    console.log(`Mapping card: Key=${key}, Name=${card.name}`);
+                                                    cardMap[key] = card;
+                                                });
+                                
+                                                setCardData(cardMap);
+                                            } else {
+                                                console.error('Failed to fetch card data, status:', response.status);
+                                            }
+                                        } catch (error) {
+                                            console.error('Error fetching card data:', error);
+                                        }
+                                    };
+                                                                                                        
+                                    useEffect(() => {
+                                        const fetchData = async () => {
+                                            try {
+                                                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                                                if (response.ok) {
+                                                    const data = await response.json();
+                                                    setEventData(data);
+                                                    
+                                                    const format = data.format || '';
+                                                    await fetchCardData(format); // Fetch card data based on format
+                                                } else {
+                                                    console.error('Failed to fetch event data');
+                                                }
+                                            } catch (error) {
+                                                console.error('Error fetching event data:', error);
+                                            }
+                                        };
+                                
+                                        fetchData();
+                                    }, [eventId]);
+                                                                                                                                                                                                                                                                                        
+    useEffect(() => {
+        if (divisionParam) {
+            setDivision(divisionParam);
+        }
+    }, [divisionParam]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
+    }, [activeTab, eventId]);
+
+    useEffect(() => {
+        setShowDayOneMeta(false);
+        setShowConversionRate(false);
+    }, [division]);
+
+    useEffect(() => {
+        if (selectedArchetype) {
+            const filteredDecks = results.filter(result => {
+                let sprite1 = result.sprite1 || '';
+                let sprite2 = result.sprite2 || '';
+
+                if (!sprite1 && !sprite2) {
+                    const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
+                    sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                    sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+                }
+
+                const key = getCustomLabel(eventId, sprite1, sprite2);
+                return key === selectedArchetype;
+            });
+
+            const cardSets = {
+                pokemon: new Map(),
+                trainer: new Map(),
+                energy: new Map(),
+            };
+
+            filteredDecks.forEach(({ decklist }) => {
+                ['pokemon', 'trainer', 'energy'].forEach((category) => {
+                    if (decklist[category]) {
+                        decklist[category].forEach(card => {
+                            const cardKey = `${card.set}-${card.number}`;
+                            console.log(`Processing card: Name=${card.name}, Set=${card.set}, Number=${card.number}, Key=${cardKey}`); // Log card info
+
+                            if (!cardSets[category].has(cardKey)) {
+                                cardSets[category].set(cardKey, {
+                                    cardInfo: card,
+                                    count: parseInt(card.count, 10),
+                                    occurrences: 1,
+                                });
+                            } else {
+                                const cardData = cardSets[category].get(cardKey);
+                                cardData.count += parseInt(card.count, 10);
+                                cardData.occurrences += 1;
+                                cardSets[category].set(cardKey, cardData);
+                            }
+                        });
+                    }
+                });
+            });
+
+            const commonCards = {
+                pokemon: [],
+                trainer: [],
+                energy: [],
+            };
+
+            ['pokemon', 'trainer', 'energy'].forEach((category) => {
+                cardSets[category].forEach((cardData, cardKey) => {
+                    if (cardData.occurrences === filteredDecks.length) {
+                        commonCards[category].push({
+                            ...cardData.cardInfo,
+                            averageCount: (cardData.count / cardData.occurrences).toFixed(2),
+                        });
+                    }
+                });
+            });
+
+            setAverageCardCounts([...commonCards.pokemon, ...commonCards.trainer, ...commonCards.energy]);
+        } else {
+            setAverageCardCounts([]);
+        }
+    }, [selectedArchetype, results]);
+
+    const cardImageUrl = (card) => {
+        if (!cardData) {
+            return 'https://via.placeholder.com/150';  // Placeholder image as fallback
+        }
+
+        const key = `${card.set}-${card.number}`;
+        const cardInfo = cardData[key];
+
+        if (cardInfo && cardInfo.images) {
+            return cardInfo.images.small;  // Use the small image URL
+        } else {
+            console.log(`Card not found in DB for key=${key}`);
+            return 'https://via.placeholder.com/150';  // Placeholder image as fallback
+        }
+    };
+                        
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
             ? mastersResults.slice(0, 64)
@@ -971,6 +1087,26 @@ const EventPage = () => {
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>
                                 </div>
+                                {/* {selectedArchetype && (
+                                    <div className='average-card-counts'>
+                                        <h3>Cards Found in Every {selectedArchetype} Deck</h3>
+                                        <div className="deck-cards">
+                                            {averageCardCounts.length > 0 ? (
+                                                averageCardCounts.map((card, index) => (
+                                                    <div key={index} className="card-container">
+                                                        <img src={cardImageUrl(card)} alt={card.name} />
+                                                        <div className="card-info">
+                                                            <p>{card.name}</p>
+                                                            <p>Average Count: {card.averageCount}</p>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p>No common cards found in this archetype.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                )} */}
                                 <div className='deck-archetypes'>
                                     <h3>All Results per Deck</h3>
                                     <div className='filter-container'>
