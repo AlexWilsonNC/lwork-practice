@@ -639,7 +639,7 @@ const EventPage = () => {
                                         return normalizeString(existingCard.name) === normalizeString(card.name);
                                     }
                                 });
-            
+    
                                 if (existingCardKey) {
                                     const cardData = cardSets[category].get(existingCardKey);
                                     cardData.count += parseInt(card.count, 10);
@@ -665,6 +665,7 @@ const EventPage = () => {
                 energy: [],
             };
     
+            // Populate the commonCards and sort them by averageCount
             ['pokemon', 'trainer', 'energy'].forEach((category) => {
                 cardSets[category].forEach((cardData) => {
                     if (!showTop30 && cardData.occurrences === filteredDecks.length) {
@@ -679,6 +680,9 @@ const EventPage = () => {
                         });
                     }
                 });
+    
+                // Sort each category by averageCount in descending order
+                commonCards[category].sort((a, b) => b.averageCount - a.averageCount);
             });
     
             const allCommonCards = [
@@ -692,7 +696,7 @@ const EventPage = () => {
             setAverageCardCounts([]);
         }
     }, [selectedArchetype, showTop30, eventId, results]);
-                        
+                            
     const cardImageUrl = (card) => {
         if (!cardData) {
             return 'https://via.placeholder.com/150';
@@ -1387,7 +1391,7 @@ const EventPage = () => {
                                     </div>
                                 </div>
                                 <div className='deck-archetypes'>
-                                    <h3>All Results per Deck</h3>
+                                    <h3>Results by Deck</h3>
                                     <div className='filter-container'>
                                         <div className='filters-top'>
                                             <div className='indiv-filter'>
