@@ -353,7 +353,7 @@ const Homepage = () => {
                                 </WrappedFeature>
                             </a>
                     </div>
-                    <div className='homepage-box3'>
+                    <div className='homepage-box3 zmore'>
                         <div className='flex-row-wide'>
                             <FeaturedHeaders className='featured-headers'>Upcoming Tournaments</FeaturedHeaders>
                             <a href='/tournaments/upcoming' className='blue'>View All</a>
