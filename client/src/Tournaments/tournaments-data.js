@@ -178,7 +178,7 @@ const tournamentList = [
         "date": "Oct 19, 2024",
         "flag": france,
         "location": "Lille, France",
-        "registrationTime": "2024-08-28T19:00:00-03:00",
+        "registrationTime": "2024-08-07T19:00:00+02:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
