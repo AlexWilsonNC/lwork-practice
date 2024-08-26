@@ -167,8 +167,8 @@ const tournamentList = [
         "date": "Oct 5, 2024",
         "flag": peru,
         "location": "Lime, Peru",
-        "registrationTime": "2024-08-07T19:00:00-03:00",
-        "registrationLink": "https://playlatam.net/tournaments/LIM25-TCG-MA",
+        "registrationTime": "2024-08-07T19:00:00+02:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_LILLE/masters',
@@ -178,7 +178,7 @@ const tournamentList = [
         "date": "Oct 19, 2024",
         "flag": france,
         "location": "Lille, France",
-        "registrationTime": "",
+        "registrationTime": "2024-08-28T19:00:00-03:00",
         "registrationLink": "",
     },
     {
