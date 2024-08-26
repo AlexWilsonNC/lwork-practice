@@ -646,8 +646,8 @@ const filteredDecks = decks.flatMap(d => d.decks)
             <button onClick={resetFilters} className="reset-btn">Reset</button>
           </div>
         </div>
-        <div className='average-card-counts'>
-          <p>Avg. Card Count in {decks[0].label}</p>
+        {/* <div className='average-card-counts'>
+          <p>Avg. Card Count in {decks[0].label}</p> */}
           {/* <div className='button-container'>
             <button
               onClick={handleShowTop30}
@@ -662,7 +662,7 @@ const filteredDecks = decks.flatMap(d => d.decks)
               Only Cards in All Lists
             </button>
           </div> */}
-          <div className="deck-cards">
+          {/* <div className="deck-cards">
             {averageCardCounts.length > 0 ? (
               averageCardCounts.map((card, index) => (
                 <div key={index} className="card-container-avg" onClick={() => handleCardClick(card)}>
@@ -674,7 +674,7 @@ const filteredDecks = decks.flatMap(d => d.decks)
               <p>No common cards found in this archetype.</p>
             )}
           </div>
-        </div>
+        </div> */}
         <table className='results-table deck-profile-table'>
           <thead>
             <tr>
