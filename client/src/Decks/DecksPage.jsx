@@ -319,10 +319,10 @@ const Decks = () => {
                   <option value="BST-PAL">BST-PAL</option>
                   <option value="BST-SVI">BST-SVI</option>
                   <option value="SSH-CRZ">SSH-CRZ</option>
-                  <option value="SSH-SIT">SSH-SIT</option>
                 </optgroup>
                 
                 <optgroup label="2022">
+                  <option value="SSH-SIT">SSH-SIT</option>
                   <option value="SSH-PGO">SSH-PGO</option>
                   <option value="SSH-ASR">SSH-ASR</option>
                   <option value="SSH-BRS">SSH-BRS</option>
@@ -330,10 +330,10 @@ const Decks = () => {
                 
                 <optgroup label="2020">
                   <option value="UPR-SSH">UPR-SSH</option>
-                  <option value="UPR-CEC">UPR-CEC</option>
                 </optgroup>
                 
                 <optgroup label="2019">
+                  <option value="UPR-CEC">UPR-CEC</option>
                   <option value="UPR-UNM">UPR-UNM</option>
                   <option value="SUM-UNB">SUM-UNB</option>
                   <option value="SUM-TEU">SUM-TEU</option>
@@ -344,17 +344,17 @@ const Decks = () => {
                   <option value="BKT-CES">BKT-CES</option>
                   <option value="BKT-FLI">BKT-FLI</option>
                   <option value="BKT-UPR">BKT-UPR</option>
-                  <option value="BKT-UPR">BKT-CIN</option>
                 </optgroup>
 
                 <optgroup label="2017">
+                  <option value="BKT-CIN">BKT-CIN</option>
                   <option value="PRC-BUS">PRC-BUS</option>
                   <option value="PRC-GRI">PRC-GRI</option>
                   <option value="PRC-SUM">PRC-SUM</option>
-                  <option value="PRC-EVO">PRC-EVO</option>
                 </optgroup>
 
                 <optgroup label="2016">
+                  <option value="PRC-EVO">PRC-EVO</option>
                   <option value="XY-STS">XY-STS</option>
                   <option value="XY-FCO">XY-FCO</option>
                 </optgroup>
@@ -458,11 +458,17 @@ const Decks = () => {
             {sortedFormatOrder.map((format) => (
               (selectedFormat === '' || selectedFormat === format) && decksByFormat[format]?.length > 0 && (
                 <React.Fragment key={format}>
-                  <FormatSeparator>
-                    <td colSpan="6" className='paddingfive'>
-                      {decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown'}&nbsp; -&nbsp; {format}
-                    </td>
-                  </FormatSeparator>
+                <FormatSeparator>
+                  <td colSpan="6" className='paddingfive'>
+                    {(format === "NXD-FLF" && "2014") ||
+                    (format === "DP-UL" && "2010") ||
+                    (format === "HL-HP" && "2006") ||
+                    (format === "HL-HP" && "2006") ||
+                    (format === "BS-FO" && "1999") ||
+                    (decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown')
+                    }&nbsp; -&nbsp; {format}
+                  </td>
+                </FormatSeparator>
                   {decksByFormat[format]
                     .map((deck) => {
                       const decksInCurrentFormat = deck.decks.filter(d => d.eventFormat === format);
