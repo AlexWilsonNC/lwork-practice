@@ -5,6 +5,7 @@ import Navbar from './Nav/Navbar';
 import HomePage from './Homepage/HomePage';
 import EventList from './Tournaments/EventList';
 import EventPage from './Tournaments/EventPage';
+import LiveStandings from './Live/LiveStandings';
 import PlayerDeck from './Tournaments/PlayerDeck';
 import DecksPage from './Decks/DecksPage';
 import DeckProfile from './Decks/DeckProfile';
@@ -33,6 +34,7 @@ function App() {
           <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
           <Route path="/tournaments/retro" element={<EventList showCompleted={false} />} />
           <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
+          <Route path="/live" element={<LiveStandings />} />
           <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
           <Route path="/decks" element={<DecksPage />} />
           {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
