@@ -13,7 +13,7 @@ function Footer() {
         <footer className='site-footer'>
             <div className="footer-content">
                 <div>
-                    <a className='legends-brand' href="./home">
+                    <a className='legends-brand' href="/">
                         <img src='' className="nav-logo-footer" alt="logo" />
                         <h1>PTCG <span className='legends-font-footer'>Legends</span></h1>
                     </a>

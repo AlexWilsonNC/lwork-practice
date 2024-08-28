@@ -1429,16 +1429,27 @@ const EventPage = () => {
                                             </button>
                                         </div> */}
                                         <div className="deck-cards">
-                                        {averageCardCounts.length > 0 ? (
-                                            averageCardCounts.map((card, index) => (
-                                                <div key={index} className="card-container-avg" onClick={() => handleCardClick(card)}>
-                                                    <img src={cardImageUrl(card)} alt={card.name} />
-                                                    <div className="card-count-avg">{card.averageCount}</div>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <p>No common cards found in this archetype.</p>
-                                        )}
+                                            {averageCardCounts.length > 0 ? (
+                                                averageCardCounts.map((card, index) => {
+                                                    const isBasicEnergy = card.name.toLowerCase().includes("basic");
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="card-container-avg"
+                                                            onClick={() => {
+                                                                if (!isBasicEnergy) {
+                                                                    handleCardClick(card);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <img src={cardImageUrl(card)} alt={card.name} />
+                                                            <div className="card-count-avg">{card.averageCount}</div>
+                                                        </div>
+                                                    );
+                                                })
+                                            ) : (
+                                                <p>No common cards found in this archetype.</p>
+                                            )}
                                         </div>
                                     </div>
                                 )}

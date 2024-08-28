@@ -484,7 +484,7 @@ const Decks = () => {
                       const overriddenSprites = archetypeSpriteOverrides[deck.label];
                       const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : firstResult.sprite1;
                       const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : firstResult.sprite2;
-                      const totalDecksInFormat = totalDecksPerFormat[format]; // Total decks in the format
+                      const totalDecksInFormat = totalDecksPerFormat[format];
                       const percentage = ((deckCount / totalDecksInFormat) * 100).toFixed(2);
 
                       return (
@@ -521,8 +521,8 @@ const Decks = () => {
                             )}
                           </td>
                           <td>
-                            <Link to={`/deck/${normalizeLabel(deck.label)}`}>
-                              {deck.label}
+                            <Link to={`/deck/${normalizeLabel(deck.label)}?format=${format}`}>
+                                {deck.label}
                             </Link>
                           </td>
                           <td>{percentage}%</td>

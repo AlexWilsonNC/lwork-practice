@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
@@ -377,14 +377,18 @@ const DeckProfile = () => {
   const [decks, setDecks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [averageCardCounts, setAverageCardCounts] = useState([]);
   const [showTop30, setShowTop30] = useState(true);
   const [cardData, setCardData] = useState(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [selectedFormat, setSelectedFormat] = useState('');
 
   useEffect(() => {
+    const urlFormat = searchParams.get('format'); // Retrieve format from URL query
+    setSelectedFormat(urlFormat); // Set the format directly from the URL
+
     const fetchDecks = async () => {
         try {
             const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
@@ -394,14 +398,15 @@ const DeckProfile = () => {
             const data = await response.json();
             setDecks(data);
             
-            // Determine the most recent format
+            // Use the format from the URL, and only fallback if none is provided
             const formats = data.flatMap(d => d.decks.map(deck => deck.eventFormat));
             const uniqueFormats = [...new Set(formats)];
-            const mostRecentFormat = uniqueFormats[uniqueFormats.length - 1]; // Now getting the last format
-            setSelectedFormat(mostRecentFormat);
-
-            // Fetch card data for the most recent format
-            await fetchCardData(mostRecentFormat);
+            const mostRecentFormat = uniqueFormats[uniqueFormats.length - 1]; // Fallback to most recent format if none selected
+            const formatToUse = urlFormat || mostRecentFormat;
+            setSelectedFormat(formatToUse); // Set the selected format to the format in the URL
+            
+            // Fetch card data for the format
+            await fetchCardData(formatToUse);
         } catch (error) {
             console.error('Error fetching decks:', error);
         } finally {
@@ -410,7 +415,7 @@ const DeckProfile = () => {
     };
 
     fetchDecks();
-}, [id]);
+  }, [id, searchParams]); // Now also depends on searchParams to handle format changes
 
 const fetchCardData = async (format) => {
   try {
@@ -628,8 +633,7 @@ const filteredDecks = decks.flatMap(d => d.decks)
           <div className='filters-top'>
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
-              <select value={selectedFormat} onChange={e => setSelectedFormat(e.target.value)}>
-                {/* <option value="">All Formats</option> */}
+              <select value={selectedFormat || ''} onChange={e => setSelectedFormat(e.target.value)}>
                 {uniqueFormats.map((format, index) => (
                   <option key={index} value={format}>{format}</option>
                 ))}
