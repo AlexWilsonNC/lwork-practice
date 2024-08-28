@@ -267,7 +267,7 @@ const tournamentList = [
         "flag": usa,
         "location": "Louisville, Kentucky",
         "registrationTime": "2024-08-28T19:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
+        "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
         "id": '2025_EUIC/masters',
