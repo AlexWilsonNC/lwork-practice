@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
@@ -297,34 +296,6 @@ app.get('/api/decks/:label', async (req, res) => {
   } catch (error) {
     console.error('Error fetching decks:', error);
     res.status(500).json({ message: 'Server error' });
-  }
-});
-
-app.get('/api/live-standings', async (req, res) => {
-  const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
-  try {
-    const response = await fetch(eventUrl);
-    
-    if (!response.ok) {
-      console.error('Error fetching data:', response.status, response.statusText);
-      return res.status(response.status).json({ message: `Error fetching live standings. Status: ${response.status} ${response.statusText}` });
-    }
-
-    const text = await response.text(); // Read as text first to log
-    console.log('Response Text:', text);
-
-    let data;
-    try {
-      data = JSON.parse(text); // Manually parse JSON to handle errors
-    } catch (jsonError) {
-      console.error('JSON parsing error:', jsonError.message);
-      return res.status(500).json({ message: 'Error parsing JSON from live standings' });
-    }
-
-    res.json(data);
-  } catch (error) {
-    console.error('Error fetching live standings:', error.message);
-    res.status(500).json({ message: 'Error fetching live standings' });
   }
 });
 
