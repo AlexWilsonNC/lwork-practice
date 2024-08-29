@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
+const https = require('https');
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,56 @@ playersConnection.once('open', () => {
 decksConnection.on('error', console.error.bind(console, 'MongoDB connection error for decksConnection:'));
 decksConnection.once('open', () => {
   console.log('Connected to decksConnection');
+});
+
+let standingsCache = null;
+let cacheTimestamp = null;
+const cacheDuration = 5 * 60 * 1000; // 5 minutes
+
+const fetchStandings = () => {
+  const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
+  console.log('Fetching live standings from:', eventUrl);
+
+  https.get(eventUrl, (response) => {
+    let data = '';
+
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    response.on('end', () => {
+      try {
+        const parsedData = JSON.parse(data);
+        standingsCache = parsedData;
+        cacheTimestamp = Date.now();
+        console.log('Successfully fetched and cached standings data.');
+      } catch (error) {
+        console.error('Error parsing JSON:', error.message);
+      }
+    });
+
+  }).on('error', (error) => {
+    console.error('Error fetching live standings:', error.message);
+  });
+};
+
+// Initial fetch to populate cache
+fetchStandings();
+
+// Regular interval fetch to refresh cache
+setInterval(fetchStandings, cacheDuration);
+
+app.get('/api/live-standings', (req, res) => {
+  console.log('API route hit: /api/live-standings');
+  res.setHeader('Cache-Control', 'no-store'); // Disable caching
+  if (standingsCache && Date.now() - cacheTimestamp < cacheDuration) {
+    console.log('Serving cached data');
+    res.json(standingsCache);
+  } else {
+    console.log('Cache expired, fetching new data');
+    fetchStandings();
+    res.json(standingsCache || { message: 'Fetching data, please try again shortly.' });
+  }
 });
 
 const eventSchema = new mongoose.Schema({

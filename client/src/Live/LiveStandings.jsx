@@ -6,28 +6,37 @@ const LiveStandings = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('LiveStandings component mounted');  // Log for component mount
     const fetchStandings = async () => {
       try {
         setLoading(true);
+        console.log('Fetching standings...');
         const response = await fetch('/api/live-standings');
+        console.log('Full response:', response);
         if (!response.ok) {
           throw new Error('Failed to fetch live standings');
         }
-        const data = await response.json();
+        const text = await response.text();
+        if (text.startsWith('<!DOCTYPE html>')) {
+          throw new Error('Unexpected HTML response, expected JSON.');
+        }
+        const data = JSON.parse(text);
         setStandings(data);
+        console.log('Fetched standings:', data);
       } catch (err) {
-        setError('Failed to fetch live standings');
+        console.error('Error:', err);
+        setError('Failed to fetch live standings: ' + err.message);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchStandings(); // Fetch immediately on component mount
-    const intervalId = setInterval(fetchStandings, 5 * 60 * 1000); // Fetch every 5 minutes
-
-    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  
+    fetchStandings();
+    const intervalId = setInterval(fetchStandings, 5 * 60 * 1000);
+  
+    return () => clearInterval(intervalId);
   }, []);
-
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -51,9 +60,9 @@ const LiveStandings = () => {
         <tbody>
           {standings.map((standing, index) => (
             <tr key={index}>
-              <td>{standing.rank}</td>
-              <td>{standing.playerName}</td>
-              <td>{standing.points}</td>
+              <td>{standing.placing}</td>
+              <td>{standing.name}</td>
+              <td>{standing.record.wins}</td>
               {/* Adjust field names according to actual JSON structure */}
             </tr>
           ))}
