@@ -120,7 +120,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite = getPokemonSpriteURL('miraidon');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Iron Valiant ex')) {
-        firstSprite = getPokemonSpriteURL('blank');
         secondSprite = getPokemonSpriteURL('miraidon');
     }    
     else if (hasPokemon('Iron Crown ex') && hasPokemon('Iron Hands ex')) {
@@ -147,7 +146,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Bibarel')) {
-        firstSprite = getPokemonSpriteURL('blank');
         secondSprite = getPokemonSpriteURL('dragapult');
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Xatu')) {

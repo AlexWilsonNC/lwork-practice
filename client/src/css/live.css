@@ -1,0 +1,150 @@
+.live-table {
+    width: 100%;
+}
+.live-table-flag-name {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+.live-table-flag-name:hover {
+    color: #1290eb;
+}
+.live-table-flag-name img {
+    margin-right: 10px !important;
+    width: 18px !important;
+}
+.live-table-tr td {
+    padding: 5px;
+}
+.moveflagdownabit {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* align-items: center; */
+}
+.moveflagdownabit img {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 5px 5px 0 0 !important;
+}
+.modal-player-standings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+.modal-player-standings a {
+    color: #1290eb;
+}
+.selectedplayer-record {
+    color: grey;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+}
+.player-sprites {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: -10px 0 0 -5px;
+}
+.player-sprites img {
+    width: 40px !important;
+    height: auto !important;
+}
+.opponent-sprites {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    margin-left: 0px !important;
+}
+.opponent-sprites img {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: cover;
+    object-position: center;
+    display: block;          
+}
+.live-table th {
+    font-size: 12px;
+    padding-bottom: 5px !important;
+}
+.live-table th:nth-child(1),
+.live-table th:nth-child(2),
+.live-table th:nth-child(3),
+.live-table th:nth-child(4) {
+    text-align: start;
+}
+.live-table td:nth-child(1),
+.live-table tr:nth-child(1) {
+    padding-left: 15px;
+}
+.live-modal {
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 15px #021d31;
+    width: 40%;
+}
+.live-modal ul {
+    list-style: none;
+}
+.live-modal ul li {
+    margin: 3px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    border-radius: 2px;
+}
+.live-modal ul li > div {
+    flex: 1;
+}
+.live-modal ul li > div:first-child {
+    text-align: left;
+    flex: 1;
+    transform: scale(0.7);
+    margin-left: -10px;
+}
+.live-modal ul li > div:nth-child(2) {
+    text-align: start;
+    flex: 3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.live-modal ul li > div:nth-child(3) {
+    text-align: center;
+    flex: 1;
+}
+.live-modal ul li > div:nth-child(4) {
+    text-align: center;
+    flex: 1;
+    opacity: 0.5;
+}
+.live-modal ul li > div:last-child {
+    text-align: center;
+    flex: 1;
+    opacity: 0.5;
+}
+.close-live-modal {
+    top: 5px;
+    right: 10px;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 50%;
+    position: absolute;
+}
+.close-live-modal:hover {
+    cursor: pointer;
+    color: #1290eb;
+}
+.submitdeckbtnopp {
+    background-color: #1290eb;
+    color: white;
+    padding: 2px;
+    border: none;
+    border-radius: 2px;
+}

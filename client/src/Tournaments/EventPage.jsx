@@ -9,6 +9,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
+import LiveStandings from '../Live/LiveStandings';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -491,6 +492,9 @@ const EventPage = () => {
     const [top30CardCounts, setTop30CardCounts] = useState([]);
     const [showTop30, setShowTop30] = useState(true);
     const [cardData, setCardData] = useState(null);
+    const [viewTab, setViewTab] = useState('Decks');
+    const [eventName, setEventName] = useState('');
+
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -553,6 +557,7 @@ const EventPage = () => {
                                                 if (response.ok) {
                                                     const data = await response.json();
                                                     setEventData(data);
+                                                    setEventName(data.name);
                                                     
                                                     const format = data.format || '';
                                                     await fetchCardData(format);
@@ -837,6 +842,14 @@ const EventPage = () => {
         return eventData?.format;
     };
 
+    const handleTabChange = (tab) => {
+        setViewTab(tab);
+    };
+
+    const handleActiveTabChange = (tab) => {
+        setActiveTab(tab);
+    };    
+
     if (!eventData) {
         return;
     }
@@ -1093,12 +1106,12 @@ const EventPage = () => {
                 <title>{eventData.name}</title>
                 <meta
                     name='description'
-                    content={`Results, decks and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
+                    content={`Results, decklists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
                 />
                 <meta property='og:title' content={eventData.name} />
                 <meta
                     property='og:description'
-                    content={`Results, decks and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
+                    content={`Results, decklists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
                 />
                 <meta property='og:image' content={eventData.thumbnail} />
                 <meta
@@ -1111,7 +1124,7 @@ const EventPage = () => {
                 <meta name='twitter:title' content={eventData.name} />
                 <meta
                     name='twitter:description'
-                    content={`Results, decks and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
+                    content={`Results, lists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
                 />
                 <meta name='twitter:image' content={eventData.thumbnail} />
             </Helmet>
@@ -1323,16 +1336,42 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
+                                {(eventId === '2024_WORLDS' || eventId.includes('2025')) && (
+                                    <div className="decks-records-btns">
+                                        <button 
+                                            onClick={() => handleTabChange('Decks')} 
+                                            className={viewTab === 'Decks' ? 'active' : ''}
+                                            style={{ backgroundColor: viewTab === 'Decks' ? '#1290eb' : 'grey' }}
+                                        >
+                                            Decklists
+                                        </button>
+                                        <button 
+                                            onClick={() => handleTabChange('Records')} 
+                                            className={viewTab === 'Records' ? 'active' : ''}
+                                            style={{ backgroundColor: viewTab === 'Records' ? '#1290eb' : 'grey' }}
+                                        >
+                                            Records
+                                        </button>
+                                    </div>
+                                )}
+                            {viewTab === 'Decks' ? (
+                            <>
                                 {/* unofficial red event message text */}
                                 {eventId === '2025_WORLDS' && (
-                                    <p className="unofficial-message">* Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.</p>
+                                <p className="unofficial-message">
+                                    * Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.
+                                </p>
                                 )}
                                 {results.length > 0 ? (
-                                    displayResults(results, eventId, division)
+                                displayResults(results, eventId, division)
                                 ) : (
-                                    <p className='notavailable'>Results not yet available for this event.</p>
+                                <p className='notavailable'>Results not yet available for this event.</p>
                                 )}
-                            </div>
+                            </>
+                            ) : (
+                                <LiveStandings eventName={eventName} />                            
+                            )}
+                        </div>
                         ) : (
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>

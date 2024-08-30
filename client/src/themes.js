@@ -41,6 +41,10 @@ export const lightTheme = {
     spinner: '#1290eb',
     aboutbg: '#f5f5f5',
     abouttxt: '#333',
+    modalbg: '#FFF',
+    winBg: '#C1E1C1', // light green for wins
+    lossBg: '#FAA0A0', // light red for losses
+    tieBg: '#fffcc2',  // light yellow for ties
 
 };
 
@@ -88,5 +92,9 @@ export const darkTheme = {
     spinner: '#1290eb',
     aboutbg: 'rgb(27, 27, 29)',
     abouttxt: 'rgb(210, 210, 210)',
+    modalbg: '#2b3135',
+    winBg: '#739e73', // darker green for wins
+    lossBg: '#b54a4a', // darker red for losses
+    tieBg: '#bab461',  // darker yellow for ties
 
 };

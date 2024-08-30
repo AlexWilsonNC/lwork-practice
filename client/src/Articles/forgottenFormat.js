@@ -7,7 +7,7 @@ const article1 = {
     authorSocial: '@StarshineSimon',
     authorSocialLink: 'https://twitter.com/StarshineSimon',
     authorImage: '/assets/authors/simon-boschert.jpg',
-    date: 'Aug 30, 2024',
+    date: 'Sept 2024',
     headerImage: '/assets/article-images/dragons-exalted.jpg',
     imgMoveDown: false,
     sneakPeakText: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo ad, quibusdam eligendi architecto",
