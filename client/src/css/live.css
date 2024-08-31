@@ -137,14 +137,63 @@
     border-radius: 50%;
     position: absolute;
 }
-.close-live-modal:hover {
+.deckselectmodalx {
+    font-size: 12px;
+}
+.close-live-modal:hover,
+.deckselectmodalx:hover {
     cursor: pointer;
     color: #1290eb;
 }
 .submitdeckbtnopp {
-    background-color: #1290eb;
-    color: white;
-    padding: 2px;
-    border: none;
+    background-color: rgba(53, 56, 74, 0.235) !important;
+    color: white !important;
+    padding: 1px 5px;
+    border: 1px solid white !important;
     border-radius: 2px;
+}
+.deck-submission-modal {
+    width: auto;
+}
+.deck-submission-modal hr {
+    margin-top: 5px;
+    opacity: 0.5;
+}
+.deck-submission-modal strong {
+    margin-top: 10px;
+}
+.deck-submission-modal UL {
+    margin-top: 10px;
+}
+.available-decks-to-choose {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.deck-to-be-chosen {
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+}
+.deck-to-be-chosen:hover {
+    color: #1290eb;
+    cursor: pointer;
+}
+.deck-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 6px;
+}
+.deck-option img {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: cover;
+    object-position: center;
+    margin-top: -10px;
+}
+.darkened {
+    display: none;
 }

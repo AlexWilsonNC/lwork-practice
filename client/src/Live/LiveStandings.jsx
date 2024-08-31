@@ -144,6 +144,9 @@ const Modal = styled.div`
   .link-to-playerprofile {margin-top: 5px;}
   .second-sprite {margin-left: 0px !important;}
   .player-sprites .second-sprite {margin-left: -7px !important;}
+  .deck-to-be-chosen .second-sprite {
+    margin-left: -10px !important;
+  }
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -297,13 +300,153 @@ const LiveStandings = ({ eventName }) => {
 
   const handleDeckSubmission = (opponent) => {
     setSelectedOpponent(opponent);
-    setAvailableDecks(['Deck A', 'Deck B', 'Deck C']); // Example options
+    setAvailableDecks([
+      {
+        name: 'Ancient Box',
+        firstSprite: '/assets/sprites/roaring-moon.png',
+        secondSprite: '/assets/sprites/flutter-mane.png'
+      },
+      {
+        name: 'Arceus Giratina',
+        firstSprite: '/assets/sprites/arceus.png',
+        secondSprite: '/assets/sprites/giratina-origin.png'
+      },
+      {
+        name: 'Armarouge Box',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/armarouge.png'
+      },
+      {
+        name: 'Banette',
+        firstSprite: '/assets/sprites/banette.png',
+        secondSprite: '/assets/sprites/gardevoir.png'
+      },
+      {
+        name: 'Charizard Pidgeot',
+        firstSprite: '/assets/sprites/charizard.png',
+        secondSprite: '/assets/sprites/pidgeot.png'
+      },
+      {
+        name: 'Chien-Pao',
+        firstSprite: '/assets/sprites/chien-pao.png',
+        secondSprite: '/assets/sprites/baxcalibur.png'
+      },
+      {
+        name: 'Dialga',
+        firstSprite: '/assets/sprites/dialga-origin.png',
+        secondSprite: '/assets/sprites/metang.png'
+      },
+      {
+        name: 'Froslass',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/froslass.png'
+      },
+      {
+        name: 'Future Box',
+        firstSprite: '/assets/sprites/iron-hands.png',
+        secondSprite: '/assets/sprites/iron-crown.png'
+      },
+      {
+        name: 'Gardevoir',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/gardevoir.png'
+      },
+      {
+        name: 'Gholdengo',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/gholdengo.png'
+      },
+      {
+        name: 'Giratina',
+        firstSprite: '/assets/sprites/giratina-origin.png',
+        secondSprite: '/assets/sprites/comfey.png'
+      },
+      {
+        name: 'Gouging Fire',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/gouging-fire.png'
+      },
+      {
+        name: 'Iron Thorns',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/ironthorns.png'
+      },
+      {
+        name: 'Klawf',
+        firstSprite: '/assets/sprites/klawf.png',
+        secondSprite: '/assets/sprites/brute-bonnet.png'
+      },
+      {
+        name: 'Lost Box',
+        firstSprite: '/assets/sprites/comfey.png',
+        secondSprite: '/assets/sprites/sableye.png'
+      },
+      {
+        name: 'Lugia',
+        firstSprite: '/assets/sprites/lugia.png',
+        secondSprite: '/assets/sprites/archeops.png'
+      },
+      {
+        name: 'Miraidon',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/miraidon.png'
+      },
+      {
+        name: 'Pidgeot',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/pidgeot.png'
+      },
+      {
+        name: 'Raging Bolt',
+        firstSprite: '/assets/sprites/raging-bolt.png',
+        secondSprite: '/assets/sprites/ogerpon.png'
+      },
+      {
+        name: 'Regidrago',
+        firstSprite: '/assets/sprites/regidrago.png',
+        secondSprite: '/assets/sprites/ogerpon.png'
+      },
+      {
+        name: 'Roaring Moon',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/roaring-moon.png'
+      },
+      {
+        name: 'Snorlax',
+        firstSprite: '/assets/sprites/snorlax.png',
+        secondSprite: '/assets/sprites/rotom.png'
+      },
+      {
+        name: 'Other',
+        firstSprite: '/assets/sprites/blank.png',
+        secondSprite: '/assets/sprites/other.png'
+      },
+    ]);
     setShowDeckSubmissionModal(true);
   };
 
-
   const handleDeckSelection = (deck) => {
     console.log(`Selected deck: ${deck} for opponent: ${selectedOpponent.name}`);
+    const updatedStandings = standings.map(player => {
+      // Find the opponent within the selected player's rounds
+      if (player.name === selectedPlayer.name) {
+        const updatedRounds = { ...player.rounds };
+  
+        // Update the specific round's opponent
+        Object.keys(updatedRounds).forEach(round => {
+          if (updatedRounds[round].name === selectedOpponent.name) {
+            updatedRounds[round].sprite1 = deck.firstSprite;
+            updatedRounds[round].sprite2 = deck.secondSprite;
+          }
+        });
+  
+        return { ...player, rounds: updatedRounds };
+      }
+      return player;
+    });
+    // Update the standings state
+    setStandings(updatedStandings);
+    // Close the deck submission modal
     setShowDeckSubmissionModal(false);
   };
 
@@ -347,7 +490,7 @@ const LiveStandings = ({ eventName }) => {
       {showModal && (
         <>
           <Overlay onClick={closeModal} />
-          <Modal className='live-modal'>
+          <Modal className={`live-modal ${showDeckSubmissionModal ? 'darkened' : ''}`}>
             <button onClick={closeModal} className='close-live-modal'>X</button>
             <div className='modal-player-standings'>
               <h2 className='align-center'>
@@ -440,8 +583,8 @@ const LiveStandings = ({ eventName }) => {
                         <img className='sprite second-sprite' src={opponentSprites.secondSprite} alt="sprite" />
                       )}
                       {/* Display the submit button if both sprites are blank */}
-                      {opponentSprites.firstSprite === '/assets/sprites/blank.png' && (
-                        <button className='submitdeckbtnopp' onClick={() => handleDeckSubmission(opponent)} style={{ cursor: 'pointer', marginLeft: '10px' }}>
+                      {opponentSprites.secondSprite === '/assets/sprites/hyphen.png' && (
+                        <button className='submitdeckbtnopp' onClick={() => handleDeckSubmission(opponent)} style={{ cursor: 'pointer', marginLeft: '-26px' }}>
                           +
                         </button>
                       )}
@@ -456,16 +599,21 @@ const LiveStandings = ({ eventName }) => {
         </>
       )}
 
-{showDeckSubmissionModal && (
+      {showDeckSubmissionModal && (
         <>
           <Overlay onClick={() => setShowDeckSubmissionModal(false)} />
           <Modal className='deck-submission-modal'>
-            <button onClick={() => setShowDeckSubmissionModal(false)}>X</button>
-            <h3>Select Deck for {selectedOpponent.name}</h3>
-            <ul>
+            <button className='close-live-modal deckselectmodalx' onClick={() => setShowDeckSubmissionModal(false)}>X</button>
+            <strong>Select Deck for<br></br>{selectedOpponent.name}</strong>
+            <hr></hr>
+            <ul className='available-decks-to-choose'>
               {availableDecks.map((deck, idx) => (
-                <li key={idx}>
-                  <button onClick={() => handleDeckSelection(deck)}>{deck}</button>
+                <li key={idx} className="deck-option">
+                  <button className='deck-to-be-chosen' onClick={() => handleDeckSelection(deck.name)}>
+                    <img className='sprite' src={deck.firstSprite} alt="sprite" />
+                    <img className='sprite second-sprite' src={deck.secondSprite} alt="sprite" />
+                    {deck.name}
+                  </button>
                 </li>
               ))}
             </ul>
