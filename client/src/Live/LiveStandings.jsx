@@ -136,6 +136,8 @@ const Modal = styled.div`
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh;
   button {
     border: none;
     background-color: transparent;

@@ -43,7 +43,7 @@ let cacheTimestamp = null;
 const cacheDuration = 5 * 60 * 1000; // 5 minutes
 
 const fetchStandings = () => {
-  const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
+  const eventUrl = 'https://alexwilsonnc.github.io/totevntdta/2024_WORLDS.json';
   console.log('Fetching live standings from:', eventUrl);
 
   https.get(eventUrl, (response) => {
