@@ -43,7 +43,7 @@ let cacheTimestamp = null;
 const cacheDuration = 5 * 60 * 1000; // 5 minutes
 
 const fetchStandings = () => {
-  const eventUrl = 'https://alexwilsonnc.github.io/totevntdta/2024_WORLDS.json';
+  const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
   console.log('Fetching live standings from:', eventUrl);
 
   https.get(eventUrl, (response) => {
@@ -76,16 +76,40 @@ fetchStandings();
 setInterval(fetchStandings, cacheDuration);
 
 app.get('/api/live-standings', (req, res) => {
-  console.log('API route hit: /api/live-standings');
-  res.setHeader('Cache-Control', 'no-store'); // Disable caching
-  if (standingsCache && Date.now() - cacheTimestamp < cacheDuration) {
-    console.log('Serving cached data');
-    res.json(standingsCache);
+  const { eventId, isEventCompleted, finalDataUrl } = req.query;
+
+  let urlToFetch;
+  if (isEventCompleted === 'true' && finalDataUrl) {
+      urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
+  } else if (isEventCompleted === 'false') {
+      urlToFetch = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';  // Replace with actual live URL
   } else {
-    console.log('Cache expired, fetching new data');
-    fetchStandings();
-    res.json(standingsCache || { message: 'Fetching data, please try again shortly.' });
+      return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
   }
+
+  console.log('Fetching live standings from:', urlToFetch);
+
+  https.get(urlToFetch, (response) => {
+      let data = '';
+
+      response.on('data', (chunk) => {
+          data += chunk;
+      });
+
+      response.on('end', () => {
+          try {
+              const parsedData = JSON.parse(data);
+              res.json(parsedData);
+          } catch (error) {
+              console.error('Error parsing JSON:', error.message);
+              res.status(500).json({ error: 'Error parsing JSON or no data received' });
+          }
+      });
+
+  }).on('error', (error) => {
+      console.error('Error fetching live standings:', error.message);
+      res.status(500).json({ error: 'Error fetching live standings: ' + error.message });
+  });
 });
 
 const eventSchema = new mongoose.Schema({

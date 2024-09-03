@@ -494,7 +494,6 @@ const EventPage = () => {
     const [cardData, setCardData] = useState(null);
     const [viewTab, setViewTab] = useState('Decks');
     const [eventName, setEventName] = useState('');
-
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -521,57 +520,56 @@ const EventPage = () => {
                                     ? allResults
                                     : [];
 
-                                    const normalizeString = (str) => {
-                                        return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                                    };
+    const normalizeString = (str) => {
+        return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
 
-                                    const fetchCardData = async (format) => {
-                                        try {
-                                            const collectionsParam = formatToCollections(format).join(',');
-                                            const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
-                                    
-                                            const response = await fetch(url);
-                                    
-                                            if (response.ok) {
-                                                const cards = await response.json();
-                                                const cardMap = {};
-                                    
-                                                cards.forEach(card => {
-                                                    const key = `${card.setAbbrev}-${card.number}`;
-                                                    cardMap[key] = card;
-                                                });
-                                    
-                                                setCardData(cardMap);
-                                            } else {
-                                                console.error('Failed to fetch card data, status:', response.status);
-                                            }
-                                        } catch (error) {
-                                            console.error('Error fetching card data:', error);
-                                        }
-                                    };
-                                                                                                                                                                                
-                                    useEffect(() => {
-                                        const fetchData = async () => {
-                                            try {
-                                                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
-                                                if (response.ok) {
-                                                    const data = await response.json();
-                                                    setEventData(data);
-                                                    setEventName(data.name);
-                                                    
-                                                    const format = data.format || '';
-                                                    await fetchCardData(format);
-                                                } else {
-                                                    console.error('Failed to fetch event data');
-                                                }
-                                            } catch (error) {
-                                                console.error('Error fetching event data:', error);
-                                            }
-                                        };
-                                
-                                        fetchData();
-                                    }, [eventId]);
-                                                                                                                                                                                                                                                                                        
+    const fetchCardData = async (format) => {
+        try {
+            const collectionsParam = formatToCollections(format).join(',');
+            const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+            const response = await fetch(url);
+    
+            if (response.ok) {
+                const cards = await response.json();
+                const cardMap = {};
+    
+                cards.forEach(card => {
+                    const key = `${card.setAbbrev}-${card.number}`;
+                    cardMap[key] = card;
+                });
+    
+                setCardData(cardMap);
+            } else {
+                console.error('Failed to fetch card data, status:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching card data:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setEventData(data);
+                    setEventName(data.name);
+                    
+                    const format = data.format || '';
+                    await fetchCardData(format);
+                } else {
+                    console.error('Failed to fetch event data');
+                }
+            } catch (error) {
+                console.error('Error fetching event data:', error);
+            }
+        };
+
+        fetchData();
+    }, [eventId]);
+
     useEffect(() => {
         if (divisionParam) {
             setDivision(divisionParam);
@@ -588,18 +586,41 @@ const EventPage = () => {
     }, [division]);
 
     useEffect(() => {
-        // Initialize selectedArchetype from sessionStorage
         const savedArchetype = sessionStorage.getItem(`selectedArchetype_${eventId}`);
         if (savedArchetype) {
             setSelectedArchetype(savedArchetype);
         }
     
-        // Initialize showTop30 from sessionStorage
         const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
         if (savedShowTop30 !== null) {
             setShowTop30(JSON.parse(savedShowTop30));
         }
     }, [eventId]);
+
+    useEffect(() => {
+        const fetchLiveStandings = async () => {
+            if (!eventData) return;
+
+            const isEventCompleted = eventData.isEventCompleted;
+            const finalDataUrl = eventData.finalDataUrl;
+            
+            const standingsUrl = isEventCompleted ? finalDataUrl : '';
+
+            try {
+                const response = await fetch(`/api/live-standings?eventId=${eventId}&isEventCompleted=${isEventCompleted}&finalDataUrl=${encodeURIComponent(standingsUrl)}`);
+                if (response.ok) {
+                    const standingsData = await response.json();
+                    setAverageCardCounts(standingsData); // Assuming you want to update card counts with standings data
+                } else {
+                    console.error('Failed to fetch live standings');
+                }
+            } catch (error) {
+                console.error('Error fetching live standings:', error);
+            }
+        };
+
+        fetchLiveStandings();
+    }, [eventData]);
     
     useEffect(() => {
         const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
@@ -1338,20 +1359,20 @@ const EventPage = () => {
                             <div className='event-results'>
                                 {(eventId === '2024_WORLDS' || eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
-                                        <button 
+                                        {/* <button 
                                             onClick={() => handleTabChange('Decks')} 
                                             className={viewTab === 'Decks' ? 'active' : ''}
                                             style={{ backgroundColor: viewTab === 'Decks' ? '#1290eb' : 'grey' }}
                                         >
                                             Decklists
-                                        </button>
-                                        <button 
+                                        </button> */}
+                                        {/* <button 
                                             onClick={() => handleTabChange('Records')} 
                                             className={viewTab === 'Records' ? 'active' : ''}
                                             style={{ backgroundColor: viewTab === 'Records' ? '#1290eb' : 'grey' }}
                                         >
                                             Records
-                                        </button>
+                                        </button> */}
                                     </div>
                                 )}
                             {viewTab === 'Decks' ? (

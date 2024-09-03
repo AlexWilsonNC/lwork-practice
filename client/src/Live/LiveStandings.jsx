@@ -260,6 +260,8 @@ const LiveStandings = ({ eventName }) => {
     return <div>{error}</div>;
   }
 
+  const isArrayStandings = Array.isArray(standings);
+
   const getCountryFlag = (name) => {
     const countryCodeMatch = name.match(/\[(.*?)\]/);
     const countryCode = countryCodeMatch ? countryCodeMatch[1] : 'unknown';
@@ -268,14 +270,15 @@ const LiveStandings = ({ eventName }) => {
     return { flag, playerName, countryCode };
   };
 
-  const getCurrentRound = (standings) => {
-    const rounds = standings.flatMap(player => Object.keys(player.rounds).map(Number));
-    return Math.max(...rounds);
-  };
+  // const getCurrentRound = (standings) => {
+  //   const rounds = standings.flatMap(player => Object.keys(player.rounds).map(Number));
+  //   return Math.max(...rounds);
+  // };
 
-  const currentRound = getCurrentRound(standings);
+  // const currentRound = getCurrentRound(standings);
 
   const handlePlayerClick = (standing, index) => {
+    if (!isArrayStandings) return; // Safeguard for unexpected data format
     const { flag, playerName, countryCode } = getCountryFlag(standing.name);
     const { firstSprite, secondSprite } = getPokemonSprites(standing.decklist, standing.sprite1, standing.sprite2);
     setSelectedPlayer({
@@ -455,6 +458,8 @@ const LiveStandings = ({ eventName }) => {
   return (
     <LiveStandingsDiv className='center-me marginbottom'>
       {/* <p>Current Round: {currentRound}</p> */}
+      {isArrayStandings ? (
+
       <table className='live-table'>
         <thead>
           <tr>
@@ -488,6 +493,9 @@ const LiveStandings = ({ eventName }) => {
           })}
         </tbody>
       </table>
+                  ) : (
+                    <div>Error: Unexpected data format</div>
+                )}    
 
       {showModal && (
         <>

@@ -189,8 +189,8 @@ const tournamentList = [
         "date": "Nov 2, 2024",
         "flag": poland,
         "location": "Gdańsk, Poland",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-09-04T19:00:00+02:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": '2025_BUENOS_AIRES/masters',
