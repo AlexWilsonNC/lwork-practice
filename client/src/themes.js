@@ -44,7 +44,8 @@ export const lightTheme = {
     modalbg: '#FFF',
     winBg: '#C1E1C1', // light green for wins
     lossBg: '#FAA0A0', // light red for losses
-    tieBg: '#fffcc2',  // light yellow for ties
+    tieBg: '#fffcc2', // light yellow for ties
+    calculatorSelect: '',
 
 };
 
@@ -96,5 +97,6 @@ export const darkTheme = {
     winBg: '#739e73', // darker green for wins
     lossBg: '#b54a4a', // darker red for losses
     tieBg: '#bab461',  // darker yellow for ties
+    calculatorSelect: '',
 
 };

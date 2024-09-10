@@ -18,6 +18,7 @@ import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
 import AllArticlesPage from './ArticleComponents/AllArticlesPage';
 import ArticleComponent from './ArticleComponents/ArticleComponent';
 import About from './About/About';
+import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
@@ -48,6 +49,7 @@ function App() {
           <Route path="/articles/all" element={<AllArticlesPage />} />
           <Route path="/articles/:articleId" element={<ArticleComponent />} />
           <Route path="/about" element={<About />} />
+          <Route path="/deckcalculator" element={<DeckCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BackToTopButton />
