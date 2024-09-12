@@ -82,7 +82,7 @@ app.get('/api/live-standings', (req, res) => {
   if (isEventCompleted === 'true' && finalDataUrl) {
       urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
   } else if (isEventCompleted === 'false') {
-      urlToFetch = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';  // Replace with actual live URL
+      urlToFetch = 'https://pokedata.ovh/standings/0000129/masters/0000129_Masters.json';  // Replace with actual live URL
   } else {
       return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
   }

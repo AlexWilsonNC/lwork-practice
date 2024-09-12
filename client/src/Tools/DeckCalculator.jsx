@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const CalculateMeta = styled.div`
   padding-left: 25px;
+  margin-bottom: 25px;
   width: 27%;
   color: ${({ theme }) => theme.text};
   select, input {
@@ -28,6 +29,16 @@ const CalculateMeta = styled.div`
   }
   .marginfive {margin-bottom: 10px;}
 `;
+const SpriteContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+  img {
+    width: 55px;
+    height: auto;
+  }
+`;
 
 const decks = [
     "Regidrago",
@@ -48,7 +59,26 @@ const decks = [
     "Banette ex",
     "United Wings",
 ];
-
+const archetypeSpriteOverrides = {
+    "Regidrago": { "sprite1": "regidrago", sprite2: "ogerpon" },
+    "Raging Bolt": { sprite1: "raging-bolt", sprite2: "ogerpon" },
+    "Charizard Pidgeot": { sprite1: "charizard", sprite2: "pidgeot" },
+    "Lugia Archeops": { sprite1: "lugia", sprite2: "archeops" },
+    "Iron Thorns": { sprite1: "blank", sprite2: "ironthorns" },
+    "Gardevoir": { sprite1: "blank", sprite2: "gardevoir" },
+    "Snorlax": { sprite1: "blank", sprite2: "snorlax" },
+    "Ancient Box": { sprite1: "roaring-moon", sprite2: "flutter-mane" },
+    "Miraidon": { sprite1: "blank", sprite2: "miraidon" },
+    "Dragapult": { sprite1: "blank", sprite2: "dragapult" },
+    "Chien-Pao": { sprite1: "chien-pao", sprite2: "baxcalibur" },
+    "Pidgeot Control": { sprite1: "blank", sprite2: "pidgeot" },
+    "Gholdengo": { sprite1: "blank", sprite2: "gholdengo" },
+    "Roaring Moon (Turbo)": { sprite1: "blank", sprite2: "roaring-moon" },
+    "Radiant Charizard LZB": { sprite1: "comfey", sprite2: "charizard-shiny" },
+    "Banette ex": { sprite1: "blank", sprite2: "banette" },
+    "United Wings": { sprite1: "flamigo", sprite2: "murkrow" },
+  };
+  
 const DeckCalculator = () => {
   const [matchupWinRates, setMatchupWinRates] = useState({});
   const [metaShare, setMetaShare] = useState({});
@@ -142,6 +172,26 @@ const DeckCalculator = () => {
   return (
     <CalculateMeta>
       <div>
+      <SpriteContainer>
+  {decks.map((deck) => {
+    const overriddenSprites = archetypeSpriteOverrides[deck] || { sprite1: deck.sprite1, sprite2: deck.sprite2 };
+    console.log(`Rendering ${deck}`, overriddenSprites); // Debugging output
+
+    return (
+      <div key={deck}>
+        <img
+          src={`/assets/sprites/${overriddenSprites.sprite1}.png`}
+          alt={`${deck} sprite 1`}
+        />
+        <img
+          src={`/assets/sprites/${overriddenSprites.sprite2}.png`}
+          alt={`${deck} sprite 2`}
+        />
+      </div>
+    );
+  })}
+</SpriteContainer>
+
         <br></br>
         <h3>Select Deck Match-Ups</h3>
         <br></br>

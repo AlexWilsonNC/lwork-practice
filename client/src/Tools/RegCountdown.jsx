@@ -50,7 +50,8 @@ const CountdownTooltip = ({ registrationTime }) => {
       <span className="material-symbols-outlined reg-icon">
         {new Date(registrationTime) > new Date() ? 'schedule' : 'edit_note'}
       </span>
-      {timeRemaining && <TooltipContainer>{timeRemaining}</TooltipContainer>}
+      {/* {timeRemaining && <TooltipContainer>{timeRemaining}</TooltipContainer>} */}
+      {timeRemaining && <TooltipContainer>{timeRemaining} (Wave 1)</TooltipContainer>}
     </div>
   );
 };

@@ -1357,22 +1357,23 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
-                                {(eventId === '2024_WORLDS' || eventId.includes('2025')) && (
+                                {/* {(eventId === '2024_WORLDS' || eventId.includes('2025')) && ( */}
+                                {(eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
-                                        {/* <button 
+                                        <button 
                                             onClick={() => handleTabChange('Decks')} 
                                             className={viewTab === 'Decks' ? 'active' : ''}
                                             style={{ backgroundColor: viewTab === 'Decks' ? '#1290eb' : 'grey' }}
                                         >
                                             Decklists
-                                        </button> */}
-                                        {/* <button 
+                                        </button>
+                                        <button 
                                             onClick={() => handleTabChange('Records')} 
                                             className={viewTab === 'Records' ? 'active' : ''}
                                             style={{ backgroundColor: viewTab === 'Records' ? '#1290eb' : 'grey' }}
                                         >
                                             Records
-                                        </button> */}
+                                        </button>
                                     </div>
                                 )}
                             {viewTab === 'Decks' ? (
