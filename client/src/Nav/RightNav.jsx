@@ -70,7 +70,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
             <li><a href='/archive-updates'>Archive Updates</a></li>
             <li><a href='/articles/all' className='not-ready'>Articles</a></li>
             <li className='not-ready'><a href=''>{/* <span className='new-resource'>New</span> */} Deck Builder</a></li>
-            <li><a href='/decks' className='not-ready'>Decks by Era</a></li>
+            <li><a href='https://alexwilsonnc.github.io/tes/decks-by-era/main'>Decks by Era</a></li>
             <li className='not-ready'><a href=''>Rules by Era</a></li>
             <li className='not-ready'><a href=''>Worlds Booklets</a></li>
           </ul>
