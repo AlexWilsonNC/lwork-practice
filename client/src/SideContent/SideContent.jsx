@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
 import styled from 'styled-components';
+import Modal from '../Tools/Interstitial';
 
 const SideContainer = styled.div`
   h4 {color: ${({ theme }) => theme.text};}
@@ -10,6 +11,24 @@ const SideContainer = styled.div`
 `;
 
 const SidebarComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [externalUrl, setExternalUrl] = useState('');
+
+  const handleLinkClick = (e, url) => {
+    e.preventDefault(); // Prevent default link behavior
+    setExternalUrl(url); // Store the URL to navigate to after confirmation
+    setShowModal(true); // Show the interstitial modal
+  };
+
+  const handleConfirm = () => {
+    setShowModal(false);
+    window.location.href = externalUrl; // Redirect to the external site
+  };
+
+  const handleClose = () => {
+    setShowModal(false); // Close the modal without redirecting
+  };
+
   return (
     <SideContainer className='homepage-side'>
       <div className='side-section'>
@@ -17,10 +36,10 @@ const SidebarComponent = () => {
         <ul>
           <li><Link to='/tournaments/completed'>Completed Events</Link></li>
           <li><Link to='/tournaments/upcoming'>Upcoming Events</Link></li>
-          <li><Link to='' className='not-ready'>Decks by Era</Link></li>
+          {/* Trigger interstitial for the "Decks by Era" link */}
+          <li><a href='https://alexwilsonnc.github.io/tes/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/tes/decks-by-era/main')}>Decks by Era</a></li>
           <li><Link to='' className='not-ready'>Rules by Era</Link></li>
           <li><Link to='/cards/SFA'>Card Database</Link></li>
-          {/* <li><Link to='' className='not-ready'>Historic Timeline</Link></li> */}
           <li><Link to='' className='not-ready'>World's Booklets</Link></li>
           <li><a href='https://www.seagrovetcg.com/event-finder' target='_blank' rel='noopener noreferrer'>Local Event Finder</a></li>
         </ul>
@@ -48,6 +67,14 @@ const SidebarComponent = () => {
       </div>
 
       <TwitterWidget />
+
+      {/* Modal for external link confirmation */}
+      <Modal 
+        show={showModal} 
+        handleClose={handleClose} 
+        handleConfirm={handleConfirm} 
+        externalLink={externalUrl}
+      />
     </SideContainer>
   );
 };

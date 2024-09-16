@@ -16,3 +16,34 @@ code {
   opacity: 0.3;
   pointer-events: none;
 }
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000000000;
+}
+.modal {
+  background-color: rgb(44, 44, 47);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 70%;
+}
+.modal button {
+  margin: 10px;
+}
+.interstitial-btn {
+  padding: 3px 5px;
+}
+.interstitial-btn:hover {
+  background-color: #1290eb;
+  color:white;
+  cursor: pointer;
+}
