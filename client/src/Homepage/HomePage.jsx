@@ -92,17 +92,17 @@ const Homepage = () => {
                             </div>
                             <a href='./tournaments/2024_WORLDS'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/championship/2024-worlds/2024-worlds-banner.png' />
+                                    <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/07/Baltimore-Regional.jpg' />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Results from 2024 Worlds are Coming in!</h3>
+                                        <h3>Results from 2025 Baltimore Regionals!</h3>
                                         <p>
-                                            {/* View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream. */}
-                                            Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics.
+                                            View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                            {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Aug 17, 2024</p>
+                                        <p>Sep 16, 2024</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -306,17 +306,17 @@ const Homepage = () => {
                         </div>
                         <a href='./tournaments/2024_WORLDS'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://www.pokemon.com/static-assets/content-assets/cms2/img/attend-events/championship/2024-worlds/2024-worlds-banner.png' />
+                                <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/07/Baltimore-Regional.jpg' />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Results from 2024 Worlds are Coming in!</h3>
+                                    <h3>Results from 2025 Baltimore Regionals!</h3>
                                     <p>
-                                        {/* View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream. */}
-                                        Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics.
+                                        View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                        {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Aug 17, 2024</p>
+                                    <p>Sep 16, 2024</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
