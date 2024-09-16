@@ -1118,8 +1118,8 @@ const EventPage = () => {
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
-    const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2024_WORLDS' || eventId === '2023_WORLDS';
-    const is2024Event = eventId.includes('2024') && !eventId.toLowerCase().includes('retro');
+    const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2024_WORLDS' || eventId === '2023_WORLDS' || eventId.includes('2025');
+    const is2024Event = eventId.includes('2024') || eventId.includes('2025') && !eventId.toLowerCase().includes('retro');
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -1358,7 +1358,7 @@ const EventPage = () => {
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
                                 {/* {(eventId === '2024_WORLDS' || eventId.includes('2025')) && ( */}
-                                {(eventId.includes('2025')) && (
+                                {/* {(eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
                                         <button 
                                             onClick={() => handleTabChange('Decks')} 
@@ -1375,7 +1375,7 @@ const EventPage = () => {
                                             Records
                                         </button>
                                     </div>
-                                )}
+                                )} */}
                             {viewTab === 'Decks' ? (
                             <>
                                 {/* unofficial red event message text */}

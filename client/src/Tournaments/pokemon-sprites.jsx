@@ -132,7 +132,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Dragapult ex')) {
         const dragapultCount = getPokemonCount('Dragapult ex');
-        
         if (dragapultCount > 1) {
             firstSprite = getPokemonSpriteURL('dragapult');
             secondSprite = getPokemonSpriteURL('charizard');
@@ -162,6 +161,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Charizard ex') && hasPokemon('Bibarel')) {
         firstSprite = getPokemonSpriteURL('charizard');
         secondSprite = getPokemonSpriteURL('bibarel');
+    }
+    else if (hasPokemon('Charizard ex') && hasPokemon('Dusknoir')) {
+        firstSprite = getPokemonSpriteURL('charizard');
+        secondSprite = getPokemonSpriteURL('dusknoir');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Flutter Mane')) {
         firstSprite = getPokemonSpriteURL('roaring-moon');
@@ -243,10 +246,30 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('arceus');
         secondSprite = getPokemonSpriteURL('umbreon-vmax');
     }
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Dusknoir')) {
+        firstSprite = getPokemonSpriteURL('arceus');
+        secondSprite = getPokemonSpriteURL('dusknoir');
+    }
+    else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Dusknoir')) {
+        firstSprite = getPokemonSpriteURL('palkia-origin');
+        secondSprite = getPokemonSpriteURL('dusknoir');
+    }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Gardevoir')) {
         firstSprite = getPokemonSpriteURL('palkia-origin');
         secondSprite = getPokemonSpriteURL('gardevoir');
     }
+    else if (hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Noivern ex')) {
+        firstSprite = getPokemonSpriteURL('ogerpon-cornerstone');
+        secondSprite = getPokemonSpriteURL('noivern');
+    }    
+    else if (hasPokemon('Banette ex') && hasPokemon('Dusknoir')) {
+        firstSprite = getPokemonSpriteURL('banette');
+        secondSprite = getPokemonSpriteURL('dusknoir');
+    }    
+    else if (hasPokemon('Iron Valiant ex') && hasPokemon('Bloodmoon Ursaluna')) {
+        firstSprite = getPokemonSpriteURL('iron-valiant');
+        secondSprite = getPokemonSpriteURL('ursaluna-bloodmoon');
+    }    
 
     // Individual checks
     if (!secondSprite) {
