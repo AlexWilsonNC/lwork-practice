@@ -51,7 +51,7 @@ const CountdownTooltip = ({ registrationTime }) => {
         {new Date(registrationTime) > new Date() ? 'schedule' : 'edit_note'}
       </span>
       {/* {timeRemaining && <TooltipContainer>{timeRemaining}</TooltipContainer>} */}
-      {timeRemaining && <TooltipContainer>{timeRemaining} (Wave 1)</TooltipContainer>}
+      {timeRemaining && <TooltipContainer>Delayed</TooltipContainer>}
     </div>
   );
 };

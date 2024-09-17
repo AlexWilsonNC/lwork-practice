@@ -255,7 +255,7 @@ const tournamentList = [
         "date": "Nov 15, 2024",
         "flag": brazil,
         "location": "São Paulo, Brazil",
-        "registrationTime": "2024-09-17T10:00:00-03:00",
+        "registrationTime": "2024-09-30T10:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
