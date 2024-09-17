@@ -28,6 +28,7 @@ code {
   justify-content: center;
   align-items: center;
   z-index: 1000000000;
+  color:rgb(228, 228, 228) !important;
 }
 .modal {
   background-color: rgb(44, 44, 47);
@@ -36,14 +37,19 @@ code {
   text-align: center;
   max-width: 70%;
 }
+.modal p {
+  color:rgb(228, 228, 228) !important;
+}
 .modal button {
   margin: 10px;
+  background-color:rgb(228, 228, 228) !important;
+  border: none;
 }
 .interstitial-btn {
   padding: 3px 5px;
 }
 .interstitial-btn:hover {
-  background-color: #1290eb;
+  background-color: #1290eb !important;
   color:white;
   cursor: pointer;
 }

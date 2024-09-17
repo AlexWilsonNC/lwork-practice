@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
+import Modal from '../Tools/Interstitial';
 import '../css/players.css';
 import '../css/deckspage.css';
 
@@ -94,10 +95,13 @@ const DeckListContainer = styled.div`
   .paddingfive {
     height: 27px !important;
   }
-    .upcoming-btn {
+  .upcoming-btn {
     opacity: 0.3;
     pointer-events: none;
-    }
+  }
+  .marginleftless {
+    margin-left: 0px;
+  }
 `;
 
 const FormatSeparator = styled.tr`
@@ -169,6 +173,26 @@ const Decks = () => {
   const [selectedFormat, setSelectedFormat] = useState('BRS-SFA');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+
+    // State for managing the interstitial modal
+    const [showModal, setShowModal] = useState(false);
+    const [externalUrl, setExternalUrl] = useState('');
+  
+    // Handle link click for external links
+    const handleLinkClick = (e, url) => {
+      e.preventDefault();
+      setExternalUrl(url); // Store the URL to navigate to after confirmation
+      setShowModal(true);   // Show the interstitial modal
+    };
+  
+    const handleConfirm = () => {
+      setShowModal(false);
+      window.location.href = externalUrl; // Redirect to the external site
+    };
+  
+    const handleClose = () => {
+      setShowModal(false); // Close the modal without redirecting
+    };  
 
   useEffect(() => {
     const formatParam = searchParams.get('format') || 'BRS-SFA';
@@ -290,7 +314,8 @@ const Decks = () => {
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
             <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
-            <a onClick={navigateToFeaturedDecks} className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a>
+            {/* <a onClick={navigateToFeaturedDecks} href='www.google.com' className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a> */}
+            <a href='https://alexwilsonnc.github.io/tes/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/tes/decks-by-era/main')} className='completed-btn marginleftless'>Decks by Era</a>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
@@ -538,6 +563,13 @@ const Decks = () => {
           </table>
         )}
       </div>
+      {/* Modal for external link confirmation */}
+      <Modal
+        show={showModal}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        externalLink={externalUrl}
+      />
     </DeckListContainer>
   );
 };
