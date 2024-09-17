@@ -51,7 +51,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/decks'>Decks</a></li>
-        <li><a href='/cards/SFA'>Cards</a></li>
+        <li><a href='/cards/SCR'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
         {/* <li className='not-ready'><a href=''><span className="material-symbols-outlined">search</span></a></li> */}
       </ul>
@@ -62,7 +62,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <li><a href='/tournaments/completed'>Completed Events</a></li>
         <li><a href='/tournaments/upcoming'>Upcoming Events</a></li>
         <li><a href='/decks'>Decks</a></li>
-        <li><a href='/cards/SFA'>Cards</a></li>
+        <li><a href='/cards/SCR'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
         <div className='burger-resources'>
           <p>Resources:</p>

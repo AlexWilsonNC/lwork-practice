@@ -7,6 +7,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  "BRS-SCR",
   "BRS-SFA",
   "BRS-TWM",
   "BRS-TEF",
