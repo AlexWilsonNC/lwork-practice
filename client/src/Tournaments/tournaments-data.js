@@ -200,8 +200,8 @@ const tournamentList = [
         "date": "Nov 9, 2024",
         "flag": argentina,
         "location": "Buenos Aires, Argentina",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-09-18T19:00:00-03:00",
+        "registrationLink": "https://www.playlatam.net/tournaments/BsAs25-TCG-MA",
     },
     {
         "id": '2025_SACRAMENTO/masters',
@@ -255,7 +255,7 @@ const tournamentList = [
         "date": "Nov 15, 2024",
         "flag": brazil,
         "location": "São Paulo, Brazil",
-        "registrationTime": "2024-09-30T10:00:00-03:00",
+        // "registrationTime": "2024-09-30T10:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
