@@ -300,8 +300,7 @@ const tournamentList = [
         "flag": usa,
         "location": "Anaheim, California",
         "registrationTime": "",
-        "registrationLink": "",
-        "results": false
+        "registrationLink": ""
     },
     {
         "id": "2025_TOKYO_CL",
@@ -1125,9 +1124,7 @@ const tournamentList = [
         "eventLogo": worlds,
         "date": "Aug 28, 2026",
         "flag": usa,
-        "location": "San Francisco, California",
-        "results": false
-
+        "location": "San Francisco, California"
     },
     {
         "id": "2025_VANCOUVER",
@@ -1136,9 +1133,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 7, 2025",
         "flag": canada,
-        "location": "Vancouver, Canada",
-        "results": false
-
+        "location": "Vancouver, Canada"
     },
     {
         "id": "2025_MILWAUKEE",
@@ -1147,8 +1142,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 2, 2025",
         "flag": usa,
-        "location": "Milwaukee, Wisconsin",
-                "results": false
+        "location": "Milwaukee, Wisconsin"
     },
     {
         "id": "2025_BIRMINGHAM",
@@ -1157,8 +1151,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 18, 2025",
         "flag": uk,
-        "location": "Birmingham, UK",
-                "results": false
+        "location": "Birmingham, UK"
     },
     {
         "id": "2025_STOCKHOLM",
@@ -1167,8 +1160,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 22 , 2025",
         "flag": sweden,
-        "location": "Stockholm, Sweden",
-                "results": false
+        "location": "Stockholm, Sweden"
     },
     {
         "id": "2025_SEVILLE",
@@ -1177,8 +1169,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Apr 26, 2025",
         "flag": spain,
-        "location": "Seville, Spain",
-                "results": false
+        "location": "Seville, Spain"
     },
     {
         "id": "2025_UTRECHT",
@@ -1187,9 +1178,17 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "May 17, 2025",
         "flag": netherlands,
-        "location": "Utrecht, Netherlands",
-                "results": false
+        "location": "Utrecht, Netherlands"
           },
+    {
+        "id": "2025_BOLOGNA",
+        "name": "Bologna Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "May 31, 2025",
+        "flag": italy,
+        "location": "Bologna, Italy",
+    },
     {
         "id": "2025_RIO",
         "name": "Rio Regionals",
@@ -1197,8 +1196,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 18, 2025",
         "flag": brazil,
-        "location": "Rio de Janeiro, Brazil",
-                "results": false
+        "location": "Rio de Janeiro, Brazil"
           },
     {
         "id": "2025_MERIDA",
@@ -1207,8 +1205,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Feb 8, 2025",
         "flag": mexico,
-        "location": "Merida, Yucatán, México",
-                "results": false
+        "location": "Merida, Yucatán, México"
           },
     {
         "id": "2025_FORTALEZA",
@@ -1217,8 +1214,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 8, 2025",
         "flag": brazil,
-        "location": "Fortaleza, Brazil",
-        "results": false
+        "location": "Fortaleza, Brazil"
           },
     {
         "id": "2025_MONTERREY",
@@ -1227,8 +1223,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Apr 19, 2025",
         "flag": mexico,
-        "location": "Monterrey, México",
-        "results": false
+        "location": "Monterrey, México"
           },
     {
         "id": "2025_SANTIAGO",
@@ -1237,8 +1232,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 17, 2025",
         "flag": chile,
-        "location": "Santiago, Chile",
-        "results": false
+        "location": "Santiago, Chile"
           },
     {
         "id": "2025_PERTH",
@@ -1256,8 +1250,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 29, 2025",
         "flag": australia,
-        "location": "Brisbane, Australia",
-        "results": false
+        "location": "Brisbane, Australia"
           },
     // {
     //     "id": "eee",
