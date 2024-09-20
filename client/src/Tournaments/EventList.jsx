@@ -452,72 +452,72 @@ const EventList = () => {
                 </tr>
               </thead>
               <tbody>
-  {sortedFilteredEvents.map((event, index) => (
-    <tr key={index} className='event-row'>
-      <td>{event.date}</td>
-      <td>
-        <img src={event.eventLogo} className='event-type-logo2' alt="Event type" />
-      </td>
-      <td>
-        <div className='tournament-flags-container'>
-          <div className="flag-container">
-            <img
-              className='tournament-flags'
-              src={event.flag}
-              alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
-            />
-            <div className="flag-tooltip">
-              {countryNames[event.flag.split('/').pop().split('.')[0]]}
-            </div>
-          </div>
-          <div className='country-name-tournaments'></div>
-        </div>
-        <div>
-          <a
-            href={event.id ? event.id : '#'}
-            className='event-wth-link'
-            style={{ pointerEvents: event.id ? 'auto' : 'none' }}
-          >
-            {event.name}
-          </a>
-        </div>
-      </td>
+                {sortedFilteredEvents.map((event, index) => (
+                  <tr key={index} className='event-row'>
+                    <td>{event.date}</td>
+                    <td>
+                      <img src={event.eventLogo} className='event-type-logo2' alt="Event type" />
+                    </td>
+                    <td>
+                      <div className='tournament-flags-container'>
+                        <div className="flag-container">
+                          <img
+                            className='tournament-flags'
+                            src={event.flag}
+                            alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
+                          />
+                          <div className="flag-tooltip">
+                            {countryNames[event.flag.split('/').pop().split('.')[0]]}
+                          </div>
+                        </div>
+                        <div className='country-name-tournaments'></div>
+                      </div>
+                      <div>
+                        <a
+                          href={event.id ? event.id : '#'}
+                          className='event-wth-link'
+                          style={{ pointerEvents: event.id ? 'auto' : 'none' }}
+                        >
+                          {event.name}
+                        </a>
+                      </div>
+                    </td>
 
-      {/* For completed events, show the results icon */}
-      {!showUpcoming && (
-        <td>
-          {event.id && event.results !== false ? (
-            <a href={event.id} className='event-icon-links'>
-              <span className="material-symbols-outlined">format_list_bulleted</span>
-            </a>
-          ) : null}
-        </td>
-      )}
+                    {/* For completed events, show the results icon */}
+                    {!showUpcoming && (
+                      <td>
+                        {event.id && event.results !== false ? (
+                          <a href={event.id} className='event-icon-links'>
+                            <span className="material-symbols-outlined">format_list_bulleted</span>
+                          </a>
+                        ) : null}
+                      </td>
+                    )}
 
-      {/* For upcoming events, show the information icon */}
-      {showUpcoming && (
-        <td>
-          {event.registrationTime ? (
-            <a href={event.registrationLink} className='event-icon-links' target='_blank' style={{ position: 'relative', display: 'inline-block' }}>
-              <CountdownTooltip registrationTime={event.registrationTime} />
-            </a>
-          ) : null}
-        </td>
-      )}
+                    {/* For upcoming events, show the information icon */}
+                    {showUpcoming && (
+                      <td>
+                        {event.registrationTime ? (
+                          <a href={event.registrationLink} className='event-icon-links' target='_blank' style={{ position: 'relative', display: 'inline-block' }}>
+                            <CountdownTooltip registrationTime={event.registrationTime} />
+                          </a>
+                        ) : null}
+                      </td>
+                    )}
 
-      {/* For upcoming events, show the "note stack" icon */}
-      {showUpcoming && (
-        <td>
-          {event.id && event.results !== false ? (
-            <a href={event.id} className='event-icon-links'>
-              <span className="material-symbols-outlined">note_stack</span>
-            </a>
-          ) : null}
-        </td>
-      )}
-    </tr>
-  ))}
-</tbody>
+                    {/* For upcoming events, show the "note stack" icon */}
+                    {showUpcoming && (
+                      <td>
+                        {event.id && event.results !== false ? (
+                          <a href={event.id} className='event-icon-links'>
+                            <span className="material-symbols-outlined">note_stack</span>
+                          </a>
+                        ) : null}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
           {showUpcoming && (
