@@ -255,7 +255,7 @@ const tournamentList = [
         "date": "Nov 15, 2024",
         "flag": brazil,
         "location": "São Paulo, Brazil",
-        // "registrationTime": "2024-09-30T10:00:00-03:00",
+        "registrationTime": "2024-09-30T10:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
@@ -1127,6 +1127,8 @@ const tournamentList = [
         "date": "Aug 28, 2026",
         "flag": usa,
         "location": "San Francisco, California",
+        "results": false
+
     },
     {
         "id": "2025_VANCOUVER",
@@ -1136,6 +1138,8 @@ const tournamentList = [
         "date": "Mar 7, 2025",
         "flag": canada,
         "location": "Vancouver, Canada",
+        "results": false
+
     },
     {
         "id": "2025_MILWAUKEE",
@@ -1145,6 +1149,7 @@ const tournamentList = [
         "date": "May 2, 2025",
         "flag": usa,
         "location": "Milwaukee, Wisconsin",
+                "results": false
     },
     {
         "id": "2025_BIRMINGHAM",
@@ -1154,6 +1159,7 @@ const tournamentList = [
         "date": "Jan 18, 2025",
         "flag": uk,
         "location": "Birmingham, UK",
+                "results": false
     },
     {
         "id": "2025_STOCKHOLM",
@@ -1163,6 +1169,7 @@ const tournamentList = [
         "date": "Mar 22 , 2025",
         "flag": sweden,
         "location": "Stockholm, Sweden",
+                "results": false
     },
     {
         "id": "2025_SEVILLE",
@@ -1172,6 +1179,7 @@ const tournamentList = [
         "date": "Apr 26, 2025",
         "flag": spain,
         "location": "Seville, Spain",
+                "results": false
     },
     {
         "id": "2025_UTRECHT",
@@ -1181,6 +1189,7 @@ const tournamentList = [
         "date": "May 17, 2025",
         "flag": netherlands,
         "location": "Utrecht, Netherlands",
+                "results": false
           },
     {
         "id": "2025_RIO",
@@ -1190,6 +1199,7 @@ const tournamentList = [
         "date": "Jan 18, 2025",
         "flag": brazil,
         "location": "Rio de Janeiro, Brazil",
+                "results": false
           },
     {
         "id": "2025_MERIDA",
@@ -1199,6 +1209,7 @@ const tournamentList = [
         "date": "Feb 8, 2025",
         "flag": mexico,
         "location": "Merida, Yucatán, México",
+                "results": false
           },
     {
         "id": "2025_FORTALEZA",
@@ -1208,6 +1219,7 @@ const tournamentList = [
         "date": "Mar 8, 2025",
         "flag": brazil,
         "location": "Fortaleza, Brazil",
+        "results": false
           },
     {
         "id": "2025_MONTERREY",
@@ -1217,6 +1229,7 @@ const tournamentList = [
         "date": "Apr 19, 2025",
         "flag": mexico,
         "location": "Monterrey, México",
+        "results": false
           },
     {
         "id": "2025_SANTIAGO",
@@ -1226,6 +1239,7 @@ const tournamentList = [
         "date": "May 17, 2025",
         "flag": chile,
         "location": "Santiago, Chile",
+        "results": false
           },
     {
         "id": "2025_PERTH",
@@ -1235,6 +1249,7 @@ const tournamentList = [
         "date": "Dec 7, 2024",
         "flag": australia,
         "location": "Perth, Australia",
+        "results": false
           },
     {
         "id": "2025_BRISBANE",
@@ -1244,6 +1259,7 @@ const tournamentList = [
         "date": "Mar 29, 2025",
         "flag": australia,
         "location": "Brisbane, Australia",
+        "results": false
           },
     // {
     //     "id": "eee",
