@@ -65,9 +65,6 @@
     font-size: 13px;
     font-weight: 600;
 }
-.blue:hover {
-    color: #7cc8ff !important;
-}
 .zmore {z-index: 10;}
 .wrapped-feature {
     overflow: hidden;

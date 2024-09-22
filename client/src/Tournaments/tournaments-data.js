@@ -233,8 +233,8 @@ const tournamentList = [
         "date": "Dec 7, 2024",
         "flag": colombia,
         "location": "Bogotá, Colombia",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-09-25T19:00:00-05:00",
+        "registrationLink": "https://x.com/playlatam_op",
     },
     {
         "id": '2025_TORONTO/masters',
@@ -255,7 +255,7 @@ const tournamentList = [
         "date": "Nov 15, 2024",
         "flag": brazil,
         "location": "São Paulo, Brazil",
-        "registrationTime": "2024-09-30T10:00:00-03:00",
+        // "registrationTime": "2024-09-30T10:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
