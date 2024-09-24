@@ -211,7 +211,7 @@ const tournamentList = [
         "date": "Nov 22, 2024",
         "flag": usa,
         "location": "Sacramento, California",
-        "registrationTime": "2024-09-25T07:00:00-07:00",
+        "registrationTime": "2024-09-25T19:00:00-07:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
