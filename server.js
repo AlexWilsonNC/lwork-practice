@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require("path");
 const mongoose = require('mongoose');
-const fs = require('fs'); // To manage file-based email storage
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -39,43 +38,37 @@ decksConnection.once('open', () => {
   console.log('Connected to decksConnection');
 });
 
+const emailSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  dateSubscribed: { type: Date, default: Date.now }
+});
+
+// Create the model for the 'emails' collection in the 'subscription' database
+const EmailSubscription = mongoose.model('EmailSubscription', emailSchema, 'emails');
+
 // POST route for subscribing emails
-app.post('/api/subscribe', (req, res) => {
+app.post('/api/subscribe', async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-      return res.status(400).json({ success: false, message: 'Email is required' });
+    return res.status(400).json({ success: false, message: 'Email is required' });
   }
 
-  const csvPath = path.join(__dirname, 'subscribers.csv'); // Resolve path to CSV
-
-  // Log the path for debugging
-  console.log(`CSV path: ${csvPath}`);
-
-  // Read the file and check if the email already exists
-  fs.readFile(csvPath, 'utf8', (err, data) => {
-      if (err && err.code !== 'ENOENT') { // Allow file creation if it doesn't exist
-          console.error('Error reading CSV:', err);
-          return res.status(500).json({ success: false, message: 'Server error' });
-      }
-
-      const emails = data ? data.split('\n').map(line => line.trim()) : [];
-
-      if (emails.includes(email)) {
-          return res.status(400).json({ success: false, message: 'Email is already subscribed' });
-      }
-
-      // Append the email to the file
-      fs.appendFile(csvPath, `${email}\n`, (err) => {
-          if (err) {
-              console.error('Error writing to CSV:', err);
-              return res.status(500).json({ success: false, message: 'Server error' });
-          }
-
-          console.log(`Successfully added email: ${email}`);
-          return res.status(200).json({ success: true, message: 'Subscription successful' });
-      });
-  });
+  try {
+    // Create a new email document
+    const newEmail = new EmailSubscription({ email });
+    await newEmail.save();
+    console.log(`Successfully subscribed email: ${email}`);
+    res.status(200).json({ success: true, message: 'Subscription successful' });
+  } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate email error
+      res.status(400).json({ success: false, message: 'Email is already subscribed' });
+    } else {
+      console.error('Error saving email subscription:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  }
 });
 
 let standingsCache = null;
