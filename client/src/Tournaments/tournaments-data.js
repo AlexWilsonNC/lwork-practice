@@ -311,8 +311,7 @@ const tournamentList = [
         "flag": japan,
         "location": "Tokyo, Japan",
         "registrationTime": "2024-08-16T19:00:00+03:00",
-        "registrationLink": "https://www.pokemon-card.com/info/004574.html",
-        "results": false
+        "registrationLink": "https://www.pokemon-card.com/info/004574.html"
     },
     {
         "id": '2024_BOLOGNA',
