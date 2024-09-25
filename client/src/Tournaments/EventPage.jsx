@@ -1380,11 +1380,11 @@ const EventPage = () => {
                             {viewTab === 'Decks' ? (
                             <>
                                 {/* unofficial red event message text */}
-                                {eventId === '2025_WORLDS' && (
-                                <p className="unofficial-message">
-                                    * Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.
-                                </p>
-                                )}
+                                {/* {eventId === '2025_WORLDS' && (
+                                    <p className="unofficial-message">
+                                        * Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.
+                                    </p>
+                                )} */}
                                 {results.length > 0 ? (
                                 displayResults(results, eventId, division)
                                 ) : (
