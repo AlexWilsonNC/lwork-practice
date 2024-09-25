@@ -35,6 +35,7 @@ const CloseButton = styled.button`
 
 const FormGroup = styled.div`
   margin-bottom: 15px;
+  input {width: 55%;}
 `;
 
 const SubscribeButton = styled.button`
@@ -84,7 +85,7 @@ const SubscriptionForm = ({ closeModal }) => {
       <ModalContent className='modalsubpopup'>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
         <h3>Subscribe for Event Updates</h3>
-        <p className='smallsubtxt'>Emails consist of:
+        <p className='smallsubtxt'>Emails will be sent:
           <ul>
             <li>when new events are added to the season</li>
             <li>an event's registration is announced</li>
@@ -109,7 +110,7 @@ const SubscriptionForm = ({ closeModal }) => {
           <SubscribeButton type="submit">Subscribe</SubscribeButton>
           <br></br>
           <br></br>
-          <p className='smallsubtxt'>(This is NOT an official resource - please do not solely rely on our email system for perfect updates.)</p>
+          <p className='smallsubtxt'>(This is NOT an official resource - please do not solely rely on our email system as your only means of keeping up with the game.)</p>
         </form>
       </ModalContent>
     </SubscriptionFormContainer>
