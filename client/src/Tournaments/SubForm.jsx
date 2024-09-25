@@ -85,12 +85,14 @@ const SubscriptionForm = ({ closeModal }) => {
       <ModalContent className='modalsubpopup'>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
         <h3>Subscribe for Event Updates</h3>
-        <p className='smallsubtxt'>Emails will be sent:
+        <p className='smallsubtxt'>
+          Emails will be sent:
           <ul>
             <li>when new events are added to the season</li>
             <li>an event's registration is announced</li>
             <li>when an event's results are available</li>
           </ul>
+          (not counting Asian TPC events)
         </p>
         <br></br>
         <form onSubmit={handleSubmit}>
