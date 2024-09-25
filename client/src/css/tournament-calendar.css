@@ -328,7 +328,7 @@ td div a {
             font-size: 12px;
         }
         .redtext {
-            color: red;
+            color: red !important;
         }
         .completed-btn {
             margin-right: 5px;

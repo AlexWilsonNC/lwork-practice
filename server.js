@@ -39,23 +39,22 @@ decksConnection.once('open', () => {
   console.log('Connected to decksConnection');
 });
 
-const emailFilePath = path.join(__dirname, 'subscribed_emails.csv');
-
 // POST route for subscribing emails
 app.post('/api/subscribe', (req, res) => {
   const { email } = req.body;
-  console.log(`Received email subscription: ${email}`); // Add this line
 
   if (!email) {
       return res.status(400).json({ success: false, message: 'Email is required' });
   }
 
-  // Check if CSV file exists and append email if it doesn't exist
-  const csvPath = path.join(__dirname, 'subscribers.csv');
-  console.log(`CSV path: ${csvPath}`); // Log CSV path
+  const csvPath = path.join(__dirname, 'subscribers.csv'); // Resolve path to CSV
 
+  // Log the path for debugging
+  console.log(`CSV path: ${csvPath}`);
+
+  // Read the file and check if the email already exists
   fs.readFile(csvPath, 'utf8', (err, data) => {
-      if (err && err.code !== 'ENOENT') {
+      if (err && err.code !== 'ENOENT') { // Allow file creation if it doesn't exist
           console.error('Error reading CSV:', err);
           return res.status(500).json({ success: false, message: 'Server error' });
       }
@@ -66,6 +65,7 @@ app.post('/api/subscribe', (req, res) => {
           return res.status(400).json({ success: false, message: 'Email is already subscribed' });
       }
 
+      // Append the email to the file
       fs.appendFile(csvPath, `${email}\n`, (err) => {
           if (err) {
               console.error('Error writing to CSV:', err);
@@ -73,7 +73,7 @@ app.post('/api/subscribe', (req, res) => {
           }
 
           console.log(`Successfully added email: ${email}`);
-          res.status(200).json({ success: true, message: 'Subscription successful' });
+          return res.status(200).json({ success: true, message: 'Subscription successful' });
       });
   });
 });

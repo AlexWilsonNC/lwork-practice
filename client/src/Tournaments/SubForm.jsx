@@ -81,7 +81,7 @@ const SubscriptionForm = ({ closeModal }) => {
       <ModalContent className='modalsubpopup'>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
         <h3>Subscribe for Event Updates</h3>
-        <p className='redtext'>(IN TESTING - don not use yet)</p>
+        <p className='redtext'>(IN TESTING - do not use yet)</p>
         <form onSubmit={handleSubmit}>
           <FormGroup>
             <label htmlFor="email">Email: </label>
