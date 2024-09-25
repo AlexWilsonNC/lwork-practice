@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require("path");
 const mongoose = require('mongoose');
+const fs = require('fs'); // To manage file-based email storage
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -36,6 +37,39 @@ playersConnection.once('open', () => {
 decksConnection.on('error', console.error.bind(console, 'MongoDB connection error for decksConnection:'));
 decksConnection.once('open', () => {
   console.log('Connected to decksConnection');
+});
+
+const emailFilePath = path.join(__dirname, 'subscribed_emails.csv');
+
+// POST route for subscribing emails
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body;
+
+  // Ensure email is provided
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    // Check if file exists, create if not
+    if (!fs.existsSync(emailFilePath)) {
+      fs.writeFileSync(emailFilePath, ''); // Create the file if it doesn't exist
+    }
+
+    // Read the file to check for duplicate emails
+    const existingEmails = fs.readFileSync(emailFilePath, 'utf-8').split('\n').filter(Boolean); // filter removes empty lines
+    if (existingEmails.includes(email)) {
+      return res.status(400).json({ message: 'Email already subscribed' });
+    }
+
+    // Append the new email to the file
+    fs.appendFileSync(emailFilePath, `${email}\n`);
+
+    res.status(200).json({ message: 'Successfully subscribed!' });
+  } catch (error) {
+    console.error('Error saving email:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 let standingsCache = null;

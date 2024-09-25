@@ -34,7 +34,7 @@ const CountdownTooltip = ({ registrationTime }) => {
     const formatRegistrationTime = () => {
       const registrationDate = new Date(registrationTime);
       const options = { 
-        weekday: 'short', 
+        weekday: 'short',
         year: 'numeric', 
         month: 'short', 
         day: 'numeric', 

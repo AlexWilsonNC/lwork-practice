@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import '../css/tournament-calendar.css';
 import { sortedEvents } from './tournaments-data';
 import CountdownTooltip from '../Tools/RegCountdown';
+import SubscriptionForm from './SubForm';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -254,6 +255,7 @@ const EventList = () => {
     const [viewType, setViewType] = useState('upcoming');
     const [regionFilter, setRegionFilter] = useState(() => loadFiltersWithExpiration('regionFilter') || '');
     const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');
+    const [showModal, setShowModal] = useState(false);
   
     const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
   
@@ -264,6 +266,15 @@ const EventList = () => {
       setShowRetro(isRetro);
       setViewType(isRetro ? 'retro' : (isCompleted ? 'completed' : 'upcoming'));
   }, [location.pathname]);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
     useEffect(() => {
       saveFiltersWithExpiration('eventTypeFilter', eventTypeFilter);
@@ -358,6 +369,9 @@ const EventList = () => {
               <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
           </div>
+          <button onClick={openModal} className="subscribe-btn">
+            Email Notifications
+          </button>
           <FilterTop className='filters-top'>
           {!showRetro && (
             <div className='indiv-filter'>
@@ -519,6 +533,12 @@ const EventList = () => {
                 ))}
               </tbody>
             </table>
+            {showModal && (
+              <SubscriptionForm
+                sortedEvents={sortedEvents} // Pass sortedEvents as a prop
+                closeModal={closeModal} // Pass closeModal function to close the modal
+              />
+            )}
           </div>
           {showUpcoming && (
             <p className='marginbottom event-list-key'>

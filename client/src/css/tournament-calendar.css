@@ -20,6 +20,12 @@
     margin-top: -10px;
     width: 100%;
 }
+.subscribe-btn {
+    position: absolute;
+    right: 5px;
+    padding: 2px 5px;
+    margin-top: 5px;
+}
 .grey-line {
     color: grey;
 }
@@ -340,6 +346,9 @@ td div a {
             margin-right: 15px;
             width: 125px;
             font-size: 12px;
+        }
+        .modalsubpopup {
+            width: 80% !important;
         }
     }
     @media screen and (max-width: 445px) {
