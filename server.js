@@ -42,34 +42,40 @@ decksConnection.once('open', () => {
 const emailFilePath = path.join(__dirname, 'subscribed_emails.csv');
 
 // POST route for subscribing emails
-app.post('/api/subscribe', async (req, res) => {
+app.post('/api/subscribe', (req, res) => {
   const { email } = req.body;
+  console.log(`Received email subscription: ${email}`); // Add this line
 
-  // Ensure email is provided
   if (!email) {
-    return res.status(400).json({ message: 'Email is required' });
+      return res.status(400).json({ success: false, message: 'Email is required' });
   }
 
-  try {
-    // Check if file exists, create if not
-    if (!fs.existsSync(emailFilePath)) {
-      fs.writeFileSync(emailFilePath, ''); // Create the file if it doesn't exist
-    }
+  // Check if CSV file exists and append email if it doesn't exist
+  const csvPath = path.join(__dirname, 'subscribers.csv');
+  console.log(`CSV path: ${csvPath}`); // Log CSV path
 
-    // Read the file to check for duplicate emails
-    const existingEmails = fs.readFileSync(emailFilePath, 'utf-8').split('\n').filter(Boolean); // filter removes empty lines
-    if (existingEmails.includes(email)) {
-      return res.status(400).json({ message: 'Email already subscribed' });
-    }
+  fs.readFile(csvPath, 'utf8', (err, data) => {
+      if (err && err.code !== 'ENOENT') {
+          console.error('Error reading CSV:', err);
+          return res.status(500).json({ success: false, message: 'Server error' });
+      }
 
-    // Append the new email to the file
-    fs.appendFileSync(emailFilePath, `${email}\n`);
+      const emails = data ? data.split('\n').map(line => line.trim()) : [];
 
-    res.status(200).json({ message: 'Successfully subscribed!' });
-  } catch (error) {
-    console.error('Error saving email:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+      if (emails.includes(email)) {
+          return res.status(400).json({ success: false, message: 'Email is already subscribed' });
+      }
+
+      fs.appendFile(csvPath, `${email}\n`, (err) => {
+          if (err) {
+              console.error('Error writing to CSV:', err);
+              return res.status(500).json({ success: false, message: 'Server error' });
+          }
+
+          console.log(`Successfully added email: ${email}`);
+          res.status(200).json({ success: true, message: 'Subscription successful' });
+      });
+  });
 });
 
 let standingsCache = null;
