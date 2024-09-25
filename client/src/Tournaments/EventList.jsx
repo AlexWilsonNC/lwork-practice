@@ -369,9 +369,9 @@ const EventList = () => {
               <input type="text" className='searcheventsfield' placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
           </div>
-          <button onClick={openModal} className="subscribe-btn">
-            {/* Email Notifications */}
-          </button>
+          <div className='right'>
+            <button onClick={openModal} className="subscribe-btn"><span class="material-symbols-outlined">notifications_active</span>&nbsp;&nbsp;Email Notifications</button>
+          </div>
           <FilterTop className='filters-top'>
           {!showRetro && (
             <div className='indiv-filter'>

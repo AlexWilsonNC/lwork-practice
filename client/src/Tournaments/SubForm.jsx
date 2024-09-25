@@ -29,6 +29,7 @@ const CloseButton = styled.button`
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color:white;
 `;
 
 const FormGroup = styled.div`
@@ -36,7 +37,8 @@ const FormGroup = styled.div`
 `;
 
 const SubscribeButton = styled.button`
-  padding: 10px 15px;
+  padding: 3px 5px;
+  margin-top: 5px;
   background-color: #fff;
   color: #000;
   border: none;
@@ -81,7 +83,14 @@ const SubscriptionForm = ({ closeModal }) => {
       <ModalContent className='modalsubpopup'>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
         <h3>Subscribe for Event Updates</h3>
-        <p className='redtext'>(IN TESTING - do not use yet)</p>
+        <p className='smallsubtxt'>Emails consist of:
+          <ul>
+            <li>when new events are added to the season</li>
+            <li>an event's registration is announced</li>
+            <li>when an event's results are live</li>
+          </ul>
+        </p>
+        <br></br>
         <form onSubmit={handleSubmit}>
           <FormGroup>
             <label htmlFor="email">Email: </label>

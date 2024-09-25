@@ -5,6 +5,10 @@
     align-items: center;
     width: 100%;
 }
+.right {
+    display: flex;
+    justify-content: flex-end;
+}
 .upcoming-events {
     width: 60%;
     min-width: 60%;
@@ -21,10 +25,22 @@
     width: 100%;
 }
 .subscribe-btn {
-    position: absolute;
-    right: 5px;
-    padding: 2px 5px;
+    padding: 4px 7px;
     margin-top: 5px;
+    background-color: #1290eb;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: -15px;
+    display: flex;
+    align-items: center;
+}
+.subscribe-btn:hover {
+    background-color: #08609f;
+    cursor: pointer;
+}
+.subscribe-btn .material-symbols-outlined {
+    font-size: 14px;
 }
 .grey-line {
     color: grey;
@@ -183,6 +199,13 @@ td div a {
     padding: 7px 5px;
     margin-right: 25px;
 }
+.smallsubtxt {
+    font-size: 12px;
+    margin-top: 5px;
+}
+.smallsubtxt ul {
+    margin-left: 15px;
+}
 .searcheventsfield:hover {
     border: 1px solid #1290eb;
     filter: brightness(99%);
@@ -263,6 +286,9 @@ td div a {
         .upcoming-events {
             width: 100%;
         }
+        .subscribe-btn {
+            margin-right: 5px;
+        }
         .filters-top {
             margin-left: 25px;
         }
@@ -327,9 +353,6 @@ td div a {
         .bts-in a {
             font-size: 12px;
         }
-        .redtext {
-            color: red !important;
-        }
         .completed-btn {
             margin-right: 5px;
             margin-left: 5px;
@@ -376,6 +399,12 @@ td div a {
     @media screen and (max-width: 430px) {
         .sort-events {
             font-size: 8px;
+        }
+        .subscribe-btn {
+            font-size: 10px;
+        }
+        .subscribe-btn .material-symbols-outlined {
+            font-size: 12px;
         }
         .indiv-filter select {
             width: 65px;
