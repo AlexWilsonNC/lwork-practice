@@ -336,6 +336,7 @@ object-assign
   border-radius: 8px;
   width: 400px;
   max-width: 100%;
+  h3 {margin-top: 15px;}
 `,Pj=Q.button`
   float: right;
   background: none;

@@ -11,6 +11,8 @@ node_modules
 dist-ssr
 *.local
 .env
+exportEmails.js
+emails.txt
 
 # Editor directories and files
 .vscode/*
