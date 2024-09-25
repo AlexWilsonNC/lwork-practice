@@ -14,6 +14,7 @@ const uri = process.env.MONGODB_URI;
 const cardUri = process.env.CARD_MONGODB_URI;
 const playersUri = process.env.PLAYERS_MONGODB_URI;
 const decksUri = process.env.DECKS_MONGODB_URI;
+const emailsUri = process.env.EMAILS_MONGODB_URI; // Add the email subscription URI here
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -38,13 +39,21 @@ decksConnection.once('open', () => {
   console.log('Connected to decksConnection');
 });
 
+const emailsConnection = mongoose.createConnection(emailsUri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+emailsConnection.on('error', console.error.bind(console, 'MongoDB connection error for emailsConnection:'));
+emailsConnection.once('open', () => {
+  console.log('Connected to emailsConnection');
+});
+
+// Define the schema for emails
 const emailSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   dateSubscribed: { type: Date, default: Date.now }
 });
 
-// Create the model for the 'emails' collection in the 'subscription' database
-const EmailSubscription = mongoose.model('EmailSubscription', emailSchema, 'emails');
+// Create the model for emails
+const EmailSubscription = emailsConnection.model('EmailSubscription', emailSchema, 'emails');
 
 // POST route for subscribing emails
 app.post('/api/subscribe', async (req, res) => {
@@ -55,7 +64,7 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
-    // Create a new email document
+    // Save email to MongoDB
     const newEmail = new EmailSubscription({ email });
     await newEmail.save();
     console.log(`Successfully subscribed email: ${email}`);
