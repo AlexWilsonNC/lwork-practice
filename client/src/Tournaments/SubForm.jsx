@@ -87,7 +87,7 @@ const SubscriptionForm = ({ closeModal }) => {
           <ul>
             <li>when new events are added to the season</li>
             <li>an event's registration is announced</li>
-            <li>when an event's results are live</li>
+            <li>when an event's results are available</li>
           </ul>
         </p>
         <br></br>
@@ -106,6 +106,9 @@ const SubscriptionForm = ({ closeModal }) => {
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
           <SubscribeButton type="submit">Subscribe</SubscribeButton>
+          <br></br>
+          <br></br>
+          <p className='smallsubtxt'>(This is NOT an official resource - please do not solely rely on our email system for perfect updates.)</p>
         </form>
       </ModalContent>
     </SubscriptionFormContainer>
