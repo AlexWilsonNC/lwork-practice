@@ -5,6 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 const https = require('https');
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(cors());
@@ -55,6 +56,14 @@ const emailSchema = new mongoose.Schema({
 // Create the model for emails
 const EmailSubscription = emailsConnection.model('EmailSubscription', emailSchema, 'emails');
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // Use your preferred email service provider
+  auth: {
+    user: process.env.EMAIL_USER, // Your email address
+    pass: process.env.EMAIL_PASS, // Your email password or app password
+  },
+});
+
 // POST route for subscribing emails
 app.post('/api/subscribe', async (req, res) => {
   const { email } = req.body;
@@ -67,8 +76,28 @@ app.post('/api/subscribe', async (req, res) => {
     // Save email to MongoDB
     const newEmail = new EmailSubscription({ email });
     await newEmail.save();
+
+    // Send confirmation email
+    const mailOptions = {
+      from: process.env.EMAIL_USER, // Your email address
+      to: email,
+      subject: 'Subscription Confirmation',
+      text: `Thank you for subscribing! You will receive updates about events.`,
+      html: `<p>Thank you for subscribing! You will receive updates about events.</p>`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending confirmation email:', error);
+      } else {
+        console.log('Confirmation email sent:', info.response);
+      }
+    });
+
     console.log(`Successfully subscribed email: ${email}`);
     res.status(200).json({ success: true, message: 'Subscription successful' });
+
   } catch (error) {
     if (error.code === 11000) {
       // Handle duplicate email error

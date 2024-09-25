@@ -51,6 +51,7 @@ const SubscribeButton = styled.button`
 const SubscriptionForm = ({ closeModal }) => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,15 +63,14 @@ const SubscriptionForm = ({ closeModal }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }), // Pass email in the body
+        body: JSON.stringify({ email }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        alert('You have successfully subscribed for updates!');
-        setErrorMessage(null); // Clear any previous error message
-        closeModal(); // Close modal after successful submission
+        setErrorMessage(null);
+        setSuccessMessage('You have successfully subscribed! Please check your email to confirm.');
       } else {
         setErrorMessage(result.message || 'Subscription failed. Please try again.');
       }
@@ -105,6 +105,7 @@ const SubscriptionForm = ({ closeModal }) => {
           </FormGroup>
 
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
 
           <SubscribeButton type="submit">Subscribe</SubscribeButton>
           <br></br>
