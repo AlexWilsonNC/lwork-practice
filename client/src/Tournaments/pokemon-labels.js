@@ -10,6 +10,7 @@ const customLabelsConfig = {
         '-dragapult': 'Dragapult',
         'dragapult-comfey': 'Dragapult',
         '-pidgeot': 'Pidgeot Control',
+        'palkia-origin-noctowl': 'Palkia VSTAR',
         'regidrago-ogerpon': 'Regidrago',
         'iron-hands-iron-crown': 'Future Box',
         '-roaring-moon': 'Turbo Roaring Moon',

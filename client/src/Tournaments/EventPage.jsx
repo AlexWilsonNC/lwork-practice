@@ -1119,7 +1119,7 @@ const EventPage = () => {
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
-    const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2024_WORLDS' || eventId === '2023_WORLDS' || eventId.includes('2025');
+    const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2024_WORLDS' || eventId === '2023_WORLDS' || eventId.includes('2025') && !eventId.includes('_CL');
     const is2024Event = eventId.includes('2024') || eventId.includes('2025') && !eventId.toLowerCase().includes('retro');
 
     return (
@@ -1422,6 +1422,8 @@ const EventPage = () => {
                                                     </button>
                                                 </>
                                             </>
+                                        ) : eventId.includes("_CL") ? ( // Check for _CL first to prioritize it
+                                            <p className='chart-button'>Top {chartResults.length}</p>
                                         ) : (is2024Event && division === 'masters' || eventId.includes("2024_WORLDS")) ? (
                                             <button className={`chart-button day2btn active`}>
                                                 Day 2
