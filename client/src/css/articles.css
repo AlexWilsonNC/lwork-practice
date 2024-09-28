@@ -88,22 +88,45 @@
     font-size: 12px !important;
     margin-top: -15px;
 }
-/* .article-content-image {
-    border-radius: 15px;
-    width: 85%;
-    margin-bottom: 15px;
+.decklist-image {
+    width: 100% !important;
+    height: auto !important;
+    border: 2px solid black;
+    border-radius: 5px;
 }
-.article-content-image-small {
-    border-radius: 10px;
-    width: 55%;
-    margin-bottom: 15px;
+.center-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
-.article-content-image-xsmall {
-    border-radius: 10px;
-    width: 35%;
-    margin-bottom: 15px;
-} */
-
+.article-pokemon-card-med {
+    width: 25%;
+    border-radius: 7px;
+}
+.decklist-section {
+    width: 80%;
+}
+.decklist-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.decklist-btns button {
+    background-color: rgb(63, 63, 63);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 5px;
+    margin: 0 5px 10px 0;
+}
+.decklist-btns button:hover {
+    cursor: pointer;
+    background-color: #1290eb;
+}
+.decklist-btn.active {
+    background-color: #1290eb;
+}
 @media screen and (max-width: 812px) {
     .old-card {
         padding: 0.5px;
@@ -124,12 +147,6 @@
         background-position: 0px -50px !important;
     }
 }
-/* @media screen and (max-width: 1400px) {
-    .video-blastoise {
-        width: 700px;
-        height: 400px;
-    }
-} */
 @media screen and (max-width: 1250px) {
     .image-and-text img {
         width: 250px;height:auto;
@@ -164,12 +181,6 @@
         width: 90%;
     }
 }
-/* @media screen and (max-width: 800px) {
-    .video-blastoise {
-        width: 650px;
-        height: 330px;
-    }
-} */
 @media screen and (max-width: 700px) {
     .image-and-text img {
         width: 350px;height:auto;
@@ -239,10 +250,10 @@
     .title-hr {
         border-bottom: 4px solid rgb(0, 128, 255);
     }
-    /* .video-blastoise {
-        width: 590px;
-        height: 290px;
-    } */
+    .article-pokemon-card-med {
+        width: 45%;
+        border-radius: 7px;
+    }
     .boxxed {
         padding: 5px 7px; 
         font-size: 16px;
@@ -250,17 +261,7 @@
         margin-top: -15px;
     }
 }
-/* @media screen and (max-width: 500px) {
-    .video-blastoise {
-        width: 550px;
-        height: 250px;
-    }
-} */
 @media screen and (max-width: 450px) {
-    /* .video-blastoise {
-        width: 520px;
-        height: 220px;
-    } */
     .small-text-archive {
         font-size: 8px !important;
     }
@@ -305,12 +306,6 @@
         margin-top: -25px;
     }
 }
-/* @media screen and (max-width: 370px) {
-    .video-blastoise {
-        width: 450px;
-        height: 180px;
-    }
-} */
 @media screen and (max-width: 350px) {
     .top-backtrack {
         width:99%;
