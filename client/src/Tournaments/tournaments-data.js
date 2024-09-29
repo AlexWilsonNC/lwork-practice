@@ -147,6 +147,7 @@ const tournamentList = [
         "location": "Dortmund, Germany",
         "registrationTime": "2024-08-07T19:00:00+02:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": false
     },
     {
         "id": '2025_JOINVILLE/masters',
@@ -158,6 +159,7 @@ const tournamentList = [
         "location": "Joinville, Brazil",
         "registrationTime": "2024-08-07T19:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": false
     },
     {
         "id": '2025_LIMA/masters',
