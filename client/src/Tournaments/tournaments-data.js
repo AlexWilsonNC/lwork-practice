@@ -224,8 +224,8 @@ const tournamentList = [
         "date": "Nov 30, 2024",
         "flag": germany,
         "location": "Stuttgart, Germany",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-10-02T13:00:00-04:00",
+        "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
         "id": '2025_BOGOTA/masters',
@@ -1243,8 +1243,10 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Dec 7, 2024",
         "flag": australia,
-        "location": "Perth, Australia"
-          },
+        "location": "Perth, Australia",
+        "registrationTime": "2024-10-09T07:00:00-04:00",
+        "registrationLink": "https://rk9.gg/events/pokemon"
+    },
     {
         "id": "2025_BRISBANE",
         "name": "Brisbane Regionals",
