@@ -111,7 +111,6 @@ const Homepage = () => {
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
-                                <div className='article-overlay overlay'>Coming Soon</div>
                                 <a href='/articles/all' className='blue not-ready'>View All</a>
                                 </div>
                             <a href={`/articles/${latestArticle.id}`}>
@@ -327,7 +326,6 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
                             <a href='/articles/all' className='blue not-ready'>View All</a>
                         </div>
-                        <div className='article-overlay overlay'>Coming Soon</div>
                         <a href={`/articles/${latestArticle.id}`}>
                                 <WrappedFeature className="wrapped-feature">
                                     <div className="article-thumbnail">

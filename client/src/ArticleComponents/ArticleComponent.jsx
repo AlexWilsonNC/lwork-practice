@@ -14,6 +14,8 @@ import darkraiHydreigon from '../assets/article-images/hydreigondarkrai.png';
 import terrakionmewtwodar from '../assets/article-images/terrakionmewtwodar.png';
 import rayeels from '../assets/article-images/rayeels.png';
 import empogor from '../assets/article-images/empogor.png';
+import hoohex from '../assets/article-images/hooh.png';
+import tornadusterrak from '../assets/article-images/tornkion.png';
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -77,6 +79,18 @@ const ArticleComponent = () => {
           '{{empogor}}',
           `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${empogor}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{hoohex}}',
+          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          <img class='decklist-image' src='${hoohex}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{tornadusterrak}}',
+          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          <img class='decklist-image' src='${tornadusterrak}' alt='article Image' /></a>
           <br>`
         )
         .replace(
