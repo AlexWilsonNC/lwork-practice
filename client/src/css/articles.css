@@ -88,6 +88,29 @@
     font-size: 12px !important;
     margin-top: -15px;
 }
+.author-bio {
+    border-radius: 15px;
+    border: 1px solid grey;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.author-img {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.author-img p {
+    margin-bottom: 0px;
+}
+.author-bio img {
+    width: 25px;height: 25px;
+    margin: 0 5px;
+    border-radius: 50%;
+}
+.author-bio a {
+    color: #1290eb;
+}
 .decklist-image {
     width: 100% !important;
     height: auto !important;

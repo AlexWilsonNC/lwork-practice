@@ -285,10 +285,21 @@ object-assign
 
 <p>As always, PTCG Legends has great decklists to start with, but one of the fun parts of this format is just how a few changes can really shift how your deck plays. Maybe you want to add in some Eviolites to shore up your matchups against the aggressive decks. Sigilyph DRX and Bouffalant DRX can give you an edge over other opposing EX decks. An extra Max Potion or Enhanced Hammer can change the tide in an instant when your opponent isn’t expecting it. Although the overall card pool is small, the amount of minute tech options can dramatically change how certain decks play. I encourage you to experiment with the available options and tailor your deck to your liking - just remember, there is no wrong way to play retro!</p>
 
-<p>Closing Notes</p>
+<h3>Closing Notes</h3>
+<hr class='title-hr'></hr>
 
 <p>I hope you’ve enjoyed reading my thoughts and summaries about this unique format. While it is a footnote in history to many players, I think that it is also a neat era to look at and its relative ease of access can be used as an introductory tool for newer retro players. It has much in common with other well-beloved formats such as Base-Fossil, which leads to the games having many micro decisions that equate to large-scale results. I look forward to expanding my Gauntlet in the future to accommodate new deck variants and matchups, and who knows - maybe I’ll be playing them with you at an event sooner rather than later!</p>
-    `},b2=Q.div`
+
+<div class='author-bio'>
+    <div class='author-img'>
+      <img src='/assets/authors/simon-boschert.jpg'>
+      &nbsp;<p>Simon Boschert&nbsp;|&nbsp;</p>
+      <a href='https://twitter.com/StarshineSimon' target='_blank'>@StarshineSimon</a>
+    </div>
+    <p><i>Simon is a retro enthusiast for all card games, but his main passion lies within the Pokémon TCG. You can often find him poring over old articles and tournament reports to find inspiration for his next retro project. You can follow him on X/Twitter or view his Linktree which has a link to the Google Drive with all of his decks <a href='https://linktr.ee/starshinesimon' target='_blank'>here</a>!</i></p>
+</div>
+</div>
+`},b2=Q.div`
   background: ${({theme:e})=>e.body};
   color: ${({theme:e})=>e.text};
 `,Kt=Q.h2`
