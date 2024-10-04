@@ -5,7 +5,7 @@ const article1 = {
   authorSocial: '@StarshineSimon',
   authorSocialLink: 'https://twitter.com/StarshineSimon',
   authorImage: '/assets/authors/simon-boschert.jpg',
-  date: 'Oct 2, 2024',
+  date: 'Oct 4, 2024',
   headerImage: '/assets/article-images/dragons-exalted.jpg',
   imgMoveDown: false,
   sneakPeakText: "Take a look at a format that is often overlooked, Black & White through Dragons Exalted is a great format that brings familiarity and originality to the board!",
