@@ -171,6 +171,7 @@ const tournamentList = [
         "location": "Lime, Peru",
         "registrationTime": "2024-08-07T19:00:00+02:00",
         "registrationLink": "https://playlatam.net/tournaments/LIM25-TCG-MA",
+        "results": false
     },
     {
         "id": '2025_LILLE/masters',
