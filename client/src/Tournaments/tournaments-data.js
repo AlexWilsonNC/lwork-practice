@@ -247,8 +247,9 @@ const tournamentList = [
         "date": "Dec 13, 2024",
         "flag": canada,
         "location": "Toronto, Canada",
-        "registrationTime": "",
-        "registrationLink": "",
+        "registrationTime": "2024-10-16T19:00:00-04:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": true
     },
     {
         "id": '2025_LAIC/masters',
