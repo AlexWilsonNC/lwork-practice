@@ -328,6 +328,15 @@ const tournamentList = [
         "location": "Bologna, Italy"
     },
     {
+        "id": "2025_SAN_ANTONIO",
+        "name": "San Antonio Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "Jan 24 , 2025",
+        "flag": usa,
+        "location": "Texas, USA"
+        },
+    {
         "id": '2024_CAPE_TOWN',
         "name": "Cape Town Special Event",
         "eventType": "speSeries",
@@ -336,6 +345,15 @@ const tournamentList = [
         "flag": southAfrica,
         "location": "Cape Town, South Africa",
         "results": false
+    },
+    {
+        "id": "2025_CAROLINA",
+        "name": "Carolina Regionals",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 15, 2025",
+        "flag": puertoRico,
+        "location": "Carolina, Puerto Rico"
     },
     {
         "id": "2024_INDONESIA_CHAMPIONSHIPS",
