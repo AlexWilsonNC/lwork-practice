@@ -390,7 +390,8 @@ const EventList = () => {
                 <optgroup label="Asia-Pacific">
                   <option value="asiachampionship">Countries Championship</option>
                   <option value="championsLeague">Champions League</option>
-                  <option value="eee">Regional League</option>
+                  <option value="premierBallLeague">Premier Ball League</option>
+                  {/* {viewType === 'completed' && (<option value="eee">Regional League</option>)} */}
                 </optgroup>
                 {!showUpcoming && (
                   <optgroup label="WotC Era">

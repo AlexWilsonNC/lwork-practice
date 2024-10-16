@@ -20,6 +20,7 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 8px;
   width: 400px;
+  color: white;
   max-width: 100%;
   h3 {margin-top: 15px;}
 `;

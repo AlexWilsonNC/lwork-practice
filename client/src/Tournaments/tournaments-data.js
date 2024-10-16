@@ -3,6 +3,7 @@ import regionals from '../assets/event-logo/regionals-hd.png';
 import internats25 from '../assets/event-logo/internats-2025.png';
 import speSeries from '../assets/event-logo/spe.png';
 import worlds from '../assets/event-logo/worlds-hd.png';
+import premierBallLeague from '../assets/event-logo/premier-ball-league.png';
 import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
 import hongkongChampionships from '../assets/event-logo/ch-hongkong.png';
 import indonesiaChampionships from '../assets/event-logo/ch-indonesia.png';
@@ -419,6 +420,17 @@ const tournamentList = [
         "location": "Taguig, Philippines",
     },
     {
+        "id": "2025_PH_PBL1",
+        "name": "Philippines Premier League 1",
+        "eventType": "premierBallLeague",
+        "eventLogo": premierBallLeague,
+        "date": "Oct 26, 2024",
+        "flag": philippines,
+        "location": "Pasay City, Philippines",
+        "registrationTime": "2024-08-16T19:00:00+03:00",
+        "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/"
+        },
+    {
         "id": "2024_SANTIAGO",
         "name": "Santiago Regionals",
         "eventType": "regionals",
@@ -481,6 +493,17 @@ const tournamentList = [
         "flag": southKorea,
         "location": "South Korea",
     },
+    {
+        "id": "2025_KL1",
+        "name": "Korean League Season 1",
+        "eventType": "asiaChampionship",
+        "eventLogo": koreaLeague,
+        "date": "Nov 2, 2024",
+        "flag": southKorea,
+        "location": "Busan, South Korea",
+        "registrationTime": "2024-08-16T19:00:00+03:00",
+        "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025"
+        },
     {
         "id": "2024_BUENOS_AIRES",
         "name": "Buenos Aires Special Event",
@@ -1276,7 +1299,29 @@ const tournamentList = [
         "date": "Mar 29, 2025",
         "flag": australia,
         "location": "Brisbane, Australia"
-          },
+    },
+    {
+        "id": "2025_TH_PBL1",
+        "name": "Thailand Premier League 1",
+        "eventType": "premierBallLeague",
+        "eventLogo": premierBallLeague,
+        "date": "Oct 19, 2024",
+        "flag": thailand,
+        "location": "Nonthaburi, Thailand",
+        "registrationTime": "0",
+        "registrationLink": "https://asia.pokemon-card.com/th/archives/4826/"
+    },
+    {
+        "id": "2025_SG_PBL1",
+        "name": "Singapore Premier League 1",
+        "eventType": "premierBallLeague",
+        "eventLogo": premierBallLeague,
+        "date": "Nov 2, 2024",
+        "flag": singapore,
+        "location": "Singapore",
+        "registrationTime": "0",
+        "registrationLink": "https://asia.pokemon-card.com/sg/archives/6157/"
+    },
     // {
     //     "id": "eee",
     //     "name": "eee",
@@ -1285,24 +1330,8 @@ const tournamentList = [
     //     "date": "eee",
     //     "flag": eee,
     //     "location": "eee",
-    // },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
-    // },
-    // {
-    //     "id": "eee",
-    //     "name": "eee",
-    //     "eventType": "eee",
-    //     "eventLogo": eee,
-    //     "date": "eee",
-    //     "flag": eee,
-    //     "location": "eee",
+    //     "registrationTime": "",
+    //     "registrationLink": ""
     // },
 ];
 

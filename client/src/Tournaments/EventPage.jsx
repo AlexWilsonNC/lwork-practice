@@ -18,6 +18,7 @@ import regionals from '../assets/event-logo/regionals-hd.png';
 import internats25 from '../assets/event-logo/internats-2025.png';
 import speSeries from '../assets/event-logo/spe.png';
 import worlds from '../assets/event-logo/worlds-hd.png';
+import premierBallLeague from '../assets/event-logo/premier-ball-league.png';
 import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
 import hongkongChampionships from '../assets/event-logo/ch-hongkong.png';
 import indonesiaChampionships from '../assets/event-logo/ch-indonesia.png';
@@ -149,6 +150,7 @@ const logos = {
     speSeries: speSeries,
     ogInternats: ogInternats,
     worlds: worlds,
+    premierBallLeague: premierBallLeague,
     indonesiaChampionships: indonesiaChampionships,
     japanChampionships: japanChampionships,
     philippenesChampionships: philippenesChampionships,
