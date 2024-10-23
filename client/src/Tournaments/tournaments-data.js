@@ -184,6 +184,7 @@ const tournamentList = [
         "location": "Lille, France",
         "registrationTime": "2024-08-28T19:00:00+02:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": false
     },
     {
         "id": '2025_GDASNK/masters',
@@ -1309,7 +1310,8 @@ const tournamentList = [
         "flag": thailand,
         "location": "Nonthaburi, Thailand",
         "registrationTime": "0",
-        "registrationLink": "https://asia.pokemon-card.com/th/archives/4826/"
+        "registrationLink": "https://asia.pokemon-card.com/th/archives/4826/",
+        "results": false
     },
     {
         "id": "2025_SG_PBL1",
