@@ -159,8 +159,7 @@ const tournamentList = [
         "flag": brazil,
         "location": "Joinville, Brazil",
         "registrationTime": "2024-08-07T19:00:00-03:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
         "id": '2025_LIMA/masters',
@@ -355,7 +354,9 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Feb 15, 2025",
         "flag": puertoRico,
-        "location": "Carolina, Puerto Rico"
+        "location": "Carolina, Puerto Rico",
+        "registrationTime": "2024-10-26T19:00:00-05:00",
+        "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
         "id": "2024_INDONESIA_CHAMPIONSHIPS",
