@@ -349,13 +349,13 @@ const tournamentList = [
     },
     {
         "id": "2025_CAROLINA",
-        "name": "Carolina Regionals",
+        "name": "Carolina Special Event",
         "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "Feb 15, 2025",
         "flag": puertoRico,
         "location": "Carolina, Puerto Rico",
-        "registrationTime": "2024-10-26T19:00:00-05:00",
+        "registrationTime": "2024-10-26T19:00:00-04:00",
         "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
