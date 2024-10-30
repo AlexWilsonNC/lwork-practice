@@ -430,7 +430,8 @@ const tournamentList = [
         "flag": philippines,
         "location": "Pasay City, Philippines",
         "registrationTime": "2024-08-16T19:00:00+03:00",
-        "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/"
+        "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/",
+        "results": false
         },
     {
         "id": "2024_SANTIAGO",
