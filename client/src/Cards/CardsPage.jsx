@@ -127,7 +127,8 @@ const CardsPage = () => {
 
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
-    { name: "Surging Sparks", abbrev: "--", releaseDate: "Nov -, 2024", total: "--", notavailable: true },
+    { name: "Prismatic Evolutions", abbrev: "--", releaseDate: "Jan 17, 2025", total: "--", notavailable: true },
+    { name: "Surging Sparks", abbrev: "SSP", releaseDate: "Nov 8, 2024", total: "--", notavailable: true },
     { name: "Stellar Crown", abbrev: "SCR", releaseDate: "Sep 13, 2024", total: "175"},
     { name: "Shrouded Fable", abbrev: "SFA", releaseDate: "Aug 2, 2024", total: "99" },
     { name: "Twilight Masquerade", abbrev: "TWM", releaseDate: "May 24, 2024", total: "226" },
