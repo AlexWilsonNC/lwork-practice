@@ -195,6 +195,7 @@ const tournamentList = [
         "location": "Gdańsk, Poland",
         "registrationTime": "2024-09-04T19:00:00+02:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": false
     },
     {
         "id": '2025_BUENOS_AIRES/masters',
@@ -505,7 +506,8 @@ const tournamentList = [
         "flag": southKorea,
         "location": "Busan, South Korea",
         "registrationTime": "2024-08-16T19:00:00+03:00",
-        "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025"
+        "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025",
+        "results": false
         },
     {
         "id": "2024_BUENOS_AIRES",
@@ -1324,7 +1326,8 @@ const tournamentList = [
         "flag": singapore,
         "location": "Singapore",
         "registrationTime": "0",
-        "registrationLink": "https://asia.pokemon-card.com/sg/archives/6157/"
+        "registrationLink": "https://asia.pokemon-card.com/sg/archives/6157/",
+        "results": false
     },
     // {
     //     "id": "eee",

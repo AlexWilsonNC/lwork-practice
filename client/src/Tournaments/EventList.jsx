@@ -370,7 +370,7 @@ const EventList = () => {
             </div>
           </div>
           <div className='right'>
-            <button onClick={openModal} className="subscribe-btn"><span class="material-symbols-outlined">notifications_active</span>&nbsp;&nbsp;Email Notifications</button>
+            <button onClick={openModal} className="subscribe-btn"><span class="material-symbols-outlined">notifications_active</span>&nbsp;&nbsp;Notifications</button>
           </div>
           <FilterTop className='filters-top'>
           {!showRetro && (
