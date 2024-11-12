@@ -207,6 +207,7 @@ const tournamentList = [
         "location": "Buenos Aires, Argentina",
         "registrationTime": "2024-09-18T19:00:00-03:00",
         "registrationLink": "https://www.playlatam.net/tournaments/BsAs25-TCG-MA",
+        "results": false
     },
     {
         "id": '2025_SACRAMENTO/masters',
@@ -337,7 +338,7 @@ const tournamentList = [
         "date": "Jan 24 , 2025",
         "flag": usa,
         "location": "Texas, USA"
-        },
+    },
     {
         "id": '2024_CAPE_TOWN',
         "name": "Cape Town Special Event",
@@ -433,7 +434,7 @@ const tournamentList = [
         "registrationTime": "2024-08-16T19:00:00+03:00",
         "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/",
         "results": false
-        },
+    },
     {
         "id": "2024_SANTIAGO",
         "name": "Santiago Regionals",
@@ -508,7 +509,7 @@ const tournamentList = [
         "registrationTime": "2024-08-16T19:00:00+03:00",
         "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025",
         "results": false
-        },
+    },
     {
         "id": "2024_BUENOS_AIRES",
         "name": "Buenos Aires Special Event",
@@ -1230,7 +1231,7 @@ const tournamentList = [
         "date": "May 17, 2025",
         "flag": netherlands,
         "location": "Utrecht, Netherlands"
-          },
+    },
     {
         "id": "2025_BOLOGNA",
         "name": "Bologna Regionals",
@@ -1247,8 +1248,10 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 18, 2025",
         "flag": brazil,
-        "location": "Rio de Janeiro, Brazil"
-          },
+        "location": "Rio de Janeiro, Brazil",
+        "registrationTime": "2024-11-20T22:00:00+00:00",
+        "registrationLink": "https://rk9.gg/events/pokemon"
+    },
     {
         "id": "2025_MERIDA",
         "name": "Merida Regionals",
@@ -1257,7 +1260,7 @@ const tournamentList = [
         "date": "Feb 8, 2025",
         "flag": mexico,
         "location": "Merida, Yucatán, México"
-          },
+    },
     {
         "id": "2025_FORTALEZA",
         "name": "Fortaleza Regionals",
@@ -1266,7 +1269,7 @@ const tournamentList = [
         "date": "Mar 8, 2025",
         "flag": brazil,
         "location": "Fortaleza, Brazil"
-          },
+    },
     {
         "id": "2025_MONTERREY",
         "name": "Monterrey Regionals",
@@ -1275,7 +1278,7 @@ const tournamentList = [
         "date": "Apr 19, 2025",
         "flag": mexico,
         "location": "Monterrey, México"
-          },
+    },
     {
         "id": "2025_SANTIAGO",
         "name": "Santiago Regionals",
@@ -1284,7 +1287,7 @@ const tournamentList = [
         "date": "May 17, 2025",
         "flag": chile,
         "location": "Santiago, Chile"
-          },
+    },
     {
         "id": "2025_PERTH",
         "name": "Perth Regionals",
