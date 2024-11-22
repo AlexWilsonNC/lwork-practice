@@ -264,6 +264,7 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
         "registrationTime": "2024-10-01T18:00:00-03:00",
         "registrationLink": "https://rk9.gg/events/pokemon",
+        "results": false
     },
     {
         "id": '2025_LOUISVILLE/masters',
@@ -1203,7 +1204,9 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 18, 2025",
         "flag": uk,
-        "location": "Birmingham, UK"
+        "location": "Birmingham, UK",
+        "registrationTime": "2024-10-16T19:00:00-04:00",
+        "registrationLink": "https://rk9.gg/events/pokemon",
     },
     {
         "id": "2025_STOCKHOLM",
@@ -1249,7 +1252,7 @@ const tournamentList = [
         "date": "Jan 18, 2025",
         "flag": brazil,
         "location": "Rio de Janeiro, Brazil",
-        "registrationTime": "2024-11-20T22:00:00+00:00",
+        "registrationTime": "2024-11-27T22:00:00+00:00",
         "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
