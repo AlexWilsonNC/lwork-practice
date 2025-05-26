@@ -63,7 +63,7 @@ const SidebarComponent = () => {
           <h4>Help us Archive:</h4>
         </div>
         <p>Don't see a certain deck documented? Have a missing decklist or result from a past
-          tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
+          tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>. test</p>
       </div>
 
       <TwitterWidget />
