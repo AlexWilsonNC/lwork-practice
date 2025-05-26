@@ -62,9 +62,8 @@ const SidebarComponent = () => {
           <img className='side-icon' src='https://cdn-icons-png.freepik.com/512/8716/8716450.png' alt='Help us Archive' />
           <h4>Help us Archive:</h4>
         </div>
-        <p>Don't see a certain deck documented? Have a missing decklist or information from a past
-          tournament? Would you like to write articles? Spot a mistake? Please submit all inquiries to our
-          email address here: <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a> ~ Thank you!</p>
+        <p>Don't see a certain deck documented? Have a missing decklist or result from a past
+          tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
       </div>
 
       <TwitterWidget />
