@@ -90,19 +90,20 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/2025_BALTIMORE'>
+                            <a href='./tournaments/completed'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/07/Baltimore-Regional.jpg' />
-                                    <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
+                                    <img className='card-image' src='https://www.cloudways.com/blog/wp-content/uploads/How-to-Sell-Website-Maintenance-Services.jpg' />
+                                    <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/9459/9459152.png' />
+                                    {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
                                     <div className='homepage-box-content'>
-                                        <h3>Results from 2025 Baltimore Regionals!</h3>
+                                        <h3>Recent event results will return for the 2026 season.</h3>
                                         <p>
-                                            View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                            We appologize for the lack of updates to the site in recent months, please look forward to the future.
                                             {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Sep 16, 2024</p>
+                                        <p>May 26, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -303,19 +304,20 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/2025_BALTIMORE'>
+                        <a href='./tournaments/completed'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://victoryroadvgc.com/wp-content/uploads/2024/07/Baltimore-Regional.jpg' />
-                                <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
+                                <img className='card-image' src='https://www.cloudways.com/blog/wp-content/uploads/How-to-Sell-Website-Maintenance-Services.jpg' />
+                                <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/9459/9459152.png' />
+                                {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
                                 <div className='homepage-box-content'>
-                                    <h3>Results from 2025 Baltimore Regionals!</h3>
+                                    <h3>Recent event results will return for the 2026 season.</h3>
                                     <p>
-                                        View all Day 2 lists from this event, including top lists from both Seniors & Juniors, meta statistics, and the event's livestream.
+                                        We appologize for the lack of updates to the site in recent months, please look forward to the future.
                                         {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Sep 16, 2024</p>
+                                    <p>May 26, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
