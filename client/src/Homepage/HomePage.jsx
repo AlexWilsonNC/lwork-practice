@@ -92,13 +92,13 @@ const Homepage = () => {
                             </div>
                             <a href='./tournaments/completed'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://www.cloudways.com/blog/wp-content/uploads/How-to-Sell-Website-Maintenance-Services.jpg' />
-                                    <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/9459/9459152.png' />
+                                    <img className='card-image' src='https://www.newperspectivestudio.co.za/wp-content/uploads/2024/09/What-is-website-maintenance-and-Why-it-is-important.jpg' />
+                                    <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/2726/2726016.png' />
                                     {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
                                     <div className='homepage-box-content'>
                                         <h3>Recent event results will return for the 2026 season.</h3>
                                         <p>
-                                            We appologize for the lack of updates to the site in recent months, please look forward to the future.
+                                            We apologize for the lack of updates to the site in recent months, please look forward to the future.
                                             {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                         </p>
                                     </div>
@@ -306,13 +306,13 @@ const Homepage = () => {
                         </div>
                         <a href='./tournaments/completed'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://www.cloudways.com/blog/wp-content/uploads/How-to-Sell-Website-Maintenance-Services.jpg' />
-                                <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/9459/9459152.png' />
+                                <img className='card-image' src='https://www.newperspectivestudio.co.za/wp-content/uploads/2024/09/What-is-website-maintenance-and-Why-it-is-important.jpg' />
+                                <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/2726/2726016.png' />
                                 {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
                                 <div className='homepage-box-content'>
                                     <h3>Recent event results will return for the 2026 season.</h3>
                                     <p>
-                                        We appologize for the lack of updates to the site in recent months, please look forward to the future.
+                                        We apologize for the lack of updates to the site in recent months, please look forward to the future.
                                         {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
