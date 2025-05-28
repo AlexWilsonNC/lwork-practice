@@ -167,6 +167,9 @@ const UpcomingEvents = styled.div`
       margin-right: 5px;
       font-size: 20px;
     }
+    #toggleswitchcopy {
+      font-size: 14px;
+    }
     @media screen and (max-width: 950px) {
       .flag-container {
           margin-top: 0px;
@@ -183,6 +186,9 @@ const UpcomingEvents = styled.div`
       .event-list-key {
         margin-left: 10px;
       }
+      #toggleswitchcopy {
+        font-size: 12px;
+      }
     }
     @media screen and (max-width: 530px) {
       .event-list-key {
@@ -193,6 +199,81 @@ const UpcomingEvents = styled.div`
         font-size: 12px;
       }
     }
+    @media screen and (max-width: 445px) {
+      #toggleswitchcopy {
+        font-size: 10px;
+      }
+    }
+`;
+const ToggleSwitch = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  span {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 34px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+  }
+  span:before {
+    content: "";
+    position: absolute;
+    height: 13px;
+    width: 13px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  input:checked + span {
+    background-color: #1290eb;
+  }
+  input:checked + span:before {
+    transform: translateX(13px);
+  }
+  @media screen and (max-width: 700px) {
+    margin-right: 25px;
+    width: 26px;
+    height: 15px;
+    span:before {
+      height: 12px;
+      width: 12px;
+      left: 3px;
+      bottom: 2px;
+    }
+    input:checked + span:before {
+      transform: translateX(9px);
+    }
+  }
+  @media screen and (max-width: 530px) {
+    margin-right: 15px;
+  }
+  @media screen and (max-width: 445px) {
+    margin-right: 7px;
+    width: 25px;
+    height: 14px;
+    span:before {
+      height: 10px;
+      width: 10px;
+      left: 3px;
+      bottom: 2px;
+    }
+    input:checked + span:before {
+      transform: translateX(9px);
+    }
+  }
 `;
 const FilterTop = styled.div`
     select {background: ${({ theme }) => theme.body};}
@@ -256,6 +337,7 @@ const EventList = () => {
     const [regionFilter, setRegionFilter] = useState(() => loadFiltersWithExpiration('regionFilter') || '');
     const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');
     const [showModal, setShowModal] = useState(false);
+    const [showOnlyWithResults, setShowOnlyWithResults] = useState(false);
   
     const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
   
@@ -290,21 +372,22 @@ const EventList = () => {
       const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
       const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
 
-      if (showRetro) {
-        return event.eventType === 'retro' &&
-            isInRegion &&
-            matchesSearchTerm &&
-            (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
-            (countryFilter ? event.flag === countryFilter : true) &&
-            (yearFilter ? eventYear === yearFilter : true);
+    if (showRetro) {
+      return event.eventType === 'retro' &&
+        isInRegion &&
+        matchesSearchTerm &&
+        (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
+        (countryFilter ? event.flag === countryFilter : true) &&
+        (yearFilter ? eventYear === yearFilter : true);
     } else {
-        return isInRegion &&
-            matchesSearchTerm &&
-            (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
-            (countryFilter ? event.flag === countryFilter : true) &&
-            (yearFilter ? eventYear === yearFilter : true) &&
-            (showUpcoming ? eventDate >= new Date() : eventDate < new Date()) &&
-            event.eventType !== 'retro';
+      return isInRegion &&
+        matchesSearchTerm &&
+        (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
+        (countryFilter ? event.flag === countryFilter : true) &&
+        (yearFilter ? eventYear === yearFilter : true) &&
+        (showUpcoming ? eventDate >= new Date() : eventDate < new Date()) &&
+        event.eventType !== 'retro' &&
+        (!showUpcoming && showOnlyWithResults ? event.id && event.results !== false : true);
     }
   });
 
@@ -370,7 +453,19 @@ const EventList = () => {
             </div>
           </div>
           <div className='right'>
-            <button onClick={openModal} className="subscribe-btn"><span class="material-symbols-outlined">notifications_active</span>&nbsp;&nbsp;Notifications</button>
+            {!showUpcoming && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '12px' }}>
+                <span id='toggleswitchcopy'>Events with results only</span>
+                <ToggleSwitch>
+                  <input
+                    type="checkbox"
+                    checked={showOnlyWithResults}
+                    onChange={() => setShowOnlyWithResults(prev => !prev)}
+                  />
+                  <span />
+                </ToggleSwitch>
+              </div>
+            )}
           </div>
           <FilterTop className='filters-top'>
           {!showRetro && (
