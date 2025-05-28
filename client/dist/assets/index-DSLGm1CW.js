@@ -149,7 +149,7 @@ object-assign
   .twitter-timeline {
     ${({theme:e})=>e.twitterTimeline};
   }
-`,A2=()=>{const{theme:e}=Xt();return b.useEffect(()=>{const t=document.createElement("script");t.src="https://platform.twitter.com/widgets.js",t.async=!0,t.charset="utf-8",document.body.appendChild(t)},[]),a.jsx(x2,{theme:e,className:"homepage-hide-large",children:a.jsx("a",{className:"twitter-timeline","data-width":"450","data-height":"500","data-theme":e.themeName,href:"https://twitter.com/PTCG_Legends?ref_src=twsrc%5Etfw",children:"Tweets by PTCG_Legends"})})},v2=Q.div`
+`,A2=()=>{const{theme:e}=Xt(),t=b.useRef(null);return b.useEffect(()=>{const n=document.createElement("script");n.src="https://platform.twitter.com/widgets.js",n.async=!0,n.charset="utf-8",window.twttr?window.twttr.widgets.load(t.current):document.body.appendChild(n)},[]),a.jsx(x2,{theme:e,className:"homepage-hide-large",children:a.jsx("div",{ref:t,children:a.jsx("a",{className:"twitter-timeline","data-width":"450","data-height":"500","data-theme":e.themeName,href:"https://twitter.com/PTCG_Legends?ref_src=twsrc%5Etfw",children:"Tweets by PTCG_Legends"})})})},v2=Q.div`
   h4 {color: ${({theme:e})=>e.text};}
   p {color: ${({theme:e})=>e.text};}
   li {color: ${({theme:e})=>e.text};}
