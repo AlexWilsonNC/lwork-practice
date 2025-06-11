@@ -98,6 +98,15 @@ const tournamentList = [
         "location": ""
     },
     {
+        "id": "2024_LAIC",
+        "name": "LAIC 2024",
+        "eventType": "international",
+        "eventLogo": ogInternats,
+        "date": "Nov 17, 2023",
+        "flag": brazil,
+        "location": "São Paulo, Brazil",
+    },
+    {
         "id": '2024_NAIC_2014_RETRO/all',
         "name": "NAIC Retro Celebration (2014)",
         "eventType": "retro",

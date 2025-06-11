@@ -98,6 +98,10 @@ const customLabelsConfig = {
         'armarouge-chi-yu': 'Armarouge Box',
         '-gouging-fire': 'Gouging Fire',
         'roaring-moon-flutter-mane': 'Ancient Box',
+        'mew-vmax-genesect': 'Mew VMAX',
+        'entei-iron-valiant': 'Entei Iron Valiant',
+        'urshifu-rapid-strike-gmax-inteleon-vmax': 'Rapid Strike',
+        '-zoroark': 'Zoroark Box',
     },
     '2023': {
         'comfey-sableye': 'Lost Box',

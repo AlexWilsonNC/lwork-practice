@@ -125,6 +125,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Miraidon ex') && hasPokemon('Iron Valiant ex')) {
         secondSprite = getPokemonSpriteURL('miraidon');
     }    
+    else if (hasPokemon('Entei V') && hasPokemon('Iron Valiant ex')) {
+        firstSprite = getPokemonSpriteURL('entei');
+        secondSprite = getPokemonSpriteURL('iron-valiant');
+    }    
     else if (hasPokemon('Iron Crown ex') && hasPokemon('Iron Hands ex')) {
         firstSprite = getPokemonSpriteURL('iron-hands');
         secondSprite = getPokemonSpriteURL('iron-crown');

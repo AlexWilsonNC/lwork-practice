@@ -12,6 +12,7 @@ const formatOrder = [
   "BRS-SFA",
   "BRS-TWM",
   "BRS-TEF",
+  "BST-PAR",
   "BST-PAL",
   "BST-SVI",
   "SSH-CRZ",
