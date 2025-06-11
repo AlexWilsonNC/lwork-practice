@@ -343,6 +343,7 @@ const Decks = () => {
                 </optgroup>
 
                 <optgroup label="2023">
+                  <option value="BST-PAR">BST-PAR</option>
                   <option value="BST-PAL">BST-PAL</option>
                   <option value="BST-SVI">BST-SVI</option>
                   <option value="SSH-CRZ">SSH-CRZ</option>

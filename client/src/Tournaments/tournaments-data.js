@@ -98,9 +98,9 @@ const tournamentList = [
         "location": ""
     },
     {
-        "id": "2024_LAIC",
+        "id": "2024_LAIC/masters",
         "name": "LAIC 2024",
-        "eventType": "international",
+        "eventType": "internationals",
         "eventLogo": ogInternats,
         "date": "Nov 17, 2023",
         "flag": brazil,
