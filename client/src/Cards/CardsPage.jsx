@@ -117,6 +117,8 @@ const CardsPage = () => {
   const [cards, setCards] = useState([]);
   const [logoUrl, setLogoUrl] = useState('');
   const [nameText, setNameText] = useState(''); 
+  const [setAbbrevTitle, setAbbrevTitleAdd] = useState(''); 
+  const [setSym, setSymbol] = useState(''); 
   const [setRelease, setSetRelease] = useState(''); 
   const [setTotal, setSetTotal] = useState(''); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -128,6 +130,7 @@ const CardsPage = () => {
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
+    { name: "Black Bolt & White Flare", abbrev: "--", releaseDate: "July 18, 2025", total: "--", notavailable: true },
     { name: "Destined Rivals", abbrev: "DRI", releaseDate: "May 30, 2025", total: "244" },
     { name: "Journey Together", abbrev: "JTG", releaseDate: "Mar 28, 2025", total: "190" },
     { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },
@@ -321,6 +324,8 @@ const CardsPage = () => {
           if (data.length > 0) {
             setLogoUrl(data[0].set.images.logo);
             setNameText(data[0].set.name);
+            setSymbol(data[0].set.images.symbol);
+            setAbbrevTitleAdd(data[0].setAbbrev);
             setSetRelease(formatDate(data[0].set.releaseDate));
             setSetTotal(data[0].set.total);
           }
@@ -489,11 +494,18 @@ const handleSearch = async () => {
         <div className='whole-set-view-area'>
           {!hasSearched && (
             <div className='set-info-area'>
-              {logoUrl && <img src={logoUrl} alt="Set Logo" />}
               <div className='setinfotext'>
-                {nameText && <p>{nameText}</p>}
-                {setRelease && !nameText.toLowerCase().includes('promo') && <p>{setRelease}</p>}
-                {setTotal && <p>Cards: {setTotal}</p>}
+                {logoUrl && <img src={logoUrl} alt="Set Logo" />}
+                {nameText && (
+                  <div>
+                    <p>
+                      {nameText} <span style={{ opacity: 0.5, textDecoration: 'none' }}>({setAbbrevTitle})</span>
+                    </p>
+                    <img id='set-symbol' src={setSym} />
+                  </div>
+                )}
+                {setRelease && !nameText.toLowerCase().includes('promo') && <p><span style={{ fontWeight: 600 }}>Release:</span> {setRelease}</p>}
+                {setTotal && <p><span style={{ fontWeight: 600 }}>Cards:</span> {setTotal}</p>}
               </div>
             </div>
           )}

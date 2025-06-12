@@ -364,12 +364,15 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    text-align: start;
+    margin-left: 35px;
 }
 .set-info-area img {
     width: auto;
     height: 75px;
-    margin-right: 15px;
+    max-width: 250px;
+    object-fit: contain;
 }
 .card-display-area {
     text-align: center;
@@ -398,12 +401,28 @@
 .setabbrevopacque {
     opacity: 0.5;
 }
+#set-symbol {
+    width: auto;
+    height: 23px;
+    margin-top: -3.5px;
+}
 .setinfotext {
-    text-align: center;
-    font-size: 20px;
+    text-align: start;
+    font-size: 16px;
+}
+.setinfotext p {
+    margin-bottom: 2px;
 }
 .setinfotext p:nth-child(1) {
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: underline;
+    margin-right: 10px;
+}
+.setinfotext div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .small-disclaimer-text {
     font-size: 11px;
@@ -527,8 +546,20 @@
     .setinfotext {
         font-size: 14px;
     }
+    .setinfotext p:nth-child(1) {
+        font-size: 18px;
+        margin-right: 6px;
+    }
+    #set-symbol {
+        height: 19px;
+        margin-top: -1px;
+    }
+    .set-info-area {
+        margin-left: 15px;
+    }
     .set-info-area img {
         height: 55px;
+        max-width: 200px;
     }
     .setpopuptr {
         font-size: 14px;
@@ -719,7 +750,8 @@
         font-size: 11px;
     }
     .set-info-area img {
-        height: 45px;
+        height: 55px;
+        max-width: 175px;
     }
     .cards-specific-results td,
     .cards-specific-results .blue-link {
@@ -733,6 +765,14 @@
     }
     .sup {
         font-size: 6px;
+    }
+    .setinfotext p:nth-child(1) {
+        font-size: 16px;
+        margin-right: 5px;
+    }
+    #set-symbol {
+        height: 16px;
+        margin-top: 0px;
     }
 }
 @media screen and (max-width: 450px) {

@@ -185,13 +185,12 @@ const Homepage = () => {
                             </UpcomingEventsHome>
                         </div>
                         <div className='homepage-box'>
-                            <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
+                            <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
                             <a href='./cards/DRI'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View All Cards from <span className='new-color'>Destined Rivals</span> in
-                                            our Database!</h3>
+                                        <h3>View the lastest TCG expansion: <span className='new-color'>Destined Rivals</span>!</h3>
                                         <p>View every Pokémon card and TCG expansion in history in our database
                                             here! From Base Set through the latest release, we have them all!</p>
                                     </div>
@@ -396,14 +395,13 @@ const Homepage = () => {
                         </a>
                     </div>
                     <div className='homepage-box lessmarginbottomsmall'>
-                        <FeaturedHeaders className='featured-headers'>Latest Set List</FeaturedHeaders>
+                        <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
                         <a href='/cards/DRI'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                    <h3>View All Cards from <span className='new-color'>Surging Sparks</span> in
-                                        our Database!</h3>
-                                    <p>You can view every Pokémon card and TCG expansion in history within our database
+                                    <h3>View the lastest TCG expansion: <span className='new-color'>Destined Rivals</span>!</h3>
+                                    <p>View every Pokémon card and TCG expansion in history in our database
                                         here! From Base Set through the latest release, we have them all!</p>
                                 </div>
                             </WrappedFeature>
