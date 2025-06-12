@@ -190,9 +190,9 @@ const Homepage = () => {
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View All Cards from <span className='new-color'>Surging Sparks</span> in
+                                        <h3>View All Cards from <span className='new-color'>Destined Rivals</span> in
                                             our Database!</h3>
-                                        <p>You can view every Pokémon card and TCG expansion in history within our database
+                                        <p>View every Pokémon card and TCG expansion in history in our database
                                             here! From Base Set through the latest release, we have them all!</p>
                                     </div>
                                 </WrappedFeature>
