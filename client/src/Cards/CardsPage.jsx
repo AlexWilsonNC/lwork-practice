@@ -127,7 +127,10 @@ const CardsPage = () => {
 
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
-    { name: "Prismatic Evolutions", abbrev: "--", releaseDate: "Jan 17, 2025", total: "--", notavailable: true },
+    // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
+    { name: "Destined Rivals", abbrev: "DRI", releaseDate: "May 30, 2025", total: "244" },
+    { name: "Journey Together", abbrev: "JTG", releaseDate: "Mar 28, 2025", total: "190" },
+    { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },
     { name: "Surging Sparks", abbrev: "SSP", releaseDate: "Nov 8, 2024", total: "252"},
     { name: "Stellar Crown", abbrev: "SCR", releaseDate: "Sep 13, 2024", total: "175"},
     { name: "Shrouded Fable", abbrev: "SFA", releaseDate: "Aug 2, 2024", total: "99" },
@@ -138,9 +141,9 @@ const CardsPage = () => {
     { name: "Pokémon 151 *", abbrev: "MEW", releaseDate: "Sep 22, 2023", total: "207" },
     { name: "Obsidian Flames", abbrev: "OBF", releaseDate: "Aug 11, 2023", total: "230" },
     { name: "Paldea Evolved", abbrev: "PAL", releaseDate: "Jun 9, 2023", total: "279" },
-    { name: "Scarlet & Violet", abbrev: "SVI", releaseDate: "Mar 31, 2023", total: "252" },
+    { name: "Scarlet & Violet", abbrev: "SVI", releaseDate: "Mar 31, 2023", total: "258" },
     { name: "SV Energy", abbrev: "SVE", releaseDate: "Mar 31, 2023", total: "8" },
-    { name: "SV Black Star Promos", abbrev: "PR-SV", releaseDate: "-", total: "75" },
+    { name: "SV Black Star Promos", abbrev: "PR-SV", releaseDate: "-", total: "198" },
     { separator: true, text: "Sword & Shield"},
     { name: "Crown Zenith *", abbrev: "CRZ", releaseDate: "Jan 20, 2023", total: "160" },
     { name: "Silver Tempest", abbrev: "SIT", releaseDate: "Nov 11, 2022", total: "215" },

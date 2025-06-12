@@ -476,41 +476,67 @@ const CardView = () => {
         { name: "Lysandre's Trump Card", set: 'PHF', number: '118' },
         { name: 'Oranguru', set: 'UPR', number: '114' },
         { name: 'Pokémon Research Lab', set: 'UNM', number: '205' },
+        { name: 'Raikou', set: 'VIV', number: '50' },
+        { name: 'Marshadow', set: 'SLG', number: '45' },
+        { name: 'Marshadow', set: 'PR-SM', number: '85' },
+        { name: 'Duskull', set: 'CEC', number: '83' },
+        { name: 'Double Colorless Energy', set: 'SLG', number: '69' },
+        { name: 'Double Colorless Energy', set: 'SUM', number: '136' },
+        { name: 'Double Colorless Energy', set: 'GRI', number: '166' },
+        { name: 'Double Colorless Energy', set: 'EVO', number: '90' },
+        { name: 'Double Colorless Energy', set: 'FCO', number: '114' },
+        { name: 'Double Colorless Energy', set: 'PHF', number: '111' },
+        { name: 'Double Colorless Energy', set: 'XY', number: '130' },
+        { name: 'Double Colorless Energy', set: 'LTR', number: '113' },
+        { name: 'Double Colorless Energy', set: 'NXD', number: '92' },
+        { name: 'Double Colorless Energy', set: 'HGS', number: '103' },
+        { name: 'Double Colorless Energy', set: 'BS2', number: '124' },
+        { name: 'Double Colorless Energy', set: 'BS', number: '96' },
+        { name: 'Twin Energy', set: 'RCL', number: '174' },
+        { name: 'Twin Energy', set: 'RCL', number: '209' },
     ];
+    
     const isGLCLegal = (card) => {
-        const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-        const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
+    const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+    const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
 
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
             return false;
         }
 
-        // Check if any version of this Trainer or Energy card is legal in Standard
+        // ✅ Handle non-Pokémon legal version check
         if (card.supertype !== 'Pokémon') {
             const hasLegalVersion = otherVersions.some(otherCard =>
                 otherCard.name.toLowerCase() === card.name.toLowerCase() &&
                 isStandardLegal(otherCard)
             );
             if (hasLegalVersion) {
-                return true;
+                // Now check if THIS version is banned in GLC
+                const isBanned = bannedInGLC.some(bannedCard =>
+                    bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
+                    bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
+                    bannedCard.number === card.number
+                );
+                return !isBanned;
             }
+            return false; // No legal version = not legal
         }
+
+        // Now check GLC bans for Pokémon (not hit by above logic)
+        const isBanned = bannedInGLC.some(bannedCard =>
+            bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
+            bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
+            bannedCard.number === card.number
+        );
+        if (isBanned) return false;
 
         const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
         const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
 
-        if (isFromAllowedSet && !hasExcludedSubtype) {
-            const isBanned = bannedInGLC.some(bannedCard =>
-                bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-                bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-                bannedCard.number === card.number
-            );
-
-            return !isBanned;
-        }
-        return false;
+        return isFromAllowedSet && !hasExcludedSubtype;
     };
+
     const isBannedInGLC = (card) => {
         return bannedInGLC.some(bannedCard =>
             bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
@@ -518,6 +544,7 @@ const CardView = () => {
             bannedCard.number === card.number
         );
     };
+    
     const isStandardLegal = (card) => {
         const regulationMarks = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
 
