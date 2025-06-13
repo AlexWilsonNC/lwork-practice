@@ -36,6 +36,7 @@ import stadiumChallenge from '../assets/event-logo/stadium-challenge-wotc.png';
 import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png';
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
 import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
+import championsLeague from '../assets/event-logo/champions-league.png';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -129,6 +130,7 @@ const logos = {
     superTrainerShowdown: superTrainerShowdown,
     fourStadiumChallenge: fourStadiumChallenge,
     megaTropicalBattle: megaTropicalBattle,
+    championsLeague: championsLeague,
 }
 
 const flags = {

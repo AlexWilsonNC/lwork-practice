@@ -1265,6 +1265,7 @@ const tournamentList = [
         "date": "May 31, 2025",
         "flag": italy,
         "location": "Bologna, Italy",
+        "results": false
     },
     {
         "id": "2025_RIO",
