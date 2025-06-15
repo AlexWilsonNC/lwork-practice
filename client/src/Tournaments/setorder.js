@@ -13,8 +13,8 @@ const orderedSets = [
     "MEW",
     "OBF",
     "PAL",
-    "SVI",
     "SVE",
+    "SVI",
     "PR-SV",
 // swsh
     "CRZ",

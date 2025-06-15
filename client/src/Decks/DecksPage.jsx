@@ -8,6 +8,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  "SVI-JTG",
   "BRS-SCR",
   "BRS-SFA",
   "BRS-TWM",
@@ -334,7 +335,12 @@ const Decks = () => {
               <div className='indiv-filter'>
                 <p className='sort-events'>Format:</p>
                 <select value={selectedFormat} onChange={handleFormatChange}>
-                  <option value="">All Formats</option>
+                <option value="">All Formats</option>
+
+                <optgroup label="2025">
+                  <option value="SVI-JTG">SVI-JTG</option>
+                  <option value="BRS-SCR">BRS-SCR</option>
+                </optgroup>
 
                 <optgroup label="2024">
                   <option value="BRS-SFA">BRS-SFA</option>

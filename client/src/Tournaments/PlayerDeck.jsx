@@ -43,7 +43,7 @@ const PlayerDeckCenter = styled.div`
 `;
 
 const orderedSets = [
-  "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+  "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "PR-SV",
   "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
   "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
   "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
@@ -61,11 +61,11 @@ const orderedSets = [
 ];
 
 const promoSets = {
-  "DRI": "PR-SV",
-  "JTG": "PR-SV",
-  "PRE": "PR-SV",
-  "SSP": "PR-SV",
-  "SCR": "PR-SV",
+    "DRI": "PR-SV",
+    "JTG": "PR-SV",
+    "PRE": "PR-SV",
+    "SSP": "PR-SV",
+    "SCR": "PR-SV",
     "SFA": "PR-SV",
     "TWM": "PR-SV",
     "TEF": "PR-SV",
@@ -421,33 +421,22 @@ const PlayerDeck = () => {
         setImagesLoadedCount(prevCount => prevCount + 1);
     };
           
+    const energyKeyMap = {
+        'grass energy - basic':   'SVE-1',
+        'fire energy - basic':    'SVE-2',
+        'water energy - basic':   'SVE-3',
+        'lightning energy - basic': 'SVE-4',
+        'psychic energy - basic': 'SVE-5',
+        'fighting energy - basic': 'SVE-6',
+        'darkness energy - basic': 'SVE-7',
+        'metal energy - basic':   'SVE-8',
+    };
+
     const cardImageUrl = (card) => {
-        let key = `${card.set}-${card.number}`;
-
-        if (card.name.toLowerCase() === 'grass energy - basic') {
-            key = 'SVE-1';
-        } else if (card.name.toLowerCase() === 'fire energy - basic') {
-            key = 'SVE-2';
-        } else if (card.name.toLowerCase() === 'water energy - basic') {
-            key = 'SVE-3';
-        } else if (card.name.toLowerCase() === 'lightning energy - basic') {
-            key = 'SVE-4';
-        } else if (card.name.toLowerCase() === 'psychic energy - basic') {
-            key = 'SVE-5';
-        } else if (card.name.toLowerCase() === 'fighting energy - basic') {
-            key = 'SVE-6';
-        } else if (card.name.toLowerCase() === 'darkness energy - basic') {
-            key = 'SVE-7';
-        } else if (card.name.toLowerCase() === 'metal energy - basic') {
-            key = 'SVE-8';
-        }
-
-        let cardInfo = cardData?.cardMap?.[key];
-
-        if (cardInfo) {
-            return cardInfo.images.small;
-        }
-        return null;
+        const nameKey = card.name.trim().toLowerCase();
+        const mapKey = energyKeyMap[nameKey] || `${card.set}-${card.number}`;
+        const cardInfo = cardData?.cardMap?.[mapKey];
+        return cardInfo?.images?.small || null;
     };
 
     const countCards = (decklist, type) => {

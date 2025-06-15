@@ -339,7 +339,7 @@ const tournamentList = [
     },
     {
         "id": '2024_BOLOGNA',
-        "name": "Bologna Regionals",
+        "name": "Bologna Special Event",
         "eventType": "regionals",
         "eventLogo": regionals,
         "date": "Jun 1, 2024",
@@ -1260,13 +1260,12 @@ const tournamentList = [
     },
     {
         "id": "2025_BOLOGNA",
-        "name": "Bologna Regionals",
-        "eventType": "regionals",
-        "eventLogo": regional25,
+        "name": "Bologna Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
         "date": "May 31, 2025",
         "flag": italy,
-        "location": "Bologna, Italy",
-        "results": false
+        "location": "Bologna, Italy"
     },
     {
         "id": "2025_RIO",

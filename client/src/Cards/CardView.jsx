@@ -617,7 +617,7 @@ const CardView = () => {
     const isPromoSet = cardInfo.set.name.toLowerCase().includes('promo');
 
     const renderEnergyIcons = (cost) => {
-        if (!cost || cost.length === 0) {
+        if (!cost || cost.length === 0 || cost.some(c => String(c).toLowerCase() === 'free')) {
             return <img src={energyIcons.NoCost} alt="No Cost" className="energy-icon" />;
         }
         return cost.map((type, index) => (
