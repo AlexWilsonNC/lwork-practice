@@ -15,6 +15,9 @@
     align-items: center;
     justify-content: space-between;
 }
+.bold {
+    font-weight: 600;
+}
 .side-icon {
     width: 17.5px;height:auto;
     border-radius: 5px;

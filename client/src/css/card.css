@@ -417,7 +417,12 @@
     font-weight: bold;
     font-size: 20px;
     text-decoration: underline;
-    margin-right: 10px;
+    margin-right: 5px;
+}
+.setinfotext span {
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 5px;
 }
 .setinfotext div {
     display: flex;

@@ -43,33 +43,29 @@ const PlayerDeckCenter = styled.div`
 `;
 
 const orderedSets = [
-    "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
-
-    "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
-    "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
-
-    "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
-    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
-
-    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
-    "FLF", "KSS", "XY", "PR-XY",
-
-    "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
-
-    "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
-
-    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
-    "MT", "DP", "PR-DP",
-
-    "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
-    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
-
-    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
-    "FO", "JU", "BS", "PR-BS",
+  "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+  "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+  "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+  "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+  "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+  "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+  "FLF", "KSS", "XY", "PR-XY",
+  "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+  "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+  "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+  "MT", "DP", "PR-DP",
+  "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+  "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+  "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
+  "FO", "JU", "BS", "PR-BS",
 ];
 
 const promoSets = {
-    "SCR": "PR-SV",
+  "DRI": "PR-SV",
+  "JTG": "PR-SV",
+  "PRE": "PR-SV",
+  "SSP": "PR-SV",
+  "SCR": "PR-SV",
     "SFA": "PR-SV",
     "TWM": "PR-SV",
     "TEF": "PR-SV",
@@ -499,7 +495,7 @@ const PlayerDeck = () => {
                                 <h2>
                                     {playerData.label ? formatName(playerData.label) : formatName(playerData.name)}
                                     &nbsp;
-                                    <span className="material-symbols-outlined turned-link">link</span>      
+                                    <span className="material-symbols-outlined">article_person</span>      
                                 </h2>
                             </Link>
                         )}
@@ -507,16 +503,18 @@ const PlayerDeck = () => {
                             <>
                                 <h2>{playerData && playerData.label && <p>{playerData.label}</p>}</h2>
                                 <hr className='playerdeck-hr'></hr>
-                                {playerData && playerData.source && <p>Source:  {playerData.source}</p>}
-                                {eventData && <p><Link className='blue-link' to={`/decks-by-era`}>{eventData.name}</Link></p>}
-                                {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+                                {playerData && playerData.source && <p><span className='bold'>Source:</span> {playerData.source}</p>}
+                                {eventData && <p><Link className='blue-link bold' to={`/decks-by-era`}>{eventData.name}</Link></p>}
+                                {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
+                                {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
                             </>
                         ) : (
                             <>
                                 <hr className='playerdeck-hr'></hr>
-                                <p>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place ({capitalizeFirstLetter(division)})</p>
-                                {eventData && <p><Link className='blue-link' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-                                {eventData && <p>{eventData.date} ({division === 'professors' ? eventData.formatProfessors : eventData.format})</p>}
+                                <p><span className='bold'>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place</span> ({capitalizeFirstLetter(division)})</p>
+                                {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
+                                {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
+                                {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
                             </>
                         )}
                     </div>

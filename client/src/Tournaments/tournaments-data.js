@@ -313,6 +313,7 @@ const tournamentList = [
         "location": "New Orleans, Louisiana",
         "registrationTime": "",
         "registrationLink": "",
+        "results": false
     },
     {
         "id": "2025_WORLDS",

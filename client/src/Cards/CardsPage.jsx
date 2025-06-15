@@ -498,9 +498,8 @@ const handleSearch = async () => {
                 {logoUrl && <img src={logoUrl} alt="Set Logo" />}
                 {nameText && (
                   <div>
-                    <p>
-                      {nameText} <span style={{ opacity: 0.5, textDecoration: 'none' }}>({setAbbrevTitle})</span>
-                    </p>
+                    <p>{nameText}</p>
+                    <span style={{ opacity: 0.5, textDecoration: 'none !important', display: 'inline' }}>({setAbbrevTitle})</span>
                     <img id='set-symbol' src={setSym} />
                   </div>
                 )}

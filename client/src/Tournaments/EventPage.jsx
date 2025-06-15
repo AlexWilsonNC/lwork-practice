@@ -181,25 +181,29 @@ const logos = {
 };
 
 const orderedSets = [
-    "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
-    "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
-    "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
-    "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
-    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
-    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
-    "FLF", "KSS", "XY", "PR-XY",
-    "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
-    "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
-    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
-    "MT", "DP", "PR-DP",
-    "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
-    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
-    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
-    "FO", "JU", "BS", "PR-BS",
+  "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
+  "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+  "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+  "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+  "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+  "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+  "FLF", "KSS", "XY", "PR-XY",
+  "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+  "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+  "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+  "MT", "DP", "PR-DP",
+  "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+  "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+  "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
+  "FO", "JU", "BS", "PR-BS",
 ];
 
 const promoSets = {
-    "SCR": "PR-SV",
+  "DRI": "PR-SV",
+  "JTG": "PR-SV",
+  "PRE": "PR-SV",
+  "SSP": "PR-SV",
+  "SCR": "PR-SV",
     "SFA": "PR-SV",
     "TWM": "PR-SV",
     "TEF": "PR-SV",
@@ -370,7 +374,8 @@ const EventPageContent = styled.div`
     button {background: ${({ theme }) => theme.body};}
     button {color: ${({ theme }) => theme.text};}
   }
-  .average-card-counts p {
+  .average-card-counts p,
+  .filtered-results p {
     color: ${({ theme }) => theme.text};
   }
   .spinner {
@@ -757,6 +762,52 @@ const EventPage = () => {
             ? mastersResults.slice(0, 64)
             : results;
 
+            
+    const deckTypeCount = chartResults.reduce((acc, player) => {
+        let sprite1 = player.sprite1 || '';
+        let sprite2 = player.sprite2 || '';
+
+        if (!sprite1 && !sprite2) {
+            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+            sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+            sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+        }
+
+        if (sprite2 === 'hyphen') return acc;
+
+        let key;
+        let spriteToShow;
+
+        if (sprite1 !== 'blank' && sprite1) {
+            key = getCustomLabel(eventId, sprite1, sprite2);
+            spriteToShow = sprite1;
+        } else if (sprite2 !== 'blank' && sprite2) {
+            key = getCustomLabel(eventId, '', sprite2);
+            spriteToShow = sprite2;
+        } else {
+            return acc;
+        }
+
+        if (!acc[key]) {
+            acc[key] = { count: 0, sprite: spriteToShow };
+        }
+        acc[key].count += 1;
+
+        return acc;
+    }, {});
+
+    const deckTypeCountArray = Object.entries(deckTypeCount)
+        .map(([key, value]) => ({ key, ...value }))
+        .sort((a, b) => b.count - a.count);
+
+            useEffect(() => {
+        if (!selectedArchetype && deckTypeCountArray.length > 0) {
+            const defaultArchetype = deckTypeCountArray[0].key;
+            setSelectedArchetype(defaultArchetype);
+            sessionStorage.setItem(`selectedArchetype_${eventId}`, defaultArchetype);
+        }
+    }, [deckTypeCountArray, selectedArchetype, eventId]);
+
     const getPlayerCount = (division) => {
         switch (division) {
             case 'masters':
@@ -883,43 +934,6 @@ const EventPage = () => {
         seniorsResults.length > 0 ||
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
-
-    const deckTypeCount = chartResults.reduce((acc, player) => {
-        let sprite1 = player.sprite1 || '';
-        let sprite2 = player.sprite2 || '';
-
-        if (!sprite1 && !sprite2) {
-            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-            sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-            sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-        }
-
-        if (sprite2 === 'hyphen') return acc;
-
-        let key;
-        let spriteToShow;
-
-        if (sprite1 !== 'blank' && sprite1) {
-            key = getCustomLabel(eventId, sprite1, sprite2);
-            spriteToShow = sprite1;
-        } else if (sprite2 !== 'blank' && sprite2) {
-            key = getCustomLabel(eventId, '', sprite2);
-            spriteToShow = sprite2;
-        } else {
-            return acc;
-        }
-
-        if (!acc[key]) {
-            acc[key] = { count: 0, sprite: spriteToShow };
-        }
-        acc[key].count += 1;
-
-        return acc;
-    }, {});
-
-    const deckTypeCountArray = Object.entries(deckTypeCount)
-        .map(([key, value]) => ({ key, ...value }))
-        .sort((a, b) => b.count - a.count);
 
     const dayOneData = eventData.dayOneMeta || [];
     const dayTwoData = chartResults;
@@ -1121,7 +1135,7 @@ const EventPage = () => {
     const hasChartData = chartData.labels && chartData.labels.length > 0;
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
-    const isNAIC2024 = eventId === '2024_NAIC' || eventId === '2024_WORLDS' || eventId === '2023_WORLDS' || eventId.includes('2025') && !eventId.includes('_CL');
+    const hasDayOneMeta = eventData?.dayOneMeta !== undefined;
     const is2024Event = eventId.includes('2024') || eventId.includes('2025') && !eventId.toLowerCase().includes('retro');
 
     return (
@@ -1401,7 +1415,7 @@ const EventPage = () => {
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>
                                     <div className='alignrow'>
-                                        {isNAIC2024 && division === 'masters' ? (
+                                        {hasDayOneMeta && division === 'masters' ? (
                                             <>
                                                 <button
                                                     className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
@@ -1457,7 +1471,7 @@ const EventPage = () => {
                                     </div>
                                 </div>
                                 <div className='deck-archetypes'>
-                                    <h3>Results by Deck</h3>
+                                    <h3>Data per Archetype</h3>
                                     <div className='filter-container'>
                                         <div className='filters-top'>
                                             <div className='indiv-filter'>
@@ -1466,7 +1480,7 @@ const EventPage = () => {
                                                 onChange={handleArchetypeChange} 
                                                 className="archetype-dropdown"
                                             >
-                                                <option value="">Select Deck</option>
+                                                {/* <option value="">Select Deck</option> */}
                                                 {deckTypeCountArray.map((archetype, index) => (
                                                     <option key={index} value={archetype.key}>
                                                         {archetype.key} ({archetype.count})
@@ -1479,7 +1493,15 @@ const EventPage = () => {
                                 </div>
                                 {selectedArchetype && (
                                     <div className='average-card-counts'>
-                                        <p>Avg. Card Count in <strong>{selectedArchetype}</strong> from {eventData.name}</p>
+                                        <p>Average card count from all <strong>{selectedArchetype}</strong> list(s) - {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</p>
+                                        <hr
+                                            style={{
+                                                marginTop: '5px',
+                                                border: 'none',
+                                                borderBottom: '2px solid #ccc',
+                                                opacity: 0.5
+                                            }}
+                                        />
                                         {/* <div className='button-container'>
                                             <button
                                                 onClick={() => setShowTop30(true)}
@@ -1514,12 +1536,22 @@ const EventPage = () => {
                                                     );
                                                 })
                                             ) : (
-                                                <p>No common cards found in this archetype.</p>
+                                                <p></p>
                                             )}
                                         </div>
                                     </div>
                                 )}
                                 <div className='filtered-results'>
+                                    <p>All <strong>{selectedArchetype}</strong> results from {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</p>
+                                    <hr
+                                        style={{
+                                            marginTop: '5px',
+                                            border: 'none',
+                                            borderBottom: '2px solid #ccc',
+                                            opacity: 0.35
+                                        }}
+                                    />
+                                    <br></br>
                                     <div className='results-table charted-decks'>
                                         {results
                                             .map((result, idx) => ({ result, originalIndex: idx + 1 }))

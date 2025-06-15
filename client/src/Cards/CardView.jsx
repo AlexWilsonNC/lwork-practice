@@ -721,7 +721,7 @@ const CardView = () => {
                                         <span className='italic'>{cardInfo.number}/{cardInfo.set.printedTotal}</span>
                                     </span>
                                     {!isPromoSet && cardInfo.set.releaseDate && (
-                                        <>Released {formatDate(cardInfo.set.releaseDate)}</>
+                                        <span><span style={{ fontWeight: 600 }}>Release:</span> {formatDate(cardInfo.set.releaseDate)}</span>
                                     )}
                                 </p>
                             </div>
