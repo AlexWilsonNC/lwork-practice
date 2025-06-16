@@ -100,8 +100,16 @@ nav {
     transition: ease-in-out 0.3s;
     margin-bottom: 25px;
   }
-  .burgered-links-more li {
-    margin-bottom: 30px;
+  .burgered-links-more li:nth-child(0),
+  .burgered-links-more li:nth-child(1),
+  .burgered-links-more li:nth-child(2),
+  .burgered-links-more li:nth-child(3),
+  .burgered-links-more li:nth-child(4),
+  .burgered-links-more li:nth-child(5) {
+    margin-bottom: 15px;
+  }
+  .burgered-links-more li:nth-child(6) {
+    margin-bottom: 0px;
   }
   .burgered-links li:hover,
   .burgered-links-more li:hover {
@@ -112,15 +120,8 @@ nav {
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 15px;
   }
-  .burger-resources p {
-    text-align: end;
-    padding: 5px 15px 10px 15px;
-    font-size: 16px;
-    color: rgb(0, 47, 89);
-    opacity: 0;
-  }
   .burger-resources ul {
-    padding-left: 15px;
+    padding: 15px;
   }
   .new-resource {
     color: #1290eb;

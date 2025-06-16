@@ -215,7 +215,7 @@ const Homepage = () => {
                         </div>
                     </div>
 
-                    <h3 className='alignstart not-ready'>Articles Will Return Soon</h3>
+                    {/* <h3 className='alignstart not-ready'>Articles Will Return Soon</h3> */}
                     {/* <div className='top-featured-row not-ready'>
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
