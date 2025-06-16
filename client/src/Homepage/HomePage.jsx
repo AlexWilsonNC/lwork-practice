@@ -95,9 +95,9 @@ const Homepage = () => {
                                     <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Results from the 2025 Bologna Special Event are in!</h3>
+                                        <h3><span className='new-color'>2025 Bologna Special Event</span> results are available!</h3>
                                         <p>
-                                            Check out the Day 2 lists from this event, including Seniors & Juniors results + event statistics.
+                                            Check out the Day 2 lists from Masters, Seniors & Juniors, plus deck statistics and this event's meta shares.
                                             {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                         </p>
                                     </div>
@@ -307,9 +307,9 @@ const Homepage = () => {
                                 <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Results from the 2025 Bologna Special Event are in!</h3>
-                                    <p>
-                                        Check out the Day 2 lists from this event, including Seniors & Juniors results + event statistics.
+                                        <h3><span className='new-color'>2025 Bologna Special Event</span> results are available!</h3>
+                                        <p>
+                                            Check out the Day 2 lists from Masters, Seniors & Juniors, plus deck statistics and this event's meta shares.
                                         {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
