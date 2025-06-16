@@ -80,6 +80,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 25px 0;
   }
   .burger:hover {
     cursor: pointer;
@@ -91,10 +92,13 @@ nav {
   .burgered-links,
   .burgered-links-more {
     list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
   }
   .burgered-links li,
   .burgered-links-more li {
     transition: ease-in-out 0.3s;
+    margin-bottom: 25px;
   }
   .burgered-links-more li {
     margin-bottom: 30px;
@@ -133,6 +137,7 @@ nav {
     justify-content: space-around;
     align-items: center;
     padding-top: 5px;
+    margin: 25px 0;
   }
   .burdered-socials img {
     width: 45px;

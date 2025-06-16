@@ -7,6 +7,19 @@ import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
 import Modal from '../Tools/Interstitial'; // Assuming the modal component exists
 import '../css/nav.css';
+import pokeball from '../assets/logos/blue-ultra-ball.png';
+
+const Overlay = styled.div`
+  display: ${({ open }) => open ? 'block' : 'none'};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 999;
+  transition: transform 0.5s ease-in-out;
+`;
 
 const BurgerOpen = styled.ul`
     display: flex;
@@ -17,7 +30,6 @@ const BurgerOpen = styled.ul`
     transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(100%)'};
     top: 0;
     right: 0;
-    height: 100vh;
     max-height: 100vh;
     width: 330px;
     padding-top: 0.3rem;
@@ -26,12 +38,29 @@ const BurgerOpen = styled.ul`
     z-index: 1000;
     font-size: 24px;
     font-weight: 600;
-
+    overflow: hidden;
     background-color: ${({ theme }) => theme.burgerMenu};
 
     a {
       color: ${({ theme }) => theme.burgerTxt};
     }
+
+    &::before {
+    content: '';
+    position: absolute;
+    top: -15%;
+    left: -30%;
+    width: 700px;
+    height: 700px;
+    padding-bottom: 80%;
+    transform: rotate(-45deg);
+    background-image: url(${pokeball});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.1;
+    pointer-events: none;
+  }
 `;
 
 const ToggleButton = styled.div`
@@ -75,6 +104,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <li><a href='/cards/DRI'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
       </ul>
+      <Overlay open={open} onClick={() => setOpen(false)} />
       <BurgerOpen open={open} theme={theme} className='burgered-links'>
         <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
           <span className="material-symbols-outlined"></span>
