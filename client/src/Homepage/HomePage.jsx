@@ -90,20 +90,19 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/completed'>
+                            <a href='./tournaments/2025_BOLOGNA'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://www.newperspectivestudio.co.za/wp-content/uploads/2024/09/What-is-website-maintenance-and-Why-it-is-important.jpg' />
-                                    <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/2726/2726016.png' />
-                                    {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
+                                    <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
+                                    <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Recent event results will return for the 2026 season.</h3>
+                                        <h3>Results from the 2025 Bologna Special Event are in!</h3>
                                         <p>
-                                            We apologize for the lack of updates to the site in recent months, please look forward to the future.
+                                            Check out the Day 2 lists from this event, including Seniors & Juniors results + event statistics.
                                             {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>May 26, 2025</p>
+                                        <p>June 1, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -303,20 +302,19 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/completed'>
+                        <a href='./tournaments/2025_BOLOGNA'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://www.newperspectivestudio.co.za/wp-content/uploads/2024/09/What-is-website-maintenance-and-Why-it-is-important.jpg' />
-                                <img className='card-profile-pic transparent-profile-pic' src='https://cdn-icons-png.flaticon.com/512/2726/2726016.png' />
-                                {/* <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} /> */}
+                                <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
+                                <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Recent event results will return for the 2026 season.</h3>
+                                    <h3>Results from the 2025 Bologna Special Event are in!</h3>
                                     <p>
-                                        We apologize for the lack of updates to the site in recent months, please look forward to the future.
+                                        Check out the Day 2 lists from this event, including Seniors & Juniors results + event statistics.
                                         {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>May 26, 2025</p>
+                                    <p>June 1, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
