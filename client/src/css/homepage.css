@@ -23,6 +23,19 @@
     border-radius: 5px;
     margin-right: 5px;
 }
+.tba-text {
+    border: 1px solid grey;
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 4px;
+    margin-top: 25px;
+    padding: 50px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+}
 .new-homepage {
     display: flex;
     flex-direction: row;
