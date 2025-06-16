@@ -595,18 +595,6 @@ const EventPage = () => {
     }, [division]);
 
     useEffect(() => {
-        const savedArchetype = sessionStorage.getItem(`selectedArchetype_${eventId}`);
-        if (savedArchetype) {
-            setSelectedArchetype(savedArchetype);
-        }
-    
-        const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
-        if (savedShowTop30 !== null) {
-            setShowTop30(JSON.parse(savedShowTop30));
-        }
-    }, [eventId]);
-
-    useEffect(() => {
         const fetchLiveStandings = async () => {
             if (!eventData) return;
 
@@ -801,13 +789,20 @@ const EventPage = () => {
         .map(([key, value]) => ({ key, ...value }))
         .sort((a, b) => b.count - a.count);
 
-            useEffect(() => {
-        if (!selectedArchetype && deckTypeCountArray.length > 0) {
-            const defaultArchetype = deckTypeCountArray[0].key;
-            setSelectedArchetype(defaultArchetype);
-            sessionStorage.setItem(`selectedArchetype_${eventId}`, defaultArchetype);
-        }
-    }, [deckTypeCountArray, selectedArchetype, eventId]);
+    useEffect(() => {
+        if (!isChartReady || deckTypeCountArray.length === 0) return;
+
+        const storageKey = `selectedArchetype_${eventId}`;
+        const savedKey   = sessionStorage.getItem(storageKey);
+        const validSaved = savedKey && deckTypeCountArray.some(a => a.key === savedKey);
+
+        const defaultKey = validSaved
+            ? savedKey
+            : deckTypeCountArray[0].key;
+
+        setSelectedArchetype(defaultKey);
+        sessionStorage.setItem(storageKey, defaultKey);
+    }, [isChartReady, deckTypeCountArray, eventId]);
 
     const getPlayerCount = (division) => {
         switch (division) {
