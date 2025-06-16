@@ -492,6 +492,7 @@ const EventPage = () => {
     const [division, setDivision] = useState('masters');
     const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
     const chartRef = useRef(null);
+    const [isChartReady, setIsChartReady] = useState(false)
     const navigate = useNavigate();
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
@@ -1069,7 +1070,6 @@ const EventPage = () => {
         maintainAspectRatio: false,
         aspectRatio: 1.5,
         events: [],
-        // animation: false,
         layout: {
             padding: {
                 top: 40,
@@ -1077,6 +1077,7 @@ const EventPage = () => {
         },
         animation: {
             onComplete: () => {
+                setIsChartReady(true)
                 if (chartRef.current) {
                     const chartInstance = chartRef.current;
                     const ctx = chartInstance.ctx;
@@ -1470,6 +1471,8 @@ const EventPage = () => {
                                         <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                     </div>
                                 </div>
+                            {isChartReady && (
+                            <>
                                 <div className='deck-archetypes'>
                                     <h3>Data per Archetype</h3>
                                     <div className='filter-container'>
@@ -1582,6 +1585,8 @@ const EventPage = () => {
                                             })}
                                     </div>
                                 </div>
+                            </>
+                            )}
                             </div>
                         )}
                     </div>
