@@ -300,8 +300,7 @@ const tournamentList = [
         "flag": uk,
         "location": "London, United Kingdom",
         "registrationTime": "",
-        "registrationLink": "",
-        "results": false
+        "registrationLink": ""
     },
     {
         "id": '2025_NAIC/masters',

@@ -14,6 +14,7 @@ import deckBuilder from '../assets/homepage/deckbuilder.png';
 
 import article1 from '../Articles/whenModernBecomesRetro';
 import article2 from '../Articles/forgottenFormat';
+import naic25 from '../assets/article-thumbnails/25-naic.jpg';
 
 const Container = styled.div`
   background: ${({ theme }) => theme.body};
@@ -90,12 +91,12 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/2025_BOLOGNA'>
+                            <a href='./tournaments/2025_NAIC'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
+                                    <img className='card-image' src={naic25} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3><span className='new-color'>2025 Bologna Special Event</span> results are available!</h3>
+                                        <h3><span className='new-color'>2025 NAIC</span> results are available!</h3>
                                         {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
                                         <p>
                                             Check out the Day 2 lists from Masters, Seniors & Juniors, plus deck statistics and this event's meta shares.
@@ -103,7 +104,7 @@ const Homepage = () => {
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>June 1, 2025</p>
+                                        <p>June 16, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -122,7 +123,7 @@ const Homepage = () => {
                                         {latestArticle.type || 'Article'}
                                         </ArticleType>
                                     </div>
-                                    <p className="card-profile-author">{latestArticle.author}</p>
+                                    <p className="card-profile-author" style={{ opacity: 0.5 }}>{latestArticle.author}</p>
                                     <img
                                         className="card-profile-pic"
                                         src={latestArticle.authorImage}
@@ -306,19 +307,19 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/2025_BOLOGNA'>
+                        <a href='./tournaments/2025_NAIC'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src='https://pbs.twimg.com/media/GsG2dxBWQAAXE1X?format=jpg&name=4096x4096' />
+                                <img className='card-image' src={naic25} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                        <h3><span className='new-color'>2025 Bologna Special Event</span> results are available!</h3>
+                                        <h3><span className='new-color'>2025 NAIC</span> results are available!</h3>
                                         <p>
                                             Check out the Day 2 lists from Masters, Seniors & Juniors, plus deck statistics and this event's meta shares.
                                         {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>June 1, 2025</p>
+                                    <p>June 16, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
@@ -337,7 +338,7 @@ const Homepage = () => {
                                         {latestArticle.type || 'Article'}
                                         </ArticleType>
                                     </div>
-                                    <p className="card-profile-author">{latestArticle.author}</p>
+                                    <p className="card-profile-author" style={{ opacity: 0.5 }}>{latestArticle.author}</p>
                                     <img
                                         className="card-profile-pic"
                                         src={latestArticle.authorImage}
