@@ -173,7 +173,7 @@ const Decks = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
   const [sortType, setSortType] = useState('format');
-  const [selectedFormat, setSelectedFormat] = useState('BRS-SFA');
+  const [selectedFormat, setSelectedFormat] = useState('');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -198,7 +198,7 @@ const Decks = () => {
     };  
 
   useEffect(() => {
-    const formatParam = searchParams.get('format') || 'BRS-SFA';
+    const formatParam = searchParams.get('format') || '';
     setSelectedFormat(formatParam);
 
     const fetchDecks = async () => {
