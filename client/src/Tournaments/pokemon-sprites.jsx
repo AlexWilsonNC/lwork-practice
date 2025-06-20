@@ -345,14 +345,18 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('milotic');
         secondSprite = getPokemonSpriteURL('farigiraf');
     }      
-    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Darmanitan')) {
-        firstSprite = getPokemonSpriteURL('zoroark');
-        secondSprite = getPokemonSpriteURL('darmanitan');
-    }           
-    else if (hasPokemon('N\'s Zoroark ex') && !hasPokemon('N\'s Darmanitan')) {
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Dragapult ex')) {
+        firstSprite = getPokemonSpriteURL('dragapult');
+        secondSprite = getPokemonSpriteURL('zoroark');
+    }   
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
+        firstSprite = getPokemonSpriteURL('blaziken');
+        secondSprite = getPokemonSpriteURL('zoroark');
+    }          
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Reshiram')) {
         firstSprite = getPokemonSpriteURL('blank');
         secondSprite = getPokemonSpriteURL('zoroark');
-    }           
+    }                    
     else if (hasPokemon('Ethan\'s Ho-Oh ex') && hasPokemon('Armarouge')) {
         firstSprite = getPokemonSpriteURL('ho-oh');
         secondSprite = getPokemonSpriteURL('armarouge');

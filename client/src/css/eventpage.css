@@ -28,6 +28,10 @@
 .filtered-results {
     width: 100%;
 }
+.records-list-hover:hover {
+    background-color: #1291eb9c !important;
+    cursor: pointer;
+}
 .decks-records-btns {
     display: flex;
     flex-direction: row;
@@ -45,6 +49,32 @@
 }
 .decks-records-btns button:hover {
     cursor: pointer;
+}
+.records-list { list-style: none; padding: 0; }
+.record-item {
+  display: flex; gap: 1rem; padding: .5rem; cursor: pointer;
+}
+.record-item:hover { background: rgba(0,0,0,0.1); }
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); display: flex; 
+  align-items: center; justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: white; padding: 1.5rem; border-radius: 8px;
+  max-width: 90%; width: 500px; position: relative;
+}
+.close-btn {
+  position: absolute; top: .5rem; right: .5rem; 
+  background: transparent; border: none; font-size: 1.5rem;
+  cursor: pointer;
+}
+.matchup-table {
+  width: 100%; border-collapse: collapse; margin-top: 1rem;
+}
+.matchup-table th, .matchup-table td {
+  border: 1px solid #ddd; padding: .5rem; text-align: left;
 }
 .unofficial-message {
     text-align: center;

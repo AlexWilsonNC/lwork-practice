@@ -557,8 +557,8 @@ const Decks = () => {
                             )}
                           </td>
                           <td>
-                            <Link to={`/deck/${normalizeLabel(deck.label)}?format=${format}`}>
-                                {deck.label}
+                            <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${format}`}>
+                              {deck.label}
                             </Link>
                           </td>
                           <td>{percentage}%</td>

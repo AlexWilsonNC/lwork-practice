@@ -300,7 +300,8 @@ const tournamentList = [
         "flag": uk,
         "location": "London, United Kingdom",
         "registrationTime": "",
-        "registrationLink": ""
+        "registrationLink": "",
+        "results": false
     },
     {
         "id": '2025_NAIC/masters',
@@ -311,8 +312,7 @@ const tournamentList = [
         "flag": usa,
         "location": "New Orleans, Louisiana",
         "registrationTime": "",
-        "registrationLink": "",
-        "results": false
+        "registrationLink": ""
     },
     {
         "id": "2025_WORLDS",

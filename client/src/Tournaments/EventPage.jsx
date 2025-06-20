@@ -57,6 +57,7 @@ import canada from '../assets/flags/canada.png';
 import chile from '../assets/flags/chile.png';
 import china from '../assets/flags/china.png';
 import colombia from '../assets/flags/colombia.png';
+import costaRica from '../assets/flags/costa-rica.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
 import denmark from '../assets/flags/denmark.png';
@@ -66,15 +67,25 @@ import elSalvador from '../assets/flags/el-salvador.png';
 import finland from '../assets/flags/finland.png';
 import france from '../assets/flags/france.png';
 import germany from '../assets/flags/germany.png';
+import greece from '../assets/flags/greece.png';
 import hongKong from '../assets/flags/hong-kong.png';
+import hungary from '../assets/flags/hungary.png';
+import iceland from '../assets/flags/iceland.png';
 import indonesia from '../assets/flags/indonesia.png';
+import ireland from '../assets/flags/ireland.png';
+import israel from '../assets/flags/isreal.png';
+import isleOfMan from '../assets/flags/im.png';
 import italy from '../assets/flags/italy.png';
 import japan from '../assets/flags/japan.png';
 import southKorea from '../assets/flags/korea.png';
+import lithuania from '../assets/flags/lithuania.png';
 import malaysia from '../assets/flags/malaysia.png';
+import malta from '../assets/flags/malta.png';
 import mexico from '../assets/flags/mexico.png';
+import morocco from '../assets/flags/morocco.png';
 import netherlands from '../assets/flags/netherlands.png';
 import newZealand from '../assets/flags/new-zealand.png';
+import nicaragua from '../assets/flags/nicaragua.png';
 import norway from '../assets/flags/norway.png';
 import peru from '../assets/flags/peru.png';
 import philippines from '../assets/flags/philippines.png';
@@ -84,6 +95,8 @@ import puertoRico from '../assets/flags/puerto-rico.png';
 import russia from '../assets/flags/russia.png';
 import singapore from '../assets/flags/singapore.png';
 import slovakia from '../assets/flags/slovakia.png';
+import slovenia from '../assets/flags/slovenia.png';
+import somalia from '../assets/flags/somalia.png';
 import southAfrica from '../assets/flags/south-africa.png';
 import spain from '../assets/flags/spain.png';
 import sweden from '../assets/flags/sweden.png';
@@ -144,6 +157,67 @@ const flags = {
     unknown: unknown,
 };
 
+const flagsAbbrev = {
+    AR: argentina,
+    AU: australia,
+    AT: austria,
+    BY: belarus,
+    BE: belgium,
+    BR: brazil,
+    CA: canada,
+    CL: chile,
+    CN: china,
+    CR: costaRica,
+    CO: colombia,
+    HR: croatia,
+    CZ: czechia,
+    DK: denmark,
+    EC: ecuador,
+    SV: elSalvador,
+    FI: finland,
+    FR: france,
+    DE: germany,
+    GR: greece,
+    HK: hongKong,
+    HU: hungary,
+    IS: iceland,
+    ID: indonesia,
+    IE: ireland,
+    IL: israel,
+    IM: isleOfMan,
+    IT: italy,
+    JP: japan,
+    KR: southKorea,
+    LT: lithuania,
+    MY: malaysia,
+    MT: malta,
+    MX: mexico,
+    MA: morocco,
+    NL: netherlands,
+    NZ: newZealand,
+    NI: nicaragua,
+    NO: norway,
+    PE: peru,
+    PH: philippines,
+    PL: poland,
+    PT: portugal,
+    PR: puertoRico,
+    RU: russia,
+    SG: singapore,
+    SK: slovakia,
+    SI: slovenia,
+    SO: somalia,
+    ZA: southAfrica,
+    ES: spain,
+    SE: sweden,
+    CH: switzerland,
+    TW: taiwan,
+    TH: thailand,
+    US: usa,
+    UK: uk,
+    unknown: unknown
+}
+
 const logos = {
     retro: retro,
     regionals: regionals,
@@ -178,6 +252,67 @@ const logos = {
     superTrainerShowdown: superTrainerShowdown,
     megaTropicalBattle: megaTropicalBattle,
     championsLeague: championsLeague,
+};
+
+const countryNames = {
+    AR: 'Argentina (Latin America)',
+    AU: 'Australia (Oceania)',
+    AT: 'Austria (Europe)',
+    BY: 'Belarus (Europe)',
+    BE: 'Belgium (Europe)',
+    BR: 'Brazil (Latin America)',
+    CA: 'Canada (North America)',
+    CL: 'Chile (Latin America)',
+    CN: 'China (Asia-Pacific)',
+    CR: 'Costa Rica (Latin America)',
+    CO: 'Colombia (Latin America)',
+    HR: 'Croatia (Europe)',
+    CZ: 'Czechia (Europe)',
+    DK: 'Denmark (Europe)',
+    SV: 'El Salvador (Latin America)',
+    FI: 'Finland (Europe)',
+    FR: 'France (Europe)',
+    DE: 'Germany (Europe)',
+    GR: 'Greece (Europe)',
+    HK: 'Hong Kong (Asia-Pacific)',
+    HU: 'Hungary (Europe)',
+    IS: 'Iceland (Europe)',
+    ID: 'Indonesia (Asia-Pacific)',
+    IE: 'Ireland (Europe)',
+    IM: 'Isle of Man (Europe)',
+    IL: 'Israel (Middle East-South Africa)',
+    IT: 'Italy (Europe)',
+    JP: 'Japan (Asia-Pacific)',
+    SO: 'Somalia (Middle East-South Africa)',
+    KR: 'South Korea (Asia-Pacific)',
+    LT: 'Lithuania (Europe)',
+    MY: 'Malaysia (Asia-Pacific)',
+    MT: 'Malta (Europe)',
+    MX: 'Mexico (Latin America)',
+    MA: 'Moroco (Europe)',
+    NL: 'Netherlands (Europe)',
+    NZ: 'New Zealand (Oceania)',
+    NI: 'Nicaragua (Latin America)',
+    NO: 'Norway (Europe)',
+    PE: 'Peru (Latin America)',
+    PH: 'Philippines (Asia-Pacific)',
+    PL: 'Poland (Europe)',
+    PT: 'Portugal (Europe)',
+    PR: 'Puerto Rico (North America)',
+    RU: 'Russia (Russia)',
+    SG: 'Singapore (Asia-Pacific)',
+    SK: 'Slovakia (Europe)',
+    ZA: 'South Africa (Middle East-South Africa)',
+    ES: 'Spain (Europe)',
+    SE: 'Sweden (Europe)',
+    CH: 'Switzerland (Europe)',
+    TW: 'Taiwan (Asia-Pacific)',
+    TH: 'Thailand (Asia-Pacific)',
+    UK: 'United Kingdom (Europe)',
+    US: 'USA (North America)',
+    unknown: 'Unknown',
+    SI: 'Slovenia (Europe)',
+    EC: 'Ecuador (Latin America)'
 };
 
 const orderedSets = [
@@ -426,7 +561,43 @@ const EventPageContent = styled.div`
         background-color: #1290eb !important;
         border: 1px solid #007bff;
     }
+    .flag-container {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        margin-top: 5px;
+    }
+    .link-to-playerrecords {
+        color: ${({ theme }) => theme.text};
+    }
+    .link-to-playerrecords:hover {
+        color: #1290eb;
+    }
+    .flag-tooltip {
+        visibility: hidden;
+        background-color: #1290eb;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 10px;
+        position: absolute;
+        z-index: 9999 !important;
+        bottom: 95%;
+        left: 35%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        display: block;
+    }
+    .flag-container:hover .flag-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
 `;
+
+const getCountryName = (code) => {
+    return countryNames[code] || 'Unknown';
+};
 
 const normalizeAttacks = (attacks) => {
     return attacks.map(attack => ({
@@ -440,6 +611,13 @@ const normalizeAbilities = (abilities) => {
     return abilities.map(ability => ({
         ...ability
     })).sort((a, b) => a.name.localeCompare(b.name));
+};
+
+const parseOpponent = rawName => {
+  const m = rawName.match(/\[([A-Z]{2})\]\s*$/);
+  const code = m ? m[1] : 'unknown';
+  const name = rawName.replace(/\s*\[[A-Z]{2}\]\s*$/, '').trim();
+  return { code, name };
 };
 
 const normalizeWeaknesses = (weaknesses) => {
@@ -498,11 +676,13 @@ const EventPage = () => {
     const [showConversionRate, setShowConversionRate] = useState(false);
     const [selectedArchetype, setSelectedArchetype] = useState('');
     const [averageCardCounts, setAverageCardCounts] = useState([]);
-    const [top30CardCounts, setTop30CardCounts] = useState([]);
+    // const [top30CardCounts, setTop30CardCounts] = useState([]);
     const [showTop30, setShowTop30] = useState(true);
     const [cardData, setCardData] = useState(null);
     const [viewTab, setViewTab] = useState('Decks');
     const [eventName, setEventName] = useState('');
+    const [showModal,   setShowModal]   = useState(false);
+    const [modalPlayer, setModalPlayer] = useState(null);
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -594,30 +774,40 @@ const EventPage = () => {
         setShowConversionRate(false);
     }, [division]);
 
-    useEffect(() => {
-        const fetchLiveStandings = async () => {
-            if (!eventData) return;
+    const handleRecordClick = (player) => {
+    setModalPlayer(player);
+    setShowModal(true);
+    };
 
-            const isEventCompleted = eventData.isEventCompleted;
-            const finalDataUrl = eventData.finalDataUrl;
+    const closeModal = () => {
+    setShowModal(false);
+    setModalPlayer(null);
+    };
+
+    // useEffect(() => {
+    //     const fetchLiveStandings = async () => {
+    //         if (!eventData) return;
+
+    //         const isEventCompleted = eventData.isEventCompleted;
+    //         const finalDataUrl = eventData.finalDataUrl;
             
-            const standingsUrl = isEventCompleted ? finalDataUrl : '';
+    //         const standingsUrl = isEventCompleted ? finalDataUrl : '';
 
-            try {
-                const response = await fetch(`/api/live-standings?eventId=${eventId}&isEventCompleted=${isEventCompleted}&finalDataUrl=${encodeURIComponent(standingsUrl)}`);
-                if (response.ok) {
-                    const standingsData = await response.json();
-                    setAverageCardCounts(standingsData); // Assuming you want to update card counts with standings data
-                } else {
-                    console.error('Failed to fetch live standings');
-                }
-            } catch (error) {
-                console.error('Error fetching live standings:', error);
-            }
-        };
+    //         try {
+    //             const response = await fetch(`/api/live-standings?eventId=${eventId}&isEventCompleted=${isEventCompleted}&finalDataUrl=${encodeURIComponent(standingsUrl)}`);
+    //             if (response.ok) {
+    //                 const standingsData = await response.json();
+    //                 setAverageCardCounts(standingsData); // Assuming you want to update card counts with standings data
+    //             } else {
+    //                 console.error('Failed to fetch live standings');
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching live standings:', error);
+    //         }
+    //     };
 
-        fetchLiveStandings();
-    }, [eventData]);
+    //     fetchLiveStandings();
+    // }, [eventData]);
     
     useEffect(() => {
         const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
@@ -1371,7 +1561,7 @@ const EventPage = () => {
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
                                 {/* {(eventId === '2024_WORLDS' || eventId.includes('2025')) && ( */}
-                                {/* {(eventId.includes('2025')) && (
+                                {(eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
                                         <button 
                                             onClick={() => handleTabChange('Decks')} 
@@ -1388,23 +1578,39 @@ const EventPage = () => {
                                             Records
                                         </button>
                                     </div>
-                                )} */}
-                            {viewTab === 'Decks' ? (
-                            <>
-                                {/* unofficial red event message text */}
-                                {/* {eventId === '2025_WORLDS' && (
-                                    <p className="unofficial-message">
-                                        * Some of the below standings are inaccurate due to unofficial resistance calculations, results are official only when this message is not present.
-                                    </p>
-                                )} */}
-                                {results.length > 0 ? (
-                                displayResults(results, eventId, division)
-                                ) : (
-                                <p className='notavailable'>Results not yet available for this event.</p>
                                 )}
-                            </>
-                            ) : (
-                                <LiveStandings eventName={eventName} />                            
+                           {viewTab === 'Decks' ? (
+                                results.length
+                                ? displayResults(results, eventId, division)
+                                : <p className='notavailable'>Results not yet available.</p>
+                            )
+                            : (
+                                /* Records view */
+                                <ul className="result-list-ol">
+                                    {results.map((p, i) => (
+                                        <li key={i} className="player-list-hover records-list-hover" onClick={() => handleRecordClick(p)}>
+                                            <div className='results-list-item'>
+                                                <div className='name-n-flag'>
+                                                <span className="player-placement">{p.placing}.</span>
+                                                    <div className="flag-container">
+                                                        <img 
+                                                            className='flag-size' 
+                                                            src={flagsAbbrev[p.flag]} 
+                                                            alt="flag" 
+                                                        />
+                                                        <div className="flag-tooltip">
+                                                            {getCountryName(p.flag)}
+                                                        </div>
+                                                    </div> 
+                                                    <Link className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>{p.name}</Link>
+                                                </div>
+                                                <span className="record-summary">
+                                                    {p.record.wins}-{p.record.losses}-{p.record.ties}
+                                                </span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
                             )}
                         </div>
                         ) : (
@@ -1500,7 +1706,7 @@ const EventPage = () => {
                                                 opacity: 0.5
                                             }}
                                         />
-                                        {/* <div className='button-container'>
+                                        <div className='button-container'>
                                             <button
                                                 onClick={() => setShowTop30(true)}
                                                 className={showTop30 ? 'active-button' : ''}
@@ -1513,7 +1719,7 @@ const EventPage = () => {
                                             >
                                                 Only Cards in All Lists
                                             </button>
-                                        </div> */}
+                                        </div>
                                         <div className="deck-cards">
                                             {averageCardCounts.length > 0 ? (
                                                 averageCardCounts.map((card, index) => {
@@ -1582,6 +1788,48 @@ const EventPage = () => {
                                 </div>
                             </>
                             )}
+                            </div>
+                        )}
+                        {showModal && modalPlayer && (
+                            <div className="modal-overlay" onClick={closeModal}>
+                                <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                <button className="close-btn" onClick={closeModal}>×</button>
+                                <h3>{modalPlayer.name}’s Matchups</h3>
+                                <table className="matchup-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Rnd</th>
+                                        <th>Opponent</th>
+                                        <th>Res</th>
+                                        {/* <th>Table</th> */}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Object.entries(modalPlayer.rounds).map(([rnd, info]) => {
+                                            const { code, name } = parseOpponent(info.name);
+                                            return (
+                                            <tr key={rnd}>
+                                                <td>{rnd}</td>
+                                                <td className="name-n-flag">
+                                                <div className="flag-container">
+                                                    <img
+                                                    className="flag-size"
+                                                    src={flagsAbbrev[code] || flagsAbbrev.unknown}
+                                                    alt={code}
+                                                    />
+                                                    <div className="flag-tooltip">
+                                                    {getCountryName(code)}
+                                                    </div>
+                                                </div>
+                                                <span className="name">{name}</span>
+                                                </td>
+                                                <td>{info.result}</td>
+                                            </tr>
+                                            );
+                                        })}                                    
+                                    </tbody>
+                                </table>
+                                </div>
                             </div>
                         )}
                     </div>
