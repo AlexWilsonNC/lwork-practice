@@ -50,6 +50,41 @@
 .decks-records-btns button:hover {
     cursor: pointer;
 }
+.decklist-modal-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: -15px;
+    right: 0;
+}
+.decklist-modal-btns button {
+    margin-left: 5px;
+}
+.decklist-modal-button {
+    color:white;
+    background-color: #1290eb;
+    font-size: 16px;
+    padding: 5px 7px;
+    border: none;
+    border-radius: 2px;
+}
+.decklist-modal-button:hover {
+    cursor: pointer;
+    background-color: grey;
+}
+.modal-name-sprites {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.player-decklink-cell a {
+    color: black;
+}
+.player-decklink-cell a:hover {
+    color: #1290eb;
+}
 .records-list { list-style: none; padding: 0; }
 .record-item {
   display: flex; gap: 1rem; padding: .5rem; cursor: pointer;
@@ -70,11 +105,27 @@
   background: transparent; border: none; font-size: 1.5rem;
   cursor: pointer;
 }
+.player-result-wlt {
+    justify-content: center;
+}
 .matchup-table {
   width: 100%; border-collapse: collapse; margin-top: 1rem;
 }
 .matchup-table th, .matchup-table td {
-  border: 1px solid #ddd; padding: .5rem; text-align: left;
+  border: 1px solid rgba(0,0,0,0.05); padding: .5rem; text-align: left;
+}
+.matchup-table td.opponent-sprites-cell {
+  width: 100px;
+  /* overflow: hidden; */
+  text-align: center;
+  vertical-align: middle;
+  padding: 0px;
+}
+.matchup-table td.opponent-sprites-cell img {
+  max-width: 100%;
+  max-height: 40px;
+  object-fit: contain;
+  display: inline-block;
 }
 .unofficial-message {
     text-align: center;

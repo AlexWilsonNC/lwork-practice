@@ -483,8 +483,8 @@ const PlayerDeck = () => {
                             <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
                                 <h2>
                                     {playerData.label ? formatName(playerData.label) : formatName(playerData.name)}
-                                    &nbsp;
-                                    <span className="material-symbols-outlined">article_person</span>      
+                                    {/* &nbsp;
+                                    <span className="material-symbols-outlined">article_person</span>       */}
                                 </h2>
                             </Link>
                         )}
@@ -508,6 +508,9 @@ const PlayerDeck = () => {
                         )}
                     </div>
                     <div className='deck-top-right-options'>
+                        <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
+                            <button className="decklist-modal-button-deckprofile">Player Profile</button>
+                        </Link>
                         <DecklistOptions decklist={playerData.decklist} />
                         <div className='deckview-switcher'>
                             <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>

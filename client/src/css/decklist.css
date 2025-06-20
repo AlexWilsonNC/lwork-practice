@@ -16,6 +16,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: end;
+    position: relative;
 }
 .aligncolumn {
     display: flex;
@@ -123,6 +124,23 @@
     flex-direction: row;
     align-items: center;
     justify-content: end;
+}
+.link-to-playerprofile-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.decklist-modal-button-deckprofile {
+    color:white;
+    background-color: grey;
+    font-size: 16px;
+    padding: 5px 7px;
+    border: none;
+    border-radius: 2px;
+}
+.decklist-modal-button-deckprofile:hover {
+    cursor: pointer;
+    background-color: #1290eb;
 }
 .copy-decklist-btn,
 .open-in-deckbuilder-btn {

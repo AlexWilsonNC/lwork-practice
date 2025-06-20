@@ -595,6 +595,30 @@ const EventPageContent = styled.div`
     }
 `;
 
+const cleanSpriteName = url => {
+  if (!url) return '';
+  let fn = url.split('/').pop();            // "-assets-sprites-foo-png.png"
+  fn = fn.replace(/^-?assets-sprites-/, ''); // "foo-png.png"
+  return fn.replace(/\.png$/, '');           // "foo-png"
+};
+
+// runs cleanSpriteName on sprite1/2, falls back to getPokemonSprites if needed
+const normalizePlayerSprites = player => {
+  let s1 = cleanSpriteName(player.sprite1 || '');
+  let s2 = cleanSpriteName(player.sprite2 || '');
+
+  if (!s1 && !s2 && player.decklist) {
+    const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+    s1 = cleanSpriteName(firstSprite);
+    s2 = cleanSpriteName(secondSprite);
+  }
+
+  if (s1 === 'blank') s1 = '';
+  if (s2 === 'blank') s2 = '';
+  if (!s1) s1 = 'blank';
+
+  return { ...player, sprite1: s1, sprite2: s2 };
+};
 const getCountryName = (code) => {
     return countryNames[code] || 'Unknown';
 };
@@ -632,6 +656,57 @@ const normalizeResistances = (resistances) => {
     return resistances.map(resistance => ({
         ...resistance
     })).sort((a, b) => a.type.localeCompare(b.type));
+};
+
+const normalizeName = (name) => {
+    return name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/(^-|-$)/g, '');
+};
+
+const formatName = (name) => {
+    const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
+    const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
+
+    const specialCases = {
+        'de haes damien': 'De Haes Damien',
+        'jamie depamphilis': 'Jamie DePamphilis'
+    };
+
+    const lowerCaseName = name.toLowerCase();
+    if (specialCases[lowerCaseName]) {
+        return specialCases[lowerCaseName];
+    }
+
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word =>
+            word
+                .split('-')
+                .map(part =>
+                    part
+                        .split("'")
+                        .map(subPart => {
+                            if (lowercaseWords.includes(subPart.toLowerCase())) {
+                                return subPart.toLowerCase();
+                            } else if (uppercaseWords.includes(subPart.toLowerCase())) {
+                                return subPart.toUpperCase();
+                            } else if (subPart.startsWith('mc')) {
+                                return subPart.charAt(0).toUpperCase() + 'c' + subPart.charAt(2).toUpperCase() + subPart.slice(3);
+                            } else {
+                                return subPart.charAt(0).toUpperCase() + subPart.slice(1);
+                            }
+                        })
+                        .join("'")
+                )
+                .join("-")
+        )
+        .join(' ');
 };
 
 const comparePokemonCards = (card1, card2) => {
@@ -743,6 +818,13 @@ const EventPage = () => {
                 const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
                 if (response.ok) {
                     const data = await response.json();
+                    if (data.masters) data.masters = data.masters.map(normalizePlayerSprites);
+                    if (data.seniors) data.seniors = data.seniors.map(normalizePlayerSprites);
+                    if (data.juniors) data.juniors = data.juniors.map(normalizePlayerSprites);
+                    if (data.professors) data.professors = data.professors.map(normalizePlayerSprites);
+                    if (data.olderSeniors) data.olderSeniors = data.olderSeniors.map(normalizePlayerSprites);
+                    if (data.youngSeniors) data.youngSeniors = data.youngSeniors.map(normalizePlayerSprites);
+                    if (data.all) data.all = data.all.map(normalizePlayerSprites);
                     setEventData(data);
                     setEventName(data.name);
                     
@@ -1222,7 +1304,7 @@ const EventPage = () => {
             ? conversionChartData
             : {
                 labels: deckTypeCountArray.map((entry) => {
-                    console.log("Day 2 Label:", entry.key); // Log Day 2 labels
+                    // console.log("Day 2 Label:", entry.key);
                     return entry.key;
                 }), datasets: [
                     {
@@ -1757,33 +1839,49 @@ const EventPage = () => {
                                     />
                                     <br></br>
                                     <div className='results-table charted-decks'>
-                                        {results
-                                            .map((result, idx) => ({ result, originalIndex: idx + 1 }))
-                                            .filter(({ result }) => {
-                                                let sprite1 = result.sprite1 || '';
-                                                let sprite2 = result.sprite2 || '';
+                                    {results
+                                        .map((result, idx) => ({ result, originalIndex: idx + 1 }))
+                                        .filter(({ result }) => {
+                                        // helper to strip off any "-assets-sprites-" prefix and ".png" suffix
+                                        const cleanName = str =>
+                                            str
+                                            .split('/')           // take last segment
+                                            .pop()                // "-assets-sprites-froslass-png.png"
+                                            .replace(/^-?assets-sprites-/, '') // "froslass-png.png"
+                                            .replace(/\.png$/, '');             // "froslass-png"
 
-                                                if (!sprite1 && !sprite2) {
-                                                    const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
-                                                    sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                                    sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                                                }
+                                        // 1) clean whatever was already in result
+                                        let sprite1 = cleanName(result.sprite1 || '');
+                                        let sprite2 = cleanName(result.sprite2 || '');
 
-                                                if (sprite1 === 'blank') {
-                                                    sprite1 = '';
-                                                }
+                                        // 2) if still both empty, derive from decklist
+                                        if (!sprite1 && !sprite2 && result.decklist) {
+                                            const { firstSprite, secondSprite } = getPokemonSprites(
+                                            result.decklist, '', ''
+                                            );
+                                            sprite1 = cleanName(firstSprite)  || '';
+                                            sprite2 = cleanName(secondSprite) || '';
+                                        }
 
-                                                const key = getCustomLabel(eventId, sprite1, sprite2);
-                                                return key === selectedArchetype;
-                                            })
-                                            .map(({ result, originalIndex }, index) => {
-                                                const backgroundColor = index % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
-                                                return (
-                                                    <div key={index} style={{ backgroundColor }}>
-                                                        {displayResults([result], eventId, division, originalIndex)}
-                                                    </div>
-                                                );
-                                            })}
+                                        // 3) drop the special “blank” placeholder
+                                        if (!sprite1) sprite1 = '/assets/sprites/blank.png';
+
+                                        // 4) overwrite the result object so displayResults uses the clean versions
+                                        result.sprite1 = sprite1;
+                                        result.sprite2 = sprite2;
+
+                                        // 5) filter by your selected archetype
+                                        const key = getCustomLabel(eventId, sprite1, sprite2);
+                                        return key === selectedArchetype;
+                                        })
+                                        .map(({ result, originalIndex }, index) => {
+                                        const backgroundColor = index % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
+                                        return (
+                                            <div key={index} style={{ backgroundColor }}>
+                                            {displayResults([result], eventId, division, originalIndex)}
+                                            </div>
+                                        );
+                                        })}
                                     </div>
                                 </div>
                             </>
@@ -1793,23 +1891,75 @@ const EventPage = () => {
                         {showModal && modalPlayer && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <button className="close-btn" onClick={closeModal}>×</button>
-                                <h3>{modalPlayer.name}’s Matchups</h3>
+                                <button className="close-btn" onClick={closeModal}></button>
+                                <div className="modal-player-header">
+                                    <div className='modal-name-sprites'>
+                                        <h3>{modalPlayer.placing}. {modalPlayer.name}&nbsp; 
+                                                
+                                        </h3>
+                                        <DisplayPokemonSprites
+                                            decklist={modalPlayer.decklist}
+                                            sprite1={modalPlayer.sprite1}
+                                            sprite2={modalPlayer.sprite2}
+                                        />
+                                    </div>
+                                    <p style={{ marginTop: '-10px' }}><span className='bold'>Record:</span> ({modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties})</p>
+                                    <p style={{ marginTop: '3px' }}>{eventData.name}</p>
+                                    <div className='decklist-modal-btns'>
+                                        <Link className='link-to-playerprofile' to={`/player/${normalizeName(modalPlayer.name)}-${modalPlayer.flag}`}>
+                                            <button className="decklist-modal-button">Player Profile</button>
+                                        </Link>
+                                        {modalPlayer.decklist && (
+                                            <Link
+                                                to={`/tournaments/${eventId}/${division}/${encodeURIComponent(modalPlayer.name)}-${modalPlayer.flag}`}
+                                                className="decklist-link-icon"
+                                                title="View full decklist"
+                                            >
+                                                <button className="decklist-modal-button">Decklist</button>
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
                                 <table className="matchup-table">
                                     <thead>
                                     <tr>
-                                        <th>Rnd</th>
+                                        <th style={{ textAlign: 'center' }}>Rnd</th>
+                                        <th style={{ textAlign: 'center' }}>Res</th>
                                         <th>Opponent</th>
-                                        <th>Res</th>
-                                        {/* <th>Table</th> */}
+                                        <th style={{ textAlign: 'center' }}>Deck</th>
+                                        <th style={{ textAlign: 'center' }}>List</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        {Object.entries(modalPlayer.rounds).map(([rnd, info]) => {
+                                        {Object.entries(modalPlayer.rounds).reverse().map(([rnd, info]) => {
                                             const { code, name } = parseOpponent(info.name);
+
+                                             // 1) find the matching player object
+                                            const opponent = results.find(p =>
+                                                p.name === name &&        // match the cleaned name
+                                                p.flag === code           // match the parsed bracketed code
+                                            );
+
+                                            // 2) derive sprites — either stored on opponent or freshly computed
+                                            let sprites;
+                                            if (opponent?.sprite1) {
+                                                sprites = { first: opponent.sprite1, second: opponent.sprite2 };
+                                            } else if (opponent?.decklist) {
+                                                const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
+                                                sprites = { first: firstSprite, second: secondSprite };
+                                            }
+
+                                            const bgColor =
+                                                info.result === 'W' ? 'rgba(144,238,144,0.5)' : // lightgreen
+                                                info.result === 'L' ? 'rgba(255,182,193,0.5)' : // lightcoral
+                                                info.result === 'T' ? 'rgba(255,255,102,0.5)' : // lightyellow
+                                                'transparent';
                                             return (
                                             <tr key={rnd}>
-                                                <td>{rnd}</td>
+                                                <td style={{ textAlign: 'center' }}>{rnd}</td>
+                                                <td className='player-result-wlt' style={{ backgroundColor: bgColor, textAlign: 'center' }}>
+                                                    {info.result}
+                                                </td>
                                                 <td className="name-n-flag">
                                                 <div className="flag-container">
                                                     <img
@@ -1821,9 +1971,35 @@ const EventPage = () => {
                                                     {getCountryName(code)}
                                                     </div>
                                                 </div>
-                                                <span className="name">{name}</span>
+                                                <Link className="link-to-playerrecords">{name}</Link>
                                                 </td>
-                                                <td>{info.result}</td>
+                                                <td className="opponent-sprites-cell">
+                                                    {sprites
+                                                    ? <DisplayPokemonSprites 
+                                                        decklist={opponent.decklist} 
+                                                        sprite1={sprites.first} 
+                                                        sprite2={sprites.second} 
+                                                        />
+                                                    : <em>-</em>
+                                                    }
+                                                </td>
+                                                <td
+                                                    className="player-decklink-cell"
+                                                    style={{ textAlign: 'center', verticalAlign: 'middle' }}
+                                                >
+                                                    {opponent?.decklist ? (
+                                                    <Link
+                                                        to={`/tournaments/${eventId}/${division}/${encodeURIComponent(name)}-${code}`}
+                                                        title="View opponent’s decklist"
+                                                    >
+                                                        <span className="material-symbols-outlined">
+                                                        format_list_bulleted
+                                                        </span>
+                                                    </Link>
+                                                    ) : (
+                                                    <em></em>
+                                                    )}
+                                                </td>
                                             </tr>
                                             );
                                         })}                                    
