@@ -367,7 +367,7 @@ const tournamentList = [
     },
     {
         "id": "2025_CAROLINA",
-        "name": "Carolina Special Event",
+        "name": "Puerto Rico Special Event",
         "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "Feb 15, 2025",
@@ -499,7 +499,7 @@ const tournamentList = [
     },
     {
         "id": "2024_CAROLINA",
-        "name": "Carolina Special Event",
+        "name": "Puerto Rico Special Event",
         "eventType": "speSeries",
         "eventLogo": speSeries,
         "date": "May 11, 2024",

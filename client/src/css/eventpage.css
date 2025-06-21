@@ -79,25 +79,27 @@
     justify-content: space-between;
     align-items: center;
 }
-.player-decklink-cell a {
-    color: black;
-}
 .player-decklink-cell a:hover {
-    color: #1290eb;
+    color: #1290eb !important;
 }
 .records-list { list-style: none; padding: 0; }
 .record-item {
   display: flex; gap: 1rem; padding: .5rem; cursor: pointer;
 }
-.record-item:hover { background: rgba(0,0,0,0.1); }
+.record-item:hover { 
+    background: rgba(0,0,0,0.1); 
+}
+.link-to-playerrecords {
+    font-size: 16px;
+}
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5); display: flex; 
+  background: rgba(0,0,0,0.75); display: flex; 
   align-items: center; justify-content: center;
   z-index: 1000;
 }
 .modal-content {
-  background: white; padding: 1.5rem; border-radius: 8px;
+    padding: 1.5rem; border-radius: 8px;
   max-width: 90%; width: 500px; position: relative;
 }
 .close-btn {
@@ -110,6 +112,9 @@
 }
 .matchup-table {
   width: 100%; border-collapse: collapse; margin-top: 1rem;
+}
+.matchup-table th {
+  font-weight: 600;
 }
 .matchup-table th, .matchup-table td {
   border: 1px solid rgba(0,0,0,0.05); padding: .5rem; text-align: left;
@@ -361,10 +366,26 @@
     height: 50px;
     width: 100%;
 }
+.record-summary {
+    margin-left: auto;      
+    width: 5ch;             
+    padding-left: .5ch;     
+    text-align: left;       
+    box-sizing: content-box;
+}
 .player-placement {
     margin-right: 15px;
     width: 30px;
 }
+.player-stats {
+    margin-left: auto;
+    display: flex;    
+    gap: 75px;        
+}
+.match-points,
+.record-summary {
+    text-align: left;
+} 
 .flag-size {
     width: 20px;
     margin-right: 10px;
@@ -440,6 +461,9 @@
     }
     .name-n-flag {
         font-size: 16px;
+    }
+    .player-stats span {
+        font-size: 13px;
     }
 }
 @media screen and (max-width: 625px) {
@@ -526,14 +550,23 @@
     .player-deck-icons a {
         width: 15px;
     }
-}
-@media screen and (max-width: 550px) {
-    .name-n-flag {
-        font-size: 12px;
-    }
     .notavailable{
         margin: 75px 50px;
         text-align: center;
+    }
+    .player-stats {
+        gap: 25px;        
+    }
+    .player-stats span {
+        font-size: 12px;
+    }
+    .decks-records-btns {
+        margin-top: 15px;
+    }
+    .decks-records-btns button {
+        font-size: 14px;
+        margin-left: 10px;
+        border-radius: 1px;
     }
 }
 @media screen and (max-width: 410px) {

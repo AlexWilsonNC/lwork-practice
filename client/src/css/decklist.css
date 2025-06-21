@@ -540,6 +540,10 @@
         width: 350px;
         margin: 15px 0 0 0;
     }
+    .decklist-modal-button-deckprofile {
+        font-size: 14px;
+        border-radius: 1px;
+    }
 }
 @media screen and (max-width: 550px){
     .deck-cards {
@@ -582,6 +586,9 @@
     }
     .link-to-playerprofile h2 span {
         font-size: 20px;
+    }
+    .decklist-modal-button-deckprofile {
+        font-size: 12px;
     }
 }
 @media screen and (max-width: 500px){

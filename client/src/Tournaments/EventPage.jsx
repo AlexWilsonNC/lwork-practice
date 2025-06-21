@@ -496,6 +496,13 @@ const EventPageContent = styled.div`
   .results-list-item {
     color: ${({ theme }) => theme.text};
   }
+    .modal-content {
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.text};
+    }
+    .player-decklink-cell a {
+        color: ${({ theme }) => theme.text};
+    }
   .player-list-hover:nth-of-type(odd) {
     background-color: ${({ theme }) => theme.playerlisthover};
   }
@@ -671,17 +678,16 @@ const normalizeName = (name) => {
 const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
-
+    
     const specialCases = {
         'de haes damien': 'De Haes Damien',
-        'jamie depamphilis': 'Jamie DePamphilis'
+        'jamie depamphilis': 'Jamie DePamphilis',
     };
 
     const lowerCaseName = name.toLowerCase();
     if (specialCases[lowerCaseName]) {
         return specialCases[lowerCaseName];
     }
-
     return name
         .toLowerCase()
         .split(' ')
@@ -706,7 +712,44 @@ const formatName = (name) => {
                 )
                 .join("-")
         )
-        .join(' ');
+    .join(' ');
+};
+
+
+const getPlacementSuffix = (number) => {
+  if (number === null || number === 0) return '';
+  const j = number % 10;
+  const k = number % 100;
+  if (j === 1 && k !== 11) {
+    return (
+      <>
+        {number}
+        <sup>st</sup>
+      </>
+    );
+  }
+  if (j === 2 && k !== 12) {
+    return (
+      <>
+        {number}
+        <sup>nd</sup>
+      </>
+    );
+  }
+  if (j === 3 && k !== 13) {
+    return (
+      <>
+        {number}
+        <sup>rd</sup>
+      </>
+    );
+  }
+  return (
+    <>
+      {number}
+      <sup>th</sup>
+    </>
+  );
 };
 
 const comparePokemonCards = (card1, card2) => {
@@ -744,6 +787,7 @@ const EventPage = () => {
     const [eventData, setEventData] = useState(null);
     const [division, setDivision] = useState('masters');
     const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
+    const STORAGE_KEY = `lastModalPlayer_${eventId}`;
     const chartRef = useRef(null);
     const [isChartReady, setIsChartReady] = useState(false)
     const navigate = useNavigate();
@@ -852,45 +896,53 @@ const EventPage = () => {
     }, [activeTab, eventId]);
 
     useEffect(() => {
+        if (!results.length) return;
+        const savedTab = sessionStorage.getItem(`viewTab_${eventId}`);
+        if (savedTab !== 'Records') {
+            localStorage.removeItem(STORAGE_KEY);
+            if (savedTab) setViewTab(savedTab);
+            return;
+        }
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            try {
+            const { placing, name } = JSON.parse(raw);
+            const match = results.find(p => p.placing === placing && p.name === name);
+            if (match) {
+                setViewTab('Records');
+                setModalPlayer(match);
+                setShowModal(true);
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+            } catch {
+            localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    }, [results]);
+
+    useEffect(() => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
     }, [division]);
 
     const handleRecordClick = (player) => {
-    setModalPlayer(player);
-    setShowModal(true);
+        setViewTab('Records');
+        sessionStorage.setItem(`viewTab_${eventId}`, 'Records');
+        setModalPlayer(player);
+        setShowModal(true);
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ placing: player.placing, name: player.name })
+        );
     };
 
     const closeModal = () => {
-    setShowModal(false);
-    setModalPlayer(null);
+        setShowModal(false);
+        setModalPlayer(null);
+        localStorage.removeItem(STORAGE_KEY);
     };
 
-    // useEffect(() => {
-    //     const fetchLiveStandings = async () => {
-    //         if (!eventData) return;
-
-    //         const isEventCompleted = eventData.isEventCompleted;
-    //         const finalDataUrl = eventData.finalDataUrl;
-            
-    //         const standingsUrl = isEventCompleted ? finalDataUrl : '';
-
-    //         try {
-    //             const response = await fetch(`/api/live-standings?eventId=${eventId}&isEventCompleted=${isEventCompleted}&finalDataUrl=${encodeURIComponent(standingsUrl)}`);
-    //             if (response.ok) {
-    //                 const standingsData = await response.json();
-    //                 setAverageCardCounts(standingsData); // Assuming you want to update card counts with standings data
-    //             } else {
-    //                 console.error('Failed to fetch live standings');
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching live standings:', error);
-    //         }
-    //     };
-
-    //     fetchLiveStandings();
-    // }, [eventData]);
-    
     useEffect(() => {
         const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
         if (savedShowTop30 !== null) {
@@ -1642,8 +1694,7 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
-                                {/* {(eventId === '2024_WORLDS' || eventId.includes('2025')) && ( */}
-                                {/* {(eventId.includes('2025')) && (
+                                {(eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
                                         <button 
                                             onClick={() => handleTabChange('Decks')} 
@@ -1660,7 +1711,7 @@ const EventPage = () => {
                                             Records
                                         </button>
                                     </div>
-                                )} */}
+                                )}
                            {viewTab === 'Decks' ? (
                                 results.length
                                 ? displayResults(results, eventId, division)
@@ -1669,8 +1720,15 @@ const EventPage = () => {
                             : (
                                 /* Records view */
                                 <ul className="result-list-ol">
-                                    {results.map((p, i) => (
-                                        <li key={i} className="player-list-hover records-list-hover" onClick={() => handleRecordClick(p)}>
+                                    {results.map((p, i) => {
+                                        const { wins = 0, losses = 0, ties = 0 } = p.record;
+                                        const matchPts = wins * 3 + ties * 1;
+                                        return (
+                                        <li
+                                            key={i}
+                                            className="player-list-hover records-list-hover"
+                                            onClick={() => handleRecordClick(p)}
+                                        >
                                             <div className='results-list-item'>
                                                 <div className='name-n-flag'>
                                                     <span className="player-placement">{p.placing}.</span>
@@ -1684,14 +1742,20 @@ const EventPage = () => {
                                                             {getCountryName(p.flag)}
                                                         </div>
                                                     </div> 
-                                                    <Link className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>{p.name}</Link>
+                                                    <Link className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>
+                                                        {formatName(p.name)}
+                                                    </Link>
                                                 </div>
-                                                <span className="record-summary">
-                                                            {p.record.wins}-{p.record.losses}-{p.record.ties}
-                                                </span>
+                                                <div className="player-stats">
+                                                    <span className="match-points">{matchPts}</span>
+                                                    <span className="record-summary">
+                                                    {wins}-{losses}-{ties}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </li>
-                                    ))}
+                                        );
+                                    })}
                                 </ul>
                             )}
                         </div>
@@ -1894,17 +1958,16 @@ const EventPage = () => {
                                 <button className="close-btn" onClick={closeModal}></button>
                                 <div className="modal-player-header">
                                     <div className='modal-name-sprites'>
-                                        <h3>{modalPlayer.placing}. {modalPlayer.name}&nbsp; 
-                                                
-                                        </h3>
+                                        <h3>{formatName(modalPlayer.name)}</h3>
                                         <DisplayPokemonSprites
                                             decklist={modalPlayer.decklist}
                                             sprite1={modalPlayer.sprite1}
                                             sprite2={modalPlayer.sprite2}
                                         />
                                     </div>
-                                    <p style={{ marginTop: '-10px' }}><span className='bold'>Record:</span> ({modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties})</p>
+                                    <p style={{ marginTop: '-10px' }}><span className='bold'>{getPlacementSuffix(modalPlayer.placing)} Place</span> ({division.charAt(0).toUpperCase() + division.slice(1)})</p>
                                     <p style={{ marginTop: '3px' }}>{eventData.name}</p>
+                                    <p style={{ marginTop: '3px' }}><span className='bold'>Record: </span>({modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties})</p>
                                     <div className='decklist-modal-btns'>
                                         <Link className='link-to-playerprofile' to={`/player/${normalizeName(modalPlayer.name)}-${modalPlayer.flag}`}>
                                             <button className="decklist-modal-button">Player Profile</button>
@@ -1934,13 +1997,10 @@ const EventPage = () => {
                                         {Object.entries(modalPlayer.rounds).reverse().map(([rnd, info]) => {
                                             const { code, name } = parseOpponent(info.name);
 
-                                             // 1) find the matching player object
                                             const opponent = results.find(p =>
-                                                p.name === name &&        // match the cleaned name
-                                                p.flag === code           // match the parsed bracketed code
+                                                p.name === name &&
+                                                p.flag === code
                                             );
-
-                                            // 2) derive sprites — either stored on opponent or freshly computed
                                             let sprites;
                                             if (opponent?.sprite1) {
                                                 sprites = { first: opponent.sprite1, second: opponent.sprite2 };
@@ -1950,9 +2010,9 @@ const EventPage = () => {
                                             }
 
                                             const bgColor =
-                                                info.result === 'W' ? 'rgba(144,238,144,0.5)' : // lightgreen
-                                                info.result === 'L' ? 'rgba(255,182,193,0.5)' : // lightcoral
-                                                info.result === 'T' ? 'rgba(255,255,102,0.5)' : // lightyellow
+                                                info.result === 'W' ? 'rgba(144,238,144,0.6)' :
+                                                info.result === 'L' ? 'rgba(255,182,193,0.6)' :
+                                                info.result === 'T' ? 'rgba(255,255,102,0.6)' :
                                                 'transparent';
                                             return (
                                             <tr key={rnd}>
@@ -1961,17 +2021,27 @@ const EventPage = () => {
                                                     {info.result}
                                                 </td>
                                                 <td className="name-n-flag">
-                                                <div className="flag-container">
-                                                    <img
-                                                    className="flag-size"
-                                                    src={flagsAbbrev[code] || flagsAbbrev.unknown}
-                                                    alt={code}
-                                                    />
-                                                    <div className="flag-tooltip">
-                                                    {getCountryName(code)}
+                                                    <div className="flag-container">
+                                                        <img
+                                                            className="flag-size"
+                                                            src={flagsAbbrev[code] || flagsAbbrev.unknown}
+                                                            alt={code}
+                                                        />
+                                                        <div className="flag-tooltip">
+                                                            {getCountryName(code)}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <Link className="link-to-playerrecords">{name}</Link>
+                                                    <a
+                                                        href="#"
+                                                        className="link-to-playerrecords"
+                                                        title="View opponent’s records"
+                                                        onClick={e => {
+                                                        e.preventDefault();
+                                                        handleRecordClick(opponent);
+                                                        }}
+                                                    >
+                                                        {formatName(name)}
+                                                    </a>
                                                 </td>
                                                 <td className="opponent-sprites-cell">
                                                     {sprites
