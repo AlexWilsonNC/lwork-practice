@@ -805,6 +805,7 @@ const EventPage = () => {
     const [eventName, setEventName] = useState('');
     const [showModal,   setShowModal]   = useState(false);
     const [modalPlayer, setModalPlayer] = useState(null);
+    const [showAllPlayers, setShowAllPlayers] = useState(false);
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -893,6 +894,23 @@ const EventPage = () => {
             setDivision(divisionParam);
         }
     }, [divisionParam]);
+
+    const totalPlayers = results.length;
+    const day1Rounds =
+        totalPlayers >= 2049 ? 9 :
+        totalPlayers >=  257 ? 8 :
+                               7 ;
+
+    const day2Results = results.filter(p => {
+        const { wins = 0, losses = 0, ties = 0 } = p.record;
+        const played = wins + losses + ties;
+        return played > day1Rounds;
+    });
+    const eliminatedResults = results.filter(p => {
+        const { wins = 0, losses = 0, ties = 0 } = p.record;
+        const played = wins + losses + ties;
+        return played <= day1Rounds;
+    });
 
     useEffect(() => {
         sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
@@ -1716,11 +1734,50 @@ const EventPage = () => {
                                     </div>
                                 )}
                            {viewTab === 'Decks' ? (
-                                results.length
-                                ? displayResults(results, eventId, division)
-                                : <p className='notavailable'>Results not yet available.</p>
+                            results.length ? (
+                                <>
+                                {/*
+                                    showAllPlayers? everything : only day2Results
+                                */}
+                                { displayResults(
+                                    showAllPlayers ? results : day2Results,
+                                    eventId,
+                                    division
+                                    )
+                                }
+
+                                {/*
+                                    Show a button if there *are* eliminated players and we're hiding them
+                                */}
+                                {!showAllPlayers && eliminatedResults.length > 0 && (
+                                    <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                    <button
+                                        onClick={() => setShowAllPlayers(true)}
+                                        className="show-more-btn"
+                                    >
+                                        Show eliminated players ({eliminatedResults.length})
+                                    </button>
+                                    </div>
+                                )}
+
+                                {/*
+                                    And when we're showing all, let user hide them again if desired
+                                */}
+                                {showAllPlayers && eliminatedResults.length > 0 && (
+                                    <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                    <button
+                                        onClick={() => setShowAllPlayers(false)}
+                                        className="show-more-btn"
+                                    >
+                                        Hide eliminated players
+                                    </button>
+                                    </div>
+                                )}
+                                </>
+                            ) : (
+                                <p className='notavailable'>Results not yet available.</p>
                             )
-                            : (
+                            ) : (
                                 /* Records view */
                                 <ul className="result-list-ol">
                                     {results.map((p, i) => {
