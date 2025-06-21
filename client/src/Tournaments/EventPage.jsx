@@ -1643,7 +1643,7 @@ const EventPage = () => {
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
                                 {/* {(eventId === '2024_WORLDS' || eventId.includes('2025')) && ( */}
-                                {(eventId.includes('2025')) && (
+                                {/* {(eventId.includes('2025')) && (
                                     <div className="decks-records-btns">
                                         <button 
                                             onClick={() => handleTabChange('Decks')} 
@@ -1660,7 +1660,7 @@ const EventPage = () => {
                                             Records
                                         </button>
                                     </div>
-                                )}
+                                )} */}
                            {viewTab === 'Decks' ? (
                                 results.length
                                 ? displayResults(results, eventId, division)
@@ -1673,7 +1673,7 @@ const EventPage = () => {
                                         <li key={i} className="player-list-hover records-list-hover" onClick={() => handleRecordClick(p)}>
                                             <div className='results-list-item'>
                                                 <div className='name-n-flag'>
-                                                <span className="player-placement">{p.placing}.</span>
+                                                    <span className="player-placement">{p.placing}.</span>
                                                     <div className="flag-container">
                                                         <img 
                                                             className='flag-size' 
@@ -1687,7 +1687,7 @@ const EventPage = () => {
                                                     <Link className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>{p.name}</Link>
                                                 </div>
                                                 <span className="record-summary">
-                                                    {p.record.wins}-{p.record.losses}-{p.record.ties}
+                                                            {p.record.wins}-{p.record.losses}-{p.record.ties}
                                                 </span>
                                             </div>
                                         </li>
