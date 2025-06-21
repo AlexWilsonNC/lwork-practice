@@ -465,6 +465,24 @@
     .player-stats span {
         font-size: 13px;
     }
+    .decklist-modal-btns button {
+        font-size: 12px;
+        border-radius: 1px;
+    }
+    .matchup-table th, 
+    .matchup-table td {
+        font-size: 10px;
+    }
+    .link-to-playerrecords {
+        font-size: 10px !important;
+    }
+    .matchup-table td.opponent-sprites-cell {
+        width: 75px;
+        padding: 0px;
+    }
+    .matchup-table th, .matchup-table td {
+        padding: 3px;
+    }
 }
 @media screen and (max-width: 625px) {
     .regional-info {
@@ -567,6 +585,11 @@
         font-size: 14px;
         margin-left: 10px;
         border-radius: 1px;
+    }
+    .modal-content {
+        padding: 0.75rem; 
+        max-width: 100%; 
+        width: 90%;
     }
 }
 @media screen and (max-width: 410px) {
