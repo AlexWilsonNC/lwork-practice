@@ -503,6 +503,9 @@ const EventPageContent = styled.div`
     .player-decklink-cell a {
         color: ${({ theme }) => theme.text};
     }
+    .close-btn {
+        color: ${({ theme }) => theme.text};
+    }
   .player-list-hover:nth-of-type(odd) {
     background-color: ${({ theme }) => theme.playerlisthover};
   }
@@ -1955,7 +1958,7 @@ const EventPage = () => {
                         {showModal && modalPlayer && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <button className="close-btn" onClick={closeModal}></button>
+                                <button className="close-btn" onClick={closeModal}><span class="material-symbols-outlined">close</span></button>
                                 <div className="modal-player-header">
                                     <div className='modal-name-sprites'>
                                         <h3>{formatName(modalPlayer.name)}</h3>
