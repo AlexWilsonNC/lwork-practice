@@ -284,7 +284,12 @@ export const displayResults = (players, eventId, division, customPlacement) => {
     return (
         <OlResults className='result-list-ol'>
             {players.map((player, index) => {
-                const placement = customPlacement !== undefined ? customPlacement : index + 1;
+                const placement = Number.isInteger(customPlacement)
+                    ? customPlacement + index
+                    : (player.placing != null 
+                        ? player.placing 
+                        : index + 1
+                      );
 
                 return (
                     <li key={`${player.name}-${index}`} className='player-list-hover'>

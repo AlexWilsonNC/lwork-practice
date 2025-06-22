@@ -1818,7 +1818,7 @@ useEffect(() => {
                                     <>
                                     {displayResults(day2Results, eventId, division)}
 
-                                    {!showAllDecks && !loadingEliminatedDecks && (
+                                    {eventId.includes('2025') && !showAllDecks && !loadingEliminatedDecks && (
                                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             <button onClick={loadEliminated} className="day1buttons">
                                                 Show Day 1 Results
@@ -1835,16 +1835,20 @@ useEffect(() => {
                                     {showAllDecks && eliminatedDecks.length > 0 && (
                                         <>
                                             <div className="day-divider">
-                                                <span>Day 2 cutoff</span>
+                                            <span>Day 2 cutoff</span>
                                             </div>
-                                            {displayResults(eliminatedDecks, eventId, division, eliminatedDecks[0].placing)}
+                                            {displayResults(
+                                            eliminatedDecks,
+                                            eventId,
+                                            division
+                                            )}
                                             <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                                                <button
-                                                    onClick={() => setShowAllDecks(false)}
-                                                    className="day1buttons"
-                                                >
-                                                    Hide Day 1 Results
-                                                </button>
+                                            <button
+                                                onClick={() => setShowAllDecks(false)}
+                                                className="day1buttons"
+                                            >
+                                                Hide Day 1 Results
+                                            </button>
                                             </div>
                                         </>
                                     )}
