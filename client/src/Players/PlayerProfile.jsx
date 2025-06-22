@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
-import errorBg from '../assets/article-thumbnails/unknown-player.png';
 
 import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
@@ -266,17 +265,18 @@ const PlayerProfileContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70vh;
     text-align: center;
     padding: 1rem;
-    background-image: url(${errorBg});
+    background-image: url(${({ theme }) => theme.unknownplayer});
     background-size: 50vh;
     background-position: center;
     background-repeat: no-repeat;
   }
-  .completed-n-upcoming {
-    // margin-top: 1px;
-  }
+    @media screen and (max-width: 1000px) {
+        .center-error {
+            height: 60vh !important;
+        }
+    }
     .search-input .searcheventsfield {
         background: ${({ theme }) => theme.searchBg};
         color: ${({ theme }) => theme.searchTxt};
@@ -464,13 +464,11 @@ const PlayerProfile = () => {
           <h2>No Player Profile Found</h2>
           <br></br>
           <br></br>
-          <p>
-            This usually means <i><strong>{formattedName} ({playerFlag})</strong></i> has no Day 2 results in our database,
-            <br></br><br></br>
-            or the player name & country in the URL didn't return a match.
+          <p className='unknown-player-txt-wdth'>
+            Either <strong>{formattedName} ({playerFlag})</strong> has no Day 2 results in our database, or there's an error with the "player-flag" data in the URL, if you believe this to be an error, please contact us at <a href='mailto:ptcglegends@gmail.com' style={{ color: '#1290eb' }}>ptcglegends@gmail.com</a>.
             <br></br><br></br>
             <br></br><br></br>
-            <span className='small-text-info'>(Even though we have Day 1 results & decklists for 2025 events, <br></br>those players are not integrated into our database as that would be waaaay too much data...)</span>
+            <span className='small-text-info'>(NOTE: Even though we've begun to have Day 1 results & decklists available for 2025 events, those players are not integrated into our database if they've not yet had a seperate Day 2 performance, as that would be waaay too much data...)</span>
           </p>
         </PlayerProfileContainer>
       );

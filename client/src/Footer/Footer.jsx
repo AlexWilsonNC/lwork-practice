@@ -79,7 +79,7 @@ function Footer() {
             </div>
             <div className='bottom-footer'>
                 <img src={totodileSprite}></img>
-                <p>PTCG Legends 3.0 - 2024&nbsp;&nbsp;|&nbsp;&nbsp;Website Design: Alex Wilson&nbsp;&nbsp;|&nbsp;&nbsp;Find me on X / Twitter: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>
+                <p>PTCG Legends - 2022&nbsp;&nbsp;|&nbsp;&nbsp;Website Design: Alex Wilson&nbsp;&nbsp;|&nbsp;&nbsp;Find me on X / Twitter: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>
                 <img src={feraligatrSprite}></img>
             </div>
         </footer>

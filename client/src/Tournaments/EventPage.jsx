@@ -1816,35 +1816,37 @@ useEffect(() => {
                             {viewTab === 'Decks' ? (
                                 results.length ? (
                                     <>
-                                    {displayResults(
-                                       showAllDecks
-                                         ? [...day2Results, ...eliminatedDecks]
-                                         : day2Results,
-                                       eventId,
-                                       division
-                                    )}
+                                    {displayResults(day2Results, eventId, division)}
 
-                                    {!showAllDecks && eliminatedDecks.length === 0 && !loadingEliminatedDecks && (
+                                    {!showAllDecks && !loadingEliminatedDecks && (
                                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             <button onClick={loadEliminated} className="day1buttons">
-                                                Show Day 1 Players
+                                                Show Day 1 Results
                                             </button>
                                         </div>
                                     )}
+
                                     {loadingEliminatedDecks && (
                                         <p style={{ textAlign: 'center', margin: '1rem 0' }}>
-                                            Loading Day 1 Players…
+                                            Loading Day 1 Results
                                         </p>
                                     )}
+
                                     {showAllDecks && eliminatedDecks.length > 0 && (
-                                        <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                                            <button
-                                                onClick={() => setShowAllDecks(false)}
-                                                className="day1buttons"
-                                            >
-                                                Hide Day 1 Players
-                                            </button>
-                                        </div>
+                                        <>
+                                            <div className="day-divider">
+                                                <span>Day 2 cutoff</span>
+                                            </div>
+                                            {displayResults(eliminatedDecks, eventId, division, eliminatedDecks[0].placing)}
+                                            <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                                <button
+                                                    onClick={() => setShowAllDecks(false)}
+                                                    className="day1buttons"
+                                                >
+                                                    Hide Day 1 Results
+                                                </button>
+                                            </div>
+                                        </>
                                     )}
                                     </>
                                 ) : (
@@ -1853,12 +1855,12 @@ useEffect(() => {
                             ) : (
                                 <>
                                 <ul className="result-list-ol">
-                                    {[...day2Results, ...eliminatedRecords].map((p, i) => {
-                                        const { wins = 0, losses = 0, ties = 0 } = p.record;
+                                    {day2Results.map((p, i) => {
+                                        const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
                                         const matchPts = wins * 3 + ties * 1;
                                         return (
                                         <li
-                                            key={i}
+                                            key={`d2-${i}`}
                                             className="player-list-hover records-list-hover"
                                             onClick={() => handleRecordClick(p)}
                                         >
@@ -1883,7 +1885,53 @@ useEffect(() => {
                                                     </Link>
                                                 </div>
                                                 <div className="player-stats">
-                                                    <span className="match-points">{matchPts} pts</span>
+                                                    <span className="match-points">{matchPts}</span>
+                                                    <span className="record-summary">
+                                                        {wins}-{losses}-{ties}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        );
+                                    })}
+                                </ul>
+                                <div className="day-divider">
+                                    <span>Day 2</span>
+                                </div>
+
+                                {/* ─── Day 1 players ─── */}
+                                <ul className="result-list-ol">
+                                    {eliminatedRecords.map((p, i) => {
+                                        const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
+                                        const matchPts = wins * 3 + ties * 1;
+                                        return (
+                                        <li
+                                            key={`d1-${i}`}
+                                            className="player-list-hover records-list-hover"
+                                            onClick={() => handleRecordClick(p)}
+                                        >
+                                            <div className='results-list-item'>
+                                                <div className='name-n-flag'>
+                                                    <span className="player-placement">{p.placing}.</span>
+                                                    <div className="flag-container">
+                                                    <img
+                                                        className='flag-size'
+                                                        src={flagsAbbrev[p.flag]}
+                                                        alt={p.flag}
+                                                    />
+                                                    <div className="flag-tooltip">
+                                                        {getCountryName(p.flag)}
+                                                    </div>
+                                                    </div>
+                                                    <Link
+                                                    className="link-to-playerrecords"
+                                                    style={{ pointerEvents: 'none' }}
+                                                    >
+                                                        {formatName(p.name)}
+                                                    </Link>
+                                                </div>
+                                                <div className="player-stats">
+                                                    <span className="match-points">{matchPts}</span>
                                                     <span className="record-summary">
                                                         {wins}-{losses}-{ties}
                                                     </span>

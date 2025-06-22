@@ -422,8 +422,37 @@
 .sts-logo {
     height: 90px !important;
     width: auto;
-  }
-
+}
+.day1buttons {
+    padding: 5px 20px;
+    font-size: 16px;
+    background-color: #1290eb;
+    color: white;
+    border: none;
+    border-radius: 2px;
+}
+.day1buttons:hover {
+    cursor: pointer;
+    background-color: grey;
+}
+.day-divider {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+.day-divider::before,
+.day-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+.day-divider span {
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  white-space: nowrap;
+}
 @media screen and (max-width: 1500px) {
     .regional-container {
         width: 80%;
@@ -494,6 +523,11 @@
         align-items: flex-start;
         padding: 15px 25px;
     } 
+    .day1buttons {
+        padding: 5px 20px;
+        font-size: 14px;
+        border-radius: 1px;
+    }
     .event-results {
         width: 100%;
     }
