@@ -129,6 +129,9 @@
 .results-table th:nth-child(4) {
     width: 32%;
 }
+.small-text-info {
+    font-size: 12px;
+}
 @media screen and (max-width: 1600px) {
     .player-results-container {
         width: 70%;

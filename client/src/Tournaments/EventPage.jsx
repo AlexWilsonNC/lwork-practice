@@ -803,9 +803,15 @@ const EventPage = () => {
     const [cardData, setCardData] = useState(null);
     const [viewTab, setViewTab] = useState('Decks');
     const [eventName, setEventName] = useState('');
-    const [showModal,   setShowModal]   = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [modalPlayer, setModalPlayer] = useState(null);
-    const [showAllPlayers, setShowAllPlayers] = useState(false);
+    
+    const [eliminatedDecks, setEliminatedDecks] = useState([]);
+    const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
+    const [showAllDecks, setShowAllDecks] = useState(false);
+    const [eliminatedRecords, setEliminatedRecords] = useState([]);
+    const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
+    const [showAllRecs, setShowAllRecs] = useState(false);
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -832,6 +838,26 @@ const EventPage = () => {
                                     ? allResults
                                     : [];
 
+    const is2025Event = eventId.includes('2025');
+
+   let day2Results;
+    if (is2025Event) {
+        // only for 2025+ events do we cut on Swiss rounds
+        const totalPlayers = results.length;
+        const day1Rounds =
+            totalPlayers >= 2049 ? 9 :
+            totalPlayers >=  257 ? 8 :
+                                7 ;
+
+        day2Results = results.filter(p => {
+            const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
+            return wins + losses + ties > day1Rounds;
+        });
+        } else {
+        // legacy events (pre-2025): everyone is shown
+        day2Results = results;
+    }
+    
     const normalizeString = (str) => {
         return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
     };
@@ -929,6 +955,69 @@ const EventPage = () => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
     }, [division]);
+
+    const loadEliminated = async () => {
+    if (viewTab === 'Records') {
+        if (loadingEliminatedRecs) return;
+        setLoadingEliminatedRecs(true);
+    }
+  
+  const [year, slug] = eventId.split('_');
+  const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+  try {
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const key  = `${division}`;
+    const raw  = Array.isArray(data[key]) ? data[key] : [];
+
+    const normalized = raw.map(player => {
+      let sprite1 = player.sprite1 || '';
+      let sprite2 = player.sprite2 || '';
+
+      if (!sprite1 && !sprite2 && player.decklist) {
+        const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+        const clean = str =>
+          str
+            .split('/')
+            .pop()
+            .replace(/^-?assets-sprites-/, '')
+            .replace(/\.png$/, '');
+        sprite1 = clean(firstSprite)  || '';
+        sprite2 = clean(secondSprite) || '';
+      }
+
+      if (sprite1 === 'blank') sprite1 = '';
+      if (sprite2 === 'blank') sprite2 = '';
+      if (!sprite1) sprite1 = 'blank';
+
+      return { ...player, sprite1, sprite2 };
+    });
+
+    if (viewTab === 'Decks') {
+      setEliminatedDecks(normalized);
+      setShowAllDecks(true);
+    } else {
+      setEliminatedRecords(normalized);
+      setShowAllRecs(true);
+    }
+  } catch (err) {
+    console.error('Failed to load eliminated players:', err);
+  } finally {
+    if (viewTab === 'Decks') {
+      setLoadingEliminatedDecks(false);
+    } else {
+      setLoadingEliminatedRecs(false);
+    }
+  }
+};
+
+useEffect(() => {
+  if (viewTab !== 'Records') return;
+  if (eliminatedRecords.length === 0 && !loadingEliminatedRecs) {
+    loadEliminated();    // defined just below
+  }
+}, [viewTab, eliminatedRecords.length, loadingEliminatedRecs]);
 
     const handleRecordClick = (player) => {
         setViewTab('Records');
@@ -1243,6 +1332,14 @@ const EventPage = () => {
 
     const handleTabChange = (tab) => {
         setViewTab(tab);
+
+        if (tab === 'Decks') {
+            setShowAllDecks(false);
+            setEliminatedDecks([]);
+        } else {
+            setShowAllRecs(false);
+            setEliminatedRecords([]);
+        }
     };
 
     const handleActiveTabChange = (tab) => {
@@ -1716,15 +1813,47 @@ const EventPage = () => {
                                         </button>
                                     </div>
                                 )}
-                           {viewTab === 'Decks' ? (
-                                results.length
-                                ? displayResults(results, eventId, division)
-                                : <p className='notavailable'>Results not yet available.</p>
-                            )
-                            : (
-                                /* Records view */
+                            {viewTab === 'Decks' ? (
+                                results.length ? (
+                                    <>
+                                    {displayResults(
+                                       showAllDecks
+                                         ? [...day2Results, ...eliminatedDecks]
+                                         : day2Results,
+                                       eventId,
+                                       division
+                                    )}
+
+                                    {!showAllDecks && eliminatedDecks.length === 0 && !loadingEliminatedDecks && (
+                                        <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                            <button onClick={loadEliminated} className="day1buttons">
+                                                Show Day 1 Players
+                                            </button>
+                                        </div>
+                                    )}
+                                    {loadingEliminatedDecks && (
+                                        <p style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                            Loading Day 1 Players…
+                                        </p>
+                                    )}
+                                    {showAllDecks && eliminatedDecks.length > 0 && (
+                                        <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                            <button
+                                                onClick={() => setShowAllDecks(false)}
+                                                className="day1buttons"
+                                            >
+                                                Hide Day 1 Players
+                                            </button>
+                                        </div>
+                                    )}
+                                    </>
+                                ) : (
+                                    <p className='notavailable'>Results not yet available.</p>
+                                )
+                            ) : (
+                                <>
                                 <ul className="result-list-ol">
-                                    {results.map((p, i) => {
+                                    {[...day2Results, ...eliminatedRecords].map((p, i) => {
                                         const { wins = 0, losses = 0, ties = 0 } = p.record;
                                         const matchPts = wins * 3 + ties * 1;
                                         return (
@@ -1737,23 +1866,26 @@ const EventPage = () => {
                                                 <div className='name-n-flag'>
                                                     <span className="player-placement">{p.placing}.</span>
                                                     <div className="flag-container">
-                                                        <img 
-                                                            className='flag-size' 
-                                                            src={flagsAbbrev[p.flag]} 
-                                                            alt="flag" 
-                                                        />
-                                                        <div className="flag-tooltip">
-                                                            {getCountryName(p.flag)}
-                                                        </div>
-                                                    </div> 
-                                                    <Link className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>
+                                                    <img
+                                                        className='flag-size'
+                                                        src={flagsAbbrev[p.flag]}
+                                                        alt={p.flag}
+                                                    />
+                                                    <div className="flag-tooltip">
+                                                        {getCountryName(p.flag)}
+                                                    </div>
+                                                    </div>
+                                                    <Link
+                                                    className="link-to-playerrecords"
+                                                    style={{ pointerEvents: 'none' }}
+                                                    >
                                                         {formatName(p.name)}
                                                     </Link>
                                                 </div>
                                                 <div className="player-stats">
-                                                    <span className="match-points">{matchPts}</span>
+                                                    <span className="match-points">{matchPts} pts</span>
                                                     <span className="record-summary">
-                                                    {wins}-{losses}-{ties}
+                                                        {wins}-{losses}-{ties}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1761,6 +1893,7 @@ const EventPage = () => {
                                         );
                                     })}
                                 </ul>
+                            </>
                             )}
                         </div>
                         ) : (
@@ -2001,9 +2134,9 @@ const EventPage = () => {
                                         {Object.entries(modalPlayer.rounds).reverse().map(([rnd, info]) => {
                                             const { code, name } = parseOpponent(info.name);
 
-                                            const opponent = results.find(p =>
-                                                p.name === name &&
-                                                p.flag === code
+                                            const allPlayers = [...results, ...eliminatedRecords];
+                                            const opponent   = allPlayers.find(p =>
+                                                p.name === name && p.flag === code
                                             );
                                             let sprites;
                                             if (opponent?.sprite1) {

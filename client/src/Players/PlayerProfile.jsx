@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
+import errorBg from '../assets/article-thumbnails/unknown-player.png';
 
 import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
@@ -260,6 +261,19 @@ const countryNames = {
 const PlayerProfileContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
+    &.center-error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    text-align: center;
+    padding: 1rem;
+    background-image: url(${errorBg});
+    background-size: 50vh;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
   .completed-n-upcoming {
     // margin-top: 1px;
   }
@@ -418,6 +432,14 @@ const PlayerProfile = () => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortCriteria, setSortCriteria] = useState('date'); // Default sorting by date
+    const decodedId = decodeURIComponent(id);
+    const splitAt = decodedId.lastIndexOf('-');
+    const rawName = decodedId.substring(0, splitAt);
+    const playerFlag = decodedId.substring(splitAt + 1);
+    const formattedName = rawName
+        .split(/[-\s]+/)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+        .join(' ');
 
     useEffect(() => {
         const fetchPlayerData = async () => {
@@ -437,7 +459,21 @@ const PlayerProfile = () => {
     }, [id]);
 
     if (error) {
-        return <div>{error}</div>;
+      return (
+        <PlayerProfileContainer theme={theme} className="center-error">
+          <h2>No Player Profile Found</h2>
+          <br></br>
+          <br></br>
+          <p>
+            This usually means <i><strong>{formattedName} ({playerFlag})</strong></i> has no Day 2 results in our database,
+            <br></br><br></br>
+            or the player name & country in the URL didn't return a match.
+            <br></br><br></br>
+            <br></br><br></br>
+            <span className='small-text-info'>(Even though we have Day 1 results & decklists for 2025 events, <br></br>those players are not integrated into our database as that would be waaaay too much data...)</span>
+          </p>
+        </PlayerProfileContainer>
+      );
     }
 
     if (!player) {

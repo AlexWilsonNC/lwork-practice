@@ -372,17 +372,44 @@ const PlayerDeck = () => {
                     const [playerName, playerFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
                     const normalizedPlayerName = normalizeString(playerName);
         
-                    const playerIndex = divisionData.findIndex(p => normalizeString(p.name) === normalizedPlayerName && p.flag === playerFlag);
-        
-                    if (playerIndex !== -1) {
-                        const player = divisionData[playerIndex];
-                        setPlayerData(player);
-                        setPlacement(playerIndex + 1);
-                        const format = division === 'professors' ? eventData.formatProfessors : eventData.format;
-                        fetchCardData(format);
-                    } else {
-                        console.error('Player not found in division data');
-                    }
+                           let player = divisionData.find(p =>
+         normalizeString(p.name) === normalizedPlayerName &&
+         p.flag === playerFlag
+       );
+
+       // 2) If not there, pull in the Day-1 static JSON and search that:
+       if (!player) {
+         try {
+           const eliminated = await fetchEliminatedJson(eventId, division);
+           player = eliminated.find(p =>
+             normalizeString(p.name) === normalizedPlayerName &&
+             p.flag === playerFlag
+           );
+           // optionally capture their “placing” if it’s in the JSON
+           if (player && typeof player.placing === 'number') {
+             setPlacement(player.placing);
+           }
+         } catch (e) {
+           console.error('Error loading Day-1 JSON:', e);
+         }
+       }
+
+       // 3) If we *still* don’t have them, bail out:
+       if (!player) {
+         console.error('Player not found in any source:', decodedPlayerId);
+         return;
+       }
+
+       // 4) Finally set state & kick off card fetch:
+       setPlayerData(player);
+       if (placement === null && player.placing) {
+         setPlacement(player.placing);
+       }
+       const fmt = division === 'professors'
+         ? eventData.formatProfessors
+         : eventData.format;
+       fetchCardData(fmt);
+
                 } else {
                     console.error('Division not found in event data');
                 }
@@ -393,6 +420,16 @@ const PlayerDeck = () => {
         
         fetchPlayerData();
     }, [eventId, division, playerId]);
+
+    const fetchEliminatedJson = async (eventId, division) => {
+        const [year, slug] = eventId.split('_');
+        const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Eliminated JSON ${res.status}`);
+        const data = await res.json();
+        const key  = `${division}`;
+        return Array.isArray(data[key]) ? data[key] : [];
+    };
 
     useEffect(() => {
         if (playerData) {
