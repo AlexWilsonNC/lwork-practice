@@ -1267,6 +1267,15 @@ const tournamentList = [
         "location": "Bologna, Italy"
     },
     {
+    "id": "2025_PORTLAND",
+    "name": "Portland Regionals",
+    "eventType": "regionals",
+    "eventLogo": regional25,
+    "date": "May 24, 2025",
+    "flag": usa,
+    "location": "Portland, Oregon",
+    },
+    {
         "id": "2025_RIO",
         "name": "Rio Regionals",
         "eventType": "regionals",
