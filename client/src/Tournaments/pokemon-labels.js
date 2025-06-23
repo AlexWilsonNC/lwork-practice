@@ -78,6 +78,8 @@ const customLabelsConfig = {
         'charizard-dragapult': 'Dragapult',
         'grimmsnarl-froslass': 'Marnie\'s Grimmsnarl',
         'sinistcha-ogerpon': 'Sinistcha',
+        'magmortar-volcanion': 'Magmortar Volcanion',
+        '-substitute': 'Other',
     },
     '2024': {
         '-gardevoir': 'Gardevoir ex',

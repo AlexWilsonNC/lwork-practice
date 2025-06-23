@@ -124,11 +124,10 @@
   border: 1px solid rgba(0,0,0,0.05); padding: .5rem; text-align: left;
 }
 .matchup-table td.opponent-sprites-cell {
-  width: 100px;
-  /* overflow: hidden; */
-  text-align: center;
+  display: table-cell;
   vertical-align: middle;
-  padding: 0px;
+  padding-right: 0.5rem;
+  text-align: right; 
 }
 .matchup-table td.opponent-sprites-cell img {
   max-width: 100%;
