@@ -127,7 +127,7 @@
   display: table-cell;
   vertical-align: middle;
   padding-right: 0.5rem;
-  text-align: right; 
+  text-align: center; 
 }
 .matchup-table td.opponent-sprites-cell img {
   max-width: 100%;

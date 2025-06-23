@@ -1052,9 +1052,6 @@ useEffect(() => {
                     sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
                     sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
                 }
-
-                if (sprite1 === 'blank') sprite1 = '';
-                if (sprite2 === 'blank') sprite2 = '';
             
                 const key = getCustomLabel(eventId, sprite1, sprite2);
                 return key === selectedArchetype;
@@ -2120,10 +2117,7 @@ useEffect(() => {
                                         }
 
                                         // 3) drop the special “blank” placeholder
-                                        // if (!sprite1) sprite1 = '/assets/sprites/blank.png';
-
-                                        if (sprite1 === 'blank') sprite1 = '';
-                                        if (sprite2 === 'blank') sprite2 = '';
+                                        if (!sprite1) sprite1 = '/assets/sprites/blank.png';
 
                                         // 4) overwrite the result object so displayResults uses the clean versions
                                         result.sprite1 = sprite1;
@@ -2210,7 +2204,7 @@ useEffect(() => {
                                                 info.result === 'T' ? 'rgba(255,255,102,0.6)' :
                                                 'transparent';
                                             return (
-                                            <tr key={rnd} className='pooponme'>
+                                            <tr key={rnd}>
                                                 <td style={{ textAlign: 'center' }}>{rnd}</td>
                                                 <td className='player-result-wlt' style={{ backgroundColor: bgColor, textAlign: 'center' }}>
                                                     {info.result}

@@ -60,7 +60,7 @@
     align-items: center;
     padding: 0 15px;
 }
-.flag-size-players {
+.flag-size-player {
     width: 23px;
     height: auto;
     margin-right: 10px;
@@ -189,7 +189,7 @@
     .player-results-container td {
         font-size: 13px;
     }
-    .flag-size-players {
+    .flag-size-player {
         width: 20px;
     }
     .event-type-logo3 {
@@ -293,7 +293,7 @@
     .player-results-container td {
         font-size: 12px;
     }
-    .flag-size-players {
+    .flag-size-player {
         width: 16px;
     }
 }
@@ -333,7 +333,7 @@
     .meep td:nth-child(1) {
         font-size: 7px !important;
     }
-    .flag-size-players {
+    .flag-size-player {
         width: 14px;
     }
     .results-table td {
