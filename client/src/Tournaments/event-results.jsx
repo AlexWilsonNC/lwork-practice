@@ -58,6 +58,7 @@ import sweden from '../assets/flags/sweden.png';
 import switzerland from '../assets/flags/switzerland.png';
 import taiwan from '../assets/flags/taiwan.png';
 import thailand from '../assets/flags/thailand.png';
+import turkey from '../assets/flags/turkey.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
@@ -118,6 +119,7 @@ const flags = {
     CH: switzerland,
     TW: taiwan,
     TH: thailand,
+    TR: turkey,
     US: usa,
     UK: uk,
     unknown: unknown
@@ -177,6 +179,7 @@ const countryNames = {
     CH: 'Switzerland (Europe)',
     TW: 'Taiwan (Asia-Pacific)',
     TH: 'Thailand (Asia-Pacific)',
+    TR: 'Turkey (Middle East-South Africa)',
     UK: 'United Kingdom (Europe)',
     US: 'USA (North America)',
     unknown: 'Unknown',

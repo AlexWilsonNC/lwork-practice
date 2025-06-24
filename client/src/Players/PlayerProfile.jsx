@@ -95,6 +95,7 @@ import sweden from '../assets/flags/sweden.png';
 import switzerland from '../assets/flags/switzerland.png';
 import taiwan from '../assets/flags/taiwan.png';
 import thailand from '../assets/flags/thailand.png';
+import turkey from '../assets/flags/turkey.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
@@ -144,8 +145,8 @@ const flags = {
     CA: canada,
     CL: chile,
     CN: china,
-    CO: colombia,
     CR: costaRica,
+    CO: colombia,
     HR: croatia,
     CZ: czechia,
     DK: denmark,
@@ -153,7 +154,6 @@ const flags = {
     SV: elSalvador,
     FI: finland,
     FR: france,
-    DR: dominicanRepublic,
     DE: germany,
     GR: greece,
     HK: hongKong,
@@ -191,6 +191,7 @@ const flags = {
     CH: switzerland,
     TW: taiwan,
     TH: thailand,
+    TR: turkey,
     US: usa,
     UK: uk,
     unknown: unknown
@@ -206,8 +207,8 @@ const countryNames = {
     CA: 'Canada (North America)',
     CL: 'Chile (Latin America)',
     CN: 'China (Asia-Pacific)',
-    CO: 'Colombia (Latin America)',
     CR: 'Costa Rica (Latin America)',
+    CO: 'Colombia (Latin America)',
     HR: 'Croatia (Europe)',
     CZ: 'Czechia (Europe)',
     DK: 'Denmark (Europe)',
@@ -250,6 +251,7 @@ const countryNames = {
     CH: 'Switzerland (Europe)',
     TW: 'Taiwan (Asia-Pacific)',
     TH: 'Thailand (Asia-Pacific)',
+    TR: 'Turkey (Middle East-South Africa)',
     UK: 'United Kingdom (Europe)',
     US: 'USA (North America)',
     unknown: 'Unknown',
