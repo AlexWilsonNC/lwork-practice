@@ -17,7 +17,9 @@ const customLabelsConfig = {
         'roaring-moon-dudunsparce': 'Roaring Moon',
         'charizard-pidgeot': 'Charizard Pidgeot',
         'charizard-bibarel': 'Charizard Bibarel',
+        'charizard-noctowl': 'Charizard Noctowl',
         'dragapult-charizard': 'Dragapult',
+        'blank-great-tusk': 'Great Tusk Mill',
         'blank-ironthorns': 'Iron Thorns',
         'gholdengo-palkia-origin': 'Gholdengo',
         'gholdengo-scizor': 'Gholdengo Scizor',
@@ -79,6 +81,7 @@ const customLabelsConfig = {
         'grimmsnarl-froslass': 'Marnie\'s Grimmsnarl',
         'sinistcha-ogerpon': 'Sinistcha',
         'magmortar-volcanion': 'Magmortar Volcanion',
+        'zacian-crowned-snorlax': 'Hop\'s Zacian',
         'blank-substitute': 'Other',
     },
     '2024': {

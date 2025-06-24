@@ -199,6 +199,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('charizard');
         secondSprite = getPokemonSpriteURL('bibarel');
     }
+    else if (hasPokemon('Noctowl') && hasPokemon('Charizard ex') && hasPokemon('Terapagos ex')) {
+        firstSprite = getPokemonSpriteURL('charizard');
+        secondSprite = getPokemonSpriteURL('noctowl');
+    }    
     else if (hasPokemon('Charizard ex') && hasPokemon('Dusknoir')) {
         firstSprite = getPokemonSpriteURL('charizard');
         secondSprite = getPokemonSpriteURL('dusknoir');
@@ -375,15 +379,25 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Magmortar') && hasPokemon('Volcanion ex')) {
         firstSprite = getPokemonSpriteURL('magmortar');
         secondSprite = getPokemonSpriteURL('volcanion');
-    }           
+    } 
+    else if (hasPokemon('Great Tusk') && hasPokemon('Dudunsparce')) {
+        firstSprite = getPokemonSpriteURL('blank');
+        secondSprite = getPokemonSpriteURL('great-tusk');
+    }               
+    else if (hasPokemon('Hop\'s Zacian ex') && hasPokemon('Hop\'s Snorlax')) {
+        firstSprite = getPokemonSpriteURL('zacian-crowned');
+        secondSprite = getPokemonSpriteURL('snorlax');
+    }               
 
     // Individual checks
     if (!secondSprite) {
+        if (hasPokemon('Great Tusk')) {
+            secondSprite = getPokemonSpriteURL('great-tusk');
+        }
         if (hasPokemon('Roaring Moon ex')) {
             secondSprite = getPokemonSpriteURL('roaring-moon');
         }
         else if (hasPokemon('Gardevoir ex')) {
-            firstSprite = getPokemonSpriteURL('blank');
             secondSprite = getPokemonSpriteURL('gardevoir');
         }
         else if(hasPokemon('Comfey')) {

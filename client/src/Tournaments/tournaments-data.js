@@ -1252,8 +1252,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "May 17, 2025",
         "flag": netherlands,
-        "location": "Utrecht, Netherlands",
-        "results": false
+        "location": "Utrecht, Netherlands"
     },
     {
         "id": "2025_BOLOGNA",
@@ -1322,8 +1321,16 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 17, 2025",
         "flag": chile,
-        "location": "Santiago, Chile",
-        "results": false
+        "location": "Santiago, Chile"
+    },
+    {
+    "id": "2025_MELBOURNE",
+    "name": "Melbourne Regionals",
+    "eventType": "regionals",
+    "eventLogo": regional25,
+    "date": "May 17, 2025",
+    "flag": australia,
+    "location": "Melbourne, Australia",
     },
     {
         "id": "2025_PERTH",

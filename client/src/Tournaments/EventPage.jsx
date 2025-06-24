@@ -1814,7 +1814,7 @@ useEffect(() => {
                                     <>
                                     {displayResults(day2Results, eventId, division)}
 
-                                    {eventId.includes('2025') && !showAllDecks && !loadingEliminatedDecks && (
+                                    {eventId.includes('2025') && division === 'masters' && !showAllDecks && !loadingEliminatedDecks && (
                                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             <button onClick={loadEliminated} className="day1buttons">
                                                 Show Day 1 Results
@@ -1822,16 +1822,16 @@ useEffect(() => {
                                         </div>
                                     )}
 
-                                    {loadingEliminatedDecks && (
+                                    {loadingEliminatedDecks && division === 'masters' && (
                                         <p style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             Loading Day 1 Results
                                         </p>
                                     )}
 
-                                    {showAllDecks && eliminatedDecks.length > 0 && (
+                                    {showAllDecks && division === 'masters' && eliminatedDecks.length > 0 && (
                                         <>
                                             <div className="day-divider">
-                                            <span>Day 2 cutoff</span>
+                                                <span>Day 2 cutoff</span>
                                             </div>
                                             {displayResults(
                                             eliminatedDecks,
