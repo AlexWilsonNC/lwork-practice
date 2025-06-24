@@ -1251,6 +1251,11 @@ useEffect(() => {
                                 <strong>Day 2:</strong> {eventData.dayTwoMasters}
                             </p>
                         )}
+                        {eventData?.dayOnePlayers && (
+                            <p>
+                                <strong>Players</strong> {eventData.dayOnePlayers}
+                            </p>
+                        )}
                     </>
                 );
             case 'professors':
@@ -1588,97 +1593,88 @@ useEffect(() => {
                 <meta name='twitter:image' content={eventData.thumbnail} />
             </Helmet>
             <div className='regional-container'>
-                <div className='top-divisions'>
-                    {eventData.masters ? (
+                {division !== 'all' && (
+                    <div className='top-divisions'>
+                        {eventData.masters ? (
+                            <Link
+                                className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'
+                                    }`}
+                                to={`/tournaments/${eventId}/masters`}
+                                style={{
+                                    opacity: isMastersEmpty && otherDivisionsHaveResults ? 0.1 : 1,
+                                    pointerEvents:
+                                        isMastersEmpty && otherDivisionsHaveResults
+                                            ? 'none'
+                                            : 'all',
+                                }}
+                            >
+                                Masters
+                            </Link>
+                        ) : eventData.professors ? (
+                            <Link
+                                className={`professorsBtn ${division === 'professors'
+                                    ? 'active-division'
+                                    : 'other-division'
+                                    }`}
+                                to={`/tournaments/${eventId}/professors`}
+                                style={{ opacity: 1, pointerEvents: 'all' }}
+                            >
+                                Professors
+                            </Link>
+                        ) : null}
+                        {eventData.olderSeniors || eventData.youngSeniors ? (
+                            <>
+                                {eventData.olderSeniors && (
+                                    <Link
+                                        className={`olderSeniorsBtn ${division === 'olderSeniors'
+                                            ? 'active-division'
+                                            : 'other-division'
+                                            }`}
+                                        to={`/tournaments/${eventId}/olderSeniors`}
+                                        style={{ opacity: 1, pointerEvents: 'all' }}
+                                    >
+                                        Older Seniors
+                                    </Link>
+                                )}
+                                {eventData.youngSeniors && (
+                                    <Link
+                                        className={`youngSeniorsBtn ${division === 'youngSeniors'
+                                            ? 'active-division'
+                                            : 'other-division'
+                                            }`}
+                                        to={`/tournaments/${eventId}/youngSeniors`}
+                                        style={{ opacity: 1, pointerEvents: 'all' }}
+                                    >
+                                        Young Seniors
+                                    </Link>
+                                )}
+                            </>
+                        ) : (
+                            <Link
+                                className={`seniorsBtn ${division === 'seniors' ? 'active-division' : 'other-division'
+                                    }`}
+                                to={`/tournaments/${eventId}/seniors`}
+                                style={{
+                                    opacity: eventData.seniors ? 1 : 0.1,
+                                    pointerEvents: eventData.seniors ? 'all' : 'none',
+                                }}
+                            >
+                                Seniors
+                            </Link>
+                        )}
                         <Link
-                            className={`mastersBtn ${division === 'masters' ? 'active-division' : 'other-division'
+                            className={`juniorsBtn ${division === 'juniors' ? 'active-division' : 'other-division'
                                 }`}
-                            to={`/tournaments/${eventId}/masters`}
+                            to={`/tournaments/${eventId}/juniors`}
                             style={{
-                                opacity: isMastersEmpty && otherDivisionsHaveResults ? 0.1 : 1,
-                                pointerEvents:
-                                    isMastersEmpty && otherDivisionsHaveResults
-                                        ? 'none'
-                                        : 'all',
+                                opacity: eventData.juniors ? 1 : 0.1,
+                                pointerEvents: eventData.juniors ? 'all' : 'none',
                             }}
                         >
-                            Masters
+                            Juniors
                         </Link>
-                    ) : eventData.professors ? (
-                        <Link
-                            className={`professorsBtn ${division === 'professors'
-                                ? 'active-division'
-                                : 'other-division'
-                                }`}
-                            to={`/tournaments/${eventId}/professors`}
-                            style={{ opacity: 1, pointerEvents: 'all' }}
-                        >
-                            Professors
-                        </Link>
-                    ) : eventData.all ? (
-                        <Link
-                            className={`professorsBtn ${division === 'all'
-                                ? 'active-division'
-                                : 'other-division'
-                                }`}
-                            to={`/tournaments/${eventId}/all`}
-                            style={{ opacity: 1, pointerEvents: 'all' }}
-                        >
-                            Combined
-                        </Link>
-                    ) : null}
-                    {eventData.olderSeniors || eventData.youngSeniors ? (
-                        <>
-                            {eventData.olderSeniors && (
-                                <Link
-                                    className={`olderSeniorsBtn ${division === 'olderSeniors'
-                                        ? 'active-division'
-                                        : 'other-division'
-                                        }`}
-                                    to={`/tournaments/${eventId}/olderSeniors`}
-                                    style={{ opacity: 1, pointerEvents: 'all' }}
-                                >
-                                    Older Seniors
-                                </Link>
-                            )}
-                            {eventData.youngSeniors && (
-                                <Link
-                                    className={`youngSeniorsBtn ${division === 'youngSeniors'
-                                        ? 'active-division'
-                                        : 'other-division'
-                                        }`}
-                                    to={`/tournaments/${eventId}/youngSeniors`}
-                                    style={{ opacity: 1, pointerEvents: 'all' }}
-                                >
-                                    Young Seniors
-                                </Link>
-                            )}
-                        </>
-                    ) : (
-                        <Link
-                            className={`seniorsBtn ${division === 'seniors' ? 'active-division' : 'other-division'
-                                }`}
-                            to={`/tournaments/${eventId}/seniors`}
-                            style={{
-                                opacity: eventData.seniors ? 1 : 0.1,
-                                pointerEvents: eventData.seniors ? 'all' : 'none',
-                            }}
-                        >
-                            Seniors
-                        </Link>
-                    )}
-                    <Link
-                        className={`juniorsBtn ${division === 'juniors' ? 'active-division' : 'other-division'
-                            }`}
-                        to={`/tournaments/${eventId}/juniors`}
-                        style={{
-                            opacity: eventData.juniors ? 1 : 0.1,
-                            pointerEvents: eventData.juniors ? 'all' : 'none',
-                        }}
-                    >
-                        Juniors
-                    </Link>
-                </div>
+                    </div>
+                )}
                 <div className='regional-info'>
                     <div className='left-regional-info'>
                         <h2>{eventData.name}</h2>

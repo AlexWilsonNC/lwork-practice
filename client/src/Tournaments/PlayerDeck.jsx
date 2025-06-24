@@ -402,9 +402,21 @@ const PlayerDeck = () => {
 
        // 4) Finally set state & kick off card fetch:
        setPlayerData(player);
-       if (placement === null && player.placing) {
-         setPlacement(player.placing);
-       }
+       setPlayerData(player);
+
+        // Determine placement: use explicit if available, otherwise fallback to index+1
+        let pl = null;
+        if (typeof player.placing === 'number' && player.placing > 0) {
+          pl = player.placing;
+        } else {
+          const idx = divisionData.findIndex(p =>
+            normalizeString(p.name) === normalizeString(player.name)
+            && p.flag === player.flag
+          );
+          pl = idx >= 0 ? idx + 1 : null;
+        }
+        setPlacement(pl);
+
        const fmt = division === 'professors'
          ? eventData.formatProfessors
          : eventData.format;
@@ -537,7 +549,14 @@ const PlayerDeck = () => {
                         ) : (
                             <>
                                 <hr className='playerdeck-hr'></hr>
-                                <p><span className='bold'>{placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place</span> ({capitalizeFirstLetter(division)})</p>
+                                <p>
+                                    <span className='bold'>
+                                        {placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place
+                                    </span> 
+                                    {division !== 'all' && (
+                                        <> ({capitalizeFirstLetter(division)})</>
+                                    )}
+                                </p>
                                 {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
                                 {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
                                 {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}

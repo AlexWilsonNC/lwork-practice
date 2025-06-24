@@ -594,6 +594,7 @@ const customLabelsConfig = {
     },
     '2010': {
         'luxray-garchomp': 'LuxChomp',
+        'luxray-roserade': 'SP Box',
         'gardevoir-gallade': 'Gardevoir Gallade',
         'dialga-garchomp': 'DialgaChomp',
         'blank-gengar': 'Gengar',

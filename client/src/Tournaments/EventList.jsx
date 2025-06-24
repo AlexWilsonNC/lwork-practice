@@ -232,7 +232,7 @@ const ToggleSwitch = styled.label`
     height: 13px;
     width: 13px;
     left: 3px;
-    bottom: 3px;
+    bottom: 2.5px;
     background-color: white;
     border-radius: 50%;
     transition: 0.4s;
@@ -246,12 +246,12 @@ const ToggleSwitch = styled.label`
   @media screen and (max-width: 700px) {
     margin-right: 25px;
     width: 26px;
-    height: 15px;
+    height: 16px;
     span:before {
       height: 12px;
       width: 12px;
       left: 3px;
-      bottom: 2px;
+      bottom: 1.7px;
     }
     input:checked + span:before {
       transform: translateX(9px);
@@ -262,7 +262,7 @@ const ToggleSwitch = styled.label`
   }
   @media screen and (max-width: 445px) {
     margin-right: 7px;
-    width: 25px;
+    width: 22px;
     height: 14px;
     span:before {
       height: 10px;
@@ -271,7 +271,7 @@ const ToggleSwitch = styled.label`
       bottom: 2px;
     }
     input:checked + span:before {
-      transform: translateX(9px);
+      transform: translateX(7px);
     }
   }
 `;
@@ -620,7 +620,7 @@ const EventList = () => {
                       <td>
                         {event.id && event.results !== false ? (
                           <a href={event.id} className='event-icon-links'>
-                            <span className="material-symbols-outlined">note_stack</span>
+                            <span className="material-symbols-outlined">description</span>
                           </a>
                         ) : null}
                       </td>

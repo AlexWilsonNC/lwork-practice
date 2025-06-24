@@ -1158,8 +1158,8 @@ const tournamentList = [
         "location": "Indianapolis, Indiana",
     },
     {
-        "id": "2024_INDY_2006_RETRO",
-        "name": "Indianapolis 2006 Retro Event",
+        "id": "2024_INDY_2006_RETRO/all",
+        "name": "Indianapolis Regionals 2006 Retro Event",
         "eventType": "retro",
         "eventLogo": retro,
         "date": "May 3, 2024",
