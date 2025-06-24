@@ -1854,7 +1854,7 @@ useEffect(() => {
                                     )}
                                     </>
                                 ) : (
-                                    <p className='notavailable'>Results not yet available.</p>
+                                    <p className='notavailable'>Results not yet available</p>
                                 )
                             ) : (
                                 <>

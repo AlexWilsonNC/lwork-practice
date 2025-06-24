@@ -553,9 +553,9 @@ const EventList = () => {
                   {!showUpcoming && (
                     <th>Results</th>
                   )}
-                  {showUpcoming && (
+                  {/* {showUpcoming && (
                     <th>Registration</th>
-                  )}
+                  )} */}
                   {showUpcoming && (
                     <th>Information</th>
                   )}
@@ -605,7 +605,7 @@ const EventList = () => {
                     )}
 
                     {/* For upcoming events, show the information icon */}
-                    {showUpcoming && (
+                    {/* {showUpcoming && (
                       <td>
                         {event.registrationTime ? (
                           <a href={event.registrationLink} className='event-icon-links' target='_blank' style={{ position: 'relative', display: 'inline-block' }}>
@@ -613,7 +613,7 @@ const EventList = () => {
                           </a>
                         ) : null}
                       </td>
-                    )}
+                    )} */}
 
                     {/* For upcoming events, show the "note stack" icon */}
                     {showUpcoming && (
@@ -636,7 +636,7 @@ const EventList = () => {
               />
             )}
           </div>
-          {showUpcoming && (
+          {/* {showUpcoming && (
             <p className='marginbottom event-list-key'>
               <span className="material-symbols-outlined reg-icon">edit_note</span>
               represents that an event's registration is / was live (not taking into account if capped or closed).
@@ -647,7 +647,7 @@ const EventList = () => {
             <span className="material-symbols-outlined reg-icon">schedule</span>
             signifies that the event's registration has been scheduled + countdown timer for your convenience. 
             </p>          
-          )}
+          )} */}
         </div>
       </UpcomingEvents>
     );
