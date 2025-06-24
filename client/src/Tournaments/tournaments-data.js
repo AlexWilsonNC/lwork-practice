@@ -322,8 +322,6 @@ const tournamentList = [
         "date": "Aug 15, 2025",
         "flag": usa,
         "location": "Anaheim, California",
-        "registrationTime": "",
-        "registrationLink": ""
     },
     {
         "id": "2025_TOKYO_CL",

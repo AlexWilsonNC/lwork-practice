@@ -1755,7 +1755,7 @@ useEffect(() => {
                                 </a>
                             </p>
                         )}
-                        {eventData.format && (
+                        {eventData.format && eventData.format.toUpperCase() !== 'TBA' && (
                             <p>
                                 <strong>Format:</strong> {getEventFormat(division)}
                                 {eventData.formatAdd && (
