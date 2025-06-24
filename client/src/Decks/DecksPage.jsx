@@ -584,4 +584,5 @@ const Decks = () => {
   );
 };
 
+export { formatOrder };
 export default Decks;

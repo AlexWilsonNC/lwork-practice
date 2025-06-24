@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/deckspage.css';
+import { formatOrder } from './DecksPage';
 
 // Define styled components
 const DeckProfileContainer = styled.div`
@@ -564,7 +565,16 @@ useEffect(() => {
     return <div>No data found for this deck.</div>;
   }
 
-  const uniqueFormats = [...new Set(decks.flatMap(d => d.decks.map(deck => deck.eventFormat)))].reverse();
+const formatParam = searchParams.get('format');
+
+// 2. pull every format this archetype appears in
+const rawFormats = decks.flatMap(d => d.decks.map(deck => deck.eventFormat));
+
+// 3. dedupe
+const uniqueFormatsRaw = Array.from(new Set(rawFormats));
+
+// 4. re-order them to match your master list
+const sortedFormats = formatOrder.filter(f => uniqueFormatsRaw.includes(f));
   const uniqueDivisions = ['All Divisions', ...new Set(decks.flatMap(d => d.decks.map(deck => deck.division)))];
 
   const divisionOrder = {
@@ -638,11 +648,17 @@ const filteredDecks = decks.flatMap(d => d.decks)
           <div className='filters-top'>
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
-              <select value={selectedFormat || ''} onChange={e => setSelectedFormat(e.target.value)}>
-                {uniqueFormats.map((format, index) => (
-                  <option key={index} value={format}>{format}</option>
-                ))}
-              </select>
+              <select
+    value={selectedFormat}
+    onChange={e => {
+      setSelectedFormat(e.target.value);
+      setSearchParams({ format: e.target.value });
+    }}
+  >
+    {sortedFormats.map(fmt => (
+      <option key={fmt} value={fmt}>{fmt}</option>
+    ))}
+  </select>
             </div>
             <div className='indiv-filter'>
             <p className='sort-events'>Division:</p>

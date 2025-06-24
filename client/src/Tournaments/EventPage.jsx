@@ -16,7 +16,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
 import internats25 from '../assets/event-logo/internats-2025.png';
-import speSeries from '../assets/event-logo/spe.png';
+import speSeries from '../assets/profile-pics/play-pokemon-logo.png';
 import worlds from '../assets/event-logo/worlds-hd.png';
 import premierBallLeague from '../assets/event-logo/premier-ball-league.png';
 import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
@@ -2203,10 +2203,15 @@ useEffect(() => {
                                                 info.result === 'L' ? 'rgba(255,182,193,0.6)' :
                                                 info.result === 'T' ? 'rgba(255,255,102,0.6)' :
                                                 'transparent';
+                                            const textColor =
+                                                info.result === 'W' ? 'rgb(1, 63, 1)' :
+                                                info.result === 'L' ? 'darkred' :
+                                                info.result === 'T' ? 'rgb(78, 78, 7)' :
+                                                'inherit';
                                             return (
                                             <tr key={rnd}>
                                                 <td style={{ textAlign: 'center' }}>{rnd}</td>
-                                                <td className='player-result-wlt' style={{ backgroundColor: bgColor, textAlign: 'center' }}>
+                                                <td className='player-result-wlt' style={{ backgroundColor: bgColor, textAlign: 'center', color: textColor }}>
                                                     {info.result}
                                                 </td>
                                                 <td className="name-n-flag">

@@ -2,6 +2,10 @@
     height: 55px;
     margin-bottom: 5px;
 }
+.deck-table td img {
+    height: 45px;
+    width: auto;
+}
 .paddingfive {
     padding-left: 15px !important;
 }
@@ -99,7 +103,8 @@
         height: 45px;
     }
     .deck-table td img {
-        width: 45px !important;
+        height: 40px;
+        width: auto !important;
     }
     .fontsource,
     .fontsource a {
@@ -119,6 +124,7 @@
     }
     .deck-table td img {
         width: 40px !important;
+        height: auto;
     }
     .deck-table td {
         font-size: 9px;
