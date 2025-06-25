@@ -116,12 +116,13 @@
 }
 .matchup-table {
   width: 100%; border-collapse: collapse; margin-top: 1rem;
+  border: 1px solid rgba(123, 123, 123, 0.1); 
 }
 .matchup-table th {
   font-weight: 600;
 }
 .matchup-table th, .matchup-table td {
-  border: 1px solid rgba(0,0,0,0.05); padding: .5rem; text-align: left;
+  padding: .5rem; text-align: left;
 }
 .matchup-table td.opponent-sprites-cell {
   display: table-cell;
@@ -346,6 +347,15 @@
     overflow: visible;
     white-space: wrap;
 }
+.name-n-flag-recmodal {
+    text-align: start;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    font-size: 18px;
+    overflow: visible;
+    white-space: wrap;
+}
 .result-list-ol {
     position: relative;
     margin-top: 25px;
@@ -514,6 +524,9 @@
     }
     .matchup-table th, .matchup-table td {
         padding: 3px;
+    }
+    .name-n-flag-recmodal {
+        display: flex;
     }
 }
 @media screen and (max-width: 625px) {

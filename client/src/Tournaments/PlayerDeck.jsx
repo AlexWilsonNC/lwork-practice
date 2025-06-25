@@ -369,13 +369,18 @@ const PlayerDeck = () => {
         
                 if (divisionData) {
                     const decodedPlayerId = decodeURIComponent(playerId);
-                    const [playerName, playerFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
+                    const [rawName, rawFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
+                    const playerName       = rawName;
+                    const playerFlag       = rawFlag === 'undefined' ? undefined : rawFlag;  
                     const normalizedPlayerName = normalizeString(playerName);
         
-                           let player = divisionData.find(p =>
-         normalizeString(p.name) === normalizedPlayerName &&
-         p.flag === playerFlag
-       );
+                let player = divisionData.find(p =>
+                    normalizeString(p.name) === normalizedPlayerName
+                    && ( playerFlag
+                        ? p.flag === playerFlag        // exact match when a real flag was provided
+                        : (p.flag === undefined || p.flag === null)  // match missing flags
+                        )
+                    );
 
        // 2) If not there, pull in the Day-1 static JSON and search that:
        if (!player) {

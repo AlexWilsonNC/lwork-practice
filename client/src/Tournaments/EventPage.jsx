@@ -10,6 +10,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
 import LiveStandings from '../Live/LiveStandings';
+import { flags, countryNames } from '../Tools/flags';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -105,9 +106,12 @@ import taiwan from '../assets/flags/taiwan.png';
 import thailand from '../assets/flags/thailand.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
+import uruguay from '../assets/flags/uruguay.png';
+import guatemala from '../assets/flags/guatemala.png';
+import bolivia from '../assets/flags/bolivia.png';
 import unknown from '../assets/flags/unknown.png';
 
-const flags = {
+const flagForDiffPurpose = {
     usa: usa,
     italy: italy,
     southAfrica: southAfrica,
@@ -154,69 +158,11 @@ const flags = {
     switzerland: switzerland,
     taiwan: taiwan,
     uk: uk,
+    uruguay: uruguay,
+    guatemala: guatemala,
+    bolivia: bolivia,
     unknown: unknown,
 };
-
-const flagsAbbrev = {
-    AR: argentina,
-    AU: australia,
-    AT: austria,
-    BY: belarus,
-    BE: belgium,
-    BR: brazil,
-    CA: canada,
-    CL: chile,
-    CN: china,
-    CR: costaRica,
-    CO: colombia,
-    HR: croatia,
-    CZ: czechia,
-    DK: denmark,
-    EC: ecuador,
-    SV: elSalvador,
-    FI: finland,
-    FR: france,
-    DE: germany,
-    GR: greece,
-    HK: hongKong,
-    HU: hungary,
-    IS: iceland,
-    ID: indonesia,
-    IE: ireland,
-    IL: israel,
-    IM: isleOfMan,
-    IT: italy,
-    JP: japan,
-    KR: southKorea,
-    LT: lithuania,
-    MY: malaysia,
-    MT: malta,
-    MX: mexico,
-    MA: morocco,
-    NL: netherlands,
-    NZ: newZealand,
-    NI: nicaragua,
-    NO: norway,
-    PE: peru,
-    PH: philippines,
-    PL: poland,
-    PT: portugal,
-    PR: puertoRico,
-    RU: russia,
-    SG: singapore,
-    SK: slovakia,
-    SI: slovenia,
-    SO: somalia,
-    ZA: southAfrica,
-    ES: spain,
-    SE: sweden,
-    CH: switzerland,
-    TW: taiwan,
-    TH: thailand,
-    US: usa,
-    UK: uk,
-    unknown: unknown
-}
 
 const logos = {
     retro: retro,
@@ -252,67 +198,6 @@ const logos = {
     superTrainerShowdown: superTrainerShowdown,
     megaTropicalBattle: megaTropicalBattle,
     championsLeague: championsLeague,
-};
-
-const countryNames = {
-    AR: 'Argentina (Latin America)',
-    AU: 'Australia (Oceania)',
-    AT: 'Austria (Europe)',
-    BY: 'Belarus (Europe)',
-    BE: 'Belgium (Europe)',
-    BR: 'Brazil (Latin America)',
-    CA: 'Canada (North America)',
-    CL: 'Chile (Latin America)',
-    CN: 'China (Asia-Pacific)',
-    CR: 'Costa Rica (Latin America)',
-    CO: 'Colombia (Latin America)',
-    HR: 'Croatia (Europe)',
-    CZ: 'Czechia (Europe)',
-    DK: 'Denmark (Europe)',
-    SV: 'El Salvador (Latin America)',
-    FI: 'Finland (Europe)',
-    FR: 'France (Europe)',
-    DE: 'Germany (Europe)',
-    GR: 'Greece (Europe)',
-    HK: 'Hong Kong (Asia-Pacific)',
-    HU: 'Hungary (Europe)',
-    IS: 'Iceland (Europe)',
-    ID: 'Indonesia (Asia-Pacific)',
-    IE: 'Ireland (Europe)',
-    IM: 'Isle of Man (Europe)',
-    IL: 'Israel (Middle East-South Africa)',
-    IT: 'Italy (Europe)',
-    JP: 'Japan (Asia-Pacific)',
-    SO: 'Somalia (Middle East-South Africa)',
-    KR: 'South Korea (Asia-Pacific)',
-    LT: 'Lithuania (Europe)',
-    MY: 'Malaysia (Asia-Pacific)',
-    MT: 'Malta (Europe)',
-    MX: 'Mexico (Latin America)',
-    MA: 'Moroco (Europe)',
-    NL: 'Netherlands (Europe)',
-    NZ: 'New Zealand (Oceania)',
-    NI: 'Nicaragua (Latin America)',
-    NO: 'Norway (Europe)',
-    PE: 'Peru (Latin America)',
-    PH: 'Philippines (Asia-Pacific)',
-    PL: 'Poland (Europe)',
-    PT: 'Portugal (Europe)',
-    PR: 'Puerto Rico (North America)',
-    RU: 'Russia (Russia)',
-    SG: 'Singapore (Asia-Pacific)',
-    SK: 'Slovakia (Europe)',
-    ZA: 'South Africa (Middle East-South Africa)',
-    ES: 'Spain (Europe)',
-    SE: 'Sweden (Europe)',
-    CH: 'Switzerland (Europe)',
-    TW: 'Taiwan (Asia-Pacific)',
-    TH: 'Thailand (Asia-Pacific)',
-    UK: 'United Kingdom (Europe)',
-    US: 'USA (North America)',
-    unknown: 'Unknown',
-    SI: 'Slovenia (Europe)',
-    EC: 'Ecuador (Latin America)'
 };
 
 const orderedSets = [
@@ -809,6 +694,7 @@ const EventPage = () => {
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
     const [showAllDecks, setShowAllDecks] = useState(false);
+    const [showAllPlayers, setShowAllPlayers] = useState(false);
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
@@ -919,6 +805,8 @@ const EventPage = () => {
         if (divisionParam) {
             setDivision(divisionParam);
         }
+        setShowAllDecks(false);
+        setEliminatedRecords([]);
     }, [divisionParam]);
 
     useEffect(() => {
@@ -1681,7 +1569,7 @@ useEffect(() => {
                         <p>{eventData.date}</p>
                         <div className='place-n-flag'>
                             <img
-                                src={flags[eventData.flag]}
+                                src={flagForDiffPurpose[eventData.flag]}
                                 alt={`Flag of ${eventData.flag.toUpperCase()}`}
                             />
                             <p>{eventData.location}</p>
@@ -1814,7 +1702,7 @@ useEffect(() => {
                                     <>
                                     {displayResults(day2Results, eventId, division)}
 
-                                    {eventId.includes('2025') && division === 'masters' && !showAllDecks && !loadingEliminatedDecks && (
+                                    {eventId.includes('2025') && !showAllDecks && !loadingEliminatedDecks && (
                                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             <button onClick={loadEliminated} className="day1buttons">
                                                 Show Day 1 Results
@@ -1822,13 +1710,13 @@ useEffect(() => {
                                         </div>
                                     )}
 
-                                    {loadingEliminatedDecks && division === 'masters' && (
+                                    {loadingEliminatedDecks && (
                                         <p style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             Loading Day 1 Results
                                         </p>
                                     )}
 
-                                    {showAllDecks && division === 'masters' && eliminatedDecks.length > 0 && (
+                                    {showAllDecks && eliminatedDecks.length > 0 && (
                                         <>
                                             <div className="day-divider">
                                                 <span>Day 2 cutoff</span>
@@ -1858,6 +1746,9 @@ useEffect(() => {
                                     {day2Results.map((p, i) => {
                                         const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
                                         const matchPts = wins * 3 + ties * 1;
+                                        const imgSrc = p.flag
+                                            ? (flags[p.flag]  || '')
+                                            : flags.unknown; 
                                         return (
                                         <li
                                             key={`d2-${i}`}
@@ -1866,11 +1757,13 @@ useEffect(() => {
                                         >
                                             <div className='results-list-item'>
                                                 <div className='name-n-flag'>
-                                                    <span className="player-placement">{p.placing}.</span>
+                                                    <span className="player-placement">
+                                                        {p.placing !== 9999 ? `${p.placing}.` : ''}
+                                                    </span>
                                                     <div className="flag-container">
                                                     <img
                                                         className='flag-size'
-                                                        src={flagsAbbrev[p.flag]}
+                                                        src={imgSrc}
                                                         alt={p.flag}
                                                     />
                                                     <div className="flag-tooltip">
@@ -1904,6 +1797,9 @@ useEffect(() => {
                                     {eliminatedRecords.map((p, i) => {
                                         const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
                                         const matchPts = wins * 3 + ties * 1;
+                                        const imgSrc = p.flag
+                                            ? (flags[p.flag]  || '')
+                                            : flags.unknown; 
                                         return (
                                         <li
                                             key={`d1-${i}`}
@@ -1912,11 +1808,13 @@ useEffect(() => {
                                         >
                                             <div className='results-list-item'>
                                                 <div className='name-n-flag'>
-                                                    <span className="player-placement">{p.placing}.</span>
+                                                    <span className="player-placement">
+                                                        {p.placing !== 9999 ? `${p.placing}.` : ''}
+                                                    </span>
                                                     <div className="flag-container">
                                                     <img
                                                         className='flag-size'
-                                                        src={flagsAbbrev[p.flag]}
+                                                        src={imgSrc}
                                                         alt={p.flag}
                                                     />
                                                     <div className="flag-tooltip">
@@ -2150,7 +2048,15 @@ useEffect(() => {
                                             sprite2={modalPlayer.sprite2}
                                         />
                                     </div>
-                                    <p style={{ marginTop: '-10px' }}><span className='bold'>{getPlacementSuffix(modalPlayer.placing)} Place</span> ({division.charAt(0).toUpperCase() + division.slice(1)})</p>
+                                    {modalPlayer.placing !== 9999 && (
+                                        <p style={{ marginTop: '-10px' }}>
+                                            <span className='bold'>
+                                                {getPlacementSuffix(modalPlayer.placing)} Place
+                                            </span>
+                                            &nbsp; 
+                                            ({division.charAt(0).toUpperCase() + division.slice(1)})
+                                        </p>
+                                    )}
                                     <p style={{ marginTop: '3px' }}>{eventData.name}</p>
                                     <p style={{ marginTop: '3px' }}><span className='bold'>Record: </span>({modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties})</p>
                                     <div className='decklist-modal-btns'>
@@ -2172,8 +2078,8 @@ useEffect(() => {
                                     <thead>
                                     <tr>
                                         <th style={{ textAlign: 'center' }}>Rnd</th>
-                                        <th style={{ textAlign: 'center' }}>Res</th>
-                                        <th>Opponent</th>
+                                        <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
+                                        <th>&nbsp;Opponent</th>
                                         <th style={{ textAlign: 'center' }}>Deck</th>
                                         <th style={{ textAlign: 'center' }}>List</th>
                                     </tr>
@@ -2210,11 +2116,14 @@ useEffect(() => {
                                                 <td className='player-result-wlt' style={{ backgroundColor: bgColor, textAlign: 'center', color: textColor }}>
                                                     {info.result}
                                                 </td>
-                                                <td className="name-n-flag">
-                                                    <div className="flag-container">
+                                                <td className="name-n-flag-recmodal" style={{ marginLeft: '3px' }}>
+                                                    <div
+                                                        className="flag-container"
+                                                        style={{ opacity: name === 'BYE' ? 0 : 1 }}
+                                                    >
                                                         <img
                                                             className="flag-size"
-                                                            src={flagsAbbrev[code] || flagsAbbrev.unknown}
+                                                            src={flags[code] || flags.unknown}
                                                             alt={code}
                                                         />
                                                         <div className="flag-tooltip">
@@ -2240,7 +2149,7 @@ useEffect(() => {
                                                         sprite1={sprites.first} 
                                                         sprite2={sprites.second} 
                                                         />
-                                                    : <em>-</em>
+                                                    : <em></em>
                                                     }
                                                 </td>
                                                 <td
