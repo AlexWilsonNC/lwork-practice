@@ -4,69 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/players.css';
-import { flags, countryNames, regions  } from '../Tools/flags';
-
-const karla = {
-    AR: 'Argentina',
-    AU: 'Australia',
-    AT: 'Austria',
-    BY: 'Belarus',
-    BE: 'Belgium',
-    BR: 'Brazil',
-    CA: 'Canada',
-    CL: 'Chile',
-    CN: 'China',
-    CO: 'Colombia',
-    CR: 'Costa Rica',
-    HR: 'Croatia',
-    CZ: 'Czechia',
-    DK: 'Denmark',
-    EC: 'Ecuador',
-    SV: 'El Salvador',
-    FI: 'Finland',
-    FR: 'France',
-    DE: 'Germany',
-    GR: 'Greece',
-    HK: 'Hong Kong',
-    HU: 'Hungary',
-    IS: 'Iceland',
-    ID: 'Indonesia',
-    IE: 'Ireland',
-    IL: 'Israel',
-    IM: 'Isle of Man',
-    IT: 'Italy',
-    JP: 'Japan',
-    KR: 'South Korea',
-    LT: 'Lithuania',
-    MY: 'Malaysia',
-    MT: 'Malta',
-    MX: 'Mexico',
-    MA: 'Morocco',
-    NL: 'Netherlands',
-    NZ: 'New Zealand',
-    NI: 'Nicaragua',
-    NO: 'Norway',
-    PE: 'Peru',
-    PH: 'Philippines',
-    PL: 'Poland',
-    PT: 'Portugal',
-    PR: 'Puerto Rico',
-    RU: 'Russia',
-    SG: 'Singapore',
-    SK: 'Slovakia',
-    SI: 'Slovenia',
-    SO: 'Somalia',
-    ZA: 'South Africa',
-    ES: 'Spain',
-    SE: 'Sweden',
-    CH: 'Switzerland',
-    TW: 'Taiwan',
-    TH: 'Thailand',
-    TR: 'Turkey',
-    US: 'USA',
-    UK: 'UK',
-    unknown: 'Unknown'
-};
+import { flags, countryNames, regions, playerCountryDropdown } from '../Tools/flags';
 
 const PlayerListContainer = styled.div`
   background: ${({ theme }) => theme.body};
@@ -232,11 +170,11 @@ const Players = () => {
         }
     });
 
-    const sortedCountryCodes = Object.keys(karla).sort((a, b) => {
-        if (karla[a] < karla[b]) {
+    const sortedCountryCodes = Object.keys(playerCountryDropdown).sort((a, b) => {
+        if (playerCountryDropdown[a] < playerCountryDropdown[b]) {
             return -1;
         }
-        if (karla[a] > karla[b]) {
+        if (playerCountryDropdown[a] > playerCountryDropdown[b]) {
             return 1;
         }
         return 0;
@@ -314,7 +252,7 @@ const Players = () => {
                             <select value={countryFilter} onChange={e => setCountryFilter(e.target.value)}>
                                 <option value="">All Countries</option>
                                 {sortedCountryCodes.map(countryCode => (
-                                    <option key={countryCode} value={countryCode}>{karla[countryCode]}</option>
+                                    <option key={countryCode} value={countryCode}>{playerCountryDropdown[countryCode]}</option>
                                 ))}
                             </select>
                         </div>

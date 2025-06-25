@@ -62,6 +62,11 @@ import bolivia from '../assets/flags/bolivia.png';
 import luxembourg from '../assets/flags/luxembourg.png';
 import latvia from '../assets/flags/latvia.png';
 import albania from '../assets/flags/albania.png';
+import bulgaria from '../assets/flags/bulgaria.png';
+import cyprus from '../assets/flags/cyprus.png';
+import trinidadAndTopago from '../assets/flags/trinidad-and-tobago.png';
+import dominicanRepublic from '../assets/flags/dominican-republic.png';
+import georgia from '../assets/flags/georgia.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -129,6 +134,11 @@ export const flags = {
      LU: luxembourg,
      LV: latvia,
      AL: albania,
+     BG: bulgaria,
+     CY: cyprus,
+     TT: trinidadAndTopago,
+     DO: dominicanRepublic,
+     GE: georgia,
     unknown: unknown
 };
 
@@ -197,13 +207,92 @@ export const countryNames = {
     LU: 'Luxembourg (Europe)',
     LV: 'Latvia (Europe)',
     AL: 'Albania (Europe)',
+    BG: 'Bulgaria (Europe)',
+    CY: 'Cyprus (Europe)',
+    GE: 'Georgia (Europe)',
+    TT: 'Trinidad & Topago (Latin America)',
+    DO: 'Dominican Republic (Latin America)',
     EC: 'Ecuador (Latin America)'
+};
+
+export const playerCountryDropdown = {
+    AL: 'Albania',
+    LU: 'Luxembourg',
+    BO: 'Bolivia',
+    AR: 'Argentina',
+    SI: 'Slovenia',
+    AU: 'Australia',
+    AT: 'Austria',
+    BY: 'Belarus',
+    BE: 'Belgium',
+    BR: 'Brazil',
+    CA: 'Canada',
+    CL: 'Chile',
+    CN: 'China',
+    CO: 'Colombia',
+    CR: 'Costa Rica',
+    HR: 'Croatia',
+    CZ: 'Czechia',
+    DK: 'Denmark',
+    EC: 'Ecuador',
+    SV: 'El Salvador',
+    FI: 'Finland',
+    FR: 'France',
+    DE: 'Germany',
+    GR: 'Greece',
+    HK: 'Hong Kong',
+    HU: 'Hungary',
+    IS: 'Iceland',
+    ID: 'Indonesia',
+    IE: 'Ireland',
+    IL: 'Israel',
+    IM: 'Isle of Man',
+    IT: 'Italy',
+    JP: 'Japan',
+    KR: 'South Korea',
+    LT: 'Lithuania',
+    MY: 'Malaysia',
+    MT: 'Malta',
+    MX: 'Mexico',
+    MA: 'Morocco',
+    NL: 'Netherlands',
+    NZ: 'New Zealand',
+    NI: 'Nicaragua',
+    NO: 'Norway',
+    PE: 'Peru',
+    PH: 'Philippines',
+    PL: 'Poland',
+    PT: 'Portugal',
+    PR: 'Puerto Rico',
+    RU: 'Russia',
+    SG: 'Singapore',
+    SK: 'Slovakia',
+    SI: 'Slovenia',
+    SO: 'Somalia',
+    ZA: 'South Africa',
+    ES: 'Spain',
+    SE: 'Sweden',
+    LV: 'Latvia',
+    CH: 'Switzerland',
+    TW: 'Taiwan',
+    TH: 'Thailand',
+    TR: 'Turkey',
+    US: 'USA',
+    UK: 'UK',
+    UY: 'Uruguay',
+    GT: 'Guatemala',
+    CY: 'Cyprus',
+    BG: 'Bulgaria',
+    DO: 'Dominican Republic',
+    GE: 'Georgia',
+    TT: 'Trinidad & Topago'
+    // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT'],
-  EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL'],
+  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO'],
+  EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH'],
   MS: ['ZA','TR']

@@ -112,9 +112,18 @@ export const displayResults = (players, eventId, division, customPlacement) => {
                         : index + 1
                       );
                 const displayPlacement = placement === 9999 ? '' : placement;
-                const imgSrc = player.flag
-                    ? (flags[player.flag]  || '')
+                let code = player.flag;
+                if (code && !flags[code]) {
+                    console.warn(`Unknown flag code "${code}" for player "${player.name}" (placing ${player.placing})`);
+                }
+                const imgSrc = code
+                    ? (flags[code] || '')
                     : flags.unknown; 
+                <img
+                    className="flag-size"
+                    src={imgSrc}
+                    alt={code || "unknown"}
+                />
                 return (
                     <li key={`${player.name}-${index}`} className='player-list-hover'>
                         <div className='results-list-item'>
