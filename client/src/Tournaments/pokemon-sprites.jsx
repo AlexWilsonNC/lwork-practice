@@ -372,6 +372,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite = getPokemonSpriteURL('okidogi');
         secondSprite = getPokemonSpriteURL('dudunsparce');
     }           
+    else if (getPokemonCount('Okidogi') === 4) {
+        firstSprite = getPokemonSpriteURL('blank');
+        secondSprite = getPokemonSpriteURL('okidogi');
+    }
     else if (hasPokemon('Toedscruel ex') && hasPokemon('Teal Mask Ogerpon ex')) {
         firstSprite = getPokemonSpriteURL('toedscruel');
         secondSprite = getPokemonSpriteURL('ogerpon');

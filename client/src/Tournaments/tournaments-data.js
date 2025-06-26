@@ -1210,8 +1210,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 2, 2025",
         "flag": usa,
-        "location": "Milwaukee, Wisconsin",
-        "results": false
+        "location": "Milwaukee, Wisconsin"
     },
     {
         "id": "2025_BIRMINGHAM",

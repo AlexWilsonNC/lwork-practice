@@ -15,6 +15,7 @@ const cardUri = process.env.CARD_MONGODB_URI;
 const playersUri = process.env.PLAYERS_MONGODB_URI;
 const decksUri = process.env.DECKS_MONGODB_URI;
 const emailsUri = process.env.EMAILS_MONGODB_URI; // Add the email subscription URI here
+const cardsDecklists = process.env.CARDSINDECKLISTS_MONGODB_URI;
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
@@ -24,6 +25,7 @@ const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, 
 const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const decksConnection = mongoose.createConnection(decksUri, { useNewUrlParser: true, useUnifiedTopology: true });
+const decklistsDb = mongoose.createConnection(cardsDecklists, { useNewUrlParser: true, useUnifiedTopology: true });
 
 eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
 eventConnection.once('open', () => {
@@ -413,6 +415,39 @@ app.get('/api/decks/:label', async (req, res) => {
   } catch (error) {
     console.error('Error fetching decks:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/cardDecklists', async (req, res) => {
+  try {
+    let { set, number } = req.query;
+    if (!set || !number) {
+      return res.status(400).json({ error: 'Missing set or number parameter' });
+    }
+
+    // Always upper-case the set code
+    set = set.toUpperCase();
+    number = String(number);
+
+    const collection = decklistsDb.collection('cardDecklists');
+    const idKey = `${set}-${number}`;
+    console.log(`[cardDecklists] lookup by _id: ${idKey}`);
+
+    // 1) Try the document _id first
+    let doc = await collection.findOne({ _id: idKey });
+
+    // 2) Fallback: match on fields if that failed
+    if (!doc) {
+      console.log(`[cardDecklists] _id miss, trying {set,number}`);
+      doc = await collection.findOne({ set, number });
+    }
+
+    const occ = (doc && doc.occurrences) || [];
+    console.log(`[cardDecklists] found ${occ.length} occurrences for ${set}-${number}`);
+    return res.json({ occurrences: occ });
+  } catch (err) {
+    console.error('Error in /api/cardDecklists:', err);
+    return res.status(500).json({ error: 'Server error fetching card decklists' });
   }
 });
 

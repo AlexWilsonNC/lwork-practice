@@ -1871,7 +1871,7 @@ useEffect(() => {
                                             </>
                                         ) : eventId.includes("_CL") ? ( // Check for _CL first to prioritize it
                                             <p className='chart-button'>Top {chartResults.length}</p>
-                                        ) : (is2024Event && division === 'masters' || eventId.includes("2024_WORLDS")) ? (
+                                        ) : (is2024Event || eventId.includes("2024_WORLDS")) ? (
                                             <button className={`chart-button day2btn active`}>
                                                 Day 2
                                             </button>

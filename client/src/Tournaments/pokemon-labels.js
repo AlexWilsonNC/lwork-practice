@@ -63,6 +63,7 @@ const customLabelsConfig = {
         'clefairy-noctowl': 'Lillie\'s Clefairy Box',
         'terapagos-noctowl': 'Terapagos',
         'okidogi-dudunsparce': 'Okidogi',
+        'blank-okidogi': 'Okidogi',
         'blank-zoroark': 'N\'s Zoroark',
         'blaziken-zoroark': 'N\'s Zoroark',
         'dragapult-zoroark': 'Dragapult',
