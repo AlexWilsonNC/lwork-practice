@@ -252,6 +252,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('klawf');
         secondSprite  = getPokemonSpriteURL('brute-bonnet');
     }
+    else if (hasPokemon('Noctowl') && hasPokemon('Wellspring Mask Ogerpon ex')) {
+        firstSprite  = getPokemonSpriteURL('noctowl');
+        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
+    }    
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex')) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
@@ -315,11 +319,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Sinistcha') && hasPokemon('Teal Mask Ogerpon ex')) {
         firstSprite  = getPokemonSpriteURL('sinistcha');
         secondSprite  = getPokemonSpriteURL('ogerpon');
-    }     
-    else if (hasPokemon('Noctowl') && hasPokemon('Wellspring Mask Ogerpon ex')) {
-        firstSprite  = getPokemonSpriteURL('noctowl');
-        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
-    }     
+    }      
     else if (hasPokemon('Joltik') && hasPokemon('Pikachu ex')) {
         firstSprite  = getPokemonSpriteURL('joltik');
         secondSprite  = getPokemonSpriteURL('pikachu');
@@ -357,6 +357,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }           
     else if (hasPokemon('Cynthia\'s Garchomp ex')) {
         secondSprite  = getPokemonSpriteURL('garchomp');
+    }           
+    else if (hasPokemon('Ceruledge ex') && !hasPokemon('Joltik') && !hasPokemon('Gholdengo ex')) {
+        secondSprite  = getPokemonSpriteURL('ceruledge');
     }           
     else if (hasPokemon('Ceruledge ex') && hasPokemon('Revavroom')) {
         secondSprite  = getPokemonSpriteURL('ceruledge');

@@ -1309,8 +1309,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Apr 19, 2025",
         "flag": mexico,
-        "location": "Monterrey, México",
-        "results": false
+        "location": "Monterrey, México"
     },
     {
         "id": "2025_SANTIAGO",
@@ -1408,7 +1407,7 @@ const tournamentList = [
     "name": "Milwaukee Regionals",
     "eventType": "regionals",
     "eventLogo": regional25,
-    "date": "Oct 10 , 2025",
+    "date": "Oct 10, 2025",
     "flag": usa,
     "location": "Milwaukee, Wisconsin",
     },

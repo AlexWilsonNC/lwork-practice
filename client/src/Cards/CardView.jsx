@@ -55,24 +55,24 @@ const normalizeString = (str) => {
 };
 
 const parseEventDate = (dateStr) => {
-  // Try the built-in parser first
-  const d = new Date(dateStr);
-  if (!isNaN(d)) return d;
+    // Try the built-in parser first
+    const d = new Date(dateStr);
+    if (!isNaN(d)) return d;
 
-  // Try "StartMonth Day - EndMonth Day, Year"
-  let m = dateStr.match(/(\w+ \d+)\s*-\s*(?:\w+ \d+),\s*(\d{4})/);
-  if (m) {
-    return new Date(`${m[1]}, ${m[2]}`);
-  }
+    // Try "StartMonth Day - EndMonth Day, Year"
+    let m = dateStr.match(/(\w+ \d+)\s*-\s*(?:\w+ \d+),\s*(\d{4})/);
+    if (m) {
+        return new Date(`${m[1]}, ${m[2]}`);
+    }
 
-  // Try single "Month Day, Year"
-  m = dateStr.match(/(\w+ \d+),\s*(\d{4})/);
-  if (m) {
-    return new Date(`${m[1]}, ${m[2]}`);
-  }
+    // Try single "Month Day, Year"
+    m = dateStr.match(/(\w+ \d+),\s*(\d{4})/);
+    if (m) {
+        return new Date(`${m[1]}, ${m[2]}`);
+    }
 
-  // Fallback to Invalid Date
-  return d;
+    // Fallback to Invalid Date
+    return d;
 };
 
 const formatDate = (dateString) => {
@@ -151,6 +151,7 @@ const CardView = () => {
     const [isExpandedLegalAny, setIsExpandedLegalAny] = useState(false);
     const [isGLCLegalAny, setIsGLCLegalAny] = useState(false);
     const [expandedEvents, setExpandedEvents] = useState(new Set());
+    const [isRotated, setIsRotated] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -310,139 +311,6 @@ const CardView = () => {
         hasOtherArtseses();
     }, [otherVersions]);
 
-    // useEffect(() => {
-    //     if (!cardInfo) {
-    //         return;
-    //     }
-
-    //     const fetchEventIds = async () => {
-    //         try {
-    //             const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/event-ids');
-    //             if (response.ok) {
-    //                 const data = await response.json();
-    //                 return data;
-    //             } else {
-    //                 console.error('Failed to fetch event IDs');
-    //                 return [];
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching event IDs:', error);
-    //             return [];
-    //         }
-    //     };
-
-    //     const fetchEventData = async (eventId) => {
-    //         try {
-    //             const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
-    //             if (response.ok) {
-    //                 const data = await response.json();
-    //                 return data;
-    //             } else {
-    //                 console.error(`Failed to fetch event data for event ID: ${eventId}`);
-    //                 return null;
-    //             }
-    //         } catch (error) {
-    //             console.error(`Error fetching event data for event ID: ${eventId}`, error);
-    //             return null;
-    //         }
-    //     };
-
-    //     const parseDate = (dateString) => {
-    //         const regexRange = /(\w+ \d+) - (\d+), (\d+)/;
-    //         const regexSingle = /(\w+ \d+), (\d+)/;
-
-    //         let match = regexRange.exec(dateString);
-    //         if (match) {
-    //             return new Date(`${match[1]}, ${match[3]}`);
-    //         }
-
-    //         match = regexSingle.exec(dateString);
-    //         if (match) {
-    //             return new Date(`${match[1]}, ${match[2]}`);
-    //         }
-
-    //         return new Date(dateString);
-    //     };
-
-    //     const fetchAndFilterEvents = async () => {
-    //         if (!cardInfo) return;
-
-    //         if (cardInfo.supertype === "Energy" && cardInfo.subtypes && cardInfo.subtypes.includes("Basic")) {
-    //             setIsBasicEnergy(true);
-    //             setLoading(false);
-    //             return;
-    //         }
-            
-    //         setLoading(true);
-    //         const eventIds = await fetchEventIds();
-    //         const allResults = [];
-
-    //         for (const eventId of eventIds) {
-    //             const eventData = await fetchEventData(eventId);
-    //             if (eventData) {
-    //                 const divisions = ['masters', 'all', 'seniors', 'olderseniors', 'youngseniors', 'juniors', 'professors', 'decksbyera'];
-    //                 const results = [];
-
-    //                 divisions.forEach(division => {
-    //                     if (eventData[division]) {
-    //                         eventData[division].forEach((player, playerIndex) => {
-    //                             if (player.decklist) {
-    //                                 let hasCard = false;
-
-    //                                 hasCard = (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase() &&
-    //                                     p.set === cardInfo.setAbbrev &&
-    //                                     p.number === cardInfo.number
-    //                                 )) ||
-    //                                     player.decklist.trainer?.some(t => t.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase()) ||
-    //                                     player.decklist.energy?.some(e => e.name.trim().toLowerCase() === cardInfo.name.trim().toLowerCase());
-
-    //                                 otherVersions.forEach(version => {
-    //                                     if (player.decklist.pokemon?.some(p => p.name.trim().toLowerCase() === version.name.trim().toLowerCase() &&
-    //                                         p.set === version.setAbbrev &&
-    //                                         p.number === version.number
-    //                                     )) { hasCard = true }
-    //                                 })
-
-    //                                 if (hasCard) {
-    //                                     results.push({
-    //                                         eventId: eventData.id,
-    //                                         eventName: eventData.name,
-    //                                         eventFormat: eventData.format,
-    //                                         eventDate: eventData.date,
-    //                                         playerName: player.name,
-    //                                         playerLabel: player.source,
-    //                                         division,
-    //                                         flag: player.flag,
-    //                                         placement: playerIndex + 1,
-    //                                         decklist: player.decklist,
-    //                                         sprite1: player.sprite1,
-    //                                         sprite2: player.sprite2
-    //                                     });
-    //                                 }
-    //                             }
-    //                         });
-    //                     }
-    //                 });
-
-    //                 allResults.push(...results);
-    //             }
-    //         }
-
-    //         console.log('Before sorting:', allResults.map(result => result.eventDate));
-
-    //         allResults.sort((a, b) => parseDate(b.eventDate) - parseDate(a.eventDate));
-
-    //         console.log('After sorting:', allResults.map(result => result.eventDate));
-
-    //         setEventResults(allResults);
-
-    //         setLoading(false);
-    //         setEventsScanned(true);
-    //     };
-
-    //     fetchAndFilterEvents();
-    // }, [cardInfo, otherVersions]);
-
     useEffect(() => {
         if (!cardInfo) return;
 
@@ -457,37 +325,37 @@ const CardView = () => {
         setLoading(true);
         setEventsScanned(false);
 
-  const prints = [{ set, number }];
+        const prints = [{ set, number }];
 
-  // 2) Add every other version of the same card
-  otherVersions
-    .filter(v => v.setAbbrev !== set || v.number !== number)
-    .forEach(v => {
-      prints.push({ set: v.setAbbrev, number: v.number });
-    });
+        // 2) Add every other version of the same card
+        otherVersions
+            .filter(v => v.setAbbrev !== set || v.number !== number)
+            .forEach(v => {
+                prints.push({ set: v.setAbbrev, number: v.number });
+            });
 
-  // 3) Fetch all in parallel, flatten, sort by date, and set
-  Promise.all(
-    prints.map(({ set, number }) =>
-      fetch(`/api/cardDecklists?set=${set}&number=${number}`)
-        .then(r => r.json())
-        .then(json => json.occurrences || [])
-        .catch(() => [])
-    )
-  )
-    .then(arraysOfOcc => {
-      const allOcc = arraysOfOcc.flat();
-      allOcc.sort(
-        (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
-      );
-      setEventResults(allOcc);
-    })
-    .catch(err => console.error("Error fetching card decklists:", err))
-    .finally(() => {
-      setLoading(false);
-      setEventsScanned(true);
-    });
-}, [cardInfo, set, number, otherVersions]);  // ← include otherVersions
+        // 3) Fetch all in parallel, flatten, sort by date, and set
+        Promise.all(
+            prints.map(({ set, number }) =>
+                fetch(`/api/cardDecklists?set=${set}&number=${number}`)
+                    .then(r => r.json())
+                    .then(json => json.occurrences || [])
+                    .catch(() => [])
+            )
+        )
+            .then(arraysOfOcc => {
+                const allOcc = arraysOfOcc.flat();
+                allOcc.sort(
+                    (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
+                );
+                setEventResults(allOcc);
+            })
+            .catch(err => console.error("Error fetching card decklists:", err))
+            .finally(() => {
+                setLoading(false);
+                setEventsScanned(true);
+            });
+    }, [cardInfo, set, number, otherVersions]);  // ← include otherVersions
 
     const toggleEventExpansion = (eventId) => {
         setExpandedEvents(prev => ({
@@ -568,10 +436,10 @@ const CardView = () => {
         { name: 'Twin Energy', set: 'RCL', number: '174' },
         { name: 'Twin Energy', set: 'RCL', number: '209' },
     ];
-    
+
     const isGLCLegal = (card) => {
-    const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-    const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
+        const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+        const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
 
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
@@ -617,7 +485,7 @@ const CardView = () => {
             bannedCard.number === card.number
         );
     };
-    
+
     const isStandardLegal = (card) => {
         // UPDATE every year with regulation mark legality (assumed G will rotate in 2026 and so on...)
         // add more regulation marks as cards release in the coming years
@@ -681,10 +549,10 @@ const CardView = () => {
         otherCard.setAbbrev !== cardInfo.setAbbrev || otherCard.number !== cardInfo.number
     );
     const showOtherVersions = otherVersionsToShow.length > 0 && (cardInfo.supertype === 'Pokémon' || cardInfo.supertype === 'Trainer' || cardInfo.supertype === 'Energy');
-    const displayedOtherVersions = showAllVersions 
-    ? otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)) 
-    : otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)).slice(0, 5);
-    
+    const displayedOtherVersions = showAllVersions
+        ? otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate))
+        : otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)).slice(0, 5);
+
     if (!cardInfo) {
         return <div>Card not found</div>;
     }
@@ -732,7 +600,7 @@ const CardView = () => {
     };
 
     const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-    
+
     const monthMap = {
         Jan: 0, Feb: 1, Mar: 2, Apr: 3,
         May: 4, Jun: 5, Jul: 6, Aug: 7,
@@ -750,7 +618,7 @@ const CardView = () => {
         // then split into monthName + day
         const [monthName, dayStr] = firstDate.split(/\s+/);
         const month = monthMap[monthName];
-        const day   = parseInt(dayStr, 10);
+        const day = parseInt(dayStr, 10);
 
         return new Date(year, month, day).getTime();
     }
@@ -763,10 +631,10 @@ const CardView = () => {
             return acc;
         }, {})
     )
-    // 2) sort clusters by date
-    .sort((a, b) =>
-        parseEventDate(b[1][0].eventDate) - parseEventDate(a[1][0].eventDate)
-    );
+        // 2) sort clusters by date
+        .sort((a, b) =>
+            parseEventDate(b[1][0].eventDate) - parseEventDate(a[1][0].eventDate)
+        );
 
     // 3) pick how many clusters to show
     const displayedClusters = eventClusters
@@ -810,12 +678,25 @@ const CardView = () => {
                 <div className='card-data-all'>
                     <div className='card-and-setinfo'>
                         <img
-                            className={`the-card-img ${isFullScreen ? 'full-screen' : ''}`}
+                            className={`the-card-img${isFullScreen ? ' full-screen' : ''}${isRotated ? ' rotated' : ''}`}
                             src={cardInfo.images.large}
                             alt={cardInfo.name}
                             onClick={handleImageClick}
                             style={{ cursor: viewportWidth >= 600 ? 'zoom-in' : 'auto' }}
                         />
+                        {cardInfo.subtypes?.includes('BREAK') && (
+                            <button
+                                type="button"
+                                className="rotate-button"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    console.log('🌀 Rotate button clicked — flipping:', !isRotated);
+                                    setIsRotated(prev => !prev);
+                                }}
+                            >
+                                {isRotated ? 'Reset Rotation' : 'Rotate 90°'}
+                            </button>
+                        )}
                         {cardInfo.set && (
                             <div>
                                 <img className='cardview-setlogo' src={cardInfo.set.images.logo} alt={`${cardInfo.set.name} logo`} />
@@ -840,7 +721,18 @@ const CardView = () => {
                         )}
                     </div>
                     <div className='card-info'>
-                        <p className='card-name-view'><strong>{cardInfo.name}</strong></p>
+                        <p className="card-name-view">
+                            <strong>
+                                {cardInfo.name.replace('★', '').trim()}
+                                {cardInfo.name.includes('★') && (
+                                    <img
+                                        src="/assets/energy-symbols/gold-star.png"
+                                        alt="★"
+                                        className="star-icon"
+                                    />
+                                )}
+                            </strong>
+                        </p>
                         <hr className='blue-hr'></hr>
                         <div className='one-row marginthree'>
                             {cardInfo.types && <p>{cardInfo.types.join(', ')}</p>}
@@ -849,7 +741,12 @@ const CardView = () => {
                         {cardInfo.supertype && (
                             <p className='marginthree'>
                                 {cardInfo.supertype}
-                                {cardInfo.subtypes && cardInfo.subtypes.length > 0 && ` • ${cardInfo.subtypes.join(' • ')}`}
+                                {cardInfo.subtypes && cardInfo.subtypes.length > 0 && (
+                                    ` • ${cardInfo.subtypes
+                                        .map(st => st === 'Star' ? 'Gold Star' : st)
+                                        .join(' • ')
+                                    }`
+                                )}
                             </p>
                         )}
                         {cardInfo.evolvesFrom && (
@@ -858,6 +755,13 @@ const CardView = () => {
                             </p>
                         )}
                         <hr className='small-grey-hr'></hr>
+                        {cardInfo.ancientTrait && (
+                            <div className='attack-ability'>
+                                <ul>
+                                    <strong>{cardInfo.ancientTrait.name}:</strong> {cardInfo.ancientTrait.text}
+                                </ul>
+                            </div>
+                        )}
                         {cardInfo.abilities && (
                             <div className='attack-ability'>
                                 <ul>
@@ -886,6 +790,16 @@ const CardView = () => {
                                             <br />
                                             {attack.text}
                                         </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        <hr className='small-grey-hr'></hr>
+                        {cardInfo.rules && (
+                            <div className='attack-ability rules-text'>
+                                <ul>
+                                    {cardInfo.rules.map((rules, index) => (
+                                        <li key={index}>{rules}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -1049,163 +963,170 @@ const CardView = () => {
                 </div>
             </div>
             <div className="event-results marginbottom">
-        <p className='decks-that-contain'>Decklists that feature <span className='italic'>{cardInfo.name}</span></p>
-        <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
-        {loading && !eventsScanned ? (
-            <div className="spinner margintop"></div>
-        ) : isBasicEnergy ? (
-            <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
-        ) : eventResults.length > 0 ? (
-            <>
-                <table className="cards-specific-results">
-                    <thead>
-                        <tr>
-                        <th style={{ width: '1%' }}>Place</th>
-                        <th style={{ width: '1%' }}>Player</th>
-                        <th style={{ width: '1%' }}>Division</th>
-                        <th style={{ width: '1%' }}></th>
-                        <th style={{ width: '1%' }}>Decklist</th>
-                        </tr>
-                    </thead>
+                <p className='decks-that-contain'>Decklists that feature <span className='italic'>{cardInfo.name}</span></p>
+                <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
+                {loading && !eventsScanned ? (
+                    <div className="spinner margintop"></div>
+                ) : isBasicEnergy ? (
+                    <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
+                ) : eventResults.length > 0 ? (
+                    <>
+                        <table className="cards-specific-results">
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '1%' }}>Place</th>
+                                    <th style={{ width: '1%' }}>Player</th>
+                                    <th style={{ width: '1%' }}>Division</th>
+                                    <th style={{ width: '1%' }}></th>
+                                    <th style={{ width: '1%' }}>Decklist</th>
+                                </tr>
+                            </thead>
 
-                    {/* instead of one <tbody>, map each event to its own <tbody> */}
-                    {displayedClusters.map(([eventId, results]) => {
-                        const sortedResults = results.sort((a, b) => {
-                        const order = { masters: 0, seniors: 1, juniors: 2, all: 3 };
-                        const d = order[a.division] - order[b.division];
-                        return d !== 0 ? d : a.placement - b.placement;
-                        });
+                            {/* instead of one <tbody>, map each event to its own <tbody> */}
+                            {displayedClusters.map(([eventId, results]) => {
+                                const sortedResults = results.sort((a, b) => {
+                                    const order = { masters: 0, seniors: 1, juniors: 2, all: 3 };
+                                    const d = order[a.division] - order[b.division];
+                                    return d !== 0 ? d : a.placement - b.placement;
+                                });
 
-                        const isExpanded = !!expandedEvents[eventId];
-                        const rowsToShow = isExpanded
-                        ? sortedResults
-                        : sortedResults.slice(0, 5);
+                                const isExpanded = !!expandedEvents[eventId];
+                                const rowsToShow = isExpanded
+                                    ? sortedResults
+                                    : sortedResults.slice(0, 5);
 
-                        const { eventName, eventDate, eventFormat } = sortedResults[0];
+                                const { eventName, eventDate, eventFormat } = sortedResults[0];
 
-                        return (
-                        /* each event gets its own tbody, key’d by eventId */
-                        <tbody key={eventId} className="event-cluster-body">
-                            <tr className="event-separator">
-                            <td colSpan="5">
-                                <Link
-                                className="event-separator-content"
-                                to={`/tournaments/${eventId}${
-                                    // … your existing URL logic here …
-                                    eventId === '2002_WORLDS' || /* … */ false
-                                    ? '/seniors'
-                                    : eventId.toLowerCase().includes('retro')
-                                    ? '/all'
-                                    : ''
-                                }`}
-                                >
-                                <strong>{eventName}</strong><span style={{ opacity: 0.5 }}>&nbsp;-&nbsp;{eventDate.replace(/ - [^,]*/, '')}&nbsp;({eventFormat})</span>
-                                </Link>
-                            </td>
-                            </tr>
+                                return (
+                                    /* each event gets its own tbody, key’d by eventId */
+                                    <tbody key={eventId} className="event-cluster-body">
+                                        <tr className="event-separator">
+                                            <td colSpan="5">
+                                                <Link
+                                                    className="event-separator-content"
+                                                    to={`/tournaments/${eventId}${
+                                                        // … your existing URL logic here …
+                                                        eventId === '2002_WORLDS' || /* … */ false
+                                                            ? '/seniors'
+                                                            : eventId.toLowerCase().includes('retro')
+                                                                ? '/all'
+                                                                : ''
+                                                        }`}
+                                                >
+                                                    <strong>{eventName}</strong><span style={{ opacity: 0.5 }}>&nbsp;-&nbsp;{eventDate.replace(/ - [^,]*/, '')}&nbsp;({eventFormat})</span>
+                                                </Link>
+                                            </td>
+                                        </tr>
 
-                            {rowsToShow.map((result, idx) => (
-                            <tr key={idx}>
-                                {result.division !== 'decksbyera' ? (
-                                <>
-                                    <td>{getPlacementSuffix(result.placement)}</td>
-                                    <td>
-                                    <Link
-                                        className="link-to-playerprofile"
-                                        to={`/player/${normalizeName(
-                                        result.playerName
-                                        )}-${result.flag}`}
-                                    >
-                                        {formatName(result.playerName)}
-                                    </Link>
-                                    </td>
-                                    <td>
-                                    <span style={{ opacity: 0.4 }}>{formatName(result.division)}</span>
-                                    </td>
-                                    <td></td>
-                                </>
-                                ) : (
-                                <>
-                                    <td></td>
-                                    <td>{result.playerLabel}</td>
-                                    <td></td>
-                                    <td></td>
-                                </>
-                                )}
-                                <td className="player-deck-icons pushright">
-                                <DisplayPokemonSprites
-                                    decklist={result.decklist}
-                                    sprite1={result.sprite1}
-                                    sprite2={result.sprite2}
-                                />
-                                <Link
-                                    to={
-                                    eventId.includes('FEATURED')
-                                        ? `/tournaments/${eventId}/decksbyera/${encodeURIComponent(
-                                            result.decklist.label
-                                        )}`
-                                        : `/tournaments/${eventId}/${result.division}/${encodeURIComponent(
-                                            result.playerName
-                                        )}-${encodeURIComponent(result.flag)}`
-                                    }
-                                >
-                                    <span className="material-symbols-outlined">
-                                    format_list_bulleted
-                                    </span>
-                                </Link>
-                                </td>
-                            </tr>
-                            ))}
+                                        {rowsToShow.map((result, idx) => (
+                                            <tr key={idx}>
+                                                {result.division !== 'decksbyera' ? (
+                                                    <>
+                                                        <td>{getPlacementSuffix(result.placement)}</td>
+                                                        <td>
+                                                            <Link
+                                                                className="link-to-playerprofile"
+                                                                to={`/player/${normalizeName(
+                                                                    result.playerName
+                                                                )}-${result.flag}`}
+                                                            >
+                                                                {formatName(result.playerName)}
+                                                            </Link>
+                                                        </td>
+                                                        <td>
+                                                            <span style={{ opacity: 0.4 }}>{formatName(result.division)}</span>
+                                                        </td>
+                                                        <td></td>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <td></td>
+                                                        <td>{result.playerLabel}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </>
+                                                )}
+                                                <td className="player-deck-icons pushright">
+                                                    <DisplayPokemonSprites
+                                                        decklist={result.decklist}
+                                                        sprite1={result.sprite1}
+                                                        sprite2={result.sprite2}
+                                                    />
+                                                    <Link
+                                                        to={
+                                                            eventId.includes('FEATURED')
+                                                                ? `/tournaments/${eventId}/decksbyera/${encodeURIComponent(
+                                                                    result.decklist.label
+                                                                )}`
+                                                                : `/tournaments/${eventId}/${result.division}/${encodeURIComponent(
+                                                                    result.playerName
+                                                                )}-${encodeURIComponent(result.flag)}`
+                                                        }
+                                                    >
+                                                        <span className="material-symbols-outlined">
+                                                            format_list_bulleted
+                                                        </span>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
 
-                            {sortedResults.length > 5 && (
-                                <td colSpan="5" style={{ textAlign: 'center' }}>
-                                <a
-                                    className="showmoreversions"
-                                    onClick={() => toggleEventExpansion(eventId)}
-                                >
-                                    {isExpanded ? (
-                                    <>
-                                        See less{' '}
-                                        <span className="material-symbols-outlined">
-                                        keyboard_arrow_up
-                                        </span>
-                                    </>
-                                    ) : (
-                                    <>
-                                        Expand {sortedResults.length} more results from this event{' '}
-                                        <span className="material-symbols-outlined expand-more-results">
-                                        keyboard_arrow_down
-                                        </span>
-                                    </>
-                                    )}
-                                </a>
-                                </td>
-                            )}
-                        </tbody>
-                        );
-                    })}
-                </table>
-            </>
-        ) : eventsScanned ? (
-        // if it’s exactly LTR-30 show the “Easter egg” message
-            cardInfo.name.toLowerCase().includes("magikarp") ? (
-                <p className='margintop italic'>
-                <br/>
-                    Looks like the Pokédex was right, this Pokémon is utterly useless. It's not in a single deck in our database...
-                </p>
-            ) : (
-                <p className='margintop italic'>
-                <br/>
-                    ~ Looks like this card isn't featured in any of our documented decks, yet.
-                </p>
-            )
-        ) : null}
-        <br></br>
-        <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
-    </div>
+                                        {sortedResults.length > 5 && (
+                                            <td colSpan="5" style={{ textAlign: 'center' }}>
+                                                <a
+                                                    className="showmoreversions"
+                                                    onClick={() => toggleEventExpansion(eventId)}
+                                                >
+                                                    {isExpanded ? (
+                                                        <>
+                                                            See less{' '}
+                                                            <span className="material-symbols-outlined">
+                                                                keyboard_arrow_up
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            Expand {sortedResults.length} more results from this event{' '}
+                                                            <span className="material-symbols-outlined expand-more-results">
+                                                                keyboard_arrow_down
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </a>
+                                            </td>
+                                        )}
+                                    </tbody>
+                                );
+                            })}
+                        </table>
+                    </>
+                ) : eventsScanned ? (
+                    // if it’s exactly LTR-30 show the “Easter egg” message
+                    cardInfo.name.toLowerCase().includes("magikarp") ? (
+                        <p className='margintop italic'>
+                            <br />
+                            Looks like the Pokédex was right, this Pokémon is utterly useless. It's not in a single deck in our database...
+                        </p>
+                    ) : (
+                        <p className='margintop italic'>
+                            <br />
+                            ~ Looks like this card isn't featured in any of our documented decks, yet.
+                        </p>
+                    )
+                ) : null}
+                <br></br>
+                <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
+            </div>
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>
-                    <img className="fullscreen-image" src={cardInfo.images.large} alt={cardInfo.name} />
+                    <img
+                    className={
+                        `fullscreen-image` +
+                        (cardInfo.subtypes?.includes('BREAK') ? ' rotated' : '')
+                    }
+                    src={cardInfo.images.large}
+                    alt={cardInfo.name}
+                    />
                 </div>
             )}
         </CardViewTheme>

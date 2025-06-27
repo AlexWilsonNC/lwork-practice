@@ -60,6 +60,7 @@
     border-radius: 13px !important;
     box-shadow: 0 0 25px black;
     z-index: 1;
+    transition: transform 0.3s ease;
 }
 .trainer-details li {
     margin: 15px 0;
@@ -98,6 +99,34 @@
 }
 .attack-ability li {
     margin: 8px 0;
+}
+.rules-text {
+    font-size: 12px;
+    font-style: italic;
+}
+.rules-text li {
+    list-style: inside;
+}
+.rules-text li::marker {
+    color: grey;
+}
+.star-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 12px;
+  vertical-align: text-bottom;
+}
+.rotate-button {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}
+.the-card-img.rotated {
+  transform: rotate(90deg) !important;
 }
 .one-row {
     display: flex;
@@ -457,6 +486,10 @@ tr.event-separator:hover td {
     max-width: 90%;
     max-height: 90%;
 }
+.fullscreen-image.rotated {
+  transform: rotate(90deg);
+  max-width: 60%;
+}
 .the-card-img {
     cursor: zoom-in;
 }
@@ -611,6 +644,13 @@ tr.event-separator:hover td {
         border-radius: 27px !important;
         box-shadow: 0 0 12px black;
     }
+    .the-card-img.rotated {
+        max-width: 65%;
+        width: 95%;
+    }
+    /* .rotate-button {
+        margin-bottom: 10px;
+    } */
     .the-card-img {
         cursor: none;
     }
