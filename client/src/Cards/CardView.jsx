@@ -694,7 +694,7 @@ const CardView = () => {
                                     setIsRotated(prev => !prev);
                                 }}
                             >
-                                {isRotated ? 'Reset Rotation' : 'Rotate 90°'}
+                                Rotate&nbsp;<span class="material-symbols-outlined">autorenew</span>
                             </button>
                         )}
                         {cardInfo.set && (

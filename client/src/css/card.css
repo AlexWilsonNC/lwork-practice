@@ -124,6 +124,17 @@
   cursor: pointer;
   position: relative;
   z-index: 10;
+  background-color: #1290eb;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.rotate-button span {
+    font-size: 18px;
 }
 .the-card-img.rotated {
   transform: rotate(90deg) !important;
@@ -648,9 +659,6 @@ tr.event-separator:hover td {
         max-width: 65%;
         width: 95%;
     }
-    /* .rotate-button {
-        margin-bottom: 10px;
-    } */
     .the-card-img {
         cursor: none;
     }
