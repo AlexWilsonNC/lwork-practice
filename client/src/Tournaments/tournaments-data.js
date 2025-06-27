@@ -1241,8 +1241,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Apr 26, 2025",
         "flag": spain,
-        "location": "Seville, Spain",
-        "results": false
+        "location": "Seville, Spain"
     },
     {
         "id": "2025_UTRECHT",

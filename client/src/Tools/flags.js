@@ -67,6 +67,9 @@ import cyprus from '../assets/flags/cyprus.png';
 import trinidadAndTopago from '../assets/flags/trinidad-and-tobago.png';
 import dominicanRepublic from '../assets/flags/dominican-republic.png';
 import georgia from '../assets/flags/georgia.png';
+import venezuela from '../assets/flags/venezuela.png';
+import gibraltar from '../assets/flags/gibraltar.png';
+import romania from '../assets/flags/romania.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -139,6 +142,9 @@ export const flags = {
      TT: trinidadAndTopago,
      DO: dominicanRepublic,
      GE: georgia,
+     VE: venezuela,
+     GI: gibraltar,
+     RO: romania,
     unknown: unknown
 };
 
@@ -210,8 +216,11 @@ export const countryNames = {
     BG: 'Bulgaria (Europe)',
     CY: 'Cyprus (Europe)',
     GE: 'Georgia (Europe)',
+    GI: 'Gibraltar (Europe)',
+    RO: 'Romania (Europe)',
     TT: 'Trinidad & Topago (Latin America)',
     DO: 'Dominican Republic (Latin America)',
+    VE: 'venezuela (Latin America)',
     EC: 'Ecuador (Latin America)'
 };
 
@@ -285,14 +294,17 @@ export const playerCountryDropdown = {
     BG: 'Bulgaria',
     DO: 'Dominican Republic',
     GE: 'Georgia',
+    VE: 'Venezuela',
+    GI: 'Gibraltar',
+    RO: 'Romania',
     TT: 'Trinidad & Topago'
     // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO'],
-  EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE'],
+  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE'],
+  EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH'],
   MS: ['ZA','TR']

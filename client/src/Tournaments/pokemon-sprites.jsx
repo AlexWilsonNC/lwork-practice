@@ -43,387 +43,398 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     const hasTrainer = name        => getTrainerCount(name) > 0;
 
     // Multiple checks
-    if (hasPokemon('Gholdengo ex') && hasPokemon('Dragapult ex')) {
-        secondSprite = getPokemonSpriteURL('gholdengo');
+     if (hasPokemon('Gholdengo ex') && hasPokemon('Dragapult ex')) {
+        secondSprite  = getPokemonSpriteURL('gholdengo');
     }
     else if (hasPokemon('Iron Leaves ex') && hasPokemon('Iron Crown ex') && hasPokemon('Miraidon') && hasPokemon('Iron Valiant ex')) {
-        firstSprite = getPokemonSpriteURL('iron-leaves');
-        secondSprite = getPokemonSpriteURL('iron-crown');
+        firstSprite  = getPokemonSpriteURL('iron-leaves');
+        secondSprite  = getPokemonSpriteURL('iron-crown');
     }     
-    else if (hasPokemon('Ethan\'s Typhlosion')) {
-        secondSprite = getPokemonSpriteURL('typhlosion');
-    }
     else if (hasPokemon('Blissey ex') && hasPokemon('Munkidori')) {
-        secondSprite = getPokemonSpriteURL('blissey');
+        secondSprite  = getPokemonSpriteURL('blissey');
     }
     else if (hasPokemon('Dipplin') && hasPokemon('Thwackey')) {
-        firstSprite = getPokemonSpriteURL('dipplin');
-        secondSprite = getPokemonSpriteURL('thwackey');
+        firstSprite  = getPokemonSpriteURL('dipplin');
+        secondSprite  = getPokemonSpriteURL('thwackey');
     }
     else if (hasPokemon('Team Rocket\'s Spidops') && hasPokemon('Team Rocket\'s Mewtwo ex')) {
-        firstSprite = getPokemonSpriteURL('spidops');
-        secondSprite = getPokemonSpriteURL('mewtwo');
+        firstSprite  = getPokemonSpriteURL('spidops');
+        secondSprite  = getPokemonSpriteURL('mewtwo');
     }
     else if (hasPokemon('Regidrago VSTAR') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite = getPokemonSpriteURL('regidrago');
-        secondSprite = getPokemonSpriteURL('ogerpon');
+        firstSprite  = getPokemonSpriteURL('regidrago');
+        secondSprite  = getPokemonSpriteURL('ogerpon');
     }
     else if (hasPokemon('Raging Bolt ex') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite = getPokemonSpriteURL('raging-bolt');
-        secondSprite = getPokemonSpriteURL('ogerpon');
+        firstSprite  = getPokemonSpriteURL('raging-bolt');
+        secondSprite  = getPokemonSpriteURL('ogerpon');
     }
     else if (hasPokemon('Mew VMAX') && hasPokemon('Genesect V')) {
-        firstSprite = getPokemonSpriteURL('mew-vmax');
-        secondSprite = getPokemonSpriteURL('genesect');
+        firstSprite  = getPokemonSpriteURL('mew-vmax');
+        secondSprite  = getPokemonSpriteURL('genesect');
     }
     else if (hasPokemon('Chien-Pao ex') && hasPokemon('Baxcalibur')) {
-        firstSprite = getPokemonSpriteURL('chien-pao');
-        secondSprite = getPokemonSpriteURL('baxcalibur');
+        firstSprite  = getPokemonSpriteURL('chien-pao');
+        secondSprite  = getPokemonSpriteURL('baxcalibur');
     }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Chien-Pao ex')) {
-        firstSprite = getPokemonSpriteURL('palkia-origin');
-        secondSprite = getPokemonSpriteURL('chien-pao');
+        firstSprite  = getPokemonSpriteURL('palkia-origin');
+        secondSprite  = getPokemonSpriteURL('chien-pao');
     }
     else if (hasPokemon('Alolan Vulpix VSTAR') && hasPokemon('Yveltal')) {
-        firstSprite = getPokemonSpriteURL('vulpix-alola');
-        secondSprite = getPokemonSpriteURL('yveltal');
+        firstSprite  = getPokemonSpriteURL('vulpix-alola');
+        secondSprite  = getPokemonSpriteURL('yveltal');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Aggron VMAX')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('aggron-vmax');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('aggron-vmax');
     }
     else if (hasPokemon('Rapid Strike Urshifu VMAX') && hasPokemon('Inteleon VMAX')) {
-        firstSprite = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
-        secondSprite = getPokemonSpriteURL('inteleon-vmax');
+        firstSprite  = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
+        secondSprite  = getPokemonSpriteURL('inteleon-vmax');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Regieleki VMAX')) {
-        firstSprite = getPokemonSpriteURL('miraidon');
-        secondSprite = getPokemonSpriteURL('regieliki-vmax');
+        firstSprite  = getPokemonSpriteURL('miraidon');
+        secondSprite  = getPokemonSpriteURL('regieliki-vmax');
     }
     else if (hasPokemon('Raging Bolt ex') && hasPokemon('Sandy Shocks ex')) {
-        firstSprite = getPokemonSpriteURL('raging-bolt');
-        secondSprite = getPokemonSpriteURL('sandy-shocks');
+        firstSprite  = getPokemonSpriteURL('raging-bolt');
+        secondSprite  = getPokemonSpriteURL('sandy-shocks');
     }
     else if (hasPokemon('Comfey') && hasPokemon('Hisuian Goodra VSTAR')) {
-        firstSprite = getPokemonSpriteURL('goodra-hisui');
-        secondSprite = getPokemonSpriteURL('comfey');
+        firstSprite  = getPokemonSpriteURL('goodra-hisui');
+        secondSprite  = getPokemonSpriteURL('comfey');
     }
     else if (hasPokemon('Comfey') && hasPokemon('Dragapult ex')) {
-        firstSprite = getPokemonSpriteURL('dragapult');
-        secondSprite = getPokemonSpriteURL('comfey');
+        firstSprite  = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('comfey');
     }
     else if (hasPokemon('Comfey') && hasPokemon('Radiant Charizard')) {
-        firstSprite = getPokemonSpriteURL('comfey');
-        secondSprite = getPokemonSpriteURL('charizard-shiny');
+        firstSprite  = getPokemonSpriteURL('comfey');
+        secondSprite  = getPokemonSpriteURL('charizard-shiny');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Regidrago VSTAR')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('regidrago');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('regidrago');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Hisuian Goodra VSTAR')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('goodra-hisui');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('goodra-hisui');
     }
     else if (hasPokemon('Comfey') && hasPokemon('Giratina VSTAR')) {
-        firstSprite = getPokemonSpriteURL('giratina-origin');
-        secondSprite = getPokemonSpriteURL('comfey');
+        firstSprite  = getPokemonSpriteURL('giratina-origin');
+        secondSprite  = getPokemonSpriteURL('comfey');
     }
     else if (hasPokemon('Comfey') && hasPokemon('Sableye')) {
-        firstSprite = getPokemonSpriteURL('comfey');
-        secondSprite = getPokemonSpriteURL('sableye');
+        firstSprite  = getPokemonSpriteURL('comfey');
+        secondSprite  = getPokemonSpriteURL('sableye');
     }
     else if (hasPokemon('Pidgeot ex') && hasPokemon('Snorlax') && hasPokemon('Cornerstone Mask Ogerpon ex')) {
-        secondSprite = getPokemonSpriteURL('pidgeot');
+        secondSprite  = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Snorlax') && hasPokemon('Rotom V')) {
-        firstSprite = getPokemonSpriteURL('snorlax');
-        secondSprite = getPokemonSpriteURL('rotom');
+        firstSprite  = getPokemonSpriteURL('snorlax');
+        secondSprite  = getPokemonSpriteURL('rotom');
     }
     else if (hasPokemon('Zoroark') && hasPokemon('Kirlia')) {
-        secondSprite = getPokemonSpriteURL('zoroark');
+        secondSprite  = getPokemonSpriteURL('zoroark');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Zapdos')) {
-        secondSprite = getPokemonSpriteURL('miraidon');
+        secondSprite  = getPokemonSpriteURL('miraidon');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Raichu V')) {
-        secondSprite = getPokemonSpriteURL('miraidon');
+        secondSprite  = getPokemonSpriteURL('miraidon');
     }
     else if (hasPokemon('Miraidon ex') && hasPokemon('Iron Valiant ex')) {
-        secondSprite = getPokemonSpriteURL('miraidon');
+        secondSprite  = getPokemonSpriteURL('miraidon');
     }    
     else if (hasPokemon('Entei V') && hasPokemon('Iron Valiant ex')) {
-        firstSprite = getPokemonSpriteURL('entei');
-        secondSprite = getPokemonSpriteURL('iron-valiant');
+        firstSprite  = getPokemonSpriteURL('entei');
+        secondSprite  = getPokemonSpriteURL('iron-valiant');
     }    
     else if (hasPokemon('Iron Crown ex') && hasPokemon('Iron Hands ex')) {
-        firstSprite = getPokemonSpriteURL('iron-hands');
-        secondSprite = getPokemonSpriteURL('iron-crown');
+        firstSprite  = getPokemonSpriteURL('iron-hands');
+        secondSprite  = getPokemonSpriteURL('iron-crown');
     }
     else if (hasPokemon('Lugia VSTAR') && hasPokemon('Archeops')) {
-        firstSprite = getPokemonSpriteURL('lugia');
-        secondSprite = getPokemonSpriteURL('archeops');
+        firstSprite  = getPokemonSpriteURL('lugia');
+        secondSprite  = getPokemonSpriteURL('archeops');
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Dragapult ex')) {
         const dragapultCount = getPokemonCount('Dragapult ex');
         if (dragapultCount > 1) {
-            firstSprite = getPokemonSpriteURL('dragapult');
-            secondSprite = getPokemonSpriteURL('charizard');
+            firstSprite  = getPokemonSpriteURL('dragapult');
+            secondSprite  = getPokemonSpriteURL('charizard');
         } else {
-            firstSprite = getPokemonSpriteURL('charizard');
-            secondSprite = getPokemonSpriteURL('pidgeot');
+            firstSprite  = getPokemonSpriteURL('charizard');
+            secondSprite  = getPokemonSpriteURL('pidgeot');
         }
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Pidgeot ex')) {
-        firstSprite = getPokemonSpriteURL('dragapult');
-        secondSprite = getPokemonSpriteURL('pidgeot');
+        firstSprite  = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Bibarel')) {
-        secondSprite = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('dragapult');
     }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Xatu')) {
-        firstSprite = getPokemonSpriteURL('dragapult');
-        secondSprite = getPokemonSpriteURL('xatu');
+        firstSprite  = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('xatu');
     }
     else if (hasPokemon('Pidgeot ex') && hasPokemon('Chi-Yu ex')) {
-        secondSprite = getPokemonSpriteURL('pidgeot');
+        secondSprite  = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Pidgeot ex')) {
-        firstSprite = getPokemonSpriteURL('charizard');
-        secondSprite = getPokemonSpriteURL('pidgeot');
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Bibarel')) {
-        firstSprite = getPokemonSpriteURL('charizard');
-        secondSprite = getPokemonSpriteURL('bibarel');
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('bibarel');
     }
     else if (hasPokemon('Noctowl') && hasPokemon('Charizard ex') && hasPokemon('Terapagos ex')) {
-        firstSprite = getPokemonSpriteURL('charizard');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }    
     else if (hasPokemon('Charizard ex') && hasPokemon('Dusknoir')) {
-        firstSprite = getPokemonSpriteURL('charizard');
-        secondSprite = getPokemonSpriteURL('dusknoir');
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Flutter Mane')) {
-        firstSprite = getPokemonSpriteURL('roaring-moon');
-        secondSprite = getPokemonSpriteURL('flutter-mane');
+        firstSprite  = getPokemonSpriteURL('roaring-moon');
+        secondSprite  = getPokemonSpriteURL('flutter-mane');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Koraidon')) {
-        firstSprite = getPokemonSpriteURL('roaring-moon');
-        secondSprite = getPokemonSpriteURL('koraidon');
+        firstSprite  = getPokemonSpriteURL('roaring-moon');
+        secondSprite  = getPokemonSpriteURL('koraidon');
     }
     else if (hasPokemon('Roaring Moon ex') && hasPokemon('Dudunsparce')) {
-        firstSprite = getPokemonSpriteURL('roaring-moon');
-        secondSprite = getPokemonSpriteURL('dudunsparce');
+        firstSprite  = getPokemonSpriteURL('roaring-moon');
+        secondSprite  = getPokemonSpriteURL('dudunsparce');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Great Tusk')) {
-        firstSprite = getPokemonSpriteURL('roaring-moon');
-        secondSprite = getPokemonSpriteURL('great-tusk');
+        firstSprite  = getPokemonSpriteURL('roaring-moon');
+        secondSprite  = getPokemonSpriteURL('great-tusk');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Giratina VSTAR')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('giratina-origin');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('giratina-origin');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Armarouge')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('armarouge');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('armarouge');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Radiant Charizard')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('charizard-shiny');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('charizard-shiny');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Alolan Vulpix VSTAR')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('vulpix-alola');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('vulpix-alola');
     }
     else if (hasPokemon('Tinkaton ex') && hasPokemon('Dudunsparce')) {
-        firstSprite = getPokemonSpriteURL('tinkaton');
-        secondSprite = getPokemonSpriteURL('dudunsparce');
+        firstSprite  = getPokemonSpriteURL('tinkaton');
+        secondSprite  = getPokemonSpriteURL('dudunsparce');
     }
     else if (hasPokemon('Espathra ex') && hasPokemon('Xatu')) {
-        firstSprite = getPokemonSpriteURL('espathra');
-        secondSprite = getPokemonSpriteURL('xatu');
+        firstSprite  = getPokemonSpriteURL('espathra');
+        secondSprite  = getPokemonSpriteURL('xatu');
     }
     else if (hasPokemon('Gholdengo ex') && hasPokemon('Origin Forme Palkia VSTAR')) {
-        firstSprite = getPokemonSpriteURL('gholdengo');
-        secondSprite = getPokemonSpriteURL('palkia-origin');
+        firstSprite  = getPokemonSpriteURL('gholdengo');
+        secondSprite  = getPokemonSpriteURL('palkia-origin');
     }
     else if (hasPokemon('Origin Forme Dialga VSTAR') && hasPokemon('Metang')) {
-        firstSprite = getPokemonSpriteURL('dialga-origin');
-        secondSprite = getPokemonSpriteURL('metang');
+        firstSprite  = getPokemonSpriteURL('dialga-origin');
+        secondSprite  = getPokemonSpriteURL('metang');
     }
     else if (hasPokemon('Klawf') && hasPokemon('Brute Bonnet')) {
-        firstSprite = getPokemonSpriteURL('klawf');
-        secondSprite = getPokemonSpriteURL('brute-bonnet');
+        firstSprite  = getPokemonSpriteURL('klawf');
+        secondSprite  = getPokemonSpriteURL('brute-bonnet');
     }
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex')) {
-        firstSprite = getPokemonSpriteURL('ogerpon');
-        secondSprite = getPokemonSpriteURL('ogerpon-wellspring');
+        firstSprite  = getPokemonSpriteURL('ogerpon');
+        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }
     else if(hasPokemon('Marnie\'s Grimmsnarl ex') && hasPokemon('Froslass')) {
-        firstSprite = getPokemonSpriteURL('grimmsnarl');
-        secondSprite = getPokemonSpriteURL('froslass');
+        firstSprite  = getPokemonSpriteURL('grimmsnarl');
+        secondSprite  = getPokemonSpriteURL('froslass');
     }
     else if (hasPokemon('Froslass') && hasPokemon('Munkidori')) {
-        firstSprite = getPokemonSpriteURL('froslass');
-        secondSprite = getPokemonSpriteURL('munkidori');
+        firstSprite  = getPokemonSpriteURL('froslass');
+        secondSprite  = getPokemonSpriteURL('munkidori');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Duraludon VMAX')) {
-        firstSprite = getPokemonSpriteURL('duraludon-gmax');
-        secondSprite = getPokemonSpriteURL('arceus');
+        firstSprite  = getPokemonSpriteURL('duraludon-gmax');
+        secondSprite  = getPokemonSpriteURL('arceus');
     }
     else if (hasPokemon('Ting-Lu ex') && hasPokemon('Koraidon ex')) {
-        firstSprite = getPokemonSpriteURL('ting-lu');
-        secondSprite = getPokemonSpriteURL('koraidon');
+        firstSprite  = getPokemonSpriteURL('ting-lu');
+        secondSprite  = getPokemonSpriteURL('koraidon');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Flying Pikachu VMAX')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('pikachu-gmax');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('pikachu-gmax');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Umbreon VMAX')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('umbreon-vmax');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('umbreon-vmax');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Dusknoir')) {
-        firstSprite = getPokemonSpriteURL('arceus');
-        secondSprite = getPokemonSpriteURL('dusknoir');
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
     }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Dusknoir')) {
-        firstSprite = getPokemonSpriteURL('palkia-origin');
-        secondSprite = getPokemonSpriteURL('dusknoir');
+        firstSprite  = getPokemonSpriteURL('palkia-origin');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
     }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Gardevoir')) {
-        firstSprite = getPokemonSpriteURL('palkia-origin');
-        secondSprite = getPokemonSpriteURL('gardevoir');
+        firstSprite  = getPokemonSpriteURL('palkia-origin');
+        secondSprite  = getPokemonSpriteURL('gardevoir');
     }
     else if (hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Noivern ex')) {
-        firstSprite = getPokemonSpriteURL('ogerpon-cornerstone');
-        secondSprite = getPokemonSpriteURL('noivern');
+        firstSprite  = getPokemonSpriteURL('ogerpon-cornerstone');
+        secondSprite  = getPokemonSpriteURL('noivern');
     }    
     else if (hasPokemon('Banette ex') && hasPokemon('Dusknoir')) {
-        firstSprite = getPokemonSpriteURL('banette');
-        secondSprite = getPokemonSpriteURL('dusknoir');
+        firstSprite  = getPokemonSpriteURL('banette');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
     }    
     else if (hasPokemon('Iron Valiant ex') && hasPokemon('Bloodmoon Ursaluna')) {
-        firstSprite = getPokemonSpriteURL('iron-valiant');
-        secondSprite = getPokemonSpriteURL('ursaluna-bloodmoon');
+        firstSprite  = getPokemonSpriteURL('iron-valiant');
+        secondSprite  = getPokemonSpriteURL('ursaluna-bloodmoon');
     }  
     else if (hasPokemon('Noctowl') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Flareon ex') && hasPokemon('Volcanion ex')) {
-        firstSprite = getPokemonSpriteURL('flareon');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('flareon');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }     
     else if (hasPokemon('Noctowl') && hasPokemon('Leafeon ex') && hasPokemon('Flareon ex') && hasPokemon('Sylveon ex')) {
-        firstSprite = getPokemonSpriteURL('flareon');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('flareon');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }     
     else if (hasPokemon('Sinistcha') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite = getPokemonSpriteURL('sinistcha');
-        secondSprite = getPokemonSpriteURL('ogerpon');
+        firstSprite  = getPokemonSpriteURL('sinistcha');
+        secondSprite  = getPokemonSpriteURL('ogerpon');
     }     
     else if (hasPokemon('Noctowl') && hasPokemon('Wellspring Mask Ogerpon ex')) {
-        firstSprite = getPokemonSpriteURL('noctowl');
-        secondSprite = getPokemonSpriteURL('ogerpon-wellspring');
+        firstSprite  = getPokemonSpriteURL('noctowl');
+        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }     
     else if (hasPokemon('Joltik') && hasPokemon('Pikachu ex')) {
-        firstSprite = getPokemonSpriteURL('joltik');
-        secondSprite = getPokemonSpriteURL('pikachu');
+        firstSprite  = getPokemonSpriteURL('joltik');
+        secondSprite  = getPokemonSpriteURL('pikachu');
     }    
     else if (hasPokemon('Dragapult ex') && hasPokemon('Dusknoir')) {
-        firstSprite = getPokemonSpriteURL('dragapult');
-        secondSprite = getPokemonSpriteURL('dusknoir');
+        firstSprite  = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
     }    
     else if (hasPokemon('Flareon ex') && hasPokemon('Noctowl')) {
-        firstSprite = getPokemonSpriteURL('flareon');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('flareon');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }      
     else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl')) {
-        firstSprite = getPokemonSpriteURL('clefairy');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('clefairy');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }
     else if (hasPokemon('Milotic ex') && hasPokemon('Farigiraf ex')) {
-        firstSprite = getPokemonSpriteURL('milotic');
-        secondSprite = getPokemonSpriteURL('farigiraf');
+        firstSprite  = getPokemonSpriteURL('milotic');
+        secondSprite  = getPokemonSpriteURL('farigiraf');
     }      
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Dragapult ex')) {
-        firstSprite = getPokemonSpriteURL('dragapult');
-        secondSprite = getPokemonSpriteURL('zoroark');
+        firstSprite  = getPokemonSpriteURL('dragapult');
+        secondSprite  = getPokemonSpriteURL('zoroark');
     }   
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
-        firstSprite = getPokemonSpriteURL('blaziken');
-        secondSprite = getPokemonSpriteURL('zoroark');
+        firstSprite  = getPokemonSpriteURL('blaziken');
+        secondSprite  = getPokemonSpriteURL('zoroark');
     }          
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Reshiram')) {
-        secondSprite = getPokemonSpriteURL('zoroark');
+        secondSprite  = getPokemonSpriteURL('zoroark');
     }                    
     else if (hasPokemon('Ethan\'s Ho-Oh ex') && hasPokemon('Armarouge')) {
-        firstSprite = getPokemonSpriteURL('ho-oh');
-        secondSprite = getPokemonSpriteURL('armarouge');
+        firstSprite  = getPokemonSpriteURL('ho-oh');
+        secondSprite  = getPokemonSpriteURL('armarouge');
     }           
     else if (hasPokemon('Cynthia\'s Garchomp ex')) {
-        secondSprite = getPokemonSpriteURL('garchomp');
+        secondSprite  = getPokemonSpriteURL('garchomp');
     }           
     else if (hasPokemon('Ceruledge ex') && hasPokemon('Revavroom')) {
-        secondSprite = getPokemonSpriteURL('ceruledge');
+        secondSprite  = getPokemonSpriteURL('ceruledge');
     }           
     else if (hasPokemon('Terapagos ex') && hasPokemon('Bouffalant')) {
-        firstSprite = getPokemonSpriteURL('terapagos');
-        secondSprite = getPokemonSpriteURL('noctowl');
+        firstSprite  = getPokemonSpriteURL('terapagos');
+        secondSprite  = getPokemonSpriteURL('noctowl');
     }           
     else if (hasPokemon('Okidogi') && hasPokemon('Dudunsparce')) {
-        firstSprite = getPokemonSpriteURL('okidogi');
-        secondSprite = getPokemonSpriteURL('dudunsparce');
+        firstSprite  = getPokemonSpriteURL('okidogi');
+        secondSprite  = getPokemonSpriteURL('dudunsparce');
     }           
-    else if (getPokemonCount('Okidogi') === 4) {
-        firstSprite = getPokemonSpriteURL('blank');
-        secondSprite = getPokemonSpriteURL('okidogi');
-    }
     else if (hasPokemon('Toedscruel ex') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite = getPokemonSpriteURL('toedscruel');
-        secondSprite = getPokemonSpriteURL('ogerpon');
+        firstSprite  = getPokemonSpriteURL('toedscruel');
+        secondSprite  = getPokemonSpriteURL('ogerpon');
     }           
     else if (hasPokemon('Magmortar') && hasPokemon('Volcanion ex')) {
-        firstSprite = getPokemonSpriteURL('magmortar');
-        secondSprite = getPokemonSpriteURL('volcanion');
+        firstSprite  = getPokemonSpriteURL('magmortar');
+        secondSprite  = getPokemonSpriteURL('volcanion');
     } 
     else if (hasPokemon('Great Tusk') && hasPokemon('Dudunsparce')) {
-        firstSprite = getPokemonSpriteURL('blank');
-        secondSprite = getPokemonSpriteURL('great-tusk');
+        secondSprite  = getPokemonSpriteURL('great-tusk');
     }               
     else if (hasPokemon('Hop\'s Zacian ex') && hasPokemon('Hop\'s Snorlax')) {
-        firstSprite = getPokemonSpriteURL('zacian-crowned');
-        secondSprite = getPokemonSpriteURL('snorlax');
+        firstSprite  = getPokemonSpriteURL('zacian-crowned');
+        secondSprite  = getPokemonSpriteURL('snorlax');
+    }               
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Archaludon ex')) {
+        firstSprite  = getPokemonSpriteURL('archaludon');
+        secondSprite  = getPokemonSpriteURL('zoroark');
     }               
 
     // Individual checks
     if (!secondSprite) {
         if (hasPokemon('Great Tusk')) {
-            secondSprite = getPokemonSpriteURL('great-tusk');
+            secondSprite  = getPokemonSpriteURL('great-tusk');
         }
-        if (hasPokemon('Roaring Moon ex')) {
-            secondSprite = getPokemonSpriteURL('roaring-moon');
+        else if (hasPokemon('Ethan\'s Typhlosion')) {
+            secondSprite  = getPokemonSpriteURL('typhlosion');
+        }
+        else if (hasPokemon('Copperajah ex')) {
+            secondSprite  = getPokemonSpriteURL('copperajah');
+        }
+        else if (hasPokemon('Slowking')) {
+            secondSprite  = getPokemonSpriteURL('slowking');
+        }
+        else if (getPokemonCount('Okidogi') === 4) {
+            secondSprite  = getPokemonSpriteURL('okidogi');
+        }
+        else if (hasPokemon('Roaring Moon ex')) {
+            secondSprite  = getPokemonSpriteURL('roaring-moon');
         }
         else if (hasPokemon('Gardevoir ex')) {
-            secondSprite = getPokemonSpriteURL('gardevoir');
+            secondSprite  = getPokemonSpriteURL('gardevoir');
         }
         else if(hasPokemon('Comfey')) {
-            secondSprite = getPokemonSpriteURL('comfey');
+            secondSprite  = getPokemonSpriteURL('comfey');
         }
         else if(hasPokemon('Hydreigon ex')) {
-            secondSprite = getPokemonSpriteURL('hydreigon');
+            secondSprite  = getPokemonSpriteURL('hydreigon');
         }
         else if(hasPokemon('Mamoswine ex')) {
-            secondSprite = getPokemonSpriteURL('mamoswine');
+            secondSprite  = getPokemonSpriteURL('mamoswine');
         }
         else if(hasPokemon('Iron Thorns ex')) {
-            secondSprite = getPokemonSpriteURL('ironthorns');
+            secondSprite  = getPokemonSpriteURL('ironthorns');
         }
         else if(hasPokemon('Inteleon VMAX')) {
-            secondSprite = getPokemonSpriteURL('inteleon-vmax');
+            secondSprite  = getPokemonSpriteURL('inteleon-vmax');
         }
         else if(hasPokemon('Dragapult ex')) {
-            secondSprite = getPokemonSpriteURL('dragapult');
+            secondSprite  = getPokemonSpriteURL('dragapult');
         }
         else if(hasPokemon('Gholdengo ex')) {
-            secondSprite = getPokemonSpriteURL('gholdengo');
+            secondSprite  = getPokemonSpriteURL('gholdengo');
+        }
+        else if(hasPokemon('Feraligatr')) {
+            secondSprite  = getPokemonSpriteURL('feraligatr');
         }
         else if(hasPokemon('N\'s Zoroark ex')) {
             secondSprite  = getPokemonSpriteURL('zoroark');
@@ -431,12 +442,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if(getPokemonCount('Archaludon ex') >= 2) {
             secondSprite  = getPokemonSpriteURL('archaludon');
         }
-        else if(hasPokemon('Feraligatr')) {
-            secondSprite = getPokemonSpriteURL('feraligatr');
-        }
-        // always keep last, so any deck with pidgeot doesnt get overwritten
+        // always keep last, so any deck with x & x doesnt get overwritten, least important last case if sprite assignment
         else if(hasPokemon('Pidgeot ex')) {
-            secondSprite = getPokemonSpriteURL('pidgeot');
+            secondSprite  = getPokemonSpriteURL('pidgeot');
         }
     }
 
