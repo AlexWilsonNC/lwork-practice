@@ -1049,7 +1049,7 @@ const CardView = () => {
                 </div>
             </div>
             <div className="event-results marginbottom">
-        <p className='decks-that-contain'>Decklists that contain <span className='italic'>{cardInfo.name}</span></p>
+        <p className='decks-that-contain'>Decklists that feature <span className='italic'>{cardInfo.name}</span></p>
         <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
         {loading && !eventsScanned ? (
             <div className="spinner margintop"></div>
@@ -1099,7 +1099,7 @@ const CardView = () => {
                                     : ''
                                 }`}
                                 >
-                                <strong>{eventName}</strong> — {eventDate} ({eventFormat})
+                                <strong>{eventName}</strong><span style={{ opacity: 0.5 }}>&nbsp;-&nbsp;{eventDate.replace(/ - [^,]*/, '')}&nbsp;({eventFormat})</span>
                                 </Link>
                             </td>
                             </tr>
@@ -1120,7 +1120,7 @@ const CardView = () => {
                                     </Link>
                                     </td>
                                     <td>
-                                    <span className="grey">{formatName(result.division)}</span>
+                                    <span style={{ opacity: 0.4 }}>{formatName(result.division)}</span>
                                     </td>
                                     <td></td>
                                 </>
@@ -1173,7 +1173,7 @@ const CardView = () => {
                                     ) : (
                                     <>
                                         Expand {sortedResults.length} more results from this event{' '}
-                                        <span className="material-symbols-outlined">
+                                        <span className="material-symbols-outlined expand-more-results">
                                         keyboard_arrow_down
                                         </span>
                                     </>
@@ -1187,10 +1187,21 @@ const CardView = () => {
                 </table>
             </>
         ) : eventsScanned ? (
-                <p className='margintop italic'>~ Looks like this card isn't featured in any of PTCG Legend's documented decks yet.</p>
+        // if it’s exactly LTR-30 show the “Easter egg” message
+            cardInfo.name.toLowerCase().includes("magikarp") ? (
+                <p className='margintop italic'>
+                <br/>
+                    Looks like the Pokédex was right, this Pokémon is utterly useless. It's not in a single deck in our database...
+                </p>
+            ) : (
+                <p className='margintop italic'>
+                <br/>
+                    ~ Looks like this card isn't featured in any of our documented decks, yet.
+                </p>
+            )
         ) : null}
         <br></br>
-        <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name}? Or spot a mistake? Send it in to <a className='blue' href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
+        <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
     </div>
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>

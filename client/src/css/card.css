@@ -134,9 +134,6 @@
 .green {
     color:rgb(0, 135, 0);
 }
-.grey {
-    color:rgb(134, 134, 134);
-}
 .shrink {
     font-size: 12px;
 }
@@ -230,7 +227,7 @@ tr.event-separator:hover td {
     color:rgb(16, 34, 199);
 }
 .smaller-txt {
-    font-size: 14px;
+    font-size: 12px;
 }
 .other-versions {
     width: 450px;
@@ -529,9 +526,6 @@ tr.event-separator:hover td {
     .other-versions td {
         font-size: 11px;
     }
-    .showmoreversions {
-        width: 110% !important;
-    }
     .navigation-links a {
         font-size: 12px;
     }
@@ -547,7 +541,10 @@ tr.event-separator:hover td {
         width: 100%;
     }
     .showmoreversions {
-        width: 100% !important;
+        font-size: 12px;
+    }
+    .expand-more-results {
+        font-size: 18px;
     }
     .turned-link {
         font-size: 18px;
@@ -654,7 +651,10 @@ tr.event-separator:hover td {
         width: 125%;
     }
     .showmoreversions {
-        width: 125% !important;
+        font-size: 10px;
+    }
+    .expand-more-results {
+        font-size: 15px;
     }
     .other-versions td,
     .card-art-td {
@@ -793,7 +793,10 @@ tr.event-separator:hover td {
         width: 110%;
     }
     .showmoreversions {
-        width: 110% !important;
+        font-size: 8px;
+    }
+    .expand-more-results {
+        font-size: 12px;
     }
     .legality-mark {
         font-size: 20px;
@@ -804,9 +807,6 @@ tr.event-separator:hover td {
     .cards-specific-results th:nth-child(4),
     .cards-specific-results td:nth-child(4) {
         text-align: end;
-    }
-    .showmoreversions span {
-        font-size: 20px;
     }
     .other-versions td,
     .card-art-td {
@@ -854,9 +854,6 @@ tr.event-separator:hover td {
 @media screen and (max-width: 380px) {
     .other-versions {
         width: 100%;
-    }
-    .showmoreversions {
-        width: 100% !important;
     }
     .the-card-img {
         border-radius: 16px !important;

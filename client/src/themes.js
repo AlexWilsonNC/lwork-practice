@@ -28,7 +28,7 @@ export const lightTheme = {
     deckBorder: "3px solid rgb(180, 180, 180)",
     listCardBg: '#FFF',
     listCardText: '#000',
-    cardInfoBg: 'rgba(255, 255, 255, 0.8)',
+    cardInfoBg: 'rgba(255, 255, 255, 0.6)',
     otherVers: 'rgb(200, 223, 240)',
     twitterTimeline: {
         'data-theme': 'light'
@@ -80,7 +80,7 @@ export const darkTheme = {
     deckBorder: "3px solid rgb(40, 40, 40)",
     listCardBg: 'rgb(67, 73, 85)',
     listCardText: 'rgb(230, 230, 230)',
-    cardInfoBg: 'rgba(29, 36, 55, 0.8)',
+    cardInfoBg: 'rgba(29, 36, 55, 0.75)',
     otherVers: 'rgba(2, 24, 40, 0.497)',
     twitterTimeline: {
         'data-theme': 'dark'

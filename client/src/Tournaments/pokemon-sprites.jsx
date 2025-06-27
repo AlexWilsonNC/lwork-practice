@@ -425,8 +425,11 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if(hasPokemon('Gholdengo ex')) {
             secondSprite = getPokemonSpriteURL('gholdengo');
         }
-        else if(hasPokemon('Archaludon ex')) {
-            secondSprite = getPokemonSpriteURL('archaludon');
+        else if(hasPokemon('N\'s Zoroark ex')) {
+            secondSprite  = getPokemonSpriteURL('zoroark');
+        }
+        else if(getPokemonCount('Archaludon ex') >= 2) {
+            secondSprite  = getPokemonSpriteURL('archaludon');
         }
         else if(hasPokemon('Feraligatr')) {
             secondSprite = getPokemonSpriteURL('feraligatr');
