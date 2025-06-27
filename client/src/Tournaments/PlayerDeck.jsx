@@ -42,6 +42,7 @@ const PlayerDeckCenter = styled.div`
     }
 `;
 
+// NOTE: energy that are in their own set must now be ordered before and after each format
 const orderedSets = [
   "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
   "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",

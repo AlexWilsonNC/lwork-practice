@@ -1112,18 +1112,14 @@ useEffect(() => {
     const getPlayerCount = (division) => {
         switch (division) {
             case 'masters':
+                const total = mastersResults.length;
+                const day2 = day2Results.length;
+                const day1Count = eventData.dayOneMasters ?? total;
+                const day2Count = eventData.dayTwoMasters ?? day2;
                 return (
                     <>
-                        {eventData?.dayOneMasters && (
-                            <p>
-                                <strong>Day 1:</strong> {eventData.dayOneMasters}
-                            </p>
-                        )}
-                        {eventData?.dayTwoMasters && (
-                            <p>
-                                <strong>Day 2:</strong> {eventData.dayTwoMasters}
-                            </p>
-                        )}
+                        <p><strong>Day 1:</strong> {day1Count}</p>
+                        <p><strong>Day 2:</strong> {day2Count}</p>
                     </>
                 );
             case 'all':

@@ -204,6 +204,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('roaring-moon');
         secondSprite  = getPokemonSpriteURL('flutter-mane');
     }
+    else if (hasPokemon('Roaring Moon ex') && hasPokemon('Pecharunt ex')) {
+        secondSprite  = getPokemonSpriteURL('roaring-moon');
+    }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Koraidon')) {
         firstSprite  = getPokemonSpriteURL('roaring-moon');
         secondSprite  = getPokemonSpriteURL('koraidon');
@@ -248,6 +251,14 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('dialga-origin');
         secondSprite  = getPokemonSpriteURL('metang');
     }
+    else if (hasPokemon('Klawf') && hasPokemon('Brute Bonnet') && hasPokemon('Terapagos ex')) {
+        firstSprite  = getPokemonSpriteURL('klawf');
+        secondSprite  = getPokemonSpriteURL('terapagos');
+    }
+    else if (hasPokemon('Brute Bonnet') && hasPokemon('Archaludon ex')) {
+        firstSprite  = getPokemonSpriteURL('archaludon');
+        secondSprite  = getPokemonSpriteURL('brute-bonnet');
+    }
     else if (hasPokemon('Klawf') && hasPokemon('Brute Bonnet')) {
         firstSprite  = getPokemonSpriteURL('klawf');
         secondSprite  = getPokemonSpriteURL('brute-bonnet');
@@ -263,6 +274,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if(hasPokemon('Marnie\'s Grimmsnarl ex') && hasPokemon('Froslass')) {
         firstSprite  = getPokemonSpriteURL('grimmsnarl');
         secondSprite  = getPokemonSpriteURL('froslass');
+    }
+    else if (hasPokemon('Froslass') && hasPokemon('Munkidori') && hasPokemon('Dragapult ex')) {
+        secondSprite  = getPokemonSpriteURL('dragapult');
     }
     else if (hasPokemon('Froslass') && hasPokemon('Munkidori')) {
         firstSprite  = getPokemonSpriteURL('froslass');
@@ -394,7 +408,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
 
     // Individual checks
     if (!secondSprite) {
-        if (hasPokemon('Great Tusk')) {
+        if (getPokemonCount('Gouging Fire ex') >= 2) {
+            secondSprite  = getPokemonSpriteURL('gouging-fire');
+        }
+        else if (hasPokemon('Great Tusk')) {
             secondSprite  = getPokemonSpriteURL('great-tusk');
         }
         else if (hasPokemon('Ethan\'s Typhlosion')) {
@@ -444,9 +461,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         }
         else if(getPokemonCount('Archaludon ex') >= 2) {
             secondSprite  = getPokemonSpriteURL('archaludon');
-        }
-        else if(getPokemonCount('Gouging Fire ex') >= 2) {
-            secondSprite  = getPokemonSpriteURL('gouging-fire');
         }
         // always keep last, so any deck with x & x doesnt get overwritten, least important last case if sprite assignment
         else if(hasPokemon('Pidgeot ex')) {

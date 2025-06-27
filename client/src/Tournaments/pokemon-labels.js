@@ -32,6 +32,8 @@ const customLabelsConfig = {
         'froslass-munkidori': 'Froslass',
         'raging-bolt-sandy-shocks': 'Raging Bolt Sandy Shocks',
         'klawf-brute-bonnet': 'Klawf',
+        'klawf-terapagos': 'Klawf Terapagos',
+        'archaludon-brute-bonnet': 'Poison Archaludon',
         'giratina-origin-comfey': 'Giratina LZB',
         'arceus-giratina-origin': 'Arceus Giratina',
         'comfey-roaring-moon': 'Lost Box',
