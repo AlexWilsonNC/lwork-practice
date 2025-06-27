@@ -690,6 +690,7 @@ const EventPage = () => {
     const [eventName, setEventName] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [modalPlayer, setModalPlayer] = useState(null);
+    const [fetchedDayOneCount, setFetchedDayOneCount] = useState(null);
     
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
@@ -787,7 +788,7 @@ const EventPage = () => {
                     if (data.all) data.all = data.all.map(normalizePlayerSprites);
                     setEventData(data);
                     setEventName(data.name);
-                    
+
                     const format = data.format || '';
                     await fetchCardData(format);
                 } else {
@@ -800,6 +801,43 @@ const EventPage = () => {
 
         fetchData();
     }, [eventId]);
+
+    useEffect(() => {
+        if (!eventData || !eventId.includes('2025')) return;
+        (async () => {
+            try {
+            const [year, slug] = eventId.split('_');
+            const elUrl = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+            const elRes = await fetch(elUrl);
+            if (!elRes.ok) return;
+            const elData = await elRes.json();
+
+            // grab eliminated for the *current* division
+            const rawElim = Array.isArray(elData[division]) ? elData[division] : [];
+
+            // how many made Day 2 in that division?
+            const dayTwoCount = Array.isArray(eventData[division]) 
+                ? eventData[division].length 
+                : 0;
+
+            // total Day 1 = eliminated + those who made Day 2
+            const dayOneCount = rawElim.length + dayTwoCount;
+
+            // build keys like "dayOneSeniors"/"dayTwoJuniors"
+            const divCap    = division[0].toUpperCase() + division.slice(1);
+            const dayOneKey = `dayOne${divCap}`;
+            const dayTwoKey = `dayTwo${divCap}`;
+
+            setEventData(prev => ({
+                ...prev,
+                [dayOneKey]: dayOneCount,
+                [dayTwoKey]: dayTwoCount
+            }));
+            } catch (err) {
+            console.error('could not re-fetch Day 1 counts:', err);
+            }
+        })();
+    }, [eventData, division, eventId]);
 
     useEffect(() => {
         if (divisionParam) {
@@ -845,60 +883,61 @@ const EventPage = () => {
     }, [division]);
 
     const loadEliminated = async () => {
-    if (viewTab === 'Records') {
-        if (loadingEliminatedRecs) return;
+        if (viewTab === 'Records') {
+            if (loadingEliminatedRecs) return;
         setLoadingEliminatedRecs(true);
     }
   
-  const [year, slug] = eventId.split('_');
-  const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
-  try {
-    const res  = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const key  = `${division}`;
-    const raw  = Array.isArray(data[key]) ? data[key] : [];
+    const [year, slug] = eventId.split('_');
+    const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+    try {
+        const res  = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const key  = `${division}`;
+        const raw  = Array.isArray(data[key]) ? data[key] : [];
 
-    const normalized = raw.map(player => {
-      let sprite1 = player.sprite1 || '';
-      let sprite2 = player.sprite2 || '';
+        const normalized = raw.map(player => {
+        let sprite1 = player.sprite1 || '';
+        let sprite2 = player.sprite2 || '';
 
-      if (!sprite1 && !sprite2 && player.decklist) {
-        const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-        const clean = str =>
-          str
-            .split('/')
-            .pop()
-            .replace(/^-?assets-sprites-/, '')
-            .replace(/\.png$/, '');
-        sprite1 = clean(firstSprite)  || '';
-        sprite2 = clean(secondSprite) || '';
-      }
+        if (!sprite1 && !sprite2 && player.decklist) {
+            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+            const clean = str =>
+            str
+                .split('/')
+                .pop()
+                .replace(/^-?assets-sprites-/, '')
+                .replace(/\.png$/, '');
+            sprite1 = clean(firstSprite)  || '';
+            sprite2 = clean(secondSprite) || '';
+        }
 
-      if (sprite1 === 'blank') sprite1 = '';
-      if (sprite2 === 'blank') sprite2 = '';
-      if (!sprite1) sprite1 = 'blank';
+        if (sprite1 === 'blank') sprite1 = '';
+        if (sprite2 === 'blank') sprite2 = '';
 
-      return { ...player, sprite1, sprite2 };
-    });
+        if (!sprite1) sprite1 = 'blank';
 
-    if (viewTab === 'Decks') {
-      setEliminatedDecks(normalized);
-      setShowAllDecks(true);
-    } else {
-      setEliminatedRecords(normalized);
-      setShowAllRecs(true);
-    }
-  } catch (err) {
-    console.error('Failed to load eliminated players:', err);
-  } finally {
-    if (viewTab === 'Decks') {
-      setLoadingEliminatedDecks(false);
-    } else {
-      setLoadingEliminatedRecs(false);
-    }
-  }
-};
+            return { ...player, sprite1, sprite2 };
+        });
+
+        if (viewTab === 'Decks') {
+            setEliminatedDecks(normalized);
+            setShowAllDecks(true);
+        } else {
+            setEliminatedRecords(normalized);
+            setShowAllRecs(true);
+        }
+        } catch (err) {
+            console.error('Failed to load eliminated players:', err);
+        } finally {
+            if (viewTab === 'Decks') {
+            setLoadingEliminatedDecks(false);
+            } else {
+            setLoadingEliminatedRecs(false);
+            }
+        }
+    };
 
 useEffect(() => {
   if (viewTab !== 'Records') return;
@@ -1118,8 +1157,14 @@ useEffect(() => {
                 const day2Count = eventData.dayTwoMasters ?? day2;
                 return (
                     <>
-                        <p><strong>Day 1:</strong> {day1Count}</p>
-                        <p><strong>Day 2:</strong> {day2Count}</p>
+                        <p>
+                            <strong>Day 1:</strong> {day1Count}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
+                        <p>
+                            <strong>Day 2:</strong> {day2Count}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
                     </>
                 );
             case 'all':
@@ -1158,33 +1203,37 @@ useEffect(() => {
                     </>
                 );
             case 'seniors':
+                const totalSrs = seniorsResults.length;
+                const day2Srs = day2Results.length;
+                const day1CountSrs = eventData.dayOneSeniors ?? totalSrs;
+                const day2CountSrs = eventData.dayTwoSeniors ?? day2Srs;
                 return (
                     <>
-                        {eventData?.dayOneSeniors && (
-                            <p>
-                                <strong>Day 1:</strong> {eventData.dayOneSeniors}
-                            </p>
-                        )}
-                        {eventData?.dayTwoSeniors && (
-                            <p>
-                                <strong>Day 2:</strong> {eventData.dayTwoSeniors}
-                            </p>
-                        )}
+                        <p>
+                            <strong>Day 1:</strong> {day1CountSrs}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
+                        <p>
+                            <strong>Day 2:</strong> {day2CountSrs}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
                     </>
                 );
             case 'juniors':
+                const totalJrs = juniorsResults.length;
+                const day2Jrs = day2Results.length;
+                const day1CountJrs = eventData.dayOneJuniors ?? totalJrs;
+                const day2CountJrs = eventData.dayTwoJuniors ?? day2Jrs;
                 return (
                     <>
-                        {eventData?.dayOneJuniors && (
-                            <p>
-                                <strong>Day 1:</strong> {eventData.dayOneJuniors}
-                            </p>
-                        )}
-                        {eventData?.dayTwoJuniors && (
-                            <p>
-                                <strong>Day 2:</strong> {eventData.dayTwoJuniors}
-                            </p>
-                        )}
+                        <p>
+                            <strong>Day 1:</strong> {day1CountJrs}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
+                        <p>
+                            <strong>Day 2:</strong> {day2CountJrs}{' '}
+                            {division.charAt(0).toUpperCase() + division.slice(1)}
+                        </p>
                     </>
                 );
             case 'olderSeniors':
