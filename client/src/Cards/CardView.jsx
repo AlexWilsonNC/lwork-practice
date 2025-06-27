@@ -343,18 +343,34 @@ const CardView = () => {
                     .catch(() => [])
             )
         )
-            .then(arraysOfOcc => {
-                const allOcc = arraysOfOcc.flat();
-                allOcc.sort(
-                    (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
-                );
-                setEventResults(allOcc);
+        .then(arraysOfOcc => {
+            const allOcc = arraysOfOcc.flat()
+
+            // ═══════ dedupe by event+division+player+decklist ═══════
+            const seen = new Set()
+            const uniqueOcc = allOcc.filter(o => {
+            // if you have a decklist.label field in o, include it here
+            const key = [
+                o.eventId,
+                o.division,
+                o.playerName,
+                o.flag,
+                o.decklist?.label || ''
+            ].join('||')
+            if (seen.has(key)) return false
+            seen.add(key)
+            return true
             })
-            .catch(err => console.error("Error fetching card decklists:", err))
-            .finally(() => {
-                setLoading(false);
-                setEventsScanned(true);
-            });
+            uniqueOcc.sort(
+            (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
+            )
+            setEventResults(uniqueOcc)
+        })
+        .catch(err => console.error("Error fetching card decklists:", err))
+        .finally(() => {
+            setLoading(false)
+            setEventsScanned(true)
+        })
     }, [cardInfo, set, number, otherVersions]);  // ← include otherVersions
 
     const toggleEventExpansion = (eventId) => {
