@@ -12,6 +12,7 @@ const customLabelsConfig = {
         'blank-pidgeot': 'Pidgeot Control',
         'palkia-origin-noctowl': 'Palkia VSTAR',
         'regidrago-ogerpon': 'Regidrago',
+        'comfey-sableye': 'Lost Box',
         'iron-hands-iron-crown': 'Future Box',
         'blank-roaring-moon': 'Roaring Moon',
         'roaring-moon-dudunsparce': 'Roaring Moon',

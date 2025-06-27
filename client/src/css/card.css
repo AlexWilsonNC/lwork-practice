@@ -104,12 +104,12 @@
     font-size: 12px;
     font-style: italic;
 }
-.rules-text li {
+/* .rules-text li {
     list-style: inside;
 }
 .rules-text li::marker {
     color: grey;
-}
+} */
 .star-icon {
   display: inline-block;
   width: 1em;
@@ -134,7 +134,7 @@
   justify-content: center;
 }
 .rotate-button span {
-    font-size: 18px;
+    font-size: 16px;
 }
 .the-card-img.rotated {
   transform: rotate(90deg) !important;

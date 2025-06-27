@@ -1641,7 +1641,10 @@ useEffect(() => {
                         )}
                         {eventData.format && eventData.format.toUpperCase() !== 'TBA' && (
                             <p>
-                                <strong>Format:</strong> {getEventFormat(division)}
+                                <strong>Format:</strong>{' '}
+                                <Link to={`/decks?format=${encodeURIComponent(eventData.format)}`}>
+                                    {getEventFormat(division)}
+                                </Link>
                                 {eventData.formatAdd && (
                                     <span>
                                         &nbsp;{eventData.formatAdd}

@@ -445,6 +445,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if(getPokemonCount('Archaludon ex') >= 2) {
             secondSprite  = getPokemonSpriteURL('archaludon');
         }
+        else if(getPokemonCount('Gouging Fire ex') >= 2) {
+            secondSprite  = getPokemonSpriteURL('gouging-fire');
+        }
         // always keep last, so any deck with x & x doesnt get overwritten, least important last case if sprite assignment
         else if(hasPokemon('Pidgeot ex')) {
             secondSprite  = getPokemonSpriteURL('pidgeot');

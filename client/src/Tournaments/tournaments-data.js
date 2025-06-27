@@ -1348,8 +1348,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 29, 2025",
         "flag": australia,
-        "location": "Brisbane, Australia",
-        "results": false
+        "location": "Brisbane, Australia"
     },
     {
         "id": "2025_TH_PBL1",
@@ -1419,6 +1418,15 @@ const tournamentList = [
     "date": "Oct 11, 2025",
     "flag": brazil,
     "location": "Belo Horizonte, Brazil",
+    },
+    {
+    "id": "2025_ATLANTA",
+    "name": "Atlanta Regionals",
+    "eventType": "regionals",
+    "eventLogo": regional25,
+    "date": "Apr 12, 2025",
+    "flag": usa,
+    "location": "Atlanta, Georgia",
     },
     {
     "id": "2026_LILLE",

@@ -61,6 +61,7 @@ import guatemala from '../assets/flags/guatemala.png';
 import bolivia from '../assets/flags/bolivia.png';
 import luxembourg from '../assets/flags/luxembourg.png';
 import latvia from '../assets/flags/latvia.png';
+import jamaica from '../assets/flags/jamaica.png';
 import albania from '../assets/flags/albania.png';
 import bulgaria from '../assets/flags/bulgaria.png';
 import cyprus from '../assets/flags/cyprus.png';
@@ -145,6 +146,7 @@ export const flags = {
      VE: venezuela,
      GI: gibraltar,
      RO: romania,
+     JM: jamaica,
     unknown: unknown
 };
 
@@ -220,6 +222,7 @@ export const countryNames = {
     RO: 'Romania (Europe)',
     TT: 'Trinidad & Topago (Latin America)',
     DO: 'Dominican Republic (Latin America)',
+    JM: 'Jamaica (Latin America)',
     VE: 'venezuela (Latin America)',
     EC: 'Ecuador (Latin America)'
 };
@@ -297,13 +300,14 @@ export const playerCountryDropdown = {
     VE: 'Venezuela',
     GI: 'Gibraltar',
     RO: 'Romania',
+    JM: 'Jamaica',
     TT: 'Trinidad & Topago'
     // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE'],
+  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM'],
   EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH'],

@@ -602,9 +602,18 @@ const CardView = () => {
     const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
 
     const monthMap = {
-        Jan: 0, Feb: 1, Mar: 2, Apr: 3,
-        May: 4, Jun: 5, Jul: 6, Aug: 7,
-        Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        Jan: 0, January: 0,
+        Feb: 1, February: 1,
+        Mar: 2, March: 2,
+        Apr: 3, April: 3,
+        May: 4,
+        Jun: 5, June: 5,
+        Jul: 6, July: 6,
+        Aug: 7, August: 7,
+        Sep: 8, September: 8,
+        Oct: 9, October: 9,
+        Nov: 10, November: 10,
+        Dec: 11, December: 11
     };
     function parseEventDate(dateStr) {
         // split off the year
@@ -617,7 +626,7 @@ const CardView = () => {
 
         // then split into monthName + day
         const [monthName, dayStr] = firstDate.split(/\s+/);
-        const month = monthMap[monthName];
+        const month = monthMap[monthName.slice(0, 3)];
         const day = parseInt(dayStr, 10);
 
         return new Date(year, month, day).getTime();
@@ -631,11 +640,10 @@ const CardView = () => {
             return acc;
         }, {})
     )
-        // 2) sort clusters by date
-        .sort((a, b) =>
-            parseEventDate(b[1][0].eventDate) - parseEventDate(a[1][0].eventDate)
-        );
-
+    // 2) sort clusters by date
+    .sort((a, b) =>
+        new Date(b[1][0].eventDate).getTime() - new Date(a[1][0].eventDate).getTime()
+    );
     // 3) pick how many clusters to show
     const displayedClusters = eventClusters
 
@@ -690,11 +698,10 @@ const CardView = () => {
                                 className="rotate-button"
                                 onClick={e => {
                                     e.stopPropagation();
-                                    console.log('🌀 Rotate button clicked — flipping:', !isRotated);
                                     setIsRotated(prev => !prev);
                                 }}
                             >
-                                Rotate&nbsp;<span class="material-symbols-outlined">autorenew</span>
+                                Rotate&nbsp;<span class="material-symbols-outlined">forward_media</span>
                             </button>
                         )}
                         {cardInfo.set && (
