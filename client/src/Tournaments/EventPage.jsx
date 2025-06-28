@@ -1948,25 +1948,22 @@ useEffect(() => {
                                         </button>
 
                                         {/* Only show Day 1 & Conversion for 2025+ or if we have hardcoded Day 1 data */}
-                                        {( (is2025Event || eventData?.dayOneMeta?.length > 0) && division === 'masters' ) 
-                                            ? (
-                                                <>
-                                                    <button
-                                                        className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                        onClick={handleDayOneClick}
+                                        {((is2025Event || eventData?.dayOneMeta?.length > 0) && division === 'masters') && (
+                                            <>
+                                                <button
+                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleDayOneClick}
                                                     >
-                                                        Day 1
-                                                    </button>
-                                                    {/* <button
-                                                        className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                        onClick={handleConversionRateClick}
+                                                    Day 1
+                                                </button>
+                                                {/* <button
+                                                    className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                                    onClick={handleConversionRateClick}
                                                     >
-                                                        % Conversion
-                                                    </button> */}
-                                                </>
-                                            )
-                                            : null
-                                        }
+                                                    % Conversion
+                                                </button> */}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (

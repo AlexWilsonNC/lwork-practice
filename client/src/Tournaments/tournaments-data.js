@@ -1231,8 +1231,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 22 , 2025",
         "flag": sweden,
-        "location": "Stockholm, Sweden",
-        "results": false
+        "location": "Stockholm, Sweden"
     },
     {
         "id": "2025_SEVILLE",
