@@ -606,7 +606,6 @@ const formatName = (name) => {
     .join(' ');
 };
 
-
 const getPlacementSuffix = (number) => {
   if (number === null || number === 0) return '';
   const j = number % 10;
@@ -702,6 +701,12 @@ const EventPage = () => {
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
+
+    const didFetchCounts = useRef({});
+
+    useEffect(() => {
+        didFetchCounts.current[division] = false;
+    }, [eventId, division]);
     
     const mastersResults = eventData?.masters || [];
     const seniorsResults = eventData?.seniors || [];
@@ -807,51 +812,34 @@ const EventPage = () => {
 
     useEffect(() => {
         if (!eventData || !eventId.includes('2025')) return;
+        if (didFetchCounts.current[division]) return;
+
         (async () => {
             try {
             const [year, slug] = eventId.split('_');
             const elUrl = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
             const elRes = await fetch(elUrl);
-            if (!elRes.ok) return;
+            if (!elRes.ok) throw new Error(`HTTP ${elRes.status}`);
+
             const elData = await elRes.json();
-
-            // grab eliminated for the *current* division
-            const rawElim = Array.isArray(elData[division]) ? elData[division] : [];
-
-            // how many made Day 2 in that division?
-            const dayTwoCount = Array.isArray(eventData[division]) 
-                ? eventData[division].length 
-                : 0;
-
-            // total Day 1 = eliminated + those who made Day 2
+            const rawElim     = Array.isArray(elData[division]) ? elData[division] : [];
+            const dayTwoCount = Array.isArray(eventData[division]) ? eventData[division].length : 0;
             const dayOneCount = rawElim.length + dayTwoCount;
 
-            // build keys like "dayOneSeniors"/"dayTwoJuniors"
             const divCap    = division[0].toUpperCase() + division.slice(1);
             const dayOneKey = `dayOne${divCap}`;
             const dayTwoKey = `dayTwo${divCap}`;
 
-             const dayOneMeta = rawElim.map(player => {
-                // reuse your existing sprite‐normalizer
-                const { sprite1, sprite2 } = normalizePlayerSprites(player);
-                return {
-                    sprite1,
-                    sprite2,
-                    deckcount: player.deckcount || 1
-                };
-            });
-
             setEventData(prev => ({
                 ...prev,
-                // stash the full Day 1 meta array...
-                dayOneMeta,
-                // ...and still patch counts
                 [dayOneKey]: dayOneCount,
                 [dayTwoKey]: dayTwoCount
             }));
 
+            // mark it done so we don’t loop
+            didFetchCounts.current[division] = true;
             } catch (err) {
-                console.error('could not re-fetch Day 1 counts:', err);
+            console.error('Could not fetch Day 1 counts for', division, err);
             }
         })();
     }, [eventData, division, eventId]);
@@ -1301,8 +1289,63 @@ useEffect(() => {
         setActiveTab(tab);
     };    
 
+ const dayOneTypeArray = React.useMemo(() => {
+   if (is2025Event) {
+     // for 2025+, use both eliminated and survivors so it's truly Day 1
+     const allDayOneDecks = [...eliminatedDecks, ...day2Results];
+     const map = countByArchetype(allDayOneDecks, eventId);
+     return Object.entries(map)
+       .map(([key, {count, sprite}]) => ({ key, count, sprite }))
+       .sort((a, b) => b.count - a.count);
+   }
+
+   // pre-2025: safely default to an empty array if there is no dayOneMeta
+   const meta = eventData?.dayOneMeta ?? [];
+   return meta
+     .map(m => ({
+       key:    getCustomLabel(eventId, m.sprite1, m.sprite2),
+       count:  m.deckcount,
+       sprite: (m.sprite1 || m.sprite2 || '').replace('.png','')
+     }))
+     .sort((a, b) => b.count - a.count);
+ }, [
+   is2025Event,
+   eliminatedDecks,
+   day2Results,
+   // notice the optional chaining here
+   eventData?.dayOneMeta,
+   eventId
+ ]);
+
+
+        const chartData = showDayOneMeta
+            ? {
+                labels: dayOneTypeArray.map(e => e.key),
+                datasets: [{
+                    label: 'Deck Count',
+                    data:  dayOneTypeArray.map(e => e.count),
+                    backgroundColor: '#1291eb8b'
+                }]
+                }
+            : showConversionRate
+                ? conversionChartData
+                : {
+                    labels: deckTypeCountArray.map(e => e.key),
+                    datasets: [{
+                    label: 'Deck Count',
+                    data:  deckTypeCountArray.map(e => e.count),
+                    backgroundColor: '#1291eb8b'
+                    }]
+                };
+
+                useEffect(() => {
+            if (is2025Event && showDayOneMeta && eliminatedDecks.length === 0) {
+                loadEliminated();
+            }
+        }, [is2025Event, showDayOneMeta, eliminatedDecks.length]);
+
     if (!eventData) {
-        return;
+        return null;
     }
 
     const isMastersEmpty = mastersResults.length === 0;
@@ -1379,7 +1422,6 @@ useEffect(() => {
         ]
     };
 
-
     const handleDayOneClick = () => {
         setShowDayOneMeta(true);
         setShowConversionRate(false);
@@ -1394,34 +1436,23 @@ useEffect(() => {
         setShowConversionRate(true);
     };
 
-    const chartData = showDayOneMeta
-        ? {
-            labels: eventData.dayOneMeta.map(meta => {
-                const { sprite1, sprite2 } = meta;
-                return getCustomLabel(eventId, sprite1, sprite2);
-            }),
-            datasets: [
-                {
-                    label: 'Deck Count',
-                    data: eventData.dayOneMeta.map(meta => meta.deckcount),
-                    backgroundColor: '#1291eb8b'
-                }
-            ]
-        }
-        : showConversionRate
-            ? conversionChartData
-            : {
-                labels: deckTypeCountArray.map((entry) => {
-                    // console.log("Day 2 Label:", entry.key);
-                    return entry.key;
-                }), datasets: [
-                    {
-                        label: 'Deck Count',
-                        data: deckTypeCountArray.map((entry) => entry.count),
-                        backgroundColor: '#1291eb8b'
-                    }
-                ]
-            };
+    function countByArchetype(players, eventId) {
+    return players.reduce((acc, player) => {
+        let { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+        firstSprite  = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
+        secondSprite = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
+
+        // skip hyphens/blanks
+        if (secondSprite === 'hyphen') return acc;
+
+        const key = getCustomLabel(eventId, firstSprite || '', secondSprite || '');
+        if (!key) return acc;
+
+        acc[key] = acc[key] || { count: 0, sprite: firstSprite || secondSprite };
+        acc[key].count++;
+        return acc;
+        }, {});
+    }
 
     const getDayOneMetaSprites = (meta) => {
         return {
@@ -1466,13 +1497,11 @@ useEffect(() => {
                         const data = dataset.data[index];
 
                         let sprite;
-
                         if (showDayOneMeta) {
-                            const metaKey = eventData.dayOneMeta[index];
-                            const { firstSprite, secondSprite } = getDayOneMetaSprites(metaKey);
-                            sprite = firstSprite !== '' ? firstSprite : secondSprite;
+                        // always safe now: dayOneTypeArray[index] exists and has .sprite
+                        sprite = dayOneTypeArray[index]?.sprite;
                         } else {
-                            sprite = deckTypeCount[label]?.sprite;
+                        sprite = deckTypeCount[label]?.sprite;
                         }
 
                         const bar = meta.data[index];
@@ -1911,14 +1940,16 @@ useEffect(() => {
                             <div className='event-statistics'>
                                 <div className='chart-btns-container'>
                                     <div className='alignrow'>
-                                        {hasDayOneMeta && division === 'masters' ? (
-                                            <>
-                                                <button
-                                                    className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayTwoClick}
-                                                >
-                                                    Day 2
-                                                </button>
+                                        <button
+                                            className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                            onClick={handleDayTwoClick}
+                                        >
+                                            Day 2
+                                        </button>
+
+                                        {/* Only show Day 1 & Conversion for 2025+ or if we have hardcoded Day 1 data */}
+                                        {( (is2025Event || eventData?.dayOneMeta?.length > 0) && division === 'masters' ) 
+                                            ? (
                                                 <>
                                                     <button
                                                         className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
@@ -1926,23 +1957,16 @@ useEffect(() => {
                                                     >
                                                         Day 1
                                                     </button>
-                                                    <button
+                                                    {/* <button
                                                         className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
                                                         onClick={handleConversionRateClick}
                                                     >
                                                         % Conversion
-                                                    </button>
+                                                    </button> */}
                                                 </>
-                                            </>
-                                        ) : eventId.includes("_CL") ? ( // Check for _CL first to prioritize it
-                                            <p className='chart-button'>Top {chartResults.length}</p>
-                                        ) : (is2024Event || eventId.includes("2024_WORLDS")) ? (
-                                            <button className={`chart-button day2btn active`}>
-                                                Day 2
-                                            </button>
-                                        ) : (
-                                            <p className='chart-button'>Top {chartResults.length}</p>
-                                        )}
+                                            )
+                                            : null
+                                        }
                                     </div>
                                 </div>
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (

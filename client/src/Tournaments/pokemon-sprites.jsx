@@ -381,9 +381,17 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('terapagos');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }           
+    else if (hasPokemon('Terapagos ex') && hasPokemon('Origin Forme Palkia V') && hasPokemon('Noctowl')) {
+        firstSprite  = getPokemonSpriteURL('terapagos');
+        secondSprite  = getPokemonSpriteURL('palkia-origin');
+    }           
     else if (hasPokemon('Okidogi') && hasPokemon('Dudunsparce')) {
         firstSprite  = getPokemonSpriteURL('okidogi');
         secondSprite  = getPokemonSpriteURL('dudunsparce');
+    }           
+    else if (hasPokemon('Okidogi') && hasPokemon('Garchomp ex')) {
+        firstSprite  = getPokemonSpriteURL('okidogi');
+        secondSprite  = getPokemonSpriteURL('garchomp');
     }           
     else if (hasPokemon('Toedscruel ex') && hasPokemon('Teal Mask Ogerpon ex')) {
         firstSprite  = getPokemonSpriteURL('toedscruel');
@@ -460,6 +468,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         }
         else if(getPokemonCount('Archaludon ex') >= 2) {
             secondSprite  = getPokemonSpriteURL('archaludon');
+        }
+        else if(getPokemonCount('Snorlax') === 4) {
+            secondSprite  = getPokemonSpriteURL('snorlax');
         }
         // always keep last, so any deck with x & x doesnt get overwritten, least important last case if sprite assignment
         else if(hasPokemon('Pidgeot ex')) {
