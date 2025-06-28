@@ -28,6 +28,10 @@
     align-items: center;
     width: 100%;
 }
+.event-results-cardview {
+    width: 70%;
+    margin-bottom: 25px;
+}
 .card-and-setinfo {
     display: flex;
     flex-direction: column;
@@ -517,6 +521,9 @@ tr.event-separator:hover td {
     .navigation-links {
         width: 90%;
     }
+    .event-results-cardview {
+        width: 90%;
+    }
 }
 @media screen and (max-width: 950px) {
     .the-card-img {
@@ -645,6 +652,9 @@ tr.event-separator:hover td {
     }
     .justcardviewonly .event-results {
         width: 98%;
+    }
+     .event-results-cardview {
+        width: 95%;
     }
 }
 @media screen and (max-width: 600px) {

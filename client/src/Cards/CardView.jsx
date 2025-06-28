@@ -817,15 +817,19 @@ const CardView = () => {
                                 </ul>
                             </div>
                         )}
-                        <hr className='small-grey-hr'></hr>
-                        {cardInfo.rules && (
-                            <div className='attack-ability rules-text'>
-                                <ul>
-                                    {cardInfo.rules.map((rules, index) => (
-                                        <li key={index}>{rules}</li>
-                                    ))}
-                                </ul>
-                            </div>
+                        {cardInfo.supertype === 'Pokémon' && (
+                            <>
+                                <hr className='small-grey-hr' />
+                                {cardInfo.rules && (
+                                    <div className='attack-ability rules-text'>
+                                        <ul>
+                                            {cardInfo.rules.map((rule, index) => (
+                                                <li key={index}>{rule}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </>
                         )}
                         {cardInfo.supertype === 'Trainer' && (
                             <div className='trainer-details'>
@@ -985,7 +989,7 @@ const CardView = () => {
                     </div>
                 </div>
             </div>
-            <div className="event-results marginbottom">
+            <div className="event-results-cardview marginbottom">
                 <p className='decks-that-contain'>Decklists that feature <span className='italic'>{cardInfo.name}</span></p>
                 <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
                 {loading && !eventsScanned ? (
