@@ -211,6 +211,20 @@
 }
 .chart-container-wrapper {
     width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a transparent;
+}
+.chart-container-wrapper::-webkit-scrollbar {
+  height: 4px;
+  background: transparent;  /* hide default track */
+}
+.chart-container-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+/* optional: hide scrollbar on hover-out, if you prefer */
+.chart-container-wrapper:hover::-webkit-scrollbar {
+  background: transparent;
 }
 .chart-container {
     position: relative;
@@ -235,10 +249,10 @@
     }
 }
 @media (max-width: 630px) {
-    .chart-container-wrapper {
+    /* .chart-container-wrapper {
         overflow-x: auto;
         overflow-y: hidden;
-    }
+    } */
     .chart-container {
         min-width: 600px;
         margin: 0;

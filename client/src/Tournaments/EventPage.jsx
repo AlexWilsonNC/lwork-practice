@@ -1113,23 +1113,25 @@ useEffect(() => {
 
         if (sprite2 === 'hyphen') return acc;
 
-        let key;
-        let spriteToShow;
-
-        if (sprite1 !== 'blank' && sprite1) {
-            key = getCustomLabel(eventId, sprite1, sprite2);
-            spriteToShow = sprite1;
-        } else if (sprite2 !== 'blank' && sprite2) {
-            key = getCustomLabel(eventId, '', sprite2);
-            spriteToShow = sprite2;
-        } else {
-            return acc;
-        }
+        let key = getCustomLabel(eventId, sprite1, sprite2);
 
         if (!acc[key]) {
-            acc[key] = { count: 0, sprite: spriteToShow };
+            // start with an array of the two (if present)
+            const sprites = [];
+            if (sprite1 && sprite1 !== 'blank') sprites.push(sprite1);
+            if (sprite2 && sprite2 !== 'blank') sprites.push(sprite2);
+            acc[key] = { count: 0, sprites };
         }
-        acc[key].count += 1;
+
+        // increment count
+        acc[key].count++;
+
+        // also merge in any new sprite we discover
+        [sprite1, sprite2].forEach(s => {
+            if (s && s !== 'blank' && !acc[key].sprites.includes(s)) {
+            acc[key].sprites.push(s);
+            }
+        });
 
         return acc;
     }, {});
@@ -1289,60 +1291,70 @@ useEffect(() => {
         setActiveTab(tab);
     };    
 
- const dayOneTypeArray = React.useMemo(() => {
-   if (is2025Event) {
-     // for 2025+, use both eliminated and survivors so it's truly Day 1
-     const allDayOneDecks = [...eliminatedDecks, ...day2Results];
-     const map = countByArchetype(allDayOneDecks, eventId);
-     return Object.entries(map)
-       .map(([key, {count, sprite}]) => ({ key, count, sprite }))
-       .sort((a, b) => b.count - a.count);
-   }
-
-   // pre-2025: safely default to an empty array if there is no dayOneMeta
-   const meta = eventData?.dayOneMeta ?? [];
-   return meta
-     .map(m => ({
-       key:    getCustomLabel(eventId, m.sprite1, m.sprite2),
-       count:  m.deckcount,
-       sprite: (m.sprite1 || m.sprite2 || '').replace('.png','')
-     }))
-     .sort((a, b) => b.count - a.count);
- }, [
-   is2025Event,
-   eliminatedDecks,
-   day2Results,
-   // notice the optional chaining here
-   eventData?.dayOneMeta,
-   eventId
- ]);
-
-
-        const chartData = showDayOneMeta
-            ? {
-                labels: dayOneTypeArray.map(e => e.key),
-                datasets: [{
-                    label: 'Deck Count',
-                    data:  dayOneTypeArray.map(e => e.count),
-                    backgroundColor: '#1291eb8b'
-                }]
-                }
-            : showConversionRate
-                ? conversionChartData
-                : {
-                    labels: deckTypeCountArray.map(e => e.key),
-                    datasets: [{
-                    label: 'Deck Count',
-                    data:  deckTypeCountArray.map(e => e.count),
-                    backgroundColor: '#1291eb8b'
-                    }]
-                };
-
-                useEffect(() => {
-            if (is2025Event && showDayOneMeta && eliminatedDecks.length === 0) {
-                loadEliminated();
+    const dayOneTypeArray = React.useMemo(() => {
+        if (is2025Event) {
+        const allDayOneDecks = [...eliminatedDecks, ...day2Results];
+        const dayOneMap = allDayOneDecks.reduce((acc, player) => {
+            let s1 = player.sprite1 || '';
+            let s2 = player.sprite2 || '';
+            if (!s1 && !s2 && player.decklist) {
+            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+            s1 = firstSprite.replace('/assets/sprites/', '').replace('.png','');
+            s2 = secondSprite.replace('/assets/sprites/', '').replace('.png','');
             }
-        }, [is2025Event, showDayOneMeta, eliminatedDecks.length]);
+            if (s2 === 'hyphen') return acc;
+            const key = getCustomLabel(eventId, s1, s2);
+            if (!acc[key]) acc[key] = { count: 0, sprites: [] };
+            acc[key].count++;
+            [s1, s2].forEach(s => {
+            if (s && s !== 'blank' && !acc[key].sprites.includes(s)) {
+                acc[key].sprites.push(s);
+            }
+            });
+            return acc;
+        }, {});
+        return Object.entries(dayOneMap)
+        .map(([key, { count, sprites }]) => ({ key, count, sprites }))
+        .filter(item => item.key !== 'blank-')      // ← remove the empty-sprite bucket
+        .sort((a, b) => b.count - a.count);
+    }
+
+    // pre-2025: safely default to an empty array if there is no dayOneMeta
+    const meta = eventData?.dayOneMeta ?? [];
+    return meta
+        .map(m => {
+            const s1 = (m.sprite1 || '').replace('.png','');
+            const s2 = (m.sprite2 || '').replace('.png','');
+            const sprites = [];
+            if (s1 && s1 !== 'blank') sprites.push(s1);
+            if (s2 && s2 !== 'blank') sprites.push(s2);
+            return {
+            key:     getCustomLabel(eventId, s1, s2),
+            count:   m.deckcount,
+            sprites,
+            };
+        })
+        .sort((a, b) => b.count - a.count);
+        }, 
+        [
+            is2025Event,
+            eliminatedDecks,
+            day2Results,
+            eventData?.dayOneMeta,
+            eventId
+        ]
+    );
+
+    // useEffect(() => {
+    //     if (is2025Event && (showDayOneMeta || showConversionRate) && eliminatedDecks.length === 0) {
+    //         loadEliminated();
+    //     }
+    // }, [is2025Event, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
+    useEffect(() => {
+        if (is2025Event && eliminatedDecks.length === 0) {
+            loadEliminated();
+        }
+    }, [is2025Event, eliminatedDecks.length]);
 
     if (!eventData) {
         return null;
@@ -1354,73 +1366,81 @@ useEffect(() => {
         juniorsResults.length > 0 ||
         professorsResults.length > 0;
 
-    const dayOneData = eventData.dayOneMeta || [];
-    const dayTwoData = chartResults;
+    let combinedData;
 
-    const combinedData = dayOneData.reduce((acc, dayOneDeck) => {
-        let dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
-    
-        // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 1 data
-        if (dayOneLabel === 'Radiant Charizard LZB') {
-            dayOneLabel = 'Lost Box';
-        }
-    
-        const dayTwoDeck = dayTwoData.find(dayTwoDeck => {
-            const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-            let normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-            let normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-    
-            let dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
-    
-            // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 2 data
-            if (dayTwoLabel === 'Radiant Charizard LZB') {
-                dayTwoLabel = 'Lost Box';
-            }
-    
-            return dayOneLabel === dayTwoLabel;
+    if (is2025Event) {
+        // ——— NEW 2025+ logic ———
+        // Build Day 1 counts off of your dynamic "dayOneTypeArray"
+        const dayOneItems = dayOneTypeArray.map(e => ({ label: e.key, count: e.count }));
+        // Build Day 2 counts off of your deckTypeCountArray
+        const dayTwoItems = deckTypeCountArray.map(e => ({ label: e.key, count: e.count }));
+
+        // Zip them together
+        combinedData = dayOneItems.map(({ label, count: dayOneCount }) => {
+            const dayTwoCount = dayTwoItems.find(d2 => d2.label === label)?.count || 0;
+            const rate = dayOneCount > 0
+            ? ((dayTwoCount / dayOneCount) * 100).toFixed(2)
+            : '0.00';
+            return { label, conversionRate: rate };
         });
-    
-        if (dayTwoDeck) {
-            const dayTwoCount = dayTwoData.filter(dayTwoDeck => {
-                const { firstSprite, secondSprite } = getPokemonSprites(dayTwoDeck.decklist, '', '');
-                let normalizedSprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
-                let normalizedSprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
-    
-                let dayTwoLabel = getCustomLabel(eventId, normalizedSprite1, normalizedSprite2);
-    
-                // Treat 'Radiant Charizard LZB' as 'Lost Box' in Day 2 data
-                if (dayTwoLabel === 'Radiant Charizard LZB') {
-                    dayTwoLabel = 'Lost Box';
-                }
-    
-                return dayTwoLabel === dayOneLabel;
-            }).length;
-    
-            acc.push({
-                label: dayOneLabel,
-                conversionRate: ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2),
+    } else {
+        // ——— FALLBACK pre-2025 logic ———
+        // Use your existing dayOneMeta → chartResults reduce
+        const dayOneData = eventData.dayOneMeta || [];
+        const dayTwoData = chartResults;
+
+        combinedData = dayOneData.reduce((acc, dayOneDeck) => {
+            const dayOneLabel = getCustomLabel(eventId, dayOneDeck.sprite1, dayOneDeck.sprite2);
+
+            // find matching Day 2 decks…
+            const matches = dayTwoData.filter(d2 => {
+            const { firstSprite, secondSprite } = getPokemonSprites(d2.decklist, '', '');
+            const d2Label = getCustomLabel(
+                eventId,
+                firstSprite.replace('/assets/sprites/', '').replace('.png',''),
+                secondSprite.replace('/assets/sprites/', '').replace('.png','')
+            );
+            return d2Label === dayOneLabel;
             });
-        } else {
-            acc.push({
-                label: dayOneLabel,
-                conversionRate: '0.00%',
-            });
-        }
-    
-        return acc;
-    }, []);
-    
+
+            const dayTwoCount = matches.length;
+            const rate = dayOneDeck.deckcount > 0
+            ? ((dayTwoCount / dayOneDeck.deckcount) * 100).toFixed(2)
+            : '0.00';
+
+            acc.push({ label: dayOneLabel, conversionRate: rate });
+            return acc;
+        }, []);
+    }
 
     const conversionChartData = {
-        labels: combinedData.map(data => data.label),
-        datasets: [
-            {
-                label: 'Conversion Rate (%)',
-                data: combinedData.map(data => data.conversionRate),
-                backgroundColor: '#1291eb8b'
-            }
-        ]
+        labels: combinedData.map(d => d.label),
+        datasets: [{
+            label: '% Conversion',
+            data: combinedData.map(d => d.conversionRate),
+            backgroundColor: '#1290eb8b'
+        }]
     };
+
+    const chartData = showDayOneMeta
+        ? {
+            labels: dayOneTypeArray.map(e => e.key),
+            datasets: [{
+                label: 'Deck Count',
+                data:  dayOneTypeArray.map(e => e.count),
+                backgroundColor: '#1291eb8b'
+            }]
+            }
+        : showConversionRate
+            ? conversionChartData
+            : {
+                labels: deckTypeCountArray.map(e => e.key),
+                datasets: [{
+                label: 'Deck Count',
+                data:  deckTypeCountArray.map(e => e.count),
+                backgroundColor: '#1291eb8b'
+                }]
+            };
 
     const handleDayOneClick = () => {
         setShowDayOneMeta(true);
@@ -1478,7 +1498,7 @@ useEffect(() => {
         events: [],
         layout: {
             padding: {
-                top: 40,
+                top: 20,
             },
         },
         animation: {
@@ -1494,32 +1514,38 @@ useEffect(() => {
                     chartInstance.data.labels.forEach((label, index) => {
                         const meta = chartInstance.getDatasetMeta(0);
                         const dataset = chartInstance.data.datasets[0];
-                        const data = dataset.data[index];
+                        const data  = dataset.data[index];
 
-                        let sprite;
-                        if (showDayOneMeta) {
-                        // always safe now: dayOneTypeArray[index] exists and has .sprite
-                        sprite = dayOneTypeArray[index]?.sprite;
-                        } else {
-                        sprite = deckTypeCount[label]?.sprite;
-                        }
+                        const sprites = showDayOneMeta
+                            ? dayOneTypeArray[index]?.sprites || []
+                            : deckTypeCount[label]?.sprites || [];
 
-                        const bar = meta.data[index];
-                        if (sprite && bar) {
-                            const { x, y } = bar.tooltipPosition();
-                            const img = new Image();
-                            img.src = `/assets/sprites/${sprite}.png`;
-                            img.onload = () => {
-                                const aspectRatio = img.width / img.height;
-                                const displayWidth = 45;
-                                const displayHeight = displayWidth / aspectRatio;
+                            const bar = meta.data[index];
+                            if (bar && sprites.length) {
+                            const { x } = bar.tooltipPosition();
+                            const displayWidth = 35;
+                            const spacing      = -15;
+                            const totalWidth   = sprites.length * displayWidth
+                                                + (sprites.length - 1) * spacing;
+                            // start so that strip is centered on the bar
+                            const startX = x - totalWidth / 2;
 
-                                ctx.drawImage(img, x - displayWidth / 2, y - displayHeight - 0, displayWidth, displayHeight);
-                            };
-                        }
-                        if (data >= 0) {
-                            const textYPosition = bar.y + 10;
-                            ctx.fillText(data, bar.x, textYPosition);
+                            sprites.forEach((spr, i) => {
+                                const img = new Image();
+                                img.src = `/assets/sprites/${spr}.png`;
+                                img.onload = () => {
+                                    const aspectRatio = img.width / img.height;
+                                    const w = displayWidth;
+                                    const h = w / aspectRatio;
+                                    const drawX = startX + i * (displayWidth + spacing);
+                                    const drawY = bar.y - h;
+                                    ctx.drawImage(img, drawX, drawY, w, h);
+                                };
+                            });
+                            if (data > 0) {
+                                const textY = bar.y + 10;   // tweak as needed
+                                ctx.fillText(data, x, textY);
+                            }
                         }
                     });
                 }
@@ -1752,6 +1778,7 @@ useEffect(() => {
                         className={`event-option ${activeTab === 'Results' ? 'active-option' : ''}`}
                         onClick={() => {
                             setActiveTab('Results');
+                            setShowAllDecks(false);
                         }}
                     >
                         Results
@@ -1948,24 +1975,42 @@ useEffect(() => {
                                         </button>
 
                                         {/* Only show Day 1 & Conversion for 2025+ or if we have hardcoded Day 1 data */}
-                                        {((is2025Event || eventData?.dayOneMeta?.length > 0) && division === 'masters') && (
+                                        {(is2025Event
+                                            || (eventData?.dayOneMeta?.length > 0 && division === 'masters')
+                                        ) && (
                                             <>
-                                                <button
-                                                    className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleDayOneClick}
-                                                    >
-                                                    Day 1
-                                                </button>
-                                                {/* <button
-                                                    className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                    onClick={handleConversionRateClick}
-                                                    >
-                                                    % Conversion
-                                                </button> */}
+                                            <button
+                                                className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                onClick={handleDayOneClick}
+                                            >
+                                                Day 1
+                                            </button>
+                                            <button
+                                                className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                                onClick={handleConversionRateClick}
+                                            >
+                                                Conversion %
+                                            </button>
                                             </>
                                         )}
                                     </div>
                                 </div>
+                                {eventId.includes('2025') && chartResults.length > 16 && (
+                                    <div className='chart-description'>
+                                        {showDayOneMeta && !showConversionRate && (
+                                        <p>* Total count for each deck archetype from Day 1</p>
+                                        )}
+                                        {!showDayOneMeta && !showConversionRate && (
+                                        <p>* Total count for each deck archetype from Day 2</p>
+                                        )}
+                                        {showConversionRate && (
+                                        <p>* Conversion rate of each archetype, from Day 1 into Day 2
+                                            <br></br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            (decimal values = percentage)</p>
+                                        )}
+                                    </div>
+                                )}
                                 {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
                                     <div className='chart-description'>
                                         {showDayOneMeta && !showConversionRate && (
@@ -1982,9 +2027,18 @@ useEffect(() => {
                                 {!hasChartData && (
                                     <div className='chart-description'><p>* No known decks available for this division</p></div>
                                 )}
-                                <div className='chart-container-wrapper'>
-                                    <div className='chart-container'>
-                                        <Bar ref={chartRef} data={chartData} options={chartOptions} />
+                                <div className='chart-container-wrapper' style={{
+                                    overflowX: 'auto',
+                                    paddingBottom: showDayOneMeta ? '1rem' : undefined,
+                                }}>
+                                    <div className='chart-container'
+                                        style={{
+                                            minWidth: `${Math.max(
+                                                chartData.labels.length * 50, 600)}px`,
+                                            height: '400px',
+                                        }}
+                                    >
+                                        <Bar ref={chartRef} data={chartData} options={chartOptions} width={null} height={null}/>
                                     </div>
                                 </div>
                             {isChartReady && (
@@ -2012,7 +2066,7 @@ useEffect(() => {
                                 </div>
                                 {selectedArchetype && (
                                     <div className='average-card-counts'>
-                                        <p>Average card count from all <strong>{selectedArchetype}</strong> list(s) - {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</p>
+                                        <p>Average card count from all Day 2 <strong>{selectedArchetype}</strong> lists <span style={{ opacity: 0.25 }}>&nbsp;• {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</span></p>
                                         <hr
                                             style={{
                                                 marginTop: '5px',
@@ -2061,7 +2115,7 @@ useEffect(() => {
                                     </div>
                                 )}
                                 <div className='filtered-results'>
-                                    <p>All <strong>{selectedArchetype}</strong> results from {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</p>
+                                    <p>All Day 2 <strong>{selectedArchetype}</strong> results <span style={{ opacity: 0.25 }}>&nbsp;• {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</span></p>
                                     <hr
                                         style={{
                                             marginTop: '5px',

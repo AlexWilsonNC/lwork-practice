@@ -266,12 +266,16 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('noctowl');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }    
-    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex')) {
+    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }
     else if(hasPokemon('Marnie\'s Grimmsnarl ex') && hasPokemon('Froslass')) {
         firstSprite  = getPokemonSpriteURL('grimmsnarl');
+        secondSprite  = getPokemonSpriteURL('froslass');
+    }
+    else if (hasPokemon('Froslass') && hasPokemon('Espathra ex')) {
+        firstSprite  = getPokemonSpriteURL('espathra');
         secondSprite  = getPokemonSpriteURL('froslass');
     }
     else if (hasPokemon('Froslass') && hasPokemon('Munkidori') && hasPokemon('Dragapult ex')) {
@@ -329,10 +333,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('flareon');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }     
-    else if (hasPokemon('Sinistcha') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite  = getPokemonSpriteURL('sinistcha');
-        secondSprite  = getPokemonSpriteURL('ogerpon');
-    }      
     else if (hasPokemon('Joltik') && hasPokemon('Pikachu ex')) {
         firstSprite  = getPokemonSpriteURL('joltik');
         secondSprite  = getPokemonSpriteURL('pikachu');
@@ -409,8 +409,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('snorlax');
     }               
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Archaludon ex')) {
-        firstSprite  = getPokemonSpriteURL('archaludon');
-        secondSprite  = getPokemonSpriteURL('zoroark');
+        secondSprite  = getPokemonSpriteURL('archaludon');
     }               
 
     // Individual checks
