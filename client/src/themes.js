@@ -49,7 +49,7 @@ export const lightTheme = {
     lossBg: '#FAA0A0', // light red for losses
     tieBg: '#fffcc2', // light yellow for ties
     unknownplayer: errorBgGrey,
-
+    blueballopacity: '0.075',
 };
 
 export const darkTheme = {
@@ -101,5 +101,5 @@ export const darkTheme = {
     lossBg: '#b54a4a', // darker red for losses
     tieBg: '#bab461',  // darker yellow for ties
     unknownplayer: errorBg,
-
+    blueballopacity: '0.038',
 };

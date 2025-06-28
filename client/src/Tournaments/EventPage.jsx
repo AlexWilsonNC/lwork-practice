@@ -427,6 +427,9 @@ const EventPageContent = styled.div`
   .chart-button.active {
     background-color: #1290eb;
   }
+    .regional-info::before {
+        opacity: ${({ theme }) => theme.blueballopacity};
+    }
   @media screen and (max-width: 1115px) {
     .filters-top {
         margin-top: 15px;
@@ -828,13 +831,27 @@ const EventPage = () => {
             const dayOneKey = `dayOne${divCap}`;
             const dayTwoKey = `dayTwo${divCap}`;
 
+             const dayOneMeta = rawElim.map(player => {
+                // reuse your existing sprite‐normalizer
+                const { sprite1, sprite2 } = normalizePlayerSprites(player);
+                return {
+                    sprite1,
+                    sprite2,
+                    deckcount: player.deckcount || 1
+                };
+            });
+
             setEventData(prev => ({
                 ...prev,
+                // stash the full Day 1 meta array...
+                dayOneMeta,
+                // ...and still patch counts
                 [dayOneKey]: dayOneCount,
                 [dayTwoKey]: dayTwoCount
             }));
+
             } catch (err) {
-            console.error('could not re-fetch Day 1 counts:', err);
+                console.error('could not re-fetch Day 1 counts:', err);
             }
         })();
     }, [eventData, division, eventId]);

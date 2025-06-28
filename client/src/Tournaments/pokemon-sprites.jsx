@@ -133,8 +133,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('pidgeot');
     }
     else if (hasPokemon('Snorlax') && hasPokemon('Rotom V')) {
-        firstSprite  = getPokemonSpriteURL('snorlax');
-        secondSprite  = getPokemonSpriteURL('rotom');
+        secondSprite  = getPokemonSpriteURL('snorlax');
     }
     else if (hasPokemon('Zoroark') && hasPokemon('Kirlia')) {
         secondSprite  = getPokemonSpriteURL('zoroark');

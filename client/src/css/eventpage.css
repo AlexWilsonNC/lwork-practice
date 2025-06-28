@@ -20,7 +20,29 @@
     background-color: rgb(27, 27, 29);
     color: #E1E1E1;
     position: relative;
+    overflow: hidden;
     z-index: 0;
+}
+.regional-info::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 150%;
+  width: 200%;
+  background-image: url('../assets/logos/blue-ultra-ball.png');
+  background-size: auto 500px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  /* opacity: 0.035; */
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-8deg) translateY(-25%) translateX(30px);
+  transform-origin: center right;
+}
+.regional-info > * {
+  position: relative;
+  z-index: 1;
 }
 .regional-info p {
     font-size: 15px;
@@ -208,6 +230,9 @@
     .chart-container {
         min-width: 95vw;
     }
+    .regional-info::before {
+        transform: rotate(-8deg) translateY(-25%) translateX(125px);
+    }
 }
 @media (max-width: 630px) {
     .chart-container-wrapper {
@@ -330,7 +355,7 @@
     border-right: 1px solid #1290eb;
 }
 .event-results {
-    width: 70%;
+    width: 95%;
     margin-bottom: 25px;
 }
 .notavailable{
@@ -478,8 +503,13 @@
     .regional-info-bg-logo {
         height: 110px;
     }
-    .event-results {
-        width: 90%;
+    .link-to-playerrecords {
+        font-size: 16px;
+    }
+}
+@media screen and (min-width: 1200px) {
+    .name-n-flag {
+        font-size: 16px !important;
     }
 }
 @media screen and (max-width: 950px) {
@@ -541,7 +571,7 @@
         border-radius: 1px;
     }
     .event-results {
-        width: 100%;
+        width: 97%;
     }
     .regional-info h2 {
         font-size: 18px;
@@ -591,6 +621,9 @@
     }
     .results-list-item {
         height: 45px;
+    }
+    .regional-info::before {
+        transform: rotate(-8deg) translateY(-10%) translateX(125px);
     }
 }
 @media screen and (max-width: 550px) {
