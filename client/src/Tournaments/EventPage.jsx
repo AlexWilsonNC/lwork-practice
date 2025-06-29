@@ -733,9 +733,9 @@ const EventPage = () => {
                                     ? allResults
                                     : [];
 
-    const is2025Event = eventId.includes('2025');
+    const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
 
-   let day2Results;
+    let day2Results;
     if (is2025Event) {
         // only for 2025+ events do we cut on Swiss rounds
         const totalPlayers = results.length;
@@ -1136,20 +1136,235 @@ useEffect(() => {
         return acc;
     }, {});
 
+    if (deckTypeCount['Gardevoir & Sylveon']) {
+        deckTypeCount['Gardevoir & Sylveon'].sprites = [
+            'gardevoir-sylveon-tagteam'
+        ];
+    } 
+    if (deckTypeCount['Malamar']) {
+        deckTypeCount['Malamar'].sprites = [
+            'malamar'
+        ];
+    }
+    if (deckTypeCount['Blacephalon GX']) {
+        deckTypeCount['Blacephalon GX'].sprites = [
+            'blacephalon'
+        ];
+    }
+    if (deckTypeCount['Spiritomb']) {
+        deckTypeCount['Spiritomb'].sprites = [
+            'spiritomb'
+        ];
+    }
+    if (deckTypeCount['Zapdos']) {
+        deckTypeCount['Zapdos'].sprites = [
+            'zapdos'
+        ];
+    }
+    if (deckTypeCount['Wall Stall']) {
+        deckTypeCount['Wall Stall'].sprites = [
+            'substitute'
+        ];
+    }
+    if (deckTypeCount['Lucario GX']) {
+        deckTypeCount['Lucario GX'].sprites = [
+            'lucario'
+        ];
+    }
+    if (deckTypeCount['Gardevoir GX']) {
+        deckTypeCount['Gardevoir GX'].sprites = [
+            'gardevoir'
+        ];
+    }
+    if (deckTypeCount['Gardevoir']) {
+        deckTypeCount['Gardevoir'].sprites = [
+            'gardevoir'
+        ];
+    }
+    if (deckTypeCount['Buzzwole GX']) {
+        deckTypeCount['Buzzwole GX'].sprites = [
+            'buzzwole'
+        ];
+    }
+    if (deckTypeCount['Volcanion']) {
+        deckTypeCount['Volcanion'].sprites = [
+            'volcanion'
+        ];
+    }
+    if (deckTypeCount['Rainbow Road']) {
+        deckTypeCount['Rainbow Road'].sprites = [
+            'xerneas-active'
+        ];
+    }
+    if (deckTypeCount['Zoroark BREAK']) {
+        deckTypeCount['Zoroark BREAK'].sprites = [
+            'zoroark'
+        ];
+    }
+    if (deckTypeCount['Darkrai']) {
+        deckTypeCount['Darkrai'].sprites = [
+            'darkrai'
+        ];
+    }
+    if (deckTypeCount['Mega Mewtwo']) {
+        deckTypeCount['Mega Mewtwo'].sprites = [
+            'mewtwo-mega-y'
+        ];
+    }
+    if (deckTypeCount['Vespiquen']) {
+        deckTypeCount['Vespiquen'].sprites = [
+            'vespiquen'
+        ];
+    }
+    if (deckTypeCount['Mega Rayquaza']) {
+        deckTypeCount['Mega Rayquaza'].sprites = [
+            'rayquaza-mega'
+        ];
+    }
+    if (deckTypeCount['Mega Gardevoir Brilliant Arrow']) {
+        deckTypeCount['Mega Gardevoir Brilliant Arrow'].sprites = [
+            'gardevoir-mega'
+        ];
+    }
+    if (deckTypeCount['Toad Bats']) {
+        deckTypeCount['Toad Bats'].sprites = [
+            'seismitoad',
+            'crobat'
+        ];
+    }
+    if (deckTypeCount['Primal Groudon']) {
+        deckTypeCount['Primal Groudon'].sprites = [
+            'groudon-primal'
+        ];
+    }
+    if (deckTypeCount['Mega Manectric']) {
+        deckTypeCount['Mega Manectric'].sprites = [
+            'manectric-mega'
+        ];
+    }
+    if (deckTypeCount['Darkrai-EX']) {
+        deckTypeCount['Darkrai-EX'].sprites = [
+            'darkrai'
+        ];
+    }
+    if (deckTypeCount['Yanmega PRIME']) {
+        deckTypeCount['Yanmega PRIME'].sprites = [
+            'yanmega'
+        ];
+    }
+    if (deckTypeCount['Empoleon']) {
+        deckTypeCount['Empoleon'].sprites = [
+            'empoleon'
+        ];
+    }
+    if (deckTypeCount['Scizor']) {
+        deckTypeCount['Scizor'].sprites = [
+            'scizor'
+        ];
+    }
+    if (deckTypeCount['Flygon']) {
+        deckTypeCount['Flygon'].sprites = [
+            'flygon'
+        ];
+    }
+    if (deckTypeCount['LBS']) {
+        deckTypeCount['LBS'].sprites = [
+            'lugia',
+            'blastoise'
+        ];
+    }
+    if (deckTypeCount['Medicham']) {
+        deckTypeCount['Medicham'].sprites = [
+            'medicham'
+        ];
+    }
+    if (deckTypeCount['Walrein']) {
+        deckTypeCount['Walrein'].sprites = [
+            'walrein'
+        ];
+    }
+    if (deckTypeCount['Blaziken']) {
+        deckTypeCount['Blaziken'].sprites = [
+            'blaziken'
+        ];
+    }
+    if (deckTypeCount['Dark Feraligatr']) {
+        deckTypeCount['Dark Feraligatr'].sprites = [
+            'feraligatr'
+        ];
+    }
+    if (deckTypeCount['Espeon']) {
+        deckTypeCount['Espeon'].sprites = [
+            'espeon'
+        ];
+    }
+    if (deckTypeCount['Kingdra']) {
+        deckTypeCount['Kingdra'].sprites = [
+            'kingdra'
+        ];
+    }
+    if (deckTypeCount['Dark Blastoise']) {
+        deckTypeCount['Dark Blastoise'].sprites = [
+            'blastoise'
+        ];
+    }
+    if (deckTypeCount['Sneasel']) {
+        deckTypeCount['Sneasel'].sprites = [
+            'sneasel'
+        ];
+    }
+    if (deckTypeCount['Riptide Feraligatr']) {
+        deckTypeCount['Riptide Feraligatr'].sprites = [
+            'feraligatr'
+        ];
+    }
+    if (deckTypeCount['Crobat']) {
+        deckTypeCount['Crobat'].sprites = [
+            'crobat'
+        ];
+    }
+    if (deckTypeCount['Typhlosion']) {
+        deckTypeCount['Typhlosion'].sprites = [
+            'typhlosion'
+        ];
+    }
+    if (deckTypeCount['Steelix']) {
+        deckTypeCount['Steelix'].sprites = [
+            'steelix'
+        ];
+    }
+    if (deckTypeCount['Wigglytuff']) {
+        deckTypeCount['Wigglytuff'].sprites = [
+            'wigglytuff'
+        ];
+    }
+    if (deckTypeCount['Haymaker']) {
+        deckTypeCount['Haymaker'].sprites = [
+            'hitmonchan'
+        ];
+    }
+
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
         .sort((a, b) => b.count - a.count);
+    const filteredDeckTypeCountArray = !is2025Event
+        ? deckTypeCountArray.filter(d => d.key !== 'blank-')
+        : deckTypeCountArray;
+
+        const finalDeckTypeCountArray = filteredDeckTypeCountArray.map(d => {
+            return d;
+        });
 
     useEffect(() => {
         if (!isChartReady || deckTypeCountArray.length === 0) return;
 
         const storageKey = `selectedArchetype_${eventId}`;
         const savedKey   = sessionStorage.getItem(storageKey);
-        const validSaved = savedKey && deckTypeCountArray.some(a => a.key === savedKey);
+        const validSaved = savedKey && finalDeckTypeCountArray.some(a => a.key === savedKey);
 
         const defaultKey = validSaved
             ? savedKey
-            : deckTypeCountArray[0].key;
+            : finalDeckTypeCountArray[0].key;
 
         setSelectedArchetype(defaultKey);
         sessionStorage.setItem(storageKey, defaultKey);
@@ -1434,10 +1649,10 @@ useEffect(() => {
         : showConversionRate
             ? conversionChartData
             : {
-                labels: deckTypeCountArray.map(e => e.key),
+                labels: finalDeckTypeCountArray.map(e => e.key),
                 datasets: [{
                 label: 'Deck Count',
-                data:  deckTypeCountArray.map(e => e.count),
+                data:  finalDeckTypeCountArray.map(e => e.count),
                 backgroundColor: '#1291eb8b'
                 }]
             };
@@ -1786,11 +2001,15 @@ useEffect(() => {
                     <a
                         className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
                         onClick={() => {
-                            if (resultsAvailable) {
+                            if (resultsAvailable && !(eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors'))) {
                                 setActiveTab('Statistics');
                             }
                         }}
-                        style={statisticsTabStyle}
+                        style={
+                            eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors')
+                                ? { opacity: 0.1, pointerEvents: 'none' }
+                                : statisticsTabStyle
+                        }
                     >
                         Statistics
                     </a>
@@ -1800,7 +2019,7 @@ useEffect(() => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
-                                {(eventId.includes('2025')) && (
+                                {(eventId.includes('2025')) && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
                                     <div className="decks-records-btns">
                                         <button 
                                             onClick={() => handleTabChange('Decks')} 
@@ -1823,7 +2042,7 @@ useEffect(() => {
                                     <>
                                     {displayResults(day2Results, eventId, division)}
 
-                                    {eventId.includes('2025') && !showAllDecks && !loadingEliminatedDecks && (
+                                    {eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                             <button onClick={loadEliminated} className="day1buttons">
                                                 Show Day 1 Results
@@ -2054,7 +2273,7 @@ useEffect(() => {
                                                 className="archetype-dropdown"
                                             >
                                                 {/* <option value="">Select Deck</option> */}
-                                                {deckTypeCountArray.map((archetype, index) => (
+                                                {finalDeckTypeCountArray.map((archetype, index) => (
                                                     <option key={index} value={archetype.key}>
                                                         {archetype.key} ({archetype.count})
                                                     </option>
