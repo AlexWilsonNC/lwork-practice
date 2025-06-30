@@ -430,21 +430,21 @@ const EventPageContent = styled.div`
     .regional-info::before {
         opacity: ${({ theme }) => theme.blueballopacity};
     }
-  @media screen and (max-width: 1115px) {
-    .filters-top {
-        margin-top: 15px;
-        margin-left: 0px !important;
+    @media screen and (max-width: 1115px) {
+        .filters-top {
+            margin-top: 15px;
+            margin-left: 0px !important;
+        }
+        .indiv-filter select {
+            width: 150px;
+        }
+        .indiv-filter select {
+            width: 175px;
+            height: 24px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
     }
-    .indiv-filter select {
-        width: 150px;
-    }
-    .indiv-filter select {
-        width: 175px;
-        height: 24px;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-  }
     .button-container button {
         margin: 7px 7px -7px 0;
         border: none;
@@ -458,6 +458,19 @@ const EventPageContent = styled.div`
     .active-button {
         background-color: #1290eb !important;
         border: 1px solid #007bff;
+    }
+    .day-toggle-buttons button {
+        padding: 5px 7px;
+        border-radius: 2px;
+        border: none;
+        color:#fff;
+        margin-right: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .day-toggle-buttons button:not(.active-button) {
+        background-color: rgb(80, 80, 80);
     }
     .flag-container {
         position: relative;
@@ -693,6 +706,7 @@ const EventPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalPlayer, setModalPlayer] = useState(null);
     const [fetchedDayOneCount, setFetchedDayOneCount] = useState(null);
+    const [dataDay, setDataDay] = useState('day2');    // ← 'day2' or 'day1'
     
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
@@ -968,106 +982,104 @@ useEffect(() => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    useEffect(() => {
-        const savedShowTop30 = sessionStorage.getItem(`showTop30_${eventId}`);
-        if (savedShowTop30 !== null) {
-            setShowTop30(JSON.parse(savedShowTop30));
-        }
-    
-        if (selectedArchetype) {
-            const filteredDecks = results.filter(result => {
-                let sprite1 = result.sprite1 || '';
-                let sprite2 = result.sprite2 || '';
-            
-                if (!sprite1 && !sprite2) {
-                    const { firstSprite, secondSprite } = getPokemonSprites(result.decklist, '', '');
-                    sprite1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                    sprite2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
-                }
-            
-                const key = getCustomLabel(eventId, sprite1, sprite2);
-                return key === selectedArchetype;
-            });
-            
-            const cardSets = {
-                pokemon: new Map(),
-                trainer: new Map(),
-                energy: new Map(),
-            };
-            
-            filteredDecks.forEach(({ decklist }) => {
-                if (decklist) {
-                    ['pokemon', 'trainer', 'energy'].forEach((category) => {
-                        if (decklist[category]) {
-                            decklist[category].forEach(card => {
-                                const existingCardKey = Array.from(cardSets[category].keys()).find(key => {
-                                    const existingCard = cardSets[category].get(key).cardInfo;
-                                    if (category === 'pokemon') {
-                                        return normalizeString(existingCard.name) === normalizeString(card.name) &&
-                                            comparePokemonCards(existingCard, card);
-                                    } else if (category === 'energy') {
-                                        return compareEnergyCards(existingCard, card);
-                                    } else {
-                                        return normalizeString(existingCard.name) === normalizeString(card.name);
-                                    }
-                                });
-    
-                                if (existingCardKey) {
-                                    const cardData = cardSets[category].get(existingCardKey);
-                                    cardData.count += parseInt(card.count, 10);
-                                    cardData.occurrences += 1;
-                                    cardSets[category].set(existingCardKey, cardData);
-                                } else {
-                                    const cardKey = `${card.set}-${card.number}`;
-                                    cardSets[category].set(cardKey, {
-                                        cardInfo: card,
-                                        count: parseInt(card.count, 10),
-                                        occurrences: 1,
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-                            
-            const commonCards = {
-                pokemon: [],
-                trainer: [],
-                energy: [],
-            };
-    
-            // Populate the commonCards and sort them by averageCount
-            ['pokemon', 'trainer', 'energy'].forEach((category) => {
-                cardSets[category].forEach((cardData) => {
-                    if (!showTop30 && cardData.occurrences === filteredDecks.length) {
-                        commonCards[category].push({
-                            ...cardData.cardInfo,
-                            averageCount: (cardData.count / cardData.occurrences).toFixed(2),
-                        });
-                    } else if (showTop30) {
-                        commonCards[category].push({
-                            ...cardData.cardInfo,
-                            averageCount: (cardData.count / filteredDecks.length).toFixed(2),
-                        });
-                    }
-                });
-    
-                // Sort each category by averageCount in descending order
-                commonCards[category].sort((a, b) => b.averageCount - a.averageCount);
-            });
-    
-            const allCommonCards = [
-                ...commonCards.pokemon,
-                ...commonCards.trainer,
-                ...commonCards.energy
-            ];
-    
-            setAverageCardCounts(allCommonCards);
+useEffect(() => {
+  // 1) restore the “showTop30” setting
+  const saved = sessionStorage.getItem(`showTop30_${eventId}`);
+  if (saved !== null) {
+    setShowTop30(JSON.parse(saved));
+  }
+
+  // 2) if nothing selected, clear out and bail
+  if (!selectedArchetype) {
+    setAverageCardCounts([]);
+    return;
+  }
+
+  // 3) pick Day 2 vs Day 1 decks
+  const sourceDecks = dataDay === 'day2' ? results : eliminatedDecks;
+  const filteredDecks = sourceDecks.filter(player => {
+    let s1 = player.sprite1 || '';
+    let s2 = player.sprite2 || '';
+    if (!s1 && !s2 && player.decklist) {
+      const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+      s1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+      s2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
+    }
+    const key = getCustomLabel(eventId, s1, s2);
+    return key === selectedArchetype;
+  });
+
+  // 4) aggregate counts exactly as before
+  const cardSets = {
+    pokemon: new Map(),
+    trainer: new Map(),
+    energy:  new Map(),
+  };
+
+  filteredDecks.forEach(({ decklist }) => {
+    if (!decklist) return;
+    ['pokemon', 'trainer', 'energy'].forEach(category => {
+      (decklist[category] || []).forEach(card => {
+        const existingKey = Array
+          .from(cardSets[category].keys())
+          .find(k => {
+            const info = cardSets[category].get(k).cardInfo;
+            if (category === 'pokemon') {
+              return normalizeString(info.name) === normalizeString(card.name)
+                && comparePokemonCards(info, card);
+            }
+            if (category === 'energy') {
+              return compareEnergyCards(info, card);
+            }
+            return normalizeString(info.name) === normalizeString(card.name);
+          });
+
+        if (existingKey) {
+          const cd = cardSets[category].get(existingKey);
+          cd.count       += Number(card.count);
+          cd.occurrences += 1;
+          cardSets[category].set(existingKey, cd);
         } else {
-            setAverageCardCounts([]);
+          const newKey = `${card.set}-${card.number}`;
+          cardSets[category].set(newKey, {
+            cardInfo:   card,
+            count:      Number(card.count),
+            occurrences: 1
+          });
         }
-    }, [selectedArchetype, showTop30, eventId, results]);
+      });
+    });
+  });
+
+  // 5) build commonCards & sort
+  const commonCards = { pokemon: [], trainer: [], energy: [] };
+  ['pokemon','trainer','energy'].forEach(cat => {
+    cardSets[cat].forEach(cd => {
+      const avg = showTop30
+        ? cd.count / filteredDecks.length
+        : cd.occurrences === filteredDecks.length
+          ? cd.count / cd.occurrences
+          : null;
+
+      if (avg !== null) {
+        commonCards[cat].push({
+          ...cd.cardInfo,
+          averageCount: avg.toFixed(2)
+        });
+      }
+    });
+    commonCards[cat].sort((a,b) => b.averageCount - a.averageCount);
+  });
+
+  // 6) flatten & set state
+  const allCommon = [
+    ...commonCards.pokemon,
+    ...commonCards.trainer,
+    ...commonCards.energy
+  ];
+  setAverageCardCounts(allCommon);
+
+}, [ selectedArchetype, showTop30, dataDay, eliminatedDecks, eventId, results ]);
                             
     const cardImageUrl = (card) => {
         if (!cardData) {
@@ -1656,6 +1668,10 @@ useEffect(() => {
                 backgroundColor: '#1291eb8b'
                 }]
             };
+
+            const dropdownOptions = dataDay === 'day2'
+  ? finalDeckTypeCountArray
+  : dayOneTypeArray;
 
     const handleDayOneClick = () => {
         setShowDayOneMeta(true);
@@ -2264,6 +2280,22 @@ useEffect(() => {
                             <>
                                 <div className='deck-archetypes'>
                                     <h3>Data per Archetype</h3>
+                                    {is2025Event && (
+                                        <div className="day-toggle-buttons" style={{ margin: '0.5rem 0' }}>
+                                            <button
+                                                onClick={() => setDataDay('day2')}
+                                                className={dataDay === 'day2' ? 'active-button' : ''}
+                                            >
+                                            Day 2
+                                            </button>
+                                            <button
+                                                onClick={() => setDataDay('day1')}
+                                                className={dataDay === 'day1' ? 'active-button' : ''}
+                                            >
+                                            Day 1
+                                            </button>
+                                        </div>
+                                    )}
                                     <div className='filter-container'>
                                         <div className='filters-top'>
                                             <div className='indiv-filter'>
@@ -2272,10 +2304,9 @@ useEffect(() => {
                                                 onChange={handleArchetypeChange} 
                                                 className="archetype-dropdown"
                                             >
-                                                {/* <option value="">Select Deck</option> */}
-                                                {finalDeckTypeCountArray.map((archetype, index) => (
+                                                {dropdownOptions.map((archetype, index) => (
                                                     <option key={index} value={archetype.key}>
-                                                        {archetype.key} ({archetype.count})
+                                                        {archetype.key} &nbsp;({archetype.count})
                                                     </option>
                                                 ))}
                                             </select>
@@ -2334,62 +2365,50 @@ useEffect(() => {
                                     </div>
                                 )}
                                 <div className='filtered-results'>
-                                    <p>All Day 2 <strong>{selectedArchetype}</strong> results <span style={{ opacity: 0.25 }}>&nbsp;• {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</span></p>
-                                    <hr
-                                        style={{
-                                            marginTop: '5px',
-                                            border: 'none',
-                                            borderBottom: '2px solid #ccc',
-                                            opacity: 0.35
-                                        }}
-                                    />
-                                    <br></br>
+                                    <p>
+                                        All {dataDay === 'day2' ? 'Day 2' : 'Day 1'}{' '}
+                                        <strong>{selectedArchetype}</strong> results{' '}
+                                        <span style={{ opacity: 0.25 }}>
+                                        • {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1)})
+                                        </span>
+                                    </p>
+                                    <hr style={{
+                                        marginTop: '5px',
+                                        border: 'none',
+                                        borderBottom: '2px solid #ccc',
+                                        opacity: 0.35
+                                    }}/>
+                                    <br/>
                                     <div className='results-table charted-decks'>
-                                    {results
-                                        .map((result, idx) => ({ result, originalIndex: idx + 1 }))
-                                        .filter(({ result }) => {
-                                        // helper to strip off any "-assets-sprites-" prefix and ".png" suffix
-                                        const cleanName = str =>
-                                            str
-                                            .split('/')           // take last segment
-                                            .pop()                // "-assets-sprites-froslass-png.png"
-                                            .replace(/^-?assets-sprites-/, '') // "froslass-png.png"
-                                            .replace(/\.png$/, '');             // "froslass-png"
-
-                                        // 1) clean whatever was already in result
-                                        let sprite1 = cleanName(result.sprite1 || '');
-                                        let sprite2 = cleanName(result.sprite2 || '');
-
-                                        // 2) if still both empty, derive from decklist
-                                        if (!sprite1 && !sprite2 && result.decklist) {
-                                            const { firstSprite, secondSprite } = getPokemonSprites(
-                                            result.decklist, '', ''
-                                            );
-                                            sprite1 = cleanName(firstSprite)  || '';
-                                            sprite2 = cleanName(secondSprite) || '';
-                                        }
-
-                                        // 3) drop the special “blank” placeholder
-                                        if (!sprite1) sprite1 = '/assets/sprites/blank.png';
-
-                                        // 4) overwrite the result object so displayResults uses the clean versions
-                                        result.sprite1 = sprite1;
-                                        result.sprite2 = sprite2;
-
-                                        // 5) filter by your selected archetype
-                                        const key = getCustomLabel(eventId, sprite1, sprite2);
-                                        return key === selectedArchetype;
+                                        {(
+                                        // if Day 2: just day2Results, otherwise combine Day 1+Day 2
+                                        (dataDay === 'day2'
+                                            ? day2Results
+                                            : [...day2Results, ...eliminatedDecks,]
+                                        )
+                                        // filter by the archetype
+                                        .filter(player => {
+                                            let s1 = player.sprite1 || '';
+                                            let s2 = player.sprite2 || '';
+                                            if (!s1 && !s2 && player.decklist) {
+                                            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+                                            s1 = firstSprite.replace('/assets/sprites/', '').replace('.png','');
+                                            s2 = secondSprite.replace('/assets/sprites/', '').replace('.png','');
+                                            }
+                                            return getCustomLabel(eventId, s1, s2) === selectedArchetype;
                                         })
-                                        .map(({ result, originalIndex }, index) => {
-                                        const backgroundColor = index % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
-                                        return (
-                                            <div key={index} style={{ backgroundColor }}>
-                                            {displayResults([result], eventId, division, originalIndex)}
-                                            </div>
-                                        );
-                                        })}
+                                        // render
+                                        .map((p, i) => {
+                                            const bg = i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
+                                            return (
+                                                <div key={p.placing || i} style={{ backgroundColor: bg }}>
+                                                {displayResults([p], eventId, division)}
+                                                </div>
+                                            );
+                                        })
+                                        )}
                                     </div>
-                                </div>
+                                </div>                         
                             </>
                             )}
                             </div>

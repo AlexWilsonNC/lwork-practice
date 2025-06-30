@@ -190,7 +190,8 @@
     white-space: nowrap;
     overflow: hidden;
 }
-.chart-button:hover {
+.chart-button:hover,
+.day-toggle-buttons button {
     cursor: pointer;
 }
 .chart-description {
@@ -234,6 +235,9 @@
 }
 .deck-archetypes {
     margin-top: 15px;
+}
+.archetype-dropdown {
+    width: auto !important;
 }
 @media (max-width: 1500px) {
     .chart-container {
