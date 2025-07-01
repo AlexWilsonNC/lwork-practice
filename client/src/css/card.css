@@ -333,6 +333,9 @@ tr.event-separator:hover td {
     justify-content: center;
     margin-top: 15px;
 }
+.showmoreversions-diffprints:hover {
+    cursor: pointer;
+}
 .showmoreversions {
     font-size: 13px;
     display: flex;

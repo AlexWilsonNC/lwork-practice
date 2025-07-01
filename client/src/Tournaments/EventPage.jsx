@@ -2342,15 +2342,12 @@ useEffect(() => {
                                         <div className="deck-cards">
                                             {averageCardCounts.length > 0 ? (
                                                 averageCardCounts.map((card, index) => {
-                                                    const isBasicEnergy = card.name.toLowerCase().includes("basic");
                                                     return (
                                                         <div
                                                             key={index}
                                                             className="card-container-avg"
                                                             onClick={() => {
-                                                                if (!isBasicEnergy) {
-                                                                    handleCardClick(card);
-                                                                }
+                                                                handleCardClick(card);
                                                             }}
                                                         >
                                                             <img src={cardImageUrl(card)} alt={card.name} />

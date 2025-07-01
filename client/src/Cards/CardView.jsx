@@ -314,13 +314,13 @@ const CardView = () => {
     useEffect(() => {
         if (!cardInfo) return;
 
-        // Skip for Basic Energy
-        if (cardInfo.supertype === "Energy" && cardInfo.subtypes?.includes("Basic")) {
-            setIsBasicEnergy(true);
-            setLoading(false);
-            setEventsScanned(true);
-            return;
-        }
+        // // Skip for Basic Energy
+        // if (cardInfo.supertype === "Energy" && cardInfo.subtypes?.includes("Basic")) {
+        //     setIsBasicEnergy(true);
+        //     setLoading(false);
+        //     setEventsScanned(true);
+        //     return;
+        // }
 
         setLoading(true);
         setEventsScanned(false);
@@ -455,7 +455,17 @@ const CardView = () => {
 
     const isGLCLegal = (card) => {
         const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-        const excludedSubtypes = ["EX", "GX", "ex", "V", "VMAX", "VSTAR", "Prism Star", "Radiant", "ACE SPEC", "V-UNION"];
+        const excludedSubtypes = new Set(
+            ["EX","GX","ex","V","VMAX","VSTAR","Prism Star","Radiant","ACE SPEC","V-UNION"]
+            .map(s => s.toLowerCase())
+        );
+
+        if (
+            Array.isArray(card.subtypes) &&
+            card.subtypes.some(st => excludedSubtypes.has(st.toLowerCase()))
+        ) {
+            return false;
+        }
 
         // Check for banned CC cards in CEL set
         if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
@@ -463,35 +473,24 @@ const CardView = () => {
         }
 
         // ✅ Handle non-Pokémon legal version check
-        if (card.supertype !== 'Pokémon') {
-            const hasLegalVersion = otherVersions.some(otherCard =>
-                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
-                isStandardLegal(otherCard)
+         if (card.supertype !== 'Pokémon') {
+                const hasStdLegalVersion = otherVersions.some(o =>
+                o.name.toLowerCase() === card.name.toLowerCase() &&
+                isStandardLegal(o)
             );
-            if (hasLegalVersion) {
-                // Now check if THIS version is banned in GLC
-                const isBanned = bannedInGLC.some(bannedCard =>
-                    bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-                    bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-                    bannedCard.number === card.number
-                );
-                return !isBanned;
-            }
-            return false; // No legal version = not legal
+            if (!hasStdLegalVersion) return false;
+            // check individual GLC bans
+            const isIndividuallyBanned = bannedInGLC.some(b =>
+                b.name.toLowerCase()   === card.name.toLowerCase() &&
+                b.set.toLowerCase()    === card.setAbbrev.toLowerCase() &&
+                b.number               === card.number
+            );
+            return !isIndividuallyBanned;
         }
 
-        // Now check GLC bans for Pokémon (not hit by above logic)
-        const isBanned = bannedInGLC.some(bannedCard =>
-            bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-            bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-            bannedCard.number === card.number
-        );
-        if (isBanned) return false;
-
         const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
-        const hasExcludedSubtype = card.subtypes && card.subtypes.some(subtype => excludedSubtypes.includes(subtype));
 
-        return isFromAllowedSet && !hasExcludedSubtype;
+        return isFromAllowedSet;
     };
 
     const isBannedInGLC = (card) => {
@@ -575,6 +574,11 @@ const CardView = () => {
 
     const isPromoSet = cardInfo.set.name.toLowerCase().includes('promo');
 
+    // const skipNumberTypes = [
+    //     'Grass','Fire','Water','Lightning',
+    //     'Psychic','Fighting','Darkness','Metal','Fairy'
+    // ];
+
     const renderEnergyIcons = (cost) => {
         if (!cost || cost.length === 0 || cost.some(c => String(c).toLowerCase() === 'free')) {
             return <img src={energyIcons.NoCost} alt="No Cost" className="energy-icon" />;
@@ -647,6 +651,11 @@ const CardView = () => {
 
         return new Date(year, month, day).getTime();
     }
+
+    const isBasicEnergyCard =
+        cardInfo.supertype === 'Energy' &&
+        Array.isArray(cardInfo.subtypes) &&
+        cardInfo.subtypes.includes('Basic');
 
     // const displayedEventResults = showAllResults ? eventResults : eventResults.slice(0, 5);
     const eventClusters = Object.entries(
@@ -777,7 +786,12 @@ const CardView = () => {
                                 {cardInfo.subtypes && cardInfo.subtypes.includes('Level-Up') ? 'Levels up from' : 'Evolves from'} {cardInfo.evolvesFrom}
                             </p>
                         )}
-                        <hr className='small-grey-hr'></hr>
+                        {!
+                            (cardInfo.supertype === 'Energy' &&
+                            Array.isArray(cardInfo.subtypes) &&
+                            cardInfo.subtypes.includes('Basic')
+                            ) && <hr className='small-grey-hr' />
+                        }
                         {cardInfo.ancientTrait && (
                             <div className='attack-ability'>
                                 <ul>
@@ -883,7 +897,12 @@ const CardView = () => {
                         {cardInfo.supertype === 'Pokémon' && (
                             <p>Retreat Cost: &nbsp;{cardInfo.convertedRetreatCost || 0}</p>
                         )}
-                        <hr className='small-grey-hr'></hr>
+                        {!
+                            (cardInfo.supertype === 'Energy' &&
+                            Array.isArray(cardInfo.subtypes) &&
+                            cardInfo.subtypes.includes('Basic')
+                            ) && <hr className='small-grey-hr' />
+                        }
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
                         {cardInfo.artist && <p>Illustrator: <span className='italic'>{cardInfo.artist}</span></p>}
                         <hr className='blue-hr'></hr>
@@ -894,45 +913,32 @@ const CardView = () => {
                                     <p className='marginthree smaller-than-others'>Regulation Mark: {cardInfo.regulationMark}</p>
                                 )}
                                 <div className='legality-checks'>
-                                    <p>Standard: {(isStandardLegal(cardInfo) || isStandardLegalAny) ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span> : <span className="material-symbols-outlined" style={{ color: 'rgb(204, 37, 37)' }}>close</span>}</p>
                                     <p>
-                                        Expanded:
-                                        {cardInfo.set.releaseDate === "N/A" ? (
-                                            <>
-                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {(isExpandedLegal(cardInfo) || isExpandedLegalAny) ? (
-                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                                ) : (
-                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                                )}
-                                                {isBannedInExpanded(cardInfo) && (
-                                                    <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                                )}
-                                            </>
-                                        )}
+                                        Standard: {
+                                        isBasicEnergyCard
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : (isStandardLegal(cardInfo) || isStandardLegalAny)
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
+                                        }
                                     </p>
                                     <p>
-                                        GLC:
-                                        {cardInfo.set.releaseDate === "N/A" ? (
-                                            <>
-                                                <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                                <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(not released)</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {(isGLCLegal(cardInfo) || isGLCLegalAny) ? (
-                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(0, 198, 0)' }}>check</span>
-                                                ) : (
-                                                    <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(204, 37, 37)' }}>close</span>
-                                                )}
-                                                {isBannedInGLC(cardInfo) && (
-                                                    <span style={{ color: 'rgb(204, 37, 37)', marginLeft: '1px' }}>(Banned)</span>
-                                                )}
-                                            </>
-                                        )}
+                                        Expanded: {
+                                        isBasicEnergyCard
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : (isExpandedLegal(cardInfo) || isExpandedLegalAny)
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
+                                        }
+                                    </p>
+                                    <p>
+                                        GLC: {
+                                        isBasicEnergyCard
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : (isGLCLegal(cardInfo) || isGLCLegalAny)
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
+                                        }
                                     </p>
                                 </div>
                                 <div className='show-cardinfo-on-small'>
