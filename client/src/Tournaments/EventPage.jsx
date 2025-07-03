@@ -375,6 +375,9 @@ const EventPageContent = styled.div`
     color: ${({ theme }) => theme.text};
     cursor: pointer;
   }
+    .stat-toggle-buttons button {
+        color: ${({ theme }) => theme.text}; 
+    }
   .active-option {
     background: ${({ theme }) => theme.body};
   }
@@ -706,7 +709,8 @@ const EventPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalPlayer, setModalPlayer] = useState(null);
     const [fetchedDayOneCount, setFetchedDayOneCount] = useState(null);
-    const [dataDay, setDataDay] = useState('day2');    // ← 'day2' or 'day1'
+    const [dataDay, setDataDay] = useState('day2'); // 'day2' or 'day1'
+    const [showAllCardsList, setShowAllCardsList] = useState(false);
     
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
@@ -715,6 +719,7 @@ const EventPage = () => {
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
+    const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'matchups'
 
     const didFetchCounts = useRef({});
 
@@ -1061,12 +1066,17 @@ useEffect(() => {
           ? cd.count / cd.occurrences
           : null;
 
-      if (avg !== null) {
+        if (avg == null) return;  
+
+        const formatted = avg.toFixed(2);
+        const display = (formatted === "0.00" && avg > 0)
+            ? avg.toFixed(3)
+            : formatted;
+
         commonCards[cat].push({
-          ...cd.cardInfo,
-          averageCount: avg.toFixed(2)
+            ...cd.cardInfo,
+            averageCount: display
         });
-      }
     });
     commonCards[cat].sort((a,b) => b.averageCount - a.averageCount);
   });
@@ -2017,14 +2027,16 @@ useEffect(() => {
                     <a
                         className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
                         onClick={() => {
+                            // only open Statistics when allowed…
                             if (resultsAvailable && !(eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors'))) {
-                                setActiveTab('Statistics');
+                            setActiveTab('Statistics');
+                            setStatView('meta');      // ← reset to the “Meta” sub‐tab
                             }
                         }}
                         style={
                             eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors')
-                                ? { opacity: 0.1, pointerEvents: 'none' }
-                                : statisticsTabStyle
+                            ? { opacity: 0.1, pointerEvents: 'none' }
+                            : statisticsTabStyle
                         }
                     >
                         Statistics
@@ -2200,214 +2212,131 @@ useEffect(() => {
                         </div>
                         ) : (
                             <div className='event-statistics'>
-                                <div className='chart-btns-container'>
-                                    <div className='alignrow'>
-                                        <button
-                                            className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                            onClick={handleDayTwoClick}
-                                        >
-                                            Day 2
-                                        </button>
-
-                                        {/* Only show Day 1 & Conversion for 2025+ or if we have hardcoded Day 1 data */}
-                                        {(is2025Event
-                                            || (eventData?.dayOneMeta?.length > 0 && division === 'masters')
-                                        ) && (
-                                            <>
-                                            <button
-                                                className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                onClick={handleDayOneClick}
-                                            >
-                                                Day 1
-                                            </button>
-                                            <button
-                                                className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                onClick={handleConversionRateClick}
-                                            >
-                                                Conversion %
-                                            </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                {eventId.includes('2025') && chartResults.length > 16 && (
-                                    <div className='chart-description'>
-                                        {showDayOneMeta && !showConversionRate && (
-                                        <p>* Total count for each deck archetype from Day 1</p>
-                                        )}
-                                        {!showDayOneMeta && !showConversionRate && (
-                                        <p>* Total count for each deck archetype from Day 2</p>
-                                        )}
-                                        {showConversionRate && (
-                                        <p>* Conversion rate of each archetype, from Day 1 into Day 2
-                                            <br></br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            (decimal values = percentage)</p>
-                                        )}
-                                    </div>
-                                )}
-                                {division === 'masters' && eventId.includes('2024') && !eventId.includes('RETRO') && chartResults.length > 16 && (
-                                    <div className='chart-description'>
-                                        {showDayOneMeta && !showConversionRate && (
-                                            <p>* Most played decks from Day 1 (data collected from event stream)</p>
-                                        )}
-                                        {!showDayOneMeta && !showConversionRate && (
-                                            <p>* Total count for each deck archetype from Day 2</p>
-                                        )}
-                                        {showConversionRate && (
-                                            <p>* Percentage of the top Day 1 decks that made Day 2</p>
-                                        )}
-                                    </div>
-                                )}
-                                {!hasChartData && (
-                                    <div className='chart-description'><p>* No known decks available for this division</p></div>
-                                )}
-                                <div className='chart-container-wrapper' style={{
-                                    overflowX: 'auto',
-                                    paddingBottom: showDayOneMeta ? '1rem' : undefined,
-                                }}>
-                                    <div className='chart-container'
-                                        style={{
-                                            minWidth: `${Math.max(
-                                                chartData.labels.length * 50, 600)}px`,
-                                            height: '400px',
-                                        }}
+                                <div className="stat-toggle-buttons" style={{ marginBottom: '1rem' }}>
+                                    <button
+                                        onClick={() => setStatView('meta')}
+                                        className={statView === 'meta' ? 'active-button' : ''}
                                     >
-                                        <Bar ref={chartRef} data={chartData} options={chartOptions} width={null} height={null}/>
-                                    </div>
+                                        Meta Chart
+                                    </button>
+                                    <button
+                                        onClick={() => setStatView('decklists')}
+                                        className={statView === 'decklists' ? 'active-button' : ''}
+                                    >
+                                        Archetypes
+                                    </button>
+                                    <button
+                                        disabled
+                                        style={{ opacity: 0.1, pointerEvents: 'none' }}
+                                    >
+                                        Matchups
+                                    </button>
                                 </div>
-                            {isChartReady && (
-                            <>
-                                <div className='deck-archetypes'>
-                                    <h3>Data per Archetype</h3>
-                                    {is2025Event && (
-                                        <div className="day-toggle-buttons" style={{ margin: '0.5rem 0' }}>
+                                {statView==='meta' && (
+                                <>
+                                    <div className='chart-btns-container'>
+                                        <div className='alignrow'>
                                             <button
-                                                onClick={() => setDataDay('day2')}
-                                                className={dataDay === 'day2' ? 'active-button' : ''}
-                                            >
-                                            Day 2
+                                                className={`chart-button day2btn ${!showDayOneMeta&&!showConversionRate?'active':''}`}
+                                                onClick={handleDayTwoClick}
+                                                >Day 2
                                             </button>
-                                            <button
-                                                onClick={() => setDataDay('day1')}
-                                                className={dataDay === 'day1' ? 'active-button' : ''}
-                                            >
-                                            Day 1
-                                            </button>
-                                        </div>
-                                    )}
-                                    <div className='filter-container'>
-                                        <div className='filters-top'>
-                                            <div className='indiv-filter'>
-                                            <select 
-                                                value={selectedArchetype} 
-                                                onChange={handleArchetypeChange} 
-                                                className="archetype-dropdown"
-                                            >
-                                                {dropdownOptions.map((archetype, index) => (
-                                                    <option key={index} value={archetype.key}>
-                                                        {archetype.key} &nbsp;({archetype.count})
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {selectedArchetype && (
-                                    <div className='average-card-counts'>
-                                        <p>Average card count from all Day 2 <strong>{selectedArchetype}</strong> lists <span style={{ opacity: 0.25 }}>&nbsp;• {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1).toLowerCase()})</span></p>
-                                        <hr
-                                            style={{
-                                                marginTop: '5px',
-                                                border: 'none',
-                                                borderBottom: '2px solid #ccc',
-                                                opacity: 0.5
-                                            }}
-                                        />
-                                        <div className='button-container'>
-                                            <button
-                                                onClick={() => setShowTop30(true)}
-                                                className={showTop30 ? 'active-button' : ''}
-                                            >
-                                                Show All Cards %
-                                            </button>
-                                            <button
-                                                onClick={() => setShowTop30(false)}
-                                                className={!showTop30 ? 'active-button' : ''}
-                                            >
-                                                Only Cards in All Lists
-                                            </button>
-                                        </div>
-                                        <div className="deck-cards">
-                                            {averageCardCounts.length > 0 ? (
-                                                averageCardCounts.map((card, index) => {
-                                                    return (
-                                                        <div
-                                                            key={index}
-                                                            className="card-container-avg"
-                                                            onClick={() => {
-                                                                handleCardClick(card);
-                                                            }}
-                                                        >
-                                                            <img src={cardImageUrl(card)} alt={card.name} />
-                                                            <div className="card-count-avg">{card.averageCount}</div>
-                                                        </div>
-                                                    );
-                                                })
-                                            ) : (
-                                                <p></p>
+                                            {(is2025Event||(eventData?.dayOneMeta?.length>0&&division==='masters'))&&(
+                                            <>
+                                                <button
+                                                className={`chart-button day1btn ${showDayOneMeta&&!showConversionRate?'active':''}`}
+                                                onClick={handleDayOneClick}
+                                                >Day 1</button>
+                                                <button
+                                                className={`chart-button conversbtn ${showConversionRate?'active':''}`}
+                                                onClick={handleConversionRateClick}
+                                                >Conversion %
+                                                </button>
+                                            </>
                                             )}
                                         </div>
                                     </div>
-                                )}
-                                <div className='filtered-results'>
-                                    <p>
-                                        All {dataDay === 'day2' ? 'Day 2' : 'Day 1'}{' '}
-                                        <strong>{selectedArchetype}</strong> results{' '}
-                                        <span style={{ opacity: 0.25 }}>
-                                        • {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1)})
-                                        </span>
-                                    </p>
-                                    <hr style={{
-                                        marginTop: '5px',
-                                        border: 'none',
-                                        borderBottom: '2px solid #ccc',
-                                        opacity: 0.35
-                                    }}/>
-                                    <br/>
-                                    <div className='results-table charted-decks'>
-                                        {(
-                                        // if Day 2: just day2Results, otherwise combine Day 1+Day 2
-                                        (dataDay === 'day2'
-                                            ? day2Results
-                                            : [...day2Results, ...eliminatedDecks,]
-                                        )
-                                        // filter by the archetype
-                                        .filter(player => {
-                                            let s1 = player.sprite1 || '';
-                                            let s2 = player.sprite2 || '';
-                                            if (!s1 && !s2 && player.decklist) {
-                                            const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-                                            s1 = firstSprite.replace('/assets/sprites/', '').replace('.png','');
-                                            s2 = secondSprite.replace('/assets/sprites/', '').replace('.png','');
-                                            }
-                                            return getCustomLabel(eventId, s1, s2) === selectedArchetype;
-                                        })
-                                        // render
-                                        .map((p, i) => {
-                                            const bg = i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.3)';
-                                            return (
-                                                <div key={p.placing || i} style={{ backgroundColor: bg }}>
-                                                {displayResults([p], eventId, division)}
-                                                </div>
-                                            );
-                                        })
+                                    {eventId.includes('2025')&&chartResults.length>16&&(
+                                    <div className='chart-description'>
+                                        {showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 1</p>}
+                                        {!showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 2</p>}
+                                        {showConversionRate&&(
+                                        <p>* Conversion rate of each archetype, from Day 1 into Day 2<br/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;(decimal values = percentage)
+                                        </p>
                                         )}
                                     </div>
-                                </div>                         
-                            </>
-                            )}
+                                    )}
+                                    {!hasChartData&&(
+                                    <div className='chart-description'><p>* No known decks available for this division</p></div>
+                                    )}
+                                    <div className='chart-container-wrapper' style={{ overflowX:'auto', paddingBottom: showDayOneMeta?'1rem':undefined }}>
+                                    <div className='chart-container' style={{ minWidth:`${Math.max(chartData.labels.length*50,600)}px`, height:'400px' }}>
+                                        <Bar ref={chartRef} data={chartData} options={chartOptions}/>
+                                    </div>
+                                    </div>
+                                </>
+                                )}
+
+                                {statView==='decklists' && isChartReady && (
+                                <>
+                                    <div className='deck-archetypes'>
+                                    {/* <h3>Data per Archetype</h3> */}
+                                    {is2025Event&&(
+                                        <div className="day-toggle-buttons" style={{ margin:'0.5rem 0' }}>
+                                        <button onClick={()=>setDataDay('day2')} className={dataDay==='day2'?'active-button':''}>Day 2</button>
+                                        <button onClick={()=>setDataDay('day1')} className={dataDay==='day1'?'active-button':''}>Day 1</button>
+                                        </div>
+                                    )}
+                                    <div className='filter-container'>
+                                        <select value={selectedArchetype} onChange={handleArchetypeChange} className="archetype-dropdown">
+                                        {dropdownOptions.map((a,i)=>(
+                                            <option key={i} value={a.key}>{a.key} ({a.count})</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                    </div>
+                                    {selectedArchetype&&(
+                                        <div className='average-card-counts'>
+                                            <p>Average card count from all Day 2 <strong>{selectedArchetype}</strong> lists</p>
+                                            <hr style={{ marginTop:'5px', border:'none', borderBottom:'2px solid #ccc', opacity:0.5 }}/>
+                                            <div className='button-container'>
+                                            <button onClick={()=>setShowTop30(true)} className={showTop30?'active-button':''}>Show All Cards %</button>
+                                            <button onClick={()=>setShowTop30(false)} className={!showTop30?'active-button':''}>
+                                                Only Cards in All Lists
+                                            </button>
+                                            </div>
+                                            <div className="deck-cards">
+                                                {averageCardCounts.length>0?averageCardCounts.map((card,idx)=>(
+                                                    <div key={idx} className="card-container-avg" onClick={()=>handleCardClick(card)}>
+                                                    <img src={cardImageUrl(card)} alt={card.name}/>
+                                                    <div className="card-count-avg">{card.averageCount}</div>
+                                                    </div>
+                                                )):<p></p>}
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className='filtered-results'>
+                                        <p>All {dataDay==='day2'?'Day 2':'Day 1'} <strong>{selectedArchetype}</strong> results 
+                                            <span style={{ opacity:0.25 }}>
+                                            &nbsp;• {eventData.name} ({division.charAt(0).toUpperCase()+division.slice(1)})
+                                            </span>
+                                        </p>
+                                        <hr style={{ marginTop:'5px', border:'none', borderBottom:'2px solid #ccc', opacity:0.35 }}/>
+                                        <br/>
+                                        <div className='results-table charted-decks'>
+                                            {(dataDay==='day2'?day2Results:[...day2Results,...eliminatedDecks])
+                                            .filter(p=>{let s1=p.sprite1||'', s2=p.sprite2||''; if(!s1&&!s2&&p.decklist){const{firstSprite,secondSprite}=getPokemonSprites(p.decklist,'',''); s1=firstSprite.replace('/assets/sprites/','').replace('.png',''); s2=secondSprite.replace('/assets/sprites/','').replace('.png','');} return getCustomLabel(eventId,s1,s2)===selectedArchetype;})
+                                            .map((p,i)=>(
+                                                <div key={p.placing||i} style={{ backgroundColor: i%2===0?'transparent':'rgba(0,0,0,0.3)' }}>
+                                                {displayResults([p],eventId,division)}
+                                                </div>
+                                            ))
+                                            }
+                                        </div>
+                                    </div>
+                                    </>
+                                )}
                             </div>
                         )}
                         {showModal && modalPlayer && (

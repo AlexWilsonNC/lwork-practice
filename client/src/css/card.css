@@ -653,6 +653,14 @@ tr.event-separator:hover td {
         margin-left: 1px;
     }
 }
+@media screen and (max-width: 750px) {
+    .legality-checks p {
+        font-size: 10px;
+    }
+    .legality-checks span {
+        font-size: 16px;
+    }
+}
 @media screen and (max-width: 675px) {
     .card-view {
         width: 100%;
@@ -796,6 +804,14 @@ tr.event-separator:hover td {
     .turned-link {
         font-size: 14px;
     }
+    @media screen and (max-width: 750px) {
+    .legality-checks p {
+        font-size: 14px;
+    }
+    .legality-checks span {
+        font-size: 22px;
+    }
+}
 }
 @media screen and (max-width: 530px) {
     .the-card-img {

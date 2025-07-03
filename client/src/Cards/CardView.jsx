@@ -910,42 +910,42 @@ const CardView = () => {
                                     <p>
                                         Standard: {
                                         isBasicEnergyCard
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
                                             : (isStandardLegal(cardInfo) || isStandardLegalAny)
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
-                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
+                                            : <span className="material-symbols-outlined" style={{color:'rgb(237, 91, 91)'}}>close</span>
                                         }
                                     </p>
                                     <p>
                                         Expanded: {
                                         isBasicEnergyCard
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
                                             : (isExpandedLegal(cardInfo) || isExpandedLegalAny)
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
-                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
+                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
+                                            : <span className="material-symbols-outlined" style={{color:'rgb(237, 91, 91)'}}>close</span>
                                         }
                                     </p>
                                     <p>
                                         GLC:{' '}
                                         {isBannedInGLC(cardInfo) ? (
                                             <>
-                                            <span className="material-symbols-outlined" style={{ color:'rgb(204,37,37)' }}>
+                                            <span className="material-symbols-outlined" style={{ color:'rgb(237, 91, 91)' }}>
                                                 close
                                             </span>
-                                            <span style={{ color:'rgb(204,37,37)', marginLeft:'4px' }}>
-                                                (Banned)
+                                            <span style={{ color:'rgb(237, 91, 91)' }}>
+                                                <p>(Banned)</p>
                                             </span>
                                             </>
                                         ) : isBasicEnergyCard ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(0,198,0)' }}>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(110, 207, 110)' }}>
                                                 check
                                             </span>
                                         ) : (isGLCLegal(cardInfo) || isGLCLegalAny) ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(0,198,0)' }}>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(110, 207, 110)' }}>
                                                 check
                                             </span>
                                         ) : (
-                                            <span className="material-symbols-outlined" style={{ color:'rgb(204,37,37)' }}>
+                                            <span className="material-symbols-outlined" style={{ color:'rgb(237, 91, 91)' }}>
                                                 close
                                             </span>
                                         )}
@@ -975,15 +975,17 @@ const CardView = () => {
                                                 {displayedOtherVersions.map((otherCard, index) => (
                                                     <tr key={index}>
                                                         <td className='card-art-td'>
-                                                            <img
-                                                                src={otherCard.images.small}
-                                                                alt={otherCard.name}
-                                                                className={
-                                                                otherCard.supertype === 'Energy'
-                                                                    ? 'cropped-energycard-art-td'
-                                                                    : 'cropped-imagecard-art-td'
-                                                                }
-                                                            />
+                                                            <Link to={`/card/${otherCard.setAbbrev}/${otherCard.number}`}>
+                                                                <img
+                                                                    src={otherCard.images.small}
+                                                                    alt={otherCard.name}
+                                                                    className={
+                                                                    otherCard.supertype === 'Energy'
+                                                                        ? 'cropped-energycard-art-td'
+                                                                        : 'cropped-imagecard-art-td'
+                                                                    }
+                                                                />
+                                                            </Link>
                                                         </td>
                                                         <td className='linktoother'>
                                                             <Link to={`/card/${otherCard.setAbbrev}/${otherCard.number}`}>

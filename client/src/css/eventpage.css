@@ -190,6 +190,10 @@
     white-space: nowrap;
     overflow: hidden;
 }
+.day-toggle-buttons {
+    margin-bottom: 25px !important;
+    margin-top: -0px !important;
+}
 .chart-button:hover,
 .day-toggle-buttons button {
     cursor: pointer;
@@ -233,11 +237,9 @@
     height: 460px;
     margin: 0 auto;
 }
-.deck-archetypes {
-    margin-top: 15px;
-}
 .archetype-dropdown {
     width: auto !important;
+    padding: 5px 0;
 }
 @media (max-width: 1500px) {
     .chart-container {
@@ -505,6 +507,29 @@
   color: #666;
   white-space: nowrap;
 }
+.stat-toggle-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.25);
+    padding-bottom: 15px;
+    margin-top: -5px;
+}
+.stat-toggle-buttons button {
+    padding: 5px 0;
+    width: 90px;
+    border-radius: 2px;
+    border: none;
+    text-align: center;
+    margin: 0 12px;
+    background-color: transparent;
+    font-weight: 600;
+}
+.stat-toggle-buttons button:hover {
+    cursor: pointer;
+    background-color: grey;
+}
 @media screen and (max-width: 1500px) {
     .regional-container {
         width: 80%;
@@ -538,6 +563,12 @@
 @media screen and (max-width: 700px) {
     .regional-container p, 
     .regional-container a {
+        font-size: 12px;
+    }
+    .stat-toggle-buttons button {
+        padding: 5px 0;
+        width: 90px;
+        margin: 0 12px;
         font-size: 12px;
     }
     .regional-info h2 {
@@ -583,6 +614,9 @@
         align-items: flex-start;
         padding: 15px 25px;
     } 
+    .archetype-dropdown {
+        padding: 2px 0;
+    }
     .day1buttons {
         padding: 5px 20px;
         font-size: 14px;
