@@ -453,47 +453,41 @@ const CardView = () => {
         { name: 'Twin Energy', set: 'RCL', number: '209' },
     ];
 
-    const isGLCLegal = (card) => {
-        const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-        const excludedSubtypes = new Set(
+    function isGLCLegal(card) {
+        // 1) cut any Pokémon subtypes you don’t want
+            const expandedSets = [
+                'black & white', 'xy', 'sun & moon',
+                'sword & shield', 'scarlet & violet'
+            ];
+        const excluded = new Set(
             ["EX","GX","ex","V","VMAX","VSTAR","Prism Star","Radiant","ACE SPEC","V-UNION"]
-            .map(s => s.toLowerCase())
+            .map(s=>s.toLowerCase())
         );
+        if (card.subtypes?.some(s=>excluded.has(s.toLowerCase()))) {
+            return false;
+        }
+        if (isBannedInGLC(card)) return false;
 
-        if (
-            Array.isArray(card.subtypes) &&
-            card.subtypes.some(st => excludedSubtypes.has(st.toLowerCase()))
-        ) {
+        // 2) special case for Double Colorless Energy by name
+        if (card.name.trim().toLowerCase()==='double colorless energy') {
             return false;
         }
 
-        // Check for banned CC cards in CEL set
-        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
-            return false;
+        // 3) Pokémon use your existing logic...
+        if (card.supertype==='Pokémon') {
+            // …whatever you already have for Pokémon…
+            // e.g. return expandedSets.includes(card.set.series.toLowerCase());
         }
 
-        // ✅ Handle non-Pokémon legal version check
-         if (card.supertype !== 'Pokémon') {
-                const hasStdLegalVersion = otherVersions.some(o =>
-                o.name.toLowerCase() === card.name.toLowerCase() &&
-                isStandardLegal(o)
-            );
-            if (!hasStdLegalVersion) return false;
-            // check individual GLC bans
-            const isIndividuallyBanned = bannedInGLC.some(b =>
-                b.name.toLowerCase()   === card.name.toLowerCase() &&
-                b.set.toLowerCase()    === card.setAbbrev.toLowerCase() &&
-                b.number               === card.number
-            );
-            return !isIndividuallyBanned;
-        }
-
-        const isFromAllowedSet = card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase());
-
-        return isFromAllowedSet;
-    };
-
+        // 4) Trainer & Special Energy: just check series + banlist
+        const series = card.set?.series?.toLowerCase();
+        return expandedSets.includes(series);
+    }
     const isBannedInGLC = (card) => {
+        if (card.name.trim().toLowerCase() === 'double colorless energy') {
+            return true;
+        }
+
         return bannedInGLC.some(bannedCard =>
             bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
             bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
@@ -932,13 +926,29 @@ const CardView = () => {
                                         }
                                     </p>
                                     <p>
-                                        GLC: {
-                                        isBasicEnergyCard
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
-                                            : (isGLCLegal(cardInfo) || isGLCLegalAny)
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(0,198,0)'}}>check</span>
-                                            : <span className="material-symbols-outlined" style={{color:'rgb(204,37,37)'}}>close</span>
-                                        }
+                                        GLC:{' '}
+                                        {isBannedInGLC(cardInfo) ? (
+                                            <>
+                                            <span className="material-symbols-outlined" style={{ color:'rgb(204,37,37)' }}>
+                                                close
+                                            </span>
+                                            <span style={{ color:'rgb(204,37,37)', marginLeft:'4px' }}>
+                                                (Banned)
+                                            </span>
+                                            </>
+                                        ) : isBasicEnergyCard ? (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(0,198,0)' }}>
+                                                check
+                                            </span>
+                                        ) : (isGLCLegal(cardInfo) || isGLCLegalAny) ? (
+                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(0,198,0)' }}>
+                                                check
+                                            </span>
+                                        ) : (
+                                            <span className="material-symbols-outlined" style={{ color:'rgb(204,37,37)' }}>
+                                                close
+                                            </span>
+                                        )}
                                     </p>
                                 </div>
                                 <div className='show-cardinfo-on-small'>
@@ -964,6 +974,17 @@ const CardView = () => {
                                             <tbody>
                                                 {displayedOtherVersions.map((otherCard, index) => (
                                                     <tr key={index}>
+                                                        <td className='card-art-td'>
+                                                            <img
+                                                                src={otherCard.images.small}
+                                                                alt={otherCard.name}
+                                                                className={
+                                                                otherCard.supertype === 'Energy'
+                                                                    ? 'cropped-energycard-art-td'
+                                                                    : 'cropped-imagecard-art-td'
+                                                                }
+                                                            />
+                                                        </td>
                                                         <td className='linktoother'>
                                                             <Link to={`/card/${otherCard.setAbbrev}/${otherCard.number}`}>
                                                                 {otherCard.set.name}
@@ -996,26 +1017,27 @@ const CardView = () => {
                 </div>
             </div>
             <div className="event-results-cardview marginbottom">
-                <p className='decks-that-contain'>Decklists that feature <span className='italic'>{cardInfo.name}</span></p>
-                <p className='italic ordered-by-most-recent'>(Ordered by most recent event appearance - Trainer & Special Energy cards of the same name appear together across all eras.)</p>
                 {loading && !eventsScanned ? (
                     <div className="spinner margintop"></div>
-                ) : isBasicEnergy ? (
-                    <p className='margintop'>This search function is not available for Basic Energy cards, that type of query would cause the planet to implode...</p>
                 ) : eventResults.length > 0 ? (
                     <>
+                        <p className="decks-that-contain">
+                            Decklists that feature <span style={{ color: '#1290eb' }}>{cardInfo.name}</span>
+                        </p>
+                        <p className="ordered-by-most-recent">
+                            (Ordered by most recent event appearance – Trainer & Special Energy
+                            cards of the same name appear together across all eras.)
+                        </p>
                         <table className="cards-specific-results">
-                            <thead>
-                                <tr>
-                                    <th style={{ width: '1%' }}>Place</th>
-                                    <th style={{ width: '1%' }}>Player</th>
-                                    <th style={{ width: '1%' }}>Division</th>
-                                    <th style={{ width: '1%' }}></th>
-                                    <th style={{ width: '1%' }}>Decklist</th>
-                                </tr>
-                            </thead>
-
-                            {/* instead of one <tbody>, map each event to its own <tbody> */}
+                        <thead>
+                            <tr>
+                            <th style={{ width: '1%' }}>Place</th>
+                            <th style={{ width: '1%' }}>Player</th>
+                            <th style={{ width: '1%' }}>Division</th>
+                            <th style={{ width: '1%' }}></th>
+                            <th style={{ width: '1%' }}>Decklist</th>
+                            </tr>
+                        </thead>
                             {displayedClusters.map(([eventId, results]) => {
                                 const sortedResults = results.sort((a, b) => {
                                     const order = { masters: 0, seniors: 1, juniors: 2, all: 3 };
@@ -1031,14 +1053,12 @@ const CardView = () => {
                                 const { eventName, eventDate, eventFormat } = sortedResults[0];
 
                                 return (
-                                    /* each event gets its own tbody, key’d by eventId */
                                     <tbody key={eventId} className="event-cluster-body">
                                         <tr className="event-separator">
                                             <td colSpan="5">
                                                 <Link
                                                     className="event-separator-content"
                                                     to={`/tournaments/${eventId}${
-                                                        // … your existing URL logic here …
                                                         eventId === '2002_WORLDS' || /* … */ false
                                                             ? '/seniors'
                                                             : eventId.toLowerCase().includes('retro')
@@ -1133,22 +1153,22 @@ const CardView = () => {
                             })}
                         </table>
                     </>
-                ) : eventsScanned ? (
-                    // if it’s exactly LTR-30 show the “Easter egg” message
-                    cardInfo.name.toLowerCase().includes("magikarp") ? (
-                        <p className='margintop italic'>
-                            <br />
-                            Looks like the Pokédex was right, this Pokémon is utterly useless. It's not in a single deck in our database...
-                        </p>
-                    ) : (
-                        <p className='margintop italic'>
-                            <br />
-                            ~ Looks like this card isn't featured in any of our documented decks, yet.
-                        </p>
-                    )
-                ) : null}
-                <br></br>
-                <p className='margintop smaller-txt italic'>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
+                ) : cardInfo.name.toLowerCase().includes('magikarp') ? (
+                    <p className="margintop italic" style={{ textAlign: 'center' }}>
+                        <br />
+                        Looks like the Pokédex was right, this Pokémon is utterly useless.
+                        It's not in a single deck in our database...
+                    </p>
+                ) : (
+                    <p className="margintop italic" style={{ textAlign: 'center' }}>
+                        Looks like this card isn't featured in any of our documented decks, yet.
+                        <br />
+                        <br />
+                        <span style={{ fontSize: '10px' }}>(Day 1 decklists from modern events are not integrated into our database)</span>
+                    </p>
+                )}
+                <br />
+                <p className='margintop smaller-txt italic' style={{ textAlign: 'center' }}>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
             </div>
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>

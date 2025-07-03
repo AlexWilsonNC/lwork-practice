@@ -274,7 +274,7 @@ tr.event-separator:hover td {
     font-size: 12px;
 }
 .other-versions {
-    width: 450px;
+    width: 100%;
     margin-top: 5px;
 }
 .other-versions td {
@@ -287,15 +287,28 @@ tr.event-separator:hover td {
     overflow: hidden;
     height: 25px;
     width: 50px;
-    border-bottom: 1px solid black;
+    margin: 50px !important;
+    border: 1px solid rgba(0, 0, 0, 0.107);
 }
 .cropped-imagecard-art-td {
     position: absolute;
-    top: -80%; 
+    top: -60%; 
     left: -15%;
     width: 150%;
     height: auto;
     opacity: 0.75;
+    transform: scale(0.85);
+    transform-origin: top left;
+}
+.cropped-energycard-art-td {
+    position: absolute;
+    top: -120%; 
+    left: -5%;
+    width: 150%;
+    height: auto;
+    opacity: 0.75;
+    transform: scale(0.75);
+    transform-origin: top left;
 }
 .linktoother a {
     color: #1290eb;
@@ -574,9 +587,6 @@ tr.event-separator:hover td {
     .trainer-details  {
         font-size: 14px;
     }
-    .other-versions {
-        width: 110%;
-    }
     .other-versions td {
         font-size: 11px;
     }
@@ -591,9 +601,6 @@ tr.event-separator:hover td {
     }
 }
 @media screen and (max-width: 800px) {
-    .other-versions {
-        width: 100%;
-    }
     .showmoreversions {
         font-size: 12px;
     }
@@ -709,7 +716,7 @@ tr.event-separator:hover td {
         display: none;
     }
     .other-versions{
-        width: 125%;
+        width: 115%;
     }
     .showmoreversions {
         font-size: 10px;
@@ -800,6 +807,9 @@ tr.event-separator:hover td {
     .cards-specific-results .second-sprite {
         margin-left: -21px;
     }
+    .other-versions{
+        width: 105%;
+    }
 }
 @media screen and (max-width: 500px) {
     .card-display-area img {
@@ -851,7 +861,7 @@ tr.event-separator:hover td {
 }
 @media screen and (max-width: 450px) {
     .other-versions {
-        width: 110%;
+        width: 100%;
     }
     .showmoreversions {
         font-size: 8px;
