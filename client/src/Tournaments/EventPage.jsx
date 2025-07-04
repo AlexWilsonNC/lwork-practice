@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import '../css/eventpage.css';
@@ -375,9 +375,6 @@ const EventPageContent = styled.div`
     color: ${({ theme }) => theme.text};
     cursor: pointer;
   }
-    .stat-toggle-buttons button {
-        color: ${({ theme }) => theme.text}; 
-    }
   .active-option {
     background: ${({ theme }) => theme.body};
   }
@@ -398,7 +395,6 @@ const EventPageContent = styled.div`
     background-color: ${({ theme }) => theme.playerlisthover};
   }
   .filter-container {
-    margin-top: -15px;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
@@ -411,6 +407,9 @@ const EventPageContent = styled.div`
   .filtered-results p {
     color: ${({ theme }) => theme.text};
   }
+    .matchups-overview {
+        color: ${({ theme }) => theme.text};
+    }
   .spinner {
     margin-top: 25px;
     border-left-color: ${({ theme }) => theme.spinner};
@@ -421,6 +420,10 @@ const EventPageContent = styled.div`
   h3 {
     color: ${({ theme }) => theme.text};
   }
+    .stats-tab-h3-label {
+        color: grey;
+        margin-bottom: 10px;
+    }
   .chart-description {
       color: ${({ theme }) => theme.chartdescrip};
   }
@@ -711,7 +714,9 @@ const EventPage = () => {
     const [fetchedDayOneCount, setFetchedDayOneCount] = useState(null);
     const [dataDay, setDataDay] = useState('day2'); // 'day2' or 'day1'
     const [showAllCardsList, setShowAllCardsList] = useState(false);
-    
+    const [matchupDay, setMatchupDay] = useState('day2');
+    const [matchupView, setMatchupView] = useState('list');
+
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
     const [showAllDecks, setShowAllDecks] = useState(false);
@@ -1121,7 +1126,6 @@ useEffect(() => {
         eventId === '2018_NAIC' && division === 'masters'
             ? mastersResults.slice(0, 64)
             : results;
-
             
     const deckTypeCount = chartResults.reduce((acc, player) => {
         let sprite1 = player.sprite1 || '';
@@ -1157,6 +1161,53 @@ useEffect(() => {
 
         return acc;
     }, {});
+
+const matchupRecordByArchetype = useMemo(() => {
+  // pick which players to include
+  const sourcePlayers = matchupDay === 'day2'
+    ? day2Results
+    : matchupDay === 'day1'
+      ? eliminatedDecks
+      : results;
+
+  // aggregate wins/losses/ties *and* collect sprites
+  const acc = {};
+  sourcePlayers.forEach(p => {
+    const { wins = 0, losses = 0, ties = 0 } = p.record || {};
+
+    // normalize sprites
+    let s1 = p.sprite1 || '';
+    let s2 = p.sprite2 || '';
+    if (!s1 && !s2 && p.decklist) {
+      const { firstSprite, secondSprite } = getPokemonSprites(p.decklist, '', '');
+      s1 = firstSprite.split('/').pop().replace('.png', '');
+      s2 = secondSprite.split('/').pop().replace('.png', '');
+    }
+
+    const key = getCustomLabel(eventId, s1, s2) || 'Other';
+
+    if (!acc[key]) acc[key] = { wins: 0, losses: 0, ties: 0, sprites: [] };
+    acc[key].wins   += wins;
+    acc[key].losses += losses;
+    acc[key].ties   += ties;
+
+    [s1, s2].forEach(s => {
+      if (s && s !== 'blank' && !acc[key].sprites.includes(s)) {
+        acc[key].sprites.push(s);
+      }
+    });
+  });
+
+  // turn into an array for rendering, sorted by total matches
+  return Object.entries(acc)
+    .filter(([ key ]) => key !== 'blank-')
+    .map(([ key, { wins, losses, ties, sprites } ]) => ({ key, wins, losses, ties, sprites }))
+    .sort((a, b) => {
+      const totalA = a.wins + a.losses + a.ties;
+      const totalB = b.wins + b.losses + b.ties;
+      return totalB - totalA;
+    });
+}, [matchupDay, day2Results, eliminatedDecks, results, eventId]);
 
     if (deckTypeCount['Gardevoir & Sylveon']) {
         deckTypeCount['Gardevoir & Sylveon'].sprites = [
@@ -1379,6 +1430,7 @@ useEffect(() => {
 
     useEffect(() => {
         if (!isChartReady || deckTypeCountArray.length === 0) return;
+        if (selectedArchetype) return;
 
         const storageKey = `selectedArchetype_${eventId}`;
         const savedKey   = sessionStorage.getItem(storageKey);
@@ -1390,7 +1442,7 @@ useEffect(() => {
 
         setSelectedArchetype(defaultKey);
         sessionStorage.setItem(storageKey, defaultKey);
-    }, [isChartReady, deckTypeCountArray, eventId]);
+    }, [isChartReady, deckTypeCountArray, eventId, selectedArchetype]);
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -1581,6 +1633,47 @@ useEffect(() => {
             eventId
         ]
     );
+
+    const archetypes = useMemo(
+        () => matchupRecordByArchetype.map(r => r.key),
+            [matchupRecordByArchetype]
+        );
+
+        const headToHead = useMemo(() => {
+        // init empty buckets
+        const m = {};
+        archetypes.forEach(rk => {
+            m[rk] = {};
+            archetypes.forEach(ck => {
+            m[rk][ck] = { wins: 0, losses: 0, ties: 0 };
+            });
+        });
+
+        // pick which players (day1/day2/combined)
+        const source =
+            matchupDay === 'day2'
+            ? day2Results
+            : matchupDay === 'day1'
+                ? eliminatedDecks
+                : [...day2Results, ...eliminatedDecks];
+
+        source.forEach(p => {
+            // figure out their own archetype
+            const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
+            Object.values(p.rounds).forEach(info => {
+            const { code, name } = parseOpponent(info.name);
+            const oppKey = getCustomLabel(eventId, code, code) || 'Other';
+
+            const cell = m[myKey][oppKey] || { wins:0, losses:0, ties:0 };
+            if (info.result === 'W') cell.wins++;
+            else if (info.result === 'L') cell.losses++;
+            else if (info.result === 'T') cell.ties++;
+            m[myKey][oppKey] = cell;
+            });
+        });
+
+        return m;
+    }, [matchupDay, day2Results, eliminatedDecks, archetypes, eventId]);
 
     // useEffect(() => {
     //     if (is2025Event && (showDayOneMeta || showConversionRate) && eliminatedDecks.length === 0) {
@@ -2041,7 +2134,7 @@ useEffect(() => {
                     >
                         Statistics
                     </a>
-                    <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>Photos</a>
+                    <a className='event-option' style={{ opacity: 0.1, pointerEvents: 'none' }}>More</a>
                 </div>
                 <div className='contain-event'>
                     <div className='event-content'>
@@ -2213,28 +2306,25 @@ useEffect(() => {
                         ) : (
                             <div className='event-statistics'>
                                 <div className="stat-toggle-buttons" style={{ marginBottom: '1rem' }}>
-                                    <button
-                                        onClick={() => setStatView('meta')}
-                                        className={statView === 'meta' ? 'active-button' : ''}
-                                    >
-                                        Meta Chart
+                                    <button onClick={() => setStatView('meta')}
+                                        className={statView === 'meta' ? 'active-button' : ''}>Meta
                                     </button>
-                                    <button
-                                        onClick={() => setStatView('decklists')}
-                                        className={statView === 'decklists' ? 'active-button' : ''}
-                                    >
-                                        Archetypes
+                                    <button onClick={() => setStatView('decklists')}
+                                        className={statView === 'decklists' ? 'active-button' : ''}>Decklists
                                     </button>
-                                    <button
-                                        disabled
-                                        style={{ opacity: 0.1, pointerEvents: 'none' }}
-                                    >
+                                    {is2025Event && (
+                                        <button onClick={() => setStatView('matchups')}
+                                                className={statView === 'matchups' ? 'active-button' : ''}
+                                                style={{ opacity: '0.1', pointerEvents: 'none' }}>
                                         Matchups
-                                    </button>
+                                        </button>
+                                    )}
                                 </div>
                                 {statView==='meta' && (
                                 <>
+                                <h3 className='stats-tab-h3-label'>Meta Share</h3>
                                     <div className='chart-btns-container'>
+
                                         <div className='alignrow'>
                                             <button
                                                 className={`chart-button day2btn ${!showDayOneMeta&&!showConversionRate?'active':''}`}
@@ -2256,21 +2346,26 @@ useEffect(() => {
                                             )}
                                         </div>
                                     </div>
-                                    {eventId.includes('2025')&&chartResults.length>16&&(
-                                    <div className='chart-description'>
-                                        {showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 1</p>}
-                                        {!showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 2</p>}
-                                        {showConversionRate&&(
-                                        <p>* Conversion rate of each archetype, from Day 1 into Day 2<br/>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;(decimal values = percentage)
-                                        </p>
-                                        )}
-                                    </div>
+                                    {eventId.includes('2025') && chartResults.length> 16 && (
+                                        <div className='chart-description'>
+                                            {showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 1</p>}
+                                            {!showDayOneMeta&&!showConversionRate&&<p>* Total count for each deck archetype from Day 2</p>}
+                                            {showConversionRate&&(
+                                            <p>* Conversion rate of each archetype, from Day 1 into Day 2<br/>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;(decimal values = percentage)
+                                            </p>
+                                            )}
+                                        </div>
                                     )}
                                     {!hasChartData&&(
-                                    <div className='chart-description'><p>* No known decks available for this division</p></div>
+                                        <div className='chart-description'><p>* No known decks available for this division</p></div>
                                     )}
                                     <div className='chart-container-wrapper' style={{ overflowX:'auto', paddingBottom: showDayOneMeta?'1rem':undefined }}>
+                                    {!eventId.includes('2025') && !eventId.includes('2024') && chartResults.length > 1 && (
+                                        <div className='chart-description'>
+                                            <p>* Total count for each deck archetype from Day 2</p>
+                                        </div>
+                                    )}
                                     <div className='chart-container' style={{ minWidth:`${Math.max(chartData.labels.length*50,600)}px`, height:'400px' }}>
                                         <Bar ref={chartRef} data={chartData} options={chartOptions}/>
                                     </div>
@@ -2281,7 +2376,7 @@ useEffect(() => {
                                 {statView==='decklists' && isChartReady && (
                                 <>
                                     <div className='deck-archetypes'>
-                                    {/* <h3>Data per Archetype</h3> */}
+                                    <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
                                     {is2025Event&&(
                                         <div className="day-toggle-buttons" style={{ margin:'0.5rem 0' }}>
                                         <button onClick={()=>setDataDay('day2')} className={dataDay==='day2'?'active-button':''}>Day 2</button>
@@ -2298,7 +2393,9 @@ useEffect(() => {
                                     </div>
                                     {selectedArchetype&&(
                                         <div className='average-card-counts'>
-                                            <p>Average card count from all Day 2 <strong>{selectedArchetype}</strong> lists</p>
+                                            <p>Average card count from all {dataDay === 'day2' ? 'Day 2' : 'Day 1'}{' '}
+                                                <strong style={{ color: '#1290eb' }}>{selectedArchetype}</strong> lists
+                                            </p>
                                             <hr style={{ marginTop:'5px', border:'none', borderBottom:'2px solid #ccc', opacity:0.5 }}/>
                                             <div className='button-container'>
                                             <button onClick={()=>setShowTop30(true)} className={showTop30?'active-button':''}>Show All Cards %</button>
@@ -2336,6 +2433,115 @@ useEffect(() => {
                                         </div>
                                     </div>
                                     </>
+                                )}
+                                {statView === 'matchups' && (
+                                    <div className="matchups-overview">
+                                        <h3 className='stats-tab-h3-label'>Matchup & Record Data</h3>
+                                        <div className="day-toggle-buttons" style={{ margin: '1rem 0' }}>
+                                            <button
+                                                onClick={() => setMatchupDay('day2')}
+                                                className={matchupDay==='day2' ? 'active-button' : ''}
+                                            >Day 2</button>
+                                            <button
+                                                onClick={() => setMatchupDay('day1')}
+                                                className={matchupDay==='day1' ? 'active-button' : ''}
+                                            >Day 1</button>
+                                            <button
+                                                onClick={() => setMatchupDay('combined')}
+                                                className={matchupDay==='combined' ? 'active-button' : ''}
+                                                style={{ opacity: '0.1', pointerEvents: 'none' }}
+                                            >Combined</button>
+                                            <button onClick={() => setMatchupView('list')}
+                                                    className={matchupView === 'list' ? 'active-button' : ''}>
+                                                List
+                                            </button>
+                                            <button onClick={() => setMatchupView('matrix')}
+                                                    className={matchupView === 'matrix' ? 'active-button' : ''}>
+                                                Matrix
+                                            </button>
+                                        </div>
+                                        {matchupView === 'list' ? (
+                                        <table className="matchup-table archetype-records">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Archetype</th>
+                                                    <th style={{ textAlign: 'start' }}>Record</th>
+                                                    <th style={{ textAlign: 'center' }}>Win %</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {matchupRecordByArchetype.map(({ key, wins, losses, ties, sprites }) => {
+                                                    const total = wins + losses + ties;
+                                                    const winPct = total > 0
+                                                        ? ((wins + ties * 0.5) / total * 100).toFixed(2)
+                                                        : '0.00';
+                                                        return (
+                                                    <tr key={key}>
+                                                        <td className="opponent-sprites-cell sing-cells-sprites">
+                                                            {sprites.map(spr => (
+                                                                <img
+                                                                key={spr}
+                                                                src={`/assets/sprites/${spr}.png`}
+                                                                alt={spr}
+                                                                className="archetype-sprite"
+                                                                />
+                                                            ))}
+                                                        </td>
+                                                        <td className='sing-arch-name'>{key}</td>
+                                                        <td className='record-summary sing-arch-rec tabular table-nums-sizes'>{wins}-{losses}-{ties}</td>
+                                                        <td className='table-nums-sizes' style={{ textAlign: 'center' }}>
+                                                            {winPct}%
+                                                        </td>
+                                                    </tr>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </table>
+                                        ) : (
+  <table className="matchup-matrix">
+    <thead>
+      <tr>
+        <th></th>
+        {archetypes.map(ck => (
+          <th key={ck}>{ck}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {archetypes.map(rk => (
+        <tr key={rk}>
+          <th>{rk}</th>
+          {archetypes.map(ck => {
+            const { wins, losses, ties } = headToHead[rk][ck];
+            const total = wins + losses + ties;
+            // ties count as half wins
+            const pct = total > 0
+              ? (wins + ties * 0.5) / total * 100
+              : 50;
+            // intensity from 0 at 50% → 1 at 0% or 100%
+            const intensity = Math.abs(pct - 50) / 50;
+            // red <50, blue ≥50
+            const bg = pct >= 50
+              ? `rgba(18,144,235,${intensity})`
+              : `rgba(235,18,18,${intensity})`;
+            return (
+              <td key={ck}
+                  style={{
+                    background: bg,
+                    textAlign: 'center',
+                    fontVariantNumeric: 'tabular-nums'
+                  }}>
+                {pct.toFixed(2)}%
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+                                    </div>
                                 )}
                             </div>
                         )}

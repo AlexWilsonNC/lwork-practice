@@ -43,8 +43,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     const hasTrainer = name        => getTrainerCount(name) > 0;
 
     // Multiple checks
-     if (hasPokemon('Gholdengo ex') && hasPokemon('Dragapult ex')) {
-        secondSprite  = getPokemonSpriteURL('gholdengo');
+    if (hasPokemon('Gholdengo ex') && hasPokemon('Dragapult ex')) {
+        firstSprite  = getPokemonSpriteURL('gholdengo');
+        secondSprite  = getPokemonSpriteURL('dragapult');
     }
     else if (hasPokemon('Iron Leaves ex') && hasPokemon('Iron Crown ex') && hasPokemon('Miraidon') && hasPokemon('Iron Valiant ex')) {
         firstSprite  = getPokemonSpriteURL('iron-leaves');

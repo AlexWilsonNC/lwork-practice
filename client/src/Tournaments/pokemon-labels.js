@@ -25,6 +25,7 @@ const customLabelsConfig = {
         'blank-ironthorns': 'Iron Thorns',
         'gholdengo-palkia-origin': 'Gholdengo',
         'gholdengo-scizor': 'Gholdengo Scizor',
+        'gholdengo-dragapult': 'Gholdengo Dragapult',
         'dragapult-xatu': 'Dragapult Xatu',
         'dialga-origin-metang': 'Dialga VSTAR',
         'roaring-moon-koraidon': 'Ancient Box',
