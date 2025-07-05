@@ -725,6 +725,8 @@ const EventPage = () => {
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
     const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'matchups'
+    const [infoArchetype, setInfoArchetype] = useState(null);
+    const [infoStats,    setInfoStats]    = useState({ wins:0, losses:0, ties:0 });
 
     const didFetchCounts = useRef({});
 
@@ -1639,7 +1641,7 @@ const matchupRecordByArchetype = useMemo(() => {
             [matchupRecordByArchetype]
         );
 
-        const headToHead = useMemo(() => {
+    const headToHead = useMemo(() => {
         // init empty buckets
         const m = {};
         archetypes.forEach(rk => {
@@ -1660,9 +1662,14 @@ const matchupRecordByArchetype = useMemo(() => {
         source.forEach(p => {
             // figure out their own archetype
             const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
-            Object.values(p.rounds).forEach(info => {
-            const { code, name } = parseOpponent(info.name);
-            const oppKey = getCustomLabel(eventId, code, code) || 'Other';
+            + Object.values(p.rounds).forEach(info => {
+            // figure out who they actually played
+            const { code: flag, name: oppName } = parseOpponent(info.name);
+            // find that opponent in your current pool
+            const opp = source.find(pl => pl.name === oppName && pl.flag === flag);
+            const oppKey = opp
+                ? getCustomLabel(eventId, opp.sprite1, opp.sprite2)
+                : 'Other';
 
             const cell = m[myKey][oppKey] || { wins:0, losses:0, ties:0 };
             if (info.result === 'W') cell.wins++;
@@ -1675,11 +1682,27 @@ const matchupRecordByArchetype = useMemo(() => {
         return m;
     }, [matchupDay, day2Results, eliminatedDecks, archetypes, eventId]);
 
+    const spriteMap = React.useMemo(() => {
+        return matchupRecordByArchetype.reduce((m, { key, sprites }) => {
+            m[key] = sprites;
+            return m;
+        }, {});
+    }, [matchupRecordByArchetype]);
+
+    const summaryByArchetype = useMemo(() => {
+        return archetypes.reduce((acc, key) => {
+            const { wins, losses, ties } = headToHead[key][key];
+            acc[key] = { wins, losses, ties };
+            return acc;
+        }, {});
+    }, [archetypes, headToHead]);
+
     // useEffect(() => {
     //     if (is2025Event && (showDayOneMeta || showConversionRate) && eliminatedDecks.length === 0) {
     //         loadEliminated();
     //     }
     // }, [is2025Event, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
+    
     useEffect(() => {
         if (is2025Event && eliminatedDecks.length === 0) {
             loadEliminated();
@@ -2315,7 +2338,8 @@ const matchupRecordByArchetype = useMemo(() => {
                                     {is2025Event && (
                                         <button onClick={() => setStatView('matchups')}
                                                 className={statView === 'matchups' ? 'active-button' : ''}
-                                                style={{ opacity: '0.1', pointerEvents: 'none' }}>
+                                                style={{ opacity: '0.1', pointerEvents: 'none' }}
+                                        >
                                         Matchups
                                         </button>
                                     )}
@@ -2499,51 +2523,125 @@ const matchupRecordByArchetype = useMemo(() => {
                                             </tbody>
                                         </table>
                                         ) : (
-  <table className="matchup-matrix">
-    <thead>
-      <tr>
-        <th></th>
-        {archetypes.map(ck => (
-          <th key={ck}>{ck}</th>
-        ))}
-      </tr>
-    </thead>
-    <tbody>
-      {archetypes.map(rk => (
-        <tr key={rk}>
-          <th>{rk}</th>
-          {archetypes.map(ck => {
-            const { wins, losses, ties } = headToHead[rk][ck];
-            const total = wins + losses + ties;
-            // ties count as half wins
-            const pct = total > 0
-              ? (wins + ties * 0.5) / total * 100
-              : 50;
-            // intensity from 0 at 50% → 1 at 0% or 100%
-            const intensity = Math.abs(pct - 50) / 50;
-            // red <50, blue ≥50
-            const bg = pct >= 50
-              ? `rgba(18,144,235,${intensity})`
-              : `rgba(235,18,18,${intensity})`;
-            return (
-              <td key={ck}
-                  style={{
-                    background: bg,
-                    textAlign: 'center',
-                    fontVariantNumeric: 'tabular-nums'
-                  }}>
-                {pct.toFixed(2)}%
-              </td>
-            );
-          })}
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)}
+                                        <div class="matchup-matrix-wrapper">
+                                            <table className="matchup-matrix">
+                                                <thead>
+                                                    <tr>
+                                                        {/* top-left corner blank */}
+                                                        <th>vs</th>
+                                                        {archetypes.map(ck => {
+                                                            const sprites = spriteMap[ck] || [];
+                                                            return (
+                                                                <th key={ck} className="matrix-header-cell">
+                                                                {sprites.map(s => {
+                                                            return (
+                                                                <img
+                                                                key={s}
+                                                                src={`/assets/sprites/${s}.png`}
+                                                                alt={s}
+                                                                className="matrix-header-sprite"
+                                                                />
+                                                            );
+                                                            })}
+                                                                <button
+                                                                    className="matrix-info-btn"
+                                                                    onClick={() => {
+                                                                    setInfoArchetype(ck);
+                                                                    setInfoStats(summaryByArchetype[ck]);
+                                                                    }}
+                                                                >
+                                                                    ℹ️
+                                                                    {/* <span class="material-symbols-outlined">info</span> */}
+                                                                </button>
+                                                                </th>
+                                                            );
+                                                        })}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {archetypes.map(rk => (
+                                                        <tr key={rk}>
+                                                            <th className='bottom-border-matrix'>
+                                                                {spriteMap[rk]?.map(spr => (
+                                                                    <img
+                                                                        key={spr}
+                                                                        src={`/assets/sprites/${spr}.png`}
+                                                                        alt={spr}
+                                                                        className="matrix-header-sprite"
+                                                                    />
+                                                                ))}
+                                                            </th>
+                                                            {archetypes.map(ck => {
+                                                                const { wins, losses, ties } = headToHead[rk][ck];
+                                                                const total = wins + losses + ties;
+
+                                                                // no matches → blank cell
+                                                                if (total === 0) {
+                                                                    return (
+                                                                    <td
+                                                                        key={ck}
+                                                                        style={{
+                                                                        background: 'transparent',
+                                                                        textAlign: 'center',
+                                                                        fontVariantNumeric: 'tabular-nums',
+                                                                        }}
+                                                                    />
+                                                                    );
+                                                                }
+
+                                                                // otherwise compute %
+                                                                const pct = ((wins + ties * 0.5) / total) * 100;
+                                                                const intensity = Math.abs(pct - 50) / 50;
+                                                                const bg = pct >= 50
+                                                                    ? `rgba(18,144,235,${intensity})`
+                                                                    : `rgba(235,18,18,${intensity})`;
+
+                                                                return (
+                                                                    <td
+                                                                        key={ck}
+                                                                        style={{
+                                                                            background: bg,
+                                                                            textAlign: 'center',
+                                                                            fontVariantNumeric: 'tabular-nums',
+                                                                        }}
+                                                                        >
+                                                                        {pct.toFixed(2)}%
+                                                                    </td>
+                                                                );
+                                                            })}
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
+                        )}
+                        {infoArchetype && (
+                        <div className="matrix-info-modal-overlay" onClick={() => setInfoArchetype(null)}>
+                            <div className="matrix-info-modal" onClick={e => e.stopPropagation()}>
+                            <h4>{infoArchetype}</h4>
+                            <div className="modal-sprites">
+                                {(spriteMap[infoArchetype]||[]).map(s => (
+                                <img key={s} src={`/assets/sprites/${s}.png`} alt={s} />
+                                ))}
+                            </div>
+                            <p>Record: {infoStats.wins}–{infoStats.losses}–{infoStats.ties}</p>
+                            <p>
+                                Win %:{" "}
+                                {(() => {
+                                const total = infoStats.wins + infoStats.losses + infoStats.ties;
+                                const pct = total
+                                    ? ((infoStats.wins + infoStats.ties * .5) / total * 100).toFixed(2)
+                                    : "0.00";
+                                return pct;
+                                })()}%
+                            </p>
+                            <button onClick={() => setInfoArchetype(null)}>Close</button>
+                            </div>
+                        </div>
                         )}
                         {showModal && modalPlayer && (
                             <div className="modal-overlay" onClick={closeModal}>

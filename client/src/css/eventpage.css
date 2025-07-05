@@ -226,9 +226,9 @@
 .sing-arch-rec {
     padding-right: 25px !important;
 }
-.sing-arch-name {
-    /* padding-left: 25px !important; */
-}
+/* .sing-arch-name {
+    padding-left: 25px !important;
+} */
 .sing-cells-sprites {
     padding-left: 25px !important;
 }
@@ -266,6 +266,73 @@
     width: auto !important;
     padding: 5px 0;
 }
+/* -------------------------- */
+.matchup-matrix {
+  table-layout: fixed;
+  display: block;         /* let it overflow */
+  overflow-x: auto;       /* horizontal scrollbar when needed */
+  white-space: nowrap;    /* prevents wrapping if content is wide */
+  width: max-content;
+}
+.matchup-matrix th {
+    width: 80px !important;
+}
+.matchup-matrix th img {
+    width: 50px;
+    height: auto;
+}
+.matchup-matrix th img:nth-of-type(2) {
+  margin-left: -20px;
+}
+.matchup-matrix td {
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid rgba(128, 128, 128, 0.5);
+}
+.matchup-matrix-wrapper {
+  overflow-x: auto;
+}
+
+.matrix-header-cell {
+    position: relative;
+    border-left: 1px solid rgba(128, 128, 128, 0.5);
+}
+.matrix-info-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.matrix-info-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.matrix-info-modal {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 240px;
+  text-align: center;
+}
+.modal-sprites img {
+  width: 40px; height: 40px;
+  margin: 0 4px;
+}
+.bottom-border-matrix {
+    border-top: 1px solid rgba(128, 128, 128, 0.5);
+}
+/* -------------------------- */
 @media (max-width: 1500px) {
     .chart-container {
         min-width: 80vw;

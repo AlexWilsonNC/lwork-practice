@@ -358,10 +358,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('dragapult');
         secondSprite  = getPokemonSpriteURL('zoroark');
     }   
-    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
-        firstSprite  = getPokemonSpriteURL('blaziken');
-        secondSprite  = getPokemonSpriteURL('zoroark');
-    }          
+    // else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
+    //     firstSprite  = getPokemonSpriteURL('blaziken');
+    //     secondSprite  = getPokemonSpriteURL('zoroark');
+    // }          
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Reshiram')) {
         secondSprite  = getPokemonSpriteURL('zoroark');
     }                    
