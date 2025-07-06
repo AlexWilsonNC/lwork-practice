@@ -1298,8 +1298,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 8, 2025",
         "flag": brazil,
-        "location": "Fortaleza, Brazil",
-        "results": false
+        "location": "Fortaleza, Brazil"
     },
     {
         "id": "2025_MONTERREY",

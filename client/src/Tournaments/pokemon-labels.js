@@ -5,6 +5,7 @@ const customLabelsConfig = {
         'lugia-archeops': 'Lugia Archeops',
         'raging-bolt-ogerpon': 'Raging Bolt',
         'blank-miraidon': 'Miraidon',
+        'miraidon-regieliki-vmax': 'Miraidon Regieliki',
         'blank-snorlax': 'Snorlax Stall',
         'dragapult-pidgeot': 'Dragapult Pidgeot',
         'blank-dragapult': 'Dragapult',
@@ -31,6 +32,7 @@ const customLabelsConfig = {
         'roaring-moon-koraidon': 'Ancient Box',
         'roaring-moon-great-tusk': 'Ancient Box',
         'roaring-moon-flutter-mane': 'Ancient Box',
+        'murkrow-flamigo': 'United Wings',
         'froslass-munkidori': 'Froslass',
         'espathra-froslass': 'Espathra Froslass',
         'raging-bolt-sandy-shocks': 'Raging Bolt Sandy Shocks',
@@ -147,6 +149,7 @@ const customLabelsConfig = {
         'entei-iron-valiant': 'Entei Iron Valiant',
         'urshifu-rapid-strike-gmax-inteleon-vmax': 'Rapid Strike',
         'blank-zoroark': 'Zoroark Box',
+        'murkrow-flamigo': 'United Wings',
     },
     '2023': {
         'comfey-charizard-shiny': 'Radiant Charizard LZB',

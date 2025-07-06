@@ -396,7 +396,7 @@ const EventPageContent = styled.div`
   }
   .filter-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin-bottom: 20px;
     select {background: ${({ theme }) => theme.body};}
     select {color: ${({ theme }) => theme.text};}
@@ -2205,18 +2205,26 @@ const matchupRecordByArchetype = useMemo(() => {
                                             <div className="day-divider">
                                                 <span>Day 2 cutoff</span>
                                             </div>
+                                            <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                                <button
+                                                    onClick={() => setShowAllDecks(false)}
+                                                    className="day1buttons"
+                                                >
+                                                    Hide Day 1 Results
+                                                </button>
+                                            </div>
                                             {displayResults(
                                             eliminatedDecks,
                                             eventId,
                                             division
                                             )}
                                             <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                                            <button
-                                                onClick={() => setShowAllDecks(false)}
-                                                className="day1buttons"
-                                            >
-                                                Hide Day 1 Results
-                                            </button>
+                                                <button
+                                                    onClick={() => setShowAllDecks(false)}
+                                                    className="day1buttons"
+                                                >
+                                                    Hide Day 1 Results
+                                                </button>
                                             </div>
                                         </>
                                     )}

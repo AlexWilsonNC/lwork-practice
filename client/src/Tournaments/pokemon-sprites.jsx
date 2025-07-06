@@ -122,6 +122,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('goodra-hisui');
     }
+    else if (hasPokemon('Murkrow') && hasPokemon('Flamigo')) {
+        firstSprite  = getPokemonSpriteURL('murkrow');
+        secondSprite  = getPokemonSpriteURL('flamigo');
+    }
     else if (hasPokemon('Comfey') && hasPokemon('Giratina VSTAR')) {
         firstSprite  = getPokemonSpriteURL('giratina-origin');
         secondSprite  = getPokemonSpriteURL('comfey');
