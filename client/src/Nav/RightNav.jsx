@@ -121,7 +121,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
             <li className='not-ready'><a href=''>Deck Builder</a></li>
             {/* Trigger interstitial for the "Decks by Era" link */}
             <li>
-              <a href='https://alexwilsonnc.github.io/tes/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/tes/decks-by-era/main')}>
+              <a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main')}>
                 Decks by Era
               </a>
             </li>

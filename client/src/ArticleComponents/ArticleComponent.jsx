@@ -49,19 +49,19 @@ const ArticleComponent = () => {
       let updatedContent = selectedArticle.content
         .replace(
           '{{fluffychompImage}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
             <img class='decklist-image' src='${fluffychompImg}' alt='FluffyChomp Deck Image' />
           </a><br>`
         )
         .replace(
           '{{tinasetImage}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${tinaimg}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{pookahooh}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${pookahoohimg}' alt='article Image' /></a>
           <br>`
         )
@@ -71,43 +71,43 @@ const ArticleComponent = () => {
         )
         .replace(
           '{{darkraiHydreigonImg}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${darkraiHydreigon}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{empogor}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${empogor}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{hoohex}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${hoohex}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{tornadusterrak}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${tornadusterrak}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{terrakionmewtwodar}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${terrakionmewtwodar}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{rayeels}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${rayeels}' alt='article Image' /></a>
           <br>`
         )
         .replace(
           '{{sixprizesscreenshot}}',
-          `<a href='https://alexwilsonnc.github.io/tes/decks-by-era/2012/bw-drx' target='_blank'>
+          `<a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${sixprizesscreensho}' alt='article Image' /></a>
           <br>`
         );

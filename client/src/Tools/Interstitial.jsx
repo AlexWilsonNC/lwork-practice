@@ -9,14 +9,14 @@ const Modal = ({ show, handleClose, handleConfirm, externalLink }) => {
       <div className="modal">
         <h2>Leaving PTCG Legends</h2>
         <br></br>
-        <p>You are about to go to a snapshot of the old site. (While we continue to work on an improved version of 'Decks by Era', we've made the old site's page accessible - javascript doesn't work there and the font is off.)
+        <p>You are about to go the original PTCG Legends site. (While we continue to work on an improved version of 'Decks by Era', we've made the old site's page accessible.)
             <br></br>
             <br></br>
-           (To get back, click on the PTCG Legends logo at the top of the page to return to this site.)
+           (To come back to the new site, click on the PTCG Legends logo at the top of the page.)
         </p>
         <br></br>
-        <button className='interstitial-btn' onClick={handleConfirm}>Continue</button>
-        <button className='interstitial-btn' onClick={handleClose}>Cancel</button>
+        <button className='interstitial-btn continue-btn' onClick={handleConfirm}>Continue</button>
+        <button className='interstitial-btn cancel-btn' onClick={handleClose}>Cancel</button>
       </div>
     </div>
   );

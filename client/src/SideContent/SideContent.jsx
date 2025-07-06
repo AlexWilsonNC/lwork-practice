@@ -37,7 +37,7 @@ const SidebarComponent = () => {
           <li><Link to='/tournaments/completed'>Completed Events</Link></li>
           <li><Link to='/tournaments/upcoming'>Upcoming Events</Link></li>
           {/* Trigger interstitial for the "Decks by Era" link */}
-          <li><a href='https://alexwilsonnc.github.io/tes/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/tes/decks-by-era/main')}>Decks by Era</a></li>
+          <li><a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main')}>Decks by Era</a></li>
           <li><Link to='' className='not-ready'>Rules by Era</Link></li>
           <li><Link to='/cards/DRI'>Card Database</Link></li>
           <li><Link to='' className='not-ready'>World's Booklets</Link></li>
