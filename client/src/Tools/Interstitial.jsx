@@ -9,7 +9,7 @@ const Modal = ({ show, handleClose, handleConfirm, externalLink }) => {
       <div className="modal">
         <h2>Leaving PTCG Legends</h2>
         <br></br>
-        <p>You are about to go the original PTCG Legends site. (While we continue to work on an improved version of 'Decks by Era', we've made the old site's page accessible.)
+        <p>You are about to go the original PTCG Legends site. (While we continue to work on an improved version of 'Decks by Era', we've made the old site's decks accessible.)
             <br></br>
             <br></br>
            (To come back to the new site, click on the PTCG Legends logo at the top of the page.)
