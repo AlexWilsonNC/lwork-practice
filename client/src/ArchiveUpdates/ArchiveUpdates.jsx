@@ -81,7 +81,7 @@ const ArchiveUpdates = () => {
           <h3 className='boxxed'>June 2024</h3>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p className='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p className='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2012/hgss-nxd#zekchamp' className='not-ready'>2012 (HGS-NXD)</a> Zekrom Machamp</p>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
@@ -108,7 +108,7 @@ const ArchiveUpdates = () => {
           <h3 className='boxxed'>May 2024</h3>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p className='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p className='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2002/n1-lc#darkferaligatr' className='not-ready'>2002 (N1-LC)</a> Dark Feraligatr</p>
                     <p>• <a href='../decks-by-era/2002/n1-lc#lanturn' className='not-ready'>2002 (N1-LC)</a> Lanturn Slowking</p>
                     <p>• <a href='../decks-by-era/2003/n1-sk#zardsaur' className='not-ready'>2003 (N1-SK)</a> Charizard Venusaur</p>
@@ -151,7 +151,7 @@ const ArchiveUpdates = () => {
             <h3 class='boxxed'>April 2024</h3>
             <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2005/rs-em#rocloc' className='not-ready'>2005 RS - EM</a> Rock Lock (Build 1)</p>
                     <p>• <a href='../decks-by-era/2006/hl-hp#ockock' className='not-ready'>2006 HL - HP</a> Rock Lock (Build 1)</p>
                     <p>• <a href='../decks-by-era/2009/dp-pl#machamppalkia' className='not-ready'>2009 DP - PL</a> Machamp Palkia</p>
@@ -177,7 +177,7 @@ const ArchiveUpdates = () => {
             <h3 class='boxxed'>March 2024</h3>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2010/dp-ul#flygross' className='not-ready'>2010 DP - UL</a> Flygon Metagross</p>
                     <p>• <a href='../decks-by-era/2012/bw-drx#dragon' className='not-ready'>2012 BW - DRX</a> Hydreigon</p>
                     <p>• <a href='../decks-by-era/2016/bw-fco#beesflareon' className='not-ready'>2016 BW - FCO</a> Vespiquen Flareon (Build 2)</p>
@@ -218,7 +218,7 @@ const ArchiveUpdates = () => {
                 <h3 class='boxxed'>January 2024</h3>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2001/bs-n4#jumpluff' className='not-ready'>2001 BS - N4</a> Jumpluff</p>
                     <p>• <a href='../decks-by-era/2002/n1-lc#blastoisesteelix' className='not-ready'>2002 N1 - LC</a> Dark Blastoise Steelix</p>
                     <p>• <a href='../decks-by-era/2002/n1-lc#kingdra' className='not-ready'>2002 N1 - LC</a> Kingdra - Top 32 Worlds</p>
@@ -260,7 +260,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../articles/retro/blastoise-mega-battle' className='not-ready'>Footage</a> from the FIRST EVER broadcasted Pokémon tournament in history!</p> 
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#aerodactylmew2' className='not-ready'>1999 BS - FO</a> Aerodactyl Mewtwo</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#eeclefabe' className='not-ready'>1999 BS - FO</a> Clefable</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#dgg' className='not-ready'>1999 BS - FO</a> Drought (Golduck)</p>
@@ -272,7 +272,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../decks-by-era/2019/4-upr-unm#beheeyem' className='not-ready'>2019 UPR - UNM</a> Beheeyem (Build 2)</p>
                     <br />
                     <p style={{ fontWeight: 600 }}>Updated Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have received updates in our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have received updates in our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#alakazam' className='not-ready'>1999 BS - FO</a> Alakazam</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#electabuzz-magmar' className='not-ready'>1999 BS - FO</a> Magmar Electabuzz</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#venusaur' className='not-ready'>1999 BS - FO</a> Venusaur</p>
@@ -291,7 +291,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../decks-by-era/2011/md-bw' className='not-ready'>2011 MD-BW</a> format page added with 16 new decks</p> 
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2009/dp-pl#kingdra' className='not-ready'>2009 DP - PL</a> Kindra - Jimmy O'Brein</p>
                     <p>• <a href='../decks-by-era/2010/dp-ul#flyphan' className='not-ready'>2010 DP - UL</a> Flygon Donphan</p>
                     <p>• <a href='../decks-by-era/2010/dp-ul#jumplf' className='not-ready'>2010 DP - UL</a> Jumpluff (Build 2)</p>
@@ -319,7 +319,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='/tournaments/2018_EUIC/masters/Raz%20Wolpe-IL'>2018 EUIC</a> 33<sup>rd</sup> Place Volcanion - Raz Wolpe</p>
                     <br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/1999/bs#arctrode' className='not-ready'>1999 Base Set</a> Magmar Electrode</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#arcmar' className='not-ready'>1999 BS-FO</a> Magmar Arcanine (Build 1) - Jason Klaczynski</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#scyther' className='not-ready'>1999 BS-FO</a> Scyther Hitmonchan - Jason Klaczynski</p>
@@ -365,7 +365,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='../major-events/2012/global-nationals-results' className='not-ready'>2012 Germany Nationals</a> Top 4 Celebi Mewtwo</p>
                     <p>• <a href='../major-events/2013/global-nationals-results' className='not-ready'>2013 Germany Nationals</a> Top 16 Klinklang</p>
                     <br /><p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#lickimuk' className='not-ready'>1999 BS-FO</a> Lickitung Muk Stall - Jason Klaczynski</p>
                     <p>• <a href='../decks-by-era/1999/bs-fossil#hitting-lickitung' className='not-ready'>1999 BS-FO</a> Hitmonchan Lickitung</p>
                     <p>• <a href='../decks-by-era/2001/tr-n3#jumpluff' className='not-ready'>2001 TR-N3</a> Jumpluff Espeon</p>
@@ -413,7 +413,7 @@ const ArchiveUpdates = () => {
                     <p>• <a href='/tournaments/2011_NATS_US/juniors/Sydney%20Morisoli-US'>2011 US Nationals</a> 2<sup>nd</sup> Place Reshiphlosion - Sydney Morisoli</p>
                     <p>• <a href='/tournaments/2013_NATS_US/masters/Dylan%20Lefavour-US'>2013 US Nationals</a> Top 32 Blastoise - Dylan Lefavour</p><br />
                     <p style={{ fontWeight: 600 }}>Newly Archived Decks:</p>
-                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="../decks-by-era/main">Decks by Era</a> section.)</p>
+                    <p class='small-text-archive'>(The below deck(s) have been added to our <a href="https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main">Decks by Era</a> section.)</p>
                     <p>• <a href='../decks-by-era/2011/md-col#prizes' className='not-ready'>2011 MD-COL</a> Prize Mill (Magnezone Floatzle)</p>
                     
                     <br />
