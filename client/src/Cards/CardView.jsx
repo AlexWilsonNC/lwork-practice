@@ -1027,8 +1027,7 @@ const CardView = () => {
                             Decklists that feature <span style={{ color: '#1290eb' }}>{cardInfo.name}</span>
                         </p>
                         <p className="ordered-by-most-recent">
-                            (Ordered by most recent event appearance – Trainer & Special Energy
-                            cards of the same name appear together across all eras.)
+                            (Ordered by most recent event appearance - Day 1 decklists from modern events are not integrated into our database.)
                         </p>
                         <table className="cards-specific-results">
                         <thead>
@@ -1166,7 +1165,7 @@ const CardView = () => {
                         Looks like this card isn't featured in any of our documented decks, yet.
                         <br />
                         <br />
-                        <span style={{ fontSize: '10px' }}>(Day 1 decklists from modern events are not integrated into our database)</span>
+                        <span style={{ fontSize: '10px' }}>(Day 1 decklists from modern events are not integrated into our database.)</span>
                     </p>
                 )}
                 <br />
