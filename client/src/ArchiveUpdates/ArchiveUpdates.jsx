@@ -61,7 +61,7 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
-          <p className='margin-top-article smaller-txt italic red'>* Opaque links are pages yet to be converted on the new site, check back on them soon.</p>
+          <p className='margin-top-article smaller-txt italic'>* Opaque links are pages yet to be converted on the new site, check back on them soon.</p>
 
           <hr className='title-hr' />
           <br />

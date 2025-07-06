@@ -11,7 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+select {
+  border: 1px solid grey;
+}
 .not-ready {
   opacity: 0.3;
   pointer-events: none;

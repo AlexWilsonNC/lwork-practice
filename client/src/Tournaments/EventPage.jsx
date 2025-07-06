@@ -1662,7 +1662,7 @@ const matchupRecordByArchetype = useMemo(() => {
         source.forEach(p => {
             // figure out their own archetype
             const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
-            + Object.values(p.rounds).forEach(info => {
+            Object.values(p.rounds || {}).forEach(info => {
             // figure out who they actually played
             const { code: flag, name: oppName } = parseOpponent(info.name);
             // find that opponent in your current pool

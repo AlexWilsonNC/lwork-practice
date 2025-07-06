@@ -109,8 +109,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
           <span className="material-symbols-outlined"></span>
         </ToggleButton>
-        <li><a href='/tournaments/completed'>Completed Events</a></li>
-        <li><a href='/tournaments/upcoming'>Upcoming Events</a></li>
+        <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/DRI'>Cards</a></li>
         <li><a href='/players'>Players</a></li>
