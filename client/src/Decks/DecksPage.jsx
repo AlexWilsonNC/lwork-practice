@@ -318,7 +318,7 @@ const Decks = () => {
           <div className='bts-in'>
             <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
             {/* <a onClick={navigateToFeaturedDecks} href='www.google.com' className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a> */}
-            <a href='https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends/decks-by-era/main')} className='completed-btn marginleftless'>Decks by Era</a>
+            <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className='completed-btn marginleftless'>Decks by Era</a>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
