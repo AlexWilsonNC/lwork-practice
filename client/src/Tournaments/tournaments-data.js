@@ -1200,8 +1200,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 7, 2025",
         "flag": canada,
-        "location": "Vancouver, Canada",
-        "results": false
+        "location": "Vancouver, Canada"
     },
     {
         "id": "2025_MILWAUKEE",

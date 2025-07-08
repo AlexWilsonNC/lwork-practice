@@ -1636,51 +1636,59 @@ const matchupRecordByArchetype = useMemo(() => {
         ]
     );
 
-    const archetypes = useMemo(
-        () => matchupRecordByArchetype.map(r => r.key),
-            [matchupRecordByArchetype]
-        );
+    const archetypes = useMemo(() => {
+        // gather every archetype you know *plus* “Other”
+        const keys = new Set();
+        matchupRecordByArchetype.forEach(r => keys.add(r.key));
+        keys.add('Other');
+        return Array.from(keys);
+    }, [matchupRecordByArchetype]);
 
-    const headToHead = useMemo(() => {
-        // init empty buckets
-        const m = {};
-        archetypes.forEach(rk => {
-            m[rk] = {};
-            archetypes.forEach(ck => {
-            m[rk][ck] = { wins: 0, losses: 0, ties: 0 };
-            });
-        });
+const headToHead = useMemo(() => {
+  // init empty buckets
+  const m = {};
+  archetypes.forEach(rk => {
+    m[rk] = {};
+    archetypes.forEach(ck => {
+      m[rk][ck] = { wins: 0, losses: 0, ties: 0 };
+    });
+  });
 
-        // pick which players (day1/day2/combined)
-        const source =
-            matchupDay === 'day2'
-            ? day2Results
-            : matchupDay === 'day1'
-                ? eliminatedDecks
-                : [...day2Results, ...eliminatedDecks];
+  // pick which players (day1/day2/combined)
+  const source =
+    matchupDay === 'day2' ? day2Results
+    : matchupDay === 'day1' ? eliminatedDecks
+    : [...day2Results, ...eliminatedDecks];
 
-        source.forEach(p => {
-            // figure out their own archetype
-            const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
-            Object.values(p.rounds || {}).forEach(info => {
-            // figure out who they actually played
-            const { code: flag, name: oppName } = parseOpponent(info.name);
-            // find that opponent in your current pool
-            const opp = source.find(pl => pl.name === oppName && pl.flag === flag);
-            const oppKey = opp
-                ? getCustomLabel(eventId, opp.sprite1, opp.sprite2)
-                : 'Other';
+  source.forEach(p => {
+    const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
 
-            const cell = m[myKey][oppKey] || { wins:0, losses:0, ties:0 };
-            if (info.result === 'W') cell.wins++;
-            else if (info.result === 'L') cell.losses++;
-            else if (info.result === 'T') cell.ties++;
-            m[myKey][oppKey] = cell;
-            });
-        });
+    // If somehow we didn’t seed this bucket, skip
+    if (!m[myKey]) return;
 
-        return m;
-    }, [matchupDay, day2Results, eliminatedDecks, archetypes, eventId]);
+    Object.values(p.rounds || {}).forEach(info => {
+      const { code: flag, name: oppName } = parseOpponent(info.name);
+      const opp = source.find(pl => pl.name === oppName && pl.flag === flag);
+
+      // always default to Other
+      const oppKey = opp
+        ? (getCustomLabel(eventId, opp.sprite1, opp.sprite2) || 'Other')
+        : 'Other';
+
+      // if this meta‐matchup wasn’t initialized, seed it now
+      if (!m[myKey][oppKey]) {
+        m[myKey][oppKey] = { wins: 0, losses: 0, ties: 0 };
+      }
+
+      const cell = m[myKey][oppKey];
+      if (info.result === 'W')      cell.wins++;
+      else if (info.result === 'L') cell.losses++;
+      else if (info.result === 'T') cell.ties++;
+    });
+  });
+
+  return m;
+}, [matchupDay, day2Results, eliminatedDecks, archetypes, eventId]);
 
     const spriteMap = React.useMemo(() => {
         return matchupRecordByArchetype.reduce((m, { key, sprites }) => {

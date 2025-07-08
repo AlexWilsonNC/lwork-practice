@@ -54,6 +54,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Blissey ex') && hasPokemon('Munkidori')) {
         secondSprite  = getPokemonSpriteURL('blissey');
     }
+    else if (hasPokemon('Regigigas') && hasPokemon('Regirock') && hasPokemon('Regice') && hasPokemon('Registeel') && hasPokemon('Regieleki') && hasPokemon('Regidrago')) {
+        secondSprite  = getPokemonSpriteURL('regigigas');
+    }
     else if (hasPokemon('Dipplin') && hasPokemon('Thwackey')) {
         firstSprite  = getPokemonSpriteURL('dipplin');
         secondSprite  = getPokemonSpriteURL('thwackey');
