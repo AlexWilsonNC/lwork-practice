@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
 import styled from 'styled-components';
@@ -13,6 +13,12 @@ const SideContainer = styled.div`
 const SidebarComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
+
+  useEffect(() => {
+    if (window.twttr && window.twttr.widgets) {
+      window.twttr.widgets.load();
+    }
+  }, []);
 
   const handleLinkClick = (e, url) => {
     e.preventDefault(); // Prevent default link behavior
@@ -66,7 +72,15 @@ const SidebarComponent = () => {
           tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
       </div>
 
-      <TwitterWidget />
+       <blockquote
+        className="twitter-timeline"
+        data-theme="light"
+        data-height="500"
+      >
+        <a href="https://twitter.com/PTCG_Legends?ref_src=twsrc%5Etfw">
+          Tweets by @PTCG_Legends
+        </a>
+      </blockquote>
 
       {/* Modal for external link confirmation */}
       <Modal 
