@@ -3,21 +3,16 @@ import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
 import styled from 'styled-components';
 import Modal from '../Tools/Interstitial';
-import { useTheme } from '../contexts/ThemeContext';
 
 const SideContainer = styled.div`
   h4 {color: ${({ theme }) => theme.text};}
   p {color: ${({ theme }) => theme.text};}
   li {color: ${({ theme }) => theme.text};}
-    .twitter-timeline {
-    ${({ theme }) => theme.twitterTimeline};
-  }
 `;
 
 const SidebarComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
-  const { theme } = useTheme();
 
   useEffect(() => {
     // Helper to load all twitter-timeline blockquotes
@@ -63,7 +58,7 @@ const SidebarComponent = () => {
   };
 
   return (
-    <SideContainer theme={theme} className='homepage-side'>
+    <SideContainer className='homepage-side'>
       <div className='side-section'>
         <h4>Helpful Resources:</h4>
         <ul>
@@ -99,12 +94,7 @@ const SidebarComponent = () => {
           tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
       </div>
 
-      <blockquote
-        className="twitter-timeline"
-        data-width="450"
-        data-height="500"
-        data-theme={theme.themeName}
-      >
+      <blockquote className="twitter-tweet">
         <a href="https://twitter.com/PTCG_Legends/status/1842225599953199256"></a>
       </blockquote>
 
