@@ -246,13 +246,12 @@
 }
 .chart-container-wrapper::-webkit-scrollbar {
   height: 4px;
-  background: transparent;  /* hide default track */
+  background: transparent;
 }
 .chart-container-wrapper::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 2px;
 }
-/* optional: hide scrollbar on hover-out, if you prefer */
 .chart-container-wrapper:hover::-webkit-scrollbar {
   background: transparent;
 }
@@ -269,9 +268,9 @@
 /* -------------------------- */
 .matchup-matrix {
   table-layout: fixed;
-  display: block;         /* let it overflow */
-  overflow-x: auto;       /* horizontal scrollbar when needed */
-  white-space: nowrap;    /* prevents wrapping if content is wide */
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
   width: max-content;
 }
 .matchup-matrix th {

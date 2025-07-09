@@ -3,20 +3,47 @@ import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
 import styled from 'styled-components';
 import Modal from '../Tools/Interstitial';
+import { useTheme } from '../contexts/ThemeContext';
 
 const SideContainer = styled.div`
   h4 {color: ${({ theme }) => theme.text};}
   p {color: ${({ theme }) => theme.text};}
   li {color: ${({ theme }) => theme.text};}
+    .twitter-timeline {
+    ${({ theme }) => theme.twitterTimeline};
+  }
 `;
 
 const SidebarComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
+  const { theme } = useTheme();
 
   useEffect(() => {
+    // Helper to load all twitter-timeline blockquotes
+    const loadTimelines = () => {
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load();
+      }
+    };
+
+    // If widgets.js is already here, either load immediately...
     if (window.twttr && window.twttr.widgets) {
-      window.twttr.widgets.load();
+      loadTimelines();
+    }
+    // …or wait for the SDK’s ready() callback
+    else if (window.twttr && window.twttr.ready) {
+      window.twttr.ready(loadTimelines);
+    }
+    // Otherwise, poll until twttr is defined (in case async script is super slow)
+    else {
+      const interval = setInterval(() => {
+        if (window.twttr && window.twttr.widgets) {
+          loadTimelines();
+          clearInterval(interval);
+        }
+      }, 250);
+      // (you could clearInterval on unmount if you want)
     }
   }, []);
 
@@ -36,7 +63,7 @@ const SidebarComponent = () => {
   };
 
   return (
-    <SideContainer className='homepage-side'>
+    <SideContainer theme={theme} className='homepage-side'>
       <div className='side-section'>
         <h4>Helpful Resources:</h4>
         <ul>
@@ -72,14 +99,13 @@ const SidebarComponent = () => {
           tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
       </div>
 
-       <blockquote
+      <blockquote
         className="twitter-timeline"
-        data-theme="light"
+        data-width="450"
         data-height="500"
+        data-theme={theme.themeName}
       >
-        <a href="https://twitter.com/PTCG_Legends?ref_src=twsrc%5Etfw">
-          Tweets by @PTCG_Legends
-        </a>
+        <a href="https://twitter.com/PTCG_Legends/status/1842225599953199256"></a>
       </blockquote>
 
       {/* Modal for external link confirmation */}
