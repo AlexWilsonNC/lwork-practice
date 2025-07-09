@@ -1422,13 +1422,23 @@ const matchupRecordByArchetype = useMemo(() => {
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
         .sort((a, b) => b.count - a.count);
-    const filteredDeckTypeCountArray = !is2025Event
-        ? deckTypeCountArray.filter(d => d.key !== 'blank-')
-        : deckTypeCountArray;
+    const filteredDeckTypeCountArray = deckTypeCountArray;
 
-        const finalDeckTypeCountArray = filteredDeckTypeCountArray.map(d => {
-            return d;
-        });
+    const finalDeckTypeCountArray = filteredDeckTypeCountArray.map(d => {
+        return d;
+    });
+
+    const handleDataDayChange = (day) => {
+  setDataDay(day);
+  if (day === 'day2') {
+    // pick the #1 archetype (skip blank-)
+    const top = finalDeckTypeCountArray.find(d => d.key !== 'blank-')?.key;
+    if (top) {
+      setSelectedArchetype(top);
+      sessionStorage.setItem(`selectedArchetype_${eventId}`, top);
+    }
+  }
+};
 
     useEffect(() => {
         if (!isChartReady || deckTypeCountArray.length === 0) return;
@@ -1783,6 +1793,8 @@ const headToHead = useMemo(() => {
         }]
     };
 
+    const nonBlankDecks = finalDeckTypeCountArray.filter(e => e.key !== 'blank-');
+
     const chartData = showDayOneMeta
         ? {
             labels: dayOneTypeArray.map(e => e.key),
@@ -1795,10 +1807,10 @@ const headToHead = useMemo(() => {
         : showConversionRate
             ? conversionChartData
             : {
-                labels: finalDeckTypeCountArray.map(e => e.key),
-                datasets: [{
-                label: 'Deck Count',
-                data:  finalDeckTypeCountArray.map(e => e.count),
+               labels: nonBlankDecks.map(e => e.key),
+            datasets: [{
+              label: 'Deck Count',
+              data: nonBlankDecks.map(e => e.count),
                 backgroundColor: '#1291eb8b'
                 }]
             };
@@ -1815,6 +1827,12 @@ const headToHead = useMemo(() => {
     const handleDayTwoClick = () => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
+        const topDay2 = dropdownOptions[0]?.key || '';
+        setSelectedArchetype(topDay2);
+        sessionStorage.setItem(
+            `selectedArchetype_${eventId}`,
+            topDay2
+        );
     };
     const handleConversionRateClick = () => {
         setShowDayOneMeta(false);
@@ -2419,22 +2437,31 @@ const headToHead = useMemo(() => {
                                     <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
                                     {is2025Event&&(
                                         <div className="day-toggle-buttons" style={{ margin:'0.5rem 0' }}>
-                                        <button onClick={()=>setDataDay('day2')} className={dataDay==='day2'?'active-button':''}>Day 2</button>
-                                        <button onClick={()=>setDataDay('day1')} className={dataDay==='day1'?'active-button':''}>Day 1</button>
+   <button onClick={()=>handleDataDayChange('day2')} className={dataDay==='day2'?'active-button':''}>Day 2</button>
+   <button onClick={()=>handleDataDayChange('day1')} className={dataDay==='day1'?'active-button':''}>Day 1</button>
                                         </div>
                                     )}
                                     <div className='filter-container'>
-                                        <select value={selectedArchetype} onChange={handleArchetypeChange} className="archetype-dropdown">
-                                        {dropdownOptions.map((a,i)=>(
-                                            <option key={i} value={a.key}>{a.key} ({a.count})</option>
-                                        ))}
+                                        <select
+                                            value={selectedArchetype}
+                                            onChange={handleArchetypeChange}
+                                            className="archetype-dropdown"
+                                            >
+                                            {dropdownOptions.map((a,i) => (
+                                                <option key={i} value={a.key}>
+                                                {/* display blank- as “Unknown” */}
+                                                {a.key === 'blank-' ? 'Unknown' : a.key} ({a.count})
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                     </div>
                                     {selectedArchetype&&(
                                         <div className='average-card-counts'>
                                             <p>Average card count from all {dataDay === 'day2' ? 'Day 2' : 'Day 1'}{' '}
-                                                <strong style={{ color: '#1290eb' }}>{selectedArchetype}</strong> lists
+                                                <strong style={{ color: '#1290eb' }}>
+                                                    {selectedArchetype === 'blank-' ? 'Unknown' : selectedArchetype}
+                                                </strong> lists
                                             </p>
                                             <hr style={{ marginTop:'5px', border:'none', borderBottom:'2px solid #ccc', opacity:0.5 }}/>
                                             <div className='button-container'>
