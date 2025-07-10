@@ -280,6 +280,15 @@ const tournamentList = [
         "results": false
     },
     {
+        "id": "2026_LAIC",
+        "name": "LAIC 2026",
+        "eventType": "internationals",
+        "eventLogo": internats25,
+        "date": "Nov 21, 2025",
+        "flag": brazil,
+        "location": "São Paulo, Brazil",
+    },
+    {
         "id": '2025_LOUISVILLE/masters',
         "name": "Louisville Regionals",
         "eventType": "regionals",
