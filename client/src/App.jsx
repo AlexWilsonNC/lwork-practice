@@ -22,6 +22,7 @@ import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
+import DeckBuilder from './components/DeckBuilder';
 
 function App() {
 
@@ -49,6 +50,8 @@ function App() {
           <Route path="/articles/all" element={<AllArticlesPage />} />
           <Route path="/articles/:articleId" element={<ArticleComponent />} />
           <Route path="/about" element={<About />} />
+          {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
+          <Route path="/ljhksdgbnksgkjsiodsfi" element={<DeckBuilder />} />
           <Route path="/deckcalculator" element={<DeckCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
