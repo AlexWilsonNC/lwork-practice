@@ -16,7 +16,6 @@ export default function DeckList({ deck, onUpdateCount }) {
           <div className="deck-add-minus">
             <button
               onClick={() => onUpdateCount(i, c.count - 1)}
-              disabled={c.count <= 1}
               className='pm-card minus-card'
             >–</button>
             <span className='current-cnt-num'>{c.count}</span>

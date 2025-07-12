@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './ExportButtons.css'
 
-export default function ExportButtons({ deck }) {
+export default function ExportButtons({ deck, onImportDeck }) {
+  const [importing, setImporting] = useState(false)
   const copyText = () => {
     const text = deck
       .map(c => `${c.count} ${c.name} ${c.setAbbrev}-${c.number}`)
@@ -16,6 +17,15 @@ export default function ExportButtons({ deck }) {
     navigator.clipboard.writeText(JSON.stringify(json, null, 2))
   }
 
+   const handleImport = async () => {
+    setImporting(true)
+    try {
+      await onImportDeck()
+    } finally {
+      setImporting(false)
+    }
+  }
+
   return (
     <div className="deck-build-options">
         <div class='all-options-box'>
@@ -27,8 +37,14 @@ export default function ExportButtons({ deck }) {
                     <button onClick={copyJson} disabled={!deck.length}>
                         Copy as JSON
                     </button>
-                    {/* <div class='import-as-deck option-btn' onclick="importDeck()">
-                        <span class="material-symbols-outlined">content_paste</span>
+                    <button
+                        onClick={handleImport}
+                        disabled={importing}
+                    >
+                        {importing ? 'Importing…' : 'Import Deck'}
+                    </button>
+                        {/* <div class='import-as-deck option-btn' onclick="importDeck()">
+                            <span class="material-symbols-outlined">content_paste</span>
                             <p>Paste Deck</p>
                         </div>
                         <div class='copy-as-dckli option-btn'>
@@ -50,8 +66,7 @@ export default function ExportButtons({ deck }) {
                         <div class='export-json option-btn'>
                             <span class="material-symbols-outlined">code</span>
                             <p>Export Jsoɴ</p>
-                        </div>
-                    </div> */}
+                        </div> */}
                 </div>
             </div>
         </div>
