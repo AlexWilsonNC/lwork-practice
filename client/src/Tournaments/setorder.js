@@ -152,3 +152,5 @@ const orderedSets = [
     "BS",
     "PR-BS",
 ]
+
+export default orderedSets

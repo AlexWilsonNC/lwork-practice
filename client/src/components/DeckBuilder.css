@@ -1,75 +1,133 @@
-/* body {
-    overflow: hidden !important;
-    position: fixed; 
-    inset: 0;
-    background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='60' height='60' patternTransform='scale(1) rotate(45)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M29.998 26.65v6.693zm-6.837 3.347h3.488zm10.185 0h3.489zm0 0a3.349 3.346 0 01-3.348 3.346 3.349 3.346 0 01-3.349-3.346 3.349 3.346 0 013.349-3.346 3.349 3.346 0 013.348 3.346zm-3.173-6.832c-1.978-.032-3.976.786-5.29 2.287-1.986 2.163-2.275 5.629-.727 8.113 1.45 2.442 4.522 3.736 7.287 3.116 3.067-.607 5.45-3.561 5.392-6.684.045-2.643-1.642-5.173-4.042-6.245a6.489 6.489 0 00-2.62-.587zM59.995 52.87v14.25zm-14.557 7.125h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zm-6.757-14.547c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM-.005 52.87v14.25zm-14.557 7.125h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zM.368 45.447c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM59.995-7.13V7.12zM45.438-.006h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zm-6.757-14.547c-4.212-.069-8.465 1.673-11.262 4.869C44.876-5.078 44.26 2.3 47.556 7.59c3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM-.005-7.13V7.12zM-14.562-.006h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zM.368-14.553c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249z'  stroke-width='0.5' stroke='hsla(259, 0%, 74%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>"), linear-gradient(to bottom, rgb(255, 255, 255), rgb(255, 255, 255)); 
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+.card-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
-body.darkon {
-    background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='60' height='60' patternTransform='scale(1) rotate(45)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M29.998 26.65v6.693zm-6.837 3.347h3.488zm10.185 0h3.489zm0 0a3.349 3.346 0 01-3.348 3.346 3.349 3.346 0 01-3.349-3.346 3.349 3.346 0 013.349-3.346 3.349 3.346 0 013.348 3.346zm-3.173-6.832c-1.978-.032-3.976.786-5.29 2.287-1.986 2.163-2.275 5.629-.727 8.113 1.45 2.442 4.522 3.736 7.287 3.116 3.067-.607 5.45-3.561 5.392-6.684.045-2.643-1.642-5.173-4.042-6.245a6.489 6.489 0 00-2.62-.587zM59.995 52.87v14.25zm-14.557 7.125h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zm-6.757-14.547c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM-.005 52.87v14.25zm-14.557 7.125h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zM.368 45.447c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM59.995-7.13V7.12zM45.438-.006h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zm-6.757-14.547c-4.212-.069-8.465 1.673-11.262 4.869C44.876-5.078 44.26 2.3 47.556 7.59c3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249zM-.005-7.13V7.12zM-14.562-.006h7.428zm21.687 0h7.427zm0 0a7.13 7.124 0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 7.13 7.124 0 017.13 7.125zM.368-14.553c-4.212-.069-8.465 1.673-11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2 9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583 11.48-14.231.096-5.628-3.495-11.014-8.606-13.298-1.757-.813-3.665-1.217-5.58-1.249z'  stroke-width='0.5' stroke='hsla(0, 0%, 0%, 0.58)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>"), linear-gradient(to bottom, rgb(84, 129, 152),rgb(65, 74, 96));
-} */
-/* .spinner {
-    position: fixed;
-    top: 0;
-    left : 0;
-    width: 100vw;
-    height: 100vh;
+/* modal “window” */
+.card-modal-content {
+  background: rgba(25, 26, 30, 0.65);
+  border-radius: 8px;
+  border: 3px solid grey;
+  width: 50%;
+  height: 75%;
+  max-width: 70%;
+  max-height: 90%;
+  overflow-y: auto;
+  padding: 15px;
+  position: relative;
+  color: white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+/* close “×” button */
+.modal-close {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 48px;
+  cursor: pointer;
+  color: white;
+}
+.modal-close:hover {
+  color: #1290eb;
+}
+.modal-retreat-cost {
+    margin-bottom: 7px;
+}
+/* large card image */
+.card-modal-image {
+  width: 42%;
+  height: auto;
+  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+  display: block;
+}
+/* details section */
+.card-details {
+  margin-bottom: 1rem;
+}
+.card-details h2 {
+  margin-bottom: 5px;
+  font-size: 24px;
+}
+.card-details p { 
+  margin-bottom: 7px;
+  font-size: 16px;
+}
+/* plus/minus controls */
+.modal-count-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.modal-count-controls button {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  border-radius: 2px;
+  border: none;
+}
+.modal-count-controls button:hover {
+  cursor: pointer;
+  background-color: #1290eb;
+  color: white;
+}
+.modal-count {
+  font-size: 1.2rem;
+}
+.zoomed-card-db-hr {
+    width: 20%;
+    margin: 10px 0;
+    opacity: 0.5;
+}
+.modal-rules ul {
+    list-style: none;
+}
+.modal-rules li {
+    margin: 10px 0;
+}
+.bottom-db-modal-bts {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
-    background-color: white;
-    transition: opacity 0.75s, visibility 0.75s;
-    z-index: 999999;
+    margin-top: 25px;
 }
-.spinner img {
-    width: 60px;
-    height: auto;
-    margin-top: -25px;
+.bottom-db-modal-bts button {
+    font-size: 16px;
+    border: 1px solid grey;
+    height: 40px;
+    width: 200px;
+    border-radius: 2px;
+    background-color: #1290eb;
+    color: white;
+    font-weight: 600;
 }
-.spinner div {
-    margin-bottom: 25px;
+.bottom-db-modal-bts button:hover {
+    cursor: pointer;
+    background-color: grey;
 }
-.spinner-hidden {
-    opacity: 0;
-    visibility: hidden;
+.bottom-db-modal-bts .tcgplayer-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.spinner::after {
-    content: "";
-    width: 75px;
-    height: 75px;
-    border: 5px solid black;
-    border-top-color: white;
-    border-radius: 50%;
-    animation: loading 0.75s ease infinite;
+.bottom-db-modal-bts .tcgplayer-btn__icon {
+  width: auto;
+  height: 90%;
 }
-.spinner.darkon {
-    background-color: #191919;
-}
-.spinner.darkon::after {
-    border-top-color: #191919 !important;
-    border: 5px solid white;
-}
-@keyframes loading {
-    from{
-        transform: rotate(0turn);
-    }
-    to{
-        transform: rotate(1turn);
-    }
-} */
-
-/*////////////////*/
-
+/*************************/
 .deck-builder {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -184,7 +242,7 @@ body.darkon {
 }
 .all-cards-container {
     width: 100%;
-    height: 83.5vh;
+    height: 90.5vh;
     overflow-y: scroll;
     border-bottom: 1000px solid rgb(27, 27, 27);
 }
@@ -217,7 +275,7 @@ body.darkon {
 }
 .all-cards-displayed {
     width: 95%;
-    padding: 10px 0 50px 30px;
+    padding: 10px 10px 10px 20px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -246,21 +304,21 @@ body.darkon {
     align-items: center;
     justify-content: center;
     color:white;
-    padding: 19px;
+    padding: 16px;
     font-size: 23px;
-    background-color: rgb(46, 48, 67);
-    margin-bottom: 5px;
-    border: 2px solid black;
-    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.82);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
     content: "+";
-    width: 10px;height: 10px;
+    width: 10px;
+    height: 10px;
     position: absolute;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.681);
     transition: ease all 0.2s;
 }
 .add-card-to-deck::before {
     content: "+";
-    margin-left: -2px;
     font-weight: 600;
 }
 .add-card-to-deck:hover {
@@ -349,18 +407,36 @@ body.darkon {
     transform: scale(1.05)
 }
 .database-card-in-list {
-        /* if 27 or less */
-        /* width: 115px; */
+    /* if 27 or less */
+    /* width: 115px; */
 
     height: auto;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
     border-radius: 4px;
 
-        /* if 28 or more */
-        width: 6vw;
+    /* if 28 or more */
+    width: 6vw;
 }
 .database-card-in-list:hover {
     cursor: pointer;
+}
+.deck-box.shrink-cards .database-card-in-list,
+.deck-box.shrink-cards .deckbuilt-card-container {
+  width: 4vw;
+}
+.deck-box.shrink-cards .current-cnt-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+.deck-box.shrink-cards .deck-add-minus {
+    margin-bottom: 5px;
+    width: 4vw;
+}
+.deck-box.shrink-cards .pm-card {
+    height: 20px;
+    width: 20px;
 }
 .deck-add-minus {
     display: flex;
@@ -371,31 +447,31 @@ body.darkon {
     /* transition: ease all 0.3s; */
     position: absolute;
 
-        /* if 27 or less */
-        /* width: 115px; */
+    /* if 27 or less */
+    /* width: 115px; */
 
-        /* if 28 or more */
-        width: 6vw;
+    /* if 28 or more */
+    width: 6vw;
 }
 .pm-card {
-        /* if 27 or less */
-        /* padding: 5px; */
+    /* if 27 or less */
+    /* padding: 5px; */
 
-        /* if 28 or more */
-        padding: 4px;
+    /* if 28 or more */
+    padding: 4px;
     
     visibility: hidden;
     font-size: 16px;
     background-color: #1290eb;
     color: white;
-    border: 2px solid rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(0, 0, 0, 0.4);
     font-weight: 600;
-    border-radius: 5px;
+    border-radius: 50%;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* transition: ease all 0.2s; */
+    padding-top: 2px;
     height: 30px;
     width: 30px;
 }
@@ -428,7 +504,7 @@ body.darkon {
     z-index: 2;
 }
 .active-deck-container {
-    width: 60%;height:100vh;
+    width: 60%;height:auto;
 }
 .deck-build-options {
     height: 9.2vh;width: 100%;
@@ -534,7 +610,7 @@ body.darkon {
     color: rgb(232, 232, 232);
     background-color: rgb(22, 22, 22);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-    border: 1px solid black;
+    border: 1.5px solid grey;
     padding: 5px 7px;
     transition: ease all 0.2s;
     font-weight: 400;
@@ -562,8 +638,8 @@ body.darkon {
 #deck-reset:hover,
 #deck-sort:hover,
 .support-again:hover {
-    background-color: rgb(255, 255, 255);
-    color: black;
+    background-color: #1290eb;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 .deck-box {
@@ -572,6 +648,27 @@ body.darkon {
     justify-content: center;
     flex-wrap: wrap;
     padding: 15px;
+    /* position: relative; */
+}
+.deck-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.spinner-icon {
+  font-size: 3rem;
+  color: #1290eb;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 .expand-advanced {
     width: 100%;

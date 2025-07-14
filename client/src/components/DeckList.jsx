@@ -1,12 +1,26 @@
 import React from 'react'
 import './DeckList.css'
 
-export default function DeckList({ deck, onUpdateCount }) {
+export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false }) {
+  const shrink = Array.isArray(deck) && deck.length > 45
   return (
-    <div className="deck-box">
-      {deck.length === 0 && <p>Your deck is empty</p>}
-      {deck.map((c, i) => (
-        <div key={`${c.setAbbrev}-${c.number}`} className="deckbuilt-card-container">
+    <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}>
+         {/* spinner overlay */}
+          {loading && (
+            <div className="deck-spinner">
+              <span className="material-symbols-outlined spinner-icon">
+                autorenew
+              </span>
+            </div>
+          )}
+      {!loading && deck.length === 0 && <p></p>}
+      {!loading && deck.map((c, i) => (
+        <div
+          key={`${c.setAbbrev}-${c.number}`}
+          className="deckbuilt-card-container"
+          onClick={() => onCardClick(c)}
+          style={{ cursor: 'pointer' }}
+        >
           <img
             src={c.images.small}
             alt={c.name}
@@ -15,12 +29,18 @@ export default function DeckList({ deck, onUpdateCount }) {
           />
           <div className="deck-add-minus">
             <button
-              onClick={() => onUpdateCount(i, c.count - 1)}
+              onClick={e => {
+                e.stopPropagation()
+                onUpdateCount(i, c.count - 1)
+              }}
               className='pm-card minus-card'
             >–</button>
             <span className='current-cnt-num'>{c.count}</span>
             <button
-              onClick={() => onUpdateCount(i, c.count + 1)}
+              onClick={e => {
+                e.stopPropagation()
+                onUpdateCount(i, c.count + 1)
+              }}
               disabled={c.count >= 4}
               className='pm-card plus-card'
             >＋</button>

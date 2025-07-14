@@ -5,7 +5,7 @@ export default function ExportButtons({ deck, onImportDeck }) {
   const [importing, setImporting] = useState(false)
   const copyText = () => {
     const text = deck
-      .map(c => `${c.count} ${c.name} ${c.setAbbrev}-${c.number}`)
+      .map(c => `${c.count} ${c.name} ${c.setAbbrev} ${c.number}`)
       .join('\n')
     navigator.clipboard.writeText(text)
   }
@@ -17,10 +17,19 @@ export default function ExportButtons({ deck, onImportDeck }) {
     navigator.clipboard.writeText(JSON.stringify(json, null, 2))
   }
 
-   const handleImport = async () => {
+  const handleImport = async () => {
+    // if there's already cards, confirm overwrite
+    if (deck.length > 0) {
+      const ok = window.confirm(
+        'You currently have cards in your decklist, are you sure you want to overwrite it?'
+      )
+      if (!ok) return
+    }
+
     setImporting(true)
     try {
-      await onImportDeck()
+      // tell DeckBuilder to overwrite existing deck
+      await onImportDeck(true)
     } finally {
       setImporting(false)
     }
