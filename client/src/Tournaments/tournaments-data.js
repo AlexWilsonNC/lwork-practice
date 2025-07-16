@@ -1569,7 +1569,33 @@ const tournamentList = [
     "flag": usa,
     "location": "New Orleans, Louisiana",
     },
-   
+    {
+    "id": "2026_PRAGUE",
+    "name": "Prague Regionals",
+    "eventType": "regionals",
+    "eventLogo": regional25,
+    "date": "Apr 25, 2026",
+    "flag": czechia,
+    "location": "Prague, Czech Republic",
+    },
+    {
+    "id": "2026_TORONTO",
+    "name": "Toronto Regionals",
+    "eventType": "regionals",
+    "eventLogo": regional25,
+    "date": "Jan 17, 2026",
+    "flag": canada,
+    "location": "Toronto, Canada",
+    },
+    {
+    "id": "2026_TURIN",
+    "name": "Turin Special Championships",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 6, 2026",
+    "flag": italy,
+    "location": "Turin, Italy",
+    },
 ];
 
 const parseDate = (dateStr) => {

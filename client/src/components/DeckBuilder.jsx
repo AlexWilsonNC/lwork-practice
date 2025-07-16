@@ -162,7 +162,7 @@ const DeckBuilderComp = styled.div`
         background-image: ${({ theme }) => theme.activeDeckContainer}
     }
     .card-search-container {
-        background-image: ${({ theme }) => theme.cardSearchBg}
+        background: ${({ theme }) => theme.cardSearchBg}
     }
     height: 100vh;
     overflow: hidden;
