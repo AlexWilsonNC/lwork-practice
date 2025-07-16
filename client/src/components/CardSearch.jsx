@@ -7,7 +7,8 @@ export default function CardSearch({ onAddCard, onCardClick }) {
   const [results, setResults] = useState([])
 
   useEffect(() => {
-    if (query.length < 2) {
+    const trimmed = query.trim()
+    if (trimmed.length < 2 && trimmed.toUpperCase() !== 'N') {
       setResults([])
       return
     }
@@ -19,7 +20,11 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         })
         .then(data => {
           // ensure we have an array
-          const arr = Array.isArray(data) ? data : []
+          let arr = Array.isArray(data) ? data : []
+
+           if (trimmed.toUpperCase() === 'N') {
+                arr = arr.filter(c => c.name.toUpperCase() === 'N')
+           }
 
           // sort by setOrder: newest sets last in setOrder → highest index → come first
           arr.sort((a, b) => {
@@ -42,13 +47,26 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     <div className="card-search-container">
         <div class='event-searchbar'>
             <span class="material-symbols-outlined search-mag">search</span>
+            <div className="search-input-wrapper">
             <input
                 type="text"
                 placeholder="Search cards…"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
             />
-            <button id='searchButton' type="button">Search</button>
+                {query && (
+                    <button
+                    type="button"
+                    className="clear-input-btn"
+                    onClick={() => {
+                        setQuery('')
+                        setResults([])
+                    }}
+                    aria-label="Clear search"
+                    >×</button>
+                )}
+            </div>
+            {/* <button id='searchButton' type="button">Search</button> */}
             <div id='filter-search' style={{ opacity: 0.1, pointerEvents: 'none' }}>
                 <p>Search Filter</p>
                 <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -58,7 +76,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                 id="search-reset"
                 onClick={() => setQuery('')}
             >
-                <span className="material-symbols-outlined">refresh</span>
+                <span className="material-symbols-outlined">close</span>
                 <p>Reset</p>
             </button>
         </div>
@@ -91,13 +109,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                         ></button>
                     </div>
                 ))}
-                {query.length >= 2 &&
-                    Array.isArray(results) &&
-                    results.length === 0 && (
-                    <p className="no-results">
-                        {/* No cards found for “{query}”, check the spelling. */}
-                    </p>
-                )}
+
             </div>
         </div>
     </div>

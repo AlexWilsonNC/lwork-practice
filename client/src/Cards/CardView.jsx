@@ -760,10 +760,6 @@ const CardView = () => {
                             </strong>
                         </p>
                         <hr className='blue-hr'></hr>
-                        <div className='one-row marginthree'>
-                            {cardInfo.types && <p>{cardInfo.types.join(', ')}</p>}
-                            {cardInfo.hp && <p>&nbsp;•&nbsp;{cardInfo.hp}<span className='shrink'> HP</span></p>}
-                        </div>
                         {cardInfo.supertype && (
                             <p className='marginthree'>
                                 {cardInfo.supertype}
@@ -775,6 +771,10 @@ const CardView = () => {
                                 )}
                             </p>
                         )}
+                        <div className='one-row marginthree'>
+                            {cardInfo.types && <p>{cardInfo.types.join(', ')}</p>}
+                            {cardInfo.hp && <p>&nbsp;•&nbsp;{cardInfo.hp}<span className='shrink'> HP</span></p>}
+                        </div>
                         {cardInfo.evolvesFrom && (
                             <p className='marginthree'>
                                 {cardInfo.subtypes && cardInfo.subtypes.includes('Level-Up') ? 'Levels up from' : 'Evolves from'} {cardInfo.evolvesFrom}

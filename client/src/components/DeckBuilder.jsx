@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom';
 import CardSearch     from './CardSearch'
 import DeckList       from './DeckList'
@@ -7,7 +7,7 @@ import './DeckBuilder.css'
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
-import patreonImg from '../assets/social-media-icons/patreon-icon.webp';
+import patreonImg from '../assets/social-media-icons/black-patreon-blob.png';
 import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
 
 const energyIcons = {
@@ -159,18 +159,37 @@ const STORAGE_KEY = 'deckbuilder-deck'
 
 const DeckBuilderComp = styled.div`
     .active-deck-container {
-        background-image: ${({ theme }) => theme.deckPlaymat};
-        border: ${({ theme }) => theme.deckBorder};
+        background-image: ${({ theme }) => theme.activeDeckContainer}
+    }
+    .card-search-container {
+        background-image: ${({ theme }) => theme.cardSearchBg}
     }
     height: 100vh;
     overflow: hidden;
     display: flex;
-
 `;
 
 export default function DeckBuilder() {
   // — load deck from localStorage or start empty
   const { theme } = useTheme();
+  const [limitCounts, setLimitCounts] = useState(true);
+  const [showLimitMenu, setShowLimitMenu] = useState(false);
+  const [viewMode,   setViewMode]   = useState('image')
+  const menuRef = useRef(null)
+
+ useEffect(() => {
+   if (!showLimitMenu) return
+   const handleClickOutside = e => {
+     if (menuRef.current && !menuRef.current.contains(e.target)) {
+       setShowLimitMenu(false)
+     }
+   }
+   document.addEventListener('mousedown', handleClickOutside)
+   return () => {
+     document.removeEventListener('mousedown', handleClickOutside)
+   }
+ }, [showLimitMenu])
+
   const [deck, setDeck] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []
@@ -186,23 +205,35 @@ export default function DeckBuilder() {
   }, [deck])
 
   // add a card (or bump count if already in deck)
-  function addCard(card) {
-    setDeck(prev => {
-        const idx = prev.findIndex(c =>
-        c.setAbbrev === card.setAbbrev && c.number === card.number
-        )
-        let next
-        if (idx >= 0) {
-        const newCount = Math.min(prev[idx].count + 1, 4)
-        next = prev.map((c,i) =>
-            i === idx ? { ...c, count: newCount } : c
-        )
-        } else {
-        next = [...prev, { ...card, count: 1 }]
-        }
-        return next
-    })
-  }
+function addCard(cardToAdd) {
+  setDeck(prevDeck => {
+    // find the exact match in the previous deck
+    const idx = prevDeck.findIndex(
+      c => c.setAbbrev === cardToAdd.setAbbrev && c.number === cardToAdd.number
+    );
+
+    if (idx >= 0) {
+      // we already have this card → increment its count
+      return prevDeck.map((c, i) => {
+        if (i !== idx) return c;
+
+        // special case: Basic Energy is unlimited (if you still want that)
+        const isBasicEnergy =
+          cardToAdd.supertype === 'Energy' &&
+          cardToAdd.name.startsWith('Basic');
+
+        const newCount = isBasicEnergy
+          ? c.count + 1
+          : Math.min(c.count + 1, 4);
+
+        return { ...c, count: newCount };
+      });
+    } else {
+      // brand new card → add with count = 1
+      return [...prevDeck, { ...cardToAdd, count: 1 }];
+    }
+  });
+}
 
   // update count for a card by its index in the array
   function updateCount(index, newCount) {
@@ -251,8 +282,9 @@ export default function DeckBuilder() {
                 c => c.setAbbrev === setAbbrev && c.number === number
             )
             if (idx > -1) {
-                // merge counts
-                if (match.supertype !== 'Energy') {
+                if (!limitCounts) {
+                merged[idx].count += count
+                } else if (match.supertype !== 'Energy') {
                 merged[idx].count = Math.min(merged[idx].count + count, 4)
                 } else {
                 merged[idx].count += count
@@ -315,16 +347,24 @@ export default function DeckBuilder() {
 
             return (
                 <div
-                className="card-modal-overlay"
-                onClick={() => setZoomCard(null)}
+                    className="card-modal-overlay"
+                    onClick={() => setZoomCard(null)}
                 >
                     <div
                         className="card-modal-content"
                         onClick={e => e.stopPropagation()}
                     >
+                        {zoomCard.images.large && (
+                            <div
+                                className="modal-bg-blur"
+                                style={{
+                                    backgroundImage: `url(${zoomCard.images.large})`
+                                }}
+                            />
+                        )}
                         <button
-                        className="modal-close"
-                        onClick={() => setZoomCard(null)}
+                            className="modal-close"
+                            onClick={() => setZoomCard(null)}
                         >
                         ×
                         </button>
@@ -334,15 +374,17 @@ export default function DeckBuilder() {
                             alt={zoomCard.name}
                             className="card-modal-image"
                         />
-
+                        {/* <p style={{ textAlign: 'center', margin: '20px 0 5px 0', opacity: 0.5 }}>In Deck:</p> */}
                         <div className="modal-count-controls">
                             <button
+                                className='btn-minus-r'
                                 type="button"
                                 onClick={() => handleDelta(-1)}
                                 disabled={currentCount <= 0}
                             >–</button>
                             <span className="modal-count">{currentCount}</span>
                             <button
+                                className='btn-plus-l'
                                 type="button"
                                 onClick={() => handleDelta(1)}
                                 disabled={zoomCard.supertype !== 'Energy' && currentCount >= 4}
@@ -353,7 +395,7 @@ export default function DeckBuilder() {
                             <h2>{zoomCard.name}</h2>
                             <p>{zoomCard.supertype} • {zoomCard.subtypes?.join(' • ')}</p>
                             {zoomCard.supertype === 'Pokémon' && (
-                                <p>{zoomCard.types} • {zoomCard.hp}</p>
+                                <p>{zoomCard.types} • {zoomCard.hp}<span className='shrink'> HP</span></p>
                             )}
                             <hr className="zoomed-card-db-hr" />
                             {zoomCard.abilities?.map((ab, i) => (
@@ -489,10 +531,71 @@ export default function DeckBuilder() {
                             <span className="material-symbols-outlined">close</span>
                             <p>Reset</p>
                         </div>
+                        <div className="limit-menu-container" ref={menuRef}>
+                            {/* three‐dot trigger */}
+                            <button
+                                className="limit-menu-btn"
+                                onClick={() => setShowLimitMenu(v => !v)}
+                                aria-label="Open deck settings"
+                            >
+                                ⋮
+                            </button>
+                            {/* the dropdown */}
+                            {showLimitMenu && (
+                                <div className="limit-menu-dropdown">
+                                    <div
+                                        className="menu-item"
+                                        onClick={() => {
+                                        setLimitCounts(true)
+                                        setShowLimitMenu(false)
+                                        }}
+                                    >
+                                        <span className="menu-check">
+                                        {limitCounts ? '✔︎' : ''}
+                                        </span>
+                                        Enforce Limits
+                                    </div>
+                                    <div
+                                        className="menu-item"
+                                        onClick={() => {
+                                        setLimitCounts(false)
+                                        setShowLimitMenu(false)
+                                        }}
+                                    >
+                                        <span className="menu-check">
+                                        {!limitCounts ? '✔︎' : ''}
+                                        </span>
+                                        Remove Limits
+                                    </div>
+                                    <hr className='dropdown-hr-options'></hr>
+                                    <div
+                                        className="menu-item"
+                                        onClick={() => {
+                                        setViewMode('image')
+                                        setShowLimitMenu(false)
+                                        }}
+                                    >
+                                        <span className="menu-check">{viewMode === 'image' ? '✔︎' : ''}</span>
+                                        Image View
+                                    </div>
+                                    <div
+                                        className="menu-item"
+                                        onClick={() => {
+                                        setViewMode('list')
+                                        setShowLimitMenu(false)
+                                        }}
+                                    >
+                                        <span className="menu-check">{viewMode === 'list' ? '✔︎' : ''}</span>
+                                        List View
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
-                        <p>Support this Project</p>
                         <img src={patreonImg} />
+                        {/* <p>Support this Project</p> */}
+                        <p>Support Us</p>
                     </a>
                 </div>
                 <DeckList 
@@ -501,6 +604,8 @@ export default function DeckBuilder() {
                     onCardClick={handleCardClick} 
                     loading={importing} 
                     onCardDrop={addCard}
+                    limitCounts={limitCounts}
+                    viewMode={viewMode}
                 />
             </div>
         </div>

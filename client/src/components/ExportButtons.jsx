@@ -11,10 +11,45 @@ export default function ExportButtons({ deck, onImportDeck }) {
   }
 
   const copyJson = () => {
-    const json = deck.map(({ count, name, setAbbrev, number }) => ({
-      count, name, set: setAbbrev, number
-    }))
-    navigator.clipboard.writeText(JSON.stringify(json, null, 2))
+    // categorize cards by supertype
+    const pokemon = deck
+      .filter(c => c.supertype === 'Pokémon')
+      .map(({ count, name, setAbbrev, number }) => ({
+        count,
+        name,
+        set: setAbbrev,
+        number
+      }))
+
+    const trainer = deck
+      .filter(c => c.supertype === 'Trainer')
+      .map(({ count, name, setAbbrev, number }) => ({
+        count,
+        name,
+        set: setAbbrev,
+        number
+      }))
+
+    const energy = deck
+      .filter(c => c.supertype === 'Energy')
+      .map(({ count, name, setAbbrev, number }) => ({
+        count,
+        name,
+        set: setAbbrev,
+        number
+      }))
+
+    const output = {
+      decklist: {
+        pokemon,
+        trainer,
+        energy
+      }
+    }
+
+    navigator.clipboard.writeText(
+      JSON.stringify(output, null, 2)
+    )
   }
 
   const handleImport = async () => {

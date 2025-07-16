@@ -204,6 +204,7 @@
     flex-direction: row;
     align-items: center;
     border: 1px solid black;
+    overflow: hidden;
 }
 .deckview-switcher div {
     width: 50%;
@@ -211,7 +212,6 @@
     align-items: center;
     justify-content: center;
     padding: 5px;
-    border-radius: 4px;
 }
 .copy-decklist-btn span,
 .open-in-deckbuilder-btn span,
@@ -220,7 +220,6 @@
 }
 .active-grid-option {
     background-color: #1290eb !important;
-    border-radius: 4px;
     color: white !important;
 }
 .list-form:hover,
