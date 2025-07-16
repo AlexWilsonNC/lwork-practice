@@ -159,10 +159,10 @@ const STORAGE_KEY = 'deckbuilder-deck'
 
 const DeckBuilderComp = styled.div`
     .active-deck-container {
-        background-image: ${({ theme }) => theme.activeDeckContainer}
+        background-image: ${({ theme }) => theme.deckPlaymat}
     }
     .card-search-container {
-        background: ${({ theme }) => theme.cardSearchBg}
+        background-image: ${({ theme }) => theme.cardSearchBg}
     }
     height: 100vh;
     overflow: hidden;

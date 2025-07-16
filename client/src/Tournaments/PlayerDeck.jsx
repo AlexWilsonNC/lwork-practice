@@ -188,7 +188,7 @@ const promoSets = {
 };
 
 const cleanCardName = (name) => {
-    return name.replace(" - ACESPEC", "").replace(" - Basic", "");
+    return name.replace(" - ACESPEC Energy", "").replace(" - ACESPEC", "").replace(" - Basic", "").replace(" - Special", "");
 };
 
 const capitalizeFirstLetter = (string) => {
@@ -515,6 +515,12 @@ const PlayerDeck = () => {
         return null;
     }
 
+    const cleanedDecklist = {
+        pokemon:   playerData.decklist.pokemon  .map(c => ({ ...c, name: cleanCardName(c.name) })),
+        trainer:   playerData.decklist.trainer  .map(c => ({ ...c, name: cleanCardName(c.name) })),
+        energy:    playerData.decklist.energy   .map(c => ({ ...c, name: cleanCardName(c.name) })),
+    };
+    
     return (
         <PlayerDeckCenter className='center' theme={theme}>
             <Helmet>
@@ -573,7 +579,7 @@ const PlayerDeck = () => {
                         <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
                             <button className="decklist-modal-button-deckprofile">Player Profile</button>
                         </Link>
-                        <DecklistOptions decklist={playerData.decklist} />
+                        <DecklistOptions decklist={cleanedDecklist} />
                         <div className='deckview-switcher'>
                             <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
                                 <span className="material-symbols-outlined">reorder</span>

@@ -1,13 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './ExportButtons.css'
 
 export default function ExportButtons({ deck, onImportDeck }) {
   const [importing, setImporting] = useState(false)
+  const [showCopyMenu, setShowCopyMenu] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    if (!showCopyMenu) return
+    const handleClickOutside = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowCopyMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showCopyMenu])
+
   const copyText = () => {
     const text = deck
       .map(c => `${c.count} ${c.name} ${c.setAbbrev} ${c.number}`)
       .join('\n')
     navigator.clipboard.writeText(text)
+    setShowCopyMenu(false)
+    setShowSuccess(true)
   }
 
   const copyJson = () => {
@@ -50,7 +67,15 @@ export default function ExportButtons({ deck, onImportDeck }) {
     navigator.clipboard.writeText(
       JSON.stringify(output, null, 2)
     )
+    setShowCopyMenu(false)
+    setShowSuccess(true)
   }
+
+    useEffect(() => {
+        if (!showSuccess) return
+        const t = setTimeout(() => setShowSuccess(false), 2000)
+        return () => clearTimeout(t)
+    }, [showSuccess])
 
   const handleImport = async () => {
     // if there's already cards, confirm overwrite
@@ -75,17 +100,36 @@ export default function ExportButtons({ deck, onImportDeck }) {
         <div class='all-options-box'>
             <div class='options-left'>
                 <div class='options-row row-options-1'>
-                    <button onClick={copyText} disabled={!deck.length}>
-                        Copy as Text
+                    <button onClick={handleImport} disabled={importing}>
+                        <p>Paste Deck</p>
                     </button>
-                    <button onClick={copyJson} disabled={!deck.length}>
-                        Copy as JSON
-                    </button>
-                    <button
-                        onClick={handleImport}
-                        disabled={importing}
-                    >
-                        {importing ? 'Importing…' : 'Import Deck'}
+                    <div className="copy-menu-container" ref={menuRef}>
+                        <button
+                            onClick={() => setShowCopyMenu(v => !v)}
+                            disabled={!deck.length}
+                        >
+                            <p>Copy Options</p>
+                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+                        </button>
+                        {showCopyMenu && (
+                            <div className="copy-menu-dropdown">
+                                <div
+                                    className="menu-item"
+                                    onClick={copyText}
+                                >
+                                    Copy as Text
+                                </div>
+                                <div
+                                    className="menu-item"
+                                    onClick={copyJson}
+                                >
+                                    Copy as Jsoɴ
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <button onClick={copyJson} disabled={!deck.length} className='save-deck-btn'>
+                        <p>Save Deck</p>
                     </button>
                         {/* <div class='import-as-deck option-btn' onclick="importDeck()">
                             <span class="material-symbols-outlined">content_paste</span>
@@ -114,6 +158,12 @@ export default function ExportButtons({ deck, onImportDeck }) {
                 </div>
             </div>
         </div>
+        {showSuccess && (
+            <div className="copy-success-overlay">
+                <div className="copy-success-icon">✔︎</div>
+                <p>Copied</p>
+            </div>
+        )}
     </div>
   )
 }

@@ -1,49 +1,58 @@
 import React from 'react';
 
 const DecklistOptions = ({ decklist }) => {
-    const cleanCardName = (name) => {
-        return name.replace(" - ACESPEC", "");
-    };
+  // Remove unwanted suffixes and force the "Pokémon" accent
+  const cleanCardName = (name) => {
+    return name
+      .replace(" - ACESPEC", "")
+      .replace(/Pokemon/g, "Pokémon");
+  };
 
-    const copyToClipboard = () => {
-        if (!decklist) return;
+  // Copy decklist with trimmed lines to avoid extra spaces
+  const copyToClipboard = () => {
+    if (!decklist) return;
 
-        const formatCards = (cards) =>
-            cards.map(card => `${card.count} ${cleanCardName(card.name)} ${card.set} ${card.number}`).join('\n');
+    const formatCards = (cards) =>
+      cards.map(
+        (card) => `${card.count} ${cleanCardName(card.name)} ${card.set} ${card.number}`
+      );
 
-        const decklistText = `
-Pokémon:
-${formatCards(decklist.pokemon)}
+    const lines = [
+      'Pokémon:',
+      ...formatCards(decklist.pokemon),
+      '',
+      'Trainers:',
+      ...formatCards(decklist.trainer),
+      '',
+      'Energy:',
+      ...formatCards(decklist.energy),
+    ];
 
-Trainers:
-${formatCards(decklist.trainer)}
+    const decklistText = lines.join('\n');
 
-Energy:
-${formatCards(decklist.energy)}
-        `;
+    navigator.clipboard.writeText(decklistText).then(() => {
+      console.log('Decklist copied to clipboard');
+    }).catch((err) => {
+      console.error('Failed to copy decklist:', err);
+    });
+  };
 
-        navigator.clipboard.writeText(decklistText.trim()).then(() => {
-            console.log('Decklist copied to clipboard');
-        }).catch(err => {
-            console.error('Failed to copy decklist:', err);
-        });
-    };
-    const openInDeckbuilder = () => {
-        console.log('Opened in deckbuilder');
-    };
+  const openInDeckbuilder = () => {
+    console.log('Opened in deckbuilder');
+  };
 
-    return (
-    <div className='deck-top-right-options'>
-        <div className='copy-decklist-btn' onClick={copyToClipboard}>
-            <span className="material-symbols-outlined">content_copy</span>
-            <span className="tooltip-text">Copy to Clipboard</span>
-        </div>
-        <div className='open-in-deckbuilder-btn not-ready' onClick={openInDeckbuilder}>
-            <span className="material-symbols-outlined">build_circle</span>
-            <span className="tooltip-text">Open in Deckbuilder</span>
-        </div>
+  return (
+    <div className="deck-top-right-options">
+      <div className="copy-decklist-btn" onClick={copyToClipboard}>
+        <span className="material-symbols-outlined">content_copy</span>
+        <span className="tooltip-text">Copy to Clipboard</span>
+      </div>
+      <div className="open-in-deckbuilder-btn not-ready" onClick={openInDeckbuilder}>
+        <span className="material-symbols-outlined">build_circle</span>
+        <span className="tooltip-text">Open in Deckbuilder</span>
+      </div>
     </div>
-    );
+  );
 };
 
 export default DecklistOptions;

@@ -65,6 +65,7 @@
   font-size: 48px;
   cursor: pointer;
   color: white;
+  text-shadow: 1px 1px 2px black;
 }
 .modal-close:hover {
   color: #1290eb;
@@ -530,9 +531,9 @@
     font-size: 16px;
     background-color: #1290eb;
     color: white;
-    border: 2px solid rgba(0, 0, 0, 0.4);
+    border: 1.5px solid rgba(0, 0, 0, 0.4);
     font-weight: 600;
-    border-radius: 50%;
+    border-radius: 5px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -605,39 +606,127 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-end;
 }
-.option-btn {
-    padding: 5px 10px;
-    font-size: 16px;
+.options-row button {
     text-decoration: none;
-    color: rgb(213, 213, 213);
-    display: inline-block;
-    padding: 17px 0;
-    text-align: center;
-    background-image: linear-gradient(rgb(154, 176, 210) 0 0);
+    color: rgb(233, 233, 233);
+    background-color: rgb(90, 90, 90);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    font-weight: 600;
+    font-size: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
     background-position: 0 100%;
     background-size: 0% 3px;
     background-repeat: no-repeat;
-    transition:
-      background-size 0.35s,
-      background-position 0s 0.35s;
+    transition: ease all 0.2s;
+    margin-right: 15px;
+    width: 155px;
+    height: 45px;
 }
-.option-btn:hover {
-    color: rgb(255, 255, 255);
-    background-position: 100% 100%;
-    background-size: 100% 3px;
+.save-deck-btn {
+    background-color: #1290eb !important;
+    border: 2px solid rgba(0, 0, 0, 0.4) !important;
+    color: white !important;
+}
+.save-deck-btn:hover {
+    background-color: rgb(142, 142, 142) !important;
+    border: 2px solid rgba(0, 0, 0, 0.4) !important;
+    color: white !important;
+}
+.options-row button span {
+    font-weight: 300;
+    font-size: 20px;
+}
+.options-row button p {
+    padding-left: 5px;
+    font-size: 16px;
+}
+.options-row button:hover {
     cursor: pointer;
+    color: white;
+    background-color: rgb(142, 142, 142);
 }
-.option-btn p {
-    margin-left: 5px;
+.bold-span {
+    font-weight: 400 !important;
+    margin-left: 1px;
+}
+/**/
+.copy-menu-container {
+  position: relative;
+  display: inline-block;
+  margin: 0 0.5rem;
+}
+/* the dropdown panel */
+.copy-menu-dropdown {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  background: #2f3136;
+  border: 1px solid grey;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  z-index: 1000;
+  min-width: 130px;
+}
+/* each option */
+.copy-menu-dropdown .menu-item {
+  padding: 0.5rem 1rem;
+  color: #ddd;
+  cursor: pointer;
+}
+.copy-menu-dropdown .menu-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+.copy-success-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  color:white;
+  font-weight: 600;
+  font-size: 28px;
+  background-color: rgba(0, 0, 0, 0.8);
+  animation: fadeOut 2s forwards;
+}
+.copy-success-icon {
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  border: 2px solid white;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  opacity: 1;
+  animation: fadeOut 2s forwards;
+  margin-bottom: 5px;
+}
+.copy-success-icon p {
+    animation: fadeOut 2s forwards;
+}
+@keyframes fadeOut {
+  0%, 80% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { opacity: 0; }
 }
 .deck-stats {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 33px 0;
+    padding: 10px 20px 0;
 }
 .support-again {
     display: flex;
@@ -652,8 +741,7 @@
 .stat-count {
     color: black;
     background-color: white;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-    border: 1px solid black;
+    border: 2px solid rgba(0, 0, 0, 0.5);
     padding: 5px 7px 5px 10px;
     transition: ease all 0.2s;
     font-weight: 400;
@@ -669,9 +757,9 @@
 #deck-reset,
 #deck-sort,
 .support-again {
-    color: rgb(232, 232, 232);
+    color: white;
     background-color: #1290eb;
-    border: none;
+    border: 2px solid rgba(0, 0, 0, 0.3);
     padding: 5px 7px;
     transition: ease all 0.2s;
     font-weight: 400;
@@ -699,7 +787,6 @@
 #deck-reset:hover,
 #deck-sort:hover,
 .support-again:hover {
-    background-color: #1290eb;
     background-color: grey;
     cursor: pointer;
 }
@@ -711,12 +798,15 @@
 /* the three-dot button */
 .limit-menu-btn {
   background: #1290eb;
-  border: none;
+  border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   padding: 2px 13px;
   color: white;
   font-size: 1.25rem;
   cursor: pointer;
+}
+.limit-menu-btn:hover {
+  background-color: grey;
 }
 /* the dropdown panel */
 .limit-menu-dropdown {
