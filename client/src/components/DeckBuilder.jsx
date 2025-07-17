@@ -190,23 +190,49 @@ export default function DeckBuilder() {
    }
  }, [showLimitMenu])
 
-    const [deck, setDeck] = useState(() => {
-        // 1) look for #deck=… in the URL
-        const h = window.location.hash.slice(1);            // e.g. "deck=…"
-        const params = new URLSearchParams(h);
-        if (params.has('deck')) {
-            try {
-            const data = JSON.parse(decodeURIComponent(params.get('deck')));
-            return Array.isArray(data) ? data : [];
-            } catch {
-            console.warn('Invalid deck in URL hash');
-            }
-        }
-        // 2) fall back to localStorage
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [] }
-        catch { return [] }
-    });
-    
+const [deck, setDeck] = useState(() => {
+  // 1) try URL hash first
+  const hash = window.location.hash.slice(1);        // "deck=…"
+  const params = new URLSearchParams(hash);
+  if (params.has('deck')) {
+    try {
+      const arr = JSON.parse(decodeURIComponent(params.get('deck')));
+      // arr is now [ { set:'DRI', number:'3', count:1}, … ]
+      // fetch each full card from your API:
+      return []; // start empty; we'll fill in below
+    } catch {
+      console.warn('Invalid deck in URL');
+    }
+  }
+  // 2) fallback to localStorage
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+});
+
+// once mounted, if we saw a hash-deck, go fetch all cards and setDeck
+useEffect(() => {
+  const hash = window.location.hash.slice(1);
+  const params = new URLSearchParams(hash);
+  if (!params.has('deck')) return;
+  let minimal;
+  try {
+    minimal = JSON.parse(decodeURIComponent(params.get('deck')));
+  } catch {
+    return;
+  }
+  // for each minimal entry, fetch the full card from your API
+  Promise.all(
+    minimal.map(({ set, number, count }) =>
+      fetch(`/api/cards/${set}/${number}`)
+        .then(r => r.json())
+        .then(card => ({ ...card, count }))
+    )
+  ).then(fullDeck => setDeck(fullDeck));
+}, []);
+
   const [zoomCard, setZoomCard] = useState(null);
 
   // persist to localStorage on every change

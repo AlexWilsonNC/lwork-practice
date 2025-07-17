@@ -71,13 +71,15 @@ export default function ExportButtons({ deck, onImportDeck }) {
     setShowSuccess(true)
   }
 
-    const shareViaLink = () => {
-        // build a minimal deck payload: you could even just send [{ set:"BLW",number:"15",count:3 },…]
-        const payload = JSON.stringify(deck);
-        const url = `${window.location.origin}/deckbuilder#deck=${encodeURIComponent(payload)}`;
-        navigator.clipboard.writeText(url).then(() => {
-            // show your “copied!” toast, etc…
-        });
+    const shareLink = () => {
+        const minimal = deck.map(c => ({
+            set:    c.setAbbrev,
+            number: c.number,
+            count:  c.count
+        }));
+        const fragment = encodeURIComponent(JSON.stringify(minimal));
+        const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
+        navigator.clipboard.writeText(url).then(/* show “✓ copied” toast */);
     };
 
     useEffect(() => {
