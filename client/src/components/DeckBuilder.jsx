@@ -190,20 +190,23 @@ export default function DeckBuilder() {
    }
  }, [showLimitMenu])
 
-  const [deck, setDeck] = useState(() => {
-    try {
-      // 1) check for ?deck=… in URL
-      const params = new URLSearchParams(window.location.search)
-      const share = params.get('deck')
-      if (share) {
-        return JSON.parse(decodeURIComponent(share))
-      }
-      // 2) fallback to localStorage
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []
-    } catch {
-      return []
-    }
-  })
+    const [deck, setDeck] = useState(() => {
+        // 1) look for #deck=… in the URL
+        const h = window.location.hash.slice(1);            // e.g. "deck=…"
+        const params = new URLSearchParams(h);
+        if (params.has('deck')) {
+            try {
+            const data = JSON.parse(decodeURIComponent(params.get('deck')));
+            return Array.isArray(data) ? data : [];
+            } catch {
+            console.warn('Invalid deck in URL hash');
+            }
+        }
+        // 2) fall back to localStorage
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [] }
+        catch { return [] }
+    });
+    
   const [zoomCard, setZoomCard] = useState(null);
 
   // persist to localStorage on every change
