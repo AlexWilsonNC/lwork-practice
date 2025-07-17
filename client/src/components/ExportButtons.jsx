@@ -75,7 +75,7 @@ export default function ExportButtons({ deck, onImportDeck }) {
     // encode deck array as URI component
     const param = encodeURIComponent(JSON.stringify(deck))
     // build full URL (path to your deckbuilder page)
-    const url = `${window.location.origin}${window.location.pathname}?deck=${param}`
+    const url = `${window.location.origin}/deckbuilder?deck=${param}`
     navigator.clipboard.writeText(url)
     setShowCopyMenu(false)
     setShowSuccess(true)
