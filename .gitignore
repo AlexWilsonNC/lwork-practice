@@ -24,3 +24,4 @@ emails.txt
 *.njsproj
 *.sln
 *.sw?
+node_modules/
