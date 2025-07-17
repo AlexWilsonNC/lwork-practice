@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import './ExportButtons.css'
 
 export default function ExportButtons({ deck, onImportDeck }) {
   const [importing, setImporting] = useState(false)
@@ -28,7 +27,6 @@ export default function ExportButtons({ deck, onImportDeck }) {
   }
 
   const copyJson = () => {
-    // categorize cards by supertype
     const pokemon = deck
       .filter(c => c.supertype === 'Pokémon')
       .map(({ count, name, setAbbrev, number }) => ({
@@ -67,9 +65,9 @@ export default function ExportButtons({ deck, onImportDeck }) {
     navigator.clipboard.writeText(
       JSON.stringify(output, null, 2)
     )
-    setShowCopyMenu(false)
-    setShowSuccess(true)
-  }
+        setShowCopyMenu(false)
+        setShowSuccess(true)
+    }
 
     const shareLink = () => {
         const minimal = deck.map(c => ({
@@ -79,7 +77,9 @@ export default function ExportButtons({ deck, onImportDeck }) {
         }));
         const fragment = encodeURIComponent(JSON.stringify(minimal));
         const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
-        navigator.clipboard.writeText(url).then(/* show “✓ copied” toast */);
+        navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
+        setShowCopyMenu(false)
+        setShowSuccess(true)
     };
 
     useEffect(() => {
@@ -89,7 +89,6 @@ export default function ExportButtons({ deck, onImportDeck }) {
     }, [showSuccess])
 
   const handleImport = async () => {
-    // if there's already cards, confirm overwrite
     if (deck.length > 0) {
       const ok = window.confirm(
         'You currently have cards in your decklist, are you sure you want to overwrite it?'
@@ -99,7 +98,6 @@ export default function ExportButtons({ deck, onImportDeck }) {
 
     setImporting(true)
     try {
-      // tell DeckBuilder to overwrite existing deck
       await onImportDeck(true)
     } finally {
       setImporting(false)
@@ -136,8 +134,18 @@ export default function ExportButtons({ deck, onImportDeck }) {
                                 >
                                     Copy as Jsoɴ
                                 </div>
-                                <div className="menu-item" onClick={shareLink}>
+                                <div 
+                                    className="menu-item" 
+                                    onClick={shareLink}
+                                >
                                     Share via Link
+                                </div>
+                                <div 
+                                    className="menu-item" 
+                                    style={{ opacity: 0.1, pointerEvents: 'none' }}
+                                    // onClick={shareLink}
+                                >
+                                    Save as Image
                                 </div>
                             </div>
                         )}

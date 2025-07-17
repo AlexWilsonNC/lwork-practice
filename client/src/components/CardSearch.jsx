@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import './CardSearch.css'
 import setOrder from '../Tournaments/setorder'
 
 export default function CardSearch({ onAddCard, onCardClick }) {
@@ -7,6 +6,12 @@ export default function CardSearch({ onAddCard, onCardClick }) {
   const [results, setResults] = useState([])
   const [defaultCards, setDefault] = useState([])
   const [suppressDefault, setSuppressDefault] = useState(false)
+
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [filters, setFilters] = useState({
+    supertypes: { Pokémon: false, Trainer: false, Energy: false },
+    sets: {},
+  })
 
   useEffect(() => {
     const newestSet = setOrder[0]
@@ -17,7 +22,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
       })
       .then(data => {
         const arr = Array.isArray(data) ? data : []
-        // sort by descending number within set (highest-first)
         arr.sort((a, b) => {
           const nA = parseInt(a.number, 10) || 0
           const nB = parseInt(b.number, 10) || 0
@@ -34,7 +38,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
   useEffect(() => {
     const trimmed = query.trim()
 
-    // 1) If the input is completely empty, show the default newest‐set cards
     if (trimmed === '') {
       if (suppressDefault) {
         setResults([])
@@ -44,7 +47,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
       return
     }
 
-    // 2) Now the old guard: fewer than 2 chars (and not exactly "N") → clear
     if (trimmed.length < 2 && trimmed.toUpperCase() !== 'N') {
         setResults([])
         return
@@ -56,20 +58,16 @@ export default function CardSearch({ onAddCard, onCardClick }) {
           return res.json()
         })
         .then(data => {
-          // ensure we have an array
           let arr = Array.isArray(data) ? data : []
 
            if (trimmed.toUpperCase() === 'N') {
                 arr = arr.filter(c => c.name.toUpperCase() === 'N')
            }
 
-          // sort by setOrder: newest sets last in setOrder → highest index → come first
           arr.sort((a, b) => {
             const idxA = setOrder.indexOf(a.setAbbrev)
             const idxB = setOrder.indexOf(b.setAbbrev)
-            // 1) different sets? sort by setOrder
             if (idxA !== idxB) return idxA - idxB
-            // 2) same set? parse number and sort descending
             const numA = parseInt(a.number, 10)  || 0
             const numB = parseInt(b.number, 10)  || 0
             return numA - numB
@@ -85,37 +83,142 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     return () => clearTimeout(t)
   }, [query, defaultCards])
 
+  const displayResults = results.filter(card => {
+    // supertype filter
+    if (!filters.supertypes[card.supertype]) return false
+    // set filter: if ANY set checkbox is checked, only include those sets
+    const setsChecked = Object.values(filters.sets).some(v => v)
+    if (setsChecked && !filters.sets[card.setAbbrev]) return false
+    return true
+  })
+
   return (
     <div className="card-search-container">
-        <div class='event-searchbar'>
-            <span class="material-symbols-outlined search-mag">search</span>
-            <div className="search-input-wrapper">
-                <input
-                    type="text"
-                    placeholder="Search cards…"
-                    value={query}
-                    onChange={e => {
-                      setSuppressDefault(false)
-                      setQuery(e.target.value)
-                    }}
-                />
-                {query && (
-                    <button
-                    type="button"
-                    className="clear-input-btn"
-                    onClick={() => {
-                        setQuery('')
-                        setSuppressDefault(true)
-                        setResults([])
-                    }}
-                    aria-label="Clear search"
-                    >×</button>
-                )}
+        {/* --- Advanced Search Button --- */}
+        <button
+            className="advanced-search-button"
+            onClick={() => setShowAdvanced(true)}
+        >
+            Advanced Search
+            <span className="material-symbols-outlined">keyboard_arrow_down</span>
+        </button>
+
+        {showAdvanced && (
+            <div className="advanced-search-modal-overlay" onClick={() => setShowAdvanced(false)}>
+            <div className="advanced-search-modal" onClick={e => e.stopPropagation()}>
+                <h2>Advanced Search</h2>
+                <hr></hr>
+                <div className="filter-group">
+                    <h3>Card Type:</h3>
+                    {[
+                        'Pokémon',
+                        'Trainer',
+                        // 'Energy',
+                        'Item',
+                        'Supporter',
+                        'Stadium',
+                        'Tool'
+                        // 'Basic Energy',
+                        // 'Special Energy'
+                    ].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            className={`type-btn ${filters.supertypes[type] ? 'active' : ''}`}
+                            onClick={() => {
+                                setFilters(f => ({
+                                ...f,
+                                supertypes: {
+                                    ...f.supertypes,
+                                    [type]: !f.supertypes[type]
+                                }
+                                }))
+                            }}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                    <span className='cardtypeenergy'>Energy:</span>
+                    {[
+                        'Basic',
+                        'Special'
+                    ].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            className={`type-btn ${filters.supertypes[type] ? 'active' : ''}`}
+                            onClick={() => {
+                                setFilters(f => ({
+                                ...f,
+                                supertypes: {
+                                    ...f.supertypes,
+                                    [type]: !f.supertypes[type]
+                                }
+                                }))
+                            }}
+                        >
+                            {type}
+                        </button>
+                    ))}
                 </div>
-                {/* <button id='searchButton' type="button">Search</button> */}
-                <div id='filter-search' style={{ opacity: 0.1, pointerEvents: 'none' }}>
-                    <p>Search Filter</p>
-                    <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                <div className="filter-group">
+                    <h3>Sets</h3>
+                    {/* {setOrder.map(set => (
+                        <label key={set}>
+                        <input
+                            type="checkbox"
+                            checked={!!filters.sets[set]}
+                            onChange={() => {
+                            setFilters(f => ({
+                                ...f,
+                                sets: {
+                                ...f.sets,
+                                [set]: !f.sets[set]
+                                }
+                            }))
+                            }}
+                        />
+                        {set}
+                        </label>
+                    ))} */}
+                </div>
+
+                <div className="modal-buttons">
+                <button onClick={() => setShowAdvanced(false)}>
+                    Apply
+                </button>
+                <button onClick={() => setShowAdvanced(false)}>
+                    Cancel
+                </button>
+                </div>
+            </div>
+            </div>
+        )}
+        <div className='event-searchbar'>
+            <div className='search-cards-div'>
+                <div className="search-input-wrapper">
+                    <span className="material-symbols-outlined search-mag">search</span>
+                    <input
+                        type="text"
+                        placeholder="Search cards…"
+                        value={query}
+                        onChange={e => {
+                        setSuppressDefault(false)
+                        setQuery(e.target.value)
+                        }}
+                    />
+                    {query && (
+                        <button
+                        type="button"
+                        className="clear-input-btn"
+                        onClick={() => {
+                            setQuery('')
+                            setSuppressDefault(true)
+                            setResults([])
+                        }}
+                        aria-label="Clear search"
+                        >×</button>
+                    )}
                 </div>
                 <button
                     type="button"
@@ -130,8 +233,9 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                     <p>Reset</p>
                 </button>
             </div>
+            </div>
             <div className="all-cards-container">
-                <div class='all-cards-displayed'>
+                <div className='all-cards-displayed'>
                     {results.map(card => (
                         <div
                         key={`${card.setAbbrev}-${card.number}`}

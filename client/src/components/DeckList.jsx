@@ -1,5 +1,4 @@
 import React from 'react'
-import './DeckList.css'
 
 export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, limitCounts = true, viewMode = 'image' }) {
   const shrink = Array.isArray(deck) && deck.length > 45
@@ -33,7 +32,6 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
 
   return (
     <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}>
-         {/* spinner overlay */}
           {loading && (
             <div className="deck-spinner">
               <span className="material-symbols-outlined spinner-icon">
@@ -76,9 +74,6 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
                className='pm-card plus-card'
             >＋</button>
           </div>
-          {/* <div className="card-label">
-            {c.name} ({c.setAbbrev}-{c.number})
-          </div> */}
         </div>
         )
     })}

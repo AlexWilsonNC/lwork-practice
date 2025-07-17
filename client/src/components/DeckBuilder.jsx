@@ -57,7 +57,6 @@ function sortDeck(deck) {
   const trainers = deck.filter(c => c.supertype === "Trainer");
   const energies = deck.filter(c => c.supertype === "Energy");
 
-  // ── Trainers ─────────────────────────────────────────────────────────────
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
     const subB = b.subtypes?.[0] ?? "";
@@ -67,9 +66,7 @@ function sortDeck(deck) {
     return b.count - a.count;
   });
 
-  // ── Energies ─────────────────────────────────────────────────────────────
   const sortedEnergies = [...energies].sort((a, b) => {
-    // extract basic vs special
     const typeOf = card => {
       const m = card.name.match(/^Basic\s+(\w+)/i);
       return m ? m[1] : card.name.split(" ")[1];
@@ -82,7 +79,6 @@ function sortDeck(deck) {
     return basicEnergyTypes.indexOf(tA) - basicEnergyTypes.indexOf(tB);
   });
 
-  // ── Pokémon (families) ───────────────────────────────────────────────────
   const evoGraph = {};
   pokemons.forEach(card => {
     const name = card.name;
@@ -99,7 +95,6 @@ function sortDeck(deck) {
     });
   });
 
-  // Extract connected components (families)
   const visited = new Set();
   const families = [];
   pokemons.forEach(card => {
@@ -122,7 +117,6 @@ function sortDeck(deck) {
     families.push(family);
   });
 
-  // Compute family metrics
   families.forEach(fam => {
     fam.highestStage = fam.reduce((minSt, c) => {
       const st = c.subtypes?.[0] || "Basic";
@@ -131,7 +125,6 @@ function sortDeck(deck) {
     fam.highestCount = fam.reduce((maxC, c) => Math.max(maxC, c.count), 0);
   });
 
-  // Sort families (by count desc, then by stage asc)
   families.sort((a, b) => {
     if (b.highestCount !== a.highestCount) {
       return b.highestCount - a.highestCount;
@@ -139,7 +132,6 @@ function sortDeck(deck) {
     return a.highestStage - b.highestStage;
   });
 
-  // Flatten back, sorting within each family by stage then count
   const sortedPokemons = [];
   families.forEach(fam => {
     fam.sort((a, b) => {
@@ -151,7 +143,6 @@ function sortDeck(deck) {
     sortedPokemons.push(...fam);
   });
 
-  // 3) Combine and return
   return [...sortedPokemons, ...sortedTrainers, ...sortedEnergies];
 }
 
@@ -170,90 +161,79 @@ const DeckBuilderComp = styled.div`
 `;
 
 export default function DeckBuilder() {
-  // — load deck from localStorage or start empty
   const { theme } = useTheme();
   const [limitCounts, setLimitCounts] = useState(true);
   const [showLimitMenu, setShowLimitMenu] = useState(false);
   const [viewMode,   setViewMode]   = useState('image')
   const menuRef = useRef(null)
 
- useEffect(() => {
-   if (!showLimitMenu) return
-   const handleClickOutside = e => {
-     if (menuRef.current && !menuRef.current.contains(e.target)) {
-       setShowLimitMenu(false)
-     }
-   }
-   document.addEventListener('mousedown', handleClickOutside)
-   return () => {
-     document.removeEventListener('mousedown', handleClickOutside)
-   }
- }, [showLimitMenu])
+    useEffect(() => {
+        if (!showLimitMenu) return
+        const handleClickOutside = e => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+            setShowLimitMenu(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [showLimitMenu])
 
-const [deck, setDeck] = useState(() => {
-  // 1) try URL hash first
-  const hash = window.location.hash.slice(1);        // "deck=…"
-  const params = new URLSearchParams(hash);
-  if (params.has('deck')) {
-    try {
-      const arr = JSON.parse(decodeURIComponent(params.get('deck')));
-      // arr is now [ { set:'DRI', number:'3', count:1}, … ]
-      // fetch each full card from your API:
-      return []; // start empty; we'll fill in below
-    } catch {
-      console.warn('Invalid deck in URL');
+    const [deck, setDeck] = useState(() => {
+    const hash = window.location.hash.slice(1);
+    const params = new URLSearchParams(hash);
+    if (params.has('deck')) {
+        try {
+        const arr = JSON.parse(decodeURIComponent(params.get('deck')));
+        // arr is now [ { set:'DRI', number:'3', count:1}, … ]
+        return [];
+        } catch {
+        console.warn('Invalid deck in URL');
+        }
     }
-  }
-  // 2) fallback to localStorage
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch {
-    return [];
-  }
-});
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch {
+        return [];
+    }
+    });
 
-// once mounted, if we saw a hash-deck, go fetch all cards and setDeck
-useEffect(() => {
-  const hash = window.location.hash.slice(1);
-  const params = new URLSearchParams(hash);
-  if (!params.has('deck')) return;
-  let minimal;
-  try {
-    minimal = JSON.parse(decodeURIComponent(params.get('deck')));
-  } catch {
-    return;
-  }
-  // for each minimal entry, fetch the full card from your API
-  Promise.all(
-    minimal.map(({ set, number, count }) =>
-      fetch(`/api/cards/${set}/${number}`)
-        .then(r => r.json())
-        .then(card => ({ ...card, count }))
-    )
-  ).then(fullDeck => setDeck(fullDeck));
-}, []);
+    useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    const params = new URLSearchParams(hash);
+    if (!params.has('deck')) return;
+    let minimal;
+    try {
+        minimal = JSON.parse(decodeURIComponent(params.get('deck')));
+    } catch {
+        return;
+    }
+    Promise.all(
+        minimal.map(({ set, number, count }) =>
+        fetch(`/api/cards/${set}/${number}`)
+            .then(r => r.json())
+            .then(card => ({ ...card, count }))
+        )
+    ).then(fullDeck => setDeck(fullDeck));
+    }, []);
 
   const [zoomCard, setZoomCard] = useState(null);
 
-  // persist to localStorage on every change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deck))
   }, [deck])
 
-  // add a card (or bump count if already in deck)
 function addCard(cardToAdd) {
   setDeck(prevDeck => {
-    // find the exact match in the previous deck
     const idx = prevDeck.findIndex(
       c => c.setAbbrev === cardToAdd.setAbbrev && c.number === cardToAdd.number
     );
 
     if (idx >= 0) {
-      // we already have this card → increment its count
       return prevDeck.map((c, i) => {
         if (i !== idx) return c;
 
-        // special case: Basic Energy is unlimited (if you still want that)
         const isBasicEnergy =
           cardToAdd.supertype === 'Energy' &&
           cardToAdd.name.startsWith('Basic');
@@ -265,13 +245,11 @@ function addCard(cardToAdd) {
         return { ...c, count: newCount };
       });
     } else {
-      // brand new card → add with count = 1
       return [...prevDeck, { ...cardToAdd, count: 1 }];
     }
   });
 }
 
-  // update count for a card by its index in the array
   function updateCount(index, newCount) {
     setDeck(d => d
       .map((c,i) => i === index ? { ...c, count: newCount } : c)
@@ -285,9 +263,7 @@ function addCard(cardToAdd) {
     async function importDeck(overwrite = false) {
     setImporting(true)
     try {
-        // Snapshot the starting deck: either empty (overwrite) or existing
         const startingDeck = overwrite ? [] : [...deck]
-        // Immediately clear UI if overwriting
         if (overwrite) setDeck([])
         const text = await navigator.clipboard.readText()
         const lines = text
@@ -295,7 +271,6 @@ function addCard(cardToAdd) {
         .map(l => l.trim())
         .filter(l => l && !l.endsWith(':'))
         .filter(l => /^\d+\s/.test(l))
-        // Build new merged deck from the snapshot
         const merged = [...startingDeck]
 
         for (const line of lines) {
@@ -305,7 +280,6 @@ function addCard(cardToAdd) {
             const setAbbrev = parts.pop()
             const name = parts.slice(1).join(' ')
 
-            // fetch matching card(s)
             const results = await fetch(
             `/api/cards/searchbyname/partial/${encodeURIComponent(name)}`
             ).then(r => r.json())
@@ -568,7 +542,6 @@ function addCard(cardToAdd) {
                             <p>Reset</p>
                         </div>
                         <div className="limit-menu-container" ref={menuRef}>
-                            {/* three‐dot trigger */}
                             <button
                                 className="limit-menu-btn"
                                 onClick={() => setShowLimitMenu(v => !v)}
@@ -576,7 +549,6 @@ function addCard(cardToAdd) {
                             >
                                 ⋮
                             </button>
-                            {/* the dropdown */}
                             {showLimitMenu && (
                                 <div className="limit-menu-dropdown">
                                     <div
