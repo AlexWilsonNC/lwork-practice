@@ -708,7 +708,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 36px;
   opacity: 1;
   animation: fadeOut 2s forwards;
   margin-bottom: 5px;
@@ -814,7 +814,7 @@
   top: 120%;
   right: -120px;
   background: #2f3136;
-  border: 1px solid #444;
+  border: 1px solid grey;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   overflow: hidden;

@@ -71,6 +71,16 @@ export default function ExportButtons({ deck, onImportDeck }) {
     setShowSuccess(true)
   }
 
+  const shareLink = () => {
+    // encode deck array as URI component
+    const param = encodeURIComponent(JSON.stringify(deck))
+    // build full URL (path to your deckbuilder page)
+    const url = `${window.location.origin}${window.location.pathname}?deck=${param}`
+    navigator.clipboard.writeText(url)
+    setShowCopyMenu(false)
+    setShowSuccess(true)
+  }
+
     useEffect(() => {
         if (!showSuccess) return
         const t = setTimeout(() => setShowSuccess(false), 2000)
@@ -124,6 +134,9 @@ export default function ExportButtons({ deck, onImportDeck }) {
                                     onClick={copyJson}
                                 >
                                     Copy as Jsoɴ
+                                </div>
+                                <div className="menu-item" onClick={shareLink}>
+                                    Share via Link
                                 </div>
                             </div>
                         )}

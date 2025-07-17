@@ -192,6 +192,13 @@ export default function DeckBuilder() {
 
   const [deck, setDeck] = useState(() => {
     try {
+      // 1) check for ?deck=… in URL
+      const params = new URLSearchParams(window.location.search)
+      const share = params.get('deck')
+      if (share) {
+        return JSON.parse(decodeURIComponent(share))
+      }
+      // 2) fallback to localStorage
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []
     } catch {
       return []
