@@ -194,8 +194,8 @@ const Homepage = () => {
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View the lastest TCG expansion: <span className='new-color'>Destined Rivals</span>!</h3>
-                                        <p>View every Pokémon card and TCG expansion in history in our database
+                                        <h3>View the lastest TCG expansions: <span className='new-color'>Black Bolt & White Flare</span>!</h3>
+                                        <p>View every Pokémon card from every expansion ever, in our database
                                             here! From Base Set through the latest release, we have them all!</p>
                                     </div>
                                 </WrappedFeature>
@@ -406,10 +406,10 @@ const Homepage = () => {
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                    <h3>View the lastest TCG expansion: <span className='new-color'>Destined Rivals</span>!</h3>
-                                    <p>View every Pokémon card and TCG expansion in history in our database
-                                        here! From Base Set through the latest release, we have them all!</p>
-                                </div>
+                                        <h3>View the lastest TCG expansions: <span className='new-color'>Black Bolt & White Flare</span>!</h3>
+                                        <p>View every Pokémon card from every expansion ever, in our database
+                                            here! From Base Set through the latest release, we have them all!</p>
+                                    </div>
                             </WrappedFeature>
                         </a>
                     </div>
