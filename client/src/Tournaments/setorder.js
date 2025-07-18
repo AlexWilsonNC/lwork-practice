@@ -1,5 +1,7 @@
 const orderedSets = [
 // sv
+    "BLK",
+    "WHT",
     "DRI",
     "JTG",
     "PRE",

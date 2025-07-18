@@ -190,7 +190,7 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
-                            <a href='./cards/DRI'>
+                            <a href='./cards/BLK'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
@@ -402,7 +402,7 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall'>
                         <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
-                        <a href='/cards/DRI'>
+                        <a href='/cards/BLK'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>

@@ -1,39 +1,75 @@
 import React, { useState, useEffect } from 'react'
 import setOrder from '../Tournaments/setorder'
+import bw1 from '../assets/sets/black-white/bw1-bw.png'
+import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
+import rs1 from '../assets/sets/ruby-saphire/ex1-ruby-sapphire.png'
+import sm1 from '../assets/sets/sun-moon/sm1-sm.png'
+import ssh1 from '../assets/sets/sword-shield/ssh1.webp'
+import sv1 from '../assets/sets/scarlet-violet/sv1.png'
+import wotc from '../assets/sets/wizards-of-the-coast/wotc.png'
+import xy1 from '../assets/sets/xy/xy1-xy.png'
+import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
+
+import sv4Img from '../assets/sets/scarlet-violet/logos/sv4-paradox-rift.png'
 
 export default function CardSearch({ onAddCard, onCardClick }) {
-  const [query,  setQuery]  = useState('')
-  const [results, setResults] = useState([])
-  const [defaultCards, setDefault] = useState([])
-  const [suppressDefault, setSuppressDefault] = useState(false)
+    const [query,  setQuery]  = useState('')
+    const [results, setResults] = useState([])
+    const [defaultCards, setDefault] = useState([])
+    const [suppressDefault, setSuppressDefault] = useState(false)
+    const [showSets, setShowSets] = useState(false)
 
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [filters, setFilters] = useState({
-    supertypes: { Pokémon: false, Trainer: false, Energy: false },
-    sets: {},
-  })
+    const ERA_OPTIONS = [
+        { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
+        { key: 'SSH1', name: 'Sword & Shield', src: ssh1 },
+        { key: 'SM1', name: 'Sun & Moon', src: sm1 },
+        { key: 'XY1', name: 'XY', src: xy1 },
+        { key: 'BW1', name: 'Black & White', src: bw1 },
+        { key: 'HGSS1', name: 'Heatgold & Soulsilver', src: hgss1 },
+        { key: 'DP1', name: 'Diamond & Pearl', src: dp1 },
+        { key: 'RS1', name: 'Ruby & Saphire', src: rs1 },
+        { key: 'WOTC', name: 'Wizards of the Coast', src: wotc }
+    ];
+    const SET_OPTIONS = [
+        { key: 'SV4', name: 'Paradox Rift', img: sv4Img, css: 'paradox-rift' },
+        { key: 'SV1', name: 'Scarlet & Violet', img: sv1, css: 'scarlet-violet' },
+    ]
 
-  useEffect(() => {
-    const newestSet = setOrder[0]
-    fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`Network ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        const arr = Array.isArray(data) ? data : []
-        arr.sort((a, b) => {
-          const nA = parseInt(a.number, 10) || 0
-          const nB = parseInt(b.number, 10) || 0
-          return nA - nB
+    const [showAdvanced, setShowAdvanced] = useState(false)
+    const [filters, setFilters] = useState({
+        supertypes: { Pokémon: false, Trainer: false, Energy: false },
+        sets: {},
+        eras: ERA_OPTIONS.reduce((acc, e) => ({ ...acc, [e.key]: false }), {})
+    })
+
+    const toggleSet = key => {
+        setFilters(f => ({
+        ...f,
+        sets: { ...f.sets, [key]: !f.sets[key] }
+        }))
+    }
+
+    useEffect(() => {
+        const newestSet = setOrder[0]
+        fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Network ${res.status}`)
+            return res.json()
         })
-        setDefault(arr)
-        setResults(arr)
-      })
-      .catch(err => {
-        console.error('Failed to load default set:', err)
-      })
-  }, [])
+        .then(data => {
+            const arr = Array.isArray(data) ? data : []
+            arr.sort((a, b) => {
+            const nA = parseInt(a.number, 10) || 0
+            const nB = parseInt(b.number, 10) || 0
+            return nA - nB
+            })
+            setDefault(arr)
+            setResults(arr)
+        })
+        .catch(err => {
+            console.error('Failed to load default set:', err)
+        })
+    }, [])
 
   useEffect(() => {
     const trimmed = query.trim()
@@ -109,6 +145,68 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                 <h2>Advanced Search</h2>
                 <hr></hr>
                 <div className="filter-group">
+                    <h3>Eras</h3>
+                    <div className="era-buttons">
+                    {ERA_OPTIONS.map(({ key, name, src }) => (
+                        <button
+                            key={key}
+                            type="button"
+                            className={`era-btn ${filters.eras[key] ? 'active' : ''}`}
+                            onClick={() =>
+                                setFilters(f => ({
+                                ...f,
+                                eras: {
+                                    ...f.eras,
+                                    [key]: !f.eras[key]
+                                }
+                                }))
+                            }
+                        >
+                        <img src={src} alt={name} title={name} />
+                        </button>
+                    ))}
+                    </div>
+                </div>
+                <div className="filter-group sets-dropdown">
+                    <h3 onClick={() => setShowSets(s => !s)}>
+                        Sets
+                    </h3>
+                    <div className="toggle-sets-wrapper">
+                        <button
+                            type="button"
+                            className="toggle-sets-btn"
+                            onClick={() => setShowSets(s => !s)}
+                            aria-expanded={showSets}
+                        >
+                            {showSets ? 'Hide sets' : 'Show sets'}
+                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+                        </button>
+                        {showSets && (
+                            <>
+                                <div
+                                    className="sets-overlay"
+                                    onClick={() => setShowSets(false)}
+                                />
+                                <div className="sets-grid">
+                                    {SET_OPTIONS.map(({ key, name, img, css }) => (
+                                    <button
+                                        key={key}
+                                        type="button"
+                                        className={`set-cube ${css} ${filters.sets[key] ? 'darkon' : ''}`}
+                                        onClick={() => toggleSet(key)}
+                                    >
+                                        <p>
+                                            <img className="adv-set-logo" src={img} alt={name} title={name} />
+                                        </p>
+                                        <div className="set-name">{name}</div>
+                                    </button>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div className="filter-group">
                     <h3>Card Type:</h3>
                     {[
                         'Pokémon',
@@ -160,27 +258,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                             {type}
                         </button>
                     ))}
-                </div>
-                <div className="filter-group">
-                    <h3>Sets</h3>
-                    {/* {setOrder.map(set => (
-                        <label key={set}>
-                        <input
-                            type="checkbox"
-                            checked={!!filters.sets[set]}
-                            onChange={() => {
-                            setFilters(f => ({
-                                ...f,
-                                sets: {
-                                ...f.sets,
-                                [set]: !f.sets[set]
-                                }
-                            }))
-                            }}
-                        />
-                        {set}
-                        </label>
-                    ))} */}
                 </div>
 
                 <div className="modal-buttons">

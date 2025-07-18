@@ -22,7 +22,7 @@ import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
-import DeckBuilder from './components/DeckBuilder';
+import DeckBuilder from './DeckBuilder/DeckBuilder';
 
 function App() {
 

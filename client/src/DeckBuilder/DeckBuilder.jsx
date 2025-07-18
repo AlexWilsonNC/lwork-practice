@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 import CardSearch     from './CardSearch'
 import DeckList       from './DeckList'
 import ExportButtons  from './ExportButtons'
-import './DeckBuilder.css'
+import '../css/DeckBuilder.css'
+import './setsInAdvancedDropdown.css'
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import patreonImg from '../assets/social-media-icons/black-patreon-blob.png';
 import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
+
+// fetch('https://api.pokemontcg.io/v2/sets').then(res => { console.log('List of All Sets', res.json()) })
+/* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"zsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
+/* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"rsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
+// /* set 250+ */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:svp&page=2').then(res => { console.log('Download Page 2', res.json()) })
+// /* card */ fetch('https://api.pokemontcg.io/v2/cards/sv2-1').then(res => { console.log('Download New Card', res.json()) })
 
 const energyIcons = {
   Colorless: '/assets/energy-symbols/colorless.png',
@@ -150,7 +157,7 @@ const STORAGE_KEY = 'deckbuilder-deck'
 
 const DeckBuilderComp = styled.div`
     .active-deck-container {
-        background-image: ${({ theme }) => theme.deckPlaymat}
+        background-image: ${({ theme }) => theme.activeDeckContainer}
     }
     .card-search-container {
         background-image: ${({ theme }) => theme.cardSearchBg}

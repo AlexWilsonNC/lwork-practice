@@ -130,10 +130,11 @@ const CardsPage = () => {
   const availableSets = [
     { separator: true, text: "Scarlet & Violet"},
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
-    { name: "Black Bolt & White Flare", abbrev: "--", releaseDate: "July 18, 2025", total: "--", notavailable: true },
+    { name: "Black Bolt *", abbrev: "BLK", releaseDate: "July 18, 2025", total: "172" },
+    { name: "White Flare *", abbrev: "WHT", releaseDate: "July 18, 2025", total: "173" },
     { name: "Destined Rivals", abbrev: "DRI", releaseDate: "May 30, 2025", total: "244" },
     { name: "Journey Together", abbrev: "JTG", releaseDate: "Mar 28, 2025", total: "190" },
-    { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },
+    { name: "Prismatic Evolutions *", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },
     { name: "Surging Sparks", abbrev: "SSP", releaseDate: "Nov 8, 2024", total: "252"},
     { name: "Stellar Crown", abbrev: "SCR", releaseDate: "Sep 13, 2024", total: "175"},
     { name: "Shrouded Fable", abbrev: "SFA", releaseDate: "Aug 2, 2024", total: "99" },
