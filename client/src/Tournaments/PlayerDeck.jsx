@@ -579,7 +579,12 @@ const PlayerDeck = () => {
                         <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
                             <button className="decklist-modal-button-deckprofile">Player Profile</button>
                         </Link>
-                        <DecklistOptions decklist={cleanedDecklist} />
+                        { cardData && (
+                            <DecklistOptions
+                                decklist={cleanedDecklist}
+                                cardMap={cardData.cardMap}
+                            />
+                        ) }
                         <div className='deckview-switcher'>
                             <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
                                 <span className="material-symbols-outlined">reorder</span>
@@ -609,7 +614,20 @@ const PlayerDeck = () => {
                         ))}
                         {playerData.decklist.trainer.map((card, index) => (
                             <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                 {
+   (() => {
+     const mapKey = `${card.set}-${card.number}`;
+     const info   = cardData?.cardMap?.[mapKey];
+     const altTxt = info?.name ?? card.name;  // fallback to decklist name
+     return (
+       <img
+         src={cardImageUrl(card)}
+         alt={altTxt}
+         onLoad={handleImageLoad}
+       />
+     );
+   })()
+ }
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}

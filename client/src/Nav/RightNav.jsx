@@ -5,7 +5,7 @@ import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
 import discordIcon from '../assets/social-media-icons/discord-icon.png';
 import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
-import Modal from '../Tools/Interstitial'; // Assuming the modal component exists
+import Modal from '../Tools/Interstitial';
 import '../css/nav.css';
 import pokeball from '../assets/logos/blue-ultra-ball.png';
 

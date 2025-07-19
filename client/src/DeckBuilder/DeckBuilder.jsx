@@ -156,9 +156,6 @@ function sortDeck(deck) {
 const STORAGE_KEY = 'deckbuilder-deck'
 
 const DeckBuilderComp = styled.div`
-    .active-deck-container {
-        background-image: ${({ theme }) => theme.activeDeckContainer}
-    }
     .card-search-container {
         background-image: ${({ theme }) => theme.cardSearchBg}
     }
@@ -171,7 +168,8 @@ export default function DeckBuilder() {
   const { theme } = useTheme();
   const [limitCounts, setLimitCounts] = useState(true);
   const [showLimitMenu, setShowLimitMenu] = useState(false);
-  const [viewMode,   setViewMode]   = useState('image')
+  const [viewMode,   setViewMode]   = useState('image');
+  const [zoomScale, setZoomScale] = useState(1);
   const menuRef = useRef(null)
 
     useEffect(() => {
@@ -270,7 +268,7 @@ function addCard(cardToAdd) {
     async function importDeck(overwrite = false) {
     setImporting(true)
     try {
-        const startingDeck = overwrite ? [] : [...deck]
+        const startingDeck = overwrite ? [] : [...deck];
         if (overwrite) setDeck([])
         const text = await navigator.clipboard.readText()
         const lines = text
@@ -278,7 +276,7 @@ function addCard(cardToAdd) {
         .map(l => l.trim())
         .filter(l => l && !l.endsWith(':'))
         .filter(l => /^\d+\s/.test(l))
-        const merged = [...startingDeck]
+        const merged = [...startingDeck];
 
         for (const line of lines) {
             const parts = line.split(/\s+/)
@@ -286,10 +284,15 @@ function addCard(cardToAdd) {
             const number = parts.pop()
             const setAbbrev = parts.pop()
             const name = parts.slice(1).join(' ')
+            const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
+            const url = `/api/cards/searchbyname/partial/${safeName}`;
 
-            const results = await fetch(
-            `/api/cards/searchbyname/partial/${encodeURIComponent(name)}`
-            ).then(r => r.json())
+            const res = await fetch(url);
+            if (!res.ok) {
+              console.error('search error', res.status, await res.text());
+              continue;
+            }
+            const results = await res.json();
 
             const match = results.find(
             c => c.setAbbrev === setAbbrev && c.number === number
@@ -313,7 +316,6 @@ function addCard(cardToAdd) {
             console.warn('Could not import:', name, setAbbrev, number)
             }
         }
-
         setDeck(merged)
         } catch (err) {
         console.error('Import failed', err)
@@ -606,6 +608,26 @@ function addCard(cardToAdd) {
                                 </div>
                             )}
                         </div>
+                        <div
+                          className="zoom-slider"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginLeft: '1rem'
+                          }}
+                        >
+                         <span className="material-symbols-outlined slider-zoomout">remove</span>
+                         <input
+                           type="range"
+                           min={0.5}
+                           max={2}
+                           step={0.1}
+                           value={zoomScale}
+                           onChange={e => setZoomScale(parseFloat(e.target.value))}
+                           style={{ margin: '0 0.5rem' }}
+                         />
+                         <span className="material-symbols-outlined slider-zoomin">add</span>
+                       </div>
                     </div>
                     <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
                         <img src={patreonImg} />
@@ -621,6 +643,7 @@ function addCard(cardToAdd) {
                     onCardDrop={addCard}
                     limitCounts={limitCounts}
                     viewMode={viewMode}
+                    zoomScale={zoomScale}
                 />
             </div>
         </div>

@@ -1,21 +1,21 @@
 import React from 'react';
 
-const DecklistOptions = ({ decklist }) => {
-  // Remove unwanted suffixes and force the "Pokémon" accent
+const DecklistOptions = ({ decklist, cardMap }) => {
   const cleanCardName = (name) => {
     return name
       .replace(" - ACESPEC", "")
-      .replace(/Pokemon/g, "Pokémon");
   };
 
-  // Copy decklist with trimmed lines to avoid extra spaces
   const copyToClipboard = () => {
     if (!decklist) return;
 
-    const formatCards = (cards) =>
-      cards.map(
-        (card) => `${card.count} ${cleanCardName(card.name)} ${card.set} ${card.number}`
-      );
+    const formatCards = cards =>
+    cards.map(card => {
+      const key = `${card.set}-${card.number}`;
+      const accented = cardMap[key]?.name;
+      const displayName = accented ?? cleanCardName(card.name);
+      return `${card.count} ${displayName} ${card.set} ${card.number}`;
+    });
 
     const lines = [
       'Pokémon:',

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, limitCounts = true, viewMode = 'image' }) {
+export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, limitCounts = true, viewMode = 'image', zoomScale = 1 }) {
   const shrink = Array.isArray(deck) && deck.length > 45
 
    if (viewMode === 'list') {
@@ -53,8 +53,11 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
           <img
             src={c.images.small}
             alt={c.name}
-            onClick={() => {/* TODO: open modal with c.images.large */}}
-            className='database-card-in-list card-added-in-decklist'
+            className="database-card-in-list card-added-in-decklist"
+            style={{
+              width: `${70 * zoomScale}px`,  /* 70 is your base width in px */
+              height: 'auto'
+            }}
           />
           <div className="deck-add-minus">
             <button
