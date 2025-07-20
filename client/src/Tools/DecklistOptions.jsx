@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'
 
 const DecklistOptions = ({ decklist, cardMap }) => {
+  const navigate = useNavigate()
+
   const cleanCardName = (name) => {
     return name
       .replace(" - ACESPEC", "")
@@ -38,8 +41,21 @@ const DecklistOptions = ({ decklist, cardMap }) => {
   };
 
   const openInDeckbuilder = () => {
-    console.log('Opened in deckbuilder');
-  };
+    const minimal = [
+      ...decklist.pokemon,
+      ...decklist.trainer,
+      ...decklist.energy
+    ].map(c => ({
+      set:    c.set,
+      number: c.number,
+      count:  Number(c.count)
+    }))
+
+    const hash = `deck=${encodeURIComponent(JSON.stringify(minimal))}`
+
+    navigate(`/deckbuilder#${hash}`)
+  }
+
 
   return (
     <div className="deck-top-right-options">

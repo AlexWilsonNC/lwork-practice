@@ -190,10 +190,20 @@
     height: 100%;
     max-width: 100%;
     max-height: 100%;
+    position: relative;
+}
+.deckbuilder-spinner-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 .card-search-container {
     width: 40%;height:100%;
-    /* z-index: 0; */
     position: relative;
 }
 .event-searchbar {
@@ -322,9 +332,8 @@
 }
 .all-cards-container {
     width: 100%;
-    height: 90.5vh;
+    height: 92vh;
     overflow-y: scroll;
-    border-bottom: 1000px solid rgb(27, 27, 27);
 }
 .all-cards-farther {
     height: 72vh;
@@ -338,17 +347,10 @@
 .all-cards-container::-webkit-scrollbar-thumb {
     background-color: #1290eb;
 }
-.all-cards-container.darkon::-webkit-scrollbar-track {
-    background-color: #272d34;
-    border: 1px solid #121212;
-}
-.all-cards-container.darkon::-webkit-scrollbar-thumb {
-    background-color: rgb(218, 221, 230);
-    box-shadow: 0px 2px rgba(0, 0, 0, 0.86);
-}
 .all-cards-displayed {
     width: 95%;
-    padding: 10px 10px 100px 20px;
+    padding: 10px;
+    padding-bottom: 100px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -504,12 +506,7 @@
     font-size: 14px;
 }
 .deck-box.shrink-cards .deck-add-minus {
-    margin-bottom: 5px;
-    width: 4vw;
-}
-.deck-box.shrink-cards .pm-card {
-    height: 20px;
-    width: 20px;
+    margin-bottom: 7px;
 }
 .deck-add-minus {
     display: flex;
@@ -517,24 +514,11 @@
     align-items: center;
     justify-content: space-around;
     margin-bottom: 10px;
-    /* transition: ease all 0.3s; */
     position: absolute;
-
-    /* if 27 or less */
-    /* width: 115px; */
-
-    /* if 28 or more */
     width: 6vw;
 }
 .pm-card {
-    /* if 27 or less */
-    /* padding: 5px; */
-
-    /* if 28 or more */
-    padding: 4px;
-    
     visibility: hidden;
-    font-size: 16px;
     background-color: #1290eb;
     color: white;
     border: 1.5px solid rgba(0, 0, 0, 0.4);
@@ -544,25 +528,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 2px;
-    height: 30px;
-    width: 30px;
 }
 .deckbuilt-card-container:hover > .deck-add-minus > .pm-card {
     visibility: visible !important;
 }
 .pm-card:hover {
     cursor: pointer;
-    background-color: rgb(255, 255, 255);
-    color:black;
+    background-color: #12588a;
 }
 .current-cnt-num {
-        /* if 27 or less */
-        /* width: 37px; */
-
-        /* if 28 or more */
-        width: 25px;
-    height: 25px;
     background: rgba(0, 0, 0, 0.82);
     border-radius: 5px;
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -571,7 +545,6 @@
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 16px;
     font-weight: bolder;
     pointer-events: none;
     z-index: 2;
@@ -764,8 +737,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    color: white;
-    background-color: grey;
+    color: black;
+    background-color: white;
     border: 2px solid rgba(0, 0, 0, 0.3);
     padding: 5px 7px;
     transition: ease all 0.2s;
@@ -782,7 +755,7 @@
 .stat-count {
     color: black;
     background-color: white;
-    border: 2px solid rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.3);
     padding: 5px 7px 5px 10px;
     transition: ease all 0.2s;
     font-weight: 400;
@@ -790,6 +763,7 @@
     border-radius: 4px;
     width: 125px;
     overflow: hidden;
+    text-wrap: nowrap;
 }
 .current-deck-count {
     font-weight: 600;
@@ -830,7 +804,8 @@
     cursor: pointer;
 }
 .support-again:hover {
-    background-color: #1290eb;
+    background-color: grey;
+    color: white;
     cursor: pointer;
 }
 .limit-menu-container {
@@ -906,7 +881,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* background: rgba(0,0,0,0.7); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1532,40 +1506,36 @@
   margin-left: 1rem;
 }
 .zoom-slider input[type="range"] {
-  /* kill the native look so our styles show */
   -webkit-appearance: none;
   appearance: none;
-  width: 100px;             /* adjust to whatever length you like */
-  background: transparent;  /* track lives in the ::-webkit‑slider‑runnable‑track */
+  width: 100px; 
+  background: transparent;
   margin: 0 0.5rem;
 }
-
 /* Chrome, Safari, Edge */
 .zoom-slider input[type="range"]::-webkit-slider-runnable-track {
-  height: 4px;              /* ← THIN rail! */
+  height: 4px;
   background: #ccc;
+  /* border: 1px solid grey; */
   border-radius: 2px;
 }
-
 .zoom-slider input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 12px;
-  height: 12px;
-  margin-top: -4px;         /* half the rail-height to center */
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
   border-radius: 50%;
   background: #1290eb;
   border: 2px solid rgba(0,0,0,0.3);
   cursor: pointer;
 }
-
 /* Firefox */
 .zoom-slider input[type="range"]::-moz-range-track {
-  height: 4px;              /* match webkit */
+  height: 4px;
   background: #ccc;
   border-radius: 2px;
 }
-
 .zoom-slider input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
@@ -1574,7 +1544,6 @@
   border: 2px solid rgba(0,0,0,0.3);
   cursor: pointer;
 }
-
 /* IE */
 .zoom-slider input[type="range"]::-ms-track {
   height: 4px;
@@ -1597,7 +1566,6 @@
   background: #1290eb;
   border: 2px solid rgba(0,0,0,0.3);
 }
-
 .slider-zoomin,
 .slider-zoomout {
     padding: 2px;
@@ -1607,6 +1575,13 @@
     color:white;
     font-size: 16px;
     font-weight: 600;
+    transition: ease all 0.2s;
+}
+.slider-zoomin:hover,
+.slider-zoomout:hover {
+    cursor: pointer;
+    background-color: grey;
+    transform: scale(1.1);
 }
 
 @media screen and (max-width: 1160px) {

@@ -563,7 +563,8 @@ const CardView = () => {
         : otherVersionsToShow.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)).slice(0, 5);
 
     if (!cardInfo) {
-        return <div>Card not found</div>;
+        // return <div>Card not found</div>;
+        return <div></div>;
     }
 
     const isPromoSet = cardInfo.set.name.toLowerCase().includes('promo');

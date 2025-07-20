@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import './App.css'
 import Navbar from './Nav/Navbar';
 import HomePage from './Homepage/HomePage';
@@ -25,6 +25,8 @@ import NotFound from './Catch/NotFound';
 import DeckBuilder from './DeckBuilder/DeckBuilder';
 
 function App() {
+  const { pathname } = useLocation()
+  const noFooterOn = ['/ljhksdgbnksgkjsiodsfi', '/ljhksdgbnksgkjsiodsfi']
 
   return (
     <div className="all-app-container">
@@ -55,9 +57,10 @@ function App() {
           <Route path="/deckcalculator" element={<DeckCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        
         <BackToTopButton />
       </main>
-      <Footer />
+      { !noFooterOn.includes(pathname) && <Footer/> }
     </div>
   );
 }

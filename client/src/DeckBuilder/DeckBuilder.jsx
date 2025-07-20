@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom';
-import CardSearch     from './CardSearch'
-import DeckList       from './DeckList'
-import ExportButtons  from './ExportButtons'
+import CardSearch from './CardSearch'
+import DeckList from './DeckList'
+import ExportButtons from './ExportButtons'
 import '../css/DeckBuilder.css'
 import './setsInAdvancedDropdown.css'
 import { Helmet } from 'react-helmet';
@@ -19,17 +19,17 @@ import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
 
 const energyIcons = {
   Colorless: '/assets/energy-symbols/colorless.png',
-  Grass:     '/assets/energy-symbols/grass.png',
-  Fire:      '/assets/energy-symbols/fire.png',
-  Water:     '/assets/energy-symbols/water.png',
+  Grass: '/assets/energy-symbols/grass.png',
+  Fire: '/assets/energy-symbols/fire.png',
+  Water: '/assets/energy-symbols/water.png',
   Lightning: '/assets/energy-symbols/lightning.png',
-  Psychic:   '/assets/energy-symbols/psychic.png',
-  Fighting:  '/assets/energy-symbols/fighting.png',
-  Darkness:  '/assets/energy-symbols/dark.png',
-  Metal:     '/assets/energy-symbols/metal.png',
-  Fairy:     '/assets/energy-symbols/fairy.png',
-  Dragon:    '/assets/energy-symbols/dragon.png',
-  NoCost:    '/assets/energy-symbols/deselect-all.png'
+  Psychic: '/assets/energy-symbols/psychic.png',
+  Fighting: '/assets/energy-symbols/fighting.png',
+  Darkness: '/assets/energy-symbols/dark.png',
+  Metal: '/assets/energy-symbols/metal.png',
+  Fairy: '/assets/energy-symbols/fairy.png',
+  Dragon: '/assets/energy-symbols/dragon.png',
+  NoCost: '/assets/energy-symbols/deselect-all.png'
 };
 
 function renderEnergyIcons(cost) {
@@ -46,17 +46,17 @@ function renderEnergyIcons(cost) {
   ));
 }
 
-const basicEnergyTypes = ["Grass","Fire","Water","Lightning","Psychic","Fighting","Darkness","Metal","Fairy"];
+const basicEnergyTypes = ["Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness", "Metal", "Fairy"];
 const stageOrder = { "Stage 2": 0, "Stage 1": 1, "Basic": 2 };
-const trainerPriority  = {
-    "Supporter": 0,
-    "Item": 1,
-    "Rocket's Secret Machine": 1,
-    "Rocket's Secret Robot": 1,
-    "Goldenrod Game Corner": 1,
-    "Pokémon Tool": 2,
-    "Technical Machine": 2,
-    "Stadium": 3,
+const trainerPriority = {
+  "Supporter": 0,
+  "Item": 1,
+  "Rocket's Secret Machine": 1,
+  "Rocket's Secret Robot": 1,
+  "Goldenrod Game Corner": 1,
+  "Pokémon Tool": 2,
+  "Technical Machine": 2,
+  "Stadium": 3,
 };
 
 function sortDeck(deck) {
@@ -155,6 +155,10 @@ function sortDeck(deck) {
 
 const STORAGE_KEY = 'deckbuilder-deck'
 
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 2;
+const ZOOM_STEP = 0.1;
+
 const DeckBuilderComp = styled.div`
     .card-search-container {
         background-image: ${({ theme }) => theme.cardSearchBg}
@@ -168,60 +172,68 @@ export default function DeckBuilder() {
   const { theme } = useTheme();
   const [limitCounts, setLimitCounts] = useState(true);
   const [showLimitMenu, setShowLimitMenu] = useState(false);
-  const [viewMode,   setViewMode]   = useState('image');
-  const [zoomScale, setZoomScale] = useState(1);
+  const [viewMode, setViewMode] = useState('image');
+  const [zoomScale, setZoomScale] = useState(1.4); // default decklist zoom
+  const [loadingHash, setLoadingHash] = useState(false)
   const menuRef = useRef(null)
 
-    useEffect(() => {
-        if (!showLimitMenu) return
-        const handleClickOutside = e => {
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
-            setShowLimitMenu(false)
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [showLimitMenu])
+  useEffect(() => {
+    if (!showLimitMenu) return
+    const handleClickOutside = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowLimitMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showLimitMenu])
 
-    const [deck, setDeck] = useState(() => {
+  const [deck, setDeck] = useState(() => {
     const hash = window.location.hash.slice(1);
     const params = new URLSearchParams(hash);
     if (params.has('deck')) {
-        try {
+      try {
         const arr = JSON.parse(decodeURIComponent(params.get('deck')));
         // arr is now [ { set:'DRI', number:'3', count:1}, … ]
         return [];
-        } catch {
+      } catch {
         console.warn('Invalid deck in URL');
-        }
+      }
     }
     try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch {
-        return [];
+      return [];
     }
-    });
+  });
 
-    useEffect(() => {
+  useEffect(() => {
     const hash = window.location.hash.slice(1);
     const params = new URLSearchParams(hash);
     if (!params.has('deck')) return;
     let minimal;
     try {
-        minimal = JSON.parse(decodeURIComponent(params.get('deck')));
+      minimal = JSON.parse(decodeURIComponent(params.get('deck')));
+      // make sure counts are numbers
+      minimal = minimal.map(c => ({ ...c, count: Number(c.count) }));
     } catch {
-        return;
+      return;
     }
+
+    // start spinner
+    setLoadingHash(true);
     Promise.all(
-        minimal.map(({ set, number, count }) =>
+      minimal.map(({ set, number, count }) =>
         fetch(`/api/cards/${set}/${number}`)
-            .then(r => r.json())
-            .then(card => ({ ...card, count }))
-        )
-    ).then(fullDeck => setDeck(fullDeck));
-    }, []);
+          .then(r => r.json())
+          .then(card => ({ ...card, count }))
+      )
+    ).then(fullDeck => setDeck(fullDeck))
+      .catch(console.error)
+      .finally(() => setLoadingHash(false))
+  }, []);
 
   const [zoomCard, setZoomCard] = useState(null);
 
@@ -229,100 +241,100 @@ export default function DeckBuilder() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deck))
   }, [deck])
 
-function addCard(cardToAdd) {
-  setDeck(prevDeck => {
-    const idx = prevDeck.findIndex(
-      c => c.setAbbrev === cardToAdd.setAbbrev && c.number === cardToAdd.number
-    );
+  function addCard(cardToAdd) {
+    setDeck(prevDeck => {
+      const idx = prevDeck.findIndex(
+        c => c.setAbbrev === cardToAdd.setAbbrev && c.number === cardToAdd.number
+      );
 
-    if (idx >= 0) {
-      return prevDeck.map((c, i) => {
-        if (i !== idx) return c;
+      if (idx >= 0) {
+        return prevDeck.map((c, i) => {
+          if (i !== idx) return c;
 
-        const isBasicEnergy =
-          cardToAdd.supertype === 'Energy' &&
-          cardToAdd.name.startsWith('Basic');
+          const isBasicEnergy =
+            cardToAdd.supertype === 'Energy' &&
+            cardToAdd.name.startsWith('Basic');
 
-        const newCount = isBasicEnergy
-          ? c.count + 1
-          : Math.min(c.count + 1, 4);
+          const newCount = isBasicEnergy
+            ? c.count + 1
+            : Math.min(c.count + 1, 4);
 
-        return { ...c, count: newCount };
-      });
-    } else {
-      return [...prevDeck, { ...cardToAdd, count: 1 }];
-    }
-  });
-}
+          return { ...c, count: newCount };
+        });
+      } else {
+        return [...prevDeck, { ...cardToAdd, count: 1 }];
+      }
+    });
+  }
 
   function updateCount(index, newCount) {
     setDeck(d => d
-      .map((c,i) => i === index ? { ...c, count: newCount } : c)
+      .map((c, i) => i === index ? { ...c, count: newCount } : c)
       .filter(c => c.count > 0)
     )
   }
 
-    const [importing, setImporting] = useState(false)
-    const [dragOver, setDragOver]   = useState(false)
+  const [importing, setImporting] = useState(false)
+  const [dragOver, setDragOver] = useState(false)
 
-    async function importDeck(overwrite = false) {
+  async function importDeck(overwrite = false) {
     setImporting(true)
     try {
-        const startingDeck = overwrite ? [] : [...deck];
-        if (overwrite) setDeck([])
-        const text = await navigator.clipboard.readText()
-        const lines = text
+      const startingDeck = overwrite ? [] : [...deck];
+      if (overwrite) setDeck([])
+      const text = await navigator.clipboard.readText()
+      const lines = text
         .split(/\r?\n/)
         .map(l => l.trim())
         .filter(l => l && !l.endsWith(':'))
         .filter(l => /^\d+\s/.test(l))
-        const merged = [...startingDeck];
+      const merged = [...startingDeck];
 
-        for (const line of lines) {
-            const parts = line.split(/\s+/)
-            const count = parseInt(parts[0], 10)
-            const number = parts.pop()
-            const setAbbrev = parts.pop()
-            const name = parts.slice(1).join(' ')
-            const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
-            const url = `/api/cards/searchbyname/partial/${safeName}`;
+      for (const line of lines) {
+        const parts = line.split(/\s+/)
+        const count = parseInt(parts[0], 10)
+        const number = parts.pop()
+        const setAbbrev = parts.pop()
+        const name = parts.slice(1).join(' ')
+        const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
+        const url = `/api/cards/searchbyname/partial/${safeName}`;
 
-            const res = await fetch(url);
-            if (!res.ok) {
-              console.error('search error', res.status, await res.text());
-              continue;
-            }
-            const results = await res.json();
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.error('search error', res.status, await res.text());
+          continue;
+        }
+        const results = await res.json();
 
-            const match = results.find(
+        const match = results.find(
+          c => c.setAbbrev === setAbbrev && c.number === number
+        )
+        if (match) {
+          const idx = merged.findIndex(
             c => c.setAbbrev === setAbbrev && c.number === number
-            )
-            if (match) {
-            const idx = merged.findIndex(
-                c => c.setAbbrev === setAbbrev && c.number === number
-            )
-            if (idx > -1) {
-                if (!limitCounts) {
-                merged[idx].count += count
-                } else if (match.supertype !== 'Energy') {
-                merged[idx].count = Math.min(merged[idx].count + count, 4)
-                } else {
-                merged[idx].count += count
-                }
+          )
+          if (idx > -1) {
+            if (!limitCounts) {
+              merged[idx].count += count
+            } else if (match.supertype !== 'Energy') {
+              merged[idx].count = Math.min(merged[idx].count + count, 4)
             } else {
-                merged.push({ ...match, count })
+              merged[idx].count += count
             }
-            } else {
-            console.warn('Could not import:', name, setAbbrev, number)
-            }
+          } else {
+            merged.push({ ...match, count })
+          }
+        } else {
+          console.warn('Could not import:', name, setAbbrev, number)
         }
-        setDeck(merged)
-        } catch (err) {
-        console.error('Import failed', err)
-        } finally {
-        setImporting(false)
-        }
+      }
+      setDeck(merged)
+    } catch (err) {
+      console.error('Import failed', err)
+    } finally {
+      setImporting(false)
     }
+  }
 
   const handleCardClick = card => setZoomCard(card);
 
@@ -335,8 +347,8 @@ function addCard(cardToAdd) {
 
   return (
     <DeckBuilderComp className='center' theme={theme}>
-        <Helmet>
-            {/* <title>{isFeatured ? `${formatName(playerData.name)}'s Featured Deck` : `${formatName(playerData.name)}'s Decklist`}</title>
+      <Helmet>
+        {/* <title>{isFeatured ? `${formatName(playerData.name)}'s Featured Deck` : `${formatName(playerData.name)}'s Decklist`}</title>
             <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
             <meta property="og:title" content={eventData.name} />
             <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
@@ -348,305 +360,328 @@ function addCard(cardToAdd) {
             <meta name="twitter:title" content={eventData.name} />
             <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
             <meta name="twitter:image" content={eventData.thumbnail} /> */}
-        </Helmet>
-        {zoomCard && (() => {
-            const idx = deck.findIndex(
-                c => c.setAbbrev === zoomCard.setAbbrev && c.number === zoomCard.number
-            );
-            const currentCount = idx >= 0 ? deck[idx].count : 0;
-
-            const handleDelta = delta => {
-                const newCount = currentCount + delta;
-                    if (idx >= 0) {
-                        updateCount(idx, newCount);
-                    } else if (delta > 0) {
-                        addCard(zoomCard);
-                }
-            };
-
-            return (
-                <div
-                    className="card-modal-overlay"
-                    onClick={() => setZoomCard(null)}
-                >
-                    <div
-                        className="card-modal-content"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        {zoomCard.images.large && (
-                            <div
-                                className="modal-bg-blur"
-                                style={{
-                                    backgroundImage: `url(${zoomCard.images.large})`
-                                }}
-                            />
-                        )}
-                        <button
-                            className="modal-close"
-                            onClick={() => setZoomCard(null)}
-                        >
-                        ×
-                        </button>
-
-                        <img
-                            src={zoomCard.images.large}
-                            alt={zoomCard.name}
-                            className="card-modal-image"
-                        />
-                        {/* <p style={{ textAlign: 'center', margin: '20px 0 5px 0', opacity: 0.5 }}>In Deck:</p> */}
-                        <div className="modal-count-controls">
-                            <button
-                                className='btn-minus-r'
-                                type="button"
-                                onClick={() => handleDelta(-1)}
-                                disabled={currentCount <= 0}
-                            >–</button>
-                            <span className="modal-count">{currentCount}</span>
-                            <button
-                                className='btn-plus-l'
-                                type="button"
-                                onClick={() => handleDelta(1)}
-                                disabled={zoomCard.supertype !== 'Energy' && currentCount >= 4}
-                            >＋</button>
-                        </div>
-
-                        <div className="card-details">
-                            <h2>{zoomCard.name}</h2>
-                            <p>{zoomCard.supertype} • {zoomCard.subtypes?.join(' • ')}</p>
-                            {zoomCard.supertype === 'Pokémon' && (
-                                <p>{zoomCard.types} • {zoomCard.hp}<span className='shrink'> HP</span></p>
-                            )}
-                            <hr className="zoomed-card-db-hr" />
-                            {zoomCard.abilities?.map((ab, i) => (
-                                <p key={i}>
-                                    <strong><span style={{ color: 'red' }}>Ability:</span> {ab.name}</strong>
-                                    <br></br>{ab.text}
-                                </p>
-                            ))}
-                            {zoomCard.attacks?.map((atk, i) => (
-                                <div key={i}>
-                                    <p style={{ margin: '15px 0'}}> 
-                                        {renderEnergyIcons(atk.cost)}&nbsp;&nbsp;
-                                        <strong>{atk.name}</strong>&nbsp;&nbsp;&nbsp;&nbsp;{atk.damage}
-                                        <br></br>{atk.text}
-                                    </p>
-                                </div>
-                            ))}
-                            {zoomCard.supertype != 'Pokémon' && zoomCard.rules?.length > 0 && (
-                                <div className="modal-rules">
-                                    <ul>
-                                        {zoomCard.rules.map((text, i) => (
-                                            <li key={i}>{text}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {zoomCard.supertype === 'Pokémon' && (
-                                <hr className='zoomed-card-db-hr'></hr>
-                            )}
-                            {(zoomCard.retreatCost != null || zoomCard.convertedRetreatCost != null) && (
-                                <div className="modal-retreat-cost">
-                                    <strong>Retreat:</strong>&nbsp;&nbsp;{' '}
-                                    {(() => {
-                                        if (zoomCard.convertedRetreatCost != null) {
-                                        return zoomCard.convertedRetreatCost;
-                                        }
-                                        if (Array.isArray(zoomCard.retreatCost)) {
-                                        return zoomCard.retreatCost.length;
-                                        }
-                                        return 0;
-                                    })()}
-                                </div>
-                            )}
-                            {zoomCard.weaknesses && (
-                                <p>
-                                    <strong>Weakness:</strong>{' '}
-                                    {zoomCard.weaknesses.map(w=>`${w.type} ${w.value}`).join(', ')}
-                                </p>
-                            )}
-                            {zoomCard.resistances && (
-                                <p>
-                                    <strong>Resistanc:</strong>{' '}
-                                    {zoomCard.resistances.map(r=>`${r.type} ${r.value}`).join(', ')}
-                                </p>
-                            )}
-                        </div>
-                        <div className='bottom-db-modal-bts'>
-                            {tcgUrl ? (
-                                <a
-                                    href={tcgUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="tcgplayer-link"
-                                >
-                                <button className="tcgplayer-btn">
-                                    <img
-                                    src={tcgplayerIcon}
-                                    alt="TCGplayer"
-                                    className="tcgplayer-btn__icon"
-                                    />
-                                    &nbsp;TCGplayer
-                                </button>
-                                </a>
-                            ) : (
-                                <button className="tcgplayer-btn" disabled>
-                                <img
-                                    src={tcgplayerIcon}
-                                    alt="TCGplayer"
-                                    className="tcgplayer-btn__icon"
-                                />
-                                &nbsp;TCGplayer
-                                </button>
-                            )}
-                            <Link to={`/card/${zoomCard.setAbbrev}/${zoomCard.number}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <button>View in Database</button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            );
-        })()}
-        <div className="deck-builder">
-            <CardSearch onAddCard={addCard} onCardClick={handleCardClick} />
-            <div
-              className={`active-deck-container${dragOver ? ' drag-over' : ''}`}
-              onDragOver={e => {
-                e.preventDefault()
-                setDragOver(true)
-              }}
-              onDragLeave={e => {
-                e.preventDefault()
-                setDragOver(false)
-              }}
-              onDrop={e => {
-                e.preventDefault()
-                setDragOver(false)
-                const json = e.dataTransfer.getData('application/json')
-                if (json) {
-                  try {
-                    const card = JSON.parse(json)
-                    addCard(card)
-                  } catch {}
-                }
-              }}
-            >
-                <ExportButtons 
-                    deck={deck} 
-                    onImportDeck={importDeck}
-                />
-                <div className='deck-stats'>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <p className='stat-count'>
-                            Card Count: <span className='current-deck-count'>{totalCount}</span>
-                        </p>
-                        <div id='deck-sort'style={{ cursor: 'pointer' }} onClick={handleSort}>
-                            <span className="material-symbols-outlined">sort</span>
-                            <p>&nbsp;Sort&nbsp;</p>
-                        </div>
-                        <div id="deck-reset" onClick={() => setDeck([])}>
-                            <span className="material-symbols-outlined">close</span>
-                            <p>Reset</p>
-                        </div>
-                        <div className="limit-menu-container" ref={menuRef}>
-                            <button
-                                className="limit-menu-btn"
-                                onClick={() => setShowLimitMenu(v => !v)}
-                                aria-label="Open deck settings"
-                            >
-                                ⋮
-                            </button>
-                            {showLimitMenu && (
-                                <div className="limit-menu-dropdown">
-                                    <div
-                                        className="menu-item"
-                                        onClick={() => {
-                                        setLimitCounts(true)
-                                        setShowLimitMenu(false)
-                                        }}
-                                    >
-                                        <span className="menu-check">
-                                        {limitCounts ? '✔︎' : ''}
-                                        </span>
-                                        Enforce Limits
-                                    </div>
-                                    <div
-                                        className="menu-item"
-                                        onClick={() => {
-                                        setLimitCounts(false)
-                                        setShowLimitMenu(false)
-                                        }}
-                                    >
-                                        <span className="menu-check">
-                                        {!limitCounts ? '✔︎' : ''}
-                                        </span>
-                                        Remove Limits
-                                    </div>
-                                    <hr className='dropdown-hr-options'></hr>
-                                    <div
-                                        className="menu-item"
-                                        onClick={() => {
-                                        setViewMode('image')
-                                        setShowLimitMenu(false)
-                                        }}
-                                    >
-                                        <span className="menu-check">{viewMode === 'image' ? '✔︎' : ''}</span>
-                                        Image View
-                                    </div>
-                                    <div
-                                        className="menu-item"
-                                        onClick={() => {
-                                        setViewMode('list')
-                                        setShowLimitMenu(false)
-                                        }}
-                                    >
-                                        <span className="menu-check">{viewMode === 'list' ? '✔︎' : ''}</span>
-                                        List View
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        <div
-                          className="zoom-slider"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginLeft: '1rem'
-                          }}
-                        >
-                         <span className="material-symbols-outlined slider-zoomout">remove</span>
-                         <input
-                           type="range"
-                           min={0.5}
-                           max={2}
-                           step={0.1}
-                           value={zoomScale}
-                           onChange={e => setZoomScale(parseFloat(e.target.value))}
-                           style={{ margin: '0 0.5rem' }}
-                         />
-                         <span className="material-symbols-outlined slider-zoomin">add</span>
-                       </div>
-                    </div>
-                    <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
-                        <img src={patreonImg} />
-                        {/* <p>Support this Project</p> */}
-                        <p>Support Us</p>
-                    </a>
-                </div>
-                <DeckList 
-                    deck={deck} 
-                    onUpdateCount={updateCount} 
-                    onCardClick={handleCardClick} 
-                    loading={importing} 
-                    onCardDrop={addCard}
-                    limitCounts={limitCounts}
-                    viewMode={viewMode}
-                    zoomScale={zoomScale}
-                />
-            </div>
+      </Helmet>
+      {loadingHash && (
+        <div className="deckbuilder-spinner-overlay">
+          <div className="deck-spinner">
+            <span className="material-symbols-outlined spinner-icon">
+              autorenew
+            </span>
+          </div>
         </div>
+      )}
+      {zoomCard && (() => {
+        const idx = deck.findIndex(
+          c => c.setAbbrev === zoomCard.setAbbrev && c.number === zoomCard.number
+        );
+        const currentCount = idx >= 0 ? deck[idx].count : 0;
+
+        const handleDelta = delta => {
+          const newCount = currentCount + delta;
+          if (idx >= 0) {
+            updateCount(idx, newCount);
+          } else if (delta > 0) {
+            addCard(zoomCard);
+          }
+        };
+
+        return (
+          <div
+            className="card-modal-overlay"
+            onClick={() => setZoomCard(null)}
+          >
+            <div
+              className="card-modal-content"
+              onClick={e => e.stopPropagation()}
+            >
+              {zoomCard.images.large && (
+                <div
+                  className="modal-bg-blur"
+                  style={{
+                    backgroundImage: `url(${zoomCard.images.large})`
+                  }}
+                />
+              )}
+              <button
+                className="modal-close"
+                onClick={() => setZoomCard(null)}
+              >
+                ×
+              </button>
+
+              <img
+                src={zoomCard.images.large}
+                alt={zoomCard.name}
+                className="card-modal-image"
+              />
+              {/* <p style={{ textAlign: 'center', margin: '20px 0 5px 0', opacity: 0.5 }}>In Deck:</p> */}
+              <div className="modal-count-controls">
+                <button
+                  className='btn-minus-r'
+                  type="button"
+                  onClick={() => handleDelta(-1)}
+                  disabled={currentCount <= 0}
+                >–</button>
+                <span className="modal-count">{currentCount}</span>
+                <button
+                  className='btn-plus-l'
+                  type="button"
+                  onClick={() => handleDelta(1)}
+                  disabled={zoomCard.supertype !== 'Energy' && currentCount >= 4}
+                >＋</button>
+              </div>
+
+              <div className="card-details">
+                <h2>{zoomCard.name}</h2>
+                <p>{zoomCard.supertype} • {zoomCard.subtypes?.join(' • ')}</p>
+                {zoomCard.supertype === 'Pokémon' && (
+                  <p>{zoomCard.types} • {zoomCard.hp}<span className='shrink'> HP</span></p>
+                )}
+                <hr className="zoomed-card-db-hr" />
+                {zoomCard.abilities?.map((ab, i) => (
+                  <p key={i}>
+                    <strong><span style={{ color: 'red' }}>Ability:</span> {ab.name}</strong>
+                    <br></br>{ab.text}
+                  </p>
+                ))}
+                {zoomCard.attacks?.map((atk, i) => (
+                  <div key={i}>
+                    <p style={{ margin: '15px 0' }}>
+                      {renderEnergyIcons(atk.cost)}&nbsp;&nbsp;
+                      <strong>{atk.name}</strong>&nbsp;&nbsp;&nbsp;&nbsp;{atk.damage}
+                      <br></br>{atk.text}
+                    </p>
+                  </div>
+                ))}
+                {zoomCard.supertype != 'Pokémon' && zoomCard.rules?.length > 0 && (
+                  <div className="modal-rules">
+                    <ul>
+                      {zoomCard.rules.map((text, i) => (
+                        <li key={i}>{text}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {zoomCard.supertype === 'Pokémon' && (
+                  <hr className='zoomed-card-db-hr'></hr>
+                )}
+                {(zoomCard.retreatCost != null || zoomCard.convertedRetreatCost != null) && (
+                  <div className="modal-retreat-cost">
+                    <strong>Retreat:</strong>&nbsp;&nbsp;{' '}
+                    {(() => {
+                      if (zoomCard.convertedRetreatCost != null) {
+                        return zoomCard.convertedRetreatCost;
+                      }
+                      if (Array.isArray(zoomCard.retreatCost)) {
+                        return zoomCard.retreatCost.length;
+                      }
+                      return 0;
+                    })()}
+                  </div>
+                )}
+                {zoomCard.weaknesses && (
+                  <p>
+                    <strong>Weakness:</strong>{' '}
+                    {zoomCard.weaknesses.map(w => `${w.type} ${w.value}`).join(', ')}
+                  </p>
+                )}
+                {zoomCard.resistances && (
+                  <p>
+                    <strong>Resistanc:</strong>{' '}
+                    {zoomCard.resistances.map(r => `${r.type} ${r.value}`).join(', ')}
+                  </p>
+                )}
+              </div>
+              <div className='bottom-db-modal-bts'>
+                {tcgUrl ? (
+                  <a
+                    href={tcgUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tcgplayer-link"
+                  >
+                    <button className="tcgplayer-btn">
+                      <img
+                        src={tcgplayerIcon}
+                        alt="TCGplayer"
+                        className="tcgplayer-btn__icon"
+                      />
+                      &nbsp;TCGplayer
+                    </button>
+                  </a>
+                ) : (
+                  <button className="tcgplayer-btn" disabled>
+                    <img
+                      src={tcgplayerIcon}
+                      alt="TCGplayer"
+                      className="tcgplayer-btn__icon"
+                    />
+                    &nbsp;TCGplayer
+                  </button>
+                )}
+                <Link to={`/card/${zoomCard.setAbbrev}/${zoomCard.number}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button>View in Database</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      <div className="deck-builder">
+        <CardSearch onAddCard={addCard} onCardClick={handleCardClick} />
+        <div
+          className={`active-deck-container${dragOver ? ' drag-over' : ''}`}
+          onDragOver={e => {
+            e.preventDefault()
+            setDragOver(true)
+          }}
+          onDragLeave={e => {
+            e.preventDefault()
+            setDragOver(false)
+          }}
+          onDrop={e => {
+            e.preventDefault()
+            setDragOver(false)
+            const json = e.dataTransfer.getData('application/json')
+            if (json) {
+              try {
+                const card = JSON.parse(json)
+                addCard(card)
+              } catch { }
+            }
+          }}
+        >
+          <ExportButtons
+            deck={deck}
+            onImportDeck={importDeck}
+          />
+          <div className='deck-stats'>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <p className='stat-count'>
+                Card Count: <span className='current-deck-count'>{totalCount}</span>
+              </p>
+              <div id='deck-sort' style={{ cursor: 'pointer' }} onClick={handleSort}>
+                <span className="material-symbols-outlined">sort</span>
+                <p>&nbsp;Sort&nbsp;</p>
+              </div>
+              <div id="deck-reset" onClick={() => setDeck([])}>
+                <span className="material-symbols-outlined">close</span>
+                <p>Reset</p>
+              </div>
+              <div className="limit-menu-container" ref={menuRef}>
+                <button
+                  className="limit-menu-btn"
+                  onClick={() => setShowLimitMenu(v => !v)}
+                  aria-label="Open deck settings"
+                >
+                  ⋮
+                </button>
+                {showLimitMenu && (
+                  <div className="limit-menu-dropdown">
+                    <div
+                      className="menu-item"
+                      onClick={() => {
+                        setLimitCounts(true)
+                        setShowLimitMenu(false)
+                      }}
+                    >
+                      <span className="menu-check">
+                        {limitCounts ? '✔︎' : ''}
+                      </span>
+                      Enforce Limits
+                    </div>
+                    <div
+                      className="menu-item"
+                      onClick={() => {
+                        setLimitCounts(false)
+                        setShowLimitMenu(false)
+                      }}
+                    >
+                      <span className="menu-check">
+                        {!limitCounts ? '✔︎' : ''}
+                      </span>
+                      Remove Limits
+                    </div>
+                    <hr className='dropdown-hr-options'></hr>
+                    <div
+                      className="menu-item"
+                      onClick={() => {
+                        setViewMode('image')
+                        setShowLimitMenu(false)
+                      }}
+                    >
+                      <span className="menu-check">{viewMode === 'image' ? '✔︎' : ''}</span>
+                      Image View
+                    </div>
+                    <div
+                      className="menu-item"
+                      onClick={() => {
+                        setViewMode('list')
+                        setShowLimitMenu(false)
+                      }}
+                    >
+                      <span className="menu-check">{viewMode === 'list' ? '✔︎' : ''}</span>
+                      List View
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="zoom-slider">
+                <button
+                  type="button"
+                  className="material-symbols-outlined slider-zoomout"
+                  onClick={() =>
+                    setZoomScale(z =>
+                      Math.max(MIN_ZOOM, parseFloat((z - ZOOM_STEP).toFixed(2)))
+                    )
+                  }
+                  disabled={zoomScale <= MIN_ZOOM}
+                >
+                  remove
+                </button>
+                <input
+                  type="range"
+                  min={MIN_ZOOM}
+                  max={MAX_ZOOM}
+                  step={ZOOM_STEP}
+                  value={zoomScale}
+                  onChange={e => setZoomScale(parseFloat(e.target.value))}
+                />
+                <button
+                  type="button"
+                  className="material-symbols-outlined slider-zoomin"
+                  onClick={() =>
+                    setZoomScale(z =>
+                      Math.min(MAX_ZOOM, parseFloat((z + ZOOM_STEP).toFixed(2)))
+                    )
+                  }
+                  disabled={zoomScale >= MAX_ZOOM}
+                >
+                  add
+                </button>
+              </div>
+            </div>
+            <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
+              <img src={patreonImg} />
+              {/* <p>Support this Project</p> */}
+              <p>Support Us</p>
+            </a>
+          </div>
+          <DeckList
+            deck={deck}
+            onUpdateCount={updateCount}
+            onCardClick={handleCardClick}
+            loading={importing}
+            onCardDrop={addCard}
+            limitCounts={limitCounts}
+            viewMode={viewMode}
+            zoomScale={zoomScale}
+          />
+        </div>
+      </div>
     </DeckBuilderComp>
-    )
+  )
 }
