@@ -10,10 +10,11 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import patreonImg from '../assets/social-media-icons/black-patreon-blob.png';
 import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
+import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png'
 
 // fetch('https://api.pokemontcg.io/v2/sets').then(res => { console.log('List of All Sets', res.json()) })
-/* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"zsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
-/* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"rsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
+// /* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"zsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
+// /* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"rsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
 // /* set 250+ */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:svp&page=2').then(res => { console.log('Download Page 2', res.json()) })
 // /* card */ fetch('https://api.pokemontcg.io/v2/cards/sv2-1').then(res => { console.log('Download New Card', res.json()) })
 
@@ -363,11 +364,10 @@ export default function DeckBuilder() {
       </Helmet>
       {loadingHash && (
         <div className="deckbuilder-spinner-overlay">
-          <div className="deck-spinner">
-            <span className="material-symbols-outlined spinner-icon">
-              autorenew
-            </span>
-          </div>
+          <img src={blueUltraBallSpinner}
+             alt="Loading"
+             className="pokeball-spinner"
+          />
         </div>
       )}
       {zoomCard && (() => {

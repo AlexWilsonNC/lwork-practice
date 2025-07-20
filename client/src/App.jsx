@@ -23,14 +23,16 @@ import Footer from './Footer/Footer';
 import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
 import DeckBuilder from './DeckBuilder/DeckBuilder';
+import PrintDecklist from './DeckBuilder/PrintDecklist'
 
 function App() {
   const { pathname } = useLocation()
-  const noFooterOn = ['/ljhksdgbnksgkjsiodsfi', '/ljhksdgbnksgkjsiodsfi']
+  const noNavBarOn = ['/print']
+  const noFooterOn = ['/ljhksdgbnksgkjsiodsfi', '/print']
 
   return (
     <div className="all-app-container">
-      <Navbar />
+      { !noNavBarOn.includes(pathname) && <Navbar/> }
       <main className='mainwrapedcontainer'>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -54,6 +56,7 @@ function App() {
           <Route path="/about" element={<About />} />
           {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
           <Route path="/ljhksdgbnksgkjsiodsfi" element={<DeckBuilder />} />
+          <Route path="/print" element={<PrintDecklist />} />
           <Route path="/deckcalculator" element={<DeckCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

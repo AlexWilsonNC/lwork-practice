@@ -1,4 +1,5 @@
 import React from 'react'
+import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png'
 
 export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, limitCounts = true, viewMode = 'image', zoomScale = 1 }) {
   const shrink = Array.isArray(deck) && deck.length > 45
@@ -36,9 +37,10 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
     <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}>
       {loading && (
         <div className="deck-spinner">
-          <span className="material-symbols-outlined spinner-icon">
-            autorenew
-          </span>
+          <img src={blueUltraBallSpinner}
+              alt="Loading"
+              className="pokeball-spinner"
+          />
         </div>
       )}
 

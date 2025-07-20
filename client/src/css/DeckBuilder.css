@@ -1,3 +1,13 @@
+.pokeball-spinner {
+  width: 64px;
+  height: 64px;
+  animation: pokeball-spin 1.2s linear infinite;
+}
+@keyframes pokeball-spin {
+  from   { transform: rotate(0deg); }
+  to     { transform: rotate(360deg); }
+}
+/**/
 .card-modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -334,6 +344,7 @@
     width: 100%;
     height: 92vh;
     overflow-y: scroll;
+    padding: 15px 0;
 }
 .all-cards-farther {
     height: 72vh;
@@ -348,11 +359,9 @@
     background-color: #1290eb;
 }
 .all-cards-displayed {
-    width: 95%;
-    padding: 10px;
     padding-bottom: 100px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -1338,6 +1347,29 @@
 
 /**/
 
+.print-top-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 25px 0;
+    width: 100%;
+}
+.topformspan {
+    width: 120px;
+}
+.print-top-form label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.print-top-form input {
+    width: 200px;
+}
+.print-top-form select {
+  width: 204px;
+}
+
 @media screen and (min-width: 2300px) {
     .add-card-to-deck {
         margin-top: 110px;
@@ -1516,7 +1548,6 @@
 .zoom-slider input[type="range"]::-webkit-slider-runnable-track {
   height: 4px;
   background: #ccc;
-  /* border: 1px solid grey; */
   border-radius: 2px;
 }
 .zoom-slider input[type="range"]::-webkit-slider-thumb {

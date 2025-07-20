@@ -104,6 +104,20 @@ export default function ExportButtons({ deck, onImportDeck }) {
     }
   }
 
+  const openPrintDecklist = () => {
+    const minimal = deck.map(c => ({
+      supertype: c.supertype,
+      set: c.setAbbrev,
+      name: c.name,
+      number: c.number,
+      count: c.count,
+      regMark: c.regulationMark || ''
+    }))
+    const payload = encodeURIComponent(JSON.stringify(minimal))
+    window.open(`${window.location.origin}/print?deck=${payload}`, '_blank')
+    setShowCopyMenu(false)
+  }
+
   return (
     <div className="deck-build-options">
         <div class='all-options-box'>
@@ -146,6 +160,9 @@ export default function ExportButtons({ deck, onImportDeck }) {
                                     // onClick={shareLink}
                                 >
                                     Save as Image
+                                </div>
+                                <div className="menu-item" onClick={openPrintDecklist}>
+                                  Print Decklist
                                 </div>
                             </div>
                         )}
