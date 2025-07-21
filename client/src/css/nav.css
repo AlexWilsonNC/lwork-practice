@@ -224,17 +224,22 @@ nav {
     }
     .burger {
       transform: scale(0.8);
-      margin-top: 13px;
     }
     .login-slash-account-btn li {
       font-size: 18px;
     }
     .toggle-darkmode {
       width: 23px; height: 23px;
-      margin-left: 225px !important;
+      margin: 19px 0 25px 225px !important;
     }
     .toggle-darkmode span {
       font-size: 20px;
+    }
+    .login-slash-account-btn li {
+      margin-top: -6px;
+    }
+    .burger-nav-hr {
+      margin: -10px 0 15px 0;
     }
 }
 @media screen and (max-height: 750px) {
