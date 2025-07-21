@@ -7,6 +7,23 @@
   from   { transform: rotate(0deg); }
   to     { transform: rotate(360deg); }
 }
+.image-export-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* above everything */
+}
+.spinner-icon {
+  font-size: 3rem;
+  color: white;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 /**/
 .card-modal-overlay {
   position: fixed;
@@ -672,7 +689,6 @@
   display: inline-block;
   margin: 0 0.5rem;
 }
-/* the dropdown panel */
 .copy-menu-dropdown {
   position: absolute;
   top: 120%;
@@ -682,9 +698,8 @@
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   z-index: 1000;
-  min-width: 130px;
+  width: 153px;
 }
-/* each option */
 .copy-menu-dropdown .menu-item {
   padding: 0.5rem 1rem;
   color: #ddd;
@@ -894,11 +909,6 @@
   justify-content: center;
   align-items: center;
   z-index: 10;
-}
-.spinner-icon {
-  font-size: 3rem;
-  color: #1290eb;
-  animation: spin 1s linear infinite;
 }
 @keyframes spin {
   to { transform: rotate(360deg); }

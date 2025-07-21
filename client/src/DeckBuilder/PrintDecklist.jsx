@@ -44,6 +44,9 @@ export default function PrintDecklist() {
   const pokemon  = deck.filter(c => c.supertype === 'Pokémon')
   const trainers = deck.filter(c => c.supertype === 'Trainer')
   const energy   = deck.filter(c => c.supertype === 'Energy')
+  const pokemonCount = pokemon.reduce((sum, c) => sum + Number(c.count), 0);
+  const trainerCount = trainers.reduce((sum, c) => sum + Number(c.count), 0);
+  const energyCount  = energy.reduce((sum, c) => sum + Number(c.count), 0);
 
   return (
     <>
@@ -163,7 +166,7 @@ export default function PrintDecklist() {
 
       {pokemon.length > 0 && (
         <>
-          <h3 style={{backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Pokémon <span style={{opacity: 0.5}}>({pokemon.length})</span></h3>
+          <h3 style={{backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Pokémon <span style={{opacity: 0.5}}>({pokemonCount})</span></h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
@@ -191,7 +194,7 @@ export default function PrintDecklist() {
       {trainers.length > 0 && (
         <>
           <br></br>
-          <h3 style={{marginBottom: '-15px', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Trainers <span style={{opacity: 0.5}}>({trainers.length})</span></h3>
+          <h3 style={{marginBottom: '-15px', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Trainers <span style={{opacity: 0.5}}>({trainerCount})</span></h3>
           <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
             <tbody>
               {trainers.map((c,i) => (
@@ -210,7 +213,7 @@ export default function PrintDecklist() {
       {energy.length > 0 && (
         <>
           <br></br>
-          <h3 style={{marginBottom: '-15px', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Energy <span style={{opacity: 0.5}}>({energy.length})</span></h3>
+          <h3 style={{marginBottom: '-15px', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 10px'}}>Energy <span style={{opacity: 0.5}}>({energyCount})</span></h3>
           <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
             <tbody>
               {energy.map((c,i) => (

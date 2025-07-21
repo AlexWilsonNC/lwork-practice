@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { toPng } from 'html-to-image'
 
-export default function ExportButtons({ deck, onImportDeck }) {
+export default function ExportButtons({ deck, onImportDeck, deckRef, onExportStart, onExportEnd }) {
   const [importing, setImporting] = useState(false)
   const [showCopyMenu, setShowCopyMenu] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -65,28 +66,28 @@ export default function ExportButtons({ deck, onImportDeck }) {
     navigator.clipboard.writeText(
       JSON.stringify(output, null, 2)
     )
-        setShowCopyMenu(false)
-        setShowSuccess(true)
-    }
+    setShowCopyMenu(false)
+    setShowSuccess(true)
+  }
 
-    const shareLink = () => {
-        const minimal = deck.map(c => ({
-            set:    c.setAbbrev,
-            number: c.number,
-            count:  c.count
-        }));
-        const fragment = encodeURIComponent(JSON.stringify(minimal));
-        const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
-        navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
-        setShowCopyMenu(false)
-        setShowSuccess(true)
-    };
+  const shareLink = () => {
+    const minimal = deck.map(c => ({
+      set: c.setAbbrev,
+      number: c.number,
+      count: c.count
+    }));
+    const fragment = encodeURIComponent(JSON.stringify(minimal));
+    const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
+    navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
+    setShowCopyMenu(false)
+    setShowSuccess(true)
+  };
 
-    useEffect(() => {
-        if (!showSuccess) return
-        const t = setTimeout(() => setShowSuccess(false), 2000)
-        return () => clearTimeout(t)
-    }, [showSuccess])
+  useEffect(() => {
+    if (!showSuccess) return
+    const t = setTimeout(() => setShowSuccess(false), 2000)
+    return () => clearTimeout(t)
+  }, [showSuccess])
 
   const handleImport = async () => {
     if (deck.length > 0) {
@@ -118,91 +119,139 @@ export default function ExportButtons({ deck, onImportDeck }) {
     setShowCopyMenu(false)
   }
 
+  const handleExportImage = () => {
+    const node = deckRef.current;
+    if (!node) return;
+
+    onExportStart()
+
+    const patternSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="140%" height="140%">
+  <defs>
+    <pattern
+      id="patternBg"
+      patternUnits="userSpaceOnUse"
+      width="75"
+      height="75"
+      patternTransform="rotate(45 30 30)"
+    >
+      <rect x="0" y="0" width="100%" height="100%" fill="#2e2e32ff"/>
+      <path
+        d="M59.995 52.87v14.25zm-14.557 7.125h7.428zm21.687 0h7.427zm0 0a7.13 7.124 
+           0 01-7.13 7.124 7.13 7.124 0 01-7.13-7.124 7.13 7.124 0 017.13-7.125 
+           7.13 7.124 0 017.13 7.125zm-6.757-14.547c-4.212-.069-8.465 1.673
+           -11.262 4.869-4.23 4.606-4.845 11.985-1.55 17.274 3.09 5.2
+           9.628 7.954 15.517 6.635 6.53-1.292 11.604-7.583
+           11.48-14.231.096-5.628-3.495-11.014-8.606-13.298
+           -1.757-.813-3.665-1.217-5.58-1.249z"
+        stroke-width="1.5"
+        stroke="#ffffff24"
+        fill="none"
+      />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#patternBg)"/>
+  <image
+    href="__DECK_PNG__"
+    x="0" y="0"
+    width="${node.clientWidth}" height="${node.clientHeight}"
+    preserveAspectRatio="xMinYMin slice"
+  />
+</svg>`;
+
+    const svgBase64 = btoa(unescape(encodeURIComponent(patternSvg)));
+    const bgUrl = `url("data:image/svg+xml;base64,${svgBase64}")`;
+
+    const prevBg = node.style.background;
+    node.style.background = bgUrl;
+    node.style.backgroundSize = '75px 75px';
+
+    toPng(node, { cacheBust: true, backgroundColor: null })
+      .then(pngDataUrl => {
+        node.style.background = prevBg;
+
+        const w = window.open();
+        w.document.write(`
+        <html>
+          <head><title>Save your deck</title></head>
+          <body style="margin:0;display:flex;
+                       justify-content:center;align-items:center;
+                       background:#000">
+            <img src="${pngDataUrl}"
+                 style="max-width:95%;height:auto;max-height:95%;display:block"/>
+          </body>
+        </html>
+      `);
+        w.document.close();
+      })
+      .catch(err => {
+        console.error('Could not generate image', err);
+        node.style.background = prevBg;
+      })
+      .finally(() => onExportEnd())
+    setShowCopyMenu(false)
+  }
+
   return (
     <div className="deck-build-options">
-        <div class='all-options-box'>
-            <div class='options-left'>
-                <div class='options-row row-options-1'>
-                    <button onClick={handleImport} disabled={importing}>
-                        <p>Paste Deck</p>
-                    </button>
-                    <div className="copy-menu-container" ref={menuRef}>
-                        <button
-                            onClick={() => setShowCopyMenu(v => !v)}
-                            disabled={!deck.length}
-                        >
-                            <p>Copy Options</p>
-                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
-                        </button>
-                        {showCopyMenu && (
-                            <div className="copy-menu-dropdown">
-                                <div
-                                    className="menu-item"
-                                    onClick={copyText}
-                                >
-                                    Copy as Text
-                                </div>
-                                <div
-                                    className="menu-item"
-                                    onClick={copyJson}
-                                >
-                                    Copy as Jsoɴ
-                                </div>
-                                <div 
-                                    className="menu-item" 
-                                    onClick={shareLink}
-                                >
-                                    Share via Link
-                                </div>
-                                <div 
-                                    className="menu-item" 
-                                    style={{ opacity: 0.1, pointerEvents: 'none' }}
-                                    // onClick={shareLink}
-                                >
-                                    Save as Image
-                                </div>
-                                <div className="menu-item" onClick={openPrintDecklist}>
-                                  Print Decklist
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <button onClick={copyJson} disabled={!deck.length} className='save-deck-btn'>
-                        <p>Save Deck</p>
-                    </button>
-                        {/* <div class='import-as-deck option-btn' onclick="importDeck()">
-                            <span class="material-symbols-outlined">content_paste</span>
-                            <p>Paste Deck</p>
-                        </div>
-                        <div class='copy-as-dckli option-btn'>
-                            <span class="material-symbols-outlined">content_copy</span>
-                            <p>Copy Deck</p>
-                        </div>
-                        <div class='share-decklist option-btn' style="opacity: 0.1;">
-                            <span class="material-symbols-outlined">ios_share</span>
-                            <p>Share Deck</p>
-                        </div>
-                        <div class='save-as-img option-btn' onclick="takeshot()" style="opacity: 0.1;">
-                            <span class="material-symbols-outlined">photo_camera</span>
-                            <p>Save Image</p>
-                        </div>
-                        <div class='print-deck option-btn' style="opacity: 0.1;">
-                            <span class="material-symbols-outlined">print</span>
-                            <p>Print List</p>
-                        </div>
-                        <div class='export-json option-btn'>
-                            <span class="material-symbols-outlined">code</span>
-                            <p>Export Jsoɴ</p>
-                        </div> */}
+      <div class='all-options-box'>
+        <div class='options-left'>
+          <div class='options-row row-options-1'>
+            <button onClick={handleImport} disabled={importing}>
+              <p>Import Deck</p>
+            </button>
+            <div className="copy-menu-container" ref={menuRef}>
+              <button
+                onClick={() => setShowCopyMenu(v => !v)}
+                disabled={!deck.length}
+              >
+                <p>Export Deck</p>
+                <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+              </button>
+              {showCopyMenu && (
+                <div className="copy-menu-dropdown">
+                  <div
+                    className="menu-item"
+                    onClick={copyText}
+                  >
+                    Copy as Text
+                  </div>
+                  <div
+                    className="menu-item"
+                    onClick={copyJson}
+                  >
+                    Copy as Jsoɴ
+                  </div>
+                  <div
+                    className="menu-item"
+                    onClick={shareLink}
+                  >
+                    Share via Link
+                  </div>
+                  <div
+                    className="menu-item"
+                    onClick={handleExportImage}
+                  >
+                    Save as Image
+                  </div>
+                  <div className="menu-item" onClick={openPrintDecklist}>
+                    Print Decklist
+                  </div>
                 </div>
+              )}
             </div>
+            <button onClick={copyJson} disabled={!deck.length} className='save-deck-btn'>
+              <p>Save Deck</p>
+            </button>
+          </div>
         </div>
-        {showSuccess && (
-            <div className="copy-success-overlay">
-                <div className="copy-success-icon">✔︎</div>
-                <p>Copied</p>
-            </div>
-        )}
+      </div>
+      {showSuccess && (
+        <div className="copy-success-overlay">
+          <div className="copy-success-icon">✔︎</div>
+          <p>Copied</p>
+        </div>
+      )}
     </div>
   )
 }

@@ -167,6 +167,10 @@ const DeckBuilderComp = styled.div`
     height: 100vh;
     overflow: hidden;
     display: flex;
+    .support-again {
+      color: ${({ theme }) => theme.text};
+      background-color: ${({ theme }) => theme.supportPatreonBtn};
+  }
 `;
 
 export default function DeckBuilder() {
@@ -176,6 +180,8 @@ export default function DeckBuilder() {
   const [viewMode, setViewMode] = useState('image');
   const [zoomScale, setZoomScale] = useState(1.4); // default decklist zoom
   const [loadingHash, setLoadingHash] = useState(false)
+  const [exportingImage, setExportingImage] = useState(false)
+  const deckRef = useRef()
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -362,11 +368,19 @@ export default function DeckBuilder() {
             <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
             <meta name="twitter:image" content={eventData.thumbnail} /> */}
       </Helmet>
+      {exportingImage && (
+        <div className="image-export-overlay">
+          <img src={blueUltraBallSpinner}
+            alt="Loading"
+            className="pokeball-spinner"
+          />
+        </div>
+      )}
       {loadingHash && (
         <div className="deckbuilder-spinner-overlay">
           <img src={blueUltraBallSpinner}
-             alt="Loading"
-             className="pokeball-spinner"
+            alt="Loading"
+            className="pokeball-spinner"
           />
         </div>
       )}
@@ -557,6 +571,9 @@ export default function DeckBuilder() {
           <ExportButtons
             deck={deck}
             onImportDeck={importDeck}
+            deckRef={deckRef}
+            onExportStart={() => setExportingImage(true)}
+            onExportEnd={()   => setExportingImage(false)}
           />
           <div className='deck-stats'>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -670,16 +687,18 @@ export default function DeckBuilder() {
               <p>Support Us</p>
             </a>
           </div>
-          <DeckList
-            deck={deck}
-            onUpdateCount={updateCount}
-            onCardClick={handleCardClick}
-            loading={importing}
-            onCardDrop={addCard}
-            limitCounts={limitCounts}
-            viewMode={viewMode}
-            zoomScale={zoomScale}
-          />
+          <div ref={deckRef} id="deck-to-export">
+            <DeckList
+              deck={deck}
+              onUpdateCount={updateCount}
+              onCardClick={handleCardClick}
+              loading={importing}
+              onCardDrop={addCard}
+              limitCounts={limitCounts}
+              viewMode={viewMode}
+              zoomScale={zoomScale}
+            />
+          </div>
         </div>
       </div>
     </DeckBuilderComp>

@@ -23,6 +23,8 @@ nav {
     height:auto;
     pointer-events: none;
     content: url('../assets/logos/logo-darkmode.png');
+    /* content: url('../assets/logos/blue-ultra-ball.png');
+    transform: rotate(-25deg); */
   }
   .legends-font {
     font-size: 46px;
