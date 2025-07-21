@@ -194,9 +194,9 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
 
   return (
     <div className="deck-build-options">
-      <div class='all-options-box'>
-        <div class='options-left'>
-          <div class='options-row row-options-1'>
+      <div className='all-options-box'>
+        <div className='options-left'>
+          <div className='options-row row-options-1'>
             <button onClick={handleImport} disabled={importing}>
               <p>Import Deck</p>
             </button>

@@ -2566,7 +2566,7 @@ const headToHead = useMemo(() => {
                                             </tbody>
                                         </table>
                                         ) : (
-                                        <div class="matchup-matrix-wrapper">
+                                        <div className="matchup-matrix-wrapper">
                                             <table className="matchup-matrix">
                                                 <thead>
                                                     <tr>
@@ -2689,7 +2689,7 @@ const headToHead = useMemo(() => {
                         {showModal && modalPlayer && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <button className="close-btn" onClick={closeModal}><span class="material-symbols-outlined">close</span></button>
+                                <button className="close-btn" onClick={closeModal}><span className="material-symbols-outlined">close</span></button>
                                 <div className="modal-player-header">
                                     <div className='modal-name-sprites'>
                                         <h3>{formatName(modalPlayer.name)}</h3>

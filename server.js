@@ -2,50 +2,114 @@ const express = require('express');
 const path = require("path");
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bcrypt     = require('bcrypt');
+const jwt        = require('jsonwebtoken');
 require('dotenv').config();
-const port = process.env.PORT || 5000;
 const https = require('https');
 
 const app = express();
+const port = process.env.PORT || 5000;
+
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.MONGODB_URI;
-const cardUri = process.env.CARD_MONGODB_URI;
-const playersUri = process.env.PLAYERS_MONGODB_URI;
-const decksUri = process.env.DECKS_MONGODB_URI;
-const emailsUri = process.env.EMAILS_MONGODB_URI; // Add the email subscription URI here
-const cardsDecklists = process.env.CARDSINDECKLISTS_MONGODB_URI;
+const {
+  MONGODB_URI,
+  CARD_MONGODB_URI,
+  PLAYERS_MONGODB_URI,
+  DECKS_MONGODB_URI,
+  EMAILS_MONGODB_URI,
+  CARDSINDECKLISTS_MONGODB_URI,
+  JWT_SECRET,
+  SALT_ROUNDS = 10,
+  USER_MONGODB_URI
+} = process.env;
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+// ─── Connect to MongoDB ────────────────────────────────────────────────────────
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-const eventConnection = mongoose.createConnection(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const cardConnection = mongoose.createConnection(cardUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const playersConnection = mongoose.createConnection(playersUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const decksConnection = mongoose.createConnection(decksUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const decklistsDb = mongoose.createConnection(cardsDecklists, { useNewUrlParser: true, useUnifiedTopology: true });
+const authConnection = mongoose.createConnection(
+  USER_MONGODB_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
+authConnection.on('error', console.error.bind(console, 'Auth DB error:'));
+authConnection.once('open', () => console.log('Connected to Auth DB'));
 
-eventConnection.on('error', console.error.bind(console, 'MongoDB connection error for eventConnection:'));
-eventConnection.once('open', () => {
+const eventConnection     = mongoose.createConnection(MONGODB_URI,            { useNewUrlParser: true, useUnifiedTopology: true });
+const cardConnection      = mongoose.createConnection(CARD_MONGODB_URI,       { useNewUrlParser: true, useUnifiedTopology: true });
+const playersConnection   = mongoose.createConnection(PLAYERS_MONGODB_URI,    { useNewUrlParser: true, useUnifiedTopology: true });
+const decksConnection     = mongoose.createConnection(DECKS_MONGODB_URI,      { useNewUrlParser: true, useUnifiedTopology: true });
+const decklistsDb         = mongoose.createConnection(CARDSINDECKLISTS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { useNewUrlParser: true, useUnifiedTopology: true });
+
+[eventConnection, cardConnection, playersConnection, decksConnection, emailsConnection]
+  .forEach(conn => {
+    conn.on('error', console.error.bind(console, `MongoDB connection error for ${conn.name}:`));
+    conn.once('open', () => console.log(`Connected to ${conn.name}`));
+  });
+
+  const userSchema = new mongoose.Schema({
+  email:        { type: String, unique: true, required: true },
+  passwordHash: { type: String,             required: true }
 });
-cardConnection.on('error', console.error.bind(console, 'MongoDB connection error for cardConnection:'));
-cardConnection.once('open', () => {
-});
-playersConnection.on('error', console.error.bind(console, 'MongoDB connection error for playersConnection:'));
-playersConnection.once('open', () => {
-});
-decksConnection.on('error', console.error.bind(console, 'MongoDB connection error for decksConnection:'));
-decksConnection.once('open', () => {
-  console.log('Connected to decksConnection');
+const User = authConnection.model('User', userSchema, 'users');
+
+// Auth middleware
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or malformed Authorization header' });
+  }
+  const token = auth.split(' ')[1];
+  try {
+    const { sub } = jwt.verify(token, JWT_SECRET);
+    req.userId = sub;
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+}
+
+// Signup
+app.post('/api/auth/signup', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
+
+  try {
+    const passwordHash = await bcrypt.hash(password, Number(SALT_ROUNDS));
+    const newUser = new User({ email, passwordHash });
+    await newUser.save();
+
+    const token = jwt.sign({ sub: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token });
+  } catch (err) {
+    if (err.code === 11000) {
+      res.status(400).json({ error: 'Email already in use' });
+    } else {
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
+    }
+  }
 });
 
-const emailsConnection = mongoose.createConnection(emailsUri, { useNewUrlParser: true, useUnifiedTopology: true });
+// Login
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 
-emailsConnection.on('error', console.error.bind(console, 'MongoDB connection error for emailsConnection:'));
-emailsConnection.once('open', () => {
-  console.log('Connected to emailsConnection');
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ sub: user._id }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // Define the schema for emails

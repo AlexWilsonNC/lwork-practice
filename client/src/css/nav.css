@@ -133,7 +133,7 @@ nav {
   }
   .burdered-socials {
     width: 93%;
-    background-color: rgba(255, 255, 255, 0.837);
+    background-color: rgba(255, 255, 255, 0.85);
     border-radius: 15px;
     height: 65px;
     display: flex;
@@ -146,6 +146,30 @@ nav {
     width: 45px;
     height: auto;
     border-radius: 10px;
+  }
+  .top-login-diff {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: -1px;
+  }
+  .login-slash-account-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0;
+  }
+  .login-slash-account-btn li {
+    margin-bottom: 0px !important;
+    position: absolute;
+  }
+  .burger-nav-hr {
+    width: 93%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin: -10px 0 15px 0;
   }
   @media screen and (max-width: 1200px) {
     .right-links a {
@@ -172,6 +196,9 @@ nav {
     .nav-logo {
       width: 40px;
     }
+    .top-login-diff {
+      margin-top: -7px;
+    }
   }
   @media screen and (max-width: 800px) {
     .left-nav h1 {
@@ -188,18 +215,15 @@ nav {
       font-size: 28px;
       text-shadow: 1.3px 1.3px 0px rgb(0, 0, 0);
     }
-    .burger {
-      transform: scale(0.8);
-    }
     .right-nav {
       margin-right: 75px;
       margin-top: -5px;
     }
-    .burger {
-      right: 10px !important;
-    }
     .left-nav {
       margin-left: 10px;
+    }
+    .top-login-diff {
+      margin-top: -17px;
     }
 }
 @media screen and (max-height: 750px) {

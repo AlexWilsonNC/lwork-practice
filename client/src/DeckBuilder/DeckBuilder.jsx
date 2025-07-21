@@ -162,7 +162,7 @@ const ZOOM_STEP = 0.1;
 
 const DeckBuilderComp = styled.div`
     .card-search-container {
-        background-image: ${({ theme }) => theme.cardSearchBg}
+      background-image: ${({ theme }) => theme.cardSearchBg}
     }
     height: 100vh;
     overflow: hidden;

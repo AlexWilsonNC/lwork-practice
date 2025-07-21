@@ -1,6 +1,8 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useContext } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import { AuthContext } from '../contexts/AuthContext';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
 import discordIcon from '../assets/social-media-icons/discord-icon.png';
 import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
@@ -41,6 +43,10 @@ const BurgerOpen = styled.ul`
     overflow: hidden;
     background-color: ${({ theme }) => theme.burgerMenu};
 
+    .burger-nav-hr {
+      border-bottom: ${({ theme }) => theme.burgernavhr};
+    }
+
     a {
       color: ${({ theme }) => theme.burgerTxt};
     }
@@ -67,14 +73,16 @@ const ToggleButton = styled.div`
   border-radius: 50%;
   border: ${({ theme }) => theme.themeBorder};
   background-color: ${({ theme }) => theme.themeBg};
+  margin-left: 215px;
   span::before {
-    content: ${({ theme }) => theme.themeName === 'dark' ? "'light_mode'" : "'dark_mode'"}; 
+    content: ${({ theme }) => theme.themeName === 'dark' ? "'brightness_4'" : "'dark_mode'"}; 
     color: ${({ theme }) => theme.themeColor};
   }
 `;
 
 const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
   const { theme, toggleTheme } = useTheme();
+  const { user } = useContext(AuthContext);  // null when not logged in
   
   // State for managing the interstitial modal
   const [showModal, setShowModal] = useState(false);
@@ -106,9 +114,18 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
       </ul>
       <Overlay open={open} onClick={() => setOpen(false)} />
       <BurgerOpen open={open} theme={theme} className='burgered-links'>
-        <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
-          <span className="material-symbols-outlined"></span>
-        </ToggleButton>
+        <div className='top-login-diff'>
+          <div className='login-slash-account-btn'>
+            {user
+              ? <li className='not-ready'><Link to="/account">Account</Link></li>
+              : <li className='not-ready'><Link to="/login">Login</Link></li>
+            }
+          </div>
+          <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
+            <span className="material-symbols-outlined"></span>
+          </ToggleButton>
+        </div>
+        <hr className='burger-nav-hr'></hr>
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/BLK'>Cards</a></li>

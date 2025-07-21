@@ -387,7 +387,7 @@ const FeaturedDecks = () => {
                                                 )}
                                                 </td>
                                                 <td>{deck.label}</td>
-                                                <td class='fontsource'>
+                                                <td className='fontsource'>
                                                     {deck.sourceLink ? (
                                                         <a href={deck.sourceLink} target="_blank" className='blue' rel="noopener noreferrer">
                                                             {deck.source}
