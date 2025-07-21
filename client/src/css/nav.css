@@ -222,8 +222,19 @@ nav {
     .left-nav {
       margin-left: 10px;
     }
-    .top-login-diff {
-      margin-top: -17px;
+    .burger {
+      transform: scale(0.8);
+      margin-top: 13px;
+    }
+    .login-slash-account-btn li {
+      font-size: 18px;
+    }
+    .toggle-darkmode {
+      width: 23px; height: 23px;
+      margin-left: 225px !important;
+    }
+    .toggle-darkmode span {
+      font-size: 20px;
     }
 }
 @media screen and (max-height: 750px) {
