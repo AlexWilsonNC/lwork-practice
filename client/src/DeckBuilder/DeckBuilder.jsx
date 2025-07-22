@@ -183,6 +183,8 @@ export default function DeckBuilder() {
   const [exportingImage, setExportingImage] = useState(false)
   const deckRef = useRef()
   const menuRef = useRef(null)
+  const params = new URLSearchParams(window.location.search);
+  const originalDeckId = params.get('deckId');
 
   useEffect(() => {
     if (!showLimitMenu) return
@@ -570,6 +572,7 @@ export default function DeckBuilder() {
         >
           <ExportButtons
             deck={deck}
+            originalDeckId={originalDeckId}
             onImportDeck={importDeck}
             deckRef={deckRef}
             onExportStart={() => setExportingImage(true)}

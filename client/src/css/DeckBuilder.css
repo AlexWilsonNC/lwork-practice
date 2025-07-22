@@ -634,7 +634,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 .options-row button {
     text-decoration: none;
@@ -655,6 +655,15 @@
     margin-right: 15px;
     width: 155px;
     height: 45px;
+}
+.my-decks-btn {
+    margin-left: 20px;
+}
+.deck-options-btns-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 .save-deck-btn {
     background-color: #1290eb !important;
@@ -1687,7 +1696,7 @@
   padding: 15px;
   width: 90%;
   max-width: 600px;
-  height: auto;
+  height: 200px;
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(0,0,0,1);
   overflow: hidden;

@@ -42,6 +42,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 .deck-card {
@@ -49,34 +50,29 @@
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  background: rgb(29, 30, 31);
   color: rgb(231, 231, 231);
   width: 275px;
   height: auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 .deck-card-img {
   position: relative;
   overflow: hidden;
-  width: 100%;   /* tweak to how big you want each mascot slot */
-  height: 150px; /* tweak to your desired aspect */
-  margin: 0 auto;/* centers it in the card if you like */
+  width: 100%;
+  height: 150px;
+  margin: 0 auto;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
-/* exactly the same crop you use in CardView */
 .cropped-mascot-card {
  position: absolute;
     top: -40%; 
     left: -10%;
     width: 120%;
     height: auto;
-    opacity: 0.75;
     transform: scale(1);
     transform-origin: top left;
 }
-/* .deck-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-} */
 .deck-card-info {
   padding: .5rem;
   background: var(--info-bg);
@@ -85,6 +81,21 @@
   margin: 0 0 .25rem;
   font-size: 1.1rem;
 }
+.saved-deck-hr {
+    width: 75%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 3px solid rgba(128, 128, 128, 0.324);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-bottom: 8px;
+}
+.deck-card-description {
+    width: 95%;
+    height: 35px;
+    overflow: hidden;
+}
 .deck-card-info p {
   margin: 0 .25rem .5rem;
   font-size: .9rem;
@@ -92,6 +103,106 @@
 }
 .deck-card-info small {
   color: var(--text-muted);
+}
+.favorite-heart-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -20px;
+}
+.favorite-heart {
+    margin-right: 7px;
+    padding: 2px;
+}
+.menu-icon {
+    padding: 2px;
+    border-radius: 3px;
+}
+.menu-icon:hover {
+  cursor: pointer;
+  background-color: rgba(91, 91, 91, 0.25);
+}
+.folder-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.folder-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.sort-favorites-btn {
+    background-color: transparent;
+    width: auto;
+    padding: 10px 7px 7px 0;
+    color: #1290eb;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    transition: ease all 0.2s;
+    margin-right: 15px;
+}
+.sort-favorites-btn:hover {
+    cursor: pointer;
+    color: rgb(219, 77, 77);
+}
+.sort-favorites-btn:hover p {
+    text-decoration: underline;
+}
+.sort-favorites-btn span {
+    margin-right: 5px;
+    font-size: 16px;
+}
+.deckcollection-menu-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: #2f3136;
+  z-index: 100;
+}
+.deckcollection-menu-dropdown button {
+  padding: 0.7rem 1rem;
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+.deckcollection-menu-dropdown button:hover {
+  background: rgba(255, 255, 255, 0.185);
+}
+/* deck in collection's options modal */
+.deck-edit-modal {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.deck-edit-modal-box {
+  background: var(--bg);
+  padding:2rem;
+  border-radius:8px;
+  width: 300px;
+}
+.deck-edit-modal-box h4 {
+  margin-top:0;
+}
+.deck-edit-modal-box input,
+.deck-edit-modal-box textarea {
+  width:100%;
+  margin-bottom:1rem;
+}
+.deck-edit-modal-box button {
+  margin-right:0.5rem;
 }
 /* .modal-overlay {
   position: fixed;
@@ -155,3 +266,62 @@
   border-radius: 4px;
   cursor: pointer;
 } */
+.folders-bar {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.create-new-folder-btn {
+    background-color: #1290eb;
+    border-radius: 3px;
+    padding: 10px;
+    color: white;
+    border: none;
+    margin-right: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.folder-options-icon {
+    background-color: transparent;
+    border-radius: 3px;
+    padding: 10px 0;
+    margin-top: -15px;
+    color: #1290eb;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.folder-options-icon span {
+    font-size: 14px;
+    margin-right: 5px;
+}
+.folder-options-icon:hover {
+    color: rgb(219, 77, 77);
+}
+.folder-options-icon:hover p {
+    text-decoration: underline;
+}
+.folders-list button {
+    background-color: grey;
+    width: auto;
+    padding: 5px 6px;
+    margin-right: 5px;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.folders-list button:hover {
+    cursor: pointer;
+}
+.folders-list .active {
+    background-color: #1290eb;
+}

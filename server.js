@@ -25,7 +25,6 @@ const {
   USER_MONGODB_URI
 } = process.env;
 
-// ─── Connect to MongoDB ────────────────────────────────────────────────────────
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -58,12 +57,18 @@ const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { 
       mascotCard:  { type: String, required: true },
       description: { type: String },
       decklist:    { type: Object, required: true },
-      createdAt:   { type: Date,   default: Date.now }
-    }]
+      createdAt:   { type: Date,   default: Date.now },
+      folderId:    { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
+      favorite:    { type: Boolean, default: false }
+    }],
+    folders: [{
+      name:      { type: String, required: true },
+      order:     { type: Number, default: 0 },
+      createdAt: { type: Date, default: Date.now }
+  }]
 });
 const User = authConnection.model('User', userSchema, 'users');
 
-// Auth middleware
 function requireAuth(req, res, next) {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith('Bearer ')) {
@@ -82,14 +87,14 @@ function requireAuth(req, res, next) {
 const userDeckSchema = new mongoose.Schema({
   userId:       { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   name:         { type: String, required: true },
-  mascotCard:       { type: String, required: true },       // e.g. “Pikachu #025”
+  mascotCard:       { type: String, required: true },
   description:  { type: String },
-  decklist:     { type: Object, required: true },       // the actual decklist JSON
+  decklist:     { type: Object, required: true },
+  folderId:    { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
   createdAt:    { type: Date, default: Date.now }
 });
 const UserDeck = authConnection.model('UserDeck', userDeckSchema, 'userdecks');
 
-// Signup
 app.post('/api/auth/signup', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
@@ -111,7 +116,6 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
-// Login
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
@@ -141,8 +145,6 @@ app.post('/api/user/decks', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not save deck' });
   }
 });
-
-// 3) GET /api/user/decks — list all decks for the logged‑in user
 app.get('/api/user/decks', requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('decks');
@@ -150,6 +152,213 @@ app.get('/api/user/decks', requireAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not load decks' });
+  }
+});
+app.patch('/api/user/decks/:deckId/favorite', requireAuth, async (req, res) => {
+  const { deckId } = req.params;
+  const { favorite } = req.body;
+  try {
+    await User.updateOne(
+      { _id: req.userId, 'decks._id': deckId },
+      { $set: { 'decks.$.favorite': favorite } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update favorite' });
+  }
+});
+app.patch('/api/user/decks/:deckId/rename', requireAuth, async (req, res) => {
+  const { deckId } = req.params;
+  const { name } = req.body;
+  try {
+    await User.updateOne(
+      { _id: req.userId, 'decks._id': deckId },
+      { $set: { 'decks.$.name': name } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not rename deck' });
+  }
+});
+app.patch('/api/user/decks/:deckId/description', requireAuth, async (req, res) => {
+  const { deckId } = req.params;
+  const { description } = req.body;
+  try {
+    await User.updateOne(
+      { _id: req.userId, 'decks._id': deckId },
+      { $set: { 'decks.$.description': description } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update description' });
+  }
+});
+app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
+  const { deckId } = req.params;
+  try {
+    const user = await User.findById(req.userId);
+    const original = user.decks.id(deckId);
+    if (!original) return res.status(404).json({ error: 'Deck not found' });
+    const base = original.name.replace(/\s\(\d+\)$/, '');
+    const siblings = user.decks.filter(d => d.name.startsWith(base));
+    const copyCount = siblings.length;
+    const newName = `${base} (${copyCount})`;
+    user.decks.push({
+      name: newName,
+      mascotCard: original.mascotCard,
+      description: original.description,
+      decklist: original.decklist
+    });
+    await user.save();
+    res.json({ success: true, deck: user.decks[user.decks.length - 1] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not duplicate deck' });
+  }
+});
+app.delete('/api/user/decks/:deckId', requireAuth, async (req, res) => {
+  const { deckId } = req.params;
+  try {
+    await User.updateOne(
+      { _id: req.userId },
+      { $pull: { decks: { _id: deckId } } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not delete deck' });
+  }
+});
+app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
+  const { name, mascotCard, description, decklist } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    const deck = user.decks.id(req.params.deckId);
+    if (!deck) return res.status(404).json({ error: 'Deck not found' });
+    deck.name        = name;
+    deck.mascotCard  = mascotCard;
+    deck.description = description;
+    deck.decklist    = decklist;
+    deck.createdAt   = Date.now();
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update deck' });
+  }
+});
+userDeckSchema.add({
+  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null }
+});
+app.get('/api/user/folders', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('folders');
+    res.json(user.folders.sort((a,b) => a.order - b.order));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load folders' });
+  }
+});
+app.post('/api/user/folders', requireAuth, async (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'Name is required' });
+
+  try {
+    const user = await User.findById(req.userId);
+    const nextOrder = user.folders.length;
+    user.folders.push({ name, order: nextOrder });
+    await user.save();
+    res.json(user.folders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not create folder' });
+  }
+});
+app.patch('/api/user/folders/sort', requireAuth, async (req, res) => {
+  const { order } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    const byId = user.folders.reduce((map,f) => (map[f._id] = f, map), {});
+    order.forEach((fid, idx) => {
+      if (byId[fid]) byId[fid].order = idx;
+    });
+    user.folders.sort((a,b) => a.order - b.order);
+    await user.save();
+    res.json(user.folders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not reorder folders' });
+  }
+});
+app.patch('/api/user/folders/:id', requireAuth, async (req, res) => {
+  const { name } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    const folder = user.folders.id(req.params.id);
+    if (!folder) return res.status(404).json({ error: 'Folder not found' });
+    folder.name = name;
+    await user.save();
+    res.json(user.folders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not rename folder' });
+  }
+});
+app.patch('/api/user/decks/:deckId/move', requireAuth, async (req, res) => {
+  const { folderId } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    const deck = user.decks.id(req.params.deckId);
+    if (!deck) return res.status(404).json({ error: 'Deck not found' });
+    deck.folderId = folderId;
+    await user.save();
+    res.json({ deck });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not move deck' });
+  }
+});
+app.delete('/api/user/folders/:folderId', requireAuth, async (req, res) => {
+  const { folderId } = req.params;
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // remove the folder
+    user.folders = user.folders.filter(f => f._id.toString() !== folderId);
+
+    // un‐assign it from any decks
+    user.decks.forEach(deck => {
+      if (deck.folderId?.toString() === folderId) {
+        deck.folderId = undefined;
+      }
+    });
+
+    await user.save();
+
+    // return the updated folders array
+    res.json({ folders: user.folders });
+  } catch (err) {
+    console.error('Error deleting folder:', err);
+    res.status(500).json({ error: 'Could not delete folder' });
+  }
+});
+app.patch('/api/user/decks/:id/move', requireAuth, async (req, res) => {
+  const { folderId } = req.body;
+  try {
+    const deck = await UserDeck.findOneAndUpdate(
+      { _id: req.params.id, userId: req.userId },
+      { folderId },
+      { new: true }
+    );
+    if (!deck) return res.status(404).json({ error: 'Deck not found' });
+    res.json({ deck });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not move deck' });
   }
 });
 

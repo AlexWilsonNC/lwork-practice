@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect, useContext } from 'react'
 import { toPng } from 'html-to-image'
 import { AuthContext } from '../contexts/AuthContext'
 
-export default function ExportButtons({ deck, onImportDeck, deckRef, onExportStart, onExportEnd }) {
+export default function ExportButtons({ deck, originalDeckId, onImportDeck, deckRef, onExportStart, onExportEnd }) {
   const { user } = useContext(AuthContext)
   const [importing, setImporting] = useState(false)
   const [showCopyMenu, setShowCopyMenu] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [showSaveModal, setShowSaveModal] = useState(false)
+  const [overwriteMode, setOverwriteMode] = useState(false);
   const [deckName, setDeckName] = useState('')
   const [selectedMascot, setSelectedMascot] = useState('')
   const [description, setDescription] = useState('')
@@ -84,7 +85,7 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
       count: c.count
     }));
     const fragment = encodeURIComponent(JSON.stringify(minimal));
-    const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
+    const url = `${window.location.origin}/ljhksdgbnksgkjsiodsfi#deck=${fragment}`;
     navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
     setShowCopyMenu(false)
     setShowSuccess(true)
@@ -109,6 +110,16 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
       await onImportDeck(true)
     } finally {
       setImporting(false)
+    }
+  }
+
+  const handleMyDecks = () => {
+    if (user) {
+      // same‐window nav to account
+      window.location.href = '/account'
+    } else {
+      // reuse your save‑modal login prompt
+      setShowSaveModal(true)
     }
   }
 
@@ -208,8 +219,12 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
     setSaving(true)
     try {
       const token = localStorage.getItem('PTCGLegendsToken')
-      const res = await fetch('/api/user/decks', {
-        method: 'POST',
+      const url = overwriteMode && originalDeckId
+        ? `/api/user/decks/${originalDeckId}`
+        : '/api/user/decks';
+      const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -218,11 +233,12 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
           name: deckName,
           mascotCard: selectedMascot,
           description,
-          decklist: deck      // <-- match your server’s destructuring
+          decklist: deck
         })
       })
       if (res.ok) {
         window.open(`${window.location.origin}/account`, '_blank')
+        setSaving(false)
         setShowSaveModal(false)
         setDeckName('')
         setSelectedMascot('')
@@ -239,78 +255,105 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
 
   return (
     <>
-    <div className="deck-build-options">
-      <div className='all-options-box'>
-        <div className='options-left'>
-          <div className='options-row row-options-1'>
-            <button onClick={handleImport} disabled={importing}>
-              <p>Import Deck</p>
-            </button>
-            <div className="copy-menu-container" ref={menuRef}>
-              <button
-                onClick={() => setShowCopyMenu(v => !v)}
-                disabled={!deck.length}
-              >
-                <p>Export Deck</p>
-                <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
-              </button>
-              {showCopyMenu && (
-                <div className="copy-menu-dropdown">
-                  <div
-                    className="menu-item"
-                    onClick={copyText}
+      <div className="deck-build-options">
+        <div className='all-options-box'>
+          <div className='options-left'>
+            <div className='options-row row-options-1'>
+              <div className='my-decks-btn'>
+                <button onClick={handleMyDecks}>
+                  <p>My Decks</p>
+                </button>
+              </div>
+              <div className='deck-options-btns-right'>
+                <button onClick={handleImport} disabled={importing}>
+                  <p>Import Deck</p>
+                </button>
+                <div className="copy-menu-container" ref={menuRef}>
+                  <button
+                    onClick={() => setShowCopyMenu(v => !v)}
+                    disabled={!deck.length}
                   >
-                    Copy as Text
-                  </div>
-                  <div
-                    className="menu-item"
-                    onClick={shareLink}
-                  >
-                    Share via Link
-                  </div>
-                  <div
-                    className="menu-item"
-                    onClick={handleExportImage}
-                  >
-                    Download Image
-                  </div>
-                  <div className="menu-item" onClick={openPrintDecklist}>
-                    Print Decklist
-                  </div>
-                  <div
-                    className="menu-item"
-                    onClick={copyJson}
-                  >
-                    Copy as Jsoɴ
-                  </div>
+                    <p>Export Deck</p>
+                    <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+                  </button>
+                  {showCopyMenu && (
+                    <div className="copy-menu-dropdown">
+                      <div
+                        className="menu-item"
+                        onClick={copyText}
+                      >
+                        Copy as Text
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={shareLink}
+                      >
+                        Share via Link
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={handleExportImage}
+                      >
+                        Download Image
+                      </div>
+                      <div className="menu-item" onClick={openPrintDecklist}>
+                        Print Decklist
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={copyJson}
+                      >
+                        Copy as Jsoɴ
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+                <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
+                  <p>Save Deck</p>
+                </button>
+              </div>
             </div>
-            <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
-              <p>Save Deck</p>
-            </button>
           </div>
         </div>
+        {showSuccess && (
+          <div className="copy-success-overlay">
+            <div className="copy-success-icon">✔︎</div>
+            <p>Copied</p>
+          </div>
+        )}
       </div>
-      {showSuccess && (
-        <div className="copy-success-overlay">
-          <div className="copy-success-icon">✔︎</div>
-          <p>Copied</p>
-        </div>
-      )}
-    </div>
-    {showSaveModal && (
+      {showSaveModal && (
         <div className="savedeck-modal-overlay">
           <div className="savedeck-modal-content">
             {!user ? (
               <>
-                <p>You need to log in to save your deck.</p>
+                <p>You need tobe logged in to save decks and view your deck collection.</p>
                 <button onClick={() => window.open(`${window.location.origin}/login`, '_blank')}>Login</button>
                 <button onClick={() => setShowSaveModal(false)}>Cancel</button>
               </>
             ) : (
               <>
-                <h3>Save Deck</h3>
+                {originalDeckId && (
+                  <div style={{ marginBottom: '1em' }}>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={!overwriteMode}
+                        onChange={() => setOverwriteMode(false)}
+                      />
+                      {' '}Save as new deck
+                    </label>
+                    <label style={{ marginLeft: '1em' }}>
+                      <input
+                        type="radio"
+                        checked={overwriteMode}
+                        onChange={() => setOverwriteMode(true)}
+                      />
+                      {' '}Overwrite existing deck
+                    </label>
+                  </div>
+                )}
+                <h3>{overwriteMode ? 'Overwrite Deck' : 'Save Deck'}</h3>
                 <label>
                   Name*<br />
                   <input type="text" value={deckName} onChange={e => setDeckName(e.target.value)} />

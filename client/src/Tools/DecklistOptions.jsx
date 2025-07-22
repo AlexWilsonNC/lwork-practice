@@ -56,7 +56,6 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     navigate(`/deckbuilder#${hash}`)
   }
 
-
   return (
     <div className="deck-top-right-options">
       <div className="copy-decklist-btn" onClick={copyToClipboard}>
