@@ -164,6 +164,9 @@ nav {
     margin-bottom: 0px !important;
     position: absolute;
   }
+  .login-slash-account-btn li {
+    margin-left: 0px !important;
+  }
   .burger-nav-hr {
     width: 93%;
     border-top: none;

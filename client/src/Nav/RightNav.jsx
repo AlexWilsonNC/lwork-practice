@@ -117,8 +117,8 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <div className='top-login-diff'>
           <div className='login-slash-account-btn'>
             {user
-              ? <li className='not-ready'><Link to="/account">Account</Link></li>
-              : <li className='not-ready'><Link to="/login">Login</Link></li>
+              ? <li className='not-ready'><Link to="/account" onClick={() => setOpen(false)}>Account</Link></li>
+              : <li className='not-ready'><Link to="/login" onClick={() => setOpen(false)}>Login</Link></li>
             }
           </div>
           <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>

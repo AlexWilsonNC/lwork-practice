@@ -615,19 +615,19 @@ const PlayerDeck = () => {
                         {playerData.decklist.trainer.map((card, index) => (
                             <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
                                  {
-   (() => {
-     const mapKey = `${card.set}-${card.number}`;
-     const info   = cardData?.cardMap?.[mapKey];
-     const altTxt = info?.name ?? card.name;  // fallback to decklist name
-     return (
-       <img
-         src={cardImageUrl(card)}
-         alt={altTxt}
-         onLoad={handleImageLoad}
-       />
-     );
-   })()
- }
+                                    (() => {
+                                        const mapKey = `${card.set}-${card.number}`;
+                                        const info   = cardData?.cardMap?.[mapKey];
+                                        const altTxt = info?.name ?? card.name;  // fallback to decklist name
+                                        return (
+                                        <img
+                                            src={cardImageUrl(card)}
+                                            alt={altTxt}
+                                            onLoad={handleImageLoad}
+                                        />
+                                        );
+                                    })()
+                                }
                                 <div className="card-count">{card.count}</div>
                             </div>
                         ))}

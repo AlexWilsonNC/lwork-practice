@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import './App.css'
 import Navbar from './Nav/Navbar';
 import HomePage from './Homepage/HomePage';
@@ -20,13 +20,20 @@ import ArticleComponent from './ArticleComponents/ArticleComponent';
 import About from './About/About';
 import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
-import BackToTopButton from './Tools/BackToTopButton';
+// import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
 import DeckBuilder from './DeckBuilder/DeckBuilder';
 import PrintDecklist from './DeckBuilder/PrintDecklist'
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import Login   from './pages/Login';
 import Account from './pages/Account';
+
+export function PrivateRoute({ children }) {
+  const { user, loading } = useContext(AuthContext);
+  if (loading) return null;
+  if (!user)   return <Navigate to="/login" replace />;
+  return children;
+}
 
 function App() {
   const { pathname } = useLocation()
@@ -39,8 +46,15 @@ function App() {
         { !noNavBarOn.includes(pathname) && <Navbar/> }
         <main className='mainwrapedcontainer'>
           <Routes>
-            <Route path="/login"   element={<Login />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/account"
+              element={
+                <PrivateRoute>
+                  <Account/>
+                </PrivateRoute>
+              }
+            />
             <Route path="/" element={<HomePage />} />
             <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
             <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
@@ -67,7 +81,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           
-          <BackToTopButton />
+          {/* <BackToTopButton /> */}
         </main>
         { !noFooterOn.includes(pathname) && <Footer/> }
       </div>

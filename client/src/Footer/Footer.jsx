@@ -5,8 +5,8 @@ import discordIcon from '../assets/social-media-icons/discord-icon.png';
 import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
 import tiktokIcon from '../assets/social-media-icons/patreon-icon.webp';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
-import totodileSprite from '../assets/footer/footerspriteleft.png';
-import feraligatrSprite from '../assets/footer/footersprite.png';
+import totodileSprite from '../assets/footer/articuno.png';
+import feraligatrSprite from '../assets/footer/lugia.png';
 
 function Footer() {
     return (
@@ -78,7 +78,7 @@ function Footer() {
                 </div>
             </div>
             <div className='bottom-footer'>
-                <img src={totodileSprite}></img>
+                <img className='invert-parallel' src={totodileSprite}></img>
                 <p>PTCG Legends - 2022&nbsp;&nbsp;|&nbsp;&nbsp;Website Design: Alex Wilson&nbsp;&nbsp;|&nbsp;&nbsp;Find me on X / Twitter: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>
                 <img src={feraligatrSprite}></img>
             </div>

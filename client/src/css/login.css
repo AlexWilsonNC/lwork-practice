@@ -1,0 +1,133 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+.login-container {
+  display: flex;
+  width: 80%;
+  max-width: 1000px;
+  height: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.login-box {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.login-image {
+  flex: 0 0 60%;
+  overflow: hidden;
+}
+.login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 60% center;
+}
+.login-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.already-have-account-question {
+    margin-top: 15px;
+}
+.whole-login-page {
+    display: flex;
+    flex-direction: column;
+}
+.artwork-credit {
+    text-align: end;
+    color: rgb(190, 190, 190);
+    font-weight: 600;
+    padding: 0 15px 15px 0;
+    font-style: italic;
+}
+.login-btn-on-page {
+    background-color: #1290eb;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+}
+.login-btn-on-page:hover {
+    background-color: grey;
+    cursor: pointer;
+}
+.create-acct-btn {
+    color: #1290eb;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+}
+.create-acct-btn:hover {
+    cursor: pointer;
+}
+.login-box form input {
+    padding: 5px;
+    width: 90%;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+@media (max-width: 1150px) {
+    .login-image img {
+        object-position: 65% center;
+    }
+}
+@media (max-width: 900px) {
+    .login-image img {
+        object-position: 70% center;
+    }
+}
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    .login-box,
+    .login-image {
+        flex: none;
+        height: auto;
+    }
+    .login-page {
+        min-height: 55vh;
+    }
+    .login-container {
+        height: auto;
+    }
+    .login-box input {
+        width: 50%;
+    }
+    .artwork-credit {
+        font-size: 12px;
+    }
+}
+@media (max-width: 600px) {
+    .login-box h2 {
+        font-size: 16px;
+    }
+    .login-box p,
+    .create-acct-btn {
+        font-size: 14px;
+    }
+    .login-box input {
+        padding: 3px;
+        margin-bottom: 7px;
+        font-size: 12px;
+        width: 70%;
+    }
+    .login-btn-on-page {
+        font-size: 12px;
+    }
+}
+@media (max-width: 400px) {
+    .login-box input {
+        width: 90%;
+    }
+    .login-page {
+        min-height: 37vh;
+    }
+}

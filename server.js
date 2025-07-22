@@ -51,8 +51,15 @@ const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { 
   });
 
   const userSchema = new mongoose.Schema({
-  email:        { type: String, unique: true, required: true },
-  passwordHash: { type: String,             required: true }
+    email:        { type: String, unique: true, required: true },
+    passwordHash: { type: String,             required: true },
+    decks: [{
+      name:        { type: String, required: true },
+      mascotCard:  { type: String, required: true },
+      description: { type: String },
+      decklist:    { type: Object, required: true },
+      createdAt:   { type: Date,   default: Date.now }
+    }]
 });
 const User = authConnection.model('User', userSchema, 'users');
 
@@ -71,6 +78,16 @@ function requireAuth(req, res, next) {
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 }
+
+const userDeckSchema = new mongoose.Schema({
+  userId:       { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  name:         { type: String, required: true },
+  mascotCard:       { type: String, required: true },       // e.g. “Pikachu #025”
+  description:  { type: String },
+  decklist:     { type: Object, required: true },       // the actual decklist JSON
+  createdAt:    { type: Date, default: Date.now }
+});
+const UserDeck = authConnection.model('UserDeck', userDeckSchema, 'userdecks');
 
 // Signup
 app.post('/api/auth/signup', async (req, res) => {
@@ -112,6 +129,30 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+app.post('/api/user/decks', requireAuth, async (req, res) => {
+  const { name, mascotCard, description, decklist } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    user.decks.push({ name, mascotCard, description, decklist });
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not save deck' });
+  }
+});
+
+// 3) GET /api/user/decks — list all decks for the logged‑in user
+app.get('/api/user/decks', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('decks');
+    res.json(user.decks);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load decks' });
+  }
+});
+
 // Define the schema for emails
 const emailSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -145,6 +186,7 @@ app.post('/api/subscribe', async (req, res) => {
     }
   }
 });
+
 
 let standingsCache = null;
 let cacheTimestamp = null;

@@ -152,7 +152,9 @@
 .unhide-footer {
     display: none;
 }
-
+.invert-parallel {
+    transform: scaleX(-1);
+}
 @media screen and (max-width: 1300px) {
     .useful-row2 a {
         margin-left: -20px;

@@ -1,0 +1,157 @@
+.account-page {
+  padding: 25px;
+}
+.account-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+.account-tabs button {
+    background-color: grey;
+    width: 150px;
+    padding: 7px;
+    color: white;
+    border: none;
+    margin: 0 5px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.account-tabs button span {
+    margin-left: 5px;
+    font-size: 20px;
+}
+.account-tabs button:hover {
+    cursor: pointer;
+}
+.decks-account-btn.active,
+.profile-account-btn.active {
+    background-color: #1290eb;
+}
+/**/
+.account-decks {
+    margin: 25px 0;
+}
+.decks-grid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+.deck-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgb(29, 30, 31);
+  color: rgb(231, 231, 231);
+  width: 275px;
+  height: auto;
+}
+.deck-card-img {
+  position: relative;
+  overflow: hidden;
+  width: 100%;   /* tweak to how big you want each mascot slot */
+  height: 150px; /* tweak to your desired aspect */
+  margin: 0 auto;/* centers it in the card if you like */
+}
+/* exactly the same crop you use in CardView */
+.cropped-mascot-card {
+ position: absolute;
+    top: -40%; 
+    left: -10%;
+    width: 120%;
+    height: auto;
+    opacity: 0.75;
+    transform: scale(1);
+    transform-origin: top left;
+}
+/* .deck-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+} */
+.deck-card-info {
+  padding: .5rem;
+  background: var(--info-bg);
+}
+.deck-card-info h3 {
+  margin: 0 0 .25rem;
+  font-size: 1.1rem;
+}
+.deck-card-info p {
+  margin: 0 .25rem .5rem;
+  font-size: .9rem;
+  color: var(--text-muted);
+}
+.deck-card-info small {
+  color: var(--text-muted);
+}
+/* .modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right:0; bottom:0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: var(--body-bg);
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 8px;
+}
+.modal-close {
+  position: absolute;
+  top: .5rem; right: .5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.deck-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 1rem 0;
+}
+.card-container {
+  width: 60px;
+  height: 90px;
+  position: relative;
+}
+.card-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-count {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: .75rem;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.edit-button {
+  display: block;
+  margin: 1rem auto 0;
+  padding: .5rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} */

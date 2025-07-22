@@ -1,10 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { toPng } from 'html-to-image'
+import { AuthContext } from '../contexts/AuthContext'
 
 export default function ExportButtons({ deck, onImportDeck, deckRef, onExportStart, onExportEnd }) {
+  const { user } = useContext(AuthContext)
   const [importing, setImporting] = useState(false)
   const [showCopyMenu, setShowCopyMenu] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [deckName, setDeckName] = useState('')
+  const [selectedMascot, setSelectedMascot] = useState('')
+  const [description, setDescription] = useState('')
+  const [saving, setSaving] = useState(false)
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -192,7 +199,46 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
     setShowCopyMenu(false)
   }
 
+  const handleSaveClick = () => {
+    setShowSaveModal(true)
+  }
+
+  const handleModalSave = async () => {
+    if (!deckName.trim() || !selectedMascot) return
+    setSaving(true)
+    try {
+      const token = localStorage.getItem('PTCGLegendsToken')
+      const res = await fetch('/api/user/decks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: deckName,
+          mascotCard: selectedMascot,
+          description,
+          decklist: deck      // <-- match your server’s destructuring
+        })
+      })
+      if (res.ok) {
+        window.open(`${window.location.origin}/account`, '_blank')
+        setShowSaveModal(false)
+        setDeckName('')
+        setSelectedMascot('')
+        setDescription('')
+      } else {
+        console.error('Failed to save deck')
+      }
+    } catch (err) {
+      console.error('Error saving deck', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
+    <>
     <div className="deck-build-options">
       <div className='all-options-box'>
         <div className='options-left'>
@@ -218,12 +264,6 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
                   </div>
                   <div
                     className="menu-item"
-                    onClick={copyJson}
-                  >
-                    Copy as Jsoɴ
-                  </div>
-                  <div
-                    className="menu-item"
                     onClick={shareLink}
                   >
                     Share via Link
@@ -232,15 +272,21 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
                     className="menu-item"
                     onClick={handleExportImage}
                   >
-                    Save as Image
+                    Download Image
                   </div>
                   <div className="menu-item" onClick={openPrintDecklist}>
                     Print Decklist
                   </div>
+                  <div
+                    className="menu-item"
+                    onClick={copyJson}
+                  >
+                    Copy as Jsoɴ
+                  </div>
                 </div>
               )}
             </div>
-            <button onClick={copyJson} disabled={!deck.length} className='save-deck-btn'>
+            <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
               <p>Save Deck</p>
             </button>
           </div>
@@ -253,5 +299,46 @@ export default function ExportButtons({ deck, onImportDeck, deckRef, onExportSta
         </div>
       )}
     </div>
+    {showSaveModal && (
+        <div className="savedeck-modal-overlay">
+          <div className="savedeck-modal-content">
+            {!user ? (
+              <>
+                <p>You need to log in to save your deck.</p>
+                <button onClick={() => window.open(`${window.location.origin}/login`, '_blank')}>Login</button>
+                <button onClick={() => setShowSaveModal(false)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <h3>Save Deck</h3>
+                <label>
+                  Name*<br />
+                  <input type="text" value={deckName} onChange={e => setDeckName(e.target.value)} />
+                </label>
+                <label>
+                  Mascot*<br />
+                  <select value={selectedMascot} onChange={e => setSelectedMascot(e.target.value)}>
+                    <option value="">Select a card</option>
+                    {deck.map(card => (
+                      <option key={`${card.setAbbrev}-${card.number}`} value={`${card.setAbbrev}-${card.number}`}> {`${card.count}x ${card.name}`} </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Description<br />
+                  <textarea value={description} onChange={e => setDescription(e.target.value)} />
+                </label>
+                <div className="modal-actions">
+                  <button onClick={() => setShowSaveModal(false)} disabled={saving}>Cancel</button>
+                  <button onClick={handleModalSave} disabled={!deckName.trim() || !selectedMascot || saving}>
+                    {saving ? 'Saving...' : 'Save'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
