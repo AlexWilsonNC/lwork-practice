@@ -162,8 +162,8 @@
 .copy-decklist-btn .tooltip-text,
 .open-in-deckbuilder-btn .tooltip-text {
     visibility: hidden;
-    background-color: black;
-    color: rgb(200, 200, 200);
+    background-color: #1290eb;
+    color: white;
     text-align: center;
     border-radius: 6px;
     font-size: 12px;

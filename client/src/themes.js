@@ -62,6 +62,8 @@ export const lightTheme = {
   savedDeckBg: 'rgba(235, 235, 235, 0.46)',
   favoriteHeart: 'rgb(183, 183, 183)',
   favoriteHeartRed: 'red',
+  profileDarkBlue: '#021828',
+  profileSliderBg: 'rgb(176, 176, 176)',
 
 };
 
@@ -126,5 +128,7 @@ export const darkTheme = {
   savedDeckBg: 'rgb(29, 30, 31)',
   favoriteHeart: 'rgb(85, 85, 85)',
   favoriteHeartRed: 'rgb(220, 93, 93)',
+  profileDarkBlue: 'grey',
+  profileSliderBg: 'rgb(87, 87, 87)',
 
 };

@@ -63,7 +63,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Copy to Clipboard</span>
       </div>
       <div className="open-in-deckbuilder-btn not-ready" onClick={openInDeckbuilder}>
-        <span className="material-symbols-outlined">build_circle</span>
+        <span className="material-symbols-outlined">contract_edit</span>
         <span className="tooltip-text">Open in Deckbuilder</span>
       </div>
     </div>

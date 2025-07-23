@@ -5,6 +5,7 @@ import '../css/Account.css'
 import styled from 'styled-components';
 
 const AccountSection = styled.div`
+    background-color: ${({ theme }) => theme.loginbg};
     .deck-card-info {
         color: ${({ theme }) => theme.text};
     }
@@ -24,6 +25,12 @@ const AccountSection = styled.div`
     }
     .sort-favorites-btn {
         margin-bottom: 1rem;
+    }
+    .create-new-deck-link-btn {
+        background-color: ${({ theme }) => theme.profileDarkBlue};
+    }
+    .account-tabs {
+        background-color: ${({ theme }) => theme.profileSliderBg};
     }
 `;
 
@@ -312,6 +319,7 @@ export default function Account() {
                             <div className="account-decks">
                                 <div className="folders-bar">
                                     <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}>+ New Folder</button>
+                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}><span className="material-symbols-outlined">contract_edit</span> Create New Deck</button>
                                 </div>
                                 <button
                                     className="folder-options-icon"
@@ -462,6 +470,11 @@ export default function Account() {
                                                                 )}
                                                             </div>
                                                         </div>
+                                                        {!activeFolder && d.folderId && (
+                                                            <span className="folder-label">
+                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                            </span>
+                                                        )}
                                                         <h3>{d.name}</h3>
                                                         <hr className='saved-deck-hr'></hr>
                                                         {d.description && <p className='deck-card-description'>{d.description}</p>}
@@ -535,47 +548,52 @@ export default function Account() {
                                     </div>
                                 )}
                                 {showFolderModal && (
-                                    <div className="modal-overlay" onClick={() => setShowFolderModal(false)}>
-                                        <div className="modal-box" onClick={e => e.stopPropagation()}>
-                                            <h4>Create Folder</h4>
+                                    <div className="deck-collection-modal-overlay" onClick={() => setShowFolderModal(false)}>
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                            <h4>New Folder</h4>
                                             <input
                                                 placeholder="Folder name"
                                                 value={newFolderName}
                                                 onChange={e => setNewFolderName(e.target.value)}
                                             />
-                                            <button onClick={() => setShowFolderModal(false)}>Cancel</button>
-                                            <button
-                                                disabled={!newFolderName.trim()}
-                                                onClick={async () => {
-                                                    try {
-                                                        const res = await fetch('/api/user/folders', {
-                                                            method: 'POST',
-                                                            headers: {
-                                                                'Content-Type': 'application/json',
-                                                                Authorization: `Bearer ${token}`
-                                                            },
-                                                            body: JSON.stringify({ name: newFolderName.trim() })
-                                                        });
-                                                        if (!res.ok) throw new Error('Failed to create folder');
+                                            <div className='buttons-row-modal'>
+                                                <button className='cancel-button' onClick={() => setShowFolderModal(false)}>Cancel</button>
+                                                <button
+                                                    style={{
+                                                        backgroundColor: newFolderName.trim() ? '#1290eb' : '#1290eb'
+                                                    }}
+                                                    disabled={!newFolderName.trim()}
+                                                    onClick={async () => {
+                                                        try {
+                                                            const res = await fetch('/api/user/folders', {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                    Authorization: `Bearer ${token}`
+                                                                },
+                                                                body: JSON.stringify({ name: newFolderName.trim() })
+                                                            });
+                                                            if (!res.ok) throw new Error('Failed to create folder');
 
-                                                        const payload = await res.json();
-                                                        const list = payload.folders || payload;
-                                                        const created = Array.isArray(list)
-                                                            ? list[list.length - 1]
-                                                            : list;
+                                                            const payload = await res.json();
+                                                            const list = payload.folders || payload;
+                                                            const created = Array.isArray(list)
+                                                                ? list[list.length - 1]
+                                                                : list;
 
-                                                        setFolders(fs => [...fs, created]);
-                                                        setFoldersOrder(o => [...o, created._id]);
-                                                        setNewFolderName('');
-                                                        setShowFolderModal(false);
-                                                    } catch (err) {
-                                                        console.error(err);
-                                                        alert(err.message);
-                                                    }
-                                                }}
-                                            >
-                                                Save
-                                            </button>
+                                                            setFolders(fs => [...fs, created]);
+                                                            setFoldersOrder(o => [...o, created._id]);
+                                                            setNewFolderName('');
+                                                            setShowFolderModal(false);
+                                                        } catch (err) {
+                                                            console.error(err);
+                                                            alert(err.message);
+                                                        }
+                                                    }}
+                                                >
+                                                    Save
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -660,10 +678,10 @@ export default function Account() {
                                 )}
                                 {showSortModal && (
                                     <div
-                                        className="modal-overlay"
+                                        className="deck-collection-modal-overlay"
                                         onClick={() => setShowSortModal(false)}
                                     >
-                                        <div className="modal-box" onClick={e => e.stopPropagation()}>
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Sort Folders</h4>
                                             <ul className="sort-folders-list">
                                                 {(foldersOrder || []).map((id, idx) => {
@@ -671,30 +689,43 @@ export default function Account() {
                                                     if (!folder) return null
                                                     return (
                                                         <li key={id}>
-                                                            <span>{folder.name}</span>
+                                                            <div>
+                                                                <span className='order-folder-name'>{folder.name}</span>
+                                                            </div>
                                                             <button
+                                                                className='up-sort-btn'
                                                                 disabled={idx === 0}
                                                                 onClick={() => {
                                                                     const o = [...foldersOrder];
                                                                     [o[idx - 1], o[idx]] = [o[idx], o[idx - 1]];
                                                                     setFoldersOrder(o);
                                                                 }}
-                                                            >↑</button>
+                                                            >
+                                                                <span class="material-symbols-outlined">
+                                                                    keyboard_arrow_up
+                                                                </span>
+                                                            </button>
                                                             <button
+                                                                className='down-sort-btn'
                                                                 disabled={idx === (foldersOrder || []).length - 1}
                                                                 onClick={() => {
                                                                     const o = [...foldersOrder];
                                                                     [o[idx], o[idx + 1]] = [o[idx + 1], o[idx]];
                                                                     setFoldersOrder(o);
                                                                 }}
-                                                            >↓</button>
+                                                            >
+                                                                <span class="material-symbols-outlined">
+                                                                    keyboard_arrow_down
+                                                                </span>
+                                                            </button>
                                                         </li>
                                                     );
                                                 })}
                                             </ul>
-                                            <div className="modal-actions">
-                                                <button onClick={() => setShowSortModal(false)}>Cancel</button>
+                                            <div className="buttons-row-modal">
+                                                <button className='cancel-button' onClick={() => setShowSortModal(false)}>Cancel</button>
                                                 <button
+                                                    className='save-button'
                                                     onClick={async () => {
                                                         try {
                                                             const res = await fetch('/api/user/folders/sort', {
@@ -708,7 +739,6 @@ export default function Account() {
                                                             const data = await res.json();
                                                             if (!res.ok) throw new Error(data.error || 'Couldn’t save folder order');
 
-                                                            // normalize whether your API gives you { folders: [...] } or just [...]
                                                             const newList = Array.isArray(data) ? data : data.folders || [];
                                                             setFolders(newList);
                                                             setFoldersOrder(newList.map(f => f._id));
@@ -719,7 +749,7 @@ export default function Account() {
                                                         }
                                                     }}
                                                 >
-                                                    Save Order
+                                                    Save
                                                 </button>
                                             </div>
                                         </div>
