@@ -32,6 +32,9 @@ const AccountSection = styled.div`
     .account-tabs {
         background-color: ${({ theme }) => theme.profileSliderBg};
     }
+    .not-blue-p {
+        color: ${({ theme }) => theme.text};
+    }
 `;
 
 export default function Account() {
@@ -65,6 +68,10 @@ export default function Account() {
     const [renameFolderName, setRenameFolderName] = useState('');
     const [showSortModal, setShowSortModal] = useState(false);
     const [foldersOrder, setFoldersOrder] = useState([]);
+    const [sortMode, setSortMode] = useState(() => {
+        const saved = localStorage.getItem('sortMode')
+        return saved !== null ? parseInt(saved, 10) : 0
+    })
 
     const handleLogout = () => {
         logout();
@@ -116,22 +123,68 @@ export default function Account() {
             console.error(err);
         }
     };
+
     const handleRename = async () => {
-        await fetch(`/api/user/decks/${modalDeck._id}/rename`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ name: newValue })
-        });
+        const res = await fetch(
+            `/api/user/decks/${modalDeck._id}/rename`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: newValue.trim() }),
+            }
+        );
+        if (!res.ok) {
+            console.error(await res.text());
+            throw new Error('Rename failed');
+        }
+        const payload = await res.json();
+        // if your API returned { deck: {...} } use it, else fallback to modalDeck+newValue
+        const returned = payload.deck || payload;
+        const id = returned._id || modalDeck._id;
+        const name = returned.name || newValue.trim();
+
+        setDecks(ds =>
+            ds.map(d =>
+                d._id === id
+                    ? { ...d, name }
+                    : d
+            )
+        );
         setShowRenameModal(false);
         setMenuOpenId(null);
     };
 
     const handleDescr = async () => {
-        await fetch(`/api/user/decks/${modalDeck._id}/description`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ description: newValue })
-        });
+        const res = await fetch(
+            `/api/user/decks/${modalDeck._id}/description`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ description: newValue.trim() }),
+            }
+        );
+        if (!res.ok) {
+            console.error(await res.text());
+            throw new Error('Update description failed');
+        }
+        const payload = await res.json();
+        const returned = payload.deck || payload;
+        const id = returned._id || modalDeck._id;
+        const desc = returned.description || newValue.trim();
+
+        setDecks(ds =>
+            ds.map(d =>
+                d._id === id
+                    ? { ...d, description: desc }
+                    : d
+            )
+        );
         setShowDescModal(false);
         setMenuOpenId(null);
     };
@@ -243,7 +296,7 @@ export default function Account() {
                                 hasAncientTrait: !!card.ancientTrait,
                                 hasBreakTrait: card.subtypes?.includes('BREAK'),
                                 isLegendCard: card.subtypes?.includes('LEGEND'),
-                                specificallyLugiaLegend: card.name==='Lugia LEGEND',
+                                specificallyLugiaLegend: card.name === 'Lugia LEGEND',
                             };
                         } catch {
                             return deck;
@@ -285,17 +338,44 @@ export default function Account() {
     const openModal = deck => setSelectedDeck(deck);
     const closeModal = () => setSelectedDeck(null);
 
+    const filteredDecks = (showFavorites ? decks.filter(d => d.favorite) : decks)
+        .filter(d => activeFolder ? String(d.folderId) === activeFolder : true);
+
+    const displayedDecks = React.useMemo(() => {
+        const arr = [...filteredDecks];
+        switch (sortMode) {
+            case 0:
+                // newest first
+                return arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            case 2:
+                // A → Z
+                return arr.sort((a, b) => a.name.localeCompare(b.name));
+            case 3:
+                // by your folder order
+                return arr.sort((a, b) => {
+                    const ai = foldersOrder.indexOf(a.folderId);
+                    const bi = foldersOrder.indexOf(b.folderId);
+                    // decks with no folder go last
+                    const aidx = ai === -1 ? foldersOrder.length : ai;
+                    const bidx = bi === -1 ? foldersOrder.length : bi;
+                    if (aidx !== bidx) return aidx - bidx;
+                    // fall back to newest
+                    return a.name.localeCompare(b.name);
+                });
+            case 1:
+                // oldest first
+                return arr.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            default:
+                return arr;
+        }
+    }, [filteredDecks, sortMode, foldersOrder]);
+
+    useEffect(() => {
+        localStorage.setItem('sortMode', sortMode)
+    }, [sortMode])
+
     if (loading) return <p>Loading your decks…</p>;
     if (error) return <p className="error">{error}</p>;
-
-    const displayedDecks = (showFavorites
-        ? decks.filter(d => d.favorite)
-        : decks
-    ).filter(d =>
-        activeFolder
-            ? String(d.folderId) === activeFolder
-            : true
-    );
 
     return (
         <AccountSection className="account-page">
@@ -348,45 +428,62 @@ export default function Account() {
                                         </button>
                                     ))}
                                 </div>
-                                <div className='folder-options'>
+                                <div className='decks-in-folder-options-sort-list-views'>
+                                    <div className='folder-options'>
+                                        <button
+                                            className="sort-favorites-btn"
+                                            onClick={() => setShowFavorites(!showFavorites)}
+                                        >
+                                            {showFavorites ? (
+                                                <>
+                                                    <p>Show All Decks</p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span className="material-symbols-outlined">favorite</span>
+                                                    <p>Favorites Only</p>
+                                                </>
+                                            )}
+                                        </button>
+                                        {activeFolder && (
+                                            <div className="folder-controls">
+                                                <button
+                                                    className="sort-favorites-btn"
+                                                    onClick={() => {
+                                                        // prefill with current folder’s name
+                                                        const f = folders.find(f => f._id === activeFolder);
+                                                        setRenameFolderName(f?.name || '');
+                                                        setShowRenameFolderModal(true);
+                                                    }}
+                                                >
+                                                    <span className="material-symbols-outlined">drive_file_rename_outline</span>
+                                                    <p>Rename Folder</p>
+                                                </button>
+                                                <button
+                                                    className="sort-favorites-btn"
+                                                    onClick={handleDeleteFolder}
+                                                >
+                                                    <span className="material-symbols-outlined">delete</span>
+                                                    <p>Delete Folder</p>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                     <button
                                         className="sort-favorites-btn"
-                                        onClick={() => setShowFavorites(!showFavorites)}
+                                        onClick={() => setSortMode(m => (m + 1) % 4)}
                                     >
-                                        {showFavorites ? (
-                                            <>
-                                                <p>Show All Decks</p>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="material-symbols-outlined">favorite</span>
-                                                <p>Favorites Only</p>
-                                            </>
-                                        )}
+                                        <span className='not-blue-p'>Sorted:&nbsp;</span>
+                                        <p>
+                                            {{
+                                                0: "Most Recent",
+                                                1: "Earliest Added",
+                                                2: "Alphabetically",
+                                                3: "Folder Order"
+                                            }[sortMode]}
+                                        </p>
+                                        {/* <span className="material-symbols-outlined">sort</span> */}
                                     </button>
-                                    {activeFolder && (
-                                        <div className="folder-controls">
-                                            <button
-                                                className="sort-favorites-btn"
-                                                onClick={() => {
-                                                    // prefill with current folder’s name
-                                                    const f = folders.find(f => f._id === activeFolder);
-                                                    setRenameFolderName(f?.name || '');
-                                                    setShowRenameFolderModal(true);
-                                                }}
-                                            >
-                                                <span className="material-symbols-outlined">drive_file_rename_outline</span>
-                                                <p>Rename Folder</p>
-                                            </button>
-                                            <button
-                                                className="sort-favorites-btn"
-                                                onClick={handleDeleteFolder}
-                                            >
-                                                <span className="material-symbols-outlined">delete</span>
-                                                <p>Delete Folder</p>
-                                            </button>
-                                        </div>
-                                    )}
                                 </div>
                                 <div className="decks-grid">
                                     {displayedDecks
@@ -427,11 +524,16 @@ export default function Account() {
                                                                         transformOrigin: 'top left',
                                                                         left: '315px',
                                                                         width: '85%',
-                                                                        top: '0%' 
+                                                                        top: '0%'
                                                                     }
                                                                     : {})
                                                             }}
                                                         />
+                                                        {!activeFolder && d.folderId && (
+                                                            <span className="folder-label">
+                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                            </span>
+                                                        )}
                                                     </div>
                                                     <div className="deck-card-info">
                                                         <div className='favorite-heart-container'>
@@ -495,14 +597,9 @@ export default function Account() {
                                                                 )}
                                                             </div>
                                                         </div>
-                                                        {!activeFolder && d.folderId && (
-                                                            <span className="folder-label">
-                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
-                                                            </span>
-                                                        )}
                                                         <h3>{d.name}</h3>
                                                         <hr className='saved-deck-hr'></hr>
-                                                        {d.description && <p className='deck-card-description'>{d.description || '\u00A0'}</p>}
+                                                        <p className='deck-card-description'>{d.description || '\u00A0'}</p>
                                                     </div>
                                                 </div>
                                             );

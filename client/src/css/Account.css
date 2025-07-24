@@ -58,7 +58,6 @@
   width: 275px;
   height: auto;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  position: relative;
 }
 .deck-card-img {
   position: relative;
@@ -87,7 +86,7 @@
   color: #fff;
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 2px 6px;
+  padding: 3px 6px;
   border-bottom-left-radius: 4px;
   margin-bottom: 0.25rem;
   box-shadow: 0 0 3px black;
@@ -99,6 +98,7 @@
 .deck-card-info h3 {
   margin: 0 0 .25rem;
   font-size: 1.1rem;
+  text-wrap: nowrap;
 }
 .saved-deck-hr {
     width: 75%;
@@ -140,6 +140,12 @@
   cursor: pointer;
   background-color: rgba(91, 91, 91, 0.25);
 }
+.decks-in-folder-options-sort-list-views {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
 .folder-options {
     display: flex;
     flex-direction: row;
@@ -178,11 +184,15 @@
     margin-right: 5px;
     font-size: 16px;
 }
+.not-blue-p {
+    font-size: 14px !important;
+}
 .deckcollection-menu-dropdown {
   position: absolute;
   display: flex;
   flex-direction: column;
   background: #2f3136;
+  border: 1px solid grey;
   z-index: 100;
 }
 .deckcollection-menu-dropdown button {
@@ -433,6 +443,16 @@
 }
 .folder-options-icon:hover p {
     text-decoration: underline;
+}
+.folders-list {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+.folders-list button:nth-child(1) {
+    font-size: 14px;
+    padding: 6px 7px;
 }
 .folders-list button {
     background-color: grey;
