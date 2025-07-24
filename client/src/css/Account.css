@@ -39,7 +39,7 @@
 }
 /**/
 .account-decks {
-    margin: 25px 0;
+    margin: 25px;
 }
 .decks-grid {
   display: flex;
@@ -70,7 +70,7 @@
   clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 .cropped-mascot-card {
- position: absolute;
+    position: absolute;
     top: -40%; 
     left: -10%;
     width: 120%;
@@ -79,12 +79,12 @@
     transform-origin: top left;
 }
 .folder-label {
-position: absolute;
+  position: absolute;
   top: 0;
   right: 0;
   z-index: 2;
-  background: white;
-  color: #4c4c4c;
+  background: #1290eb;
+  color: #fff;
   font-size: 0.8rem;
   font-weight: 600;
   padding: 2px 6px;

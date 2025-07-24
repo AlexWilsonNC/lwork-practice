@@ -240,7 +240,10 @@ export default function Account() {
                             return {
                                 ...deck,
                                 mascotImageUrl: card.images?.large || card.images?.small,
-                                hasAncientTrait: !!card.ancientTrait
+                                hasAncientTrait: !!card.ancientTrait,
+                                hasBreakTrait: card.subtypes?.includes('BREAK'),
+                                isLegendCard: card.subtypes?.includes('LEGEND'),
+                                specificallyLugiaLegend: card.name==='Lugia LEGEND',
                             };
                         } catch {
                             return deck;
@@ -254,7 +257,6 @@ export default function Account() {
                 );
                 setFavorites(favs);
                 setDecks(withImages);
-                // load this user’s folders and seed both `folders` and `foldersOrder`
                 fetch('/api/user/folders', {
                     headers: {
                         'Content-Type': 'application/json',
@@ -358,7 +360,7 @@ export default function Account() {
                                         ) : (
                                             <>
                                                 <span className="material-symbols-outlined">favorite</span>
-                                                <p>Show Favorites</p>
+                                                <p>Favorites Only</p>
                                             </>
                                         )}
                                     </button>
@@ -403,8 +405,31 @@ export default function Account() {
                                                             alt={`${d.name} mascot`}
                                                             className="cropped-mascot-card"
                                                             style={{
-                                                                // if mascot card has an ancient trait, nudge it down a bit
-                                                                top: d.hasAncientTrait ? '-80%' : undefined
+                                                                top: d.hasAncientTrait ? '-80%' : undefined,
+                                                                ...(d.hasBreakTrait
+                                                                    ? {
+                                                                        transform: 'rotate(90deg)',
+                                                                        transformOrigin: 'top left',
+                                                                        left: '375px',
+                                                                    }
+                                                                    : {}),
+                                                                ...(d.isLegendCard
+                                                                    ? {
+                                                                        transform: 'rotate(90deg)',
+                                                                        transformOrigin: 'top left',
+                                                                        left: '300px',
+                                                                        width: '85%'
+                                                                    }
+                                                                    : {}),
+                                                                ...(d.specificallyLugiaLegend
+                                                                    ? {
+                                                                        transform: 'rotate(90deg)',
+                                                                        transformOrigin: 'top left',
+                                                                        left: '315px',
+                                                                        width: '85%',
+                                                                        top: '0%' 
+                                                                    }
+                                                                    : {})
                                                             }}
                                                         />
                                                     </div>
@@ -477,7 +502,7 @@ export default function Account() {
                                                         )}
                                                         <h3>{d.name}</h3>
                                                         <hr className='saved-deck-hr'></hr>
-                                                        {d.description && <p className='deck-card-description'>{d.description}</p>}
+                                                        {d.description && <p className='deck-card-description'>{d.description || '\u00A0'}</p>}
                                                     </div>
                                                 </div>
                                             );

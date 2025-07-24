@@ -237,7 +237,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         })
       })
       if (res.ok) {
-        window.open(`${window.location.origin}/account`, '_blank')
+        window.location.href = '/account'
         setSaving(false)
         setShowSaveModal(false)
         setDeckName('')
