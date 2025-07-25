@@ -64,6 +64,7 @@ export const lightTheme = {
   favoriteHeartRed: 'red',
   profileDarkBlue: '#021828',
   profileSliderBg: 'rgb(176, 176, 176)',
+  listVersionedFolderLabel: '#81c0ed',
 
 };
 
@@ -130,5 +131,6 @@ export const darkTheme = {
   favoriteHeartRed: 'rgb(220, 93, 93)',
   profileDarkBlue: 'grey',
   profileSliderBg: 'rgb(87, 87, 87)',
+  listVersionedFolderLabel: 'rgb(56, 82, 105)',
 
 };

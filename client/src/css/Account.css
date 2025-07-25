@@ -90,6 +90,26 @@
   border-bottom-left-radius: 4px;
   margin-bottom: 0.25rem;
   box-shadow: 0 0 3px black;
+  width: 30%;
+  text-wrap: nowrap;
+  text-align: center;
+}
+.folder-label-list-version {
+  position: absolute;
+  bottom: 0;
+  right: 3.5px;
+  z-index: 2;
+  background: #81c0ed;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 15px;
+  margin-bottom: 0.25rem;
+  width: 20%;
+  text-wrap: nowrap;
+  text-align: center;
 }
 .deck-card-info {
   padding: .5rem;
@@ -245,7 +265,7 @@
 .deck-collection-modal-box {
     background-color: rgb(56, 62, 73);
     width: auto;
-    max-width: 450px;
+    min-width: 450px;
     padding: 25px;
     border-radius: 5px;
     color: rgb(239, 239, 239);
@@ -257,10 +277,16 @@
     margin-bottom: 10px;
     font-size: 20px;
 }
-.deck-collection-modal-box input {
+.deck-collection-modal-box input,
+.deck-collection-modal-box select {
     height: 25px;
     padding-left: 7px;
     width: 90%;
+}
+.deck-collection-modal-box textarea {
+    width: 95%;
+    height: 75px;
+    padding: 10px;
 }
 .buttons-row-modal {
     margin-top: 15px;
@@ -287,20 +313,40 @@
 .cancel-button {
     background-color: grey;
 }
-.sort-folders-list{
+.preset-sort-folders-buttons button {
+    background-color: #1290eb;
+    border: 2px solid #1290eb;
+    color: white;
+    padding: 3px 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.preset-sort-folders-buttons span {
+    font-size: 15px;
+}
+.sort-folders-list {
     list-style: none;
-    padding: 5px;
     font-size: 18px;
+    width: 100%;
 }
 .sort-folders-list li {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin-bottom: 5px;
     background-color: rgb(80, 86, 97);
     border-radius: 4px;
-    padding: 5px;
+    padding: 6px 15px;
+}
+.buttons-row-lineup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
 }
 .sort-folders-list li div {
     min-width: 150px !important;
@@ -449,6 +495,7 @@
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-start;
+    flex-wrap: wrap;
 }
 .folders-list button:nth-child(1) {
     font-size: 14px;
@@ -459,6 +506,7 @@
     width: auto;
     padding: 5px 6px;
     margin-right: 5px;
+    margin-bottom: 5px;
     color: white;
     border: none;
     border-radius: 3px;
@@ -471,4 +519,53 @@
 }
 .folders-list .active {
     background-color: #1290eb;
+}
+
+
+
+.decks-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.deck-list-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+  background: var(--savedDeckBg);
+  border-radius: 4px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  width: 45%;
+}
+.list-thumb-container {
+  position: relative;
+  overflow: hidden;
+  width: 40%;
+  height: 60px;
+  border-radius: 5px;
+}
+.list-thumb {
+    position: absolute;
+    top: -85%; 
+    left: -10%;
+    width: 120%;
+    height: auto;
+    transform: scale(1);
+    transform-origin: top left;
+}
+.list-info {
+    padding-left: 15px;
+    width: 60%;
+ }
+.list-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.list-info p {
+  margin: 2px 0 0;
+  font-size: .85rem;
+  color: var(--text-muted);
 }

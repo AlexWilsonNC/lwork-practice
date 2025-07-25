@@ -3,13 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import '../css/Account.css'
 import styled from 'styled-components';
+import Spinner from '../contexts/Spinner';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
     .deck-card-info {
         color: ${({ theme }) => theme.text};
     }
+    .deck-list-item {
+        color: ${({ theme }) => theme.text};
+    }
     .deck-card {
+        background-color: ${({ theme }) => theme.savedDeckBg};
+    }
+    .deck-list-item {
         background-color: ${({ theme }) => theme.savedDeckBg};
     }
     .favorite-heart {
@@ -34,6 +41,9 @@ const AccountSection = styled.div`
     }
     .not-blue-p {
         color: ${({ theme }) => theme.text};
+    }
+    .folder-label-list-version {
+        background-color: ${({ theme }) => theme.listVersionedFolderLabel};
     }
 `;
 
@@ -72,6 +82,7 @@ export default function Account() {
         const saved = localStorage.getItem('sortMode')
         return saved !== null ? parseInt(saved, 10) : 0
     })
+    const [viewMode, setViewMode] = useState('grid');
 
     const handleLogout = () => {
         logout();
@@ -195,7 +206,14 @@ export default function Account() {
             headers: { Authorization: `Bearer ${token}` }
         });
         const { deck: newDeck } = await res.json();
-        setDecks(ds => [...ds, { ...newDeck, mascotImageUrl: deck.mascotImageUrl }]);
+
+        const duplicateWithFolder = {
+            ...newDeck,
+            mascotImageUrl: deck.mascotImageUrl,
+            folderId: deck.folderId
+        };
+
+        setDecks(ds => [...ds, duplicateWithFolder]);
         setMenuOpenId(null);
     }
 
@@ -266,6 +284,36 @@ export default function Account() {
         window.location.href =
             `/ljhksdgbnksgkjsiodsfi?deckId=${deck._id}#deck=${fragment}`;
     }
+
+    const handleCreateFolder = async () => {
+        const name = newFolderName.trim();
+        if (!name) return;
+
+        try {
+            const res = await fetch('/api/user/folders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ name })
+            });
+            if (!res.ok) throw new Error('Failed to create folder');
+
+            const payload = await res.json();
+            const list = payload.folders || payload;
+            const created = Array.isArray(list) ? list[list.length - 1] : list;
+
+            // add it straight into your in‑memory state
+            setFolders(fs => [...fs, created]);
+            setFoldersOrder(o => [...o, created._id]);
+            setNewFolderName('');
+            setShowFolderModal(false);
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
+    };
 
     useEffect(() => {
         if (!token) {
@@ -374,7 +422,7 @@ export default function Account() {
         localStorage.setItem('sortMode', sortMode)
     }, [sortMode])
 
-    if (loading) return <p>Loading your decks…</p>;
+    if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
 
     return (
@@ -430,12 +478,24 @@ export default function Account() {
                                 </div>
                                 <div className='decks-in-folder-options-sort-list-views'>
                                     <div className='folder-options'>
+                                        <div className='decks-in-folder-options-sort-list-views'>
+                                            <button
+                                                className="sort-favorites-btn"
+                                                onClick={() => setViewMode(vm => vm === 'grid' ? 'list' : 'grid')}
+                                            >
+                                                <span className="material-symbols-outlined">
+                                                    {viewMode === 'grid' ? 'grid_view' : 'format_list_bulleted'}
+                                                </span>
+                                                <p>{viewMode === 'grid' ? 'Tile View' : 'List View'}</p>
+                                            </button>
+                                        </div>
                                         <button
                                             className="sort-favorites-btn"
                                             onClick={() => setShowFavorites(!showFavorites)}
                                         >
                                             {showFavorites ? (
                                                 <>
+                                                    <span className="material-symbols-outlined">all_inclusive</span>
                                                     <p>Show All Decks</p>
                                                 </>
                                             ) : (
@@ -477,7 +537,7 @@ export default function Account() {
                                         <p>
                                             {{
                                                 0: "Most Recent",
-                                                1: "Earliest Added",
+                                                1: "Least Recent",
                                                 2: "Alphabetically",
                                                 3: "Folder Order"
                                             }[sortMode]}
@@ -485,71 +545,192 @@ export default function Account() {
                                         {/* <span className="material-symbols-outlined">sort</span> */}
                                     </button>
                                 </div>
-                                <div className="decks-grid">
-                                    {displayedDecks
-                                        .filter(d => d != null)
-                                        .map((d, i) => {
-                                            const id = d._id || d.createdAt;
+                                {viewMode === 'grid' ? (
+                                    <div className="decks-grid">
+                                        {displayedDecks
+                                            .filter(d => d != null)
+                                            .map((d, i) => {
+                                                const id = d._id || d.createdAt;
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className="deck-card"
+                                                        onClick={() => openModal(d)}
+                                                    >
+                                                        <div className="deck-card-img">
+                                                            <img
+                                                                src={d.mascotImageUrl}
+                                                                alt={`${d.name} mascot`}
+                                                                className="cropped-mascot-card"
+                                                                style={{
+                                                                    top: d.hasAncientTrait ? '-80%' : undefined,
+                                                                    ...(d.hasBreakTrait
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '375px',
+                                                                        }
+                                                                        : {}),
+                                                                    ...(d.isLegendCard
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '300px',
+                                                                            width: '85%'
+                                                                        }
+                                                                        : {}),
+                                                                    ...(d.specificallyLugiaLegend
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '315px',
+                                                                            width: '85%',
+                                                                            top: '0%'
+                                                                        }
+                                                                        : {})
+                                                                }}
+                                                            />
+                                                            {!activeFolder && d.folderId && (
+                                                                <span className="folder-label">
+                                                                    {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="deck-card-info">
+                                                            <div className='favorite-heart-container'>
+                                                                <span
+                                                                    className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                                    onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
+
+                                                                >
+                                                                    {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                                </span>
+                                                                <div
+                                                                    ref={el => {
+                                                                        if (menuOpenId === d._id) {
+                                                                            menuContainerRef.current = el;
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <span
+                                                                        className="material-symbols-outlined menu-icon"
+                                                                        onClick={e => {
+                                                                            e.stopPropagation();
+                                                                            openMenu(e, d._id);
+                                                                        }}
+                                                                    >
+                                                                        more_vert
+                                                                    </span>
+                                                                    {menuOpenId === d._id && (
+                                                                        <div className="deckcollection-menu-dropdown">
+                                                                            <button onClick={e => {
+                                                                                e.stopPropagation();
+                                                                                setModalDeck(d);
+                                                                                setNewValue(d.name);
+                                                                                setShowRenameModal(true);
+                                                                            }}>
+                                                                                Rename
+                                                                            </button>
+                                                                            <button onClick={e => {
+                                                                                e.stopPropagation();
+                                                                                setModalDeck(d);
+                                                                                setNewValue(d.description || '');
+                                                                                setShowDescModal(true);
+                                                                            }}>
+                                                                                Edit Description
+                                                                            </button>
+                                                                            <button onClick={() => goToDeckbuilder(d)}>
+                                                                                Edit in Deckbuilder
+                                                                            </button>
+                                                                            <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
+                                                                                Duplicate
+                                                                            </button>
+                                                                            <button onClick={e => {
+                                                                                e.stopPropagation();
+                                                                                setMoveModalDeck(d);
+                                                                                setSelectedFolderId(d.folderId || '');
+                                                                                setShowMoveModal(true);
+                                                                            }}>Move</button>
+                                                                            <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
+                                                                                Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <h3>{d.name}</h3>
+                                                            <hr className='saved-deck-hr'></hr>
+                                                            <p className='deck-card-description'>{d.description || '\u00A0'}</p>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                    </div>
+                                ) : (
+                                    <div className="decks-list">
+                                        {displayedDecks.map((d, i) => {
+                                            const id = d._id || i;
                                             return (
                                                 <div
-                                                    key={i}
-                                                    className="deck-card"
+                                                    key={id}
+                                                    className="deck-list-item"
                                                     onClick={() => openModal(d)}
+                                                    style={{ position: 'relative' }}
                                                 >
-                                                    <div className="deck-card-img">
+                                                    <div className='list-thumb-container'>
                                                         <img
                                                             src={d.mascotImageUrl}
-                                                            alt={`${d.name} mascot`}
-                                                            className="cropped-mascot-card"
-                                                            style={{
-                                                                top: d.hasAncientTrait ? '-80%' : undefined,
-                                                                ...(d.hasBreakTrait
-                                                                    ? {
-                                                                        transform: 'rotate(90deg)',
-                                                                        transformOrigin: 'top left',
-                                                                        left: '375px',
-                                                                    }
-                                                                    : {}),
-                                                                ...(d.isLegendCard
-                                                                    ? {
-                                                                        transform: 'rotate(90deg)',
-                                                                        transformOrigin: 'top left',
-                                                                        left: '300px',
-                                                                        width: '85%'
-                                                                    }
-                                                                    : {}),
-                                                                ...(d.specificallyLugiaLegend
-                                                                    ? {
-                                                                        transform: 'rotate(90deg)',
-                                                                        transformOrigin: 'top left',
-                                                                        left: '315px',
-                                                                        width: '85%',
-                                                                        top: '0%'
-                                                                    }
-                                                                    : {})
-                                                            }}
+                                                            alt={d.name}
+                                                            className="list-thumb"
+                                                                style={{
+                                                                    top: d.hasAncientTrait ? '-80%' : undefined,
+                                                                    ...(d.hasBreakTrait
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '240px',
+                                                                        }
+                                                                        : {}),
+                                                                    ...(d.isLegendCard
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '195px',
+                                                                            width: '85%'
+                                                                        }
+                                                                        : {}),
+                                                                    ...(d.specificallyLugiaLegend
+                                                                        ? {
+                                                                            transform: 'rotate(90deg)',
+                                                                            transformOrigin: 'top left',
+                                                                            left: '205px',
+                                                                            width: '85%',
+                                                                            top: '0%'
+                                                                        }
+                                                                        : {})
+                                                                }}
+
                                                         />
-                                                        {!activeFolder && d.folderId && (
-                                                            <span className="folder-label">
-                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
-                                                            </span>
-                                                        )}
                                                     </div>
-                                                    <div className="deck-card-info">
-                                                        <div className='favorite-heart-container'>
+                                                    <div className="list-info">
+                                                        <h3>{d.name}</h3>
+                                                        <p className='deck-card-description'>{d.description || '\u00A0'}</p>
+                                                    </div>
+                                                    <div className='favorite-heart-container' style={{ margin: 0 }}>
                                                             <span
                                                                 className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
-                                                                onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
-
+                                                                onClick={e => {
+                                                                    e.stopPropagation();
+                                                                    toggleFavorite(d._id);
+                                                                }}
                                                             >
                                                                 {favorites.has(id) ? 'favorite' : 'favorite_border'}
                                                             </span>
                                                             <div
                                                                 ref={el => {
-                                                                    if (menuOpenId === d._id) {
-                                                                        menuContainerRef.current = el;
-                                                                    }
+                                                                    if (menuOpenId === d._id) menuContainerRef.current = el;
                                                                 }}
+                                                                style={{ position: 'relative' }}
                                                             >
                                                                 <span
                                                                     className="material-symbols-outlined menu-icon"
@@ -561,73 +742,74 @@ export default function Account() {
                                                                     more_vert
                                                                 </span>
                                                                 {menuOpenId === d._id && (
-                                                                    <div className="deckcollection-menu-dropdown">
-                                                                        <button onClick={e => {
-                                                                            e.stopPropagation();
-                                                                            setModalDeck(d);
-                                                                            setNewValue(d.name);
-                                                                            setShowRenameModal(true);
-                                                                        }}>
-                                                                            Rename
-                                                                        </button>
-                                                                        <button onClick={e => {
-                                                                            e.stopPropagation();
-                                                                            setModalDeck(d);
-                                                                            setNewValue(d.description || '');
-                                                                            setShowDescModal(true);
-                                                                        }}>
-                                                                            Edit Description
-                                                                        </button>
-                                                                        <button onClick={() => goToDeckbuilder(d)}>
-                                                                            Edit in Deckbuilder
-                                                                        </button>
-                                                                        <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
-                                                                            Duplicate
-                                                                        </button>
-                                                                        <button onClick={e => {
-                                                                            e.stopPropagation();
-                                                                            setMoveModalDeck(d);
-                                                                            setSelectedFolderId(d.folderId || '');
-                                                                            setShowMoveModal(true);
-                                                                        }}>Move</button>
-                                                                        <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
-                                                                            Delete
-                                                                        </button>
+                                                                    <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
+                                                                        <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.name); setShowRenameModal(true); }}>Rename</button>
+                                                                        <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.description || ''); setShowDescModal(true); }}>Edit Description</button>
+                                                                        <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
+                                                                        <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
+                                                                        <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>Move</button>
+                                                                        <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
                                                                     </div>
                                                                 )}
                                                             </div>
                                                         </div>
-                                                        <h3>{d.name}</h3>
-                                                        <hr className='saved-deck-hr'></hr>
-                                                        <p className='deck-card-description'>{d.description || '\u00A0'}</p>
-                                                    </div>
+                                                        {!activeFolder && d.folderId && (
+                                                            <span className="folder-label-list-version">
+                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                            </span>
+                                                        )}
                                                 </div>
                                             );
                                         })}
-                                </div>
+                                    </div>
+                                )}
                                 {showRenameModal && (
-                                    <div className="deck-edit-modal">
-                                        <div className="deck-edit-modal-box">
-                                            <h4>Rename Deck</h4>
-                                            <input
-                                                value={newValue}
-                                                onChange={e => setNewValue(e.target.value)}
-                                            />
-                                            <button onClick={() => setShowRenameModal(false)}>Cancel</button>
-                                            <button onClick={handleRename} disabled={!newValue.trim()}>Save</button>
+                                    <div className="deck-collection-modal-overlay">
+                                        <div className="deck-collection-modal-box">
+                                            <form
+                                                onSubmit={e => {
+                                                    e.preventDefault();
+                                                    handleRename();
+                                                }}
+                                            >
+                                                <h4>Rename Deck</h4>
+                                                <input
+                                                    autoFocus
+                                                    value={newValue}
+                                                    onChange={e => setNewValue(e.target.value)}
+                                                />
+                                                <div className="buttons-row-modal">
+                                                    <button
+                                                        type="button"
+                                                        className="cancel-button"
+                                                        onClick={() => setShowRenameModal(false)}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className="save-button"
+                                                        disabled={!newValue.trim()}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 )}
                                 {showDescModal && (
-                                    <div className="deck-edit-modal">
-                                        <div className="deck-edit-modal-box">
+                                    <div className="deck-collection-modal-overlay">
+                                        <div className="deck-collection-modal-box">
                                             <h4>Edit Description</h4>
                                             <textarea
                                                 value={newValue}
                                                 onChange={e => setNewValue(e.target.value)}
                                             />
-                                            <button onClick={() => setShowDescModal(false)}>Cancel</button>
-                                            <button onClick={handleDescr}>Save</button>
+                                            <div className="buttons-row-modal">
+                                                <button class='cancel-button' onClick={() => setShowDescModal(false)}>Cancel</button>
+                                                <button class='save-button' onClick={handleDescr}>Save</button>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -677,6 +859,12 @@ export default function Account() {
                                                 placeholder="Folder name"
                                                 value={newFolderName}
                                                 onChange={e => setNewFolderName(e.target.value)}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter' && newFolderName.trim()) {
+                                                        e.preventDefault();
+                                                        handleCreateFolder();
+                                                    }
+                                                }}
                                             />
                                             <div className='buttons-row-modal'>
                                                 <button className='cancel-button' onClick={() => setShowFolderModal(false)}>Cancel</button>
@@ -720,8 +908,8 @@ export default function Account() {
                                     </div>
                                 )}
                                 {showMoveModal && (
-                                    <div className="modal-overlay" onClick={() => setShowMoveModal(false)}>
-                                        <div className="modal-box" onClick={e => e.stopPropagation()}>
+                                    <div className="deck-collection-modal-overlay" onClick={() => setShowMoveModal(false)}>
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Move “{moveModalDeck.name}” to…</h4>
                                             <select
                                                 value={selectedFolderId || ''}
@@ -732,69 +920,73 @@ export default function Account() {
                                                     <option key={f._id} value={f._id}>{f.name}</option>
                                                 ))}
                                             </select>
-                                            <button onClick={() => setShowMoveModal(false)}>Cancel</button>
-                                            <button onClick={async () => {
-                                                try {
-                                                    const res = await fetch(
-                                                        `/api/user/decks/${moveModalDeck._id}/move`,
-                                                        {
-                                                            method: 'PATCH',
-                                                            headers: {
-                                                                'Content-Type': 'application/json',
-                                                                Authorization: `Bearer ${token}`
-                                                            },
-                                                            body: JSON.stringify({ folderId: selectedFolderId || null })
+                                            <div className="buttons-row-modal">
+                                                <button className='cancel-button' onClick={() => setShowMoveModal(false)}>Cancel</button>
+                                                <button className='save-button' onClick={async () => {
+                                                    try {
+                                                        const res = await fetch(
+                                                            `/api/user/decks/${moveModalDeck._id}/move`,
+                                                            {
+                                                                method: 'PATCH',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                    Authorization: `Bearer ${token}`
+                                                                },
+                                                                body: JSON.stringify({ folderId: selectedFolderId || null })
+                                                            }
+                                                        );
+                                                        if (!res.ok) {
+                                                            const err = await res.json();
+                                                            throw new Error(err.error || 'Failed to move deck');
                                                         }
-                                                    );
-                                                    if (!res.ok) {
-                                                        const err = await res.json();
-                                                        throw new Error(err.error || 'Failed to move deck');
+                                                        const json = await res.json();
+                                                        const updatedDeck = json.deck;
+                                                        if (!updatedDeck) {
+                                                            throw new Error('No deck returned from server');
+                                                        }
+                                                        setDecks(ds =>
+                                                            ds.map(d => {
+                                                                if (d._id !== updatedDeck._id) return d;
+                                                                return {
+                                                                    ...d,
+                                                                    ...updatedDeck
+                                                                };
+                                                            })
+                                                        );
+                                                    } catch (err) {
+                                                        console.error('Move failed:', err);
+                                                    } finally {
+                                                        setShowMoveModal(false);
                                                     }
-                                                    const json = await res.json();
-                                                    const updatedDeck = json.deck;
-                                                    if (!updatedDeck) {
-                                                        throw new Error('No deck returned from server');
-                                                    }
-                                                    setDecks(ds =>
-                                                        ds.map(d => {
-                                                            if (d._id !== updatedDeck._id) return d;
-                                                            return {
-                                                                ...d,
-                                                                ...updatedDeck
-                                                            };
-                                                        })
-                                                    );
-                                                } catch (err) {
-                                                    console.error('Move failed:', err);
-                                                } finally {
-                                                    setShowMoveModal(false);
-                                                }
-                                            }}>Move</button>
+                                                }}>Move</button>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
                                 {showRenameFolderModal && (
-                                    <div
-                                        className="modal-overlay"
-                                        onClick={() => setShowRenameFolderModal(false)}
-                                    >
-                                        <div className="modal-box" onClick={e => e.stopPropagation()}>
-                                            <h4>Rename Folder</h4>
-                                            <input
-                                                value={renameFolderName}
-                                                onChange={e => setRenameFolderName(e.target.value)}
-                                            />
-                                            <div className="modal-actions">
-                                                <button onClick={() => setShowRenameFolderModal(false)}>
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    disabled={!renameFolderName.trim()}
-                                                    onClick={handleRenameFolder}
-                                                >
-                                                    Save
-                                                </button>
-                                            </div>
+                                    <div className="deck-collection-modal-overlay" onClick={() => setShowRenameFolderModal(false)}>
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                            <form
+                                                onSubmit={e => {
+                                                    e.preventDefault();
+                                                    handleRenameFolder();
+                                                }}
+                                            >
+                                                <h4>Rename Folder</h4>
+                                                <input
+                                                    autoFocus
+                                                    value={renameFolderName}
+                                                    onChange={e => setRenameFolderName(e.target.value)}
+                                                />
+                                                <div className="buttons-row-modal">
+                                                    <button type="button" className='cancel-button' onClick={() => setShowRenameFolderModal(false)}>
+                                                        Cancel
+                                                    </button>
+                                                    <button type="submit" className='save-button' disabled={!renameFolderName.trim()}>
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 )}
@@ -805,6 +997,52 @@ export default function Account() {
                                     >
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Sort Folders</h4>
+                                            <div className="preset-sort-folders-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                                <button onClick={() => {
+                                                    // A → Z
+                                                    const ids = [...folders]
+                                                        .sort((a, b) => b.name.localeCompare(a.name))
+                                                        .map(f => f._id);
+                                                    setFoldersOrder(ids);
+                                                }}>
+                                                    A&nbsp;<span class="material-symbols-outlined">chevron_right</span>&nbsp;Z
+                                                </button>
+                                                <button onClick={() => {
+                                                    // Z → A
+                                                    const ids = [...folders]
+                                                        .sort((a, b) => a.name.localeCompare(b.name))
+                                                        .map(f => f._id);
+                                                    setFoldersOrder(ids);
+                                                }}>
+                                                    Z&nbsp;<span class="material-symbols-outlined">chevron_right</span>&nbsp;A
+                                                </button>
+                                                <button onClick={() => {
+                                                    // Most decks first
+                                                    const counts = decks.reduce((acc, d) => {
+                                                        if (d.folderId) acc[d.folderId] = (acc[d.folderId] || 0) + 1;
+                                                        return acc;
+                                                    }, {});
+                                                    const ids = [...folders]
+                                                        .sort((a, b) => (counts[b._id] || 0) - (counts[a._id] || 0))
+                                                        .map(f => f._id);
+                                                    setFoldersOrder(ids);
+                                                }}>
+                                                    Most Decks
+                                                </button>
+                                                <button onClick={() => {
+                                                    // Fewest decks first
+                                                    const counts = decks.reduce((acc, d) => {
+                                                        if (d.folderId) acc[d.folderId] = (acc[d.folderId] || 0) + 1;
+                                                        return acc;
+                                                    }, {});
+                                                    const ids = [...folders]
+                                                        .sort((a, b) => (counts[a._id] || 0) - (counts[b._id] || 0))
+                                                        .map(f => f._id);
+                                                    setFoldersOrder(ids);
+                                                }}>
+                                                    Fewest Decks
+                                                </button>
+                                            </div>
                                             <ul className="sort-folders-list">
                                                 {(foldersOrder || []).map((id, idx) => {
                                                     const folder = (folders || []).find(f => f._id === id)
@@ -814,32 +1052,34 @@ export default function Account() {
                                                             <div>
                                                                 <span className='order-folder-name'>{folder.name}</span>
                                                             </div>
-                                                            <button
-                                                                className='up-sort-btn'
-                                                                disabled={idx === 0}
-                                                                onClick={() => {
-                                                                    const o = [...foldersOrder];
-                                                                    [o[idx - 1], o[idx]] = [o[idx], o[idx - 1]];
-                                                                    setFoldersOrder(o);
-                                                                }}
-                                                            >
-                                                                <span class="material-symbols-outlined">
-                                                                    keyboard_arrow_up
-                                                                </span>
-                                                            </button>
-                                                            <button
-                                                                className='down-sort-btn'
-                                                                disabled={idx === (foldersOrder || []).length - 1}
-                                                                onClick={() => {
-                                                                    const o = [...foldersOrder];
-                                                                    [o[idx], o[idx + 1]] = [o[idx + 1], o[idx]];
-                                                                    setFoldersOrder(o);
-                                                                }}
-                                                            >
-                                                                <span class="material-symbols-outlined">
-                                                                    keyboard_arrow_down
-                                                                </span>
-                                                            </button>
+                                                            <div className='buttons-row-lineup'>
+                                                                <button
+                                                                    className='up-sort-btn'
+                                                                    disabled={idx === 0}
+                                                                    onClick={() => {
+                                                                        const o = [...foldersOrder];
+                                                                        [o[idx - 1], o[idx]] = [o[idx], o[idx - 1]];
+                                                                        setFoldersOrder(o);
+                                                                    }}
+                                                                >
+                                                                    <span class="material-symbols-outlined">
+                                                                        keyboard_arrow_up
+                                                                    </span>
+                                                                </button>
+                                                                <button
+                                                                    className='down-sort-btn'
+                                                                    disabled={idx === (foldersOrder || []).length - 1}
+                                                                    onClick={() => {
+                                                                        const o = [...foldersOrder];
+                                                                        [o[idx], o[idx + 1]] = [o[idx + 1], o[idx]];
+                                                                        setFoldersOrder(o);
+                                                                    }}
+                                                                >
+                                                                    <span class="material-symbols-outlined">
+                                                                        keyboard_arrow_down
+                                                                    </span>
+                                                                </button>
+                                                            </div>
                                                         </li>
                                                     );
                                                 })}
@@ -877,7 +1117,6 @@ export default function Account() {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
                         )
                     }
