@@ -82,7 +82,9 @@ export default function Account() {
         const saved = localStorage.getItem('sortMode')
         return saved !== null ? parseInt(saved, 10) : 0
     })
-    const [viewMode, setViewMode] = useState('grid');
+    const [viewMode, setViewMode] = useState(
+        () => localStorage.getItem('viewMode') || 'grid'
+    );
 
     const handleLogout = () => {
         logout();
@@ -421,6 +423,9 @@ export default function Account() {
     useEffect(() => {
         localStorage.setItem('sortMode', sortMode)
     }, [sortMode])
+    useEffect(() => {
+        localStorage.setItem('viewMode', viewMode);
+    }, [viewMode]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
