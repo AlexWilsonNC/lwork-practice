@@ -46,9 +46,9 @@ function App() {
         { !noNavBarOn.includes(pathname) && <Navbar/> }
         <main className='mainwrapedcontainer'>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/pizza" element={<Login />} />
             <Route
-              path="/account"
+              path="/taco"
               element={
                 <PrivateRoute>
                   <Account/>
