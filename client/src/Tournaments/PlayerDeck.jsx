@@ -14,7 +14,7 @@ const PlayerDeckCenter = styled.div`
         color: ${({ theme }) => theme.text};
     }
     .deck-cards {
-        background-image: ${({ theme }) => theme.deckPlaymat};
+        background-image: ${({ theme }) => theme.deckModalAccountList};
         border: ${({ theme }) => theme.deckBorder};
     }
     .copy-decklist-btn,

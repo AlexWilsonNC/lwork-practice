@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import '../css/Account.css'
 import styled from 'styled-components';
 import Spinner from '../contexts/Spinner';
+import DeckList from '../DeckBuilder/DeckList';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
@@ -45,6 +46,23 @@ const AccountSection = styled.div`
     .folder-label-list-version {
         background-color: ${({ theme }) => theme.listVersionedFolderLabel};
     }
+    .deck-box {
+        background-image: ${({ theme }) => theme.deckModalAccountList};
+        border: 3px solid rgba(94, 94, 94, 0.75);
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+    .card-modal-content-account {
+        color: ${({ theme }) => theme.text};
+        background-image: ${({ theme }) => theme.decklistModalAccountPopupView};
+    }
+    .modal-close {
+        color: ${({ theme }) => theme.modalCloseAccountList};
+        text-shadow: none;
+    }
+    .modal-close:hover {
+        color: #1290eb;
+    }
 `;
 
 export default function Account() {
@@ -78,6 +96,8 @@ export default function Account() {
     const [renameFolderName, setRenameFolderName] = useState('');
     const [showSortModal, setShowSortModal] = useState(false);
     const [foldersOrder, setFoldersOrder] = useState([]);
+    const [lockedFolders, setLockedFolders] = useState(new Set());
+    const [sortMenuOpenId, setSortMenuOpenId] = useState(null);
     const [sortMode, setSortMode] = useState(() => {
         const saved = localStorage.getItem('sortMode')
         return saved !== null ? parseInt(saved, 10) : 0
@@ -307,7 +327,6 @@ export default function Account() {
             const list = payload.folders || payload;
             const created = Array.isArray(list) ? list[list.length - 1] : list;
 
-            // add it straight into your in‑memory state
             setFolders(fs => [...fs, created]);
             setFoldersOrder(o => [...o, created._id]);
             setNewFolderName('');
@@ -428,6 +447,71 @@ export default function Account() {
         localStorage.setItem('viewMode', viewMode);
     }, [viewMode]);
 
+    const moveFolderToTop = id => {
+        setFoldersOrder(o => {
+            const rest = o.filter(x => x !== id);
+
+            let prefixLen = 0;
+            while (prefixLen < rest.length && lockedFolders.has(rest[prefixLen])) {
+                prefixLen++;
+            }
+
+            return [
+                ...rest.slice(0, prefixLen),
+                id,
+                ...rest.slice(prefixLen),
+            ];
+        });
+    };
+
+    const moveFolderToBottom = id => {
+        setFoldersOrder(o => {
+            const rest = o.filter(x => x !== id);
+
+            let idx = rest.length - 1;
+            while (idx >= 0 && lockedFolders.has(rest[idx])) {
+                idx--;
+            }
+            const insertAt = idx + 1;
+
+            return [
+                ...rest.slice(0, insertAt),
+                id,
+                ...rest.slice(insertAt),
+            ];
+        });
+    };
+
+    const toggleLockFolder = id => {
+        setLockedFolders(s => {
+            const next = new Set(s);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    const doPreset = sortedIds => {
+        setFoldersOrder(oldOrder => {
+            const locks = new Set(lockedFolders);
+            const lockedPos = oldOrder
+                .map((id, i) => locks.has(id) ? [i, id] : null)
+                .filter(Boolean);
+
+            const unlocked = sortedIds.filter(id => !locks.has(id));
+
+            const out = [];
+            let ui = 0;
+            for (let i = 0; i < oldOrder.length; i++) {
+                const lp = lockedPos.find(p => p[0] === i);
+                if (lp) out[i] = lp[1];
+                else out[i] = unlocked[ui++];
+            }
+            return out;
+        });
+    };
+    /* define folder name for selected deck in decklist modal */
+    const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
+
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
 
@@ -525,7 +609,6 @@ export default function Account() {
                                                 <button
                                                     className="sort-favorites-btn"
                                                     onClick={() => {
-                                                        // prefill with current folder’s name
                                                         const f = folders.find(f => f._id === activeFolder);
                                                         setRenameFolderName(f?.name || '');
                                                         setShowRenameFolderModal(true);
@@ -788,45 +871,83 @@ export default function Account() {
                                     </div>
                                 )}
                                 {selectedDeck && (
-                                    <div className="modal-overlay" onClick={closeModal}>
-                                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                    <div className="card-modal-overlay" onClick={closeModal}>
+                                        <div className="card-modal-content-account" onClick={e => e.stopPropagation()}>
                                             <button className="modal-close" onClick={closeModal}>×</button>
-                                            <h2>{selectedDeck.name}</h2>
-                                            <p><strong>Mascot:</strong> {selectedDeck.mascotCard}</p>
+                                            <h3>{selectedDeck.name}</h3>
+                                            <p>{selectedFolder?.name ?? ''}</p>
                                             {selectedDeck.description && <p>{selectedDeck.description}</p>}
 
-                                            <div className="deck-cards">
-                                                {selectedDeck.decklist.pokemon.map((c, i) => (
-                                                    <div key={i} className="card-container">
-                                                        <img src={c.imageUrl} alt={c.name} />
-                                                        <div className="card-count">{c.count}</div>
-                                                    </div>
-                                                ))}
-                                                {selectedDeck.decklist.trainer.map((c, i) => (
-                                                    <div key={i} className="card-container">
-                                                        <img src={c.imageUrl} alt={c.name} />
-                                                        <div className="card-count">{c.count}</div>
-                                                    </div>
-                                                ))}
-                                                {selectedDeck.decklist.energy.map((c, i) => (
-                                                    <div key={i} className="card-container">
-                                                        <img src={c.imageUrl} alt={c.name} />
-                                                        <div className="card-count">{c.count}</div>
-                                                    </div>
-                                                ))}
+                                            <div className="deck-modal-actions">
+                                                <div>
+                                                    <span
+                                                        className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
+                                                            }`}
+                                                        onClick={() => toggleFavorite(selectedDeck._id)}
+                                                    >
+                                                        {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <button onClick={() => {
+                                                        setModalDeck(selectedDeck);
+                                                        setNewValue(selectedDeck.name);
+                                                        setShowRenameModal(true);
+                                                    }}>
+                                                        Rename
+                                                    </button>
+                                                    <button onClick={() => {
+                                                        setModalDeck(selectedDeck);
+                                                        setNewValue(selectedDeck.description || '');
+                                                        setShowDescModal(true);
+                                                    }}>
+                                                        Edit Description
+                                                    </button>
+                                                    <button onClick={() => goToDeckbuilder(selectedDeck)}>
+                                                        Edit in Deckbuilder
+                                                    </button>
+                                                    <button onClick={() => handleDuplicate(selectedDeck)}>
+                                                        Duplicate
+                                                    </button>
+                                                    <button onClick={() => {
+                                                        setMoveModalDeck(selectedDeck);
+                                                        setSelectedFolderId(selectedDeck.folderId || '');
+                                                        setShowMoveModal(true);
+                                                    }}>
+                                                        Move
+                                                    </button>
+                                                    <button
+                                                        className="danger"
+                                                        onClick={() => handleDelete(selectedDeck)}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </div>
 
-                                            {/* <button
-                                                className="edit-button"
-                                                onClick={() => window.open(`/ljhksdgbnksgkjsiodsfi#deck=${encodeURIComponent(JSON.stringify(selectedDeck.decklist))}`, '_blank')}
-                                            >
-                                                Edit in DeckBuilder
-                                            </button> */}
+                                            <DeckList
+                                                deck={
+                                                    (() => {
+                                                        const raw = selectedDeck.decklist;
+                                                        return Array.isArray(raw)
+                                                            ? raw
+                                                            : [
+                                                                ...(raw.pokemon || []),
+                                                                ...(raw.trainer || []),
+                                                                ...(raw.energy || []),
+                                                            ];
+                                                    })()
+                                                }
+                                                loading={false}
+                                                onUpdateCount={() => { }}
+                                                onCardClick={card => { window.open(`/card/${card.setAbbrev}/${card.number}`, '_blank'); }}
+                                                viewMode="image"
+                                            />
                                         </div>
                                     </div>
                                 )}
                                 {showFolderModal && (
-                                    <div className="deck-collection-modal-overlay" onClick={() => setShowFolderModal(false)}>
+                                    <div className="deck-collection-modal-overlay">
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>New Folder</h4>
                                             <input
@@ -882,7 +1003,7 @@ export default function Account() {
                                     </div>
                                 )}
                                 {showMoveModal && (
-                                    <div className="deck-collection-modal-overlay" onClick={() => setShowMoveModal(false)}>
+                                    <div className="deck-collection-modal-overlay">
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Move “{moveModalDeck.name}” to…</h4>
                                             <select
@@ -938,7 +1059,7 @@ export default function Account() {
                                     </div>
                                 )}
                                 {showRenameFolderModal && (
-                                    <div className="deck-collection-modal-overlay" onClick={() => setShowRenameFolderModal(false)}>
+                                    <div className="deck-collection-modal-overlay">
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <form
                                                 onSubmit={e => {
@@ -965,15 +1086,12 @@ export default function Account() {
                                     </div>
                                 )}
                                 {showSortModal && (
-                                    <div
-                                        className="deck-collection-modal-overlay"
-                                        onClick={() => setShowSortModal(false)}
-                                    >
+                                    <div className="deck-collection-modal-overlay">
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Sort Folders</h4>
                                             <div className="preset-sort-folders-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                                                 <button onClick={() => {
-                                                    const ids = [...folders]
+                                                    const sortedIds = [...folders]
                                                         .sort((a, b) => {
                                                             const aMatch = a.name.match(/^(\d+)/);
                                                             const bMatch = b.name.match(/^(\d+)/);
@@ -987,12 +1105,12 @@ export default function Account() {
                                                         })
                                                         .map(f => f._id);
 
-                                                    setFoldersOrder(ids);
+                                                    doPreset(sortedIds);
                                                 }}>
                                                     A&nbsp;<span className="material-symbols-outlined">chevron_right</span>&nbsp;Z
                                                 </button>
                                                 <button onClick={() => {
-                                                    const ids = [...folders]
+                                                    const sortedIds = [...folders]
                                                         .sort((a, b) => {
                                                             const aNum = /^\d+/.exec(a.name);
                                                             const bNum = /^\d+/.exec(b.name);
@@ -1008,7 +1126,7 @@ export default function Account() {
                                                             return parseInt(aNum[0], 10) - parseInt(bNum[0], 10);
                                                         })
                                                         .map(f => f._id);
-                                                    setFoldersOrder(ids);
+                                                    doPreset(sortedIds);
                                                 }}>
                                                     Z&nbsp;<span className="material-symbols-outlined">chevron_left</span>&nbsp;A
                                                 </button>
@@ -1018,10 +1136,10 @@ export default function Account() {
                                                         if (d.folderId) acc[d.folderId] = (acc[d.folderId] || 0) + 1;
                                                         return acc;
                                                     }, {});
-                                                    const ids = [...folders]
+                                                    const sortedIds = [...folders]
                                                         .sort((a, b) => (counts[b._id] || 0) - (counts[a._id] || 0))
                                                         .map(f => f._id);
-                                                    setFoldersOrder(ids);
+                                                    doPreset(sortedIds);
                                                 }}>
                                                     Most Decks
                                                 </button>
@@ -1031,10 +1149,10 @@ export default function Account() {
                                                         if (d.folderId) acc[d.folderId] = (acc[d.folderId] || 0) + 1;
                                                         return acc;
                                                     }, {});
-                                                    const ids = [...folders]
+                                                    const sortedIds = [...folders]
                                                         .sort((a, b) => (counts[a._id] || 0) - (counts[b._id] || 0))
                                                         .map(f => f._id);
-                                                    setFoldersOrder(ids);
+                                                    doPreset(sortedIds);
                                                 }}>
                                                     Fewest Decks
                                                 </button>
@@ -1043,12 +1161,25 @@ export default function Account() {
                                                 {(foldersOrder || []).map((id, idx) => {
                                                     const folder = (folders || []).find(f => f._id === id)
                                                     if (!folder) return null
+
                                                     return (
                                                         <li key={id}>
                                                             <div>
                                                                 <span className='order-folder-name'>{folder.name}</span>
                                                             </div>
                                                             <div className='buttons-row-lineup'>
+                                                                <span
+                                                                    className="material-symbols-outlined"
+                                                                    title={lockedFolders.has(id) ? 'Locked' : 'Unlocked'}
+                                                                    style={{
+                                                                        margin: '0 4px',
+                                                                        color: lockedFolders.has(id)
+                                                                            ? 'rgb(220, 93, 93)'
+                                                                            : 'rgba(151, 151, 151, 0.35)'
+                                                                    }}
+                                                                >
+                                                                    {lockedFolders.has(id) ? 'lock' : 'lock_open'}
+                                                                </span>
                                                                 <button
                                                                     className='up-sort-btn'
                                                                     disabled={idx === 0}
@@ -1075,6 +1206,27 @@ export default function Account() {
                                                                         keyboard_arrow_down
                                                                     </span>
                                                                 </button>
+                                                                <button
+                                                                    className="sort-opts-btn"
+                                                                    onClick={e => { e.stopPropagation(); setSortMenuOpenId(sortMenuOpenId === id ? null : id); }}
+                                                                >
+                                                                    <span class="material-symbols-outlined">
+                                                                        more_vert
+                                                                    </span>
+                                                                </button>
+                                                                {sortMenuOpenId === id && (
+                                                                    <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
+                                                                        <button onClick={() => { moveFolderToTop(id); setSortMenuOpenId(null); }}>
+                                                                            Move to Top
+                                                                        </button>
+                                                                        <button onClick={() => { moveFolderToBottom(id); setSortMenuOpenId(null); }}>
+                                                                            Move to Bottom
+                                                                        </button>
+                                                                        <button onClick={() => { toggleLockFolder(id); setSortMenuOpenId(null); }}>
+                                                                            {lockedFolders.has(id) ? 'Unlock Position' : 'Lock Position'}
+                                                                        </button>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </li>
                                                     );
