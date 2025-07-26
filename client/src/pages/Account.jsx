@@ -85,6 +85,7 @@ export default function Account() {
     const [viewMode, setViewMode] = useState(
         () => localStorage.getItem('viewMode') || 'grid'
     );
+    // const [compactMode, setCompactMode] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -489,11 +490,20 @@ export default function Account() {
                                                 onClick={() => setViewMode(vm => vm === 'grid' ? 'list' : 'grid')}
                                             >
                                                 <span className="material-symbols-outlined">
-                                                    {viewMode === 'grid' ? 'grid_view' : 'format_list_bulleted'}
+                                                    {viewMode === 'grid' ? 'format_list_bulleted' : 'grid_view'}
                                                 </span>
-                                                <p>{viewMode === 'grid' ? 'Tile View' : 'List View'}</p>
+                                                <p>{viewMode === 'grid' ? 'List View' : 'Tile View'}</p>
                                             </button>
                                         </div>
+                                        {/* <button
+                                            className="sort-favorites-btn"
+                                            onClick={() => setCompactMode(c => !c)}
+                                        >
+                                            <span className="material-symbols-outlined">
+                                                {compactMode ? 'zoom_in' : 'zoom_out'}
+                                            </span>
+                                            <p>{compactMode ? 'Normal Size' : 'Compact Size'}</p>
+                                        </button> */}
                                         <button
                                             className="sort-favorites-btn"
                                             onClick={() => setShowFavorites(!showFavorites)}
@@ -551,125 +561,106 @@ export default function Account() {
                                     </button>
                                 </div>
                                 {viewMode === 'grid' ? (
-                                    <div className="decks-grid">
-                                        {displayedDecks
-                                            .filter(d => d != null)
-                                            .map((d, i) => {
-                                                const id = d._id || d.createdAt;
-                                                return (
-                                                    <div
-                                                        key={i}
-                                                        className="deck-card"
-                                                        onClick={() => openModal(d)}
-                                                    >
-                                                        <div className="deck-card-img">
-                                                            <img
-                                                                src={d.mascotImageUrl}
-                                                                alt={`${d.name} mascot`}
-                                                                className="cropped-mascot-card"
-                                                                style={{
-                                                                    top: d.hasAncientTrait ? '-80%' : undefined,
-                                                                    ...(d.hasBreakTrait
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '375px',
-                                                                        }
-                                                                        : {}),
-                                                                    ...(d.isLegendCard
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '300px',
-                                                                            width: '85%'
-                                                                        }
-                                                                        : {}),
-                                                                    ...(d.specificallyLugiaLegend
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '315px',
-                                                                            width: '85%',
-                                                                            top: '0%'
-                                                                        }
-                                                                        : {})
-                                                                }}
-                                                            />
-                                                            {!activeFolder && d.folderId && (
-                                                                <span className="folder-label">
-                                                                    {folders.find(f => f._id === d.folderId)?.name || '—'}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        <div className="deck-card-info">
-                                                            <div className='favorite-heart-container'>
-                                                                <span
-                                                                    className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
-                                                                    onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
-
-                                                                >
-                                                                    {favorites.has(id) ? 'favorite' : 'favorite_border'}
-                                                                </span>
-                                                                <div
-                                                                    ref={el => {
-                                                                        if (menuOpenId === d._id) {
-                                                                            menuContainerRef.current = el;
-                                                                        }
-                                                                    }}
-                                                                >
+                                    <div className='decks-grid-wrapper'>
+                                        <div className="decks-grid">
+                                            {displayedDecks
+                                                .filter(d => d != null)
+                                                .map((d, i) => {
+                                                    const id = d._id || d.createdAt;
+                                                    return (
+                                                        <div
+                                                            key={i}
+                                                            className="deck-card"
+                                                            onClick={() => openModal(d)}
+                                                        >
+                                                            <div className="deck-card-img">
+                                                                <img
+                                                                    src={d.mascotImageUrl}
+                                                                    alt={`${d.name} mascot`}
+                                                                    className={[
+                                                                        "cropped-mascot-card",
+                                                                        d.hasAncientTrait && "ancient",
+                                                                        d.hasBreakTrait && "break",
+                                                                        d.isLegendCard && "legend",
+                                                                        d.specificallyLugiaLegend && "lugia"
+                                                                    ].filter(Boolean).join(" ")}
+                                                                />
+                                                                {!activeFolder && d.folderId && (
+                                                                    <span className="folder-label">
+                                                                        {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <div className="deck-card-info">
+                                                                <div className='favorite-heart-container'>
                                                                     <span
-                                                                        className="material-symbols-outlined menu-icon"
-                                                                        onClick={e => {
-                                                                            e.stopPropagation();
-                                                                            openMenu(e, d._id);
+                                                                        className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                                        onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
+
+                                                                    >
+                                                                        {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                                    </span>
+                                                                    <div
+                                                                        ref={el => {
+                                                                            if (menuOpenId === d._id) {
+                                                                                menuContainerRef.current = el;
+                                                                            }
                                                                         }}
                                                                     >
-                                                                        more_vert
-                                                                    </span>
-                                                                    {menuOpenId === d._id && (
-                                                                        <div className="deckcollection-menu-dropdown">
-                                                                            <button onClick={e => {
+                                                                        <span
+                                                                            className="material-symbols-outlined menu-icon"
+                                                                            onClick={e => {
                                                                                 e.stopPropagation();
-                                                                                setModalDeck(d);
-                                                                                setNewValue(d.name);
-                                                                                setShowRenameModal(true);
-                                                                            }}>
-                                                                                Rename
-                                                                            </button>
-                                                                            <button onClick={e => {
-                                                                                e.stopPropagation();
-                                                                                setModalDeck(d);
-                                                                                setNewValue(d.description || '');
-                                                                                setShowDescModal(true);
-                                                                            }}>
-                                                                                Edit Description
-                                                                            </button>
-                                                                            <button onClick={() => goToDeckbuilder(d)}>
-                                                                                Edit in Deckbuilder
-                                                                            </button>
-                                                                            <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
-                                                                                Duplicate
-                                                                            </button>
-                                                                            <button onClick={e => {
-                                                                                e.stopPropagation();
-                                                                                setMoveModalDeck(d);
-                                                                                setSelectedFolderId(d.folderId || '');
-                                                                                setShowMoveModal(true);
-                                                                            }}>Move</button>
-                                                                            <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
-                                                                                Delete
-                                                                            </button>
-                                                                        </div>
-                                                                    )}
+                                                                                openMenu(e, d._id);
+                                                                            }}
+                                                                        >
+                                                                            more_vert
+                                                                        </span>
+                                                                        {menuOpenId === d._id && (
+                                                                            <div className="deckcollection-menu-dropdown">
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
+                                                                                    setModalDeck(d);
+                                                                                    setNewValue(d.name);
+                                                                                    setShowRenameModal(true);
+                                                                                }}>
+                                                                                    Rename
+                                                                                </button>
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
+                                                                                    setModalDeck(d);
+                                                                                    setNewValue(d.description || '');
+                                                                                    setShowDescModal(true);
+                                                                                }}>
+                                                                                    Edit Description
+                                                                                </button>
+                                                                                <button onClick={() => goToDeckbuilder(d)}>
+                                                                                    Edit in Deckbuilder
+                                                                                </button>
+                                                                                <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
+                                                                                    Duplicate
+                                                                                </button>
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
+                                                                                    setMoveModalDeck(d);
+                                                                                    setSelectedFolderId(d.folderId || '');
+                                                                                    setShowMoveModal(true);
+                                                                                }}>Move</button>
+                                                                                <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
+                                                                                    Delete
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
+                                                                <h3>{d.name}</h3>
+                                                                <hr className='saved-deck-hr'></hr>
+                                                                <p className='deck-card-description'>{d.description || '\u00A0'}</p>
                                                             </div>
-                                                            <h3>{d.name}</h3>
-                                                            <hr className='saved-deck-hr'></hr>
-                                                            <p className='deck-card-description'>{d.description || '\u00A0'}</p>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })}
+                                                    );
+                                                })}
+                                        </div>
                                     </div>
                                 ) : (
                                     <div className="decks-list">
@@ -686,35 +677,13 @@ export default function Account() {
                                                         <img
                                                             src={d.mascotImageUrl}
                                                             alt={d.name}
-                                                            className="list-thumb"
-                                                                style={{
-                                                                    top: d.hasAncientTrait ? '-80%' : undefined,
-                                                                    ...(d.hasBreakTrait
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '240px',
-                                                                        }
-                                                                        : {}),
-                                                                    ...(d.isLegendCard
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '195px',
-                                                                            width: '85%'
-                                                                        }
-                                                                        : {}),
-                                                                    ...(d.specificallyLugiaLegend
-                                                                        ? {
-                                                                            transform: 'rotate(90deg)',
-                                                                            transformOrigin: 'top left',
-                                                                            left: '205px',
-                                                                            width: '85%',
-                                                                            top: '0%'
-                                                                        }
-                                                                        : {})
-                                                                }}
-
+                                                            className={[
+                                                                "list-thumb",
+                                                                d.hasAncientTrait && "ancient",
+                                                                d.hasBreakTrait && "break",
+                                                                d.isLegendCard && "legend",
+                                                                d.specificallyLugiaLegend && "lugia"
+                                                            ].filter(Boolean).join(" ")}
                                                         />
                                                     </div>
                                                     <div className="list-info">
@@ -722,47 +691,47 @@ export default function Account() {
                                                         <p className='deck-card-description'>{d.description || '\u00A0'}</p>
                                                     </div>
                                                     <div className='favorite-heart-container' style={{ margin: 0 }}>
+                                                        <span
+                                                            className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                            onClick={e => {
+                                                                e.stopPropagation();
+                                                                toggleFavorite(d._id);
+                                                            }}
+                                                        >
+                                                            {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                        </span>
+                                                        <div
+                                                            ref={el => {
+                                                                if (menuOpenId === d._id) menuContainerRef.current = el;
+                                                            }}
+                                                            style={{ position: 'relative' }}
+                                                        >
                                                             <span
-                                                                className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                                className="material-symbols-outlined menu-icon"
                                                                 onClick={e => {
                                                                     e.stopPropagation();
-                                                                    toggleFavorite(d._id);
+                                                                    openMenu(e, d._id);
                                                                 }}
                                                             >
-                                                                {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                                more_vert
                                                             </span>
-                                                            <div
-                                                                ref={el => {
-                                                                    if (menuOpenId === d._id) menuContainerRef.current = el;
-                                                                }}
-                                                                style={{ position: 'relative' }}
-                                                            >
-                                                                <span
-                                                                    className="material-symbols-outlined menu-icon"
-                                                                    onClick={e => {
-                                                                        e.stopPropagation();
-                                                                        openMenu(e, d._id);
-                                                                    }}
-                                                                >
-                                                                    more_vert
-                                                                </span>
-                                                                {menuOpenId === d._id && (
-                                                                    <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
-                                                                        <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.name); setShowRenameModal(true); }}>Rename</button>
-                                                                        <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.description || ''); setShowDescModal(true); }}>Edit Description</button>
-                                                                        <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
-                                                                        <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
-                                                                        <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>Move</button>
-                                                                        <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                            {menuOpenId === d._id && (
+                                                                <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
+                                                                    <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.name); setShowRenameModal(true); }}>Rename</button>
+                                                                    <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.description || ''); setShowDescModal(true); }}>Edit Description</button>
+                                                                    <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
+                                                                    <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
+                                                                    <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>Move</button>
+                                                                    <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                        {!activeFolder && d.folderId && (
-                                                            <span className="folder-label-list-version">
-                                                                {folders.find(f => f._id === d.folderId)?.name || '—'}
-                                                            </span>
-                                                        )}
+                                                    </div>
+                                                    {!activeFolder && d.folderId && (
+                                                        <span className="folder-label-list-version">
+                                                            {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             );
                                         })}
@@ -1004,22 +973,44 @@ export default function Account() {
                                             <h4>Sort Folders</h4>
                                             <div className="preset-sort-folders-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                                                 <button onClick={() => {
-                                                    // A → Z
                                                     const ids = [...folders]
-                                                        .sort((a, b) => b.name.localeCompare(a.name))
+                                                        .sort((a, b) => {
+                                                            const aMatch = a.name.match(/^(\d+)/);
+                                                            const bMatch = b.name.match(/^(\d+)/);
+
+                                                            if (aMatch && bMatch) {
+                                                                return parseInt(bMatch[1], 10) - parseInt(aMatch[1], 10);
+                                                            }
+                                                            if (aMatch) return -1;
+                                                            if (bMatch) return 1;
+                                                            return a.name.localeCompare(b.name);
+                                                        })
                                                         .map(f => f._id);
+
                                                     setFoldersOrder(ids);
                                                 }}>
-                                                    A&nbsp;<span class="material-symbols-outlined">chevron_right</span>&nbsp;Z
+                                                    A&nbsp;<span className="material-symbols-outlined">chevron_right</span>&nbsp;Z
                                                 </button>
                                                 <button onClick={() => {
-                                                    // Z → A
                                                     const ids = [...folders]
-                                                        .sort((a, b) => a.name.localeCompare(b.name))
+                                                        .sort((a, b) => {
+                                                            const aNum = /^\d+/.exec(a.name);
+                                                            const bNum = /^\d+/.exec(b.name);
+                                                            if (!aNum && !bNum) {
+                                                                return b.name.localeCompare(a.name);
+                                                            }
+                                                            if (aNum && !bNum) {
+                                                                return 1;
+                                                            }
+                                                            if (!aNum && bNum) {
+                                                                return -1;
+                                                            }
+                                                            return parseInt(aNum[0], 10) - parseInt(bNum[0], 10);
+                                                        })
                                                         .map(f => f._id);
                                                     setFoldersOrder(ids);
                                                 }}>
-                                                    Z&nbsp;<span class="material-symbols-outlined">chevron_right</span>&nbsp;A
+                                                    Z&nbsp;<span className="material-symbols-outlined">chevron_left</span>&nbsp;A
                                                 </button>
                                                 <button onClick={() => {
                                                     // Most decks first

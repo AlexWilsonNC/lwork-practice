@@ -41,13 +41,15 @@
 .account-decks {
     margin: 25px;
 }
+.decks-grid-wrapper {
+  width: 100%;
+  padding: 1rem;
+}
 .decks-grid {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: flex-start;
 }
 .deck-card {
   display: flex;
@@ -88,7 +90,6 @@
   font-weight: 600;
   padding: 3px 6px;
   border-bottom-left-radius: 4px;
-  margin-bottom: 0.25rem;
   box-shadow: 0 0 3px black;
   width: 30%;
   text-wrap: nowrap;
@@ -272,6 +273,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    box-shadow: 0 0 25px black;
 }
 .deck-collection-modal-box h4 {
     margin-bottom: 10px;
@@ -522,10 +524,10 @@
 }
 
 
-
 .decks-list {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -568,4 +570,110 @@
   margin: 2px 0 0;
   font-size: .85rem;
   color: var(--text-muted);
+}
+.cropped-mascot-card.ancient {
+  top: -80%;
+}
+.cropped-mascot-card.break {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 375px;
+}
+.cropped-mascot-card.legend {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 300px;
+  width: 85%;
+}
+.cropped-mascot-card.lugia {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 315px;
+  width: 85%;
+  top: 0%;
+}
+.list-thumb.ancient {
+  top: -140%;
+}
+.list-thumb.break {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 240px;
+}
+.list-thumb.legend {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 195px;
+  width: 100%;
+}
+.list-thumb.lugia {
+  transform: rotate(90deg);
+  transform-origin: top left;
+  left: 205px;
+  width: 100%;
+  top: -15%;
+}
+@media (max-width: 1000px) {
+  .deck-card {
+    border-radius: 5px;
+    width: 175px;
+  }
+  .decks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 175px);
+    justify-content: center;
+    gap: 1rem;
+  }
+  .deck-card-img {
+    height: 100px;
+  }
+  .cropped-mascot-card {
+    top: -30%; 
+    left: -10%;
+    width: 120%;
+}
+  .folder-label {
+    font-size: 0.5rem;
+    padding: 2px 6px;
+    width: 30%;
+  }
+  .deck-card-info h3 {
+    font-size: 0.8rem;
+    margin-top: -8px;
+  }
+  .deck-card-description {
+    width: 95%;
+    height: 23px;
+    overflow: hidden;
+  }
+  .deck-card-info p {
+    font-size: .65rem;
+  }
+  .favorite-heart-container {
+    margin-top: -15px;
+  }
+  .favorite-heart {
+    margin-right: 0;
+    padding: 1px;
+    font-size: 1.25rem !important;
+}
+.menu-icon {
+    padding: 1px;
+    margin-right: -7.5px;
+    font-size: 1.25rem !important;
+}
+  .cropped-mascot-card.break {
+    left: 235px;
+    top: -38%;
+  }
+  .cropped-mascot-card.legend {
+    left: 220px;
+    width: 100%;
+    top: -32%;
+  }
+  .cropped-mascot-card.lugia {
+    left: 220px;
+    width: 100%;
+    top: 0%;
+  }
 }
