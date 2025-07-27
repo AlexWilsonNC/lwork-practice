@@ -48,7 +48,7 @@ const AccountSection = styled.div`
     }
     .deck-box {
         background-image: ${({ theme }) => theme.deckModalAccountList};
-        border: 3px solid rgba(94, 94, 94, 0.75);
+        border: 3px solid rgba(94, 94, 94, 0.5);
         border-radius: 5px;
         margin-top: 5px;
     }
@@ -60,8 +60,9 @@ const AccountSection = styled.div`
         color: ${({ theme }) => theme.modalCloseAccountList};
         text-shadow: none;
     }
-    .modal-close:hover {
-        color: #1290eb;
+    .deck-modal-actions button {
+        background: ${({ theme }) => theme.decklistOpenedBtnBg};
+        color: #f5f5f5;
     }
 `;
 
@@ -105,7 +106,12 @@ export default function Account() {
     const [viewMode, setViewMode] = useState(
         () => localStorage.getItem('viewMode') || 'grid'
     );
+    const [showMascotModal, setShowMascotModal] = useState(false);
+    const [primaryMascot, setPrimaryMascot] = useState('');
+    const [secondaryMascot, setSecondaryMascot] = useState('');
     // const [compactMode, setCompactMode] = useState(false);
+    const [showAllFolders, setShowAllFolders] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 850);
 
     const handleLogout = () => {
         logout();
@@ -357,19 +363,31 @@ export default function Account() {
                 const withImages = await Promise.all(
                     decks.map(async deck => {
                         const [set, num] = deck.mascotCard.split('-');
+                        let secondaryMascotImageUrl = null;
+                        if (deck.secondaryMascotCard) {
+                            const [set2, num2] = deck.secondaryMascotCard.split('-');
+                            try {
+                                const r2 = await fetch(`/api/cards/${set2}/${num2}`);
+                                const card2 = await r2.json();
+                                secondaryMascotImageUrl = card2.images?.large || card2.images?.small;
+                            } catch { }
+                        }
+
                         try {
                             const r = await fetch(`/api/cards/${set}/${num}`);
                             const card = await r.json();
                             return {
                                 ...deck,
                                 mascotImageUrl: card.images?.large || card.images?.small,
+                                secondaryMascotImageUrl,
                                 hasAncientTrait: !!card.ancientTrait,
+                                isTagTeam: card.subtypes?.includes('TAG TEAM'),
                                 hasBreakTrait: card.subtypes?.includes('BREAK'),
                                 isLegendCard: card.subtypes?.includes('LEGEND'),
                                 specificallyLugiaLegend: card.name === 'Lugia LEGEND',
                             };
                         } catch {
-                            return deck;
+                            return { ...deck, secondaryMascotImageUrl };
                         }
                     })
                 );
@@ -391,10 +409,16 @@ export default function Account() {
                         return res.json();
                     })
                     .then(data => {
-                        const list = data.folders || data;       // in case your API returns { folders: [...] }
+                        const list = data.folders || data;
                         list.sort((a, b) => a.order - b.order);
                         setFolders(list);
                         setFoldersOrder(list.map(f => f._id));
+
+                        setLockedFolders(new Set(
+                            list
+                                .filter(f => f.locked)
+                                .map(f => f._id)
+                        ));
                     })
                     .catch(err => console.error('Failed to load folders', err));
             })
@@ -490,6 +514,15 @@ export default function Account() {
         });
     };
 
+    useEffect(() => {
+        const handleResize = () => setIsMobileView(window.innerWidth < 850);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    useEffect(() => {
+        if (!isMobileView) setShowAllFolders(false);
+    }, [isMobileView]);
+
     const doPreset = sortedIds => {
         setFoldersOrder(oldOrder => {
             const locks = new Set(lockedFolders);
@@ -555,16 +588,38 @@ export default function Account() {
                                     <button
                                         className={!activeFolder ? 'active' : ''}
                                         onClick={() => setActiveFolder(null)}
-                                    >All Decks</button>
-                                    {folders.map(f => (
+                                    >
+                                        All Decks
+                                    </button>
+                                    {folders.map((f, idx) => {
+                                        if (isMobileView && !showAllFolders && idx >= 10) return null;
+                                        return (
+                                            <button
+                                                key={f._id}
+                                                className={f._id === activeFolder ? 'active' : ''}
+                                                onClick={() => setActiveFolder(f._id)}
+                                            >
+                                                {f.name}
+                                            </button>
+                                        );
+                                    })}
+                                    {isMobileView && folders.length > 10 && (
                                         <button
-                                            key={f._id}
-                                            className={f._id === activeFolder ? 'active' : ''}
-                                            onClick={() => setActiveFolder(f._id)}
+                                            className="show-more-btn"
+                                            onClick={() => setShowAllFolders(v => !v)}
                                         >
-                                            {f.name}
+                                            {showAllFolders
+                                                ? ''
+                                                : (
+                                                    <>
+                                                        <span className="material-symbols-outlined">
+                                                            keyboard_arrow_down
+                                                        </span>{' '}
+                                                        Show More
+                                                    </>
+                                                )}
                                         </button>
-                                    ))}
+                                    )}
                                 </div>
                                 <div className='decks-in-folder-options-sort-list-views'>
                                     <div className='folder-options'>
@@ -662,12 +717,22 @@ export default function Account() {
                                                                     alt={`${d.name} mascot`}
                                                                     className={[
                                                                         "cropped-mascot-card",
+                                                                        d.isTagTeam && "tagteam",
                                                                         d.hasAncientTrait && "ancient",
                                                                         d.hasBreakTrait && "break",
                                                                         d.isLegendCard && "legend",
                                                                         d.specificallyLugiaLegend && "lugia"
                                                                     ].filter(Boolean).join(" ")}
                                                                 />
+                                                                {d.secondaryMascotImageUrl && (
+                                                                    <div className='secondary-mascot-container'>
+                                                                        <img
+                                                                            src={d.secondaryMascotImageUrl}
+                                                                            alt=""
+                                                                            className="secondary-mascot-img"
+                                                                        />
+                                                                    </div>
+                                                                )}
                                                                 {!activeFolder && d.folderId && (
                                                                     <span className="folder-label">
                                                                         {folders.find(f => f._id === d.folderId)?.name || '—'}
@@ -717,8 +782,18 @@ export default function Account() {
                                                                                 }}>
                                                                                     Edit Description
                                                                                 </button>
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
+                                                                                    setModalDeck(d);
+                                                                                    // preload selects:
+                                                                                    setPrimaryMascot(d.mascotCard);
+                                                                                    setSecondaryMascot(d.secondaryMascotCard || '');
+                                                                                    setShowMascotModal(true);
+                                                                                }}>
+                                                                                    Edit Mascots
+                                                                                </button>
                                                                                 <button onClick={() => goToDeckbuilder(d)}>
-                                                                                    Edit in Deckbuilder
+                                                                                    Open in Deckbuilder
                                                                                 </button>
                                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
                                                                                     Duplicate
@@ -802,7 +877,16 @@ export default function Account() {
                                                                 <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
                                                                     <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.name); setShowRenameModal(true); }}>Rename</button>
                                                                     <button onClick={e => { e.stopPropagation(); setModalDeck(d); setNewValue(d.description || ''); setShowDescModal(true); }}>Edit Description</button>
-                                                                    <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
+                                                                    <button onClick={e => {
+                                                                        e.stopPropagation();
+                                                                        setModalDeck(d);
+                                                                        setPrimaryMascot(d.mascotCard);
+                                                                        setSecondaryMascot(d.secondaryMascotCard || '');
+                                                                        setShowMascotModal(true);
+                                                                    }}>
+                                                                        Edit Mascots
+                                                                    </button>
+                                                                    <button onClick={() => goToDeckbuilder(d)}>Open in Deckbuilder</button>
                                                                     <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
                                                                     <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>Move</button>
                                                                     <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
@@ -870,11 +954,116 @@ export default function Account() {
                                         </div>
                                     </div>
                                 )}
+                                {showMascotModal && (
+                                    <div className="deck-collection-modal-overlay">
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                            <h4>Edit Mascots</h4>
+                                            <label>
+                                                Primary Mascot*<br />
+                                                <select
+                                                    value={primaryMascot}
+                                                    onChange={e => setPrimaryMascot(e.target.value)}
+                                                >
+                                                    {modalDeck.decklist.map(c => (
+                                                        <option
+                                                            key={`${c.setAbbrev || c.set}-${c.number}`}
+                                                            value={`${c.setAbbrev || c.set}-${c.number}`}
+                                                        >
+                                                            {c.count}× {c.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                            <label>
+                                                Secondary Mascot<br />
+                                                <select
+                                                    value={secondaryMascot}
+                                                    onChange={e => setSecondaryMascot(e.target.value)}
+                                                >
+                                                    <option value="">None</option>
+                                                    {modalDeck.decklist.map(c => (
+                                                        <option
+                                                            key={`${c.setAbbrev || c.set}-${c.number}`}
+                                                            value={`${c.setAbbrev || c.set}-${c.number}`}
+                                                        >
+                                                            {c.count}× {c.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                            <div className="buttons-row-modal">
+                                                <button className="cancel-button" onClick={() => setShowMascotModal(false)}>
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    className="save-button"
+                                                    onClick={async () => {
+                                                        const token = localStorage.getItem('PTCGLegendsToken');
+                                                        const res = await fetch(
+                                                            `/api/user/decks/${modalDeck._id}/mascots`,
+                                                            {
+                                                                method: 'PATCH',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                    Authorization: `Bearer ${token}`
+                                                                },
+                                                                body: JSON.stringify({
+                                                                    mascotCard: primaryMascot,
+                                                                    secondaryMascotCard: secondaryMascot
+                                                                })
+                                                            }
+                                                        );
+                                                        if (!res.ok) {
+                                                            console.error('Failed to update mascots');
+                                                            return;
+                                                        }
+
+                                                        // 2) fetch new images so UI updates immediately
+                                                        const [set1, num1] = primaryMascot.split('-');
+                                                        const r1 = await fetch(`/api/cards/${set1}/${num1}`);
+                                                        const c1 = await r1.json();
+                                                        const newPrimaryUrl = c1.images?.large || c1.images?.small;
+
+                                                        let newSecondaryUrl = null;
+                                                        if (secondaryMascot) {
+                                                            const [set2, num2] = secondaryMascot.split('-');
+                                                            try {
+                                                                const r2 = await fetch(`/api/cards/${set2}/${num2}`);
+                                                                const c2 = await r2.json();
+                                                                newSecondaryUrl = c2.images?.large || c2.images?.small;
+                                                            } catch { }
+                                                        }
+
+                                                        // 3) stitch into decks state
+                                                        setDecks(ds =>
+                                                            ds.map(d =>
+                                                                d._id === modalDeck._id
+                                                                    ? {
+                                                                        ...d,
+                                                                        mascotCard: primaryMascot,
+                                                                        secondaryMascotCard: secondaryMascot,
+                                                                        mascotImageUrl: newPrimaryUrl,
+                                                                        secondaryMascotImageUrl: newSecondaryUrl
+                                                                    }
+                                                                    : d
+                                                            )
+                                                        )
+                                                        setShowMascotModal(false);
+                                                        setMenuOpenId(null);
+                                                    }}
+                                                    disabled={!primaryMascot}
+                                                >
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 {selectedDeck && (
-                                    <div className="card-modal-overlay" onClick={closeModal}>
+                                    <div className="card-modal-overlay-account" onClick={closeModal}>
                                         <div className="card-modal-content-account" onClick={e => e.stopPropagation()}>
                                             <button className="modal-close" onClick={closeModal}>×</button>
-                                            <h3>{selectedDeck.name}</h3>
+                                            <h3 style={{ margin: 0 }}>{selectedDeck.name}</h3>
                                             <p>{selectedFolder?.name ?? ''}</p>
                                             {selectedDeck.description && <p>{selectedDeck.description}</p>}
 
@@ -901,12 +1090,23 @@ export default function Account() {
                                                         setNewValue(selectedDeck.description || '');
                                                         setShowDescModal(true);
                                                     }}>
-                                                        Edit Description
+                                                        Edit Description
+                                                    </button>
+                                                    <button onClick={e => {
+                                                        setModalDeck(selectedDeck);
+                                                        setPrimaryMascot(selectedDeck.mascotCard);
+                                                        setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
+                                                        setShowMascotModal(true);
+                                                    }}>
+                                                        Edit Mascots
                                                     </button>
                                                     <button onClick={() => goToDeckbuilder(selectedDeck)}>
-                                                        Edit in Deckbuilder
+                                                        Open in Deckbuilder
                                                     </button>
-                                                    <button onClick={() => handleDuplicate(selectedDeck)}>
+                                                    <button onClick={() => {
+                                                        handleDuplicate(selectedDeck)
+                                                        closeModal()
+                                                    }}>
                                                         Duplicate
                                                     </button>
                                                     <button onClick={() => {
@@ -1244,7 +1444,7 @@ export default function Account() {
                                                                     'Content-Type': 'application/json',
                                                                     Authorization: `Bearer ${token}`
                                                                 },
-                                                                body: JSON.stringify({ order: foldersOrder })
+                                                                body: JSON.stringify({ order: foldersOrder, locked: Array.from(lockedFolders) })
                                                             });
                                                             const data = await res.json();
                                                             if (!res.ok) throw new Error(data.error || 'Couldn’t save folder order');
@@ -1269,7 +1469,8 @@ export default function Account() {
                         )
                     }
                 </section>
-            )}
-        </AccountSection>
+            )
+            }
+        </AccountSection >
     );
 }

@@ -11,6 +11,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const [overwriteMode, setOverwriteMode] = useState(false);
   const [deckName, setDeckName] = useState('')
   const [selectedMascot, setSelectedMascot] = useState('')
+  const [secondaryMascot, setSecondaryMascot] = useState('')
   const [description, setDescription] = useState('')
   const [saving, setSaving] = useState(false)
   const menuRef = useRef(null)
@@ -236,6 +237,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         body: JSON.stringify({
           name: deckName,
           mascotCard: selectedMascot,
+          secondaryMascotCard: secondaryMascot,
           description,
           decklist: deck
         })
@@ -246,6 +248,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         setShowSaveModal(false)
         setDeckName('')
         setSelectedMascot('')
+        setSecondaryMascot('')
         setDescription('')
       } else {
         console.error('Failed to save deck')
@@ -368,6 +371,15 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                     <option value="">Select a card</option>
                     {deck.map(card => (
                       <option key={`${card.setAbbrev}-${card.number}`} value={`${card.setAbbrev}-${card.number}`}> {`${card.count}x ${card.name}`} </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Secondary Mascot<br />
+                  <select value={secondaryMascot} onChange={e => setSecondaryMascot(e.target.value)}>
+                    <option value="">None</option>
+                    {deck.map(card => (
+                      <option key={`${card.setAbbrev}-${card.number}`} value={`${card.setAbbrev}-${card.number}`}>{`${card.count}x ${card.name}`}</option>
                     ))}
                   </select>
                 </label>

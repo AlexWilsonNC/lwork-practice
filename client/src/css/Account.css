@@ -2,6 +2,7 @@
   padding: 25px;
   min-height: 70vh;
 }
+
 .account-tabs {
   display: flex;
   flex-direction: row;
@@ -12,45 +13,52 @@
   border-radius: 12px;
   margin: 0 auto;
 }
+
 .account-tabs button {
-    background-color: transparent;
-    width: 175px;
-    padding: 7px;
-    color: white;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  background-color: transparent;
+  width: 175px;
+  padding: 7px;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
+
 .account-tabs button span {
-    margin-left: 5px;
-    font-size: 20px;
+  margin-left: 5px;
+  font-size: 20px;
 }
+
 .account-tabs button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
+
 .decks-account-btn.active,
 .profile-account-btn.active {
-    background-color: #1290eb;
-    border-radius: 10px;
+  background-color: #1290eb;
+  border-radius: 10px;
 }
+
 /**/
 .account-decks {
-    margin: 25px;
+  margin: 25px;
 }
+
 .decks-grid-wrapper {
   width: 100%;
-  padding: 1rem;
 }
+
 .decks-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: flex-start;
 }
+
 .deck-card {
   display: flex;
   flex-direction: column;
@@ -61,6 +69,7 @@
   height: auto;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
 .deck-card-img {
   position: relative;
   overflow: hidden;
@@ -70,15 +79,51 @@
   -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
   clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
+
 .cropped-mascot-card {
-    position: absolute;
-    top: -40%; 
-    left: -10%;
-    width: 120%;
-    height: auto;
-    transform: scale(1);
-    transform-origin: top left;
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  width: 120%;
+  height: auto;
+  transform: scale(1);
+  transform-origin: top left;
 }
+
+.secondary-mascot-container {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 155px;
+  height: 85px;
+  object-fit: cover;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  /* border-bottom: 5px solid rgb(205, 205, 205);
+  border-right: 5px solid rgb(205, 205, 205); */
+  border-bottom-right-radius: 25px;
+  -webkit-mask-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%);
+  mask-composite: intersect;
+}
+
+.secondary-mascot-img {
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  width: 120%;
+  height: auto;
+  transform: scale(1);
+  transform-origin: top left;
+}
+
 .folder-label {
   position: absolute;
   top: 0;
@@ -95,6 +140,7 @@
   text-wrap: nowrap;
   text-align: center;
 }
+
 .folder-label-list-version {
   position: absolute;
   bottom: 0;
@@ -112,102 +158,121 @@
   text-wrap: nowrap;
   text-align: center;
 }
+
 .deck-card-info {
   padding: .5rem;
   background: var(--info-bg);
 }
+
 .deck-card-info h3 {
   margin: 0 0 .25rem;
   font-size: 1.1rem;
   text-wrap: nowrap;
 }
+
 .saved-deck-hr {
-    width: 75%;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 3px solid rgba(128, 128, 128, 0.324);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    margin-bottom: 8px;
+  width: 75%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 3px solid rgba(128, 128, 128, 0.324);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-bottom: 8px;
 }
+
 .deck-card-description {
-    width: 95%;
-    height: 35px;
-    overflow: hidden;
+  width: 95%;
+  height: 35px;
+  overflow: hidden;
 }
+
 .deck-card-info p {
   margin: 0 .25rem .5rem;
   font-size: .9rem;
   color: var(--text-muted);
 }
+
 .deck-card-info small {
   color: var(--text-muted);
 }
+
 .favorite-heart-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -20px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -20px;
 }
+
 .favorite-heart {
-    margin-right: 7px;
-    padding: 2px;
+  margin-right: 7px;
+  padding: 2px;
 }
+
 .menu-icon {
-    padding: 2px;
-    border-radius: 3px;
+  padding: 2px;
+  border-radius: 3px;
 }
+
 .menu-icon:hover {
   cursor: pointer;
   background-color: rgba(91, 91, 91, 0.25);
 }
+
 .decks-in-folder-options-sort-list-views {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
+
 .folder-options {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
+
 .folder-controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
+
 .sort-favorites-btn {
-    background-color: transparent;
-    width: auto;
-    padding: 10px 7px 7px 0;
-    color: #1290eb;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    transition: ease all 0.2s;
-    margin-right: 15px;
+  background-color: transparent;
+  width: auto;
+  padding: 10px 7px 7px 0;
+  color: #1290eb;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  transition: ease all 0.2s;
+  margin-right: 15px;
 }
+
 .sort-favorites-btn:hover {
-    cursor: pointer;
-    color: rgb(219, 77, 77);
+  cursor: pointer;
+  color: rgb(219, 77, 77);
 }
+
 .sort-favorites-btn:hover p {
-    text-decoration: underline;
+  text-decoration: underline;
 }
+
 .sort-favorites-btn span {
-    margin-right: 5px;
-    font-size: 16px;
+  margin-right: 5px;
+  font-size: 16px;
 }
+
 .not-blue-p {
-    font-size: 14px !important;
+  font-size: 14px !important;
 }
+
 .deckcollection-menu-dropdown {
   position: absolute;
   display: flex;
@@ -215,7 +280,9 @@
   background: #2f3136;
   border: 1px solid grey;
   z-index: 100;
+  min-width: 175px;
 }
+
 .deckcollection-menu-dropdown button {
   padding: 0.7rem 1rem;
   border: none;
@@ -225,175 +292,220 @@
   width: 100%;
   cursor: pointer;
 }
+
 .deckcollection-menu-dropdown button:hover {
   background: rgba(255, 255, 255, 0.185);
 }
+
 /* deck in collection's options modal */
 .deck-edit-modal {
   position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.4);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .deck-edit-modal-box {
   background: var(--bg);
-  padding:2rem;
-  border-radius:8px;
+  padding: 2rem;
+  border-radius: 8px;
   width: 300px;
 }
+
 .deck-edit-modal-box h4 {
-  margin-top:0;
+  margin-top: 0;
 }
+
 .deck-edit-modal-box input,
 .deck-edit-modal-box textarea {
-  width:100%;
-  margin-bottom:1rem;
+  width: 100%;
+  margin-bottom: 1rem;
 }
+
 .deck-edit-modal-box button {
-  margin-right:0.5rem;
+  margin-right: 0.5rem;
 }
+
 .deck-collection-modal-overlay {
   position: fixed;
-  top: 0; left: 0; right:0; bottom:0;
-  background: rgba(0,0,0,0.8);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
+
 .deck-collection-modal-box {
-    background-color: rgb(56, 62, 73);
-    width: auto;
-    min-width: 450px;
-    padding: 25px;
-    border-radius: 5px;
-    color: rgb(239, 239, 239);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    box-shadow: 0 0 25px black;
+  background-color: rgb(56, 62, 73);
+  width: auto;
+  min-width: 450px;
+  padding: 25px;
+  border-radius: 5px;
+  color: rgb(239, 239, 239);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0 0 25px black;
 }
+
 .deck-collection-modal-box h4 {
-    margin-bottom: 10px;
-    font-size: 20px;
+  margin-bottom: 10px;
+  font-size: 20px;
 }
+
 .deck-collection-modal-box input,
 .deck-collection-modal-box select {
-    height: 25px;
-    padding-left: 7px;
-    width: 90%;
+  height: 25px;
+  padding-left: 7px;
+  width: 90%;
 }
+
 .deck-collection-modal-box textarea {
-    width: 95%;
-    height: 75px;
-    padding: 10px;
+  width: 95%;
+  height: 75px;
+  padding: 10px;
 }
+
 .buttons-row-modal {
-    margin-top: 15px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
+
 .buttons-row-modal button {
-    margin-right: 5px;
-    font-size: 15px;
-    padding: 3.5px 5px;
-    width: auto;
-    min-width: 70px;
-    cursor: pointer;
-    border: none;
-    color: white;
-    font-weight: 600;
+  margin-right: 5px;
+  font-size: 15px;
+  padding: 3.5px 5px;
+  width: auto;
+  min-width: 70px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  font-weight: 600;
 }
+
 .save-button {
-    background-color: #1290eb;
+  background-color: #1290eb;
 }
+
 .cancel-button {
-    background-color: grey;
+  background-color: grey;
 }
+
 .preset-sort-folders-buttons button {
-    background-color: #1290eb;
-    border: 2px solid #1290eb;
-    color: white;
-    padding: 3px 7px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  background-color: #1290eb;
+  border: 2px solid #1290eb;
+  color: white;
+  padding: 3px 7px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
+
 .preset-sort-folders-buttons span {
-    font-size: 15px;
+  font-size: 15px;
 }
+
 .sort-folders-list {
-    list-style: none;
-    font-size: 18px;
-    width: 100%;
+  list-style: none;
+  font-size: 18px;
+  width: 100%;
 }
+
 .sort-folders-list li {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 5px;
-    background-color: rgb(80, 86, 97);
-    border-radius: 4px;
-    padding: 6px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: rgb(80, 86, 97);
+  border-radius: 4px;
+  padding: 6px 15px;
 }
+
 .buttons-row-lineup {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
+
 .sort-folders-list li div {
-    min-width: 150px !important;
+  min-width: 150px !important;
 }
+
 .order-folder-name {
-    margin-right: 15px;
-    border-radius: 2px;
-    padding: 2px 5px;
+  margin-right: 15px;
+  border-radius: 2px;
+  padding: 2px 5px;
 }
+
 .up-sort-btn,
 .down-sort-btn {
-    background-color: rgb(221, 229, 235);
-    border: none;
-    margin-left: 5px;
-    font-size: 20px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
+  background-color: rgb(221, 229, 235);
+  border: none;
+  margin-left: 5px;
+  font-size: 20px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
 }
+
 .up-sort-btn:hover,
 .down-sort-btn:hover,
 .sort-opts-btn:hover {
-    cursor: pointer;
-    background-color: #1290eb;
-    color: white;
+  cursor: pointer;
+  background-color: #1290eb;
+  color: white;
 }
+
 .sort-opts-btn {
-    background-color: rgb(221, 229, 235);
-    border: none;
-    margin-left: 5px;
-    font-size: 20px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
+  background-color: rgb(221, 229, 235);
+  border: none;
+  margin-left: 5px;
+  font-size: 20px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
 
-    color: rgb(75, 75, 75);
+  color: rgb(75, 75, 75);
 
 }
+
 /* decklist view in account ONLY */
+.card-modal-overlay-account {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
 .card-modal-content-account {
   transform: scale(1.35);
 
@@ -407,15 +519,17 @@
   max-height: 90%;
   padding: 15px;
   color: white;
-  box-shadow: 0 0 20px rgba(0,0,0,1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 1);
   z-index: 1;
 }
+
 .card-modal-content-account p {
   font-size: 12px;
   margin-top: 2px;
 }
-.deckbuilt-card-container:hover > .deck-add-minus > .pm-card {
-    visibility: hidden !important;
+
+.card-modal-content-account .deckbuilt-card-container:hover>.deck-add-minus>.pm-card {
+  visibility: hidden !important;
 }
 
 .deck-modal-actions {
@@ -423,20 +537,22 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  flex-wrap: wrap; /* if you want them to wrap on small screens */
+  flex-wrap: wrap;
+  /* if you want them to wrap on small screens */
 }
+
 .deck-modal-actions div .favorite-heart {
   transform: scale(0.75);
   margin-left: -6.5px;
 }
+
 .deck-modal-actions .favorite-heart {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 .deck-modal-actions button {
   padding: 0.3rem 0.6rem;
-  background: rgb(169, 169, 169);
-  color: #f5f5f5;
   border: none;
   border-radius: 4px;
   margin-left: 5px;
@@ -445,16 +561,15 @@
   white-space: nowrap;
   font-weight: 600;
 }
+
 .deck-modal-actions button:hover {
-  background: #1290eb;
+  background: #1290eb !important;
 }
-.deck-modal-actions button.danger {
-  color: #d85555;
-}
+
 .deck-modal-actions button.danger:hover {
-  background: #ff0000;
-  color: #FFF;
+  background: #ff0000 !important;
 }
+
 /**/
 .folders-bar {
   display: flex;
@@ -463,88 +578,101 @@
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
+
 .create-new-deck-link-btn {
-    border-radius: 3px;
-    padding: 10px;
-    color: white;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
+
 .create-new-deck-link-btn:hover {
-    background-color: #1290eb !important;
+  background-color: #1290eb !important;
 }
+
 .create-new-deck-link-btn span {
-    font-size: 16px;
-    margin-right: 8px;
+  font-size: 16px;
+  margin-right: 8px;
 }
+
 .create-new-folder-btn {
-    background-color: #1290eb;
-    border-radius: 3px;
-    padding: 10px;
-    color: white;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+  background-color: #1290eb;
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 }
+
 .folder-options-icon {
-    background-color: transparent;
-    border-radius: 3px;
-    padding: 10px 0;
-    margin-top: -15px;
-    color: #1290eb;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  background-color: transparent;
+  border-radius: 3px;
+  padding: 10px 0;
+  margin-top: -15px;
+  color: #1290eb;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
+
 .folder-options-icon span {
-    font-size: 14px;
-    margin-right: 5px;
+  font-size: 14px;
+  margin-right: 5px;
 }
+
 .folder-options-icon:hover {
-    color: rgb(219, 77, 77);
+  color: rgb(219, 77, 77);
 }
+
 .folder-options-icon:hover p {
-    text-decoration: underline;
+  text-decoration: underline;
 }
+
 .folders-list {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
+
 .folders-list button:nth-child(1) {
-    font-size: 14px;
-    padding: 6px 7px;
+  font-size: 14px;
+  padding: 6px 7px;
 }
+
 .folders-list button {
-    background-color: grey;
-    width: auto;
-    padding: 5px 6px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 85px;
+  background-color: grey;
+  width: auto;
+  padding: 5px 6px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 85px;
 }
+
 .folders-list button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
+
 .folders-list .active {
-    background-color: #1290eb;
+  background-color: #1290eb;
 }
 
 
@@ -555,6 +683,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+
 .deck-list-item {
   display: flex;
   align-items: flex-start;
@@ -566,6 +695,7 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   width: 45%;
 }
+
 .list-thumb-container {
   position: relative;
   overflow: hidden;
@@ -573,42 +703,54 @@
   height: 60px;
   border-radius: 5px;
 }
+
 .list-thumb {
-    position: absolute;
-    top: -85%; 
-    left: -10%;
-    width: 120%;
-    height: auto;
-    transform: scale(1);
-    transform-origin: top left;
+  position: absolute;
+  top: -85%;
+  left: -10%;
+  width: 120%;
+  height: auto;
+  transform: scale(1);
+  transform-origin: top left;
 }
+
 .list-info {
-    padding-left: 15px;
-    width: 60%;
- }
+  padding-left: 15px;
+  width: 60%;
+}
+
 .list-info h3 {
   margin: 0;
   font-size: 1.1rem;
 }
+
 .list-info p {
   margin: 2px 0 0;
   font-size: .85rem;
   color: var(--text-muted);
 }
+
+.cropped-mascot-card.tagteam {
+  top: -50%;
+}
+
 .cropped-mascot-card.ancient {
   top: -80%;
 }
+
 .cropped-mascot-card.break {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 375px;
 }
+
 .cropped-mascot-card.legend {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 300px;
   width: 85%;
 }
+
 .cropped-mascot-card.lugia {
   transform: rotate(90deg);
   transform-origin: top left;
@@ -616,88 +758,286 @@
   width: 85%;
   top: 0%;
 }
+
 .list-thumb.ancient {
-  top: -140%;
+  top: -170%;
 }
+
 .list-thumb.break {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 240px;
 }
+
 .list-thumb.legend {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 195px;
   width: 100%;
 }
+
 .list-thumb.lugia {
   transform: rotate(90deg);
   transform-origin: top left;
-  left: 205px;
+  left: 260px;
   width: 100%;
-  top: -15%;
+  top: -35%;
 }
+
+@media (max-width: 1100px) {
+  .card-modal-content-account {
+    transform: scale(1.2);
+    width: 100%;
+  }
+
+  .deck-add-minus {
+    margin-bottom: 5px;
+    width: 100% !important;
+  }
+
+  .current-cnt-num {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 10px !important;
+  }
+
+  .pm-card {
+    display: none;
+  }
+
+  .deck-modal-actions div .favorite-heart {
+    transform: scale(0.65);
+  }
+
+  .deck-modal-actions button {
+    padding: 0.25rem 0.45rem;
+    border-radius: 2px;
+    margin-left: 5px;
+    font-size: 0.5rem;
+    font-weight: 500;
+  }
+
+  .deckbuilt-card-container {
+    width: 50px !important;
+    margin: 1px !important;
+  }
+  .database-card-in-list {
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.8);
+    border-radius: 2px;
+  }
+}
+
 @media (max-width: 1000px) {
+  .account-decks {
+    margin: 0px;
+  }
+
   .deck-card {
     border-radius: 5px;
     width: 175px;
   }
+
   .decks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 175px);
     justify-content: center;
     gap: 1rem;
   }
+
   .deck-card-img {
     height: 100px;
   }
+
   .cropped-mascot-card {
-    top: -30%; 
+    top: -30%;
     left: -10%;
     width: 120%;
-}
+  }
+
   .folder-label {
     font-size: 0.5rem;
     padding: 2px 6px;
     width: 30%;
   }
+
   .deck-card-info h3 {
     font-size: 0.8rem;
     margin-top: -8px;
   }
+
   .deck-card-description {
     width: 95%;
     height: 23px;
     overflow: hidden;
   }
+
   .deck-card-info p {
     font-size: .65rem;
   }
+
   .favorite-heart-container {
     margin-top: -15px;
   }
+
   .favorite-heart {
     margin-right: 0;
     padding: 1px;
     font-size: 1.25rem !important;
-}
-.menu-icon {
+  }
+
+  .menu-icon {
     padding: 1px;
     margin-right: -7.5px;
     font-size: 1.25rem !important;
-}
+  }
+
   .cropped-mascot-card.break {
     left: 235px;
     top: -38%;
   }
+
   .cropped-mascot-card.legend {
     left: 220px;
     width: 100%;
     top: -32%;
   }
+
   .cropped-mascot-card.lugia {
     left: 220px;
     width: 100%;
     top: 0%;
+  }
+
+  .deck-collection-modal-box {
+    transform: scale(0.85);
+  }
+
+  .create-new-deck-link-btn {
+    padding: 7.5px;
+    font-size: 12px;
+  }
+
+  .create-new-deck-link-btn span {
+    font-size: 12px;
+    margin-right: 6px;
+  }
+
+  .create-new-folder-btn {
+    padding: 7.5px;
+    font-size: 12px;
+  }
+
+  .folders-list button:nth-child(1) {
+    font-size: 11px;
+    padding: 6px 7px;
+  }
+
+  .folders-list button {
+    padding: 5px 6px;
+    border-radius: 2px;
+    font-size: 9px;
+    min-width: 75px;
+  }
+
+  .folders-list .show-more-btn {
+    background: none;
+    border: none;
+    color: #1290eb;
+    padding: 0px;
+    cursor: pointer;
+    font-size: 9px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3px;
+    margin-left: -2px !important;
+  }
+
+  .folders-list .show-more-btn span {
+    font-size: 11px;
+    padding-right: 3px;
+  }
+
+  .sort-favorites-btn {
+    padding: 10px 7px 7px 0;
+    font-size: 10px;
+    margin-right: 15px;
+  }
+
+  .sort-favorites-btn span {
+    margin-right: 5px;
+    font-size: 12px;
+  }
+
+  .not-blue-p {
+    font-size: 10px !important;
+  }
+
+  .folder-options-icon {
+    font-size: 10px;
+  }
+
+  .folder-options-icon span {
+    font-size: 12px;
+  }
+
+  .account-tabs {
+    transform: scale(0.75);
+    margin-top: -15px;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 700px) {
+  .card-modal-content-account {
+    transform: scale(1.2);
+  }
+
+  .deckbuilt-card-container {
+    width: 40px !important;
+  }
+  .database-card-in-list {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    border-radius: 2px;
+  }
+
+  .deck-add-minus {
+    margin-bottom: 6px;
+  }
+
+  .current-cnt-num {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 8px !important;
+    border-radius: 3px;
+  }
+
+  .card-modal-content-account h3 {
+    font-size: 14px;
+  }
+  .card-modal-content-account p {
+    font-size: 9px;
+  }
+  .deck-modal-actions {
+    margin-bottom: -3px;
+  }
+  .deck-modal-actions button {
+    padding: 0.175rem 0.35rem;
+    border-radius: 1px;
+    margin-left: 2.5px;
+    font-size: 0.35rem;
+  }
+  .deck-box {
+    border: 2px solid rgba(94, 94, 94, 0.5) !important;
+  }
+  .modal-close {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 515px) {
+.deckbuilt-card-container {
+    width: 25px !important;
   }
 }
