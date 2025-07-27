@@ -55,6 +55,7 @@ const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { 
     decks: [{
       name:        { type: String, required: true },
       mascotCard:  { type: String, required: true },
+      secondaryMascotCard: { type: String, default: null },
       description: { type: String },
       decklist:    { type: Object, required: true },
       createdAt:   { type: Date,   default: Date.now },
@@ -64,7 +65,8 @@ const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { 
     folders: [{
       name:      { type: String, required: true },
       order:     { type: Number, default: 0 },
-      createdAt: { type: Date, default: Date.now }
+      createdAt: { type: Date, default: Date.now },
+      locked: { type: Boolean, default: false }
   }]
 });
 const User = authConnection.model('User', userSchema, 'users');
@@ -88,6 +90,7 @@ const userDeckSchema = new mongoose.Schema({
   userId:       { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   name:         { type: String, required: true },
   mascotCard:       { type: String, required: true },
+  secondaryMascotCard: { type: String, default: null },
   description:  { type: String },
   decklist:     { type: Object, required: true },
   folderId:    { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
@@ -134,10 +137,10 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/user/decks', requireAuth, async (req, res) => {
-  const { name, mascotCard, description, decklist } = req.body;
+  const { name, mascotCard, secondaryMascotCard, description, decklist } = req.body;
   try {
     const user = await User.findById(req.userId);
-    user.decks.push({ name, mascotCard, description, decklist });
+    user.decks.push({ name, mascotCard, secondaryMascotCard, description, decklist });
     await user.save();
     res.json({ success: true });
   } catch (err) {
@@ -196,6 +199,30 @@ app.patch('/api/user/decks/:deckId/description', requireAuth, async (req, res) =
     res.status(500).json({ error: 'Could not update description' });
   }
 });
+app.patch(
+  '/api/user/decks/:deckId/mascots',
+  requireAuth,
+  async (req, res) => {
+    const { mascotCard, secondaryMascotCard } = req.body;
+    try {
+      await User.updateOne(
+        { _id: req.userId, 'decks._id': req.params.deckId },
+        {
+          $set: {
+            'decks.$.mascotCard': mascotCard,
+            'decks.$.secondaryMascotCard': secondaryMascotCard
+          }
+        }
+      );
+      const user = await User.findById(req.userId).select('decks');
+      const deck = user.decks.id(req.params.deckId);
+      res.json({ success: true, deck });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Could not update mascots' });
+    }
+  }
+);
 app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
   const { deckId } = req.params;
   try {
@@ -209,6 +236,7 @@ app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
     user.decks.push({
       name: newName,
       mascotCard: original.mascotCard,
+      secondaryMascotCard: original.secondaryMascotCard,
       description: original.description,
       decklist: original.decklist
     });
@@ -233,13 +261,14 @@ app.delete('/api/user/decks/:deckId', requireAuth, async (req, res) => {
   }
 });
 app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
-  const { name, mascotCard, description, decklist } = req.body;
+  const { name, mascotCard, secondaryMascotCard, description, decklist } = req.body;
   try {
     const user = await User.findById(req.userId);
     const deck = user.decks.id(req.params.deckId);
     if (!deck) return res.status(404).json({ error: 'Deck not found' });
     deck.name        = name;
     deck.mascotCard  = mascotCard;
+    deck.secondaryMascotCard  = secondaryMascotCard;
     deck.description = description;
     deck.decklist    = decklist;
     deck.createdAt   = Date.now();
@@ -278,14 +307,29 @@ app.post('/api/user/folders', requireAuth, async (req, res) => {
   }
 });
 app.patch('/api/user/folders/sort', requireAuth, async (req, res) => {
-  const { order } = req.body;
+  // pull both order *and* locked from the client
+  const { order = [], locked = [] } = req.body;
+
   try {
     const user = await User.findById(req.userId);
-    const byId = user.folders.reduce((map,f) => (map[f._id] = f, map), {});
+    // build a quick lookup by folder ID
+    const byId = user.folders.reduce((map, f) => {
+      map[f._id] = f;
+      return map;
+    }, {});
+
+    // update each folder’s order AND locked flag
     order.forEach((fid, idx) => {
-      if (byId[fid]) byId[fid].order = idx;
+      const f = byId[fid];
+      if (f) {
+        f.order = idx;
+        f.locked = locked.includes(fid);
+      }
     });
-    user.folders.sort((a,b) => a.order - b.order);
+
+    // re‑sort the array in memory for the response
+    user.folders.sort((a, b) => a.order - b.order);
+
     await user.save();
     res.json(user.folders);
   } catch (err) {
