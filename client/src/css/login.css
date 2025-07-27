@@ -135,6 +135,12 @@
     .login-btn-on-page {
         font-size: 12px;
     }
+    .login-container {
+        margin-top: 25px;
+    }
+    .artwork-credit {
+        margin-top: 15px;
+    }
 }
 @media (max-width: 400px) {
     .login-box input {
