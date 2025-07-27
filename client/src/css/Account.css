@@ -1036,9 +1036,6 @@
 }
 
 @media (max-width: 515px) {
-.deckbuilt-card-container {
-    width: 25px !important;
-  }
   .hide-on515 {
     display: none;
   }
@@ -1048,22 +1045,13 @@
     font-size: 1.45rem !important;
   }
   .move-small-deck-options-up515 {
-    margin-top: -20px;
+    /* margin-top: -20px; */
     display: flex;
     flex-direction: row;
     align-items: center;
   }
   .deck-box {
     margin-top: 10px !important;
-  }
-   .deck-add-minus {
-    margin-bottom: 3px;
-  }
-  .current-cnt-num {
-    width: 8px !important;
-    height: 8px !important;
-    font-size: 6px !important;
-    border-radius: 3px;
   }
   .card-modal-content-account h3 {
     font-size: 12px;
