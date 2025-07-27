@@ -502,9 +502,10 @@
 }
 @media screen and (max-width: 700px){
     .card-count {
-        bottom: 12px;
         font-size: 13px;
         font-weight: bold;
+        height: 25.5px;
+        width: 25.5px;
     }
     .deck-cards {
         grid-template-columns: repeat(7, 1fr);
@@ -612,9 +613,9 @@
 }
 @media screen and (max-width: 450px){
     .card-count{
-        width: 21px;
-        height: 21px;
-        border-radius: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
         font-size: 11px;
     }
 }
