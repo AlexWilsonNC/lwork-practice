@@ -132,7 +132,7 @@
 }
 @media (max-width: 800px) {
   .profile-settings-display-edit {
-    width: 90%;
+    width: 80%;
   }
 }
 .account-tabs button {
@@ -1189,6 +1189,13 @@
   .current-cnt-num {
     width: 11px !important;
     height: 11px !important;
+  }
+  .deck-collection-modal-box {
+    width: auto;
+    min-width: 450px;
+    padding: 25px;
+    border-radius: 5px;
+    transform: scale(0.65);
   }
 }
 
