@@ -1045,7 +1045,7 @@
     font-size: 1.45rem !important;
   }
   .move-small-deck-options-up515 {
-    /* margin-top: -20px; */
+    margin-top: -10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1054,4 +1054,12 @@
     margin-top: 10px !important;
     padding: 7.5px;
   }
+  .card-modal-content-account {
+    padding: 7.5px;
+    border-radius: 5px;
+    transform: scale(1.35);
+  }
+  .deck-modal-actions {
+  padding: 0 5px;
+}
 }
