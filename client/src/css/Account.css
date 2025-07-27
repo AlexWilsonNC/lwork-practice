@@ -798,6 +798,7 @@
     width: 16px !important;
     height: 16px !important;
     font-size: 10px !important;
+    border-radius: 3px;
   }
 
   .pm-card {
@@ -1010,6 +1011,7 @@
     height: 12px !important;
     font-size: 8px !important;
     border-radius: 3px;
+    margin-bottom: -5% !important; 
   }
 
   .card-modal-content-account h3 {
@@ -1064,5 +1066,9 @@
   }
   .deckbuilt-card-container {
     width: 37.5px !important;
+  }
+  .current-cnt-num {
+    width: 11px !important;
+    height: 11px !important;
   }
 }
