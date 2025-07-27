@@ -112,6 +112,8 @@ export default function Account() {
     // const [compactMode, setCompactMode] = useState(false);
     const [showAllFolders, setShowAllFolders] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 850);
+    const [isSmallViewport, setIsSmallViewport] = useState(window.innerWidth <= 515);
+    const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -522,6 +524,14 @@ export default function Account() {
     useEffect(() => {
         if (!isMobileView) setShowAllFolders(false);
     }, [isMobileView]);
+    useEffect(() => {
+        const handleResize = () => setIsSmallViewport(window.innerWidth <= 515);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    useEffect(() => {
+        if (!isSmallViewport) setMobileActionsOpen(false);
+    }, [isSmallViewport]);
 
     const doPreset = sortedIds => {
         setFoldersOrder(oldOrder => {
@@ -1070,7 +1080,7 @@ export default function Account() {
                                             <div className="deck-modal-actions">
                                                 <div>
                                                     <span
-                                                        className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
+                                                        className={`favorite-heart hide-on515 material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
                                                             }`}
                                                         onClick={() => toggleFavorite(selectedDeck._id)}
                                                     >
@@ -1078,50 +1088,79 @@ export default function Account() {
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <button onClick={() => {
-                                                        setModalDeck(selectedDeck);
-                                                        setNewValue(selectedDeck.name);
-                                                        setShowRenameModal(true);
-                                                    }}>
-                                                        Rename
-                                                    </button>
-                                                    <button onClick={() => {
-                                                        setModalDeck(selectedDeck);
-                                                        setNewValue(selectedDeck.description || '');
-                                                        setShowDescModal(true);
-                                                    }}>
-                                                        Edit Description
-                                                    </button>
-                                                    <button onClick={e => {
-                                                        setModalDeck(selectedDeck);
-                                                        setPrimaryMascot(selectedDeck.mascotCard);
-                                                        setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
-                                                        setShowMascotModal(true);
-                                                    }}>
-                                                        Edit Mascots
-                                                    </button>
-                                                    <button onClick={() => goToDeckbuilder(selectedDeck)}>
-                                                        Open in Deckbuilder
-                                                    </button>
-                                                    <button onClick={() => {
-                                                        handleDuplicate(selectedDeck)
-                                                        closeModal()
-                                                    }}>
-                                                        Duplicate
-                                                    </button>
-                                                    <button onClick={() => {
-                                                        setMoveModalDeck(selectedDeck);
-                                                        setSelectedFolderId(selectedDeck.folderId || '');
-                                                        setShowMoveModal(true);
-                                                    }}>
-                                                        Move
-                                                    </button>
-                                                    <button
-                                                        className="danger"
-                                                        onClick={() => handleDelete(selectedDeck)}
-                                                    >
-                                                        Delete
-                                                    </button>
+                                                    {!isSmallViewport ? (
+                                                        <>
+                                                            <button onClick={() => {
+                                                                setModalDeck(selectedDeck);
+                                                                setNewValue(selectedDeck.name);
+                                                                setShowRenameModal(true);
+                                                            }}>
+                                                                Rename
+                                                            </button>
+                                                            <button onClick={() => {
+                                                                setModalDeck(selectedDeck);
+                                                                setNewValue(selectedDeck.description || '');
+                                                                setShowDescModal(true);
+                                                            }}>
+                                                                Edit Description
+                                                            </button>
+                                                            <button onClick={e => {
+                                                                setModalDeck(selectedDeck);
+                                                                setPrimaryMascot(selectedDeck.mascotCard);
+                                                                setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
+                                                                setShowMascotModal(true);
+                                                            }}>
+                                                                Edit Mascots
+                                                            </button>
+                                                            <button onClick={() => goToDeckbuilder(selectedDeck)}>
+                                                                Open in Deckbuilder
+                                                            </button>
+                                                            <button onClick={() => {
+                                                                handleDuplicate(selectedDeck)
+                                                                closeModal()
+                                                            }}>
+                                                                Duplicate
+                                                            </button>
+                                                            <button onClick={() => {
+                                                                setMoveModalDeck(selectedDeck);
+                                                                setSelectedFolderId(selectedDeck.folderId || '');
+                                                                setShowMoveModal(true);
+                                                            }}>
+                                                                Move
+                                                            </button>
+                                                            <button
+                                                                className="danger"
+                                                                onClick={() => handleDelete(selectedDeck)}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <div className='move-small-deck-options-up515'>
+                                                            <span
+                                                                className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
+                                                                    }`}
+                                                                onClick={() => toggleFavorite(selectedDeck._id)}
+                                                            >
+                                                                {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
+                                                            </span>
+                                                            <span
+                                                                className="material-symbols-outlined menu-icon"
+                                                                onClick={e => { e.stopPropagation(); setMobileActionsOpen(v => !v); }}
+                                                            >more_vert</span>
+                                                            {mobileActionsOpen && (
+                                                                <div className="mobile-actions-dropdown">
+                                                                    <button onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
+                                                                    <button onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
+                                                                    <button onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
+                                                                    <button onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
+                                                                    <button onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
+                                                                    <button onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
+                                                                    <button className="danger" onClick={() => handleDelete(selectedDeck)}>Delete</button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
 
