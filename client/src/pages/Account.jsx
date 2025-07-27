@@ -574,7 +574,7 @@ export default function Account() {
                     Deck Collection
                 </button>
                 <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
-                    Profile Settings
+                    Profile
                 </button>
             </div>
 
@@ -590,7 +590,9 @@ export default function Account() {
                                         value={tempValue}
                                         onChange={e => setTempValue(e.target.value)}
                                     />
+                                    <button className='edit-user-prof-btn-cancel' onClick={() => setEditingField(null)}>Cancel</button>
                                     <button
+                                        className='edit-user-prof-btn-save'
                                         onClick={async () => {
                                             try {
                                                 await updateUserProfile({ username: tempValue });
@@ -600,19 +602,18 @@ export default function Account() {
                                             }
                                         }}
                                     >Save</button>
-                                    <button onClick={() => setEditingField(null)}>Cancel</button>
                                 </>
                             ) : (
-                                <>
+                                <div className='username-container'>
                                     <span>{user?.username}</span>
-                                    <span
-                                        className="material-symbols-outlined class-profile-span"
+                                    <button className='edit-prof-btn' 
                                         onClick={() => {
-                                            setTempValue(user?.username || '');
-                                            setEditingField('username');
-                                        }}
-                                    >edit</span>
-                                </>
+                                        setTempValue(user?.username || '');
+                                        setEditingField('username');
+                                    }}>
+                                        change
+                                    </button>
+                                </div>
                             )}
                         </div>
                         <div className='profile-item'>
@@ -624,7 +625,9 @@ export default function Account() {
                                         value={tempValue}
                                         onChange={e => setTempValue(e.target.value)}
                                     />
+                                    <button className='edit-user-prof-btn-cancel' onClick={() => setEditingField(null)}>Cancel</button>
                                     <button
+                                        className='edit-user-prof-btn-save'
                                         onClick={async () => {
                                             try {
                                                 await updateUserProfile({ email: tempValue });
@@ -634,19 +637,18 @@ export default function Account() {
                                             }
                                         }}
                                     >Save</button>
-                                    <button onClick={() => setEditingField(null)}>Cancel</button>
                                 </>
                             ) : (
-                                <>
+                                <div className='username-container'>
                                     <span>{user?.email}</span>
-                                    <span
-                                        className="material-symbols-outlined class-profile-span"
+                                    <button className='edit-prof-btn' 
                                         onClick={() => {
-                                            setTempValue(user?.email || '');
-                                            setEditingField('email');
-                                        }}
-                                    >edit</span>
-                                </>
+                                        setTempValue(user?.email || '');
+                                        setEditingField('email');
+                                    }}>
+                                        change
+                                    </button>
+                                </div>
                             )}
                         </div>
                         <button className='change-password-btn' onClick={() => setShowPwModal(true)}>
