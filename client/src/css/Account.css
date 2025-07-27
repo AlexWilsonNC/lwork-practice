@@ -1052,5 +1052,6 @@
   }
   .deck-box {
     margin-top: 10px !important;
+    padding: 7.5px;
   }
 }
