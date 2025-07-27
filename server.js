@@ -2,16 +2,26 @@ const express = require('express');
 const path = require("path");
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bcrypt     = require('bcrypt');
-const jwt        = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const https = require('https');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 const {
   MONGODB_URI,
@@ -36,12 +46,12 @@ const authConnection = mongoose.createConnection(
 authConnection.on('error', console.error.bind(console, 'Auth DB error:'));
 authConnection.once('open', () => console.log('Connected to Auth DB'));
 
-const eventConnection     = mongoose.createConnection(MONGODB_URI,            { useNewUrlParser: true, useUnifiedTopology: true });
-const cardConnection      = mongoose.createConnection(CARD_MONGODB_URI,       { useNewUrlParser: true, useUnifiedTopology: true });
-const playersConnection   = mongoose.createConnection(PLAYERS_MONGODB_URI,    { useNewUrlParser: true, useUnifiedTopology: true });
-const decksConnection     = mongoose.createConnection(DECKS_MONGODB_URI,      { useNewUrlParser: true, useUnifiedTopology: true });
-const decklistsDb         = mongoose.createConnection(CARDSINDECKLISTS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { useNewUrlParser: true, useUnifiedTopology: true });
+const eventConnection = mongoose.createConnection(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const cardConnection = mongoose.createConnection(CARD_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const playersConnection = mongoose.createConnection(PLAYERS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const decksConnection = mongoose.createConnection(DECKS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const decklistsDb = mongoose.createConnection(CARDSINDECKLISTS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const emailsConnection = mongoose.createConnection(EMAILS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 [eventConnection, cardConnection, playersConnection, decksConnection, emailsConnection]
   .forEach(conn => {
@@ -49,24 +59,25 @@ const emailsConnection    = mongoose.createConnection(EMAILS_MONGODB_URI,     { 
     conn.once('open', () => console.log(`Connected to ${conn.name}`));
   });
 
-  const userSchema = new mongoose.Schema({
-    email:        { type: String, unique: true, required: true },
-    passwordHash: { type: String,             required: true },
-    decks: [{
-      name:        { type: String, required: true },
-      mascotCard:  { type: String, required: true },
-      secondaryMascotCard: { type: String, default: null },
-      description: { type: String },
-      decklist:    { type: Object, required: true },
-      createdAt:   { type: Date,   default: Date.now },
-      folderId:    { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
-      favorite:    { type: Boolean, default: false }
-    }],
-    folders: [{
-      name:      { type: String, required: true },
-      order:     { type: Number, default: 0 },
-      createdAt: { type: Date, default: Date.now },
-      locked: { type: Boolean, default: false }
+const userSchema = new mongoose.Schema({
+  username: { type: String, unique: true, required: true },
+  email: { type: String, unique: true, required: true },
+  passwordHash: { type: String, required: true },
+  decks: [{
+    name: { type: String, required: true },
+    mascotCard: { type: String, required: true },
+    secondaryMascotCard: { type: String, default: null },
+    description: { type: String },
+    decklist: { type: Object, required: true },
+    createdAt: { type: Date, default: Date.now },
+    folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
+    favorite: { type: Boolean, default: false }
+  }],
+  folders: [{
+    name: { type: String, required: true },
+    order: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+    locked: { type: Boolean, default: false }
   }]
 });
 const User = authConnection.model('User', userSchema, 'users');
@@ -87,24 +98,25 @@ function requireAuth(req, res, next) {
 }
 
 const userDeckSchema = new mongoose.Schema({
-  userId:       { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  name:         { type: String, required: true },
-  mascotCard:       { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  name: { type: String, required: true },
+  mascotCard: { type: String, required: true },
   secondaryMascotCard: { type: String, default: null },
-  description:  { type: String },
-  decklist:     { type: Object, required: true },
-  folderId:    { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
-  createdAt:    { type: Date, default: Date.now }
+  description: { type: String },
+  decklist: { type: Object, required: true },
+  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
+  createdAt: { type: Date, default: Date.now }
 });
 const UserDeck = authConnection.model('UserDeck', userDeckSchema, 'userdecks');
 
 app.post('/api/auth/signup', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
+  if (!username) return res.status(400).json({ error: 'Username is required' });
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 
   try {
     const passwordHash = await bcrypt.hash(password, Number(SALT_ROUNDS));
-    const newUser = new User({ email, passwordHash });
+    const newUser = new User({ username, email, passwordHash });
     await newUser.save();
 
     const token = jwt.sign({ sub: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
@@ -120,16 +132,25 @@ app.post('/api/auth/signup', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
+  const { identifier, password } = req.body;
+  if (!identifier || !password) return res.status(400).json({ error: 'Identifier and password are required' });
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier }
+      ]
+    });
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     const token = jwt.sign({ sub: user._id }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token });
+    res.json({
+    token,
+    username: user.username,
+    email:    user.email
+  });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
@@ -266,12 +287,12 @@ app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
     const user = await User.findById(req.userId);
     const deck = user.decks.id(req.params.deckId);
     if (!deck) return res.status(404).json({ error: 'Deck not found' });
-    deck.name        = name;
-    deck.mascotCard  = mascotCard;
-    deck.secondaryMascotCard  = secondaryMascotCard;
+    deck.name = name;
+    deck.mascotCard = mascotCard;
+    deck.secondaryMascotCard = secondaryMascotCard;
     deck.description = description;
-    deck.decklist    = decklist;
-    deck.createdAt   = Date.now();
+    deck.decklist = decklist;
+    deck.createdAt = Date.now();
     await user.save();
     res.json({ success: true });
   } catch (err) {
@@ -285,7 +306,7 @@ userDeckSchema.add({
 app.get('/api/user/folders', requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('folders');
-    res.json(user.folders.sort((a,b) => a.order - b.order));
+    res.json(user.folders.sort((a, b) => a.order - b.order));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not load folders' });
@@ -405,6 +426,85 @@ app.patch('/api/user/decks/:id/move', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not move deck' });
   }
 });
+app.patch('/api/user/profile', requireAuth, async (req, res) => {
+  const { username, email } = req.body;
+  if (!username && !email) {
+    return res.status(400).json({ error: 'Nothing to update' });
+  }
+  try {
+    const user = await User.findById(req.userId);
+    if (username) user.username = username;
+    if (email)    user.email    = email;
+    await user.save();
+    res.json({ username: user.username, email: user.email });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update profile' });
+  }
+});
+app.patch('/api/auth/password', requireAuth, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: 'Current and new passwords required' });
+  }
+  try {
+    const user = await User.findById(req.userId);
+    const match = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!match) {
+      return res.status(401).json({ error: 'Current password incorrect' });
+    }
+    user.passwordHash = await bcrypt.hash(newPassword, Number(SALT_ROUNDS));
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not change password' });
+  }
+});
+app.post('/api/auth/forgot-password', async (req, res) => {
+  const { identifier } = req.body; // can be email or username
+  if (!identifier) {
+    return res.status(400).json({ error: 'Please provide your email or username.' });
+  }
+
+  try {
+    // find by email OR username
+    const user = await User.findOne({
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier }
+      ]
+    });
+    if (!user) {
+      // don’t leak which one exists
+      return res.status(200).json({ message: 'If that account exists, you’ll get an email shortly.' });
+    }
+
+    // generate a random temporary password
+    const tempPassword = crypto.randomBytes(4).toString('hex'); // 8 chars
+    const hash = await bcrypt.hash(tempPassword, Number(SALT_ROUNDS));
+    user.passwordHash = hash;
+    await user.save();
+
+    // send the email
+    await transporter.sendMail({
+      from: '"PTCGLegends Support" <ptcglegends@gmail.com>',
+      to: user.email,
+      subject: 'Your PTCGLegends Temporary Password',
+      text: `Hi ${user.username},\n\n` +
+            `We’ve reset your password as requested. Your temporary password is:\n\n` +
+            `    ${tempPassword}\n\n` +
+            `Please log in using this password and then choose “Change Password” to set a new one of your own.\n\n` +
+            `– The PTCGLegends Team`
+    });
+
+    res.json({ message: 'If that account exists, you’ll get an email shortly.' });
+  } catch (err) {
+    console.error('Forgot-password error:', err);
+    res.status(500).json({ error: 'Could not process that request' });
+  }
+});
+
 
 // Define the schema for emails
 const emailSchema = new mongoose.Schema({
@@ -483,35 +583,35 @@ app.get('/api/live-standings', (req, res) => {
 
   let urlToFetch;
   if (isEventCompleted === 'true' && finalDataUrl) {
-      urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
+    urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
   } else if (isEventCompleted === 'false') {
-      urlToFetch = 'https://pokedata.ovh/standings/0000129/masters/0000129_Masters.json';  // Replace with actual live URL
+    urlToFetch = 'https://pokedata.ovh/standings/0000129/masters/0000129_Masters.json';  // Replace with actual live URL
   } else {
-      return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
+    return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
   }
 
   console.log('Fetching live standings from:', urlToFetch);
 
   https.get(urlToFetch, (response) => {
-      let data = '';
+    let data = '';
 
-      response.on('data', (chunk) => {
-          data += chunk;
-      });
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
 
-      response.on('end', () => {
-          try {
-              const parsedData = JSON.parse(data);
-              res.json(parsedData);
-          } catch (error) {
-              console.error('Error parsing JSON:', error.message);
-              res.status(500).json({ error: 'Error parsing JSON or no data received' });
-          }
-      });
+    response.on('end', () => {
+      try {
+        const parsedData = JSON.parse(data);
+        res.json(parsedData);
+      } catch (error) {
+        console.error('Error parsing JSON:', error.message);
+        res.status(500).json({ error: 'Error parsing JSON or no data received' });
+      }
+    });
 
   }).on('error', (error) => {
-      console.error('Error fetching live standings:', error.message);
-      res.status(500).json({ error: 'Error fetching live standings: ' + error.message });
+    console.error('Error fetching live standings:', error.message);
+    res.status(500).json({ error: 'Error fetching live standings: ' + error.message });
   });
 });
 
@@ -565,8 +665,8 @@ const playerSchema = new mongoose.Schema({
   name: String,
   flag: String,
   results: [{
-      eventId: String,
-      decklist: String
+    eventId: String,
+    decklist: String
   }]
 });
 
@@ -618,29 +718,29 @@ app.get('/event-ids', async (req, res) => {
 app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
   let cardName = req.params.name.trim().toLowerCase();
   console.log(`Searching for cards with names containing: ${cardName}`);
-  
+
   try {
-      const collection = cardConnection.collection('card-database');
+    const collection = cardConnection.collection('card-database');
 
-      // Normalize the search query by removing non-alphanumeric characters
-      const normalizedCardName = cardName.replace(/[^a-z0-9]/gi, '');
+    // Normalize the search query by removing non-alphanumeric characters
+    const normalizedCardName = cardName.replace(/[^a-z0-9]/gi, '');
 
-      // Use a regular expression to match normalized card names
-      const cards = await collection.find({
-          name: {
-              $regex: new RegExp(normalizedCardName.split("").join("[^a-z0-9]*"), 'i')
-          }
-      }).toArray();
-
-      if (cards.length === 0) {
-          return res.status(404).json({ message: `No cards found containing: ${cardName}` });
+    // Use a regular expression to match normalized card names
+    const cards = await collection.find({
+      name: {
+        $regex: new RegExp(normalizedCardName.split("").join("[^a-z0-9]*"), 'i')
       }
+    }).toArray();
 
-      console.log(`Found ${cards.length} cards containing name: ${cardName}`);
-      res.json(cards);
+    if (cards.length === 0) {
+      return res.status(404).json({ message: `No cards found containing: ${cardName}` });
+    }
+
+    console.log(`Found ${cards.length} cards containing name: ${cardName}`);
+    res.json(cards);
   } catch (error) {
-      console.error('Error occurred while searching for cards:', error);
-      res.status(500).json({ message: 'Server error occurred' });
+    console.error('Error occurred while searching for cards:', error);
+    res.status(500).json({ message: 'Server error occurred' });
   }
 });
 
@@ -649,16 +749,16 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
   console.log(`Searching for card with name: ${cardName}`);
   try {
     const collection = cardConnection.collection('card-database');
-      const cards = await collection.find({ name: cardName }).toArray();      
-      if (cards.length === 0) {
-          return res.status(404).json({ message: `Card not found with name: ${cardName}` });
-      }
+    const cards = await collection.find({ name: cardName }).toArray();
+    if (cards.length === 0) {
+      return res.status(404).json({ message: `Card not found with name: ${cardName}` });
+    }
 
-      console.log(`Found ${cards.length} cards for name: ${cardName}`);
-      res.json(cards);
+    console.log(`Found ${cards.length} cards for name: ${cardName}`);
+    res.json(cards);
   } catch (error) {
-      console.error('Error occurred while searching for card:', error);
-      res.status(500).json({ message: 'card name', cardName });
+    console.error('Error occurred while searching for card:', error);
+    res.status(500).json({ message: 'card name', cardName });
   }
 });
 
@@ -703,29 +803,29 @@ app.get('/api/cards', async (req, res) => {
   const format = req.query.format;
 
   if (!format) {
-      console.error('Format is missing');
-      return res.status(400).json({ message: 'Format is required' });
+    console.error('Format is missing');
+    return res.status(400).json({ message: 'Format is required' });
   }
 
   try {
-      const setsToQuery = format.split(',');
+    const setsToQuery = format.split(',');
 
-      const cardPromises = setsToQuery.map(async set => {
-          const collection = cardConnection.collection(set);
-          if (!collection) {
-              console.error(`Collection ${set} not found`);
-              return [];
-          }
-          const cards = await collection.find({}).toArray();
-          return cards;
-      });
+    const cardPromises = setsToQuery.map(async set => {
+      const collection = cardConnection.collection(set);
+      if (!collection) {
+        console.error(`Collection ${set} not found`);
+        return [];
+      }
+      const cards = await collection.find({}).toArray();
+      return cards;
+    });
 
-      const allCards = await Promise.all(cardPromises);
-      const flattenedCards = allCards.flat();
+    const allCards = await Promise.all(cardPromises);
+    const flattenedCards = allCards.flat();
 
-      res.json(flattenedCards);
+    res.json(flattenedCards);
   } catch (err) {
-      res.status(500).json({ message: 'Failed to fetch cards' });
+    res.status(500).json({ message: 'Failed to fetch cards' });
   }
 });
 

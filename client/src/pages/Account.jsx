@@ -67,9 +67,18 @@ const AccountSection = styled.div`
 `;
 
 export default function Account() {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, updateUserProfile, changePassword } = useContext(AuthContext);
     const token = user?.token;
     const navigate = useNavigate();
+
+    const [editingField, setEditingField] = useState(null); // 'username' | 'email'
+    const [tempValue, setTempValue] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPwModal, setShowPwModal] = useState(false);
+    const [currentPw, setCurrentPw] = useState('');
+    const [newPw, setNewPw] = useState('');
+    const [confirmPw, setConfirmPw] = useState('');
+    const [profileError, setProfileError] = useState('');
 
     const [tab, setTab] = useState('decks');
     const [decks, setDecks] = useState([]);
@@ -570,9 +579,136 @@ export default function Account() {
             </div>
 
             {tab === 'profile' ? (
-                <section>
-                    <p><strong>Email:</strong> {user?.email}</p>
-                    <button onClick={handleLogout}>Logout</button>
+                <section className='profile-settings-display-edit'>
+                    <div className='profile-settings'>
+                        <div className='profile-item'>
+                            <strong>Username: </strong>
+                            {editingField === 'username' ? (
+                                <>
+                                    <input
+                                        type="text"
+                                        value={tempValue}
+                                        onChange={e => setTempValue(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                await updateUserProfile({ username: tempValue });
+                                                setEditingField(null);
+                                            } catch (e) {
+                                                setProfileError(e.message);
+                                            }
+                                        }}
+                                    >Save</button>
+                                    <button onClick={() => setEditingField(null)}>Cancel</button>
+                                </>
+                            ) : (
+                                <>
+                                    <span>{user?.username}</span>
+                                    <span
+                                        className="material-symbols-outlined class-profile-span"
+                                        onClick={() => {
+                                            setTempValue(user?.username || '');
+                                            setEditingField('username');
+                                        }}
+                                    >edit</span>
+                                </>
+                            )}
+                        </div>
+                        <div className='profile-item'>
+                            <strong>Email: </strong>
+                            {editingField === 'email' ? (
+                                <>
+                                    <input
+                                        type="email"
+                                        value={tempValue}
+                                        onChange={e => setTempValue(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                await updateUserProfile({ email: tempValue });
+                                                setEditingField(null);
+                                            } catch (e) {
+                                                setProfileError(e.message);
+                                            }
+                                        }}
+                                    >Save</button>
+                                    <button onClick={() => setEditingField(null)}>Cancel</button>
+                                </>
+                            ) : (
+                                <>
+                                    <span>{user?.email}</span>
+                                    <span
+                                        className="material-symbols-outlined class-profile-span"
+                                        onClick={() => {
+                                            setTempValue(user?.email || '');
+                                            setEditingField('email');
+                                        }}
+                                    >edit</span>
+                                </>
+                            )}
+                        </div>
+                        <button className='change-password-btn' onClick={() => setShowPwModal(true)}>
+                            Change Password
+                        </button>
+
+                        {profileError && <p className="error">{profileError}</p>}
+
+                        <button className='logout-btn' onClick={handleLogout}>Logout</button>
+                    </div>
+                    {showPwModal && (
+                        <div className="deck-collection-modal-overlay" onClick={() => setShowPwModal(false)}>
+                            <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                <h4>Change Password</h4>
+                                <label>
+                                    Current Password<br />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={currentPw}
+                                        onChange={e => setCurrentPw(e.target.value)}
+                                    />
+                                </label>
+                                <label>
+                                    New Password<br />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={newPw}
+                                        onChange={e => setNewPw(e.target.value)}
+                                    />
+                                </label>
+                                <label>
+                                    Confirm New Password<br />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={confirmPw}
+                                        onChange={e => setConfirmPw(e.target.value)}
+                                    />
+                                </label>
+                                <p className='cant-rem-pw-hint'>* If you can't remember your current password, logout and select "Forgot password?" after typing your account's email address in the email field.</p>
+                                <div className="buttons-row-modal">
+                                    <button className='cancel-button' onClick={() => setShowPwModal(false)}>Cancel</button>
+                                    <button
+                                        onClick={async () => {
+                                            if (newPw !== confirmPw) {
+                                                setProfileError('Passwords do not match');
+                                                return;
+                                            }
+                                            try {
+                                                await changePassword(currentPw, newPw);
+                                                setShowPwModal(false);
+                                            } catch (e) {
+                                                setProfileError(e.message);
+                                            }
+                                        }}
+                                        className='save-button'
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </section>
             ) : (
                 <section>

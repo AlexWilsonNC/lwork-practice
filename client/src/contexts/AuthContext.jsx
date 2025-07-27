@@ -8,43 +8,77 @@ export function AuthProvider({ children }) {
   const tokenKey = 'PTCGLegendsToken';
   const emailKey = 'PTCGLegendsEmail';
 
-  // On mount, pull token → validate
   useEffect(() => {
     const token = localStorage.getItem(tokenKey);
     const email = localStorage.getItem(emailKey);
+    const username = localStorage.getItem('PTCGLegendsUsername');
     if (token && email) {
-      // Optionally verify token by hitting a /me endpoint,
-      // but for now we'll just stash it.
-      setUser({ token, email });
+      setUser({ token, email, username });
     }
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (identifier, password) => {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ identifier, password })
     });
     if (!res.ok) throw new Error('Login failed');
-    const { token } = await res.json();
+    const { token, username, email: userEmail } = await res.json();
     localStorage.setItem(tokenKey, token);
-    localStorage.setItem(emailKey, email);
-    setUser({ token, email });
+    localStorage.setItem(emailKey, userEmail)
+    localStorage.setItem('PTCGLegendsUsername', username);
+    setUser({ token, email: userEmail, username });
   };
 
-  const signup = async (email, password) => {
+  const signup = async (email, password, username) => {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, username })
     });
     if (!res.ok) {
       const { error } = await res.json();
       throw new Error(error);
     }
-    // auto‑login after signup
     await login(email, password);
+  };
+
+  const updateUserProfile = async ({ username, email }) => {
+    const token = localStorage.getItem(tokenKey);
+    const res = await fetch('/api/user/profile', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ username, email })
+    });
+    if (!res.ok) {
+      const { error } = await res.json();
+      throw new Error(error || 'Profile update failed');
+    }
+    const { username: u, email: e } = await res.json();
+    localStorage.setItem(emailKey, e);
+    localStorage.setItem('PTCGLegendsUsername', u);
+    setUser(user => ({ ...user, username: u, email: e }));
+  };
+
+  const changePassword = async (currentPassword, newPassword) => {
+    const token = localStorage.getItem(tokenKey);
+    const res = await fetch('/api/auth/password', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    if (!res.ok) {
+      const { error } = await res.json();
+      throw new Error(error || 'Password change failed');
+    }
   };
 
   const logout = () => {
@@ -54,7 +88,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, updateUserProfile, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

@@ -3,6 +3,62 @@
   min-height: 70vh;
 }
 
+.profile-settings-display-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(220, 220, 220);
+  width: 65%;
+  margin: 0 auto;
+  margin-top: 25px;
+  border-radius: 7px;
+  padding: 25px 25px 50px 25px;
+  position: relative;
+}
+.profile-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.profile-settings-display-edit p {
+  font-size: 16px;
+}
+.profile-item {
+  margin-bottom: 7.5px;
+}
+.class-profile-span {
+  font-size: 18px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+.class-profile-span:hover {
+  color: #1290eb;
+}
+.change-password-btn {
+  background-color: #1290eb;
+  border: none;
+  color: white;
+  padding: 5px 7px;
+  font-size: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 7px;
+}
+.logout-btn {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 5px 7px;
+  font-size: 16px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background-color: rgb(255, 168, 37);
+}
 .account-tabs {
   display: flex;
   flex-direction: row;
@@ -12,6 +68,10 @@
   padding: 5px;
   border-radius: 12px;
   margin: 0 auto;
+}
+.cant-rem-pw-hint {
+  font-size: 7px !important;
+  font-style: italic;
 }
 
 .account-tabs button {
@@ -361,9 +421,12 @@
   margin-bottom: 10px;
   font-size: 20px;
 }
-
+.deck-collection-modal-box label {
+  margin-bottom: 35px;
+}
 .deck-collection-modal-box input,
-.deck-collection-modal-box select {
+.deck-collection-modal-box select,
+.deck-collection-modal-box label {
   height: 25px;
   padding-left: 7px;
   width: 90%;
