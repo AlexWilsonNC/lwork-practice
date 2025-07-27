@@ -606,11 +606,11 @@ export default function Account() {
                             ) : (
                                 <div className='username-container'>
                                     <span>{user?.username}</span>
-                                    <button className='edit-prof-btn' 
+                                    <button className='edit-prof-btn'
                                         onClick={() => {
-                                        setTempValue(user?.username || '');
-                                        setEditingField('username');
-                                    }}>
+                                            setTempValue(user?.username || '');
+                                            setEditingField('username');
+                                        }}>
                                         change
                                     </button>
                                 </div>
@@ -641,11 +641,11 @@ export default function Account() {
                             ) : (
                                 <div className='username-container'>
                                     <span>{user?.email}</span>
-                                    <button className='edit-prof-btn' 
+                                    <button className='edit-prof-btn'
                                         onClick={() => {
-                                        setTempValue(user?.email || '');
-                                        setEditingField('email');
-                                    }}>
+                                            setTempValue(user?.email || '');
+                                            setEditingField('email');
+                                        }}>
                                         change
                                     </button>
                                 </div>
@@ -1287,14 +1287,22 @@ export default function Account() {
                                                                 onClick={e => { e.stopPropagation(); setMobileActionsOpen(v => !v); }}
                                                             >more_vert</span>
                                                             {mobileActionsOpen && (
-                                                                <div className="mobile-actions-dropdown">
-                                                                    <button onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
-                                                                    <button onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
-                                                                    <button onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
-                                                                    <button onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
-                                                                    <button onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
-                                                                    <button onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
-                                                                    <button className="danger" onClick={() => handleDelete(selectedDeck)}>Delete</button>
+                                                                <div
+                                                                    className="deck-collection-modal-overlay"
+                                                                    onClick={() => setMobileActionsOpen(false)}
+                                                                >
+                                                                    <div
+                                                                        className="deck-collection-modal-box mobile-modal-box"
+                                                                        onClick={e => e.stopPropagation()}
+                                                                    >
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
+                                                                        <button className='small-deck-modal-options-brn-list danger' onClick={() => handleDelete(selectedDeck)}>Delete</button>
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>
