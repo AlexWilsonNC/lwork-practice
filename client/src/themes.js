@@ -26,7 +26,7 @@ const decklistSvgLight = `
        .096-5.628-3.495-11.014-8.606-13.298
        -1.757-.813-3.665-1.217-5.58-1.249z"
         fill="none"
-        stroke="rgb(200,200,200,0.5)"
+        stroke="rgb(210,210,210,0.5)"
         stroke-width="1.75"
       />
     </pattern>
@@ -122,7 +122,7 @@ const decklistSvgDark = `
        .096-5.628-3.495-11.014-8.606-13.298
        -1.757-.813-3.665-1.217-5.58-1.249z"
         stroke-width='1.5'
-        stroke='#ffffff24'
+        stroke='#393E40'
         fill='none'
       />
     </pattern>

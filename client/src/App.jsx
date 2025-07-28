@@ -27,6 +27,7 @@ import PrintDecklist from './DeckBuilder/PrintDecklist'
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import Login   from './pages/Login';
 import Account from './pages/Account';
+// import UserDeck from './pages/UserDeck';
 
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
@@ -62,6 +63,7 @@ function App() {
             <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
+            {/* <Route path="/deck-collection/:username/:deckId" element={<UserDeck />} /> */}
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
             <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />

@@ -1213,7 +1213,7 @@ export default function Account() {
                                             <button className="modal-close" onClick={closeModal}>×</button>
                                             <h3 style={{ margin: 0 }}>{selectedDeck.name}</h3>
                                             <p>{selectedFolder?.name ?? ''}</p>
-                                            {selectedDeck.description && <p>{selectedDeck.description}</p>}
+                                            <p>{selectedDeck.description || '\u00A0'}</p>
 
                                             <div className="deck-modal-actions">
                                                 <div>

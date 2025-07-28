@@ -638,7 +638,10 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 1);
   z-index: 10001;
 }
-
+/* .card-modal-content-account .deck-box {
+  transform: scale(calc(1 / 1.35)) !important;
+  transform-origin: top left;
+} */
 .card-modal-content-account p {
   font-size: 12px;
   margin-top: 2px;
@@ -1223,5 +1226,13 @@
     width: 120px;
     padding: 4px;
     font-size: 10px;
+  }
+  .deck-card {
+      border-radius: 5px;
+      width: 135px;
+    }
+    .decks-grid {
+    grid-template-columns: repeat(auto-fill, 135px);
+    gap: 1rem;
   }
 }
