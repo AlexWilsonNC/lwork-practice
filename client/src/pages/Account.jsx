@@ -564,6 +564,19 @@ export default function Account() {
     /* define folder name for selected deck in decklist modal */
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
+    useEffect(() => {
+  function handleGlobalClick() {
+    if (mobileActionsOpen) {
+      setMobileActionsOpen(false);
+    }
+  }
+  // listen on capture so it fires before anything else
+  document.addEventListener('click', handleGlobalClick, true);
+  return () => {
+    document.removeEventListener('click', handleGlobalClick, true);
+  };
+}, [mobileActionsOpen]);
+
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
 
@@ -771,7 +784,8 @@ export default function Account() {
                                 </div>
                                 <div className='decks-in-folder-options-sort-list-views'>
                                     <div className='folder-options'>
-                                        <div className='decks-in-folder-options-sort-list-views'>
+                                        {/* ADD BACK one day */}
+                                        {/* <div className='decks-in-folder-options-sort-list-views'>
                                             <button
                                                 className="sort-favorites-btn"
                                                 onClick={() => setViewMode(vm => vm === 'grid' ? 'list' : 'grid')}
@@ -781,7 +795,7 @@ export default function Account() {
                                                 </span>
                                                 <p>{viewMode === 'grid' ? 'List View' : 'Tile View'}</p>
                                             </button>
-                                        </div>
+                                        </div> */}
                                         {/* <button
                                             className="sort-favorites-btn"
                                             onClick={() => setCompactMode(c => !c)}
@@ -1288,7 +1302,7 @@ export default function Account() {
                                                             >more_vert</span>
                                                             {mobileActionsOpen && (
                                                                 <div
-                                                                    className="deck-collection-modal-overlay"
+                                                                    className="deck-collection-modal-overlay-again"
                                                                     onClick={() => setMobileActionsOpen(false)}
                                                                 >
                                                                     <div
