@@ -101,6 +101,7 @@ export const lightTheme = {
   decklistModalAccountPopupView: 'linear-gradient(to bottom right, rgb(235, 235, 235) , rgb(240, 240, 240))',
   modalCloseAccountList: '#000',
   decklistOpenedBtnBg: 'rgb(169, 169, 169)',
+  profilesettingsbg: 'rgba(220, 220, 220, 0.557)',
 
 };
 
@@ -197,5 +198,6 @@ export const darkTheme = {
   decklistModalAccountPopupView: 'linear-gradient(to top left, rgb(57, 61, 71) , rgb(45, 47, 52))',
   modalCloseAccountList: '#FFF',
   decklistOpenedBtnBg: 'rgb(100, 100, 100)',
+  profilesettingsbg: 'rgba(21, 21, 21, 0.25)',
 
 };

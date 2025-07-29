@@ -4,7 +4,6 @@
 }
 
 .profile-settings-display-edit {
-  background-color: rgba(220, 220, 220, 0.557);
   width: 65%;
   margin: 0 auto;
   margin-top: 25px;
@@ -179,16 +178,18 @@
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  overflow: hidden;
   color: rgb(231, 231, 231);
   width: 275px;
   height: auto;
+  overflow: visible;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .deck-card-img {
   position: relative;
   overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   width: 100%;
   height: 150px;
   margin: 0 auto;
@@ -385,15 +386,22 @@
 .not-blue-p {
   font-size: 14px !important;
 }
-
+.menu-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
 .deckcollection-menu-dropdown {
   position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-91%);
+  margin-top: 4px;
+  min-width: 175px;
   display: flex;
   flex-direction: column;
   background: #2f3136;
   border: 1px solid grey;
   z-index: 100;
-  min-width: 175px;
 }
 
 .deckcollection-menu-dropdown button {
@@ -410,7 +418,6 @@
   background: rgba(255, 255, 255, 0.185);
 }
 
-/* deck in collection's options modal */
 .deck-edit-modal {
   position: fixed;
   top: 0;
@@ -882,6 +889,9 @@
   width: 85%;
   top: 0%;
 }
+.cropped-mascot-card.zoroark {
+  top: -55%;
+}
 
 .list-thumb.ancient {
   top: -170%;
@@ -961,16 +971,18 @@
     border-radius: 5px;
     width: 175px;
   }
+  .deck-card-img {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 100px;
+
+  }
 
   .decks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 175px);
     justify-content: center;
     gap: 1rem;
-  }
-
-  .deck-card-img {
-    height: 100px;
   }
 
   .cropped-mascot-card {
@@ -1254,6 +1266,7 @@
     height: 18.5px;
   }
   .deck-card-info p {
+    margin: 0 .25rem;
     font-size: .5rem;
   }
   .favorite-heart {
@@ -1262,5 +1275,33 @@
   }
   .menu-icon {
     font-size: 1.1rem !important;
+  }
+   .create-new-folder-btn {
+    font-size: 9px;
+  }
+  .create-new-deck-link-btn,
+  .create-new-deck-link-btn span {
+    font-size: 9px;
+  }
+  .folders-list button:nth-child(1) {
+    font-size: 9px;
+    padding: 4px 5px;
+  }
+  .folders-list button {
+    padding: 4px;
+    font-size: 7px;
+    min-width: 65px;
+  }
+  .folders-list .show-more-btn {
+    font-size: 7.5px;
+    padding-bottom: 3px;
+  }
+  .folders-list .show-more-btn span {
+    font-size: 10px;
+    padding-right: 1.5px;
+  }
+  .deck-card-img {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
   }
 }

@@ -222,25 +222,13 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const handleModalSave = async () => {
     if (!deckName.trim() || !selectedMascot) return
     setSaving(true)
-    // categorize decklist into pokemon, trainer, energy
-    const pokemon = deck
-      .filter(c => c.supertype === 'Pokémon')
-      .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-    const trainer = deck
-      .filter(c => c.supertype === 'Trainer')
-      .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-    const energy = deck
-      .filter(c => c.supertype === 'Energy')
-      .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-    const decklist = { pokemon, trainer, energy }
-    setSaving(true)
     try {
       const token = localStorage.getItem('PTCGLegendsToken')
       const url = overwriteMode && originalDeckId
         ? `/api/user/decks/${originalDeckId}`
         : '/api/user/decks';
       const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
-            const res = await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -251,10 +239,9 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           mascotCard: selectedMascot,
           secondaryMascotCard: secondaryMascot,
           description,
-          decklist      // <-- use the categorized decklist you built above
+          decklist: deck
         })
-      });
-
+      })
       if (res.ok) {
         window.location.href = '/account'
         setSaving(false)
@@ -272,6 +259,59 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       setSaving(false)
     }
   }
+
+  // const handleModalSave = async () => {
+  //   if (!deckName.trim() || !selectedMascot) return
+  //   setSaving(true)
+  //   const pokemon = deck
+  //     .filter(c => c.supertype === 'Pokémon')
+  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
+  //   const trainer = deck
+  //     .filter(c => c.supertype === 'Trainer')
+  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
+  //   const energy = deck
+  //     .filter(c => c.supertype === 'Energy')
+  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
+  //   const decklist = { pokemon, trainer, energy }
+  //   setSaving(true)
+  //   try {
+  //     const token = localStorage.getItem('PTCGLegendsToken')
+  //     const url = overwriteMode && originalDeckId
+  //       ? `/api/user/decks/${originalDeckId}`
+  //       : '/api/user/decks';
+  //     const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
+  //           const res = await fetch(url, {
+  //       method,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify({
+  //         name: deckName,
+  //         mascotCard: selectedMascot,
+  //         secondaryMascotCard: secondaryMascot,
+  //         description,
+  //         decklist
+  //       })
+  //     });
+
+  //     if (res.ok) {
+  //       window.location.href = '/account'
+  //       setSaving(false)
+  //       setShowSaveModal(false)
+  //       setDeckName('')
+  //       setSelectedMascot('')
+  //       setSecondaryMascot('')
+  //       setDescription('')
+  //     } else {
+  //       console.error('Failed to save deck')
+  //     }
+  //   } catch (err) {
+  //     console.error('Error saving deck', err)
+  //   } finally {
+  //     setSaving(false)
+  //   }
+  // }
 
   return (
     <>

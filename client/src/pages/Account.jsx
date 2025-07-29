@@ -64,6 +64,12 @@ const AccountSection = styled.div`
         background: ${({ theme }) => theme.decklistOpenedBtnBg};
         color: #f5f5f5;
     }
+    .profile-item {
+        color: ${({ theme }) => theme.text};
+    }
+    .profile-settings-display-edit {
+        background-color: ${({ theme }) => theme.profilesettingsbg};
+    }
 `;
 
 export default function Account() {
@@ -71,7 +77,7 @@ export default function Account() {
     const token = user?.token;
     const navigate = useNavigate();
 
-    const [editingField, setEditingField] = useState(null); // 'username' | 'email'
+    const [editingField, setEditingField] = useState(null);
     const [tempValue, setTempValue] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showPwModal, setShowPwModal] = useState(false);
@@ -396,6 +402,7 @@ export default function Account() {
                                 hasBreakTrait: card.subtypes?.includes('BREAK'),
                                 isLegendCard: card.subtypes?.includes('LEGEND'),
                                 specificallyLugiaLegend: card.name === 'Lugia LEGEND',
+                                specificallyZoroarkGX: card.name === 'Zoroark-GX'
                             };
                         } catch {
                             return { ...deck, secondaryMascotImageUrl };
@@ -753,7 +760,7 @@ export default function Account() {
                                         All Decks
                                     </button>
                                     {folders.map((f, idx) => {
-                                        if (isMobileView && !showAllFolders && idx >= 10) return null;
+                                        if (isMobileView && !showAllFolders && idx >= 3) return null;
                                         return (
                                             <button
                                                 key={f._id}
@@ -764,7 +771,7 @@ export default function Account() {
                                             </button>
                                         );
                                     })}
-                                    {isMobileView && folders.length > 10 && (
+                                    {isMobileView && folders.length > 3 && (
                                         <button
                                             className="show-more-btn"
                                             onClick={() => setShowAllFolders(v => !v)}
@@ -883,7 +890,8 @@ export default function Account() {
                                                                         d.hasAncientTrait && "ancient",
                                                                         d.hasBreakTrait && "break",
                                                                         d.isLegendCard && "legend",
-                                                                        d.specificallyLugiaLegend && "lugia"
+                                                                        d.specificallyLugiaLegend && "lugia",
+                                                                        d.specificallyZoroarkGX && "zoroark"
                                                                     ].filter(Boolean).join(" ")}
                                                                 />
                                                                 {d.secondaryMascotImageUrl && (
@@ -910,7 +918,7 @@ export default function Account() {
                                                                     >
                                                                         {favorites.has(id) ? 'favorite' : 'favorite_border'}
                                                                     </span>
-                                                                    <div
+                                                                    <div className="menu-icon-wrapper"
                                                                         ref={el => {
                                                                             if (menuOpenId === d._id) {
                                                                                 menuContainerRef.current = el;
