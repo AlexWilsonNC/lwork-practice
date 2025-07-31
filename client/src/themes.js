@@ -94,7 +94,7 @@ export const lightTheme = {
   savedDeckBg: 'rgba(235, 235, 235, 0.46)',
   favoriteHeart: 'rgb(183, 183, 183)',
   favoriteHeartRed: 'red',
-  profileDarkBlue: '#062439',
+  profileDarkBlue: '#074774',
   profileSliderBg: 'rgb(176, 176, 176)',
   listVersionedFolderLabel: '#81c0ed',
   deckModalAccountList: patternBgLight,
