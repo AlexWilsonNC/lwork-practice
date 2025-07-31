@@ -1077,18 +1077,18 @@
   }
 
   .folders-list .show-more-btn {
-    background: none;
+    background-color: transparent;
     border: none;
     color: #1290eb;
     padding: 0px;
     cursor: pointer;
-    font-size: 9px;
+    font-size: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding-bottom: 3px;
-    margin-left: -2px !important;
+    padding: 3px;
+    width: auto;
   }
 
   .folders-list .show-more-btn span {
@@ -1179,6 +1179,15 @@
   }
 }
 
+@media (max-width: 550px) {
+  .hide-on-mobile550 {
+    display: none;
+  }
+  .folder-options button,
+  .folder-options-icon {
+    font-size: 9px;
+  }
+}
 @media (max-width: 515px) {
   .hide-on515 {
     display: none;
@@ -1303,5 +1312,10 @@
   .deck-card-img {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+  }
+}
+@media (max-width: 385px) {
+  .folder-options button {
+    font-size: 7px;
   }
 }

@@ -572,17 +572,17 @@ export default function Account() {
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
     useEffect(() => {
-  function handleGlobalClick() {
-    if (mobileActionsOpen) {
-      setMobileActionsOpen(false);
-    }
-  }
-  // listen on capture so it fires before anything else
-  document.addEventListener('click', handleGlobalClick, true);
-  return () => {
-    document.removeEventListener('click', handleGlobalClick, true);
-  };
-}, [mobileActionsOpen]);
+        function handleGlobalClick() {
+            if (mobileActionsOpen) {
+                setMobileActionsOpen(false);
+            }
+        }
+        // listen on capture so it fires before anything else
+        document.addEventListener('click', handleGlobalClick, true);
+        return () => {
+            document.removeEventListener('click', handleGlobalClick, true);
+        };
+    }, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
@@ -740,7 +740,7 @@ export default function Account() {
                             <div className="account-decks">
                                 <div className="folders-bar">
                                     <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}>+ New Folder</button>
-                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}><span className="material-symbols-outlined">contract_edit</span> Create New Deck</button>
+                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}><span className="material-symbols-outlined">contract_edit</span> New Deck</button>
                                 </div>
                                 <button
                                     className="folder-options-icon"
@@ -759,9 +759,8 @@ export default function Account() {
                                     >
                                         All Decks
                                     </button>
-                                    {folders.map((f, idx) => {
-                                        if (isMobileView && !showAllFolders && idx >= 3) return null;
-                                        return (
+                                    {(!isMobileView || showAllFolders) &&
+                                        folders.map(f => (
                                             <button
                                                 key={f._id}
                                                 className={f._id === activeFolder ? 'active' : ''}
@@ -769,23 +768,17 @@ export default function Account() {
                                             >
                                                 {f.name}
                                             </button>
-                                        );
-                                    })}
-                                    {isMobileView && folders.length > 3 && (
+                                        ))
+                                    }
+                                    {isMobileView && folders.length > 0 && (
                                         <button
                                             className="show-more-btn"
                                             onClick={() => setShowAllFolders(v => !v)}
                                         >
-                                            {showAllFolders
-                                                ? ''
-                                                : (
-                                                    <>
-                                                        <span className="material-symbols-outlined">
-                                                            keyboard_arrow_down
-                                                        </span>{' '}
-                                                        Show More
-                                                    </>
-                                                )}
+                                            <span className="material-symbols-outlined">
+                                                {showAllFolders ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+                                            </span>
+                                            {showAllFolders ? ' Collapse Folders' : ' Expand Folders'}
                                         </button>
                                     )}
                                 </div>
@@ -852,7 +845,7 @@ export default function Account() {
                                         )}
                                     </div>
                                     <button
-                                        className="sort-favorites-btn"
+                                        className="sort-favorites-btn hide-on-mobile550"
                                         onClick={() => setSortMode(m => (m + 1) % 4)}
                                     >
                                         <span className='not-blue-p'>Sorted:&nbsp;</span>
