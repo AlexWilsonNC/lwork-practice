@@ -718,21 +718,15 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
-.create-new-deck-link-btn:hover {
-  background-color: #1290eb !important;
-}
-
-.create-new-deck-link-btn span {
+.create-new-folder-btn span {
   font-size: 16px;
   margin-right: 8px;
 }
 
 .create-new-folder-btn {
-  background-color: #1290eb;
+  background-color: #0063a9;
   border-radius: 3px;
   padding: 10px;
   color: white;
@@ -740,6 +734,8 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .folder-options-icon {
@@ -1054,7 +1050,7 @@
     font-size: 12px;
   }
 
-  .create-new-deck-link-btn span {
+  .create-new-folder-btn span {
     font-size: 12px;
     margin-right: 6px;
   }
@@ -1289,7 +1285,7 @@
     font-size: 9px;
   }
   .create-new-deck-link-btn,
-  .create-new-deck-link-btn span {
+  .create-new-folder-btn span {
     font-size: 9px;
   }
   .folders-list button:nth-child(1) {

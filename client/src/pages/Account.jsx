@@ -739,8 +739,8 @@ export default function Account() {
                         : (
                             <div className="account-decks">
                                 <div className="folders-bar">
-                                    <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}>+ New Folder</button>
-                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}><span className="material-symbols-outlined">contract_edit</span> New Deck</button>
+                                    <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
+                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
                                 </div>
                                 <button
                                     className="folder-options-icon"
