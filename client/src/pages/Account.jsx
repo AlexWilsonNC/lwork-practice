@@ -314,7 +314,7 @@ export default function Account() {
         }
     };
 
-    function goToDeckbuilder(deck) {
+    function goToDeckbuilder(deck, newTab = false) {
         const raw = deck.decklist;
         const cards = Array.isArray(raw)
             ? raw
@@ -331,8 +331,13 @@ export default function Account() {
         }));
 
         const fragment = encodeURIComponent(JSON.stringify(minimal));
-        window.location.href =
-            `/ljhksdgbnksgkjsiodsfi?deckId=${deck._id}&public=true#deck=${fragment}`;
+        const url = `/ljhksdgbnksgkjsiodsfi?deckId=${deck._id}#deck=${fragment}`;
+
+        if (newTab) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+            window.location.href = url;
+        }
     }
 
     const handleCreateFolder = async () => {
@@ -1339,7 +1344,7 @@ export default function Account() {
                                                 {isPublicView ? (
                                                     <div className="public-actions">
                                                         <button
-                                                            onClick={() => goToDeckbuilder(selectedDeck)}
+                                                            onClick={() => goToDeckbuilder(selectedDeck, true)}
                                                             className="public-action-btn"
                                                         >
                                                             Open in Deckbuilder
