@@ -671,6 +671,7 @@ export default function Account() {
                                 </div>
                             )}
                         </div>
+                        <br></br>
                         <button className='change-password-btn' onClick={() => setShowPwModal(true)}>
                             Change Password
                         </button>

@@ -209,23 +209,22 @@
 
 .secondary-mascot-container {
   position: absolute;
-  overflow: hidden;
   top: 0;
   left: 0;
-  width: 155px;
-  height: 85px;
-  object-fit: cover;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
   z-index: 2;
-  border-bottom-right-radius: 25px;
-  -webkit-mask-image:
-    linear-gradient(to bottom, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(to right, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(to right, rgba(0, 0, 0, 1) 92%, rgba(0, 0, 0, 0) 100%);
-  mask-composite: intersect;
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 1) 45%,
+    rgba(0, 0, 0, 0) 55%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0,0,0,1) 45%,
+    rgba(0,0,0,0) 55%
+  );
 }
 
 .secondary-mascot-img {
@@ -282,6 +281,7 @@
   margin: 0 0 .25rem;
   font-size: 1.1rem;
   text-wrap: nowrap;
+  overflow: hidden;
 }
 
 .saved-deck-hr {

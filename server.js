@@ -114,7 +114,23 @@ app.post('/api/auth/signup', async (req, res) => {
   if (!username) return res.status(400).json({ error: 'Username is required' });
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 
+  const normalizedEmail = email.toLowerCase();
+
   try {
+    const conflict = await User.findOne({
+      $or: [
+        { email: normalizedEmail },
+        { username }
+      ]
+    });
+    if (conflict) {
+      if (conflict.email === normalizedEmail) {
+        return res.status(400).json({ error: 'Email already in use' });
+      } else {
+        return res.status(400).json({ error: 'Username already in use' });
+      }
+    }
+
     const passwordHash = await bcrypt.hash(password, Number(SALT_ROUNDS));
     const newUser = new User({ username, email, passwordHash });
     await newUser.save();
@@ -147,10 +163,10 @@ app.post('/api/auth/login', async (req, res) => {
     }
     const token = jwt.sign({ sub: user._id }, JWT_SECRET, { expiresIn: '7d' });
     res.json({
-    token,
-    username: user.username,
-    email:    user.email
-  });
+      token,
+      username: user.username,
+      email: user.email
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
@@ -386,6 +402,20 @@ app.patch('/api/user/decks/:deckId/move', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not move deck' });
   }
 });
+// app.get('/api/user/decks/:deckId', requireAuth, async (req, res) => {
+//     try {
+//       const user = await User.findById(req.userId);
+//       const deck = user.decks.id(req.params.deckId);
+//       if (!deck) {
+//         return res.status(404).json({ error: 'Deck not found' });
+//       }
+//       res.json(deck);
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Could not load deck' });
+//     }
+//   }
+// );
 app.delete('/api/user/folders/:folderId', requireAuth, async (req, res) => {
   const { folderId } = req.params;
   try {
@@ -434,7 +464,7 @@ app.patch('/api/user/profile', requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     if (username) user.username = username;
-    if (email)    user.email    = email;
+    if (email) user.email = email;
     await user.save();
     res.json({ username: user.username, email: user.email });
   } catch (err) {
@@ -492,10 +522,11 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       to: user.email,
       subject: 'Your PTCGLegends Temporary Password',
       text: `Hi ${user.username},\n\n` +
-            `We’ve reset your password as requested. Your temporary password is:\n\n` +
-            `    ${tempPassword}\n\n` +
-            `Please log in using this password and then choose “Change Password” to set a new one of your own.\n\n` +
-            `– The PTCGLegends Team`
+        `We’ve reset your password as requested. Your temporary password is:\n\n` +
+        `    ${tempPassword}\n\n` +
+        `Please log in using this password. Then in your profile, choose “Change Password” to set a new one of your own.\n\n` +
+        `Keep this email until you've succesfully changed your password.\n\n` +
+        `~ PTCGLegends`
     });
 
     res.json({ message: 'If that account exists, you’ll get an email shortly.' });
