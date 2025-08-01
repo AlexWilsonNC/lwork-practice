@@ -77,7 +77,8 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     order: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
-    locked: { type: Boolean, default: false }
+    locked: { type: Boolean, default: false },
+    isPublic: { type: Boolean, default: false }
   }]
 });
 const User = authConnection.model('User', userSchema, 'users');
@@ -535,7 +536,43 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     res.status(500).json({ error: 'Could not process that request' });
   }
 });
+app.patch('/api/user/folders/:id/public', requireAuth, async (req, res) => {
+  const { isPublic } = req.body;
+  try {
+    const user = await User.findById(req.userId);
+    const folder = user.folders.id(req.params.id);
+    if (!folder) return res.status(404).json({ error: 'Folder not found' });
+    folder.isPublic = Boolean(isPublic);
+    await user.save();
+    res.json({ folders: user.folders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update folder visibility' });
+  }
+});
+app.get('/api/public/:username/deck-collection', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select('decks folders');
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
+    // collect IDs of public folders
+    const publicFolderIds = user.folders
+      .filter(f => f.isPublic)
+      .map(f => f._id.toString());
+
+    // filter decks in those folders
+    const publicDecks = user.decks
+      .filter(d => d.folderId && publicFolderIds.includes(d.folderId.toString()));
+
+    res.json({
+      folders: user.folders.filter(f => f.isPublic),
+      decks:   publicDecks
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load public collection' });
+  }
+});
 
 // Define the schema for emails
 const emailSchema = new mongoose.Schema({

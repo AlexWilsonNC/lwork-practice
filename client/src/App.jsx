@@ -64,6 +64,7 @@ function App() {
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
             {/* <Route path="/deck-collection/:username/:deckId" element={<UserDeck />} /> */}
+            <Route path="/:username/deck-collection" element={<Account />} />
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
             <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />

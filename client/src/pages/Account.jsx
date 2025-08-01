@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import '../css/Account.css'
 import styled from 'styled-components';
@@ -75,6 +75,8 @@ const AccountSection = styled.div`
 export default function Account() {
     const { user, logout, updateUserProfile, changePassword } = useContext(AuthContext);
     const token = user?.token;
+    const { username } = useParams();
+    const isPublicView = Boolean(username);
     const navigate = useNavigate();
 
     const [editingField, setEditingField] = useState(null);
@@ -129,6 +131,8 @@ export default function Account() {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 850);
     const [isSmallViewport, setIsSmallViewport] = useState(window.innerWidth <= 515);
     const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+    const [publicFolders, setPublicFolders] = useState([]);
 
     const handleLogout = () => {
         logout();
@@ -361,91 +365,153 @@ export default function Account() {
     };
 
     useEffect(() => {
-        if (!token) {
-            setLoading(false);
-            return;
-        }
+        setLoading(true);
 
-        fetch('/api/user/decks', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            }
-        })
-            .then(res => {
-                if (!res.ok) throw new Error('Failed to load decks');
-                return res.json();
-            })
-            .then(async decks => {
-                const withImages = await Promise.all(
-                    decks.map(async deck => {
-                        const [set, num] = deck.mascotCard.split('-');
-                        let secondaryMascotImageUrl = null;
-                        if (deck.secondaryMascotCard) {
-                            const [set2, num2] = deck.secondaryMascotCard.split('-');
-                            try {
-                                const r2 = await fetch(`/api/cards/${set2}/${num2}`);
-                                const card2 = await r2.json();
-                                secondaryMascotImageUrl = card2.images?.large || card2.images?.small;
-                            } catch { }
-                        }
-
-                        try {
-                            const r = await fetch(`/api/cards/${set}/${num}`);
-                            const card = await r.json();
-                            return {
-                                ...deck,
-                                mascotImageUrl: card.images?.large || card.images?.small,
-                                secondaryMascotImageUrl,
-                                hasAncientTrait: !!card.ancientTrait,
-                                isTagTeam: card.subtypes?.includes('TAG TEAM'),
-                                hasBreakTrait: card.subtypes?.includes('BREAK'),
-                                isLegendCard: card.subtypes?.includes('LEGEND'),
-                                specificallyLugiaLegend: card.name === 'Lugia LEGEND',
-                                specificallyZoroarkGX: card.name === 'Zoroark-GX'
-                            };
-                        } catch {
-                            return { ...deck, secondaryMascotImageUrl };
-                        }
-                    })
-                );
-                const favs = new Set(
-                    withImages
-                        .filter(d => d.favorite)
-                        .map(d => d._id)
-                );
-                setFavorites(favs);
-                setDecks(withImages);
-                fetch('/api/user/folders', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
+        if (isPublicView) {
+            // public decks but exactly like private ones when set to public
+            fetch(`/api/public/${username}/deck-collection`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to load public collection');
+                    return res.json();
                 })
-                    .then(res => {
-                        if (!res.ok) throw new Error('Failed to load folders');
-                        return res.json();
-                    })
-                    .then(data => {
-                        const list = data.folders || data;
-                        list.sort((a, b) => a.order - b.order);
-                        setFolders(list);
-                        setFoldersOrder(list.map(f => f._id));
+                .then(async ({ folders: pubFolders, decks: pubDecks }) => {
+                    setFolders(pubFolders);
 
-                        setLockedFolders(new Set(
-                            list
-                                .filter(f => f.locked)
-                                .map(f => f._id)
-                        ));
-                    })
-                    .catch(err => console.error('Failed to load folders', err));
+                    const withImages = await Promise.all(
+                        pubDecks.map(async deck => {
+                            const sep = deck.mascotCard.lastIndexOf('-');
+                            const set = deck.mascotCard.slice(0, sep);
+                            const num = deck.mascotCard.slice(sep + 1);
+
+                            let secondaryMascotImageUrl = null;
+                            if (deck.secondaryMascotCard) {
+                                const sep2 = deck.secondaryMascotCard.lastIndexOf('-');
+                                const set2 = deck.secondaryMascotCard.slice(0, sep2);
+                                const num2 = deck.secondaryMascotCard.slice(sep2 + 1);
+                                try {
+                                    const r2 = await fetch(`/api/cards/${set2}/${num2}`);
+                                    const card2 = await r2.json();
+                                    secondaryMascotImageUrl =
+                                        card2.images?.large || card2.images?.small;
+                                } catch { /* ignore */ }
+                            }
+
+                            try {
+                                const r = await fetch(`/api/cards/${set}/${num}`);
+                                const card = await r.json();
+                                return {
+                                    ...deck,
+                                    mascotImageUrl: card.images?.large || card.images?.small,
+                                    secondaryMascotImageUrl,
+                                    hasAncientTrait: !!card.ancientTrait,
+                                    isTagTeam: card.subtypes?.includes('TAG TEAM'),
+                                    hasBreakTrait: card.subtypes?.includes('BREAK'),
+                                    isLegendCard: card.subtypes?.includes('LEGEND'),
+                                    specificallyLugiaLegend: card.name === 'Lugia LEGEND',
+                                    specificallyZoroarkGX: card.name === 'Zoroark-GX'
+                                };
+                            } catch {
+                                return { ...deck, secondaryMascotImageUrl };
+                            }
+                        })
+                    );
+                    setDecks(withImages);
+                })
+                .catch(err => {
+                    console.error(err);
+                    setError(err.message || 'Error loading public collection');
+                })
+                .finally(() => setLoading(false));
+
+        } else {
+            // — Private view: creating folders and decks
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            fetch('/api/user/decks', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
             })
-            .catch(err => {
-                console.error(err);
-                setError(err.message);
-            })
-            .finally(() => setLoading(false));
-    }, [token]);
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to load decks');
+                    return res.json();
+                })
+                .then(async decks => {
+                    const withImages = await Promise.all(
+                        decks.map(async deck => {
+                            const sep = deck.mascotCard.lastIndexOf('-');
+                            const set = deck.mascotCard.slice(0, sep);
+                            const num = deck.mascotCard.slice(sep + 1);
+
+                            let secondaryMascotImageUrl = null;
+                            if (deck.secondaryMascotCard) {
+                                const sep2 = deck.secondaryMascotCard.lastIndexOf('-');
+                                const set2 = deck.secondaryMascotCard.slice(0, sep2);
+                                const num2 = deck.secondaryMascotCard.slice(sep2 + 1);
+                                try {
+                                    const r2 = await fetch(`/api/cards/${set2}/${num2}`);
+                                    const card2 = await r2.json();
+                                    secondaryMascotImageUrl =
+                                        card2.images?.large || card2.images?.small;
+                                } catch { /* ignore */ }
+                            }
+
+                            try {
+                                const r = await fetch(`/api/cards/${set}/${num}`);
+                                const card = await r.json();
+                                return {
+                                    ...deck,
+                                    mascotImageUrl: card.images?.large || card.images?.small,
+                                    secondaryMascotImageUrl,
+                                    hasAncientTrait: !!card.ancientTrait,
+                                    isTagTeam: card.subtypes?.includes('TAG TEAM'),
+                                    hasBreakTrait: card.subtypes?.includes('BREAK'),
+                                    isLegendCard: card.subtypes?.includes('LEGEND'),
+                                    specificallyLugiaLegend: card.name === 'Lugia LEGEND',
+                                    specificallyZoroarkGX: card.name === 'Zoroark-GX'
+                                };
+                            } catch {
+                                return { ...deck, secondaryMascotImageUrl };
+                            }
+                        })
+                    );
+                    const favs = new Set(
+                        withImages.filter(d => d.favorite).map(d => d._id)
+                    );
+                    setFavorites(favs);
+                    setDecks(withImages);
+
+                    return fetch('/api/user/folders', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to load folders');
+                    return res.json();
+                })
+                .then(data => {
+                    const list = data.folders || data;
+                    list.sort((a, b) => a.order - b.order);
+                    setFolders(list);
+                    setFoldersOrder(list.map(f => f._id));
+                    setLockedFolders(
+                        new Set(list.filter(f => f.locked).map(f => f._id))
+                    );
+                })
+                .catch(err => {
+                    console.error(err);
+                    setError(err.message);
+                })
+                .finally(() => setLoading(false));
+        }
+    }, [token, isPublicView, username]);
 
     const openModal = deck => setSelectedDeck(deck);
     const closeModal = () => setSelectedDeck(null);
@@ -532,6 +598,13 @@ export default function Account() {
         });
     };
 
+    const openPrivacyModal = () => {
+        setPublicFolders(
+            folders.map(f => ({ id: f._id, name: f.name, isPublic: f.isPublic }))
+        );
+        setShowPrivacyModal(true);
+    };
+
     useEffect(() => {
         const handleResize = () => setIsMobileView(window.innerWidth < 850);
         window.addEventListener('resize', handleResize);
@@ -589,14 +662,16 @@ export default function Account() {
 
     return (
         <AccountSection className="account-page">
-            <div className="account-tabs">
-                <button onClick={() => setTab('decks')} className={`decks-account-btn ${tab === 'decks' ? 'active' : ''}`}>
-                    Deck Collection
-                </button>
-                <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
-                    Profile
-                </button>
-            </div>
+            {!isPublicView && (
+                <div className="account-tabs">
+                    <button onClick={() => setTab('decks')} className={`decks-account-btn ${tab === 'decks' ? 'active' : ''}`}>
+                        Deck Collection
+                    </button>
+                    <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
+                        Profile
+                    </button>
+                </div>
+            )}
 
             {tab === 'profile' ? (
                 <section className='profile-settings-display-edit'>
@@ -739,20 +814,39 @@ export default function Account() {
                         ? <p>You haven’t saved any decks yet.</p>
                         : (
                             <div className="account-decks">
+                                {isPublicView && (
+                                    <h2>{username}&apos;s Deck Collection</h2>
+                                )}
                                 <div className="folders-bar">
-                                    <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
+                                    {isPublicView && (
+                                        <button onClick={() => navigate('/account')}>← Back to My Account</button>
+                                    )}
+                                    {!isPublicView && (
+                                        <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
+                                    )}
                                     <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
                                 </div>
-                                <button
-                                    className="folder-options-icon"
-                                    onClick={() => {
-                                        setFoldersOrder(folders.map(f => f._id));
-                                        setShowSortModal(true);
-                                    }}
-                                >
-                                    <span className="material-symbols-outlined">swap_horiz</span>
-                                    <p>Organize Folders</p>
-                                </button>
+                                {!isPublicView && (
+                                    <button
+                                        className="folder-options-icon"
+                                        onClick={() => {
+                                            setFoldersOrder(folders.map(f => f._id));
+                                            setShowSortModal(true);
+                                        }}
+                                    >
+                                        <span className="material-symbols-outlined">swap_horiz</span>
+                                        <p>Organize Folders</p>
+                                    </button>
+                                )}
+                                {!isPublicView && (
+                                    <button
+                                        className="sort-favorites-btn"
+                                        onClick={openPrivacyModal}
+                                    >
+                                        <span className="material-symbols-outlined">public</span>
+                                        <p>Folder Privacy</p>
+                                    </button>
+                                )}
                                 <div className="folders-list">
                                     <button
                                         className={!activeFolder ? 'active' : ''}
@@ -1182,15 +1276,18 @@ export default function Account() {
                                                             return;
                                                         }
 
-                                                        // 2) fetch new images so UI updates immediately
-                                                        const [set1, num1] = primaryMascot.split('-');
+                                                        const sep1 = primaryMascot.lastIndexOf('-');
+                                                        const set1 = primaryMascot.slice(0, sep1);
+                                                        const num1 = primaryMascot.slice(sep1 + 1);
                                                         const r1 = await fetch(`/api/cards/${set1}/${num1}`);
                                                         const c1 = await r1.json();
                                                         const newPrimaryUrl = c1.images?.large || c1.images?.small;
 
                                                         let newSecondaryUrl = null;
                                                         if (secondaryMascot) {
-                                                            const [set2, num2] = secondaryMascot.split('-');
+                                                            const sep2 = secondaryMascot.lastIndexOf('-');
+                                                            const set2 = secondaryMascot.slice(0, sep2);
+                                                            const num2 = secondaryMascot.slice(sep2 + 1);
                                                             try {
                                                                 const r2 = await fetch(`/api/cards/${set2}/${num2}`);
                                                                 const c2 = await r2.json();
@@ -1198,7 +1295,6 @@ export default function Account() {
                                                             } catch { }
                                                         }
 
-                                                        // 3) stitch into decks state
                                                         setDecks(ds =>
                                                             ds.map(d =>
                                                                 d._id === modalDeck._id
@@ -1662,6 +1758,64 @@ export default function Account() {
                                                 >
                                                     Save
                                                 </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {showPrivacyModal && (
+                                    <div className="deck-collection-modal-overlay" onClick={() => setShowPrivacyModal(false)}>
+                                        <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                            <h4>Folder Visibility</h4>
+                                            <ul className="privacy-folder-list">
+                                                {publicFolders.map(f => (
+                                                    <li key={f.id}>
+                                                        <label>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={f.isPublic}
+                                                                onChange={() => {
+                                                                    setPublicFolders(pfs =>
+                                                                        pfs.map(x =>
+                                                                            x.id === f.id ? { ...x, isPublic: !x.isPublic } : x
+                                                                        )
+                                                                    );
+                                                                }}
+                                                            />
+                                                            {f.name}
+                                                        </label>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <div className="buttons-row-modal">
+                                                <button className="cancel-button" onClick={() => setShowPrivacyModal(false)}>Cancel</button>
+                                                <button
+                                                    className="save-button"
+                                                    onClick={async () => {
+                                                        try {
+                                                            // send patch for each
+                                                            await Promise.all(
+                                                                publicFolders.map(f =>
+                                                                    fetch(`/api/user/folders/${f.id}/public`, {
+                                                                        method: 'PATCH',
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+                                                                            Authorization: `Bearer ${token}`
+                                                                        },
+                                                                        body: JSON.stringify({ isPublic: f.isPublic })
+                                                                    })
+                                                                )
+                                                            );
+                                                            // refresh local folder state
+                                                            setFolders(fs =>
+                                                                fs.map(f => ({ ...f, isPublic: publicFolders.find(x => x.id === f._id)?.isPublic || false }))
+                                                            );
+                                                            setShowPrivacyModal(false);
+                                                        } catch (err) {
+                                                            console.error(err);
+                                                            alert('Could not update folder visibility');
+                                                        }
+                                                    }}
+                                                >Save</button>
                                             </div>
                                         </div>
                                     </div>
