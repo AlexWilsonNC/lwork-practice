@@ -34,8 +34,7 @@ const AccountSection = styled.div`
     .sort-favorites-btn {
         margin-bottom: 1rem;
     }
-    .create-new-deck-link-btn,
-    .create-new-folder-btn {
+    .create-new-deck-link-btn {
         background-color: ${({ theme }) => theme.profileDarkBlue};
     }
     .account-tabs {
