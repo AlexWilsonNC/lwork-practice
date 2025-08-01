@@ -332,7 +332,7 @@ export default function Account() {
 
         const fragment = encodeURIComponent(JSON.stringify(minimal));
         window.location.href =
-            `/ljhksdgbnksgkjsiodsfi?deckId=${deck._id}#deck=${fragment}`;
+            `/ljhksdgbnksgkjsiodsfi?deckId=${deck._id}&public=true#deck=${fragment}`;
     }
 
     const handleCreateFolder = async () => {
@@ -368,14 +368,16 @@ export default function Account() {
         setLoading(true);
 
         if (isPublicView) {
-            // public decks but exactly like private ones when set to public
             fetch(`/api/public/${username}/deck-collection`)
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to load public collection');
                     return res.json();
                 })
                 .then(async ({ folders: pubFolders, decks: pubDecks }) => {
-                    setFolders(pubFolders);
+                    const sortedFolders = [...pubFolders].sort((a, b) => a.order - b.order);
+                    setFolders(sortedFolders);
+                    // 2) capture that order for the "Folder Order" sortMode
+                    setFoldersOrder(sortedFolders.map(f => f._id));
 
                     const withImages = await Promise.all(
                         pubDecks.map(async deck => {
@@ -641,7 +643,6 @@ export default function Account() {
             return out;
         });
     };
-    /* define folder name for selected deck in decklist modal */
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
     useEffect(() => {
@@ -650,7 +651,6 @@ export default function Account() {
                 setMobileActionsOpen(false);
             }
         }
-        // listen on capture so it fires before anything else
         document.addEventListener('click', handleGlobalClick, true);
         return () => {
             document.removeEventListener('click', handleGlobalClick, true);
@@ -827,25 +827,25 @@ export default function Account() {
                                     <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
                                 </div>
                                 {!isPublicView && (
-                                    <button
-                                        className="folder-options-icon"
-                                        onClick={() => {
-                                            setFoldersOrder(folders.map(f => f._id));
-                                            setShowSortModal(true);
-                                        }}
-                                    >
-                                        <span className="material-symbols-outlined">swap_horiz</span>
-                                        <p>Organize Folders</p>
-                                    </button>
-                                )}
-                                {!isPublicView && (
-                                    <button
-                                        className="sort-favorites-btn"
-                                        onClick={openPrivacyModal}
-                                    >
-                                        <span className="material-symbols-outlined">public</span>
-                                        <p>Folder Privacy</p>
-                                    </button>
+                                    <div className='organize-and-public-row'>
+                                        <button
+                                            className="folder-options-icon"
+                                            onClick={() => {
+                                                setFoldersOrder(folders.map(f => f._id));
+                                                setShowSortModal(true);
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined">swap_horiz</span>
+                                            <p>Organize Folders</p>
+                                        </button>
+                                        <button
+                                            className="folder-options-icon"
+                                            onClick={openPrivacyModal}
+                                        >
+                                            <span className="material-symbols-outlined">public</span>
+                                            <p>Folder Privacy</p>
+                                        </button>
+                                    </div>
                                 )}
                                 <div className="folders-list">
                                     <button
@@ -916,7 +916,7 @@ export default function Account() {
                                                 </>
                                             )}
                                         </button>
-                                        {activeFolder && (
+                                        {activeFolder && !isPublicView && (
                                             <div className="folder-controls">
                                                 <button
                                                     className="sort-favorites-btn"
@@ -1043,7 +1043,6 @@ export default function Account() {
                                                                                 <button onClick={e => {
                                                                                     e.stopPropagation();
                                                                                     setModalDeck(d);
-                                                                                    // preload selects:
                                                                                     setPrimaryMascot(d.mascotCard);
                                                                                     setSecondaryMascot(d.secondaryMascotCard || '');
                                                                                     setShowMascotModal(true);
@@ -1330,96 +1329,128 @@ export default function Account() {
                                             <div className="deck-modal-actions">
                                                 <div>
                                                     <span
-                                                        className={`favorite-heart hide-on515 material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
+                                                        className={`favorite-heart hide-on515 material-symbols-outlined nodisplay ${favorites.has(selectedDeck._id) ? 'active' : ''
                                                             }`}
                                                         onClick={() => toggleFavorite(selectedDeck._id)}
                                                     >
                                                         {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
                                                     </span>
                                                 </div>
-                                                <div>
-                                                    {!isSmallViewport ? (
-                                                        <>
-                                                            <button onClick={() => {
-                                                                setModalDeck(selectedDeck);
-                                                                setNewValue(selectedDeck.name);
-                                                                setShowRenameModal(true);
-                                                            }}>
-                                                                Rename
-                                                            </button>
-                                                            <button onClick={() => {
-                                                                setModalDeck(selectedDeck);
-                                                                setNewValue(selectedDeck.description || '');
-                                                                setShowDescModal(true);
-                                                            }}>
-                                                                Edit Description
-                                                            </button>
-                                                            <button onClick={e => {
-                                                                setModalDeck(selectedDeck);
-                                                                setPrimaryMascot(selectedDeck.mascotCard);
-                                                                setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
-                                                                setShowMascotModal(true);
-                                                            }}>
-                                                                Edit Mascots
-                                                            </button>
-                                                            <button onClick={() => goToDeckbuilder(selectedDeck)}>
-                                                                Open in Deckbuilder
-                                                            </button>
-                                                            <button onClick={() => {
-                                                                handleDuplicate(selectedDeck)
-                                                                closeModal()
-                                                            }}>
-                                                                Duplicate
-                                                            </button>
-                                                            <button onClick={() => {
-                                                                setMoveModalDeck(selectedDeck);
-                                                                setSelectedFolderId(selectedDeck.folderId || '');
-                                                                setShowMoveModal(true);
-                                                            }}>
-                                                                Move
-                                                            </button>
-                                                            <button
-                                                                className="danger"
-                                                                onClick={() => handleDelete(selectedDeck)}
-                                                            >
-                                                                Delete
-                                                            </button>
-                                                        </>
-                                                    ) : (
-                                                        <div className='move-small-deck-options-up515'>
-                                                            <span
-                                                                className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
-                                                                    }`}
-                                                                onClick={() => toggleFavorite(selectedDeck._id)}
-                                                            >
-                                                                {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
-                                                            </span>
-                                                            <span
-                                                                className="material-symbols-outlined menu-icon"
-                                                                onClick={e => { e.stopPropagation(); setMobileActionsOpen(v => !v); }}
-                                                            >more_vert</span>
-                                                            {mobileActionsOpen && (
-                                                                <div
-                                                                    className="deck-collection-modal-overlay-again"
-                                                                    onClick={() => setMobileActionsOpen(false)}
+                                                {isPublicView ? (
+                                                    <div className="public-actions">
+                                                        <button
+                                                            onClick={() => goToDeckbuilder(selectedDeck)}
+                                                            className="public-action-btn"
+                                                        >
+                                                            Open in Deckbuilder
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                // flatten old vs new decklist
+                                                                const raw = selectedDeck.decklist;
+                                                                const cards = Array.isArray(raw)
+                                                                    ? raw
+                                                                    : [
+                                                                        ...(raw.pokemon || []),
+                                                                        ...(raw.trainer || []),
+                                                                        ...(raw.energy || []),
+                                                                    ];
+                                                                // copy as text
+                                                                const text = cards
+                                                                    .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
+                                                                    .join('\n');
+                                                                navigator.clipboard.writeText(text);
+                                                            }}
+                                                            className="public-action-btn"
+                                                        >
+                                                            Copy as Text
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div>
+                                                        {!isSmallViewport ? (
+                                                            <>
+                                                                <button onClick={() => {
+                                                                    setModalDeck(selectedDeck);
+                                                                    setNewValue(selectedDeck.name);
+                                                                    setShowRenameModal(true);
+                                                                }}>
+                                                                    Rename
+                                                                </button>
+                                                                <button onClick={() => {
+                                                                    setModalDeck(selectedDeck);
+                                                                    setNewValue(selectedDeck.description || '');
+                                                                    setShowDescModal(true);
+                                                                }}>
+                                                                    Edit Description
+                                                                </button>
+                                                                <button onClick={e => {
+                                                                    setModalDeck(selectedDeck);
+                                                                    setPrimaryMascot(selectedDeck.mascotCard);
+                                                                    setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
+                                                                    setShowMascotModal(true);
+                                                                }}>
+                                                                    Edit Mascots
+                                                                </button>
+                                                                <button onClick={() => goToDeckbuilder(selectedDeck)}>
+                                                                    Open in Deckbuilder
+                                                                </button>
+                                                                <button onClick={() => {
+                                                                    handleDuplicate(selectedDeck)
+                                                                    closeModal()
+                                                                }}>
+                                                                    Duplicate
+                                                                </button>
+                                                                <button onClick={() => {
+                                                                    setMoveModalDeck(selectedDeck);
+                                                                    setSelectedFolderId(selectedDeck.folderId || '');
+                                                                    setShowMoveModal(true);
+                                                                }}>
+                                                                    Move
+                                                                </button>
+                                                                <button
+                                                                    className="danger"
+                                                                    onClick={() => handleDelete(selectedDeck)}
                                                                 >
+                                                                    Delete
+                                                                </button>
+                                                            </>
+                                                        ) : (
+                                                            <div className='move-small-deck-options-up515'>
+                                                                <span
+                                                                    className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
+                                                                        }`}
+                                                                    onClick={() => toggleFavorite(selectedDeck._id)}
+                                                                >
+                                                                    {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
+                                                                </span>
+                                                                <span
+                                                                    className="material-symbols-outlined menu-icon"
+                                                                    onClick={e => { e.stopPropagation(); setMobileActionsOpen(v => !v); }}
+                                                                >more_vert</span>
+                                                                {mobileActionsOpen && (
                                                                     <div
-                                                                        className="deck-collection-modal-box mobile-modal-box"
-                                                                        onClick={e => e.stopPropagation()}
+                                                                        className="deck-collection-modal-overlay-again"
+                                                                        onClick={() => setMobileActionsOpen(false)}
                                                                     >
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
-                                                                        <button className='small-deck-modal-options-brn-list danger' onClick={() => handleDelete(selectedDeck)}>Delete</button>
+                                                                        <div
+                                                                            className="deck-collection-modal-box mobile-modal-box"
+                                                                            onClick={e => e.stopPropagation()}
+                                                                        >
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
+                                                                            <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
+                                                                            <button className='small-deck-modal-options-brn-list danger' onClick={() => handleDelete(selectedDeck)}>Delete</button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <DeckList
@@ -1766,23 +1797,43 @@ export default function Account() {
                                     <div className="deck-collection-modal-overlay" onClick={() => setShowPrivacyModal(false)}>
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>Folder Visibility</h4>
+                                            <div className='folder-visi-info'>
+                                                <p>
+                                                    <span class="material-symbols-outlined privacy-icon active">
+                                                        public
+                                                    </span>
+                                                    Select which folders you would like others to see from your public collection page.
+                                                </p>
+                                                <p>
+                                                    Your public collection is live at:&nbsp;
+                                                    <a
+                                                        href={`/${user.username}/deck-collection`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className='public-link-spec'
+                                                    >
+                                                        ptcglegends.com/{user.username}/deck-collection
+                                                    </a>
+                                                </p>
+                                            </div>
                                             <ul className="privacy-folder-list">
                                                 {publicFolders.map(f => (
-                                                    <li key={f.id}>
-                                                        <label>
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={f.isPublic}
-                                                                onChange={() => {
-                                                                    setPublicFolders(pfs =>
-                                                                        pfs.map(x =>
-                                                                            x.id === f.id ? { ...x, isPublic: !x.isPublic } : x
-                                                                        )
-                                                                    );
-                                                                }}
-                                                            />
-                                                            {f.name}
-                                                        </label>
+                                                    <li key={f.id} className="privacy-folder-item"
+                                                        onClick={() =>
+                                                            setPublicFolders(pfs =>
+                                                                pfs.map(x =>
+                                                                    x.id === f.id ? { ...x, isPublic: !x.isPublic } : x
+                                                                )
+                                                            )
+                                                        }
+                                                    >
+                                                        <span
+                                                            className={`material-symbols-outlined privacy-icon ${f.isPublic ? 'active' : ''}`}
+
+                                                        >
+                                                            {f.isPublic ? 'public' : 'public_off'}
+                                                        </span>
+                                                        <span className="folder-name">{f.name}</span>
                                                     </li>
                                                 ))}
                                             </ul>
