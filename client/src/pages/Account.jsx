@@ -70,6 +70,9 @@ const AccountSection = styled.div`
     .profile-settings-display-edit {
         background-color: ${({ theme }) => theme.profilesettingsbg};
     }
+    .viewing-other-profile-h2 {
+        color: ${({ theme }) => theme.text};
+    }
 `;
 
 export default function Account() {
@@ -820,7 +823,7 @@ export default function Account() {
                         : (
                             <div className="account-decks">
                                 {isPublicView && (
-                                    <h2>{username}&apos;s Deck Collection</h2>
+                                    <h2 className='viewing-other-profile-h2'>{username}'s Deck Collection</h2>
                                 )}
                                 <div className="folders-bar">
                                     {isPublicView && (
@@ -829,7 +832,9 @@ export default function Account() {
                                     {!isPublicView && (
                                         <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
                                     )}
-                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
+                                    {!isPublicView && (
+                                        <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
+                                    )}
                                 </div>
                                 {!isPublicView && (
                                     <div className='organize-and-public-row'>
@@ -905,22 +910,42 @@ export default function Account() {
                                             </span>
                                             <p>{compactMode ? 'Normal Size' : 'Compact Size'}</p>
                                         </button> */}
-                                        <button
-                                            className="sort-favorites-btn"
-                                            onClick={() => setShowFavorites(!showFavorites)}
-                                        >
-                                            {showFavorites ? (
-                                                <>
-                                                    <span className="material-symbols-outlined">all_inclusive</span>
-                                                    <p>Show All Decks</p>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span className="material-symbols-outlined">favorite</span>
-                                                    <p>Favorites Only</p>
-                                                </>
-                                            )}
-                                        </button>
+                                        {!isPublicView && (
+                                            <button
+                                                className="sort-favorites-btn"
+                                                onClick={() => setShowFavorites(!showFavorites)}
+                                            >
+                                                {showFavorites ? (
+                                                    <>
+                                                        <span className="material-symbols-outlined">all_inclusive</span>
+                                                        <p>Show All Decks</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span className="material-symbols-outlined">favorite</span>
+                                                        <p>Favorites Only</p>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                        {isPublicView && (
+                                            <button
+                                                className="sort-favorites-btn"
+                                                onClick={() => setShowFavorites(!showFavorites)}
+                                            >
+                                                {showFavorites ? (
+                                                    <>
+                                                        <span className="material-symbols-outlined">all_inclusive</span>
+                                                        <p>Show All Decks</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span className="material-symbols-outlined">favorite</span>
+                                                        <p>{username}'s Favorites Only</p>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
                                         {activeFolder && !isPublicView && (
                                             <div className="folder-controls">
                                                 <button
