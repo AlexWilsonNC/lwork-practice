@@ -825,17 +825,20 @@ export default function Account() {
                                 {isPublicView && (
                                     <h2 className='viewing-other-profile-h2'>{username}'s Deck Collection</h2>
                                 )}
-                                <div className="folders-bar">
-                                    {isPublicView && (
-                                        <button onClick={() => navigate('/account')}>← Back to My Account</button>
-                                    )}
-                                    {!isPublicView && (
+                                {!isPublicView && (
+                                    <div className="folders-bar">
                                         <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
-                                    )}
-                                    {!isPublicView && (
                                         <button className='create-new-deck-link-btn' onClick={() => navigate('/ljhksdgbnksgkjsiodsfi')}>+ New Deck</button>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
+                                {/* {isPublicView && (
+                                    <div className="folders-bar-right-only">
+                                        <button className='create-new-deck-link-btn' style={{ backgroundColor: '#1290eb', display: 'flex', alignItems: 'center' }} onClick={() => navigate('/account')}>
+                                        <span class="material-symbols-outlined" style={{ marginRight: '5px' }}>
+                                            article_person
+                                        </span>View your Account</button>
+                                    </div>
+                                )} */}
                                 {!isPublicView && (
                                     <div className='organize-and-public-row'>
                                         <button
@@ -1029,74 +1032,87 @@ export default function Account() {
                                                             </div>
                                                             <div className="deck-card-info">
                                                                 <div className='favorite-heart-container'>
-                                                                    <span
-                                                                        className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
-                                                                        onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
-
-                                                                    >
-                                                                        {favorites.has(id) ? 'favorite' : 'favorite_border'}
-                                                                    </span>
-                                                                    <div className="menu-icon-wrapper"
-                                                                        ref={el => {
-                                                                            if (menuOpenId === d._id) {
-                                                                                menuContainerRef.current = el;
-                                                                            }
-                                                                        }}
-                                                                    >
+                                                                    {!isPublicView && (
                                                                         <span
-                                                                            className="material-symbols-outlined menu-icon"
-                                                                            onClick={e => {
-                                                                                e.stopPropagation();
-                                                                                openMenu(e, d._id);
+                                                                            className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                                            onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
+
+                                                                        >
+                                                                            {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                                        </span>
+                                                                    )}
+                                                                    {isPublicView && (
+                                                                        <span style={{ pointerEvents: 'none' }}
+                                                                            className={`favorite-heart material-symbols-outlined ${d.favorite ? 'active' : ''}`}
+                                                                            onClick={e => { e.stopPropagation(); toggleFavorite(d._id); }}
+
+                                                                        >
+                                                                            {favorites.has(id) ? 'favorite' : 'favorite_border'}
+                                                                        </span>
+                                                                    )}
+                                                                    {!isPublicView && (
+                                                                        <div className="menu-icon-wrapper"
+                                                                            ref={el => {
+                                                                                if (menuOpenId === d._id) {
+                                                                                    menuContainerRef.current = el;
+                                                                                }
                                                                             }}
                                                                         >
-                                                                            more_vert
-                                                                        </span>
-                                                                        {menuOpenId === d._id && (
-                                                                            <div className="deckcollection-menu-dropdown">
-                                                                                <button onClick={e => {
+                                                                            <span
+                                                                                className="material-symbols-outlined menu-icon"
+                                                                                onClick={e => {
                                                                                     e.stopPropagation();
-                                                                                    setModalDeck(d);
-                                                                                    setNewValue(d.name);
-                                                                                    setShowRenameModal(true);
-                                                                                }}>
-                                                                                    Rename
-                                                                                </button>
-                                                                                <button onClick={e => {
-                                                                                    e.stopPropagation();
-                                                                                    setModalDeck(d);
-                                                                                    setNewValue(d.description || '');
-                                                                                    setShowDescModal(true);
-                                                                                }}>
-                                                                                    Edit Description
-                                                                                </button>
-                                                                                <button onClick={e => {
-                                                                                    e.stopPropagation();
-                                                                                    setModalDeck(d);
-                                                                                    setPrimaryMascot(d.mascotCard);
-                                                                                    setSecondaryMascot(d.secondaryMascotCard || '');
-                                                                                    setShowMascotModal(true);
-                                                                                }}>
-                                                                                    Edit Mascots
-                                                                                </button>
-                                                                                <button onClick={() => goToDeckbuilder(d)}>
-                                                                                    Open in Deckbuilder
-                                                                                </button>
-                                                                                <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
-                                                                                    Duplicate
-                                                                                </button>
-                                                                                <button onClick={e => {
-                                                                                    e.stopPropagation();
-                                                                                    setMoveModalDeck(d);
-                                                                                    setSelectedFolderId(d.folderId || '');
-                                                                                    setShowMoveModal(true);
-                                                                                }}>Move</button>
-                                                                                <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
-                                                                                    Delete
-                                                                                </button>
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
+                                                                                    openMenu(e, d._id);
+                                                                                }}
+                                                                            >
+                                                                                more_vert
+                                                                            </span>
+                                                                            {menuOpenId === d._id && (
+                                                                                <div className="deckcollection-menu-dropdown">
+                                                                                    <button onClick={e => {
+                                                                                        e.stopPropagation();
+                                                                                        setModalDeck(d);
+                                                                                        setNewValue(d.name);
+                                                                                        setShowRenameModal(true);
+                                                                                    }}>
+                                                                                        Rename
+                                                                                    </button>
+                                                                                    <button onClick={e => {
+                                                                                        e.stopPropagation();
+                                                                                        setModalDeck(d);
+                                                                                        setNewValue(d.description || '');
+                                                                                        setShowDescModal(true);
+                                                                                    }}>
+                                                                                        Edit Description
+                                                                                    </button>
+                                                                                    <button onClick={e => {
+                                                                                        e.stopPropagation();
+                                                                                        setModalDeck(d);
+                                                                                        setPrimaryMascot(d.mascotCard);
+                                                                                        setSecondaryMascot(d.secondaryMascotCard || '');
+                                                                                        setShowMascotModal(true);
+                                                                                    }}>
+                                                                                        Edit Mascots
+                                                                                    </button>
+                                                                                    <button onClick={() => goToDeckbuilder(d)}>
+                                                                                        Open in Deckbuilder
+                                                                                    </button>
+                                                                                    <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
+                                                                                        Duplicate
+                                                                                    </button>
+                                                                                    <button onClick={e => {
+                                                                                        e.stopPropagation();
+                                                                                        setMoveModalDeck(d);
+                                                                                        setSelectedFolderId(d.folderId || '');
+                                                                                        setShowMoveModal(true);
+                                                                                    }}>Move</button>
+                                                                                    <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
+                                                                                        Delete
+                                                                                    </button>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                                 <h3>{d.name}</h3>
                                                                 <hr className='saved-deck-hr'></hr>
@@ -1369,12 +1385,6 @@ export default function Account() {
                                                 {isPublicView ? (
                                                     <div className="public-actions">
                                                         <button
-                                                            onClick={() => goToDeckbuilder(selectedDeck, true)}
-                                                            className="public-action-btn"
-                                                        >
-                                                            Open in Deckbuilder
-                                                        </button>
-                                                        <button
                                                             onClick={() => {
                                                                 // flatten old vs new decklist
                                                                 const raw = selectedDeck.decklist;
@@ -1394,6 +1404,12 @@ export default function Account() {
                                                             className="public-action-btn"
                                                         >
                                                             Copy as Text
+                                                        </button>
+                                                        <button
+                                                            onClick={() => goToDeckbuilder(selectedDeck, true)}
+                                                            className="public-action-btn"
+                                                        >
+                                                            Open in Deckbuilder
                                                         </button>
                                                     </div>
                                                 ) : (

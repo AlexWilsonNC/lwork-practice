@@ -724,6 +724,13 @@
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
+.folders-bar-right-only {
+  display: flex;
+  justify-content: flex-end;
+}
+.viewing-other-profile-h2 {
+  margin-bottom: 15px;
+}
 
 .create-new-deck-link-btn {
   border-radius: 3px;
@@ -1027,7 +1034,9 @@
   .account-decks {
     margin: 0px;
   }
-
+  .viewing-other-profile-h2 {
+    font-size: 20px;
+  }
   .deck-card {
     border-radius: 5px;
     width: 175px;
@@ -1309,6 +1318,9 @@
     width: 75%;
     padding: 5px;
     border-radius: 12px;
+  }
+  .viewing-other-profile-h2 {
+    font-size: 14px;
   }
   .account-tabs button {
     width: 120px;
