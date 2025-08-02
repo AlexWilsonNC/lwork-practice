@@ -19,14 +19,17 @@
 .profile-settings {
   font-size: 16px;
 }
+
 .profile-item {
   margin-bottom: 7.5px;
 }
+
 .profile-item input {
   width: 60%;
   margin-right: 5px;
   padding-left: 5px;
 }
+
 .edit-user-prof-btn-save {
   background-color: #14c614;
   border: none;
@@ -40,22 +43,27 @@
   margin-left: 5px;
   font-weight: 600;
 }
+
 .edit-user-prof-btn-save:hover {
   background-color: #de6d10;
 }
+
 .class-profile-span {
   font-size: 18px;
   margin-left: 15px;
   cursor: pointer;
 }
+
 .class-profile-span:hover {
   color: #1290eb;
 }
+
 .username-container {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .change-password-btn {
   background-color: #1290eb;
   border: none;
@@ -66,6 +74,7 @@
   cursor: pointer;
   margin-top: 7px;
 }
+
 .edit-prof-btn {
   background-color: #1290eb;
   border: none;
@@ -76,8 +85,9 @@
   cursor: pointer;
   margin-left: 7px;
 }
+
 .logout-btn {
-  background-color: red;
+  background-color: rgb(184, 67, 67);
   border: none;
   color: white;
   padding: 5px 7px;
@@ -88,9 +98,11 @@
   border-radius: 2px;
   cursor: pointer;
 }
-.logout-btn:hover {
-  background-color: #de6d10;
+.small-txt-info-act {
+  font-size: 12px;
+  font-style: italic;
 }
+
 .account-tabs {
   display: flex;
   flex-direction: row;
@@ -101,43 +113,53 @@
   border-radius: 12px;
   margin: 0 auto;
 }
+
 .cant-rem-pw-hint {
   font-size: 7px !important;
   font-style: italic;
   max-width: 70%;
 }
+
 @media (max-width: 1000px) {
   .profile-settings-display-edit {
     width: 90%;
   }
+
   .change-password-btn {
     font-size: 11px;
     padding: 4px 5px;
   }
+
   .edit-prof-btn {
     font-size: 8px;
   }
+
   .logout-btn {
     font-size: 11px;
     padding: 4px 5px;
   }
+
   .profile-settings {
     font-size: 12px;
   }
+
   .edit-user-prof-btn-save,
   .edit-user-prof-btn-cancel {
     width: 40px;
     font-size: 9px;
   }
+
   .profile-item input {
     font-size: 10px;
   }
 }
+
 @media (max-width: 800px) {
   .profile-settings-display-edit {
     width: 80%;
   }
 }
+
 .account-tabs button {
   background-color: transparent;
   width: 175px;
@@ -219,6 +241,18 @@
   transform-origin: top left;
 }
 
+.color-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .secondary-mascot-container {
   position: absolute;
   top: 0;
@@ -227,18 +261,14 @@
   height: 150px;
   overflow: hidden;
   z-index: 2;
-  mask-image: linear-gradient(
-    to right,
-    /* to bottom right, */
-    rgba(0, 0, 0, 1) 45%,
-    rgba(0, 0, 0, 0) 55%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    /* to bottom right, */
-    rgba(0,0,0,1) 45%,
-    rgba(0,0,0,0) 55%
-  );
+  mask-image: linear-gradient(to right,
+      /* to bottom right, */
+      rgba(0, 0, 0, 1) 45%,
+      rgba(0, 0, 0, 0) 55%);
+  -webkit-mask-image: linear-gradient(to right,
+      /* to bottom right, */
+      rgba(0, 0, 0, 1) 45%,
+      rgba(0, 0, 0, 0) 55%);
 }
 
 .secondary-mascot-img {
@@ -256,7 +286,6 @@
   top: 0;
   right: 0;
   z-index: 2;
-  background: #1290eb;
   color: #fff;
   font-size: 0.8rem;
   font-weight: 600;
@@ -400,10 +429,12 @@
 .not-blue-p {
   font-size: 14px !important;
 }
+
 .menu-icon-wrapper {
   position: relative;
   display: inline-block;
 }
+
 .deckcollection-menu-dropdown {
   position: absolute;
   top: 100%;
@@ -418,7 +449,8 @@
   z-index: 100;
 }
 
-.deckcollection-menu-dropdown button {
+.deckcollection-menu-dropdown button,
+.deckcollection-menu-dropdown-folder-organize button {
   padding: 0.7rem 1rem;
   border: none;
   background: transparent;
@@ -477,9 +509,11 @@
   justify-content: center;
   align-items: center;
 }
+
 .deck-collection-modal-overlay {
   z-index: 1000;
 }
+
 .deck-collection-modal-overlay-again {
   z-index: 10005;
 }
@@ -501,9 +535,11 @@
   margin-bottom: 10px;
   font-size: 20px;
 }
+
 .deck-collection-modal-box label {
   margin-bottom: 35px;
 }
+
 .deck-collection-modal-box input,
 .deck-collection-modal-box select,
 .deck-collection-modal-box label {
@@ -587,10 +623,6 @@
   justify-content: flex-end;
 }
 
-.sort-folders-list li div {
-  min-width: 150px !important;
-}
-
 .order-folder-name {
   margin-right: 15px;
   border-radius: 2px;
@@ -619,6 +651,9 @@
   color: white;
 }
 
+.sort-opts-wrapper {
+  position: relative;
+}
 .sort-opts-btn {
   background-color: rgb(221, 229, 235);
   border: none;
@@ -630,12 +665,22 @@
   justify-content: center;
   width: 25px;
   height: 25px;
-
   color: rgb(75, 75, 75);
-
+}
+.deckcollection-menu-dropdown-folder-organize {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  min-width: 175px;
+  display: flex;
+  flex-direction: column;
+  background: #2f3136;
+  border: 1px solid grey;
+  z-index: 100;
 }
 
-/* decklist view in account ONLY */
 .card-modal-overlay-account {
   position: fixed;
   top: 0;
@@ -665,6 +710,7 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 1);
   z-index: 10001;
 }
+
 /* .card-modal-content-account .deck-box {
   transform: scale(calc(1 / 1.35)) !important;
   transform-origin: top left;
@@ -724,10 +770,12 @@
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
+
 .folders-bar-right-only {
   display: flex;
   justify-content: flex-end;
 }
+
 .viewing-other-profile-h2 {
   margin-bottom: 15px;
 }
@@ -759,11 +807,13 @@
   display: flex;
   align-items: center;
 }
+
 .organize-and-public-row {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .folder-options-icon {
   background-color: transparent;
   border-radius: 3px;
@@ -911,6 +961,7 @@
   width: 85%;
   top: 0%;
 }
+
 .cropped-mascot-card.zoroark {
   top: -55%;
 }
@@ -945,40 +996,49 @@
   flex-direction: row;
   align-items: center;
 }
+
 .public-link-spec {
   color: #1290eb
 }
+
 .folder-visi-info {
   font-size: 10px;
   margin-bottom: 25px;
 }
+
 .folder-visi-info span {
   font-size: 14px;
   margin-right: 7px;
 }
+
 .privacy-folder-list {
   list-style: none;
   margin-left: 25px;
 }
+
 .privacy-folder-item {
   margin-bottom: 8px;
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   align-items: center;
   padding: 2px 10px;
   border-radius: 2px;
 }
+
 .privacy-folder-item:hover {
   background-color: rgba(128, 128, 128, 0.25);
   cursor: pointer;
 }
+
 .privacy-folder-item .privacy-icon {
   font-size: 20px;
   color: grey;
 }
+
 .privacy-icon.active {
   color: #2196f3;
 }
+
 .privacy-folder-item .folder-name {
   margin-left: 7px;
 }
@@ -986,10 +1046,12 @@
 .privacy-folder-item label input {
   margin-right: 10px;
 }
+
 .you-havent {
   text-align: center;
   margin-top: 25px;
 }
+
 @media (max-width: 1100px) {
   .card-modal-content-account {
     transform: scale(1.2);
@@ -1028,6 +1090,7 @@
     width: 50px !important;
     margin: 1px !important;
   }
+
   .database-card-in-list {
     box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.8);
     border-radius: 2px;
@@ -1038,13 +1101,16 @@
   .account-decks {
     margin: 0px;
   }
+
   .viewing-other-profile-h2 {
     font-size: 20px;
   }
+
   .deck-card {
     border-radius: 5px;
     width: 175px;
   }
+
   .deck-card-img {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -1212,6 +1278,7 @@
   .deckbuilt-card-container {
     width: 40px !important;
   }
+
   .database-card-in-list {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
     border-radius: 2px;
@@ -1226,50 +1293,68 @@
     height: 12px !important;
     font-size: 8px !important;
     border-radius: 3px;
-    margin-bottom: -5% !important; 
+    margin-bottom: -5% !important;
   }
 
   .card-modal-content-account h3 {
     font-size: 14px;
   }
+
   .card-modal-content-account p {
     font-size: 9px;
   }
+
   .deck-modal-actions {
     margin-bottom: -3px;
   }
+
   .deck-modal-actions button {
     padding: 0.175rem 0.35rem;
     border-radius: 1px;
     margin-left: 2.5px;
     font-size: 0.35rem;
   }
+
   .deck-box {
     border: 2px solid rgba(94, 94, 94, 0.5) !important;
   }
+
   .modal-close {
     font-size: 30px;
   }
 }
 
+@media (max-width: 600px) {
+  .color-picker {
+    gap: 5px;
+  }
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+  }
+}
 @media (max-width: 550px) {
   .hide-on-mobile550 {
     display: none;
   }
+
   .folder-options button,
   .folder-options-icon {
     font-size: 9px;
   }
 }
+
 @media (max-width: 515px) {
   .hide-on515 {
     display: none;
   }
+
   .favorite-heart {
     margin-right: 0;
     padding: 1px;
     font-size: 1.45rem !important;
   }
+
   .move-small-deck-options-up515 {
     margin-top: -10px;
     display: flex;
@@ -1277,25 +1362,31 @@
     align-items: center;
     margin-right: 7.5px;
   }
+
   .deck-box {
     margin-top: 10px !important;
     padding: 7.5px;
   }
+
   .card-modal-content-account {
     padding: 7.5px;
     border-radius: 5px;
     transform: scale(1.35);
   }
+
   .deck-modal-actions {
     padding: 0 5px;
   }
+
   .deckbuilt-card-container {
     width: 37.5px !important;
   }
+
   .current-cnt-num {
     width: 11px !important;
     height: 11px !important;
   }
+
   .deck-collection-modal-box {
     width: auto;
     min-width: 450px;
@@ -1303,12 +1394,14 @@
     border-radius: 5px;
     transform: scale(0.65);
   }
+
   .mobile-modal-box {
     width: auto;
     min-width: 1px;
     transform: scale(1);
     padding: 10px;
   }
+
   .small-deck-modal-options-brn-list {
     background-color: transparent !important;
     font-size: 10px !important;
@@ -1323,81 +1416,108 @@
     padding: 5px;
     border-radius: 12px;
   }
+  .cropped-mascot-card.legend {
+    left: 180px;
+    top: -32%;
+  }
+  .cropped-mascot-card.lugia {
+    left: 180px;
+    top: 0%;
+  }
   .viewing-other-profile-h2 {
     font-size: 14px;
   }
+
   .account-tabs button {
     width: 120px;
     padding: 4px;
     font-size: 10px;
   }
+
   .deck-card {
-      border-radius: 3px;
-      width: 140px;
-    }
-    .decks-grid {
+    border-radius: 3px;
+    width: 140px;
+  }
+
+  .decks-grid {
     grid-template-columns: repeat(auto-fill, 135px);
     gap: 1rem;
   }
+
   .folder-label {
     font-size: 0.45rem;
     padding: 2px 6px;
     width: 36%;
   }
+
   .deck-card-info h3 {
     font-size: 0.6rem;
     margin-top: -8px;
   }
+
   .deck-card-description {
     height: 18.5px;
   }
+
   .deck-card-info p {
     margin: 0 .25rem;
     font-size: .5rem;
   }
+
   .favorite-heart {
     margin-right: 3.5px;
     font-size: 1.1rem !important;
   }
+
   .menu-icon {
     font-size: 1.1rem !important;
   }
-   .create-new-folder-btn {
+
+  .create-new-folder-btn {
     font-size: 9px;
   }
+
   .create-new-deck-link-btn,
   .create-new-folder-btn span {
     font-size: 9px;
   }
+
   .folders-list button:nth-child(1) {
     font-size: 9px;
     padding: 4px 5px;
   }
+
   .folders-list button {
     padding: 4px;
     font-size: 7px;
     min-width: 65px;
   }
+
   .folders-list .show-more-btn {
     font-size: 7.5px;
     padding-bottom: 3px;
   }
+
   .folders-list .show-more-btn span {
     font-size: 10px;
     padding-right: 1.5px;
   }
+
   .deck-card-img {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
+
   .secondary-mascot-container {
     clip-path: none !important;
     overflow: visible !important;
   }
+
   .secondary-mascot-img {
     top: -29.5px;
   }
 }
+
 @media (max-width: 385px) {
   .folder-options button {
     font-size: 7px;

@@ -78,7 +78,8 @@ const userSchema = new mongoose.Schema({
     order: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     locked: { type: Boolean, default: false },
-    isPublic: { type: Boolean, default: false }
+    isPublic: { type: Boolean, default: false },
+    color: { type: String,  default: '#1290eb' }
   }]
 });
 const User = authConnection.model('User', userSchema, 'users');
@@ -330,13 +331,17 @@ app.get('/api/user/folders', requireAuth, async (req, res) => {
   }
 });
 app.post('/api/user/folders', requireAuth, async (req, res) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   if (!name) return res.status(400).json({ error: 'Name is required' });
 
   try {
     const user = await User.findById(req.userId);
     const nextOrder = user.folders.length;
-    user.folders.push({ name, order: nextOrder });
+    user.folders.push({ 
+      name, 
+      order: nextOrder,
+      color: color || undefined 
+    });
     await user.save();
     res.json(user.folders);
   } catch (err) {
@@ -376,12 +381,15 @@ app.patch('/api/user/folders/sort', requireAuth, async (req, res) => {
   }
 });
 app.patch('/api/user/folders/:id', requireAuth, async (req, res) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   try {
     const user = await User.findById(req.userId);
     const folder = user.folders.id(req.params.id);
     if (!folder) return res.status(404).json({ error: 'Folder not found' });
     folder.name = name;
+    if (color !== undefined) {
+      folder.color = color;
+    }
     await user.save();
     res.json(user.folders);
   } catch (err) {

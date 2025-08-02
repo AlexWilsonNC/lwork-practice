@@ -8,10 +8,14 @@ import DeckList from '../DeckBuilder/DeckList';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
-    .deck-card-info {
-        color: ${({ theme }) => theme.text};
-    }
-    .deck-list-item {
+
+    .deck-card-info
+    .deck-list-item
+    .not-blue-p,
+    .viewing-other-profile-h2,
+    .you-havent,
+    .profile-item,
+    .profile-settings p {
         color: ${({ theme }) => theme.text};
     }
     .deck-card {
@@ -40,9 +44,6 @@ const AccountSection = styled.div`
     .account-tabs {
         background-color: ${({ theme }) => theme.profileSliderBg};
     }
-    .not-blue-p {
-        color: ${({ theme }) => theme.text};
-    }
     .folder-label-list-version {
         background-color: ${({ theme }) => theme.listVersionedFolderLabel};
     }
@@ -64,15 +65,8 @@ const AccountSection = styled.div`
         background: ${({ theme }) => theme.decklistOpenedBtnBg};
         color: #f5f5f5;
     }
-    .profile-item {
-        color: ${({ theme }) => theme.text};
-    }
     .profile-settings-display-edit {
         background-color: ${({ theme }) => theme.profilesettingsbg};
-    }
-    .viewing-other-profile-h2,
-    .you-havent {
-        color: ${({ theme }) => theme.text};
     }
 `;
 
@@ -111,6 +105,8 @@ export default function Account() {
     const [activeFolder, setActiveFolder] = useState(null);
     const [showFolderModal, setShowFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
+    const [newFolderColor, setNewFolderColor] = useState('#1290eb');
+    const colorOptions = ['#cd4036', '#e86914', '#dfb704', '#23b809', '#1a740a', '#02ac7f', '#1290eb', '#0251ac', '#663ac4', '#9d14dc', '#c814dc', '#e381ee', '#da0c8b', '#181819', '#515151', '#ffffff', '#5d3a27'];
     const [showMoveModal, setShowMoveModal] = useState(false);
     const [moveModalDeck, setMoveModalDeck] = useState(null);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -289,11 +285,18 @@ export default function Account() {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ name: renameFolderName.trim() }),
+                body: JSON.stringify({
+                    name: renameFolderName.trim(),
+                    color: newFolderColor
+                }),
             });
             if (!res.ok) throw new Error('Failed to rename folder');
             setFolders(fs =>
-                fs.map(f => (f._id === activeFolder ? { ...f, name: renameFolderName.trim() } : f))
+                fs.map(f =>
+                    f._id === activeFolder
+                        ? { ...f, name: renameFolderName.trim(), color: newFolderColor }
+                        : f
+                )
             );
             setShowRenameFolderModal(false);
         } catch (err) {
@@ -355,7 +358,10 @@ export default function Account() {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ name })
+                body: JSON.stringify({
+                    name: name,
+                    color: newFolderColor
+                })
             });
             if (!res.ok) throw new Error('Failed to create folder');
 
@@ -720,6 +726,7 @@ export default function Account() {
                                 </div>
                             )}
                         </div>
+                        <br></br>
                         <div className='profile-item'>
                             <strong>Email: </strong>
                             {editingField === 'email' ? (
@@ -759,6 +766,28 @@ export default function Account() {
                         <button className='change-password-btn' onClick={() => setShowPwModal(true)}>
                             Change Password
                         </button>
+                        <br></br>
+                        <br></br>
+                        <hr></hr>
+                        <br></br>
+                        <br></br>
+                        <p>
+                            Your public deck collection link:&nbsp;
+                            <a
+                                href={`/${user.username}/deck-collection`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className='public-link-spec'
+                            >
+                                ptcglegends.com/{user.username}/deck-collection
+                            </a>
+                        </p>
+                        <br></br>
+                        <p className='small-txt-info-act'>(All of your decks are private by default, to make them publicly viewable on the above page - open "Folder Privacy" and select each folder to make public)</p>
+                        <br></br>
+                        <p style={{ color: 'grey' }}>
+                            Please keep in mind that all profile-visible text - including your username, deck names, and deck descriptions - must adhere to our community standards. Any use of profanity, slurs, hate speech, or other offensive language is strictly prohibited. Users who violate these rules risk having their content removed and may face account suspension or deletion. Thank you for helping us maintain a respectful and welcoming environment for everyone.
+                        </p>
 
                         {profileError && <p className="error">{profileError}</p>}
 
@@ -955,13 +984,24 @@ export default function Account() {
                                                 <button
                                                     className="sort-favorites-btn"
                                                     onClick={() => {
-                                                        const f = folders.find(f => f._id === activeFolder);
-                                                        setRenameFolderName(f?.name || '');
+                                                        const f = folders.find(f => f._id === activeFolder) || {};
+                                                        setRenameFolderName(f.name || '');
+                                                        setNewFolderColor(f.color || '#1290eb');
                                                         setShowRenameFolderModal(true);
                                                     }}
                                                 >
-                                                    <span className="material-symbols-outlined">drive_file_rename_outline</span>
-                                                    <p>Rename Folder</p>
+                                                    <span
+                                                        className="color-circle"
+                                                        style={{
+                                                            width: '16px',
+                                                            height: '16px',
+                                                            borderRadius: '50%',
+                                                            display: 'inline-block',
+                                                            marginRight: '8px',
+                                                            backgroundColor: (folders.find(f => f._id === activeFolder) || {}).color
+                                                        }}
+                                                    />
+                                                    <p>Edit Folder</p>
                                                 </button>
                                                 <button
                                                     className="sort-favorites-btn"
@@ -1025,11 +1065,22 @@ export default function Account() {
                                                                         />
                                                                     </div>
                                                                 )}
-                                                                {!activeFolder && d.folderId && (
-                                                                    <span className="folder-label">
-                                                                        {folders.find(f => f._id === d.folderId)?.name || '—'}
-                                                                    </span>
-                                                                )}
+                                                                {!activeFolder && d.folderId && (() => {
+                                                                    const folderObj = folders.find(f => f._id === d.folderId) || {};
+                                                                    const bgColor = folderObj.color;
+                                                                    const txtColor = ['#ffffff'].includes(bgColor)
+                                                                        ? 'black'
+                                                                        : 'white';
+
+                                                                    return (
+                                                                        <span
+                                                                            className="folder-label"
+                                                                            style={{ backgroundColor: bgColor, color: txtColor }}
+                                                                        >
+                                                                            {folders.find(f => f._id === d.folderId)?.name || '—'}
+                                                                        </span>
+                                                                    );
+                                                                })()}
                                                             </div>
                                                             <div className="deck-card-info">
                                                                 <div className='favorite-heart-container'>
@@ -1525,6 +1576,21 @@ export default function Account() {
                                     <div className="deck-collection-modal-overlay">
                                         <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
                                             <h4>New Folder</h4>
+                                            <div className="color-picker">
+                                                {colorOptions.map(c => (
+                                                    <button
+                                                        key={c}
+                                                        type="button"
+                                                        onClick={() => setNewFolderColor(c)}
+                                                        className={`color-swatch ${c} ${newFolderColor === c ? 'selected' : ''}`}
+                                                        title={c}
+                                                        style={{
+                                                            border: newFolderColor === c ? '2px solid white' : '1px solid #444',
+                                                            backgroundColor: c,
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
                                             <input
                                                 placeholder="Folder name"
                                                 value={newFolderName}
@@ -1551,7 +1617,10 @@ export default function Account() {
                                                                     'Content-Type': 'application/json',
                                                                     Authorization: `Bearer ${token}`
                                                                 },
-                                                                body: JSON.stringify({ name: newFolderName.trim() })
+                                                                body: JSON.stringify({
+                                                                    name: newFolderName.trim(),
+                                                                    color: newFolderColor
+                                                                })
                                                             });
                                                             if (!res.ok) throw new Error('Failed to create folder');
 
@@ -1642,7 +1711,25 @@ export default function Account() {
                                                     handleRenameFolder();
                                                 }}
                                             >
-                                                <h4>Rename Folder</h4>
+                                                <h4>Edit Folder</h4>
+                                                <div className="color-picker" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                                    {colorOptions.map(c => (
+                                                        <button
+                                                            key={c}
+                                                            type="button"
+                                                            onClick={() => setNewFolderColor(c)}
+                                                            title={c}
+                                                            style={{
+                                                                width: '24px',
+                                                                height: '24px',
+                                                                borderRadius: '50%',
+                                                                border: newFolderColor === c ? '2px solid white' : '1px solid #444',
+                                                                backgroundColor: c,
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </div>
                                                 <input
                                                     autoFocus
                                                     value={renameFolderName}
@@ -1781,27 +1868,32 @@ export default function Account() {
                                                                         keyboard_arrow_down
                                                                     </span>
                                                                 </button>
-                                                                <button
-                                                                    className="sort-opts-btn"
-                                                                    onClick={e => { e.stopPropagation(); setSortMenuOpenId(sortMenuOpenId === id ? null : id); }}
-                                                                >
-                                                                    <span class="material-symbols-outlined">
-                                                                        more_vert
-                                                                    </span>
-                                                                </button>
-                                                                {sortMenuOpenId === id && (
-                                                                    <div className="deckcollection-menu-dropdown" onClick={e => e.stopPropagation()}>
-                                                                        <button onClick={() => { moveFolderToTop(id); setSortMenuOpenId(null); }}>
-                                                                            Move to Top
-                                                                        </button>
-                                                                        <button onClick={() => { moveFolderToBottom(id); setSortMenuOpenId(null); }}>
-                                                                            Move to Bottom
-                                                                        </button>
-                                                                        <button onClick={() => { toggleLockFolder(id); setSortMenuOpenId(null); }}>
-                                                                            {lockedFolders.has(id) ? 'Unlock Position' : 'Lock Position'}
-                                                                        </button>
-                                                                    </div>
-                                                                )}
+                                                                <div className="sort-opts-wrapper">
+                                                                    <button
+                                                                        className="sort-opts-btn"
+                                                                        onClick={e => { e.stopPropagation(); setSortMenuOpenId(curr => (curr === id ? null : id)); }}
+                                                                    >
+                                                                        <span class="material-symbols-outlined">
+                                                                            more_vert
+                                                                        </span>
+                                                                    </button>
+                                                                    {sortMenuOpenId === id && (
+                                                                        <div className="deckcollection-menu-dropdown-folder-organize" onClick={e => e.stopPropagation()}>
+                                                                            <button onClick={() => { moveFolderToTop(id); setSortMenuOpenId(null); }}>
+                                                                                Move to Top
+                                                                            </button>
+                                                                            <button onClick={() => { moveFolderToBottom(id); setSortMenuOpenId(null); }}>
+                                                                                Move to Bottom
+                                                                            </button>
+                                                                            <button onClick={() => { toggleLockFolder(id); setSortMenuOpenId(null); }}>
+                                                                                {lockedFolders.has(id) ? 'Unlock Position' : 'Lock Position'}
+                                                                            </button>
+                                                                            <button onClick={() => { setSortMenuOpenId(false) }}>
+                                                                                Cancel
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </li>
                                                     );
@@ -1849,10 +1941,10 @@ export default function Account() {
                                                     <span class="material-symbols-outlined privacy-icon active">
                                                         public
                                                     </span>
-                                                    Select which folders you would like others to see from your public collection page.
+                                                    Select which folders you would like others to see from your public deck collection.
                                                 </p>
                                                 <p>
-                                                    Your public collection is live at:&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your public collection is live at:&nbsp;
                                                     <a
                                                         href={`/${user.username}/deck-collection`}
                                                         target="_blank"
