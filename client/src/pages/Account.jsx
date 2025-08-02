@@ -70,7 +70,8 @@ const AccountSection = styled.div`
     .profile-settings-display-edit {
         background-color: ${({ theme }) => theme.profilesettingsbg};
     }
-    .viewing-other-profile-h2 {
+    .viewing-other-profile-h2,
+    .you-havent {
         color: ${({ theme }) => theme.text};
     }
 `;
@@ -819,7 +820,7 @@ export default function Account() {
             ) : (
                 <section>
                     {decks.length === 0
-                        ? <p>You haven’t saved any decks yet.</p>
+                        ? <p className='you-havent'>You haven’t saved any decks yet.</p>
                         : (
                             <div className="account-decks">
                                 {isPublicView && (

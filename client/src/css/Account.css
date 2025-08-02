@@ -986,6 +986,10 @@
 .privacy-folder-item label input {
   margin-right: 10px;
 }
+.you-havent {
+  text-align: center;
+  margin-top: 25px;
+}
 @media (max-width: 1100px) {
   .card-modal-content-account {
     transform: scale(1.2);
