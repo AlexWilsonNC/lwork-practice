@@ -5,6 +5,13 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import '../css/card.css';
 
+const normalize = str =>
+  str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '')
+    .toLowerCase();
+
 const CardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -82,6 +89,26 @@ const DropdownTable = styled.table`
   }
 `;
 
+const ResetButton = styled.button`
+  padding: 14px;
+  margin-left: 8px;
+  border: 1px solid rgba(150,150,150,0.5);
+  border-radius: 2px;
+  background-color: ${({ theme }) => theme.setChangeBtn};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  @media (max-width: 600px) {
+    padding: 8px;
+    font-size: 0.7rem;
+    margin-left: 3px;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.63rem;
+    padding: 6.5px;
+  }
+`;
+
+
 const DropdownTableRow = styled.tr`
 `;
 
@@ -113,30 +140,31 @@ const formatDate = (dateString) => {
 const CardsPage = () => {
   const { theme } = useTheme();
   const { setName } = useParams();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [cards, setCards] = useState([]);
   const [logoUrl, setLogoUrl] = useState('');
-  const [nameText, setNameText] = useState(''); 
-  const [setAbbrevTitle, setAbbrevTitleAdd] = useState(''); 
-  const [setSym, setSymbol] = useState(''); 
-  const [setRelease, setSetRelease] = useState(''); 
-  const [setTotal, setSetTotal] = useState(''); 
+  const [nameText, setNameText] = useState('');
+  const [setAbbrevTitle, setAbbrevTitleAdd] = useState('');
+  const [setSym, setSymbol] = useState('');
+  const [setRelease, setSetRelease] = useState('');
+  const [setTotal, setSetTotal] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCards, setFilteredCards] = useState([]);
   const dropdownRef = useRef(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [normalizedCards, setNormalizedCards] = useState([]);
 
   const availableSets = [
-    { separator: true, text: "Scarlet & Violet"},
+    { separator: true, text: "Scarlet & Violet" },
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { name: "Black Bolt *", abbrev: "BLK", releaseDate: "July 18, 2025", total: "172" },
     { name: "White Flare *", abbrev: "WHT", releaseDate: "July 18, 2025", total: "173" },
     { name: "Destined Rivals", abbrev: "DRI", releaseDate: "May 30, 2025", total: "244" },
     { name: "Journey Together", abbrev: "JTG", releaseDate: "Mar 28, 2025", total: "190" },
     { name: "Prismatic Evolutions *", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },
-    { name: "Surging Sparks", abbrev: "SSP", releaseDate: "Nov 8, 2024", total: "252"},
-    { name: "Stellar Crown", abbrev: "SCR", releaseDate: "Sep 13, 2024", total: "175"},
+    { name: "Surging Sparks", abbrev: "SSP", releaseDate: "Nov 8, 2024", total: "252" },
+    { name: "Stellar Crown", abbrev: "SCR", releaseDate: "Sep 13, 2024", total: "175" },
     { name: "Shrouded Fable", abbrev: "SFA", releaseDate: "Aug 2, 2024", total: "99" },
     { name: "Twilight Masquerade", abbrev: "TWM", releaseDate: "May 24, 2024", total: "226" },
     { name: "Temporal Forces", abbrev: "TEF", releaseDate: "Mar 22, 2024", total: "218" },
@@ -148,7 +176,7 @@ const CardsPage = () => {
     { name: "Scarlet & Violet", abbrev: "SVI", releaseDate: "Mar 31, 2023", total: "258" },
     { name: "SV Energy", abbrev: "SVE", releaseDate: "Mar 31, 2023", total: "8" },
     { name: "SV Black Star Promos", abbrev: "PR-SV", releaseDate: "-", total: "198" },
-    { separator: true, text: "Sword & Shield"},
+    { separator: true, text: "Sword & Shield" },
     { name: "Crown Zenith *", abbrev: "CRZ", releaseDate: "Jan 20, 2023", total: "160" },
     { name: "Silver Tempest", abbrev: "SIT", releaseDate: "Nov 11, 2022", total: "215" },
     { name: "Lost Origin", abbrev: "LOR", releaseDate: "Sep 9, 2022", total: "217" },
@@ -167,7 +195,7 @@ const CardsPage = () => {
     { name: "Rebel Clash", abbrev: "RCL", releaseDate: "May 1, 2020", total: "209" },
     { name: "Sword & Shield", abbrev: "SSH", releaseDate: "Feb 7, 2020", total: "216" },
     { name: "SWSH Black Star Promos", abbrev: "PR-SW", releaseDate: "-", total: "181" },
-    { separator: true, text: "Sun & Moon"},
+    { separator: true, text: "Sun & Moon" },
     { name: "Cosmic Eclipse", abbrev: "CEC", releaseDate: "Nov 1, 2019", total: "272" },
     { name: "Hidden Fates *", abbrev: "HIF", releaseDate: "Aug 23, 2019", total: "69" },
     { name: "Unified Minds", abbrev: "UNM", releaseDate: "Aug 2, 2019", total: "260" },
@@ -185,7 +213,7 @@ const CardsPage = () => {
     { name: "Guardians Rising", abbrev: "GRI", releaseDate: "May 5, 2017", total: "180" },
     { name: "Sun & Moon", abbrev: "SUM", releaseDate: "Feb 3, 2017", total: "173" },
     { name: "SM Black Star Promos", abbrev: "PR-SM", releaseDate: "-", total: "250" },
-    { separator: true, text: "XY"},
+    { separator: true, text: "XY" },
     { name: "Evolutions", abbrev: "EVO", releaseDate: "Nov 2, 2016", total: "113" },
     { name: "Steam Siege", abbrev: "STS", releaseDate: "Aug 3, 2016", total: "116" },
     { name: "Fates Collide", abbrev: "FCO", releaseDate: "May 2, 2016", total: "129" },
@@ -202,7 +230,7 @@ const CardsPage = () => {
     { name: "XY", abbrev: "XY", releaseDate: "Feb 5, 2014", total: "146" },
     { name: "Kalos Starter Set *", abbrev: "KSS", releaseDate: "Nov 8, 2013", total: "39" },
     { name: "XY Black Star Promos", abbrev: "PR-XY", releaseDate: "-", total: "216" },
-    { separator: true, text: "Black & White"},
+    { separator: true, text: "Black & White" },
     { name: "Legendary Treasures", abbrev: "LTR", releaseDate: "Nov 6, 2013", total: "140" },
     { name: "Plasma Blast", abbrev: "PLB", releaseDate: "Aug 14, 2013", total: "105" },
     { name: "Plasma Freeze", abbrev: "PLF", releaseDate: "May 8, 2013", total: "122" },
@@ -216,7 +244,7 @@ const CardsPage = () => {
     { name: "Emerging Powers", abbrev: "EPO", releaseDate: "Aug 31, 2011", total: "98" },
     { name: "Black & White", abbrev: "BLW", releaseDate: "Apr 25, 2011", total: "115" },
     { name: "BW Black Star Promos", abbrev: "PR-BLW", releaseDate: "-", total: "101" },
-    { separator: true, text: "HeartGold & SoulSilver"},
+    { separator: true, text: "HeartGold & SoulSilver" },
     { name: "Call of Legends", abbrev: "CL", releaseDate: "Feb 9, 2011", total: "106" },
     { name: "Triumphant", abbrev: "TM", releaseDate: "Nov 3, 2010", total: "103" },
     { name: "Undaunted", abbrev: "UD", releaseDate: "Aug 18, 2010", total: "91" },
@@ -224,7 +252,7 @@ const CardsPage = () => {
     { name: "HeartGold & SoulSilver", abbrev: "HS", releaseDate: "Feb 10, 2010", total: "124" },
     { name: "Pokémon Rumble *", abbrev: "RM", releaseDate: "Dec 2, 2009", total: "16" },
     { name: "HGSS Black Star Promos", abbrev: "PR-HS", releaseDate: "-", total: "25" },
-    { separator: true, text: "Diamond & Pearl"},
+    { separator: true, text: "Diamond & Pearl" },
     { name: "Arceus", abbrev: "AR", releaseDate: "Nov 4, 2009", total: "111" },
     { name: "Supreme Victors", abbrev: "SV", releaseDate: "Aug 19, 2009", total: "153" },
     { name: "Rising Rivals", abbrev: "RR", releaseDate: "May 16, 2009", total: "120" },
@@ -241,7 +269,7 @@ const CardsPage = () => {
     { name: "Mysterious Treasures", abbrev: "MT", releaseDate: "Aug 1, 2007", total: "124" },
     { name: "Diamond & Pearl", abbrev: "DP", releaseDate: "May 1, 2007", total: "130" },
     { name: "DP Black Star Promos", abbrev: "PR-DP", releaseDate: "-", total: "56" },
-    { separator: true, text: "Ruby & Sapphire"},
+    { separator: true, text: "Ruby & Sapphire" },
     { name: "POP Series 5 *", abbrev: "P5", releaseDate: "Mar 1, 2007", total: "17" },
     { name: "Power Keepers", abbrev: "PK", releaseDate: "Feb 2, 2007", total: "108" },
     { name: "Dragon Frontiers", abbrev: "DF", releaseDate: "Nov 1, 2006", total: "101" },
@@ -266,7 +294,7 @@ const CardsPage = () => {
     { name: "Sandstorm", abbrev: "SS", releaseDate: "Sep 18, 2003", total: "100" },
     { name: "Ruby & Sapphire", abbrev: "RS", releaseDate: "Jul 1, 2003", total: "109" },
     { name: "Nintendo Black Star Promos", abbrev: "PR-EX", releaseDate: "-", total: "40" },
-    { separator: true, text: "WotC"},
+    { separator: true, text: "WotC" },
     { name: "Skyridge", abbrev: "SK", releaseDate: "May 12, 2003", total: "182" },
     { name: "Aquapolis", abbrev: "AQ", releaseDate: "Jan 15, 2003", total: "182" },
     { name: "Expedition", abbrev: "EX", releaseDate: "Sep 15, 2002", total: "165" },
@@ -292,7 +320,9 @@ const CardsPage = () => {
         const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${setName}`);
         if (response.ok) {
           const data = await response.json();
-  
+
+          setCards(data);
+
           if (setName !== "BOB") {
             data.sort((a, b) => {
               const isSpecial = (number) => /^(RC|SH|GG|TG|CC|SV|SL|ONE|TWO|THREE|FOUR|grass|fire|water|lightning|fighting|psychic|dark|metal|fairy)/.test(number);
@@ -300,28 +330,33 @@ const CardsPage = () => {
                 const match = number.match(/(\d+)(a?)/i);
                 return match ? [parseInt(match[1], 10), match[2] || ''] : [NaN, ''];
               };
-  
+
               const [aNum, aSuffix] = extractNumber(a.number);
               const [bNum, bSuffix] = extractNumber(b.number);
               const aIsSpecial = isSpecial(a.number);
               const bIsSpecial = isSpecial(b.number);
-  
+
               if (aIsSpecial && !bIsSpecial) return 1;
               if (!aIsSpecial && bIsSpecial) return -1;
               if (aIsSpecial && bIsSpecial) {
                 return aNum - bNum;
               }
-  
+
               if (aNum === bNum) {
                 return aSuffix.localeCompare(bSuffix);
               }
-  
+
               return aNum - bNum;
             });
           }
-  
-          setCards(data);
-  
+          setNormalizedCards(data.map(c => ({ raw: c, norm: normalize(c.name) })));
+
+          const normList = data.map(c => ({
+            raw: c,
+            norm: normalize(c.name)
+          }));
+          setNormalizedCards(normList);
+
           if (data.length > 0) {
             setLogoUrl(data[0].set.images.logo);
             setNameText(data[0].set.name);
@@ -337,43 +372,38 @@ const CardsPage = () => {
         console.error('Error fetching cards:', error);
       }
     };
-  
+
     fetchCards();
   }, [setName]);
 
-const handleSearch = async () => {
-    try {
-        let query = searchQuery.trim().toLowerCase(); // Convert the query to lowercase
-        
-        // Check if the query is exactly "n" (case-insensitive)
-        let url;
-        if (query === "n") {
-            // Use the exact match API endpoint
-            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(query.toUpperCase())}`;
-        } else {
-            // Use the partial match API endpoint
-            url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/partial/${encodeURIComponent(query)}`;
-        }
-
-        const response = await fetch(url);
-        
-        if (response.ok) {
-            const searchData = await response.json();
-
-            // Sort cards by release date (newest first)
-            const sortedData = searchData.sort((a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate));
-
-            setFilteredCards(sortedData);
-            setHasSearched(true); // Set hasSearched to true when a search is performed
-            console.log(sortedData); // Log the sorted results for debugging
-        } else {
-            console.error('Failed to fetch search results');
-        }
-    } catch (error) {
-        console.error('Error fetching search results:', error);
+  const handleSearch = async () => {
+    const q = searchQuery.trim();
+    // if they clear the box, go back to set view
+    if (!q) {
+      setHasSearched(false);
+      setFilteredCards([]);
+      return;
     }
-};
 
+    try {
+      const res = await fetch(
+        `/api/cards/searchbyname/partial/${encodeURIComponent(q)}`
+      );
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const data = await res.json();
+      // sort by release date descending
+      data.sort(
+        (a, b) =>
+          new Date(b.set.releaseDate) - new Date(a.set.releaseDate)
+      );
+      setFilteredCards(data);
+      setHasSearched(true);
+    } catch (err) {
+      console.error('Search failed:', err);
+      setFilteredCards([]);
+      setHasSearched(true);
+    }
+  };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -402,10 +432,16 @@ const handleSearch = async () => {
   const handleSetChange = (abbrev) => {
     navigate(`/cards/${abbrev}`);
     setDropdownOpen(false);
-    setHasSearched(false); // Reset the search state
-    setSearchQuery(''); // Clear the search query
-    setFilteredCards([]); // Clear the filtered cards
+    setHasSearched(false);
+    setSearchQuery('');
+    setFilteredCards([]);
   };
+
+  const handleReset = () => {
+  setSearchQuery('');
+  setHasSearched(false);
+  setFilteredCards([]);
+};
 
   const handleClickOutside = useCallback((event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -444,6 +480,7 @@ const handleSearch = async () => {
               onKeyPress={handleKeyPress} // Listen for Enter key
               placeholder="Search any card name..."
             />
+            <ResetButton onClick={handleReset}>Reset</ResetButton>
           </SearchBarContainer>
           <DropdownButton className='dropdownbutton' onClick={() => setDropdownOpen(!dropdownOpen)}>
             <p>Change Set</p>

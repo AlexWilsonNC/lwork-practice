@@ -385,7 +385,7 @@ export default function Account() {
         if (isPublicView) {
             fetch(`/api/public/${username}/deck-collection`)
                 .then(res => {
-                    if (!res.ok) throw new Error('Failed to load public collection');
+                    if (!res.ok) throw new Error("Failed to load public collection, refresh if you believe this is in error. Otherwise, the username in the URL possibly doesn't exist.");
                     return res.json();
                 })
                 .then(async ({ folders: pubFolders, decks: pubDecks }) => {
@@ -849,7 +849,7 @@ export default function Account() {
             ) : (
                 <section>
                     {decks.length === 0
-                        ? <p className='you-havent'>You haven’t saved any decks yet.</p>
+                        ? <p className='you-havent'><i><b>{username}</b></i> doesn't have any decks marked as public currently.</p>
                         : (
                             <div className="account-decks">
                                 {isPublicView && (
@@ -898,15 +898,21 @@ export default function Account() {
                                         All Decks
                                     </button>
                                     {(!isMobileView || showAllFolders) &&
-                                        folders.map(f => (
-                                            <button
-                                                key={f._id}
-                                                className={f._id === activeFolder ? 'active' : ''}
-                                                onClick={() => setActiveFolder(f._id)}
-                                            >
-                                                {f.name}
-                                            </button>
-                                        ))
+                                        folders.map(f => {
+                                            const isActive = f._id === activeFolder;
+                                            return (
+                                                <button
+                                                    key={f._id}
+                                                    className={`folder-btn${isActive ? ' active' : ''}`}
+                                                    onClick={() => setActiveFolder(f._id)}
+                                                    style={{
+                                                        borderLeft: `4px solid ${f.color}`
+                                                    }}
+                                                >
+                                                    {f.name}
+                                                </button>
+                                            );
+                                        })
                                     }
                                     {isMobileView && folders.length > 0 && (
                                         <button

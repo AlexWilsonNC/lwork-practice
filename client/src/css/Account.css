@@ -878,6 +878,12 @@
   background-color: #1290eb;
 }
 
+.folder-btn {
+  position: relative;
+  background: #f0f0f0;
+  border: none;
+  padding-left: 12px;
+}
 
 .decks-list {
   display: flex;

@@ -88,7 +88,15 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         return
     }
     const t = setTimeout(() => {
-      fetch(`/api/cards/searchbyname/partial/${encodeURIComponent(query)}`)
+      // ➊ normalize the user’s query: remove accents & spaces, lowercase
+      const normalizedQuery = query
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '')
+        .toLowerCase();
+
+      // hit your existing endpoint with the normalized query
+      fetch(`/api/cards/searchbyname/partial/${encodeURIComponent(normalizedQuery)}`)
         .then(res => {
           if (!res.ok) throw new Error(`Network ${res.status}`)
           return res.json()
@@ -96,9 +104,18 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         .then(data => {
           let arr = Array.isArray(data) ? data : []
 
-           if (trimmed.toUpperCase() === 'N') {
-                arr = arr.filter(c => c.name.toUpperCase() === 'N')
-           }
+          // preserve your special “N” logic
+          if (trimmed.toUpperCase() === 'N') {
+            arr = arr.filter(c => c.name.toUpperCase() === 'N')
+          }
+          // ➋ now client‐side filter to ignore accents/spaces in names too
+          const normalize = str =>
+            str
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/\s+/g, '')
+              .toLowerCase();
+          arr = arr.filter(c => normalize(c.name).includes(normalizedQuery));
 
           arr.sort((a, b) => {
             const idxA = setOrder.indexOf(a.setAbbrev)

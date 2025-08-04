@@ -15,6 +15,9 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+let cachedCards = null;
+let cachedNormalizedNames = null;
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -792,31 +795,35 @@ app.get('/event-ids', async (req, res) => {
 });
 
 app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
-  let cardName = req.params.name.trim().toLowerCase();
-  console.log(`Searching for cards with names containing: ${cardName}`);
+  const rawQ = (req.params.name || '').trim();
+  const q = rawQ
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') 
+    .replace(/\s+/g, '')
+    .toLowerCase();
 
   try {
     const collection = cardConnection.collection('card-database');
+   if (!cachedCards) {
+     const cards = await collection.find().toArray();
+     cachedCards = cards;
+     cachedNormalizedNames = cards.map(c => ({
+       raw: c,
+       norm: c.name
+         .normalize('NFD')
+         .replace(/[\u0300-\u036f]/g, '')
+         .replace(/\s+/g, '')
+         .toLowerCase()
+     }));
+   }
 
-    // Normalize the search query by removing non-alphanumeric characters
-    const normalizedCardName = cardName.replace(/[^a-z0-9]/gi, '');
-
-    // Use a regular expression to match normalized card names
-    const cards = await collection.find({
-      name: {
-        $regex: new RegExp(normalizedCardName.split("").join("[^a-z0-9]*"), 'i')
-      }
-    }).toArray();
-
-    if (cards.length === 0) {
-      return res.status(404).json({ message: `No cards found containing: ${cardName}` });
-    }
-
-    console.log(`Found ${cards.length} cards containing name: ${cardName}`);
-    res.json(cards);
-  } catch (error) {
-    console.error('Error occurred while searching for cards:', error);
-    res.status(500).json({ message: 'Server error occurred' });
+   const matches = cachedNormalizedNames
+     .filter(({ norm }) => norm.includes(q))
+     .map(({ raw }) => raw);
+    return res.json(matches);
+  } catch (err) {
+    console.error('Error searching cards:', err);
+    return res.status(500).json({ error: 'Server error occurred' });
   }
 });
 

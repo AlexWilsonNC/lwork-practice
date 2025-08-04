@@ -1636,12 +1636,6 @@
 }
 
 @media screen and (max-width: 1160px) {
-    body {
-        background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(255, 255, 255));
-    }
-    body.darkon {
-        background-image: linear-gradient(to bottom, #2b2b2b, #2b2b2b);
-    }
     .deck-builder {
         flex-direction: column;
         align-items: center;
