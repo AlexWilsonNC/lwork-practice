@@ -1,0 +1,73 @@
+.center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+}
+.collapse-bts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.era-header {
+    width: 75%;
+    border: none;
+    margin-bottom: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    padding: 25px 50px;
+}
+.era-header:hover {
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+.era-rule-title {
+    font-size: 18.5px;
+}
+.era-header .material-symbols-outlined {
+    font-size: 34px;
+}
+.era-rules-side {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.era-specific-rules ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+}
+.center-rules {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.center-rules p {
+    margin-bottom: 7.5px;
+}
+.padding-top {
+    padding-top: 10px;
+}
+.padding-bottom {
+    padding-bottom: 10px;
+}
+.weakness-hr {
+    margin-bottom: 20px;
+}
+.sub-list {
+    list-style: none;
+    padding: 0 0 10px 15px !important;
+}
+.a-new-color {
+    padding: 25px 0 0;
+}
+.a-new-color {
+    display: flex;
+    align-items: center;
+}
+.a-new-color .material-symbols-outlined {
+    font-size: 20px;
+    margin-right: 7.5px;
+}

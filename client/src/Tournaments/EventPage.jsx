@@ -2389,7 +2389,7 @@ const EventPage = () => {
                                         className={statView === 'meta' ? 'active-button' : ''}>Meta
                                     </button>
                                     <button onClick={() => setStatView('decklists')}
-                                        className={statView === 'decklists' ? 'active-button' : ''}>Decklists
+                                        className={statView === 'decklists' ? 'active-button' : ''}>Decks
                                     </button>
                                     {is2025Event && (
                                         <button onClick={() => setStatView('matchups')}

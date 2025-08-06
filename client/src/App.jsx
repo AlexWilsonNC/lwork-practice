@@ -13,6 +13,7 @@ import FeaturedDecks from './Decks/FeaturedDecks';
 import CardsPage from './Cards/CardsPage';
 import CardView from './Cards/CardView';
 import Players from './Players/Players';
+import Rules from './Other/rules';
 import PlayerProfile from './Players/PlayerProfile';
 import ArchiveUpdates from './ArchiveUpdates/ArchiveUpdates';
 import AllArticlesPage from './ArticleComponents/AllArticlesPage';
@@ -27,7 +28,6 @@ import PrintDecklist from './DeckBuilder/PrintDecklist'
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import Login   from './pages/Login';
 import Account from './pages/Account';
-// import UserDeck from './pages/UserDeck';
 
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
@@ -63,7 +63,6 @@ function App() {
             <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
-            {/* <Route path="/deck-collection/:username/:deckId" element={<UserDeck />} /> */}
             <Route path="/:username/deck-collection" element={<Account />} />
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
@@ -71,6 +70,7 @@ function App() {
             <Route path="/deck/:id" element={<DeckProfile />} />
             <Route path="/cards/:setName" element={<CardsPage />} />
             <Route path="/card/:set/:number" element={<CardView />} />
+            <Route path="/rules-by-era" element={<Rules />} />
             <Route path="/players" element={<Players />} />
             <Route path="/player/:id" element={<PlayerProfile />} />
             <Route path="/archive-updates" element={<ArchiveUpdates />} />
