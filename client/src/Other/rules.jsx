@@ -387,7 +387,7 @@ const ERA_RULES = [
                 ]
             },
             burn: {
-                description: '<span class="highlight"> 2 damage counters between turns, followed by coin flip</span>',
+                description: '<span class="highlight">2 damage counters between turns, followed by coin flip</span>',
                 details: [
                     '~ <span class="highlight">heads = Pokémon is healed of burn</span>',
                     '~ <span class="highlight">tails = Pokémon remains burned</span>'
@@ -432,7 +432,7 @@ const ERA_RULES = [
                 ]
             },
             burn: {
-                description: ' 2 damage counters between turns, followed by coin flip',
+                description: '2 damage counters between turns, followed by coin flip',
                 details: [
                     '~ heads = Pokémon is healed of burn',
                     '~ tails = Pokémon remains burned'
@@ -478,7 +478,7 @@ const ERA_RULES = [
                 ]
             },
             burn: {
-                description: ' 2 damage counters between turns, followed by coin flip',
+                description: '2 damage counters between turns, followed by coin flip',
                 details: [
                     '~ heads = Pokémon is healed of burn',
                     '~ tails = Pokémon remains burned'
@@ -565,7 +565,7 @@ const RulesByEra = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon burned-condition">mode_heat</span> Burn: 
+                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon burned-condition">mode_heat</span> Burn:&nbsp;
                                     <span dangerouslySetInnerHTML={{ __html: era.mechanics.burn.description }} /></p>
                                     <ul className="sub-list">
                                         {era.mechanics.burn.details.map((d, j) => (
