@@ -38,14 +38,20 @@
     align-items: center;
     justify-content: space-between;
 }
-.era-specific-rules ul {
+.era-specific-rules {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+.era-specific-rules ul {
     padding: 10px 15px;
 }
 .era-specific-rules ul li {
     margin-bottom: 2.5px;
+    text-align: start;
+}
+.era-specific-rules ul li span {
+    text-align: start !important;
 }
 .center-rules {
     display: flex;
@@ -81,6 +87,9 @@
 }
 .weakness-hr {
     margin-bottom: 20px;
+    border: none;
+    border-bottom: 1.5px solid rgba(128, 128, 128, 0.5);
+    width: 80%;
 }
 .sub-list {
     list-style: none;
@@ -101,4 +110,57 @@
   background-color: rgba(128,128,128,0.3);
   border-radius: 2px;
   padding: 0 4px;
+}
+.rules-set-link {
+    color: #1290eb;
+}
+@media screen and (max-width: 1200px) {
+    .weakness-hr {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .era-header {
+        width: 78%;
+        padding: 15px 25px;
+    }
+    .era-rule-title {
+        font-size: 15px;
+    }
+    .era-header .material-symbols-outlined {
+        font-size: 28px;
+    }
+}
+@media screen and (max-width: 750px) {
+    .era-header {
+        width: 85%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .era-rule-title {
+        font-size: 12px;
+    }
+    .era-header .material-symbols-outlined {
+        font-size: 21px;
+    }
+    .era-header {
+        margin-bottom: 10px;
+        border-radius: 5px;
+        padding: 10px 15px;
+    }
+    .era-specific-rules strong {
+        font-size: 10px;
+    }
+    .era-specific-rules p,
+    .era-specific-rules span,
+    .sub-list {
+        font-size: 10px;
+    }
+    .center-column h2 {
+        font-size: 18px;
+    }
+    .center-column p {
+        font-size: 8px;
+        margin-top: 5px;
+    }
 }
