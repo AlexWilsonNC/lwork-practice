@@ -9,8 +9,8 @@ import DeckList from '../DeckBuilder/DeckList';
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
 
-    .deck-card-info
-    .deck-list-item
+    .deck-card-info,
+    .deck-list-item,
     .not-blue-p,
     .viewing-other-profile-h2,
     .you-havent,
