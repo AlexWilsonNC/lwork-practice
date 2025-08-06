@@ -200,6 +200,6 @@ export const darkTheme = {
   modalCloseAccountList: '#FFF',
   decklistOpenedBtnBg: 'rgb(100, 100, 100)',
   profilesettingsbg: 'rgba(21, 21, 21, 0.25)',
-  dropdownsbg: 'rgba(21, 21, 21, 0.42)',
+  dropdownsbg: 'rgba(0, 0, 0, 0.42)',
 
 };
