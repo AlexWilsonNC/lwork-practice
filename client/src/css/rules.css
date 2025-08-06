@@ -14,6 +14,9 @@
     flex-direction: column;
     align-items: center;
 }
+.collapse-bts:last-of-type {
+    margin-bottom: 25px;
+}
 .era-header {
     width: 75%;
     border: none;
