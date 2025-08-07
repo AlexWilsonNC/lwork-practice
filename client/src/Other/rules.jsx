@@ -541,14 +541,12 @@ const RulesByEra = () => {
 
                         {openStates[idx] && (
                             <div className="era-specific-rules">
-                                <br />
-                                <strong dangerouslySetInnerHTML={{ __html: era.titleSmall }} />
-                                <br />
+                                {era.titleSmall && <strong className='title-small-only' dangerouslySetInnerHTML={{ __html: era.titleSmall }} />}
                                 <ul>
                                     {era.paragraphs.map((par, i) => (
                                         <li
                                             key={i}
-                                            className={`reg-txt${par.paddingBefore ? ' padding-top' : ''}${par.paddingAfter ? ' padding-bottom' : ''}${par.text.startsWith('~') ? ' no-bullet indent' : ''}`}
+                                            className={`${par.paddingBefore ? ' padding-top' : ''}${par.paddingAfter ? ' padding-bottom' : ''}${par.text.startsWith('~') ? ' no-bullet indent' : ''}`}
                                         >
                                             <span dangerouslySetInnerHTML={{ __html: par.text }} />
                                         </li>
@@ -565,31 +563,31 @@ const RulesByEra = () => {
                                     <p>&nbsp;<strong>•</strong> &nbsp;Resistance:&nbsp;&nbsp;
                                         <span dangerouslySetInnerHTML={{ __html: era.mechanics.resistance }} />
                                     </p>
-                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon sleep-condition">snooze</span> Asleep: {era.mechanics.sleep.description}</p>
+                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon sleep-condition">snooze</span>Asleep: {era.mechanics.sleep.description}</p>
                                     <ul className="sub-list">
                                         {era.mechanics.sleep.details.map((d, j) => (
-                                            <li key={j} className="reg-txt indent">{d}</li>
+                                            <li key={j} className="indent">{d}</li>
                                         ))}
                                     </ul>
-                                    <p><span className="material-symbols-outlined fun-condition-icon paralyzed-condition">flash_off</span> Paralysis: {era.mechanics.paralysis}</p>
-                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon confused-condition">psychology_alt</span> Confusion: {era.mechanics.confusion.description}</p>
+                                    <p><span className="material-symbols-outlined fun-condition-icon paralyzed-condition">flash_off</span>Paralysis: {era.mechanics.paralysis}</p>
+                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon confused-condition">psychology_alt</span>Confusion: {era.mechanics.confusion.description}</p>
                                     <ul className="sub-list">
                                         {era.mechanics.confusion.details.map((d, j) => (
-                                            <li key={j} className="reg-txt indent">
+                                            <li key={j} className="indent">
                                                 <span dangerouslySetInnerHTML={{ __html: d }} />
                                             </li>
                                         ))}
                                     </ul>
-                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon burned-condition">mode_heat</span> Burn:&nbsp;
+                                    <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon burned-condition">mode_heat</span>Burn:&nbsp;
                                         <span dangerouslySetInnerHTML={{ __html: era.mechanics.burn.description }} /></p>
                                     <ul className="sub-list">
                                         {era.mechanics.burn.details.map((d, j) => (
-                                            <li key={j} className="reg-txt indent">
+                                            <li key={j} className="indent">
                                                 <span dangerouslySetInnerHTML={{ __html: d }} />
                                             </li>
                                         ))}
                                     </ul>
-                                    <p><span className="material-symbols-outlined fun-condition-icon poisoned-condition">skull</span> Poison: {era.mechanics.poison}</p>
+                                    <p><span className="material-symbols-outlined fun-condition-icon poisoned-condition">skull</span>Poison: {era.mechanics.poison}</p>
                                     {/* <a
                                         className="a-new-color center"
                                         href={era.pdf.href}
