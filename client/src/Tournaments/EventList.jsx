@@ -586,11 +586,11 @@ const EventList = () => {
                           <img
                             className='tournament-flags'
                             src={event.flag}
-                            alt={event.flag.split('/').pop().split('.')[0]}
+                            alt={countryNames[flagNameToKey(event.flag)]}
                           />
-                          {/* <div className="flag-tooltip">
-                            {countryNames[flagNameToKey(event.flag) ] || 'Unknown'}
-                          </div> */}
+                          <div className="flag-tooltip">
+                            {countryNames[flagNameToKey(event.flag)]}
+                          </div>
                         </div>
                         <div className='country-name-tournaments'></div>
                       </div>
