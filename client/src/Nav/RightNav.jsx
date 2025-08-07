@@ -141,8 +141,8 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
                 Decks by Era
               </a>
             </li>
-            <li><a href=''>Rules by Era</a></li>
-            <li className='not-ready'><a href='/rules-by-era'>Worlds Booklets</a></li>
+            <li><a href='/rules-by-era'>Rules by Era</a></li>
+            <li className='not-ready'><a>Worlds Booklets</a></li>
           </ul>
         </div>
         <div className='burdered-socials'>

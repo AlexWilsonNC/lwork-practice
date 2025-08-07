@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../css/rules.css';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 
 const RulesByEraComponent = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
@@ -503,6 +504,20 @@ const RulesByEra = () => {
 
     return (
         <RulesByEraComponent>
+            <Helmet>
+                <title>Rules by Era</title>
+                <meta name="description" content="Resource defining the unique rules sets of the Pokémon TCG for each era." />
+                <meta property="og:title" content="Rules by Era" />
+                <meta property="og:description" content="" />
+                <meta property="og:image" content="" />
+                <meta property="og:url" content="" />
+                <meta property="og:type" content="website" />
+                <meta name="author" content="PTCG Legends" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="" />
+                <meta name="twitter:description" content="" />
+                <meta name="twitter:image" content="" />
+            </Helmet>
             <div className="center-column">
                 <h2>Rules by Era</h2>
                 <p><span class="highlight">Highlighted</span> text implies rule change from the previous era</p>
@@ -566,7 +581,7 @@ const RulesByEra = () => {
                                         ))}
                                     </ul>
                                     <p className="reg-txt"><span className="material-symbols-outlined fun-condition-icon burned-condition">mode_heat</span> Burn:&nbsp;
-                                    <span dangerouslySetInnerHTML={{ __html: era.mechanics.burn.description }} /></p>
+                                        <span dangerouslySetInnerHTML={{ __html: era.mechanics.burn.description }} /></p>
                                     <ul className="sub-list">
                                         {era.mechanics.burn.details.map((d, j) => (
                                             <li key={j} className="reg-txt indent">
