@@ -574,7 +574,7 @@ const EventList = () => {
                           <img
                             className='tournament-flags'
                             src={event.flag}
-                            alt={event.flag.split('/').pop().split('.')[0]} // Use the image file name as the alt text
+                            alt={event.flag.split('/').pop().split('.')[0]}
                           />
                           <div className="flag-tooltip">
                             {countryNames[event.flag.split('/').pop().split('.')[0]]}
