@@ -291,6 +291,18 @@ const regionFlags = {
     'MS': [southAfrica]
 };
 
+function flagNameToKey(url) {
+  const base = url.split('/').pop().split('.')[0];
+  return base
+    .split('-')
+    .map((part, i) =>
+      i === 0
+        ? part
+        : part.charAt(0).toUpperCase() + part.slice(1)
+    )
+    .join('');
+}
+
 const parseRegistrationTime = (timeStr) => {
     return new Date(timeStr);
   };
@@ -577,7 +589,7 @@ const EventList = () => {
                             alt={event.flag.split('/').pop().split('.')[0]}
                           />
                           <div className="flag-tooltip">
-                            {countryNames[event.flag.split('/').pop().split('.')[0]]}
+                            {countryNames[flagNameToKey(event.flag) ] || 'Unknown'}
                           </div>
                         </div>
                         <div className='country-name-tournaments'></div>
