@@ -334,6 +334,10 @@ const loadFiltersWithExpiration = (key) => {
   return null;
 };
 
+const flagKey = Object.entries(countryNames).find(
+  ([key, val]) => event.flag === eval(key) // match the imported image variable
+)?.[0] || 'unknown';
+
 const EventList = () => {
     const { theme } = useTheme();
     const location = useLocation();
@@ -586,10 +590,10 @@ const EventList = () => {
                           <img
                             className='tournament-flags'
                             src={event.flag}
-                            alt={countryNames[flagNameToKey(event.flag)]}
+                            alt={countryNames[flagKey]}
                           />
                           <div className="flag-tooltip">
-                            {countryNames[flagNameToKey(event.flag)]}
+                            {countryNames[flagKey]}
                           </div>
                         </div>
                         <div className='country-name-tournaments'></div>
