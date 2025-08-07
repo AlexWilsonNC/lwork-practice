@@ -91,7 +91,7 @@ export const lightTheme = {
   loginBoxbg: '#FFF',
   loginInput: '#FFF',
   loginINPUTbORDER: '1px solid grey',
-  savedDeckBg: 'rgba(235, 235, 235, 0.46)',
+  savedDeckBg: '#FFF',
   favoriteHeart: 'rgb(183, 183, 183)',
   favoriteHeartRed: 'red',
   profileDarkBlue: '#074774',

@@ -143,9 +143,10 @@
     background-color: #1290eb;
 }
 .copy-decklist-btn,
-.open-in-deckbuilder-btn {
+.open-in-deckbuilder-btn,
+.save-to-collection-btn {
     border-radius: 5px;
-    border: 1px solid black;
+    border: 2px solid grey;
     padding: 5px;
     display: flex;
     justify-content: center;
@@ -154,13 +155,14 @@
     position: relative;
 }
 .copy-decklist-btn:hover,
-.open-in-deckbuilder-btn:hover {
+.open-in-deckbuilder-btn:hover,
+.save-to-collection-btn:hover {
     cursor: pointer;
-    background-color: #1290eb;
-    color:white;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.35);
 }
 .copy-decklist-btn .tooltip-text,
-.open-in-deckbuilder-btn .tooltip-text {
+.open-in-deckbuilder-btn .tooltip-text,
+.save-to-collection-btn .tooltip-text {
     visibility: hidden;
     background-color: #1290eb;
     color: white;
@@ -182,8 +184,12 @@
 .open-in-deckbuilder-btn .tooltip-text {
     margin-left: -43px;
 }
+.save-to-collection-btn .tooltip-text {
+    margin-left: -36px;
+}
 .copy-decklist-btn .tooltip-text::after,
-.open-in-deckbuilder-btn .tooltip-text::after {
+.open-in-deckbuilder-btn .tooltip-text::after,
+.save-to-collection-btn .tooltip-text::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -191,10 +197,11 @@
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: black transparent transparent transparent;
+    border-color: #1290eb transparent transparent transparent;
 }
 .copy-decklist-btn:hover .tooltip-text,
-.open-in-deckbuilder-btn:hover .tooltip-text {
+.open-in-deckbuilder-btn:hover .tooltip-text,
+.save-to-collection-btn:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
@@ -203,7 +210,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 1px solid black;
+    border: 2px solid grey;
     overflow: hidden;
 }
 .deckview-switcher div {
@@ -215,6 +222,7 @@
 }
 .copy-decklist-btn span,
 .open-in-deckbuilder-btn span,
+.save-to-collection-btn span,
 .deckview-switcher div span {
     font-size: 24px;
 }
@@ -225,6 +233,12 @@
 .list-form:hover,
 .playmat-form:hover{
     cursor: pointer;
+}
+.push-ttl-dwn {
+    padding-bottom: 15px;
+}
+.push-more-dwn {
+    margin-top: 75px !important;
 }
 
 .deck-list {
@@ -414,11 +428,13 @@
     }
     .copy-decklist-btn span,
     .open-in-deckbuilder-btn span,
+    .save-to-collection-btn span,
     .deckview-switcher div span {
         font-size: 20px;
     }
     .copy-decklist-btn,
-    .open-in-deckbuilder-btn {
+    .open-in-deckbuilder-btn,
+    .save-to-collection-btn {
         margin-right: 7px;
     }
     .deck-cards {
@@ -555,10 +571,12 @@
     }
     .copy-decklist-btn span,
     .open-in-deckbuilder-btn span,
+    .save-to-collection-btn span,
     .deckview-switcher div span {
         font-size: 16px;
     }
     .copy-decklist-btn,
+    .save-to-collection-btn,
     .open-in-deckbuilder-btn {
         margin-right: 5px;
     }
@@ -622,11 +640,13 @@
 @media screen and (max-width: 400px){
     .copy-decklist-btn span,
     .open-in-deckbuilder-btn span,
+    .save-to-collection-btn span,
     .deckview-switcher div span {
         font-size: 14px;
     }
     .copy-decklist-btn,
-    .open-in-deckbuilder-btn {
+    .open-in-deckbuilder-btn,
+    .save-to-collection-btn {
         margin-right: 5px;
     }
 }

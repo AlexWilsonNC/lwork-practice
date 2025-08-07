@@ -415,7 +415,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                     </label>
                   </div>
                 )}
-                <h3>{overwriteMode ? 'Overwrite Deck' : 'Save Deck'}</h3>
+                <h3 className='push-ttl-dwn'>{overwriteMode ? 'Overwrite Deck' : 'Save Deck'}</h3>
                 <label>
                   Name*<br />
                   <input type="text" value={deckName} onChange={e => setDeckName(e.target.value)} />
@@ -442,9 +442,9 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                   Description<br />
                   <textarea value={description} onChange={e => setDescription(e.target.value)} />
                 </label>
-                <div className="modal-actions">
-                  <button onClick={() => setShowSaveModal(false)} disabled={saving}>Cancel</button>
-                  <button onClick={handleModalSave} disabled={!deckName.trim() || !selectedMascot || saving}>
+                <div className="buttons-row-modal push-more-dwn">
+                  <button className='cancel-button' onClick={() => setShowSaveModal(false)} disabled={saving}>Cancel</button>
+                  <button className='save-button' onClick={handleModalSave} disabled={!deckName.trim() || !selectedMascot || saving}>
                     {saving ? 'Saving...' : 'Save'}
                   </button>
                 </div>

@@ -19,6 +19,7 @@ const PlayerDeckCenter = styled.div`
     }
     .copy-decklist-btn,
     .open-in-deckbuilder-btn,
+    .save-to-collection-btn,
     .deckview-switcher div {
         background: ${({ theme }) => theme.body};
         color: ${({ theme }) => theme.text};
