@@ -424,14 +424,14 @@ const EventList = () => {
           <meta name="description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
           <meta property="og:title" content="PTCG Legends" />
           <meta property="og:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
-          <meta property='og:image' content="https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png" />
+          <meta property='og:image' content="https://i.ibb.co/mrSpd4V3/legends-thumbnail.png" />
           <meta property="og:url" content="https://www.ptcglegends.com/tournaments" />
           <meta property="og:type" content="website" />
           <meta name="author" content="PTCG Legends" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="PTCG Legends" />
           <meta name="twitter:description" content="Upcoming and Completed Pokémon TCG Tournament info, results, and decks." />
-          <meta name="twitter:image" content="https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png" />
+          <meta name="twitter:image" content="https://i.ibb.co/mrSpd4V3/legends-thumbnail.png" />
         </Helmet>
         <div className='upcoming-events'>
           <div className='completed-n-upcoming'>
