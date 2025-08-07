@@ -383,13 +383,15 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         )}
       </div>
       {showSaveModal && (
-        <div className="savedeck-modal-overlay">
-          <div className="savedeck-modal-content">
+        <div className="deck-collection-modal-overlay">
+          <div className="deck-collection-modal-box">
             {!user ? (
               <>
-                <p>You need tobe logged in to save decks and view your deck collection.</p>
-                <button onClick={() => window.open(`${window.location.origin}/login`, '_blank')}>Login</button>
-                <button onClick={() => setShowSaveModal(false)}>Cancel</button>
+                <p>You need to be logged in to save decks and view your deck collection.</p>
+                <div className='buttons-row-modal'>
+                  <button className='save-button' onClick={() => window.open(`${window.location.origin}/login`, '_blank')}>Login</button>
+                  <button className='cancel-button' onClick={() => setShowSaveModal(false)}>Cancel</button>
+                </div>
               </>
             ) : (
               <>

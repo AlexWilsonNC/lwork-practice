@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 const NotFoundCon = styled.div`
     color: ${({ theme }) => theme.text};
+    margin:15px 0 25px;
 `;
 
 const NotFound = () => {
