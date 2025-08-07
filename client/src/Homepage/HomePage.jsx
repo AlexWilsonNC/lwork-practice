@@ -71,17 +71,17 @@ const Homepage = () => {
         <Container theme={theme}>
             <Helmet>
                 <title>PTCG Legends</title>
-                <meta name="description" content="The largest Pokémon TCG website containing both modern and retro events, decks, statistics, data and resources." />
+                <meta name="description" content="Pokémon TCG database containing modern and retro event results, decklists, statistics, data and other resources." />
                 <meta property="og:title" content="PTCG Legends" />
-                <meta property="og:description" content="The largest Pokémon TCG website containing both modern and retro events, decks, statistics, data and resources." />
-                <meta property='og:image' content='https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png' />
+                <meta property="og:description" content="Pokémon TCG database containing modern and retro event results, decklists, statistics, data and other resources." />
+                <meta property='og:image' content='https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png' />
                 <meta property="og:url" content="https://www.ptcglegends.com/" />
                 <meta property="og:type" content="website" />
                 <meta name="author" content="PTCG Legends" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="PTCG Legends" />
-                <meta name="twitter:description" content="The largest Pokémon TCG website containing both modern and retro events, decks, statistics, data and resources." />
-                <meta name="twitter:image" content="https://i.ibb.co/gw8gG0B/imageedit-10-7777594416.png" />
+                <meta name="twitter:description" content="Pokémon TCG database containing modern and retro event results, decklists, statistics, data and other resources." />
+                <meta name="twitter:image" content="https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png" />
             </Helmet>
             <div className='new-homepage'>
                 <HomepageMainContent className='homepage-main-content hide-it-all'>
