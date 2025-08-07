@@ -506,17 +506,17 @@ const RulesByEra = () => {
         <RulesByEraComponent>
             <Helmet>
                 <title>Rules by Era</title>
-                <meta name="description" content="Resource defining the unique rules sets of the Pokémon TCG for each era." />
+                <meta name="description" content="Resource defining the unique rulesets of the Pokémon TCG for each era." />
                 <meta property="og:title" content="Rules by Era" />
-                <meta property="og:description" content="" />
-                <meta property="og:image" content="" />
-                <meta property="og:url" content="" />
+                <meta property="og:description" content="Resource defining the unique rulesets of the Pokémon TCG for each era." />
+                <meta property="og:image" content="https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png" />
+                <meta property="og:url" content="https://www.ptcglegends.com/rules-by-era" />
                 <meta property="og:type" content="website" />
                 <meta name="author" content="PTCG Legends" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="" />
-                <meta name="twitter:description" content="" />
-                <meta name="twitter:image" content="" />
+                <meta name="twitter:title" content="Rules by Era" />
+                <meta name="twitter:description" content="Resource defining the unique rulesets of the Pokémon TCG for each era." />
+                <meta name="twitter:image" content="https://i.ibb.co/xSJ4bxT6/legends-thumbnail.png" />
             </Helmet>
             <div className="center-column">
                 <h2>Rules by Era</h2>
