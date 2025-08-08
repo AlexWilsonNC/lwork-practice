@@ -29,8 +29,55 @@
 .article-title p {
     margin-bottom: 5px;
 }
-.archive-updates p {
+.new-div-fix-wrap {
     margin-top: -10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.new-div-fix-wrap:hover {
+    color: #1290eb !important;
+    cursor: pointer;
+}
+.new-div-fix-wrap p {
+    font-weight: 400;
+}
+.shout-out {
+    font-style: italic;
+    font-size: 12px !important;
+}
+.shout-out a {
+    color: rgb(223, 94, 223) !important;
+}
+.new-div-fix-wrap p span {
+    font-weight: 600;
+    margin: 0 2.5px 0 7px;
+    color: #1290eb;
+}
+.new-div-fix-wrap p a {
+    margin: 0 7.5px;
+}
+.new-div-fix-wrap p sup {
+    font-size: 8px;
+}
+.archive-updates p strong {
+    margin-left: -100px;
+}
+.new-div-fix-wrap .player-deck-icons {
+    margin-top: -35px;
+}
+.new-div-fix-wrap .player-deck-icons img {
+    height: 35px;
+    width: 42px;
+}
+.archive-update-has-list {
+    border: 1px solid rgba(33, 175, 38, 0.75);
+    color: rgba(33, 175, 38, 0.75);
+    padding: 1px 5px;
+    border-radius: 3.5px;
+    margin-bottom: 20px;
 }
 .table-of-contents {
     width: 80%;
@@ -86,7 +133,6 @@
 }
 .small-text-archive {
     font-size: 12px !important;
-    margin-top: -15px;
 }
 .author-bio {
     border-radius: 15px;
@@ -150,6 +196,7 @@
 .decklist-btn.active {
     background-color: #1290eb;
 }
+
 @media screen and (max-width: 812px) {
     .old-card {
         padding: 0.5px;
@@ -342,4 +389,47 @@
     .article-title {
         width:99%;
     }
+}
+@media screen and (min-width: 650px) and (max-width: 850px) {
+    .new-div-fix-wrap p {
+        font-size: 12px;
+    }
+    .shortcircuited {
+        font-size: 12px !important;
+    }
+    .new-div-fix-wrap .player-deck-icons {
+        margin-top: -32px;
+    }
+    .new-div-fix-wrap .player-deck-icons img {
+        height: 30px;
+        width: 38px;
+    }
+    .archive-update-has-list {
+        padding: 2px 5px;
+        border-radius: 2px;
+        font-size: 7px !important;
+    }
+}
+@media screen and (min-width: 300px) and (max-width: 649px) {
+    .new-div-fix-wrap p {
+        font-size: 8px;
+    }
+    .shortcircuited {
+        font-size: 9px !important;
+        margin-left: 35px;
+    }
+    .new-div-fix-wrap .player-deck-icons {
+        margin-top: -27.5px;
+    }
+    .new-div-fix-wrap .player-deck-icons img {
+        height: 25px;
+        width: 32px;
+    }
+    .new-div-fix-wrap p sup {
+        font-size: 5px;
+    }
+}
+.shortcircuited {
+    margin-top: -16px;
+    transform: scale(0.7);
 }
