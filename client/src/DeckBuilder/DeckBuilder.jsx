@@ -11,6 +11,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import patreonImg from '../assets/social-media-icons/black-patreon-blob.png';
 import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png'
+import { isGLCLegal, isExpandedLegal, isStandardLegal } from '../Tools/CardLegality';
 
 // fetch('https://api.pokemontcg.io/v2/sets').then(res => { console.log('List of All Sets', res.json()) })
 // /* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"zsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
@@ -185,6 +186,7 @@ export default function DeckBuilder() {
   const menuRef = useRef(null)
   const params = new URLSearchParams(window.location.search);
   const originalDeckId = params.get('deckId');
+  const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
 
   useEffect(() => {
     if (!showLimitMenu) return
@@ -354,6 +356,54 @@ export default function DeckBuilder() {
   };
   const tcgUrl = zoomCard?.tcgplayer?.url
 
+  useEffect(() => {
+    let abort = false;
+    async function run() {
+      if (!zoomCard) { setLegalInfo({ std: null, exp: null, glc: null }); return; }
+
+      const glc = isGLCLegal(zoomCard);
+
+      let std = isStandardLegal(zoomCard);
+      let otherVersions = [];
+
+      if (zoomCard.supertype !== 'Pokémon' && !std) {
+        try {
+          const safeName = encodeURIComponent(zoomCard.name).replace(/\./g, '%2E');
+          const res = await fetch(`/api/cards/searchbyname/partial/${safeName}`);
+          if (res.ok) {
+            otherVersions = await res.json();
+            if (!abort) {
+              std = otherVersions.some(o => isStandardLegal(o));
+            }
+          }
+        } catch (_) { }
+      }
+
+      const exp = isExpandedLegal(zoomCard, { otherVersions });
+
+      if (!abort) setLegalInfo({ std, exp, glc });
+    }
+    run();
+    return () => { abort = true; };
+  }, [zoomCard]);
+
+  function Badge({ label, ok }) {
+    if (ok == null) return null;
+    return (
+      <span
+        style={{
+          padding: '4px 8px',
+          borderRadius: 6,
+          fontSize: 12,
+          border: `1px solid ${ok ? '#2ecc71' : '#e74c3c'}`,
+          color: ok ? '#2ecc71' : '#e74c3c'
+        }}
+        title={ok ? `${label}: Legal` : `${label}: Illegal`}
+      >
+        {label}: {ok ? 'Legal' : 'Illegal'}
+      </span>
+    );
+  }
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
@@ -507,6 +557,18 @@ export default function DeckBuilder() {
                     {zoomCard.resistances.map(r => `${r.type} ${r.value}`).join(', ')}
                   </p>
                 )}
+                <hr className='zoomed-card-db-hr'></hr>
+                {zoomCard.set && (
+                  <p>
+                    {zoomCard.rarity} • {zoomCard.number}/{zoomCard.set.printedTotal}
+                    <br></br>{zoomCard.set.series}: {zoomCard.set.name}
+                  </p>
+                )}
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+                  <Badge label="Standard" ok={legalInfo.std} />
+                  <Badge label="Expanded" ok={legalInfo.exp} />
+                  <Badge label="GLC" ok={legalInfo.glc} />
+                </div>
               </div>
               <div className='bottom-db-modal-bts'>
                 {tcgUrl ? (
@@ -514,7 +576,7 @@ export default function DeckBuilder() {
                     href={tcgUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tcgplayer-link"
+                    className="tcgplayer-link deckbuildernot-ready"
                   >
                     <button className="tcgplayer-btn">
                       <img
@@ -526,7 +588,7 @@ export default function DeckBuilder() {
                     </button>
                   </a>
                 ) : (
-                  <button className="tcgplayer-btn" disabled>
+                  <button className="tcgplayer-btn deckbuildernot-ready" disabled>
                     <img
                       src={tcgplayerIcon}
                       alt="TCGplayer"
@@ -576,7 +638,7 @@ export default function DeckBuilder() {
             onImportDeck={importDeck}
             deckRef={deckRef}
             onExportStart={() => setExportingImage(true)}
-            onExportEnd={()   => setExportingImage(false)}
+            onExportEnd={() => setExportingImage(false)}
           />
           <div className='deck-stats'>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

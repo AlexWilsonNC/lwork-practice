@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
 import '../css/card.css';
+import { isGLCLegal, isExpandedLegal, isStandardLegal, isBannedInGLC } from '../Tools/CardLegality';
 
 const CardViewTheme = styled.div`
     background: ${({ theme }) => theme.body};
@@ -282,17 +283,21 @@ const CardView = () => {
 
                     setOtherVersions(matchingCards);
 
-                    // Check legality across all versions
-                    const isLegalInAnyFormat = (card, otherVersions, legalityCheck) => {
-                        if (legalityCheck(card)) {
-                            return true;
-                        }
-                        return otherVersions.some(legalityCheck);
-                    };
+                    const stdAny =
+                        isStandardLegal(cardInfo) ||
+                        matchingCards.some(c => isStandardLegal(c));
 
-                    setIsStandardLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isStandardLegal));
-                    setIsExpandedLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isExpandedLegal));
-                    setIsGLCLegalAny(isLegalInAnyFormat(cardInfo, matchingCards, isGLCLegal));
+                    const expAny =
+                        isExpandedLegal(cardInfo, { otherVersions: matchingCards }) ||
+                        matchingCards.some(c => isExpandedLegal(c, { otherVersions: matchingCards }));
+
+                    const glcAny =
+                        isGLCLegal(cardInfo) ||
+                        matchingCards.some(c => isGLCLegal(c));
+
+                    setIsStandardLegalAny(stdAny);
+                    setIsExpandedLegalAny(expAny);
+                    setIsGLCLegalAny(glcAny);
 
                 } else {
                     console.error('Failed to fetch other versions data:', await response.json());
@@ -343,34 +348,34 @@ const CardView = () => {
                     .catch(() => [])
             )
         )
-        .then(arraysOfOcc => {
-            const allOcc = arraysOfOcc.flat()
+            .then(arraysOfOcc => {
+                const allOcc = arraysOfOcc.flat()
 
-            // ═══════ dedupe by event+division+player+decklist ═══════
-            const seen = new Set()
-            const uniqueOcc = allOcc.filter(o => {
-            // if you have a decklist.label field in o, include it here
-            const key = [
-                o.eventId,
-                o.division,
-                o.playerName,
-                o.flag,
-                o.decklist?.label || ''
-            ].join('||')
-            if (seen.has(key)) return false
-            seen.add(key)
-            return true
+                // ═══════ dedupe by event+division+player+decklist ═══════
+                const seen = new Set()
+                const uniqueOcc = allOcc.filter(o => {
+                    // if you have a decklist.label field in o, include it here
+                    const key = [
+                        o.eventId,
+                        o.division,
+                        o.playerName,
+                        o.flag,
+                        o.decklist?.label || ''
+                    ].join('||')
+                    if (seen.has(key)) return false
+                    seen.add(key)
+                    return true
+                })
+                uniqueOcc.sort(
+                    (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
+                )
+                setEventResults(uniqueOcc)
             })
-            uniqueOcc.sort(
-            (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate)
-            )
-            setEventResults(uniqueOcc)
-        })
-        .catch(err => console.error("Error fetching card decklists:", err))
-        .finally(() => {
-            setLoading(false)
-            setEventsScanned(true)
-        })
+            .catch(err => console.error("Error fetching card decklists:", err))
+            .finally(() => {
+                setLoading(false)
+                setEventsScanned(true)
+            })
     }, [cardInfo, set, number, otherVersions]);  // ← include otherVersions
 
     const toggleEventExpansion = (eventId) => {
@@ -378,180 +383,6 @@ const CardView = () => {
             ...prev,
             [eventId]: !prev[eventId],
         }));
-    };
-
-    const bannedInExpanded = [
-        { name: 'Archeops', set: 'DEX', number: '110' },
-        { name: 'Archeops', set: 'NVI', number: '67' },
-        { name: 'Chip-Chip Ice Axe', set: 'UNB', number: '165' },
-        { name: 'Delinquent', set: 'BKP', number: '98' },
-        { name: 'Delinquent', set: 'BKP', number: '98a' },
-        { name: 'Delinquent', set: 'BKP', number: '98b' },
-        { name: 'Duskull', set: 'CEC', number: '83' },
-        { name: 'Flabébé', set: 'FLI', number: '83' },
-        { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
-        { name: 'Ghetsis', set: 'PLF', number: '101' },
-        { name: 'Ghetsis', set: 'PLF', number: '115' },
-        { name: 'Hex Maniac', set: 'AOR', number: '75' },
-        { name: 'Hex Maniac', set: 'AOR', number: '75a' },
-        { name: 'Island Challenge Amulet', set: 'CEC', number: '194' },
-        { name: 'Island Challenge Amulet', set: 'CEC', number: '265' },
-        { name: 'Jessie & James', set: 'HIF', number: '58' },
-        { name: 'Jessie & James', set: 'HIF', number: '68' },
-        { name: "Lt. Surge's Strategy", set: 'UNB', number: '178' },
-        { name: "Lt. Surge's Strategy", set: 'HIF', number: '60' },
-        { name: "Lysandre's Trump Card", set: 'PHF', number: '99' },
-        { name: "Lysandre's Trump Card", set: 'PHF', number: '118' },
-        { name: 'Marshadow', set: 'SLG', number: '45' },
-        { name: 'Marshadow', set: 'PR-SM', number: '85' },
-        { name: "Maxie's Hidden Ball Trick", set: 'PRC', number: '133' },
-        { name: "Maxie's Hidden Ball Trick", set: 'PRC', number: '158' },
-        { name: 'Milotic', set: 'FLF', number: '23' },
-        { name: 'Mismagius', set: 'UNB', number: '78' },
-        { name: 'Oranguru', set: 'UPR', number: '114' },
-        { name: 'Puzzle of Time', set: 'BKP', number: '109' },
-        { name: 'Red Card', set: 'GEN', number: '71' },
-        { name: 'Reset Stamp', set: 'UNM', number: '206' },
-        { name: 'Reset Stamp', set: 'UNM', number: '206a' },
-        { name: 'Reset Stamp', set: 'UNM', number: '253' },
-        { name: 'Sableye', set: 'DEX', number: '62' },
-        { name: 'Scoop Up Net', set: 'RCL', number: '165' },
-        { name: 'Scoop Up Net', set: 'RCL', number: '207' },
-        { name: 'Shaymin-EX', set: 'ROS', number: '77' },
-        { name: 'Shaymin-EX', set: 'ROS', number: '77a' },
-        { name: 'Shaymin-EX', set: 'ROS', number: '106' },
-        { name: 'Unown', set: 'LOT', number: '90' },
-        { name: 'Unown', set: 'LOT', number: '91' },
-    ];
-    const bannedInGLC = [
-        { name: 'Chip-Chip Ice Axe', set: 'UNB', number: '165' },
-        { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
-        { name: 'Hiker', set: 'CES', number: '133' },
-        { name: 'Hiker', set: 'HIF', number: 'SV85' },
-        { name: 'Kyogre', set: 'SHF', number: '21' },
-        { name: "Lysandre's Trump Card", set: 'PHF', number: '99' },
-        { name: "Lysandre's Trump Card", set: 'PHF', number: '118' },
-        { name: 'Oranguru', set: 'UPR', number: '114' },
-        { name: 'Pokémon Research Lab', set: 'UNM', number: '205' },
-        { name: 'Raikou', set: 'VIV', number: '50' },
-        { name: 'Marshadow', set: 'SLG', number: '45' },
-        { name: 'Marshadow', set: 'PR-SM', number: '85' },
-        { name: 'Duskull', set: 'CEC', number: '83' },
-        { name: 'Double Colorless Energy', set: 'SLG', number: '69' },
-        { name: 'Double Colorless Energy', set: 'SUM', number: '136' },
-        { name: 'Double Colorless Energy', set: 'GRI', number: '166' },
-        { name: 'Double Colorless Energy', set: 'EVO', number: '90' },
-        { name: 'Double Colorless Energy', set: 'FCO', number: '114' },
-        { name: 'Double Colorless Energy', set: 'PHF', number: '111' },
-        { name: 'Double Colorless Energy', set: 'XY', number: '130' },
-        { name: 'Double Colorless Energy', set: 'LTR', number: '113' },
-        { name: 'Double Colorless Energy', set: 'NXD', number: '92' },
-        { name: 'Double Colorless Energy', set: 'HGS', number: '103' },
-        { name: 'Double Colorless Energy', set: 'BS2', number: '124' },
-        { name: 'Double Colorless Energy', set: 'BS', number: '96' },
-        { name: 'Twin Energy', set: 'RCL', number: '174' },
-        { name: 'Twin Energy', set: 'RCL', number: '209' },
-    ];
-
-    function isGLCLegal(card) {
-        // 1) cut any Pokémon subtypes you don’t want
-            const expandedSets = [
-                'black & white', 'xy', 'sun & moon',
-                'sword & shield', 'scarlet & violet'
-            ];
-        const excluded = new Set(
-            ["EX","GX","ex","V","VMAX","VSTAR","Prism Star","Radiant","ACE SPEC","V-UNION"]
-            .map(s=>s.toLowerCase())
-        );
-        if (card.subtypes?.some(s=>excluded.has(s.toLowerCase()))) {
-            return false;
-        }
-        if (isBannedInGLC(card)) return false;
-
-        // 2) special case for Double Colorless Energy by name
-        if (card.name.trim().toLowerCase()==='double colorless energy') {
-            return false;
-        }
-
-        // 3) Pokémon use your existing logic...
-        if (card.supertype==='Pokémon') {
-            // …whatever you already have for Pokémon…
-            // e.g. return expandedSets.includes(card.set.series.toLowerCase());
-        }
-
-        // 4) Trainer & Special Energy: just check series + banlist
-        const series = card.set?.series?.toLowerCase();
-        return expandedSets.includes(series);
-    }
-    const isBannedInGLC = (card) => {
-        if (card.name.trim().toLowerCase() === 'double colorless energy') {
-            return true;
-        }
-
-        return bannedInGLC.some(bannedCard =>
-            bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-            bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-            bannedCard.number === card.number
-        );
-    };
-
-    const isStandardLegal = (card) => {
-        // UPDATE every year with regulation mark legality (assumed G will rotate in 2026 and so on...)
-        // add more regulation marks as cards release in the coming years
-        const regulationMarks = ['G', 'H', 'I', 'J', 'K', 'L', 'M'];
-
-        if (card.regulationMark && regulationMarks.includes(card.regulationMark)) {
-            return true;
-        }
-
-        if (card.supertype !== 'Pokémon') {
-            const otherVersions = Object.values(cardData.cardMap).filter(otherCard =>
-                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
-                otherCard.regulationMark &&
-                regulationMarks.includes(otherCard.regulationMark)
-            );
-            return otherVersions.length > 0;
-        }
-
-        return false;
-    };
-    const isExpandedLegal = (card) => {
-        const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-
-        // Check for banned CC cards in CEL set
-        if (card.setAbbrev === "CEL" && (/^CC(1[0-9]|[1-9])$/.test(card.number))) {
-            return false;
-        }
-
-        // Check if any version of this Trainer or Energy card is legal in Standard
-        if (card.supertype !== 'Pokémon') {
-            const hasLegalVersion = otherVersions.some(otherCard =>
-                otherCard.name.toLowerCase() === card.name.toLowerCase() &&
-                isStandardLegal(otherCard)
-            );
-            if (hasLegalVersion) {
-                return true;
-            }
-        }
-
-        if (card.set && card.set.series && expandedSets.includes(card.set.series.toLowerCase())) {
-            if (!bannedInExpanded.some(bannedCard =>
-                bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-                bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-                bannedCard.number === card.number
-            )) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-    const isBannedInExpanded = (card) => {
-        return bannedInExpanded.some(bannedCard =>
-            bannedCard.name.toLowerCase() === card.name.toLowerCase() &&
-            bannedCard.set.toLowerCase() === card.setAbbrev.toLowerCase() &&
-            bannedCard.number === card.number
-        );
     };
 
     const otherVersionsToShow = otherVersions.filter(otherCard =>
@@ -660,10 +491,10 @@ const CardView = () => {
             return acc;
         }, {})
     )
-    // 2) sort clusters by date
-    .sort((a, b) =>
-        new Date(b[1][0].eventDate).getTime() - new Date(a[1][0].eventDate).getTime()
-    );
+        // 2) sort clusters by date
+        .sort((a, b) =>
+            new Date(b[1][0].eventDate).getTime() - new Date(a[1][0].eventDate).getTime()
+        );
     // 3) pick how many clusters to show
     const displayedClusters = eventClusters
 
@@ -783,8 +614,8 @@ const CardView = () => {
                         )}
                         {!
                             (cardInfo.supertype === 'Energy' &&
-                            Array.isArray(cardInfo.subtypes) &&
-                            cardInfo.subtypes.includes('Basic')
+                                Array.isArray(cardInfo.subtypes) &&
+                                cardInfo.subtypes.includes('Basic')
                             ) && <hr className='small-grey-hr' />
                         }
                         {cardInfo.ancientTrait && (
@@ -894,8 +725,8 @@ const CardView = () => {
                         )}
                         {!
                             (cardInfo.supertype === 'Energy' &&
-                            Array.isArray(cardInfo.subtypes) &&
-                            cardInfo.subtypes.includes('Basic')
+                                Array.isArray(cardInfo.subtypes) &&
+                                cardInfo.subtypes.includes('Basic')
                             ) && <hr className='small-grey-hr' />
                         }
                         {cardInfo.rarity && <p className='marginthree'>Rarity: {cardInfo.rarity}</p>}
@@ -910,43 +741,43 @@ const CardView = () => {
                                 <div className='legality-checks'>
                                     <p>
                                         Standard: {
-                                        isBasicEnergyCard
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
-                                            : (isStandardLegal(cardInfo) || isStandardLegalAny)
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
-                                            : <span className="material-symbols-outlined" style={{color:'rgb(237, 91, 91)'}}>close</span>
+                                            isBasicEnergyCard
+                                                ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>check</span>
+                                                : (isStandardLegal(cardInfo) || isStandardLegalAny)
+                                                    ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>check</span>
+                                                    : <span className="material-symbols-outlined" style={{ color: 'rgb(237, 91, 91)' }}>close</span>
                                         }
                                     </p>
                                     <p>
                                         Expanded: {
-                                        isBasicEnergyCard
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
-                                            : (isExpandedLegal(cardInfo) || isExpandedLegalAny)
-                                            ? <span className="material-symbols-outlined legality-mark" style={{color:'rgb(110, 207, 110)'}}>check</span>
-                                            : <span className="material-symbols-outlined" style={{color:'rgb(237, 91, 91)'}}>close</span>
+                                            isBasicEnergyCard
+                                                ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>check</span>
+                                                : (isExpandedLegal(cardInfo) || isExpandedLegalAny)
+                                                    ? <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>check</span>
+                                                    : <span className="material-symbols-outlined" style={{ color: 'rgb(237, 91, 91)' }}>close</span>
                                         }
                                     </p>
                                     <p>
                                         GLC:{' '}
                                         {isBannedInGLC(cardInfo) ? (
                                             <>
-                                            <span className="material-symbols-outlined" style={{ color:'rgb(237, 91, 91)' }}>
-                                                close
-                                            </span>
-                                            <span style={{ color:'rgb(237, 91, 91)' }}>
-                                                <p>(Banned)</p>
-                                            </span>
+                                                <span className="material-symbols-outlined" style={{ color: 'rgb(237, 91, 91)' }}>
+                                                    close
+                                                </span>
+                                                <span style={{ color: 'rgb(237, 91, 91)' }}>
+                                                    <p>(Banned)</p>
+                                                </span>
                                             </>
                                         ) : isBasicEnergyCard ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(110, 207, 110)' }}>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>
                                                 check
                                             </span>
                                         ) : (isGLCLegal(cardInfo) || isGLCLegalAny) ? (
-                                            <span className="material-symbols-outlined legality-mark" style={{ color:'rgb(110, 207, 110)' }}>
+                                            <span className="material-symbols-outlined legality-mark" style={{ color: 'rgb(110, 207, 110)' }}>
                                                 check
                                             </span>
                                         ) : (
-                                            <span className="material-symbols-outlined" style={{ color:'rgb(237, 91, 91)' }}>
+                                            <span className="material-symbols-outlined" style={{ color: 'rgb(237, 91, 91)' }}>
                                                 close
                                             </span>
                                         )}
@@ -981,9 +812,9 @@ const CardView = () => {
                                                                     src={otherCard.images.small}
                                                                     alt={otherCard.name}
                                                                     className={
-                                                                    otherCard.supertype === 'Energy'
-                                                                        ? 'cropped-energycard-art-td'
-                                                                        : 'cropped-imagecard-art-td'
+                                                                        otherCard.supertype === 'Energy'
+                                                                            ? 'cropped-energycard-art-td'
+                                                                            : 'cropped-imagecard-art-td'
                                                                     }
                                                                 />
                                                             </Link>
@@ -1031,15 +862,15 @@ const CardView = () => {
                             (Ordered by most recent event appearance - Day 1 decklists from modern events are not integrated into our database.)
                         </p>
                         <table className="cards-specific-results">
-                        <thead>
-                            <tr>
-                            <th style={{ width: '1%' }}>Place</th>
-                            <th style={{ width: '1%' }}>Player</th>
-                            <th style={{ width: '1%' }}>Division</th>
-                            <th style={{ width: '1%' }}></th>
-                            <th style={{ width: '1%' }}>Decklist</th>
-                            </tr>
-                        </thead>
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '1%' }}>Place</th>
+                                    <th style={{ width: '1%' }}>Player</th>
+                                    <th style={{ width: '1%' }}>Division</th>
+                                    <th style={{ width: '1%' }}></th>
+                                    <th style={{ width: '1%' }}>Decklist</th>
+                                </tr>
+                            </thead>
                             {displayedClusters.map(([eventId, results]) => {
                                 const sortedResults = results.sort((a, b) => {
                                     const order = { masters: 0, seniors: 1, juniors: 2, all: 3 };
@@ -1060,8 +891,7 @@ const CardView = () => {
                                             <td colSpan="5">
                                                 <Link
                                                     className="event-separator-content"
-                                                    to={`/tournaments/${eventId}${
-                                                        eventId === '2002_WORLDS' || /* … */ false
+                                                    to={`/tournaments/${eventId}${eventId === '2002_WORLDS' || /* … */ false
                                                             ? '/seniors'
                                                             : eventId.toLowerCase().includes('retro')
                                                                 ? '/all'
@@ -1175,12 +1005,12 @@ const CardView = () => {
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>
                     <img
-                    className={
-                        `fullscreen-image` +
-                        (cardInfo.subtypes?.includes('BREAK') ? ' rotated' : '')
-                    }
-                    src={cardInfo.images.large}
-                    alt={cardInfo.name}
+                        className={
+                            `fullscreen-image` +
+                            (cardInfo.subtypes?.includes('BREAK') ? ' rotated' : '')
+                        }
+                        src={cardInfo.images.large}
+                        alt={cardInfo.name}
                     />
                 </div>
             )}

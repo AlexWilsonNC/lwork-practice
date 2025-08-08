@@ -1062,32 +1062,32 @@
 }
 
 @media (max-width: 1100px) {
-  .card-modal-content-account {
+  .account-decks .card-modal-content-account {
     transform: scale(1.2);
     width: 100%;
   }
 
-  .deck-add-minus {
+  .account-decks .deck-add-minus {
     margin-bottom: 5px;
     width: 100% !important;
   }
 
-  .current-cnt-num {
+  .account-decks .current-cnt-num {
     width: 16px !important;
     height: 16px !important;
     font-size: 10px !important;
     border-radius: 3px;
   }
 
-  .pm-card {
+  .account-decks .pm-card {
     display: none;
   }
 
-  .deck-modal-actions div .favorite-heart {
+  .account-decks .deck-modal-actions div .favorite-heart {
     transform: scale(0.65);
   }
 
-  .deck-modal-actions button {
+  .account-decks .deck-modal-actions button {
     padding: 0.25rem 0.45rem;
     border-radius: 2px;
     margin-left: 5px;
@@ -1095,12 +1095,12 @@
     font-weight: 500;
   }
 
-  .deckbuilt-card-container {
+  .account-decks .deckbuilt-card-container {
     width: 50px !important;
     margin: 1px !important;
   }
 
-  .database-card-in-list {
+  .account-decks .database-card-in-list {
     box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.8);
     border-radius: 2px;
   }
@@ -1280,24 +1280,24 @@
 }
 
 @media (max-width: 700px) {
-  .card-modal-content-account {
+  .account-decks .card-modal-content-account {
     transform: scale(1.2);
   }
 
-  .deckbuilt-card-container {
+  .account-decks .deckbuilt-card-container {
     width: 40px !important;
   }
 
-  .database-card-in-list {
+  .account-decks .database-card-in-list {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
     border-radius: 2px;
   }
 
-  .deck-add-minus {
+  .account-decks .deck-add-minus {
     margin-bottom: 6px;
   }
 
-  .current-cnt-num {
+  .account-decks .current-cnt-num {
     width: 12px !important;
     height: 12px !important;
     font-size: 8px !important;
@@ -1324,7 +1324,7 @@
     font-size: 0.35rem;
   }
 
-  .deck-box {
+  .account-decks .deck-box {
     border: 2px solid rgba(94, 94, 94, 0.5) !important;
   }
 
