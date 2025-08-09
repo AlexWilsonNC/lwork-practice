@@ -1772,6 +1772,18 @@
 }
 
 @media screen and (max-width: 1160px) {
+  html.no-scroll,
+  body.no-scroll {
+    overflow: hidden !important;
+    height: 100% !important;
+    position: fixed;
+    width: 100%;
+  }
+  #root,
+  .deck-builder {
+    height: 100vh;
+    overflow: hidden;
+  }
  .card-search-container {
     position: fixed;
     bottom: -100%;
@@ -1781,7 +1793,7 @@
     background: #fff;
     transition: bottom 0.3s ease-in-out;
     z-index: 10000;
-    overflow-y: auto;
+    overflow: hidden;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
@@ -1871,7 +1883,7 @@
 }
 #search-reset {
     position: absolute;
-    left: 285px;
+    left: 350px;
 }
 .all-cards-container .searched-card-wrap {
     margin: 5px;
@@ -1901,6 +1913,7 @@
     font-size: 14px;
     padding: 2.7px 5px;
     border-radius: 2.5px;
+    left: 290px;
 }
 #search-reset span {
     font-size: 14px;

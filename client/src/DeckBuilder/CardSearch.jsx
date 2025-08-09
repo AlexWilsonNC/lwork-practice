@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import setOrder from '../Tournaments/setorder'
 import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
@@ -19,6 +19,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     const [suppressDefault, setSuppressDefault] = useState(false)
     const [showSets, setShowSets] = useState(false)
     const [isSearchVisible, setIsSearchVisible] = useState(true);
+    const widthRef = useRef(window.innerWidth);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -145,24 +146,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     })
 
     useEffect(() => {
-        const checkWidth = () => {
-            if (window.innerWidth < 1160) {
-                document.body.classList.add('no-scroll');
-                setIsSearchVisible(false);
-            } else {
-                document.body.classList.remove('no-scroll');
-                setIsSearchVisible(true);
-            }
-        };
-        checkWidth();
-        window.addEventListener('resize', checkWidth);
-        return () => {
-            window.removeEventListener('resize', checkWidth);
-            document.body.classList.remove('no-scroll');
-        };
-    }, []);
-
-    useEffect(() => {
         let startY = 0;
 
         const onTouchStart = (e) => {
@@ -184,6 +167,26 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             window.removeEventListener('touchend', onTouchEnd);
         };
     }, [isSearchVisible]);
+
+    useEffect(() => {
+        const onResize = () => {
+            const w = window.innerWidth;
+            if (w === widthRef.current) return; // keyboard changed height only → ignore
+            widthRef.current = w;
+
+            if (w < 1160) {
+                document.body.classList.add('no-scroll');
+                // don't auto-close if user already opened it
+                // setIsSearchVisible(false); <-- remove this line
+            } else {
+                document.body.classList.remove('no-scroll');
+                setIsSearchVisible(true);
+            }
+        };
+
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
 
     return (
         <>

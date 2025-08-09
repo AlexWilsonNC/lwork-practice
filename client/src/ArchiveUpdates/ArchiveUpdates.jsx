@@ -66,17 +66,8 @@ const ArchiveUpdates = () => {
           {/* <meta name="twitter:image" content="https://i.ibb.co/mrSpd4V3/legends-thumbnail.png" /> */}
         </Helmet>
         <div className='article-title'>
-          <h2>List of Documented Archive Updates</h2>
+          <h2>Documented Archive Updates</h2>
           <p>Last Updated: Aug 8, 2025</p>
-          <p className='share'>
-            <i className="material-symbols-outlined">ios_share</i>&nbsp;Share Page:&nbsp;&nbsp;
-            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-show-count="false">Tweet</a>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            &nbsp;&nbsp;
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://ptcglegends.com/archive-updates/" target="_blank" rel="noopener noreferrer">
-              <img className='a-social' src={fbIcon} alt='Facebook' />
-            </a>
-          </p>
         </div>
 
         {/* Article Image */}
@@ -84,11 +75,9 @@ const ArchiveUpdates = () => {
 
         {/* Article Content */}
         <div className='article-content archive-updates'>
-
-          <p className='margin-top-article smaller-txt italic'>* Opaque links are pages yet to be converted on the new site, check back on them soon.</p>
-
           <hr className='title-hr' />
           <br />
+          
           <h3 className='boxxed'>August 2025</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
@@ -149,6 +138,7 @@ const ArchiveUpdates = () => {
             <p>Max Benczek (Masters) -  32<sup>nd</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
+          <br></br>
           <p style={{ fontWeight: 600 }}>Corrections:</p>
 
           <a href='/tournaments/2014_WORLDS/masters/Chase%20Moloney-CA' className='new-div-fix-wrap'>

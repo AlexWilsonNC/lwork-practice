@@ -404,6 +404,7 @@ export default function DeckBuilder() {
       </span>
     );
   }
+  
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>

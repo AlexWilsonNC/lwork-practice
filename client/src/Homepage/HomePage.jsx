@@ -104,7 +104,7 @@ const Homepage = () => {
                                         </p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>June 16, 2025</p>
+                                        <p>Jun 16, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -147,11 +147,11 @@ const Homepage = () => {
                                     <img className='card-image' src={ogInternats} />
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3><span className='new-color'>Long-lost</span> Decks & Results Discovered!</h3>
-                                        <p>We found a bunch of long-lost decklists and results from many events, spanning from 2002 Worlds to a Top 4 list from 2008 Nationals and more!</p>
+                                        <h3><span className='new-color'>Long-lost</span> Results Discovered!</h3>
+                                        <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds, plus some important corrections!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>June 30, 2024</p>
+                                        <p>Aug 9, 2025</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -319,7 +319,7 @@ const Homepage = () => {
                                     </p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>June 16, 2025</p>
+                                    <p>Jun 16, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
@@ -390,11 +390,11 @@ const Homepage = () => {
                                 <img className='card-image' src={ogInternats} />
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3><span className='new-color'>Long-lost</span> Decks & Results Discovered!</h3>
-                                    <p>We found a bunch of long-lost decklists and results from many events, spanning from 2002 Worlds to a Top 4 list from 2008 Nationals and more!</p>
+                                    <h3><span className='new-color'>Long-lost</span> Results Discovered!</h3>
+                                    <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds and more!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>June 30, 2024</p>
+                                    <p>Aug 9, 2025</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>
