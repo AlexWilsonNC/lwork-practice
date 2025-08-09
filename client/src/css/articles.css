@@ -30,12 +30,9 @@
     margin-bottom: 5px;
 }
 .new-div-fix-wrap {
-    margin-top: -10px;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 .new-div-fix-wrap:hover {
     color: #1290eb !important;
@@ -43,6 +40,11 @@
 }
 .new-div-fix-wrap p {
     font-weight: 400;
+    display: block;            /* or just remove display:flex altogether */
+    align-items: initial;      /* not needed anymore */
+    flex: 1 1 auto;            /* let the text take remaining width */
+    min-width: 0;              /* critical: allow text to shrink & wrap in flex */
+    white-space: normal;       /* ensure normal wrapping */
 }
 .shout-out {
     font-style: italic;
@@ -53,7 +55,7 @@
 }
 .new-div-fix-wrap p span {
     font-weight: 600;
-    margin: 0 2.5px 0 7px;
+    margin-left: 5px;
     color: #1290eb;
 }
 .new-div-fix-wrap p a {
@@ -74,10 +76,11 @@
 }
 .archive-update-has-list {
     border: 1px solid rgba(33, 175, 38, 0.75);
-    color: rgba(33, 175, 38, 0.75);
-    padding: 1px 5px;
+    color: rgba(33, 175, 38, 0.75) !important;
+    padding: 1px 5px 0 5px;
+    margin-left: 5px;
     border-radius: 3.5px;
-    margin-bottom: 20px;
+    font-weight: 400 !important;
 }
 .table-of-contents {
     width: 80%;
@@ -285,6 +288,11 @@
         border-radius: 1px !important;
     }
 }
+@media screen and (max-width: 650px) {
+.shortcircuited {
+    margin-left: 90px;
+}
+}
 @media screen and (max-width: 600px) {
     .top-backtrack {
         width:95%;
@@ -390,7 +398,7 @@
         width:99%;
     }
 }
-@media screen and (min-width: 650px) and (max-width: 850px) {
+@media screen and (min-width: 1px) and (max-width: 850px) {
     .new-div-fix-wrap p {
         font-size: 12px;
     }
@@ -408,25 +416,6 @@
         padding: 2px 5px;
         border-radius: 2px;
         font-size: 7px !important;
-    }
-}
-@media screen and (min-width: 300px) and (max-width: 649px) {
-    .new-div-fix-wrap p {
-        font-size: 8px;
-    }
-    .shortcircuited {
-        font-size: 9px !important;
-        margin-left: 35px;
-    }
-    .new-div-fix-wrap .player-deck-icons {
-        margin-top: -27.5px;
-    }
-    .new-div-fix-wrap .player-deck-icons img {
-        height: 25px;
-        width: 32px;
-    }
-    .new-div-fix-wrap p sup {
-        font-size: 5px;
     }
 }
 .shortcircuited {

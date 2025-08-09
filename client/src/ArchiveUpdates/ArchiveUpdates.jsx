@@ -26,6 +26,7 @@ import emboar from '../../public/assets/sprites/emboar.png'
 import magnezone from '../../public/assets/sprites/magnezone.png'
 import altaria from '../../public/assets/sprites/altaria.png'
 import garchomp from '../../public/assets/sprites/garchomp.png'
+import blank from '../../public/assets/sprites/blank.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -93,123 +94,114 @@ const ArchiveUpdates = () => {
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
           <a href='/tournaments/2014_WORLDS/masters/Trevore%20Read-CA' className='new-div-fix-wrap'>
-            <p>• <span>2014 World Championships</span> 27<sup>th</sup> Place (Masters) Trevore Read</p>
             <div className="player-deck-icons">
               <img className="sprite" src={yveltal} alt="sprite" />
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Trevore Read (Masters) - 27<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2012_WORLDS/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
-            <p>• <span>2012 World Championships</span> 13<sup>th</sup> Place (Masters) Aaron Curry</p>
             <div className="player-deck-icons">
               <img className="sprite" src={mewtwo} alt="sprite" />
               <img className="sprite second-sprite" src={eelektrik} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Aaron Curry (Masters) - 13<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2011_WORLDS/masters/Lorenzo%20Voltolina-IT' className='new-div-fix-wrap'>
-            <p>• <span>2011 World Championships</span> 7<sup>th</sup> Place (Masters) Lorenzo Voltolina</p>
             <div className="player-deck-icons">
               <img className="sprite" src={emboar} alt="sprite" />
               <img className="sprite second-sprite" src={magnezone} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Lorenzo Voltolina (Masters) - 7<sup>th</sup> Place <span>2011 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2011_WORLDS/masters/Marco%20Escher-IT' className='new-div-fix-wrap'>
-            <p>• <span>2011 World Championships</span> 27<sup>th</sup> Place (Masters) Marco Escher</p>
             <div className="player-deck-icons">
               <img className="sprite" src={emboar} alt="sprite" />
               <img className="sprite second-sprite" src={magnezone} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Marco Escher (Masters) - 27<sup>th</sup> Place <span>2011 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2010_NATS_US/masters/John%20Kettler-US' className='new-div-fix-wrap'>
-            <p>• <span>2010 US Nationals</span> 66<sup>th</sup> Place (Masters) John Kettler</p>
             <div className="player-deck-icons">
-              <img className="sprite" src={jumpluff} alt="sprite" />
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={jumpluff} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>John Kettler (Masters) - 66<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2007_WORLDS/masters/Daniel%20Cohen-AT' className='new-div-fix-wrap'>
-            <p>• <span>2007 World Championships</span> 28<sup>th</sup> Place (Masters) Daniel Cohen</p>
             <div className="player-deck-icons">
-              <img className="sprite" src={rhyperior} alt="sprite" />
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={rhyperior} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Daniel Cohen (Masters) - 28<sup>th</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2007_WORLDS/masters/Max%20Benczek-DE' className='new-div-fix-wrap'>
-            <p>• <span>2007 World Championships</span> 32<sup>nd</sup> Place (Masters) Max Benczek </p>
             <div className="player-deck-icons">
               <img className="sprite" src={absol} alt="sprite" />
               <img className="sprite second-sprite" src={eevee} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Max Benczek (Masters) -  32<sup>nd</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <p style={{ fontWeight: 600 }}>Corrections:</p>
 
           <a href='/tournaments/2014_WORLDS/masters/Chase%20Moloney-CA' className='new-div-fix-wrap'>
-            <p>• <span>2014 World Championships</span> 6<sup>th</sup> Place (Masters) Chase Moloney</p>
             <div className="player-deck-icons">
               <img className="sprite" src={yveltal} alt="sprite" />
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Chase Moloney (Masters) - 6<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> Wrong Trubbish fixed</p>
 
           <a href='/tournaments/2013_NATS_US/masters/Ross%20Cawthon-US' className='new-div-fix-wrap'>
-            <p>• <span>2013 US Nationals</span> 54<sup>th</sup> Place (Masters) Ross Cawthon</p>
             <div className="player-deck-icons">
               <img className="sprite" src={garchomp} alt="sprite" />
               <img className="sprite second-sprite" src={altaria} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Ross Cawthon (Masters) - 54<sup>th</sup> Place <span>2013 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> Completely different list...</p>
 
           <a href='/tournaments/2010_WORLDS/masters/Tomi%20Sjöblom-FI' className='new-div-fix-wrap'>
-            <p>• <span>2010 World Championships</span> 12<sup>th</sup> Place (Masters) Tomi Sjöblom</p>
             <div className="player-deck-icons">
-              <img className="sprite" src={regigigas} alt="sprite" />
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={regigigas} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Tomi Sjöblom (Masters) - 12<sup>th</sup> Place <span>2010 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> -1 VS Seeker | -1 Time Space Destortion | +1 Night Maintenance | +1 Pokemon Rescue</p>
 
           <a href='/tournaments/2010_NATS_US/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
-            <p>• <span>2010 US Nationals</span> 28<sup>th</sup> Place (Masters) Aaron Curry</p>
             <div className="player-deck-icons">
               <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={machamp} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Aaron Curry (Masters) - 28<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> -2 Judge | +1 Expert Belt | +1 Night Maintenance</p>
 
           <a href='/tournaments/2008_WORLDS/seniors/Aziz%20Al-Yami-US' className='new-div-fix-wrap'>
-            <p>• <span>2008 World Championships</span> 5<sup>th</sup> Place (Seniors) Aziz Al-Yami</p>
             <div className="player-deck-icons">
               <img className="sprite" src={empoleon} alt="sprite" />
               <img className="sprite second-sprite" src={bronzong} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Aziz Al-Yami (Seniors) - 5<sup>th</sup> Place <span>2008 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> -5 Roseanne's Research | +3 Roseanne's Research | +2 Professor Rowan</p>
 
           <a href='/tournaments/2004_WORLDS/seniors/Kevin%20Nguyen-US' className='new-div-fix-wrap'>
-            <p>• <span>2004 World Championships</span> 2<sup>nd</sup> Place (Seniors) Kevin Nguyen</p>
             <div className="player-deck-icons">
-              <img className="sprite" src={gardevoir} alt="sprite" />
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gardevoir} alt="sprite" />
             </div>
-            <span className='small-text-archive archive-update-has-list'>list ✔</span>
+            <p>Kevin Nguyen (Seniors) -  2<sup>nd</sup> Place <span>2004 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <p className='shortcircuited'><strong>Correction:</strong> Wrong Ralts, Skitty & Magnemite fixed</p>
 
