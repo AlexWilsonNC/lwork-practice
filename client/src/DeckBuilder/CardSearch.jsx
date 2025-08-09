@@ -20,6 +20,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     const [showSets, setShowSets] = useState(false)
     const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
+    const toggleBtnRef = useRef(null);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -145,28 +146,44 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         return true
     })
 
-    useEffect(() => {
-        let startY = 0;
+useEffect(() => {
+  const btn = toggleBtnRef.current;
+  if (!btn) return;
 
-        const onTouchStart = (e) => {
-            startY = e.touches[0].clientY;
-        };
-        const onTouchEnd = (e) => {
-            const endY = e.changedTouches[0].clientY;
-            const delta = startY - endY;
+  let startY = 0;
+  let startX = 0;
 
-            // swipe up to open, swipe down to close
-            if (delta > 50 && !isSearchVisible) setIsSearchVisible(true);
-            if (delta < -50 && isSearchVisible) setIsSearchVisible(false);
-        };
+  const onTouchStart = (e) => {
+    const t = e.touches[0];
+    startY = t.clientY;
+    startX = t.clientX;
+  };
 
-        window.addEventListener('touchstart', onTouchStart, { passive: true });
-        window.addEventListener('touchend', onTouchEnd);
-        return () => {
-            window.removeEventListener('touchstart', onTouchStart);
-            window.removeEventListener('touchend', onTouchEnd);
-        };
-    }, [isSearchVisible]);
+  const onTouchEnd = (e) => {
+    const t = e.changedTouches[0];
+    const dy = startY - t.clientY;   // up = positive, down = negative
+    const dx = Math.abs(startX - t.clientX);
+
+    // ignore mostly-horizontal swipes
+    if (Math.abs(dy) < 50 || dx > 40) return;
+
+    if (dy > 0 && !isSearchVisible) {
+      // swipe up on button -> open
+      setIsSearchVisible(true);
+    } else if (dy < 0 && isSearchVisible) {
+      // swipe down on button -> close
+      setIsSearchVisible(false);
+    }
+  };
+
+  btn.addEventListener('touchstart', onTouchStart, { passive: true });
+  btn.addEventListener('touchend', onTouchEnd);
+
+  return () => {
+    btn.removeEventListener('touchstart', onTouchStart);
+    btn.removeEventListener('touchend', onTouchEnd);
+  };
+}, [isSearchVisible]);
 
     useEffect(() => {
         const onResize = () => {
@@ -404,6 +421,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                     </div>
                 </div>
                 <button
+                    ref={toggleBtnRef}
                     className={`card-search-toggle-btn ${isSearchVisible ? 'at-top' : 'at-bottom'}`}
                     onClick={() => setIsSearchVisible(v => !v)}
                     aria-expanded={isSearchVisible}
