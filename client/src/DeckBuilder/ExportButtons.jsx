@@ -144,6 +144,8 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
     onExportStart()
 
+    node.classList.add('exporting');
+
     const patternSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="140%" height="140%">
   <defs>

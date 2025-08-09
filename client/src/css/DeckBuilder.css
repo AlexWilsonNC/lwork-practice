@@ -1954,6 +1954,9 @@ body.deckbuilder-page .deck-builder {
 .advanced-search-button-small {
   display: none;
 }
+#deck-to-export.exporting .pm-card {
+  display: none !important;
+}
 
 @media screen and (min-width: 1160px) and (max-width: 1350px) {
   .search-mag {
@@ -2263,7 +2266,6 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
     left: 290px;
   }
-
   #search-reset span {
     font-size: 14px;
   }
@@ -2380,7 +2382,7 @@ body.deckbuilder-page .deck-builder {
     display: none;
   }
   .active-deck-container::before {
-    top: -300px;
+    top: -250px;
     left: 0;
     width: 150%;
     height: 150%;
@@ -2466,5 +2468,75 @@ body.deckbuilder-page .deck-builder {
 
   .card-search-toggle-line {
     border-top: 3px solid #fff;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .event-searchbar input {
+    font-size: 14px;
+    width: 200px !important;
+  }
+  #search-reset {
+    left: 235px;
+    font-size: 12.5px;
+  }
+  .advanced-search-button-small {
+    padding: 1.5px;
+    font-size: 11px;
+  }
+  .advanced-search-button-small span {
+    font-size: 16px;
+  }
+  .card-search-toggle-btn {
+    padding: 6px 0 4px;
+    font-size: 12px;
+  }
+  .card-search-toggle-line {
+    border-top: 2.5px solid #fff;
+    width: 60px;
+  }
+  .event-searchbar {
+    padding: 12px 0px 0px 20px;
+  }
+  .all-cards-container .searched-card-wrap {
+    margin: 3.5px;
+    width: 20vw;
+  }
+  .all-cards-container .database-card-in-list {
+    width: 20vw !important;
+    border-radius: 3px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .search-cards-div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .event-searchbar {
+    padding: 25px 0px 20px 20px;
+  }
+  .advanced-search-button-small {
+    order: -1;
+    width: 90%;
+    margin-left: 12.5px;
+  }
+  #search-reset {
+    margin-top: 37.2px;
+  }
+  .search-input-wrapper {
+    margin-top: 15px;
+  }
+}
+@media screen and (max-width: 475px) {
+  .zoom-slider input[type="range"] {
+    width: 75px;
+    margin: 0 0.5rem;
+  }
+}
+@media screen and (max-width: 450px) {
+  .add-card-to-deck {
+    padding: 15px;
+    font-size: 22px;
+    margin-bottom: 10px;
   }
 }
