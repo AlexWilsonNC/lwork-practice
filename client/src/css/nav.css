@@ -227,6 +227,7 @@ nav {
     }
     .burger {
       transform: scale(0.8);
+      margin-right: -10px;
     }
     .login-slash-account-btn li {
       font-size: 18px;

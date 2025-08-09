@@ -146,44 +146,44 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         return true
     })
 
-useEffect(() => {
-  const btn = toggleBtnRef.current;
-  if (!btn) return;
+    useEffect(() => {
+        const btn = toggleBtnRef.current;
+        if (!btn) return;
 
-  let startY = 0;
-  let startX = 0;
+        let startY = 0;
+        let startX = 0;
 
-  const onTouchStart = (e) => {
-    const t = e.touches[0];
-    startY = t.clientY;
-    startX = t.clientX;
-  };
+        const onTouchStart = (e) => {
+            const t = e.touches[0];
+            startY = t.clientY;
+            startX = t.clientX;
+        };
 
-  const onTouchEnd = (e) => {
-    const t = e.changedTouches[0];
-    const dy = startY - t.clientY;   // up = positive, down = negative
-    const dx = Math.abs(startX - t.clientX);
+        const onTouchEnd = (e) => {
+            const t = e.changedTouches[0];
+            const dy = startY - t.clientY;   // up = positive, down = negative
+            const dx = Math.abs(startX - t.clientX);
 
-    // ignore mostly-horizontal swipes
-    if (Math.abs(dy) < 50 || dx > 40) return;
+            // ignore mostly-horizontal swipes
+            if (Math.abs(dy) < 50 || dx > 40) return;
 
-    if (dy > 0 && !isSearchVisible) {
-      // swipe up on button -> open
-      setIsSearchVisible(true);
-    } else if (dy < 0 && isSearchVisible) {
-      // swipe down on button -> close
-      setIsSearchVisible(false);
-    }
-  };
+            if (dy > 0 && !isSearchVisible) {
+                // swipe up on button -> open
+                setIsSearchVisible(true);
+            } else if (dy < 0 && isSearchVisible) {
+                // swipe down on button -> close
+                setIsSearchVisible(false);
+            }
+        };
 
-  btn.addEventListener('touchstart', onTouchStart, { passive: true });
-  btn.addEventListener('touchend', onTouchEnd);
+        btn.addEventListener('touchstart', onTouchStart, { passive: true });
+        btn.addEventListener('touchend', onTouchEnd);
 
-  return () => {
-    btn.removeEventListener('touchstart', onTouchStart);
-    btn.removeEventListener('touchend', onTouchEnd);
-  };
-}, [isSearchVisible]);
+        return () => {
+            btn.removeEventListener('touchstart', onTouchStart);
+            btn.removeEventListener('touchend', onTouchEnd);
+        };
+    }, [isSearchVisible]);
 
     useEffect(() => {
         const onResize = () => {
@@ -216,7 +216,6 @@ useEffect(() => {
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
                     </button>
-
                     {showAdvanced && (
                         <div className="advanced-search-modal-overlay" onClick={() => setShowAdvanced(false)}>
                             <div className="advanced-search-modal" onClick={e => e.stopPropagation()}>
@@ -385,6 +384,13 @@ useEffect(() => {
                             >
                                 <span className="material-symbols-outlined">close</span>
                                 <p>Reset</p>
+                            </button>
+                            <button
+                                className="advanced-search-button-small"
+                                onClick={() => setShowAdvanced(true)}
+                            >
+                                Advanced Search
+                                <span className="material-symbols-outlined">keyboard_arrow_down</span>
                             </button>
                         </div>
                     </div>
