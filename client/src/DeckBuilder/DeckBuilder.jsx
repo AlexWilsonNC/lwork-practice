@@ -179,7 +179,10 @@ export default function DeckBuilder() {
   const [limitCounts, setLimitCounts] = useState(true);
   const [showLimitMenu, setShowLimitMenu] = useState(false);
   const [viewMode, setViewMode] = useState('image');
-  const [zoomScale, setZoomScale] = useState(1.4); // default decklist zoom
+  const [zoomScale, setZoomScale] = useState(() => {
+    const savedZoom = localStorage.getItem('decklistZoomScale');
+    return savedZoom ? parseFloat(savedZoom) : 1.4;
+  });
   const [loadingHash, setLoadingHash] = useState(false)
   const [exportingImage, setExportingImage] = useState(false)
   const deckRef = useRef()
@@ -409,6 +412,10 @@ export default function DeckBuilder() {
       </span>
     );
   }
+
+  useEffect(() => {
+    localStorage.setItem('decklistZoomScale', zoomScale);
+  }, [zoomScale]);
   
   return (
     <DeckBuilderComp className='center' theme={theme}>
