@@ -1772,7 +1772,7 @@
 }
 
 @media screen and (max-width: 1160px) {
-  html.no-scroll,
+  /* html.no-scroll,
   body.no-scroll {
     overflow: hidden !important;
     height: 100% !important;
@@ -1783,7 +1783,7 @@
   .deck-builder {
     height: 100vh;
     overflow: hidden;
-  }
+  } */
  .card-search-container {
     position: fixed;
     bottom: -100%;
