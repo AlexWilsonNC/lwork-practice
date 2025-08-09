@@ -189,6 +189,11 @@ export default function DeckBuilder() {
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
 
   useEffect(() => {
+    document.body.classList.add("deckbuilder-page");
+    return () => document.body.classList.remove("deckbuilder-page");
+  }, []);
+
+  useEffect(() => {
     if (!showLimitMenu) return
     const handleClickOutside = e => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {

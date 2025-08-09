@@ -7,6 +7,17 @@
   from   { transform: rotate(0deg); }
   to     { transform: rotate(360deg); }
 }
+  body.deckbuilder-page.no-scroll {
+    overflow: hidden !important;
+    height: 100% !important;
+    position: fixed;
+    width: 100%;
+  }
+  body.deckbuilder-page #root,
+  body.deckbuilder-page .deck-builder {
+    height: 100vh;
+    overflow: hidden;
+  }
 .image-export-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -1772,18 +1783,6 @@
 }
 
 @media screen and (max-width: 1160px) {
-  /* html.no-scroll,
-  body.no-scroll {
-    overflow: hidden !important;
-    height: 100% !important;
-    position: fixed;
-    width: 100%;
-  }
-  #root,
-  .deck-builder {
-    height: 100vh;
-    overflow: hidden;
-  } */
  .card-search-container {
     position: fixed;
     bottom: -100%;

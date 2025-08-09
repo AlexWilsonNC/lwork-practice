@@ -18,7 +18,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     const [defaultCards, setDefault] = useState([])
     const [suppressDefault, setSuppressDefault] = useState(false)
     const [showSets, setShowSets] = useState(false)
-    const [isSearchVisible, setIsSearchVisible] = useState(true);
+    const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
 
     const ERA_OPTIONS = [
