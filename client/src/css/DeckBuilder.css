@@ -496,7 +496,7 @@ body.deckbuilder-page .deck-builder {
 }
 
 .searched-card-wrap:hover {
-  transform: scale(1.05)
+  transform: scale(1.05);
 }
 
 .add-card-to-deck {
@@ -616,7 +616,7 @@ body.deckbuilder-page .deck-builder {
 }
 
 .deckbuilt-card-container:hover {
-  transform: scale(1.05)
+  transform: scale(1.05);
 }
 
 .database-card-in-list {
@@ -950,7 +950,12 @@ body.deckbuilder-page .deck-builder {
   height: auto;
   margin-right: 7px;
 }
-
+.moveit-moveit {
+  display: flex; 
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center;
+}
 .stat-count {
   color: black;
   background-color: white;
@@ -2097,7 +2102,12 @@ body.deckbuilder-page .deck-builder {
   .pm-card {
     visibility: visible;
   }
-
+.searched-card-wrap:hover {
+  transform: scale(1);
+}
+.deckbuilt-card-container:hover {
+  transform: scale(1);
+}
   .advanced-search-button {
     display: none;
   }
@@ -2599,4 +2609,12 @@ body.deckbuilder-page .deck-builder {
   .event-searchbar {
     padding: 25px 0px 20px 10px;
   }
+  .copy-menu-dropdown {
+    top: 65%;
+  }
+  .moveit-moveit {
+    justify-content: space-between; 
+    width: 100%;
+  }
 }
+

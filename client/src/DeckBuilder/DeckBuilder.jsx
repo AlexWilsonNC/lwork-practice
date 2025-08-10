@@ -654,75 +654,77 @@ export default function DeckBuilder() {
             onExportEnd={() => setExportingImage(false)}
           />
           <div className='deck-stats'>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <div className='moveit-moveit'>
               <p className='stat-count'>
                 Card Count: <span className='current-deck-count'>{totalCount}</span>
               </p>
-              <div id='deck-sort' style={{ cursor: 'pointer' }} onClick={handleSort}>
-                <span className="material-symbols-outlined">sort</span>
-                <p>&nbsp;Sort&nbsp;</p>
-              </div>
-              <div id="deck-reset" onClick={() => setDeck([])}>
-                <span className="material-symbols-outlined">close</span>
-                <p>Reset</p>
-              </div>
-              <div className="limit-menu-container" ref={menuRef}>
-                <button
-                  className="limit-menu-btn"
-                  onClick={() => setShowLimitMenu(v => !v)}
-                  aria-label="Open deck settings"
-                >
-                  ⋮
-                </button>
-                {showLimitMenu && (
-                  <div className="limit-menu-dropdown">
-                    <div
-                      className="menu-item"
-                      onClick={() => {
-                        setLimitCounts(true)
-                        setShowLimitMenu(false)
-                      }}
-                    >
-                      <span className="menu-check">
-                        {limitCounts ? '✔︎' : ''}
-                      </span>
-                      Enforce Limits
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <div id='deck-sort' style={{ cursor: 'pointer' }} onClick={handleSort}>
+                  <span className="material-symbols-outlined">sort</span>
+                  <p>&nbsp;Sort&nbsp;</p>
+                </div>
+                <div id="deck-reset" onClick={() => setDeck([])}>
+                  <span className="material-symbols-outlined">close</span>
+                  <p>Reset</p>
+                </div>
+                <div className="limit-menu-container" ref={menuRef}>
+                  <button
+                    className="limit-menu-btn"
+                    onClick={() => setShowLimitMenu(v => !v)}
+                    aria-label="Open deck settings"
+                  >
+                    ⋮
+                  </button>
+                  {showLimitMenu && (
+                    <div className="limit-menu-dropdown">
+                      <div
+                        className="menu-item"
+                        onClick={() => {
+                          setLimitCounts(true)
+                          setShowLimitMenu(false)
+                        }}
+                      >
+                        <span className="menu-check">
+                          {limitCounts ? '✔︎' : ''}
+                        </span>
+                        Enforce Limits
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={() => {
+                          setLimitCounts(false)
+                          setShowLimitMenu(false)
+                        }}
+                      >
+                        <span className="menu-check">
+                          {!limitCounts ? '✔︎' : ''}
+                        </span>
+                        Remove Limits
+                      </div>
+                      <hr className='dropdown-hr-options'></hr>
+                      <div
+                        className="menu-item"
+                        onClick={() => {
+                          setViewMode('image')
+                          setShowLimitMenu(false)
+                        }}
+                      >
+                        <span className="menu-check">{viewMode === 'image' ? '✔︎' : ''}</span>
+                        Image View
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={() => {
+                          setViewMode('list')
+                          setShowLimitMenu(false)
+                        }}
+                      >
+                        <span className="menu-check">{viewMode === 'list' ? '✔︎' : ''}</span>
+                        List View
+                      </div>
                     </div>
-                    <div
-                      className="menu-item"
-                      onClick={() => {
-                        setLimitCounts(false)
-                        setShowLimitMenu(false)
-                      }}
-                    >
-                      <span className="menu-check">
-                        {!limitCounts ? '✔︎' : ''}
-                      </span>
-                      Remove Limits
-                    </div>
-                    <hr className='dropdown-hr-options'></hr>
-                    <div
-                      className="menu-item"
-                      onClick={() => {
-                        setViewMode('image')
-                        setShowLimitMenu(false)
-                      }}
-                    >
-                      <span className="menu-check">{viewMode === 'image' ? '✔︎' : ''}</span>
-                      Image View
-                    </div>
-                    <div
-                      className="menu-item"
-                      onClick={() => {
-                        setViewMode('list')
-                        setShowLimitMenu(false)
-                      }}
-                    >
-                      <span className="menu-check">{viewMode === 'list' ? '✔︎' : ''}</span>
-                      List View
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
               <div className="zoom-slider hideon450">
                 <button
