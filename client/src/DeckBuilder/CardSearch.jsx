@@ -420,6 +420,8 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                             onAddCard(card)
                                         }}
                                         className='add-card-to-deck'
+                                        onTouchStart={e => e.currentTarget.classList.add('pressed')}
+                                        onTouchEnd={e => e.currentTarget.classList.remove('pressed')}
                                     ></button>
                                 </div>
                             ))}

@@ -2487,6 +2487,18 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
     width: 200px !important;
   }
+  .add-card-to-deck:hover {
+    background: rgba(0, 0, 0, 0.82);
+    color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.681);
+  }
+  .deckbuilt-card-container:hover>.deck-add-minus>.pm-card {
+    visibility: hidden !important;
+  }
+  .add-card-to-deck.pressed {
+    background: #fff !important;
+    color: #000;
+  }
   #search-reset {
     left: 235px;
     font-size: 12.5px;
