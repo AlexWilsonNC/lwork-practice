@@ -323,7 +323,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       <div className="deck-build-options">
         <div className='all-options-box'>
           <div className='options-left'>
-            <div className='options-row row-options-1 hideon450'>
+            <div className='options-row row-options-1'>
               <div className='my-decks-btn'>
                 <button onClick={handleMyDecks}>
                   <p>My Decks</p>
@@ -331,14 +331,14 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
               </div>
               <div className='deck-options-btns-right'>
                 <button onClick={handleImport} disabled={importing}>
-                  <p>Import Deck</p>
+                  <p>Import <span className='hideon450'>Deck</span></p>
                 </button>
                 <div className="copy-menu-container" ref={menuRef}>
                   <button
                     onClick={() => setShowCopyMenu(v => !v)}
                     disabled={!deck.length}
                   >
-                    <p>Export Deck</p>
+                    <p>Export <span className='hideon450'>Deck</span></p>
                     <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
                   </button>
                   {showCopyMenu && (
@@ -374,60 +374,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                   )}
                 </div>
                 <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
-                  <p>Save Deck</p>
-                </button>
-              </div>
-            </div>
-            <div className='options-row showon450'>
-              <div className='deck-options-btns-right'>
-                <button onClick={handleMyDecks}>
-                  <p>My Decks</p>
-                </button>
-                <button onClick={handleImport} disabled={importing}>
-                  <p>Import</p>
-                </button>
-                <div className="copy-menu-container" ref={menuRef}>
-                  <button
-                    onClick={() => setShowCopyMenu(v => !v)}
-                    disabled={!deck.length}
-                  >
-                    <p>Export</p>
-                    <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
-                  </button>
-                  {showCopyMenu && (
-                    <div className="copy-menu-dropdown">
-                      <div
-                        className="menu-item"
-                        onClick={copyText}
-                      >
-                        Copy as Text
-                      </div>
-                      <div
-                        className="menu-item"
-                        onClick={shareLink}
-                      >
-                        Share via Link
-                      </div>
-                      <div
-                        className="menu-item"
-                        onClick={handleExportImage}
-                      >
-                        Download Image
-                      </div>
-                      <div className="menu-item" onClick={openPrintDecklist}>
-                        Print Decklist
-                      </div>
-                      <div
-                        className="menu-item"
-                        onClick={copyJson}
-                      >
-                        Copy as Jsoɴ
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
-                  <p>Save</p>
+                  <p>Save <span className='hideon450'>Deck</span></p>
                 </button>
               </div>
             </div>

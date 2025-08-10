@@ -822,6 +822,10 @@ body.deckbuilder-page .deck-builder {
 .options-row button p {
   font-size: 16px;
 }
+.options-row button p span {
+  font-size: 16px;
+  font-weight: 600;
+}
 
 .options-row button:hover {
   cursor: pointer;
@@ -2292,9 +2296,12 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
   }
 
-  .options-row button span {
+  .options-row button .material-symbols-outlined {
     font-size: 18px;
     margin-left: 3px;
+  }
+  .options-row button p span {
+    font-size: 14px;
   }
 
   .copy-menu-dropdown .menu-item {
@@ -2407,10 +2414,12 @@ body.deckbuilder-page .deck-builder {
   .options-row button p {
     font-size: 10px;
   }
-
-  .options-row button span {
+.options-row button .material-symbols-outlined {
     font-size: 14px;
     margin-left: 1px;
+  }
+  .options-row button p span {
+    font-size: 10px;
   }
 
   .deck-build-options {
@@ -2570,42 +2579,34 @@ body.deckbuilder-page .deck-builder {
   .hideon450 {
     display: none !important;
   }
-  .showon450 {
-    display: flex;
-    flex-direction: row !important;
-  }
   .add-card-to-deck {
     padding: 15px;
     font-size: 22px;
     margin-bottom: 10px;
-  }
-  .deck-options-btns-right {
-    justify-content: space-around;
-    width: 100%;
-  }
-  .options-row {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-  .save-deck-btn {
-    margin-right: 0px !important;
   }
   .copy-menu-container {
     position: relative;
     display: inline-block;
     margin: 0;
   }
-  .deck-options-btns-right button {
-    /* margin: 0 15px 20px 15px; */
+  .deck-options-btns-right button,
+  .my-decks-btn button {
     width: 75px;
+    margin-right: 5px;
+    border: 1.5px solid grey;
+    border-radius: 1px;
   }
-  .deck-options-btns-right button p {
+  .my-decks-btn button {
+    margin-left: -10px;
+  }
+  .save-deck-btn {
+    border: 1.5px solid rgba(0, 0, 0, 0.4) !important;
+    border-radius: 1px;
+  }
+  .deck-options-btns-right button p,
+  .my-decks-btn button p {
     font-size: 8px !important;
   }
-  /* .deck-build-options {
-    height: 87.5px;
-  } */
   .zoom-slider {
     align-items: center;
     justify-content: center;
