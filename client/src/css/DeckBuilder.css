@@ -2164,8 +2164,7 @@ body.deckbuilder-page .deck-builder {
     cursor: pointer;
   }
 
-  .card-search-toggle-btn.at-bottom,
-  .card-search-toggle-btn.at-top {
+  .card-search-toggle-btn.at-bottom {
     bottom: 0;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -2173,13 +2172,13 @@ body.deckbuilder-page .deck-builder {
     border-bottom-right-radius: 0;
   }
 
-  /* .card-search-toggle-btn.at-top {
+  .card-search-toggle-btn.at-top {
     top: 0;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  } */
+  }
 
   .card-search-toggle-line {
     width: 100px;
