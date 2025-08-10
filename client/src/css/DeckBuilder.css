@@ -2099,12 +2099,12 @@ body.deckbuilder-page .deck-builder {
 }
 
 @media screen and (max-width: 1160px) {
-  .pm-card {
-    visibility: visible;
-  }
 .searched-card-wrap:hover {
   transform: scale(1);
 }
+  .event-searchbar {
+    border-right: none;
+  }
 .deckbuilt-card-container:hover {
   transform: scale(1);
 }
@@ -2164,7 +2164,8 @@ body.deckbuilder-page .deck-builder {
     cursor: pointer;
   }
 
-  .card-search-toggle-btn.at-bottom {
+  .card-search-toggle-btn.at-bottom,
+  .card-search-toggle-btn.at-top {
     bottom: 0;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -2172,13 +2173,13 @@ body.deckbuilder-page .deck-builder {
     border-bottom-right-radius: 0;
   }
 
-  .card-search-toggle-btn.at-top {
+  /* .card-search-toggle-btn.at-top {
     top: 0;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
+  } */
 
   .card-search-toggle-line {
     width: 100px;
@@ -2560,6 +2561,7 @@ body.deckbuilder-page .deck-builder {
   }
   .showon450 {
     display: flex;
+    flex-direction: row !important;
   }
   .add-card-to-deck {
     padding: 15px;
@@ -2567,11 +2569,8 @@ body.deckbuilder-page .deck-builder {
     margin-bottom: 10px;
   }
   .deck-options-btns-right {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
-    margin-top: -10px;
   }
   .options-row {
     flex-direction: column;
@@ -2579,7 +2578,7 @@ body.deckbuilder-page .deck-builder {
     width: 100%;
   }
   .save-deck-btn {
-    margin-right: 15px !important;
+    margin-right: 0px !important;
   }
   .copy-menu-container {
     position: relative;
@@ -2587,12 +2586,15 @@ body.deckbuilder-page .deck-builder {
     margin: 0;
   }
   .deck-options-btns-right button {
-    margin: 0 15px 20px 15px;
-    width: 125px;
+    /* margin: 0 15px 20px 15px; */
+    width: 75px;
   }
-  .deck-build-options {
+  .deck-options-btns-right button p {
+    font-size: 8px !important;
+  }
+  /* .deck-build-options {
     height: 87.5px;
-  }
+  } */
   .zoom-slider {
     align-items: center;
     justify-content: center;
@@ -2615,6 +2617,9 @@ body.deckbuilder-page .deck-builder {
   .moveit-moveit {
     justify-content: space-between; 
     width: 100%;
+  }
+  .card-search-container.visible .card-search-content {
+    padding-top: 0px;
   }
 }
 

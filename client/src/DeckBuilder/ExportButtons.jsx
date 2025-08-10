@@ -383,20 +383,15 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                 <button onClick={handleMyDecks}>
                   <p>My Decks</p>
                 </button>
-                <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
-                  <p>Save Deck</p>
-                </button>
-              </div>
-              <div className='deck-options-btns-right'>
                 <button onClick={handleImport} disabled={importing}>
-                  <p>Import Deck</p>
+                  <p>Import</p>
                 </button>
                 <div className="copy-menu-container" ref={menuRef}>
                   <button
                     onClick={() => setShowCopyMenu(v => !v)}
                     disabled={!deck.length}
                   >
-                    <p>Export Deck</p>
+                    <p>Export</p>
                     <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
                   </button>
                   {showCopyMenu && (
@@ -431,6 +426,9 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                     </div>
                   )}
                 </div>
+                <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
+                  <p>Save</p>
+                </button>
               </div>
             </div>
           </div>
