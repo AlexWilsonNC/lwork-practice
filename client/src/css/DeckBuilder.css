@@ -2576,6 +2576,9 @@ body.deckbuilder-page .deck-builder {
   .hideon450 {
     display: none !important;
   }
+  .showon450 {
+    display: flex;
+  }
   .add-card-to-deck {
     padding: 15px;
     font-size: 22px;
@@ -2597,11 +2600,14 @@ body.deckbuilder-page .deck-builder {
   #deck-sort {
     border: 1.5px solid rgba(0, 0, 0, 0.3);
     border-radius: 1px;
+    height: 25px; 
+    padding: 0 5px !important;
   }
   .limit-menu-btn {
     border: 1.5px solid rgba(0, 0, 0, 0.3);
     border-radius: 1px;
-    padding: 1.5px 10px;
+    height: 27px;
+    width: 27px;
   }
   .my-decks-btn button {
     margin-left: -10px;
@@ -2639,6 +2645,9 @@ body.deckbuilder-page .deck-builder {
   }
   .card-search-container.visible .card-search-content {
     padding-top: 0px;
+  }
+  .limit-menu-dropdown {
+    right: 0px;
   }
 }
 

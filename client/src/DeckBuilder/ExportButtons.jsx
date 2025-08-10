@@ -117,7 +117,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const handleMyDecks = () => {
     if (user) {
       // same‐window nav to account
-      window.location.href = '/account'
+      window.location.href = '/taco'
     } else {
       // reuse your save‑modal login prompt
       setShowSaveModal(true)
@@ -248,7 +248,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         })
       })
       if (res.ok) {
-        window.location.href = '/account'
+        window.location.href = '/taco'
         setSaving(false)
         setShowSaveModal(false)
         setDeckName('')
