@@ -724,7 +724,7 @@ export default function DeckBuilder() {
                   </div>
                 )}
               </div>
-              <div className="zoom-slider">
+              <div className="zoom-slider hideon450">
                 <button
                   type="button"
                   className="material-symbols-outlined slider-zoomout"
@@ -764,6 +764,40 @@ export default function DeckBuilder() {
               {/* <p>Support this Project</p> */}
               <p>Support Us</p>
             </a>
+          </div>
+          <div className="zoom-slider showon450">
+            <button
+              type="button"
+              className="material-symbols-outlined slider-zoomout"
+              onClick={() =>
+                setZoomScale(z =>
+                  Math.max(MIN_ZOOM, parseFloat((z - ZOOM_STEP).toFixed(2)))
+                )
+              }
+              disabled={zoomScale <= MIN_ZOOM}
+            >
+              remove
+            </button>
+            <input
+              type="range"
+              min={MIN_ZOOM}
+              max={MAX_ZOOM}
+              step={ZOOM_STEP}
+              value={zoomScale}
+              onChange={e => setZoomScale(parseFloat(e.target.value))}
+            />
+            <button
+              type="button"
+              className="material-symbols-outlined slider-zoomin"
+              onClick={() =>
+                setZoomScale(z =>
+                  Math.min(MAX_ZOOM, parseFloat((z + ZOOM_STEP).toFixed(2)))
+                )
+              }
+              disabled={zoomScale >= MAX_ZOOM}
+            >
+              add
+            </button>
           </div>
           <div ref={deckRef} id="deck-to-export">
             <DeckList

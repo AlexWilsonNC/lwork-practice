@@ -1372,7 +1372,7 @@
     margin-right: 7.5px;
   }
 
-  .deck-box {
+  .card-modal-content-account .deck-box {
     margin-top: 10px !important;
     padding: 7.5px;
   }
@@ -1387,11 +1387,11 @@
     padding: 0 5px;
   }
 
-  .deckbuilt-card-container {
+  .card-modal-content-account .deckbuilt-card-container {
     width: 37.5px !important;
   }
 
-  .current-cnt-num {
+  .card-modal-content-account .current-cnt-num {
     width: 11px !important;
     height: 11px !important;
   }

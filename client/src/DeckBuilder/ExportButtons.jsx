@@ -190,6 +190,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     const prevBg = node.style.background;
     node.style.background = bgUrl;
     node.style.backgroundSize = '75px 75px';
+    node.style.paddingBottom = '10px';
 
     toPng(node, { cacheBust: true, backgroundColor: null })
       .then(pngDataUrl => {
@@ -200,10 +201,12 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         <html>
           <head><title>Save your deck</title></head>
           <body style="margin:0;display:flex;
-                       justify-content:center;align-items:center;
-                       background:#000">
+                       justify-content:center;align-items:center;flex-direction:column;
+                       background:#000;height:100vh;">
+            <p style='color:white;'>FYI: Adjust the zoom slider in the deckbuilder to control how the below screenshot looks.</p>
+            <br>
             <img src="${pngDataUrl}"
-                 style="max-width:95%;height:auto;max-height:95%;display:block"/>
+                 style="max-width:95%;height:auto;max-height:95%;display:block;"/>
           </body>
         </html>
       `);
@@ -320,7 +323,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       <div className="deck-build-options">
         <div className='all-options-box'>
           <div className='options-left'>
-            <div className='options-row row-options-1'>
+            <div className='options-row row-options-1 hideon450'>
               <div className='my-decks-btn'>
                 <button onClick={handleMyDecks}>
                   <p>My Decks</p>
@@ -373,6 +376,61 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                 <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
                   <p>Save Deck</p>
                 </button>
+              </div>
+            </div>
+            <div className='options-row showon450'>
+              <div className='deck-options-btns-right'>
+                <button onClick={handleMyDecks}>
+                  <p>My Decks</p>
+                </button>
+                <button onClick={handleSaveClick} disabled={!deck.length} className='save-deck-btn'>
+                  <p>Save Deck</p>
+                </button>
+              </div>
+              <div className='deck-options-btns-right'>
+                <button onClick={handleImport} disabled={importing}>
+                  <p>Import Deck</p>
+                </button>
+                <div className="copy-menu-container" ref={menuRef}>
+                  <button
+                    onClick={() => setShowCopyMenu(v => !v)}
+                    disabled={!deck.length}
+                  >
+                    <p>Export Deck</p>
+                    <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+                  </button>
+                  {showCopyMenu && (
+                    <div className="copy-menu-dropdown">
+                      <div
+                        className="menu-item"
+                        onClick={copyText}
+                      >
+                        Copy as Text
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={shareLink}
+                      >
+                        Share via Link
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={handleExportImage}
+                      >
+                        Download Image
+                      </div>
+                      <div className="menu-item" onClick={openPrintDecklist}>
+                        Print Decklist
+                      </div>
+                      <div
+                        className="menu-item"
+                        onClick={copyJson}
+                      >
+                        Copy as Jsoɴ
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

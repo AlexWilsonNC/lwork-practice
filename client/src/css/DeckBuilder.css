@@ -770,7 +770,8 @@ body.deckbuilder-page .deck-builder {
   justify-content: space-between;
 }
 
-.options-row button {
+.options-row button,
+.options-row-small-mobile button {
   text-decoration: none;
   color: rgb(233, 233, 233);
   background-color: rgb(90, 90, 90);
@@ -2526,6 +2527,13 @@ body.deckbuilder-page .deck-builder {
   .search-input-wrapper {
     margin-top: 15px;
   }
+  .search-mag {
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+   #search-reset {
+    left: 250px;
+  }
 }
 @media screen and (max-width: 475px) {
   .zoom-slider input[type="range"] {
@@ -2533,10 +2541,62 @@ body.deckbuilder-page .deck-builder {
     margin: 0 0.5rem;
   }
 }
+.showon450 {
+  display: none;
+}
 @media screen and (max-width: 450px) {
+  .hideon450 {
+    display: none !important;
+  }
+  .showon450 {
+    display: flex;
+  }
   .add-card-to-deck {
     padding: 15px;
     font-size: 22px;
     margin-bottom: 10px;
+  }
+  .deck-options-btns-right {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: -10px;
+  }
+  .options-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .save-deck-btn {
+    margin-right: 15px !important;
+  }
+  .copy-menu-container {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+  }
+  .deck-options-btns-right button {
+    margin: 0 15px 20px 15px;
+    width: 125px;
+  }
+  .deck-build-options {
+    height: 87.5px;
+  }
+  .zoom-slider {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    right: 0;
+  }
+  .zoom-slider input[type="range"] {
+    width: 60%;
+    margin: 0 0.5rem;
+  }
+  .deck-box {
+    margin-top: 20px !important;
+  }
+  .event-searchbar {
+    padding: 25px 0px 20px 10px;
   }
 }
