@@ -1023,10 +1023,8 @@ body.deckbuilder-page .deck-builder {
   position: relative;
   display: inline-block;
   margin-left: 1rem;
-  /* spacing from reset */
 }
 
-/* the three-dot button */
 .limit-menu-btn {
   background: #1290eb;
   border: 2px solid rgba(0, 0, 0, 0.3);
@@ -1041,7 +1039,6 @@ body.deckbuilder-page .deck-builder {
   background-color: grey;
 }
 
-/* the dropdown panel */
 .limit-menu-dropdown {
   position: absolute;
   top: 120%;
@@ -2595,6 +2592,16 @@ body.deckbuilder-page .deck-builder {
     margin-right: 5px;
     border: 1.5px solid grey;
     border-radius: 1px;
+  }
+  #deck-reset,
+  #deck-sort {
+    border: 1.5px solid rgba(0, 0, 0, 0.3);
+    border-radius: 1px;
+  }
+  .limit-menu-btn {
+    border: 1.5px solid rgba(0, 0, 0, 0.3);
+    border-radius: 1px;
+    padding: 1.5px 10px;
   }
   .my-decks-btn button {
     margin-left: -10px;
