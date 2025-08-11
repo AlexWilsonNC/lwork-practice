@@ -9,7 +9,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
-import LiveStandings from '../Live/LiveStandings';
+// import LiveStandings from '../Live/LiveStandings';
 import { flags, countryNames } from '../Tools/flags';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);

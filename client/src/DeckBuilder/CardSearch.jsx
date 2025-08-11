@@ -21,6 +21,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
     const toggleBtnRef = useRef(null);
+    const [searchMode, setSearchMode] = useState('name');
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -74,15 +75,91 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             })
     }, [])
 
+    // useEffect(() => {
+    //     const trimmed = query.trim()
+
+    //     if (trimmed === '') {
+    //         if (suppressDefault) {
+    //             setResults([])
+    //         } else {
+    //             setResults(defaultCards)
+    //         }
+    //         return
+    //     }
+
+    //     if (trimmed.length < 2 && trimmed.toUpperCase() !== 'N') {
+    //         setResults([])
+    //         return
+    //     }
+    //     const t = setTimeout(() => {
+    //         // ➊ normalize the user’s query: remove accents & spaces, lowercase
+    //         const normalizedQuery = query
+    //             .normalize('NFD')
+    //             .replace(/[\u0300-\u036f]/g, '')
+    //             .replace(/\s+/g, '')
+    //             .toLowerCase();
+
+    //         // hit your existing endpoint with the normalized query
+    //         fetch(`/api/cards/searchbyname/partial/${encodeURIComponent(normalizedQuery)}`)
+    //             .then(res => {
+    //                 if (!res.ok) throw new Error(`Network ${res.status}`)
+    //                 return res.json()
+    //             })
+    //             .then(data => {
+    //                 let arr = Array.isArray(data) ? data : []
+
+    //                 // preserve your special “N” logic
+    //                 if (trimmed.toUpperCase() === 'N') {
+    //                     arr = arr.filter(c => c.name.toUpperCase() === 'N')
+    //                 }
+    //                 // ➋ now client‐side filter to ignore accents/spaces in names too
+    //                 const normalize = str =>
+    //                     str
+    //                         .normalize('NFD')
+    //                         .replace(/[\u0300-\u036f]/g, '')
+    //                         .replace(/\s+/g, '')
+    //                         .toLowerCase();
+    //                 arr = arr.filter(c => {
+    //                     if (searchMode === 'name') {
+    //                         return normalize(c.name).includes(normalizedQuery);
+    //                     } else {
+    //                         // Search name + attacks + abilities
+    //                         const texts = [
+    //                             c.name || '',
+    //                             ...(c.attacks?.map(a => a.name) || []),
+    //                             ...(c.attacks?.map(a => a.text) || []),
+    //                             ...(c.abilities?.map(a => a.name) || []),
+    //                             ...(c.abilities?.map(a => a.text) || [])
+    //                         ];
+    //                         return texts.some(t => normalize(t).includes(normalizedQuery));
+    //                     }
+    //                 });
+
+    //                 arr.sort((a, b) => {
+    //                     const idxA = setOrder.indexOf(a.setAbbrev)
+    //                     const idxB = setOrder.indexOf(b.setAbbrev)
+    //                     if (idxA !== idxB) return idxA - idxB
+    //                     const numA = parseInt(a.number, 10) || 0
+    //                     const numB = parseInt(b.number, 10) || 0
+    //                     return numA - numB
+    //                 })
+
+    //                 setResults(arr)
+    //             })
+    //             .catch(err => {
+    //                 console.error('Search failed:', err)
+    //                 setResults([])
+    //             })
+    //     }, 300)
+    //     return () => clearTimeout(t)
+    // }, [query, defaultCards])
+
     useEffect(() => {
         const trimmed = query.trim()
 
         if (trimmed === '') {
-            if (suppressDefault) {
-                setResults([])
-            } else {
-                setResults(defaultCards)
-            }
+            if (suppressDefault) setResults([])
+            else setResults(defaultCards)
             return
         }
 
@@ -90,16 +167,21 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             setResults([])
             return
         }
+
         const t = setTimeout(() => {
-            // ➊ normalize the user’s query: remove accents & spaces, lowercase
             const normalizedQuery = query
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/\s+/g, '')
                 .toLowerCase();
 
-            // hit your existing endpoint with the normalized query
-            fetch(`/api/cards/searchbyname/partial/${encodeURIComponent(normalizedQuery)}`)
+            const rawQuery = query.trim();
+
+            const route =
+                searchMode === 'name'
+                    ? `/api/cards/searchbyname/partial/${encodeURIComponent(rawQuery)}`
+                    : `/api/cards/searchbytext/partial/${encodeURIComponent(rawQuery)}`;
+
+            fetch(route)
                 .then(res => {
                     if (!res.ok) throw new Error(`Network ${res.status}`)
                     return res.json()
@@ -107,18 +189,19 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                 .then(data => {
                     let arr = Array.isArray(data) ? data : []
 
-                    // preserve your special “N” logic
                     if (trimmed.toUpperCase() === 'N') {
-                        arr = arr.filter(c => c.name.toUpperCase() === 'N')
+                        arr = arr.filter(c => (c.name || '').toUpperCase() === 'N')
                     }
-                    // ➋ now client‐side filter to ignore accents/spaces in names too
+
                     const normalize = str =>
-                        str
-                            .normalize('NFD')
-                            .replace(/[\u0300-\u036f]/g, '')
+                        (str || '')
+                            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                             .replace(/\s+/g, '')
                             .toLowerCase();
-                    arr = arr.filter(c => normalize(c.name).includes(normalizedQuery));
+
+                    if (searchMode === 'name') {
+                        arr = arr.filter(c => normalize(c.name).includes(normalizedQuery));
+                    }
 
                     arr.sort((a, b) => {
                         const idxA = setOrder.indexOf(a.setAbbrev)
@@ -131,13 +214,11 @@ export default function CardSearch({ onAddCard, onCardClick }) {
 
                     setResults(arr)
                 })
-                .catch(err => {
-                    console.error('Search failed:', err)
-                    setResults([])
-                })
+                .catch(() => setResults([]))
         }, 300)
+
         return () => clearTimeout(t)
-    }, [query, defaultCards])
+    }, [query, defaultCards, searchMode])
 
     const displayResults = results.filter(card => {
         if (!filters.supertypes[card.supertype]) return false
@@ -373,18 +454,14 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                     >×</button>
                                 )}
                             </div>
-                            <button
-                                type="button"
-                                id="search-reset"
-                                onClick={() => {
-                                    setQuery('')
-                                    setSuppressDefault(true)
-                                    setResults([])
-                                }}
+                            <select
+                                value={searchMode}
+                                onChange={e => setSearchMode(e.target.value)}
+                                className="search-mode-dropdown"
                             >
-                                <span className="material-symbols-outlined">close</span>
-                                <p>Reset</p>
-                            </button>
+                                <option value="name">Search by card name</option>
+                                <option value="text">Search by total card text</option>
+                            </select>
                             <button
                                 className="advanced-search-button-small"
                                 onClick={() => setShowAdvanced(true)}

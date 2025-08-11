@@ -190,34 +190,11 @@ export default function DeckBuilder() {
   const params = new URLSearchParams(window.location.search);
   const originalDeckId = params.get('deckId');
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
-  const [sliderNonce, setSliderNonce] = useState(0);
 
   useEffect(() => {
     document.body.classList.add("deckbuilder-page");
     return () => document.body.classList.remove("deckbuilder-page");
   }, []);
-
-  const mobileSliderRef = useRef(null);
-
-  // keep the mobile slider unfocused and disabled during export
-  useEffect(() => {
-    const el = mobileSliderRef.current;
-    if (!el) return;
-
-    if (exportingImage) {
-      // prevent “active/focus” UA styles from sticking
-      el.blur();
-      el.disabled = true;
-    } else {
-      // give the browser a beat to return from the download UI
-      const t = setTimeout(() => {
-        if (!mobileSliderRef.current) return;
-        mobileSliderRef.current.disabled = false;
-        mobileSliderRef.current.blur();
-      }, 150);
-      return () => clearTimeout(t);
-    }
-  }, [exportingImage]);
 
   useEffect(() => {
     if (!showLimitMenu) return
@@ -439,7 +416,7 @@ export default function DeckBuilder() {
   useEffect(() => {
     localStorage.setItem('decklistZoomScale', zoomScale);
   }, [zoomScale]);
-
+  
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
@@ -674,13 +651,7 @@ export default function DeckBuilder() {
             onImportDeck={importDeck}
             deckRef={deckRef}
             onExportStart={() => setExportingImage(true)}
-            onExportEnd={() => {
-              setExportingImage(false);
-              if (document.activeElement instanceof HTMLElement) {
-                document.activeElement.blur();
-              }
-              setSliderNonce(n => n + 1);
-            }}
+            onExportEnd={() => setExportingImage(false)}
           />
           <div className='deck-stats'>
             <div className='moveit-moveit'>
@@ -810,7 +781,6 @@ export default function DeckBuilder() {
               remove
             </button>
             <input
-              key={sliderNonce}
               type="range"
               min={MIN_ZOOM}
               max={MAX_ZOOM}

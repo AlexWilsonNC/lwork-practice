@@ -5,7 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const https = require('https');
+// const https = require('https');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
@@ -17,6 +17,8 @@ app.use(express.json());
 
 let cachedCards = null;
 let cachedNormalizedNames = null;
+
+const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -82,7 +84,7 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     locked: { type: Boolean, default: false },
     isPublic: { type: Boolean, default: false },
-    color: { type: String,  default: '#1290eb' }
+    color: { type: String, default: '#1290eb' }
   }]
 });
 const User = authConnection.model('User', userSchema, 'users');
@@ -340,10 +342,10 @@ app.post('/api/user/folders', requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     const nextOrder = user.folders.length;
-    user.folders.push({ 
-      name, 
+    user.folders.push({
+      name,
       order: nextOrder,
-      color: color || undefined 
+      color: color || undefined
     });
     await user.save();
     res.json(user.folders);
@@ -577,7 +579,7 @@ app.get('/api/public/:username/deck-collection', async (req, res) => {
 
     res.json({
       folders: user.folders.filter(f => f.isPublic),
-      decks:   publicDecks
+      decks: publicDecks
     });
   } catch (err) {
     console.error(err);
@@ -619,80 +621,79 @@ app.post('/api/subscribe', async (req, res) => {
   }
 });
 
+// let standingsCache = null;
+// let cacheTimestamp = null;
+// const cacheDuration = 5 * 60 * 1000; // 5 minutes
 
-let standingsCache = null;
-let cacheTimestamp = null;
-const cacheDuration = 5 * 60 * 1000; // 5 minutes
+// const fetchStandings = () => {
+//   const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
+//   console.log('Fetching live standings from:', eventUrl);
 
-const fetchStandings = () => {
-  const eventUrl = 'https://pokedata.ovh/standings/0000128/masters/0000128_Masters.json';
-  console.log('Fetching live standings from:', eventUrl);
+//   https.get(eventUrl, (response) => {
+//     let data = '';
 
-  https.get(eventUrl, (response) => {
-    let data = '';
+//     response.on('data', (chunk) => {
+//       data += chunk;
+//     });
 
-    response.on('data', (chunk) => {
-      data += chunk;
-    });
+//     response.on('end', () => {
+//       try {
+//         const parsedData = JSON.parse(data);
+//         standingsCache = parsedData;
+//         cacheTimestamp = Date.now();
+//         console.log('Successfully fetched and cached standings data.');
+//       } catch (error) {
+//         console.error('Error parsing JSON:', error.message);
+//       }
+//     });
 
-    response.on('end', () => {
-      try {
-        const parsedData = JSON.parse(data);
-        standingsCache = parsedData;
-        cacheTimestamp = Date.now();
-        console.log('Successfully fetched and cached standings data.');
-      } catch (error) {
-        console.error('Error parsing JSON:', error.message);
-      }
-    });
+//   }).on('error', (error) => {
+//     console.error('Error fetching live standings:', error.message);
+//   });
+// };
 
-  }).on('error', (error) => {
-    console.error('Error fetching live standings:', error.message);
-  });
-};
+// // Initial fetch to populate cache
+// fetchStandings();
 
-// Initial fetch to populate cache
-fetchStandings();
+// // Regular interval fetch to refresh cache
+// setInterval(fetchStandings, cacheDuration);
 
-// Regular interval fetch to refresh cache
-setInterval(fetchStandings, cacheDuration);
+// app.get('/api/live-standings', (req, res) => {
+//   const { eventId, isEventCompleted, finalDataUrl } = req.query;
 
-app.get('/api/live-standings', (req, res) => {
-  const { eventId, isEventCompleted, finalDataUrl } = req.query;
+//   let urlToFetch;
+//   if (isEventCompleted === 'true' && finalDataUrl) {
+//     urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
+//   } else if (isEventCompleted === 'false') {
+//     urlToFetch = 'https://pokedata.ovh/standings/0000129/masters/0000129_Masters.json';  // Replace with actual live URL
+//   } else {
+//     return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
+//   }
 
-  let urlToFetch;
-  if (isEventCompleted === 'true' && finalDataUrl) {
-    urlToFetch = finalDataUrl;  // Use the final data URL if the event is completed
-  } else if (isEventCompleted === 'false') {
-    urlToFetch = 'https://pokedata.ovh/standings/0000129/masters/0000129_Masters.json';  // Replace with actual live URL
-  } else {
-    return res.status(400).json({ error: 'No valid URL available for fetching standings.' });
-  }
+//   console.log('Fetching live standings from:', urlToFetch);
 
-  console.log('Fetching live standings from:', urlToFetch);
+//   https.get(urlToFetch, (response) => {
+//     let data = '';
 
-  https.get(urlToFetch, (response) => {
-    let data = '';
+//     response.on('data', (chunk) => {
+//       data += chunk;
+//     });
 
-    response.on('data', (chunk) => {
-      data += chunk;
-    });
+//     response.on('end', () => {
+//       try {
+//         const parsedData = JSON.parse(data);
+//         res.json(parsedData);
+//       } catch (error) {
+//         console.error('Error parsing JSON:', error.message);
+//         res.status(500).json({ error: 'Error parsing JSON or no data received' });
+//       }
+//     });
 
-    response.on('end', () => {
-      try {
-        const parsedData = JSON.parse(data);
-        res.json(parsedData);
-      } catch (error) {
-        console.error('Error parsing JSON:', error.message);
-        res.status(500).json({ error: 'Error parsing JSON or no data received' });
-      }
-    });
-
-  }).on('error', (error) => {
-    console.error('Error fetching live standings:', error.message);
-    res.status(500).json({ error: 'Error fetching live standings: ' + error.message });
-  });
-});
+//   }).on('error', (error) => {
+//     console.error('Error fetching live standings:', error.message);
+//     res.status(500).json({ error: 'Error fetching live standings: ' + error.message });
+//   });
+// });
 
 const eventSchema = new mongoose.Schema({
   id: String,
@@ -798,28 +799,28 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
   const rawQ = (req.params.name || '').trim();
   const q = rawQ
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') 
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '')
     .toLowerCase();
 
   try {
     const collection = cardConnection.collection('card-database');
-   if (!cachedCards) {
-     const cards = await collection.find().toArray();
-     cachedCards = cards;
-     cachedNormalizedNames = cards.map(c => ({
-       raw: c,
-       norm: c.name
-         .normalize('NFD')
-         .replace(/[\u0300-\u036f]/g, '')
-         .replace(/\s+/g, '')
-         .toLowerCase()
-     }));
-   }
+    if (!cachedCards) {
+      const cards = await collection.find().toArray();
+      cachedCards = cards;
+      cachedNormalizedNames = cards.map(c => ({
+        raw: c,
+        norm: c.name
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, '')
+          .toLowerCase()
+      }));
+    }
 
-   const matches = cachedNormalizedNames
-     .filter(({ norm }) => norm.includes(q))
-     .map(({ raw }) => raw);
+    const matches = cachedNormalizedNames
+      .filter(({ norm }) => norm.includes(q))
+      .map(({ raw }) => raw);
     return res.json(matches);
   } catch (err) {
     console.error('Error searching cards:', err);
@@ -842,6 +843,91 @@ app.get('/api/cards/searchbyname/:name', async (req, res) => {
   } catch (error) {
     console.error('Error occurred while searching for card:', error);
     res.status(500).json({ message: 'card name', cardName });
+  }
+});
+
+app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
+  try {
+    const qRaw = (req.params.q || '').trim();
+    if (!qRaw) return res.json([]);
+
+    const norm = qRaw
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+    const tokens = norm.match(/[a-z0-9]+/g) || [];
+
+    if (tokens.length === 0) return res.json([]);
+
+    const DIA = {
+      a: '[aàáâãäåāăą]',
+      c: '[cçćč]',
+      e: '[eèéêëēĕėęě]',
+      i: '[iìíîïĩīĭįı]',
+      n: '[nñńň]',
+      o: '[oòóôõöōŏőøơ]',
+      u: '[uùúûüũūŭůűųư]',
+      y: '[yýÿŷ]',
+      s: '[sśš]',
+      z: '[zżźž]',
+      l: '[lł]',
+      d: '[dď]',
+      r: '[rř]',
+      t: '[tť]',
+    };
+
+    const charClass = (ch) => {
+      const base = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      return DIA[base] || escapeRegex(ch.toLowerCase());
+    };
+
+    const toPattern = (q) => {
+      const tokens = (q || '')
+        .toLowerCase()
+        .match(/[a-z0-9]+/g) || [];
+      if (tokens.length === 0) return null;
+
+      const tokenPatterns = tokens.map(tok =>
+        tok.split('').map(charClass).join('')
+      );
+      return new RegExp(tokenPatterns.join('[\\s\\S]*?'), 'i');
+    };
+
+    const rx = toPattern(qRaw);
+    if (!rx) return res.json([]);
+
+    const cards = cardConnection.collection('card-database');
+
+    const cursor = cards.find(
+      {
+        $or: [
+          { name: rx },
+          { text: rx },
+          { rules: rx },
+          { flavorText: rx },
+          { 'attacks.name': rx },
+          { 'attacks.text': rx },
+          { 'abilities.name': rx },
+          { 'abilities.text': rx },
+          { 'ability.name': rx },
+          { 'ability.text': rx }
+        ]
+      },
+      {
+        projection: {
+          _id: 0,
+          id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
+          attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1
+        }
+      }
+    )
+      .limit(200);
+
+    const results = await cursor.toArray();
+    res.json(results);
+  } catch (e) {
+    console.error('searchbytext/partial error:', e);
+    res.status(500).json({ error: 'text search failed' });
   }
 });
 
