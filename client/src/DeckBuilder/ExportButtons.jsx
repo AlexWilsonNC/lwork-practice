@@ -116,10 +116,8 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
   const handleMyDecks = () => {
     if (user) {
-      // same‐window nav to account
       window.location.href = '/taco'
     } else {
-      // reuse your save‑modal login prompt
       setShowSaveModal(true)
     }
   }
@@ -146,15 +144,36 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     setShowCopyMenu(false);
     node.classList.add('exporting');
 
-    // keep your patterned background logic
-    const patternSvg = `...`; // (leave yours as-is)
+    const patternSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="140%" height="140%">
+  <defs>
+    <pattern id="patternBg" patternUnits="userSpaceOnUse" width="75" height="75" patternTransform="rotate(45 30 30)">
+      <rect x="0" y="0" width="100%" height="100%" fill="#2e2e32ff"/>
+      <path
+        d="M59.995 52.87
+           m-14.557 7.125h7.450z
+           m15.687 0h7.427z
+           a4 4 0 01-4 4 4 4 0 01-4 -4 4 4 0 014 -4 4 4 0 014 4
+           zm-6.757-14.547
+           c-4.212-.069-8.465 1.673-11.262 4.869
+             -4.23 4.606-4.845 11.985-1.55 17.274
+             3.09 5.2 9.628 7.954 15.517 6.635
+             6.53-1.292 11.604-7.583 11.48-14.231
+             .096-5.628-3.495-11.014-8.606-13.298
+             -1.757-.813-3.665-1.217-5.58-1.249z"
+        stroke-width="1.5" stroke="#ffffff24" fill="none"
+      />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#patternBg)"/>
+</svg>`;
     const bgUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(patternSvg)}')`;
     const prevBg = node.style.background;
+    const prevPaddingBottom = node.style.paddingBottom;
     node.style.background = bgUrl;
     node.style.backgroundSize = '75px 75px';
-    node.style.paddingBottom = '10px';
+    node.style.paddingBottom = '21px';
 
-    // allow the "exporting" styles to apply before capture
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
@@ -168,13 +187,11 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         pixelRatio
       });
 
-      // restore styles
       node.style.background = prevBg;
+      node.style.paddingBottom = prevPaddingBottom;
       node.classList.remove('exporting');
 
-      // ⬇️ PUT THE iOS SHARE/FALLBACK + DESKTOP DOWNLOAD BLOCK RIGHT HERE ⬇️
       if (isIOS) {
-        // Prefer native share (no tabs)
         const blob = await (await fetch(dataUrl)).blob();
         const file = new File([blob], 'deck.png', { type: 'image/png' });
 
@@ -182,19 +199,16 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           try {
             await navigator.share({ files: [file], title: 'PTCG Legends Deck' });
           } catch (e) {
-            // user cancelled or share failed — fallback to viewer
             const url = URL.createObjectURL(blob);
             window.location.assign(url);
             setTimeout(() => URL.revokeObjectURL(url), 15000);
           }
         } else {
-          // Fallback: show in current tab’s viewer (no blank popup)
           const url = URL.createObjectURL(blob);
           window.location.assign(url);
           setTimeout(() => URL.revokeObjectURL(url), 15000);
         }
       } else {
-        // Desktop/Android: direct download, no extra tab
         const blob = await (await fetch(dataUrl)).blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -205,7 +219,6 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 4000);
       }
-      // ⬆️ END REPLACEMENT BLOCK ⬆️
 
     } catch (err) {
       console.error('Could not generate image', err);
