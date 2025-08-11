@@ -138,12 +138,21 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     setShowCopyMenu(false)
   }
 
-  const handleExportImage = () => {
+  const handleExportImage = async () => {
     const node = deckRef.current;
     if (!node) return;
 
-    onExportStart()
+    // Open the popup synchronously (while still in the click handler)
+    // so iOS treats it as a user gesture.
+    const w = window.open('', '_blank', 'noopener');
+    if (w) {
+      w.document.write(`<html><body style="margin:0;background:#000;color:#fff;
+        display:flex;align-items:center;justify-content:center;height:100vh">
+        Generating image…</body></html>`);
+      w.document.close();
+    }
 
+    onExportStart()
     node.classList.add('exporting');
 
     const patternSvg = `
@@ -192,11 +201,17 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     node.style.backgroundSize = '75px 75px';
     node.style.paddingBottom = '10px';
 
-    toPng(node, { cacheBust: true, backgroundColor: null })
-      .then(pngDataUrl => {
+    try {
+      const pngDataUrl = await toPng(node, {
+        cacheBust: true,
+        backgroundColor: null,
+        // Clamp DPR to keep iOS canvas size reasonable
+        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      });
         node.style.background = prevBg;
 
-        const w = window.open();
+      if (w) {
+        w.document.open();
         w.document.write(`
         <html>
           <head><title>Save your deck</title></head>
@@ -210,13 +225,21 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           </body>
         </html>
       `);
-        w.document.close();
-      })
-      .catch(err => {
-        console.error('Could not generate image', err);
-        node.style.background = prevBg;
-      })
-      .finally(() => onExportEnd())
+      w.document.close();
+      } else {
+        // Fallback: trigger a download if popup was blocked
+        const a = document.createElement('a');
+        a.href = pngDataUrl;
+        a.download = 'deck.png';
+        a.click();
+      }
+    } catch (err) {
+      console.error('Could not generate image', err);
+      node.style.background = prevBg;
+      alert('Could not generate image on this device. Try zooming out a bit or make sure images allow CORS.');
+    } finally {
+      onExportEnd();
+    }
     setShowCopyMenu(false)
   }
 
