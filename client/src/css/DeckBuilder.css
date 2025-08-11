@@ -2600,14 +2600,14 @@ body.deckbuilder-page .deck-builder {
   #deck-sort {
     border: 1.5px solid rgba(0, 0, 0, 0.3);
     border-radius: 1px;
-    height: 25px; 
+    height: 20px; 
     padding: 0 5px !important;
   }
   .limit-menu-btn {
     border: 1.5px solid rgba(0, 0, 0, 0.3);
     border-radius: 1px;
-    height: 27px;
-    width: 27px;
+    padding: 0;
+    width: 24px;
   }
   .my-decks-btn button {
     margin-left: -10px;

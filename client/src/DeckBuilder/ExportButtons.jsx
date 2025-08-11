@@ -224,8 +224,13 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       console.error('Could not generate image', err);
       node.style.background = prevBg;
       node.classList.remove('exporting');
-      alert('Could not generate image on this device. Try zooming out, or ensure images allow CORS.');
+      alert('Could not generate image. Please contact us at ptcglegends@gmail.com with the decklist so we can look into this error.');
     } finally {
+      setTimeout(() => {
+        const ae = document.activeElement;
+        if (ae && typeof ae.blur === 'function') ae.blur();
+      }, 0);
+
       onExportEnd();
     }
   };
