@@ -190,6 +190,7 @@ export default function DeckBuilder() {
   const params = new URLSearchParams(window.location.search);
   const originalDeckId = params.get('deckId');
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
+  const [sliderNonce, setSliderNonce] = useState(0);
 
   useEffect(() => {
     document.body.classList.add("deckbuilder-page");
@@ -651,7 +652,7 @@ export default function DeckBuilder() {
             onImportDeck={importDeck}
             deckRef={deckRef}
             onExportStart={() => setExportingImage(true)}
-            onExportEnd={() => setExportingImage(false)}
+            onExportEnd={() => {setExportingImage(false);setSliderNonce(n => n + 1);}}
           />
           <div className='deck-stats'>
             <div className='moveit-moveit'>
@@ -781,6 +782,7 @@ export default function DeckBuilder() {
               remove
             </button>
             <input
+              key={sliderNonce} 
               type="range"
               min={MIN_ZOOM}
               max={MAX_ZOOM}
