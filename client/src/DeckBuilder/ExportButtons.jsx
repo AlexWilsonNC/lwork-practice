@@ -139,109 +139,94 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   }
 
   const handleExportImage = async () => {
-    const node = deckRef.current;
-    if (!node) return;
+  const node = deckRef.current;
+  if (!node) return;
 
-    // Open the popup synchronously (while still in the click handler)
-    // so iOS treats it as a user gesture.
-    const w = window.open('', '_blank', 'noopener');
+  onExportStart();
+  setShowCopyMenu(false);
+  node.classList.add('exporting');
+
+  // keep your patterned background logic
+  const patternSvg = `...`; // (leave yours as-is)
+  const bgUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(patternSvg)}')`;
+  const prevBg = node.style.background;
+  node.style.background = bgUrl;
+  node.style.backgroundSize = '75px 75px';
+  node.style.paddingBottom = '10px';
+
+  // allow the "exporting" styles to apply before capture
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
+
+  // Optional iOS viewer window
+  let w = null;
+  if (isIOS) {
+    // Open synchronously so it isn't blocked, but don't steal focus
+    w = window.open('', '_blank', 'noopener');
     if (w) {
-      w.document.write(`<html><body style="margin:0;background:#000;color:#fff;
-        display:flex;align-items:center;justify-content:center;height:100vh">
-        Generating image…</body></html>`);
+      w.document.write(`<!doctype html>
+        <html><head><title>Generating…</title></head>
+        <body style="margin:0;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#000;height:100vh;color:#fff;">
+          <p id="status">Generating image…</p>
+          <img id="deckpng" style="max-width:95%;height:auto;max-height:95%;display:none;"/>
+        </body></html>`);
       w.document.close();
+      try { w.blur(); window.focus(); } catch {}
     }
-
-    onExportStart()
-    node.classList.add('exporting');
-
-    const patternSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="140%" height="140%">
-  <defs>
-    <pattern
-      id="patternBg"
-      patternUnits="userSpaceOnUse"
-      width="75"
-      height="75"
-      patternTransform="rotate(45 30 30)"
-    >
-      <rect x="0" y="0" width="100%" height="100%" fill="#2e2e32ff"/>
-        <path
-         d="M59.995 52.87
-     m-14.557 7.125h7.450z
-     m15.687 0h7.427z
-     a4 4 0 01-4 4 4 4 0 01-4 -4 4 4 0 014 -4 4 4 0 014 4
-     zm-6.757-14.547
-     c-4.212-.069-8.465 1.673-11.262 4.869
-       -4.23 4.606-4.845 11.985-1.55 17.274
-       3.09 5.2 9.628 7.954 15.517 6.635
-       6.53-1.292 11.604-7.583 11.48-14.231
-       .096-5.628-3.495-11.014-8.606-13.298
-       -1.757-.813-3.665-1.217-5.58-1.249z"
-        stroke-width='1.5'
-        stroke='#ffffff24'
-        fill='none'
-      />
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#patternBg)"/>
-  <image
-    href="__DECK_PNG__"
-    x="0" y="0"
-    width="${node.clientWidth}" height="${node.clientHeight}"
-    preserveAspectRatio="xMinYMin slice"
-  />
-</svg>`;
-
-    const svgBase64 = btoa(unescape(encodeURIComponent(patternSvg)));
-    const bgUrl = `url("data:image/svg+xml;base64,${svgBase64}")`;
-
-    const prevBg = node.style.background;
-    node.style.background = bgUrl;
-    node.style.backgroundSize = '75px 75px';
-    node.style.paddingBottom = '10px';
-
-    try {
-      const pngDataUrl = await toPng(node, {
-        cacheBust: true,
-        backgroundColor: null,
-        // Clamp DPR to keep iOS canvas size reasonable
-        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-      });
-        node.style.background = prevBg;
-
-      if (w) {
-        w.document.open();
-        w.document.write(`
-        <html>
-          <head><title>Save your deck</title></head>
-          <body style="margin:0;display:flex;
-                       justify-content:center;align-items:center;flex-direction:column;
-                       background:#000;height:100vh;">
-            <p style='color:white;'>FYI: Adjust the zoom slider in the deckbuilder to control how the below screenshot looks.</p>
-            <br>
-            <img src="${pngDataUrl}"
-                 style="max-width:95%;height:auto;max-height:95%;display:block;"/>
-          </body>
-        </html>
-      `);
-      w.document.close();
-      } else {
-        // Fallback: trigger a download if popup was blocked
-        const a = document.createElement('a');
-        a.href = pngDataUrl;
-        a.download = 'deck.png';
-        a.click();
-      }
-    } catch (err) {
-      console.error('Could not generate image', err);
-      node.style.background = prevBg;
-      alert('Could not generate image on this device. Try zooming out a bit or make sure images allow CORS.');
-    } finally {
-      onExportEnd();
-    }
-    setShowCopyMenu(false)
   }
+
+  try {
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      backgroundColor: null,
+      pixelRatio
+    });
+
+    // restore styles immediately after capture
+    node.style.background = prevBg;
+    node.classList.remove('exporting');
+
+    if (isIOS) {
+      // Show in the already-opened tab (or navigate there if blocked)
+      if (w && !w.closed) {
+        const img = w.document.getElementById('deckpng');
+        if (img) {
+          img.src = dataUrl;
+          img.style.display = 'block';
+          const status = w.document.getElementById('status');
+          if (status) status.textContent = '';
+          try { w.document.title = 'Save your deck'; } catch {}
+        } else {
+          w.location.href = dataUrl;
+        }
+      } else {
+        // If popup was blocked, just navigate current tab (iOS will show the image viewer)
+        window.location.href = dataUrl;
+      }
+    } else {
+      // Desktop/Android: direct download, no extra tab
+      const blob = await (await fetch(dataUrl)).blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'deck.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+  } catch (err) {
+    console.error('Could not generate image', err);
+    node.style.background = prevBg;
+    node.classList.remove('exporting');
+    alert('Could not generate image on this device. Try zooming out, or ensure images allow CORS.');
+  } finally {
+    onExportEnd();
+  }
+};
 
   const handleSaveClick = () => {
     setShowSaveModal(true)
