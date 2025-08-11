@@ -139,80 +139,83 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   }
 
   const handleExportImage = async () => {
-  const node = deckRef.current;
-  if (!node) return;
+    const node = deckRef.current;
+    if (!node) return;
 
-  onExportStart();
-  setShowCopyMenu(false);
-  node.classList.add('exporting');
+    onExportStart();
+    setShowCopyMenu(false);
+    node.classList.add('exporting');
 
-  // keep your patterned background logic
-  const patternSvg = `...`; // (leave yours as-is)
-  const bgUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(patternSvg)}')`;
-  const prevBg = node.style.background;
-  node.style.background = bgUrl;
-  node.style.backgroundSize = '75px 75px';
-  node.style.paddingBottom = '10px';
+    // keep your patterned background logic
+    const patternSvg = `...`; // (leave yours as-is)
+    const bgUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(patternSvg)}')`;
+    const prevBg = node.style.background;
+    node.style.background = bgUrl;
+    node.style.backgroundSize = '75px 75px';
+    node.style.paddingBottom = '10px';
 
-  // allow the "exporting" styles to apply before capture
-  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    // allow the "exporting" styles to apply before capture
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
 
-  // iOS: open a blank tab now (user gesture). We'll navigate it later.
-  let w = null;
-  if (isIOS) {
-    w = window.open('about:blank', '_blank', 'noopener');
-    if (w) { try { w.blur(); window.focus(); } catch {} }
-  }
+    try {
+      const dataUrl = await toPng(node, {
+        cacheBust: true,
+        backgroundColor: null,
+        pixelRatio
+      });
 
-  try {
-    const dataUrl = await toPng(node, {
-      cacheBust: true,
-      backgroundColor: null,
-      pixelRatio
-    });
+      // restore styles
+      node.style.background = prevBg;
+      node.classList.remove('exporting');
 
-    // restore styles immediately after capture
-    node.style.background = prevBg;
-    node.classList.remove('exporting');
+      // ⬇️ PUT THE iOS SHARE/FALLBACK + DESKTOP DOWNLOAD BLOCK RIGHT HERE ⬇️
+      if (isIOS) {
+        // Prefer native share (no tabs)
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], 'deck.png', { type: 'image/png' });
 
-    if (isIOS) {
-      // iOS: object URL is more reliable than huge data: URLs
-      const blob = await (await fetch(dataUrl)).blob();
-      const url = URL.createObjectURL(blob);
-      if (w && !w.closed) {
-        w.location.replace(url);
-        // best-effort cleanup when that tab unloads
-        try { w.addEventListener('pagehide', () => URL.revokeObjectURL(url), { once: true }); } catch {}
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: 'PTCG Legends Deck' });
+          } catch (e) {
+            // user cancelled or share failed — fallback to viewer
+            const url = URL.createObjectURL(blob);
+            window.location.assign(url);
+            setTimeout(() => URL.revokeObjectURL(url), 15000);
+          }
+        } else {
+          // Fallback: show in current tab’s viewer (no blank popup)
+          const url = URL.createObjectURL(blob);
+          window.location.assign(url);
+          setTimeout(() => URL.revokeObjectURL(url), 15000);
+        }
       } else {
-        // popup blocked: just navigate current tab to the image viewer
-        window.location.href = url;
-        setTimeout(() => URL.revokeObjectURL(url), 6000);
+        // Desktop/Android: direct download, no extra tab
+        const blob = await (await fetch(dataUrl)).blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'deckbuilder-image.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
       }
-    } else {
-      // Desktop/Android: direct download, no extra tab
-      const blob = await (await fetch(dataUrl)).blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'deckbuilder-image.png';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      // ⬆️ END REPLACEMENT BLOCK ⬆️
+
+    } catch (err) {
+      console.error('Could not generate image', err);
+      node.style.background = prevBg;
+      node.classList.remove('exporting');
+      alert('Could not generate image on this device. Try zooming out, or ensure images allow CORS.');
+    } finally {
+      onExportEnd();
     }
-  } catch (err) {
-    console.error('Could not generate image', err);
-    node.style.background = prevBg;
-    node.classList.remove('exporting');
-    alert('Could not generate image on this device. Try zooming out, or ensure images allow CORS.');
-  } finally {
-    onExportEnd();
-  }
-};
+  };
 
   const handleSaveClick = () => {
     setShowSaveModal(true)
