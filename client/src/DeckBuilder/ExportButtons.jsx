@@ -161,21 +161,11 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                 (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
 
-  // Optional iOS viewer window
+  // iOS: open a blank tab now (user gesture). We'll navigate it later.
   let w = null;
   if (isIOS) {
-    // Open synchronously so it isn't blocked, but don't steal focus
-    w = window.open('', '_blank', 'noopener');
-    if (w) {
-      w.document.write(`<!doctype html>
-        <html><head><title>Generating…</title></head>
-        <body style="margin:0;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#000;height:100vh;color:#fff;">
-          <p id="status">Generating image…</p>
-          <img id="deckpng" style="max-width:95%;height:auto;max-height:95%;display:none;"/>
-        </body></html>`);
-      w.document.close();
-      try { w.blur(); window.focus(); } catch {}
-    }
+    w = window.open('about:blank', '_blank', 'noopener');
+    if (w) { try { w.blur(); window.focus(); } catch {} }
   }
 
   try {
@@ -190,21 +180,17 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     node.classList.remove('exporting');
 
     if (isIOS) {
-      // Show in the already-opened tab (or navigate there if blocked)
+      // iOS: object URL is more reliable than huge data: URLs
+      const blob = await (await fetch(dataUrl)).blob();
+      const url = URL.createObjectURL(blob);
       if (w && !w.closed) {
-        const img = w.document.getElementById('deckpng');
-        if (img) {
-          img.src = dataUrl;
-          img.style.display = 'block';
-          const status = w.document.getElementById('status');
-          if (status) status.textContent = '';
-          try { w.document.title = 'Save your deck'; } catch {}
-        } else {
-          w.location.href = dataUrl;
-        }
+        w.location.replace(url);
+        // best-effort cleanup when that tab unloads
+        try { w.addEventListener('pagehide', () => URL.revokeObjectURL(url), { once: true }); } catch {}
       } else {
-        // If popup was blocked, just navigate current tab (iOS will show the image viewer)
-        window.location.href = dataUrl;
+        // popup blocked: just navigate current tab to the image viewer
+        window.location.href = url;
+        setTimeout(() => URL.revokeObjectURL(url), 6000);
       }
     } else {
       // Desktop/Android: direct download, no extra tab
@@ -212,7 +198,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'deck.png';
+      a.download = 'deckbuilder-image.png';
       document.body.appendChild(a);
       a.click();
       a.remove();

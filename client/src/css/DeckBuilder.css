@@ -2271,7 +2271,7 @@ body.deckbuilder-page .deck-builder {
   .advanced-search-button-small {
     margin-right: 15px;
     width: 200px;
-    padding: 3px;
+    padding: 0px;
     font-size: 12.5px;
   }
   #search-reset {
