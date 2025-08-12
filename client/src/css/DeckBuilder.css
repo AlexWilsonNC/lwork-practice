@@ -105,7 +105,6 @@ body.deckbuilder-page .deck-builder {
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* the blurred backdrop */
 .modal-bg-blur {
   position: absolute;
   top: 0;
@@ -118,32 +117,34 @@ body.deckbuilder-page .deck-builder {
   filter: blur(5px);
   opacity: 0.3;
   border-radius: 8px;
-  /* sit beneath the modal’s content */
   z-index: -1;
 }
 
-/* close “×” button */
 .modal-close {
   position: absolute;
-  top: 0px;
+  top: 15px;
   right: 15px;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
+  height: 40px;
+  width: 40px;
   border: none;
   font-size: 48px;
   cursor: pointer;
   color: white;
-  text-shadow: 1px 1px 2px black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-close:hover {
-  color: #1290eb;
+  background: rgba(145, 145, 145, 0.25);
 }
 
 .modal-retreat-cost {
   margin-bottom: 7px;
 }
 
-/* large card image */
 .card-modal-image {
   width: 42%;
   height: auto;
@@ -153,7 +154,6 @@ body.deckbuilder-page .deck-builder {
   border-radius: 10px;
 }
 
-/* details section */
 .card-details {
   margin-bottom: 1rem;
   background-color: rgba(6, 12, 29, 0.317);
@@ -172,7 +172,6 @@ body.deckbuilder-page .deck-builder {
   font-size: 16px;
 }
 
-/* plus/minus controls */
 .modal-count-controls {
   display: flex;
   align-items: center;
@@ -326,6 +325,19 @@ body.deckbuilder-page .deck-builder {
   height: 100%;
   width: 100%;
 }
+.search-mode-dropdown {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 30px;
+  border: 1.5px solid grey;
+  background-color: rgb(47, 48, 49);
+  color: white;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  padding-right: 3px;
+}
 
 .search-input-wrapper {
   position: relative;
@@ -340,11 +352,15 @@ body.deckbuilder-page .deck-builder {
   font-size: 18px;
   width: 300px !important;
   box-sizing: border-box;
-  padding: 1px 10px 2px 5px;
-  background-color: rgb(255, 255, 255);
+  padding: 1px 0px 2px 10px;
+  background-color: rgb(245, 245, 245);
   color: rgb(0, 0, 0);
-  border: none;
+  border: 1.5px solid grey;
+  border-left: none;
   letter-spacing: 1px;
+  height: 30px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .event-searchbar input:focus {
@@ -467,7 +483,7 @@ body.deckbuilder-page .deck-builder {
 }
 
 .all-cards-container::-webkit-scrollbar-thumb {
-  background-color: #1290eb;
+  background-image: radial-gradient(rgb(27, 193, 222), #1290eb);
 }
 
 .all-cards-displayed {
@@ -774,25 +790,21 @@ body.deckbuilder-page .deck-builder {
 .options-row-small-mobile button {
   text-decoration: none;
   color: rgb(233, 233, 233);
-  background-color: rgb(90, 90, 90);
+  background-image: linear-gradient(to bottom right, rgb(90, 90, 90), rgb(68, 68, 68));
   border: 2px solid rgba(255, 255, 255, 0.3);
   display: flex;
   font-weight: 600;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  background-position: 0 100%;
-  background-size: 0% 3px;
-  background-repeat: no-repeat;
-  transition: ease all 0.2s;
+  border-radius: 3px;
   margin-right: 15px;
   width: 155px;
   height: 45px;
 }
 
 .my-decks-btn {
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 .deck-options-btns-right {
@@ -803,15 +815,12 @@ body.deckbuilder-page .deck-builder {
 }
 
 .save-deck-btn {
-  background-color: #1290eb !important;
-  border: 2px solid rgba(0, 0, 0, 0.4) !important;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb) !important;
   color: white !important;
 }
 
 .save-deck-btn:hover {
-  background-color: rgb(142, 142, 142) !important;
-  border: 2px solid rgba(0, 0, 0, 0.4) !important;
-  color: white !important;
+  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
 }
 
 .options-row button span {
@@ -831,7 +840,7 @@ body.deckbuilder-page .deck-builder {
 .options-row button:hover {
   cursor: pointer;
   color: white;
-  background-color: rgb(142, 142, 142);
+  background-image: linear-gradient(to bottom right, rgb(133, 133, 133), rgb(90, 90, 90));
 }
 
 .bold-span {
@@ -930,8 +939,6 @@ body.deckbuilder-page .deck-builder {
   align-items: center;
   justify-content: space-between;
   padding: 10px 15px 10px;
-  /* background: #0b72bc; */
-  /* border-bottom: 2px solid grey; */
 }
 
 .support-again {
@@ -939,15 +946,16 @@ body.deckbuilder-page .deck-builder {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  color: black;
-  background-color: white;
-  border: 2px solid rgba(0, 0, 0, 0.3);
   padding: 5px 7px;
-  transition: ease all 0.2s;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 5px 0;
   width: 151px;
+  cursor: pointer;
+}
+.support-again:hover {
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb) !important;
+  color: white !important;
 }
 
 .support-again img {
@@ -965,13 +973,13 @@ body.deckbuilder-page .deck-builder {
 
 .stat-count {
   color: black;
-  background-color: white;
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(229, 229, 229));
+  border: 1.5px solid rgba(0, 0, 0, 0.3);
   padding: 5px 7px 5px 10px;
   transition: ease all 0.2s;
   font-weight: 400;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 3px;
   width: 125px;
   overflow: hidden;
   text-wrap: nowrap;
@@ -985,12 +993,12 @@ body.deckbuilder-page .deck-builder {
 #deck-reset,
 #deck-sort {
   color: white;
-  background-color: #1290eb;
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   transition: ease all 0.2s;
   font-weight: 400;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 5px 15px;
   display: flex;
   flex-direction: row;
@@ -1014,12 +1022,7 @@ body.deckbuilder-page .deck-builder {
 #deck-sort:hover {
   background-color: grey;
   cursor: pointer;
-}
-
-.support-again:hover {
-  background-color: grey;
-  color: white;
-  cursor: pointer;
+  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
 }
 
 .limit-menu-container {
@@ -1029,9 +1032,9 @@ body.deckbuilder-page .deck-builder {
 }
 
 .limit-menu-btn {
-  background: #1290eb;
-  border: 2px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
   padding: 2px 13px;
   color: white;
   font-size: 1.25rem;
@@ -1040,6 +1043,7 @@ body.deckbuilder-page .deck-builder {
 
 .limit-menu-btn:hover {
   background-color: grey;
+  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
 }
 
 .limit-menu-dropdown {
@@ -1354,7 +1358,6 @@ body.deckbuilder-page .deck-builder {
   line-height: 1.2;
 }
 
-/**/
 .advanced-search-button {
   width: 100%;
   height: 35px;
@@ -1362,7 +1365,6 @@ body.deckbuilder-page .deck-builder {
   color: white;
   background-color: #1290eb;
   border: 2px solid rgba(0, 0, 0, .3);
-  /* border: none; */
   padding: 5px 0;
   font-weight: 600;
   display: flex;
@@ -1373,10 +1375,8 @@ body.deckbuilder-page .deck-builder {
 
 .advanced-search-button:hover {
   cursor: pointer;
-  background-color: grey;
 }
 
-/**/
 .inverted-arrow {
   transform: rotate(180deg);
 }
@@ -1571,8 +1571,7 @@ body.deckbuilder-page .deck-builder {
   border-bottom: none;
 }
 
-#filter-search,
-#search-reset {
+#filter-search {
   background-color: grey;
   border: 2px solid rgba(0, 0, 0, 0.3);
   color: rgb(233, 233, 233);
@@ -1591,19 +1590,28 @@ body.deckbuilder-page .deck-builder {
   margin-left: 5px;
 }
 
-#search-reset span {
-  font-size: 18px;
-  margin-right: 5px;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+#search-reset {
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  color: white;
+  margin-left: 5px;
 }
 
-#searchButton:hover,
-#filter-search:hover,
-#search-reset:hover,
-.blue-selected {
+#search-reset span {
+  font-size: 22px;
+  transform: rotate(45deg);
+  margin-left: -1px;
+}
+
+#search-reset:hover
+ {
   cursor: pointer;
-  background-color: #1290eb;
+  background-color: rgba(128, 128, 128, 0.406);
   color: white;
 }
 
@@ -1762,6 +1770,7 @@ body.deckbuilder-page .deck-builder {
 .zoom-slider input[type="range"]::-webkit-slider-runnable-track {
   height: 4px;
   background: #385264;
+  background-image: linear-gradient(to right, #385264, #1290eb);
   border-radius: 2px;
 }
 
@@ -1772,8 +1781,8 @@ body.deckbuilder-page .deck-builder {
   height: 16px;
   margin-top: -6px;
   border-radius: 50%;
-  background: #1290eb;
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  background: #dfdfdf;
+  border: 1.5px solid rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
 
@@ -1788,7 +1797,7 @@ body.deckbuilder-page .deck-builder {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #1290eb;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb);
   border: 2px solid rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
@@ -1823,8 +1832,8 @@ body.deckbuilder-page .deck-builder {
 .slider-zoomout {
   padding: 2px;
   border-radius: 50%;
-  background-color: #1290eb;
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   color: white;
   font-size: 16px;
   font-weight: 600;
@@ -1834,8 +1843,7 @@ body.deckbuilder-page .deck-builder {
 .slider-zoomin:hover,
 .slider-zoomout:hover {
   cursor: pointer;
-  background-color: grey;
-  transform: scale(1.1);
+  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
 }
 
 .savedeck-modal-overlay {
@@ -1974,7 +1982,9 @@ body.deckbuilder-page .deck-builder {
     margin-left: -5px;
     font-size: 20px;
   }
-
+  .options-row button p span {
+    font-size: 14px;
+  }
   .save-deck-btn {
     margin-right: 15px !important;
   }
@@ -1982,17 +1992,6 @@ body.deckbuilder-page .deck-builder {
   .event-searchbar input {
     font-size: 15px;
     width: 250px !important;
-  }
-
-  #search-reset {
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    font-size: 14px;
-    padding: 2.7px 5px;
-    border-radius: 2.5px;
-  }
-
-  #search-reset span {
-    font-size: 14px;
   }
 
   .options-row button {
@@ -2008,7 +2007,6 @@ body.deckbuilder-page .deck-builder {
 
   .options-row button span {
     font-size: 18px;
-    margin-left: 3px;
   }
 
   .copy-menu-dropdown .menu-item {
@@ -2126,7 +2124,7 @@ body.deckbuilder-page .deck-builder {
     align-items: center;
     justify-content: center;
     margin-right: 25px;
-    width: 225px;
+    width: 250px;
     background-color: #1290eb;
     border: 2px solid rgba(0, 0, 0, .3);
     color: white;
@@ -2231,14 +2229,6 @@ body.deckbuilder-page .deck-builder {
     position: relative;
   }
 
-  #search-reset {
-    position: absolute;
-    left: 350px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 2.5px;
-    padding: 2.5px 5px;
-  }
-
   .all-cards-container .searched-card-wrap {
     margin: 5px;
     width: 9.5vw;
@@ -2283,18 +2273,11 @@ body.deckbuilder-page .deck-builder {
 
   .advanced-search-button-small {
     margin-right: 15px;
-    width: 200px;
-    padding: 0px;
-    font-size: 12.5px;
+    font-size: 12px;
+    width: 260px;
   }
-
-  #search-reset {
-    font-size: 14px;
-    left: 290px;
-  }
-
-  #search-reset span {
-    font-size: 14px;
+  .advanced-search-button-small span {
+    font-size: 20px;
   }
 
   .options-row button {
@@ -2396,6 +2379,7 @@ body.deckbuilder-page .deck-builder {
     font-size: 13px;
     border-radius: 3px;
     width: 110px;
+    margin-right: -5px;
   }
 
   .support-again img {
@@ -2535,7 +2519,6 @@ body.deckbuilder-page .deck-builder {
   }
 
   .advanced-search-button-small {
-    padding: 1.5px;
     font-size: 11px;
   }
 
@@ -2565,6 +2548,10 @@ body.deckbuilder-page .deck-builder {
   .all-cards-container .database-card-in-list {
     width: 20vw !important;
     border-radius: 3px;
+  }
+
+  .search-input-wrapper input {
+    
   }
 }
 
@@ -2644,15 +2631,11 @@ body.deckbuilder-page .deck-builder {
 
   #deck-reset,
   #deck-sort {
-    border: 1.5px solid rgba(0, 0, 0, 0.3);
-    border-radius: 1px;
     height: 20px;
     padding: 0 5px !important;
   }
 
   .limit-menu-btn {
-    border: 1.5px solid rgba(0, 0, 0, 0.3);
-    border-radius: 1px;
     padding: 0;
     width: 24px;
   }
@@ -2666,10 +2649,10 @@ body.deckbuilder-page .deck-builder {
     border-radius: 1px;
   }
 
-  .deck-options-btns-right button p,
+  /* .deck-options-btns-right button p,
   .my-decks-btn button p {
     font-size: 8px !important;
-  }
+  } */
 
   .zoom-slider.showon450 input[type="range"] {
     appearance: none;
@@ -2692,9 +2675,9 @@ body.deckbuilder-page .deck-builder {
 
   .zoom-slider.showon450 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    margin-top: -7px;
+    width: 14px;
+    height: 14px;
+    margin-top: -4.6px;
   }
 
   .zoom-slider.showon450 input[type="range"]::-moz-range-track {

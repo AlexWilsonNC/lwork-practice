@@ -170,8 +170,9 @@ const DeckBuilderComp = styled.div`
     display: flex;
     .support-again {
       color: ${({ theme }) => theme.text};
-      background-color: ${({ theme }) => theme.supportPatreonBtn};
-  }
+      background-image: ${({ theme }) => theme.supportPatreonBtn};
+      border: ${({ theme }) => theme.supportPatreonBg};
+    }
 `;
 
 export default function DeckBuilder() {

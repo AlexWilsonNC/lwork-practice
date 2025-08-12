@@ -430,8 +430,15 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                     )}
                     <div className='event-searchbar'>
                         <div className='search-cards-div'>
+                            <select
+                                value={searchMode}
+                                onChange={e => setSearchMode(e.target.value)}
+                                className="search-mode-dropdown"
+                            >
+                                <option value="name">Card name</option>
+                                <option value="text">Card text</option>
+                            </select>
                             <div className="search-input-wrapper">
-                                <span className="material-symbols-outlined search-mag">search</span>
                                 <input
                                     type="text"
                                     placeholder="Search cards…"
@@ -453,15 +460,19 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                         aria-label="Clear search"
                                     >×</button>
                                 )}
+                                <button
+                                    type="button"
+                                    id="search-reset"
+                                    onClick={() => {
+                                        setQuery('')
+                                        setSuppressDefault(true)
+                                        setResults([])
+                                    }}
+                                >
+                                    <span className="material-symbols-outlined">autorenew</span>
+                                </button>
+                                {/* <span className="material-symbols-outlined search-mag">search</span> */}
                             </div>
-                            <select
-                                value={searchMode}
-                                onChange={e => setSearchMode(e.target.value)}
-                                className="search-mode-dropdown"
-                            >
-                                <option value="name">Search by card name</option>
-                                <option value="text">Search by total card text</option>
-                            </select>
                             <button
                                 className="advanced-search-button-small"
                                 onClick={() => setShowAdvanced(true)}
