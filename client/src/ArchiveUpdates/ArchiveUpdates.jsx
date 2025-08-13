@@ -27,6 +27,10 @@ import magnezone from '../../public/assets/sprites/magnezone.png'
 import altaria from '../../public/assets/sprites/altaria.png'
 import garchomp from '../../public/assets/sprites/garchomp.png'
 import blank from '../../public/assets/sprites/blank.png'
+import darkrai from '../../public/assets/sprites/darkrai.png'
+import flygon from '../../public/assets/sprites/flygon.png'
+import exeggutor from '../../public/assets/sprites/exeggutor.png'
+import unownexclamation from '../../public/assets/sprites/unown-exclamation.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -67,7 +71,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Aug 8, 2025</p>
+          <p>Last Updated: Aug 13, 2025</p>
         </div>
 
         {/* Article Image */}
@@ -88,6 +92,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
             <p>Trevore Read (Masters) - 27<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2012_WORLDS/masters/Austin%20Baggs-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={darkrai} alt="sprite" />
+              <img className="sprite second-sprite" src={mewtwo} alt="sprite" />
+            </div>
+            <p>Austin Baggs (Masters) - 12<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2012_WORLDS/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
@@ -136,6 +148,22 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={eevee} alt="sprite" />
             </div>
             <p>Max Benczek (Masters) -  32<sup>nd</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2007_WORLDS/masters/Allan%20Apter-BR' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={flygon} alt="sprite" />
+              <img className="sprite second-sprite" src={exeggutor} alt="sprite" />
+            </div>
+            <p>Allan Apter (Masters) -  58<sup>th</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2007_WORLDS/masters' className='new-div-fix-wrap'>
+          <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={unownexclamation} alt="sprite" />
+            </div>
+            <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Place <span className='small-text-archive archive-update-nolist'>no lists</span></p>
           </a>
 
           <br></br>
@@ -196,7 +224,7 @@ const ArchiveUpdates = () => {
           <p className='shortcircuited'><strong>Correction:</strong> Wrong Ralts, Skitty & Magnemite fixed</p>
 
           <br></br>
-          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> and <a href='https://x.com/PtcgArchive' target='_blank' rel='noopener noreferrer'>PTCG Archive</a> for some of the above updates this month!</p>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for nearly all of the above updates this month & <a href='https://x.com/PtcgArchive' target='_blank' rel='noopener noreferrer'>PTCG Archive</a> for the 32<sup>nd</sup> Place list from '07 Worlds!</p>
 
           {/* */}
           {/* 2024 */}

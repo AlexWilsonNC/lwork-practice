@@ -36,6 +36,7 @@
 }
 .new-div-fix-wrap:hover {
     color: #1290eb !important;
+    text-decoration: underline;
     cursor: pointer;
 }
 .new-div-fix-wrap p {
@@ -77,6 +78,14 @@
 .archive-update-has-list {
     border: 1px solid rgba(33, 175, 38, 0.75);
     color: rgba(33, 175, 38, 0.75) !important;
+    padding: 1px 5px 0 5px;
+    margin-left: 5px;
+    border-radius: 3.5px;
+    font-weight: 400 !important;
+}
+.archive-update-nolist {
+    border: 1px solid rgb(175, 33, 33);
+    color: rgb(175, 33, 33) !important;
     padding: 1px 5px 0 5px;
     margin-left: 5px;
     border-radius: 3.5px;
