@@ -67,7 +67,10 @@ function sortDeck(deck) {
   const energies = deck.filter(c => c.supertype === "Energy");
 
   const baseName = (s = '') =>
-    s.replace(/\s*(?:[☆★]\s*)?δ\s*$/u, '').trim();
+    s
+      .replace(/\s*LV\.?X\s*$/i, '')
+      .replace(/\s*(?:[☆★]\s*)?δ\s*$/u, '')
+      .trim();
 
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
@@ -137,7 +140,20 @@ function sortDeck(deck) {
       const st = c.subtypes?.[0] || "Basic";
       return Math.min(minSt, stageOrder[st] ?? stageOrder.Basic);
     }, stageOrder.Basic);
+
     fam.highestCount = fam.reduce((maxC, c) => Math.max(maxC, c.count), 0);
+
+    fam.sort((a, b) => {
+      const aLU = Array.isArray(a.subtypes) && a.subtypes.includes('Level-Up');
+      const bLU = Array.isArray(b.subtypes) && b.subtypes.includes('Level-Up');
+      if (aLU !== bLU) return aLU ? -1 : 1;
+
+      const pa = stageOrder[a.subtypes?.[0] ?? "Basic"];
+      const pb = stageOrder[b.subtypes?.[0] ?? "Basic"];
+      if (pa !== pb) return pa - pb;
+
+      return b.count - a.count;
+    });
   });
 
   families.sort((a, b) => {
@@ -306,6 +322,29 @@ export default function DeckBuilder() {
       return c.name === name ? sum + (Number(c.count) || 0) : sum;
     }, 0);
 
+  const isLevelUp = (c) =>
+    Array.isArray(c?.subtypes) && c.subtypes.includes('Level-Up');
+
+  const normalizeLimitName = (name = '') =>
+    name.replace(/\s*LV\.?X\s*$/i, '').trim();
+
+  const limitNameOf = (c) => normalizeLimitName(c?.name || '');
+
+  const totalByExactLimitName = (arr, card, excludeIdx = -1) =>
+    arr.reduce((sum, c, i) =>
+      i === excludeIdx ? sum
+        : (limitNameOf(c) === limitNameOf(card) ? sum + (Number(c.count) || 0) : sum)
+      , 0);
+
+  const totalByLimitNameNonSingleton = (arr, card, excludeIdx = -1) =>
+    arr.reduce((sum, c, i) => {
+      if (i === excludeIdx) return sum;
+      if (isBasicEnergy(c) || isSubtypeSingleton(c) || isNameSingleton(c)) return sum;
+      return (limitNameOf(c) === limitNameOf(card))
+        ? sum + (Number(c.count) || 0)
+        : sum;
+    }, 0);
+
   function addCard(cardToAdd) {
     setDeck(prevDeck => {
       const idx = prevDeck.findIndex(
@@ -347,19 +386,21 @@ export default function DeckBuilder() {
       }
 
       if (isNameSingleton(cardToAdd)) {
-        const byName = totalByExactName(prevDeck, cardToAdd.name);
+        const byName = totalByExactLimitName(prevDeck, cardToAdd);
         if (byName >= 1) return prevDeck;
         if (idx >= 0) {
-          return prevDeck.map((c, i) => i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c);
+          return prevDeck.map((c, i) =>
+            i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c
+          );
         }
         return [...prevDeck, { ...cardToAdd, count: 1 }];
       }
 
-      const totalSameName = totalByNameNonSingleton(prevDeck, cardToAdd.name);
+      const totalSameName = totalByLimitNameNonSingleton(prevDeck, cardToAdd);
       if (totalSameName >= 4) return prevDeck;
 
       if (idx >= 0) {
-        const totalOther = totalByNameNonSingleton(prevDeck, cardToAdd.name, idx);
+        const totalOther = totalByLimitNameNonSingleton(prevDeck, cardToAdd, idx);
         const maxForThisPrinting = Math.max(0, 4 - totalOther);
         return prevDeck.map((c, i) =>
           i === idx ? { ...c, count: Math.min(c.count + 1, maxForThisPrinting) } : c
@@ -405,7 +446,7 @@ export default function DeckBuilder() {
       }
 
       if (isNameSingleton(card)) {
-        const othersByName = totalByExactName(prev, card.name, index);
+        const othersByName = totalByExactLimitName(prev, card.name, index);
         const maxForThis = Math.max(0, 1 - othersByName);
         const clamped = Math.min(Math.max(newCount, 0), maxForThis);
         return prev
@@ -413,7 +454,7 @@ export default function DeckBuilder() {
           .filter(c => c.count > 0);
       }
 
-      const totalOther = totalByNameNonSingleton(prev, card.name, index);
+      const totalOther = totalByLimitNameNonSingleton(prev, card, index);
       const maxForThis = Math.max(0, 4 - totalOther);
       const clamped = Math.min(Math.max(newCount, 0), maxForThis);
 
@@ -497,7 +538,7 @@ export default function DeckBuilder() {
         }
 
         if (isNameSingleton(match)) {
-          const canAddByName = Math.max(0, 1 - totalByExactName(merged, match.name));
+          const canAddByName = Math.max(0, 1 - totalByExactLimitName(merged, match.name));
           if (canAddByName <= 0) {
             console.warn('Skipped singleton-by-name (already have one):', match.name);
             continue;
@@ -511,11 +552,11 @@ export default function DeckBuilder() {
         }
 
         if (idx > -1) {
-          const totalOther = totalByNameNonSingleton(merged, match.name, idx);
+          const totalOther = totalByLimitNameNonSingleton(merged, match.name, idx);
           const maxForThis = Math.max(0, 4 - totalOther);
           merged[idx].count = Math.min(merged[idx].count + count, maxForThis);
         } else {
-          const remaining = Math.max(0, 4 - totalByNameNonSingleton(merged, match.name));
+          const remaining = Math.max(0, 4 - totalByLimitNameNonSingleton(merged, match.name));
           if (remaining > 0) {
             merged.push({ ...match, count: Math.min(count, remaining) });
           } else {
@@ -644,8 +685,8 @@ export default function DeckBuilder() {
         const deckAceTotal = totalAceSpec(deck);
         const deckRadiantTotal = totalRadiant(deck);
         const deckStarTotal = totalStar(deck);
-        const nameSingletonInDeck = totalByExactName(deck, zoomCard?.name);
-        const remainingRegular = Math.max(0, 4 - totalByNameNonSingleton(deck, zoomCard?.name));
+        const nameSingletonInDeck = totalByExactLimitName(deck, zoomCard);
+        const remainingRegular = Math.max(0, 4 - totalByLimitNameNonSingleton(deck, zoomCard));
 
         const plusDisabled =
           !limitCounts ? false
