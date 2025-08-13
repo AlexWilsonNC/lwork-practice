@@ -439,6 +439,7 @@ export default function DeckBuilder() {
             <meta name="twitter:title" content={eventData.name} />
             <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
             <meta name="twitter:image" content={eventData.thumbnail} /> */}
+            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></meta>
       </Helmet>
       {exportingImage && (
         <div className="image-export-overlay">
