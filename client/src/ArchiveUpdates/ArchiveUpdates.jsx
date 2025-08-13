@@ -94,20 +94,20 @@ const ArchiveUpdates = () => {
             <p>Trevore Read (Masters) - 27<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <a href='/tournaments/2012_WORLDS/masters/Austin%20Baggs-US' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={darkrai} alt="sprite" />
-              <img className="sprite second-sprite" src={mewtwo} alt="sprite" />
-            </div>
-            <p>Austin Baggs (Masters) - 12<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
-          </a>
-
           <a href='/tournaments/2012_WORLDS/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={mewtwo} alt="sprite" />
               <img className="sprite second-sprite" src={eelektrik} alt="sprite" />
             </div>
             <p>Aaron Curry (Masters) - 13<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2012_WORLDS/masters/Austin%20Baggs-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={darkrai} alt="sprite" />
+              <img className="sprite second-sprite" src={mewtwo} alt="sprite" />
+            </div>
+            <p>Austin Baggs (Masters) - 24<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2011_WORLDS/masters/Lorenzo%20Voltolina-IT' className='new-div-fix-wrap'>
