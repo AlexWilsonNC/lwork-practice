@@ -66,6 +66,9 @@ function sortDeck(deck) {
   const trainers = deck.filter(c => c.supertype === "Trainer");
   const energies = deck.filter(c => c.supertype === "Energy");
 
+  const baseName = (s = '') =>
+    s.replace(/\s*(?:[☆★]\s*)?δ\s*$/u, '').trim();
+
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
     const subB = b.subtypes?.[0] ?? "";
@@ -90,31 +93,34 @@ function sortDeck(deck) {
 
   const evoGraph = {};
   pokemons.forEach(card => {
-    const name = card.name;
-    evoGraph[name] = evoGraph[name] || new Set();
+    const self = baseName(card.name);
+    evoGraph[self] = evoGraph[self] || new Set();
     if (card.evolvesFrom) {
-      evoGraph[name].add(card.evolvesFrom);
+      evoGraph[self].add(card.evolvesFrom);
       evoGraph[card.evolvesFrom] = evoGraph[card.evolvesFrom] || new Set();
-      evoGraph[card.evolvesFrom].add(name);
+      evoGraph[card.evolvesFrom].add(self);
     }
     (card.evolvesTo || []).forEach(child => {
-      evoGraph[name].add(child);
+      evoGraph[self].add(child);
       evoGraph[child] = evoGraph[child] || new Set();
-      evoGraph[child].add(name);
+      evoGraph[child].add(self);
     });
   });
 
   const visited = new Set();
   const families = [];
   pokemons.forEach(card => {
-    if (visited.has(card.name)) return;
-    const queue = [card.name];
-    visited.add(card.name);
+    const start = baseName(card.name); 
+    if (visited.has(start)) return;
+
+    const queue = [start];
+    visited.add(start);
     const family = [];
+
     while (queue.length) {
       const cur = queue.shift();
       pokemons.forEach(c => {
-        if (c.name === cur) family.push(c);
+        if (baseName(c.name) === cur) family.push(c);
       });
       (evoGraph[cur] || []).forEach(nei => {
         if (!visited.has(nei)) {

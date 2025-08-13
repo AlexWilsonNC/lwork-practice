@@ -760,9 +760,9 @@ const EventPage = () => {
                                     : [];
 
     const resultsWithPlacement = results.map((player, idx) => ({
-  ...player,
-  placing: player.placing ?? idx + 1
-}));
+        ...player,
+        placing: player.placing ?? idx + 1
+    }));
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
 
@@ -1131,8 +1131,10 @@ const EventPage = () => {
 
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
-            ? mastersResults.slice(0, 64)
-            : results;
+        ? mastersResults.slice(0, 64)
+            : (eventId === '2007_WORLDS' && division === 'masters')
+            ? mastersResults.slice(0, 16)
+                : results;
 
     const deckTypeCount = chartResults.reduce((acc, player) => {
         let sprite1 = player.sprite1 || '';

@@ -430,15 +430,15 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                     )}
                     <div className='event-searchbar'>
                         <div className='search-cards-div'>
-                            <select
-                                value={searchMode}
-                                onChange={e => setSearchMode(e.target.value)}
-                                className="search-mode-dropdown"
-                            >
-                                <option value="name">Card name</option>
-                                <option value="text">Card text</option>
-                            </select>
                             <div className="search-input-wrapper">
+                                <select
+                                    value={searchMode}
+                                    onChange={e => setSearchMode(e.target.value)}
+                                    className="search-mode-dropdown"
+                                >
+                                    <option value="name">Card name</option>
+                                    <option value="text">Card text</option>
+                                </select>
                                 <input
                                     type="text"
                                     placeholder="Search cards…"
@@ -448,10 +448,10 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                         setQuery(e.target.value)
                                     }}
                                 />
-                                {query && (
+                                {/* {query && (
                                     <button
                                         type="button"
-                                        className="clear-input-btn"
+                                        className={`clear-input-btn ${query ? '' : 'is-hidden'}`}
                                         onClick={() => {
                                             setQuery('')
                                             setSuppressDefault(true)
@@ -459,7 +459,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                         }}
                                         aria-label="Clear search"
                                     >×</button>
-                                )}
+                                )} */}
                                 <button
                                     type="button"
                                     id="search-reset"

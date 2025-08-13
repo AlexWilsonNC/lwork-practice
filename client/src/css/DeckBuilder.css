@@ -312,10 +312,12 @@ body.deckbuilder-page .deck-builder {
   background: rgb(47, 48, 49);
 }
 
-.search-mag {
+/* .search-mag {
+  position: absolute;
+  right: 8px;
   margin-right: 10px;
   color: white;
-}
+} */
 
 .search-cards-div {
   display: flex;
@@ -325,6 +327,7 @@ body.deckbuilder-page .deck-builder {
   height: 100%;
   width: 100%;
 }
+
 .search-mode-dropdown {
   display: flex;
   flex-wrap: nowrap;
@@ -334,13 +337,12 @@ body.deckbuilder-page .deck-builder {
   color: white;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
-  padding-right: 3px;
+  padding: 0 3px;
 }
 
 .search-input-wrapper {
-  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -953,6 +955,7 @@ body.deckbuilder-page .deck-builder {
   width: 151px;
   cursor: pointer;
 }
+
 .support-again:hover {
   background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb) !important;
   color: white !important;
@@ -1608,8 +1611,7 @@ body.deckbuilder-page .deck-builder {
   margin-left: -1px;
 }
 
-#search-reset:hover
- {
+#search-reset:hover {
   cursor: pointer;
   background-color: rgba(128, 128, 128, 0.406);
   color: white;
@@ -1982,9 +1984,11 @@ body.deckbuilder-page .deck-builder {
     margin-left: -5px;
     font-size: 20px;
   }
+
   .options-row button p span {
     font-size: 14px;
   }
+
   .save-deck-btn {
     margin-right: 15px !important;
   }
@@ -2276,6 +2280,7 @@ body.deckbuilder-page .deck-builder {
     font-size: 12px;
     width: 260px;
   }
+
   .advanced-search-button-small span {
     font-size: 20px;
   }
@@ -2514,8 +2519,11 @@ body.deckbuilder-page .deck-builder {
   }
 
   #search-reset {
-    left: 235px;
-    font-size: 12.5px;
+    margin-left: 0px;
+  }
+
+  #search-reset span {
+    font-size: 21px;
   }
 
   .advanced-search-button-small {
@@ -2551,7 +2559,12 @@ body.deckbuilder-page .deck-builder {
   }
 
   .search-input-wrapper input {
-    
+    height: 25px;
+  }
+
+  .search-mode-dropdown {
+    height: 25px;
+    font-size: 12px;
   }
 }
 
@@ -2571,21 +2584,21 @@ body.deckbuilder-page .deck-builder {
     margin-left: 12.5px;
   }
 
-  #search-reset {
-    margin-top: 37.2px;
-  }
-
   .search-input-wrapper {
-    margin-top: 15px;
+    margin-top: 8px;
+    padding-left: 13px;
   }
 
-  .search-mag {
-    margin-right: 5px;
-    margin-left: 10px;
+  .event-searchbar input {
+    font-size: 12px;
+    border-top-right-radius: 2.5px;
+    border-bottom-right-radius: 2.5px;
+    width: 60% !important;
   }
 
-  #search-reset {
-    left: 250px;
+  .search-mode-dropdown {
+    border-top-left-radius: 2.5px;
+    border-bottom-left-radius: 2.5px;
   }
 }
 
@@ -2649,11 +2662,6 @@ body.deckbuilder-page .deck-builder {
     border-radius: 1px;
   }
 
-  /* .deck-options-btns-right button p,
-  .my-decks-btn button p {
-    font-size: 8px !important;
-  } */
-
   .zoom-slider.showon450 input[type="range"] {
     appearance: none;
     -webkit-appearance: none;
@@ -2689,40 +2697,105 @@ body.deckbuilder-page .deck-builder {
     height: 18px;
   }
 
-.zoom-slider {
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  right: 0;
+  .zoom-slider {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    right: 0;
+  }
+
+  .zoom-slider input[type="range"] {
+    width: 60%;
+    margin: 0 0.5rem;
+  }
+
+  .deck-box {
+    margin-top: 20px !important;
+  }
+
+  .event-searchbar {
+    padding: 75px 0px 20px 10px;
+  }
+
+  .copy-menu-dropdown {
+    top: 65%;
+  }
+
+  .moveit-moveit {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .card-search-container.visible .card-search-content {
+    padding-top: 0px;
+  }
+
+  .limit-menu-dropdown {
+    right: 0px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .event-searchbar input {
+    width: 55% !important;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .event-searchbar input {
+    width: 50% !important;
+  }
 }
 
 .zoom-slider input[type="range"] {
-  width: 60%;
-  margin: 0 0.5rem;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  height: 4px !important;
+  line-height: 1 !important;
+  background: transparent;           /* keep your gradient on the track pseudo */
+  touch-action: manipulation;
 }
 
-.deck-box {
-  margin-top: 20px !important;
+/* lock thickness in EVERY state that can come back after downloads */
+.zoom-slider input[type="range"]:focus,
+.zoom-slider input[type="range"]:active,
+.zoom-slider input[type="range"]:hover {
+  height: 4px !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.event-searchbar {
-  padding: 75px 0px 20px 10px;
+/* WebKit/Blink track + thumb (Android, iOS Safari, Chrome) */
+.zoom-slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px !important;
+  border-radius: 2px;
+}
+.zoom-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  margin-top: -5px !important;  /* centers on 4px track */
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,.3);
+}
+.zoom-slider input[type="range"]:active::-webkit-slider-thumb,
+.zoom-slider input[type="range"]:focus::-webkit-slider-thumb {
+  width: 14px !important;       /* prevent UA from "growing" the thumb */
+  height: 14px !important;
+  margin-top: -5px !important;
 }
 
-.copy-menu-dropdown {
-  top: 65%;
+/* Firefox */
+.zoom-slider input[type="range"]::-moz-range-track { height: 4px !important; }
+.zoom-slider input[type="range"]::-moz-range-thumb {
+  width: 14px !important;
+  height: 14px !important;
 }
 
-.moveit-moveit {
-  justify-content: space-between;
-  width: 100%;
-}
+/* IE/Edge Legacy (safe no-op on modern) */
+.zoom-slider input[type="range"]::-ms-track { height: 4px !important; }
+.zoom-slider input[type="range"]::-ms-fill-lower,
+.zoom-slider input[type="range"]::-ms-fill-upper { height: 4px !important; }
 
-.card-search-container.visible .card-search-content {
-  padding-top: 0px;
-}
-
-.limit-menu-dropdown {
-  right: 0px;
-}
-}
+/* Keep text sizing stable on mobile (prevents any auto-font/zoom heuristics) */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
