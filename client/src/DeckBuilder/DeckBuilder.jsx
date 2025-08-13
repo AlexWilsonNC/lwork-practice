@@ -110,7 +110,7 @@ function sortDeck(deck) {
   const visited = new Set();
   const families = [];
   pokemons.forEach(card => {
-    const start = baseName(card.name); 
+    const start = baseName(card.name);
     if (visited.has(start)) return;
 
     const queue = [start];
@@ -222,7 +222,6 @@ export default function DeckBuilder() {
     if (params.has('deck')) {
       try {
         const arr = JSON.parse(decodeURIComponent(params.get('deck')));
-        // arr is now [ { set:'DRI', number:'3', count:1}, … ]
         return [];
       } catch {
         console.warn('Invalid deck in URL');
@@ -242,13 +241,11 @@ export default function DeckBuilder() {
     let minimal;
     try {
       minimal = JSON.parse(decodeURIComponent(params.get('deck')));
-      // make sure counts are numbers
       minimal = minimal.map(c => ({ ...c, count: Number(c.count) }));
     } catch {
       return;
     }
 
-    // start spinner
     setLoadingHash(true);
     Promise.all(
       minimal.map(({ set, number, count }) =>
@@ -267,61 +264,190 @@ export default function DeckBuilder() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deck))
   }, [deck])
 
+  const isBasicEnergy = c =>
+    c?.supertype === 'Energy' && /^Basic\s/i.test(c?.name || '');
+
+  const isUnlimitedByRules = (c) => {
+    const r = c?.rules;
+    if (!r) return false;
+    const rx = /You may have as many of this card in your deck as you like/i;
+    return Array.isArray(r) ? r.some(s => rx.test(s)) : rx.test(r);
+  };
+
+  const isAceSpec = c =>
+    Array.isArray(c?.subtypes) && c.subtypes.includes('ACE SPEC');
+  const isRadiant = c =>
+    Array.isArray(c?.subtypes) && c.subtypes.includes('Radiant');
+  const isStar = c =>
+    Array.isArray(c?.subtypes) && c.subtypes.includes('Star');
+
+  const isSubtypeSingleton = (c) => isAceSpec(c) || isRadiant(c) || isStar(c);
+
+  const totalAceSpec = arr =>
+    arr.reduce((sum, c) => sum + (isAceSpec(c) ? (Number(c.count) || 0) : 0), 0);
+  const totalRadiant = arr =>
+    arr.reduce((sum, c) => sum + (isRadiant(c) ? (Number(c.count) || 0) : 0), 0);
+  const totalStar = arr =>
+    arr.reduce((sum, c) => sum + (isStar(c) ? (Number(c.count) || 0) : 0), 0);
+
+  const hasDiamondInName = c => /[♢◇]/.test(c?.name || '');
+  const hasShiningInName = c => /\bShining\b/i.test(c?.name || '');
+  const isNameSingleton = c => hasDiamondInName(c) || hasShiningInName(c);
+
+  const totalByExactName = (arr, name, excludeIdx = -1) =>
+    arr.reduce((sum, c, i) =>
+      i === excludeIdx ? sum : (c.name === name ? sum + (Number(c.count) || 0) : sum)
+      , 0);
+
+  const totalByNameNonSingleton = (arr, name, excludeIdx = -1) =>
+    arr.reduce((sum, c, i) => {
+      if (i === excludeIdx) return sum;
+      if (isBasicEnergy(c) || isSubtypeSingleton(c) || isNameSingleton(c)) return sum;
+      return c.name === name ? sum + (Number(c.count) || 0) : sum;
+    }, 0);
+
   function addCard(cardToAdd) {
     setDeck(prevDeck => {
       const idx = prevDeck.findIndex(
         c => c.setAbbrev === cardToAdd.setAbbrev && c.number === cardToAdd.number
       );
 
-      if (idx >= 0) {
-        return prevDeck.map((c, i) => {
-          if (i !== idx) return c;
-
-          const isBasicEnergy =
-            cardToAdd.supertype === 'Energy' &&
-            cardToAdd.name.startsWith('Basic');
-
-          const newCount = isBasicEnergy
-            ? c.count + 1
-            : Math.min(c.count + 1, 4);
-
-          return { ...c, count: newCount };
-        });
-      } else {
+      if (!limitCounts || isBasicEnergy(cardToAdd) || isUnlimitedByRules(cardToAdd)) {
+        if (idx >= 0) {
+          return prevDeck.map((c, i) => i === idx ? { ...c, count: c.count + 1 } : c);
+        }
         return [...prevDeck, { ...cardToAdd, count: 1 }];
       }
+
+      if (isAceSpec(cardToAdd)) {
+        const canAdd = Math.max(0, 1 - totalAceSpec(prevDeck));
+        if (canAdd <= 0) return prevDeck;
+        if (idx >= 0) {
+          return prevDeck.map((c, i) => i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c);
+        }
+        return [...prevDeck, { ...cardToAdd, count: 1 }];
+      }
+
+      if (isRadiant(cardToAdd)) {
+        const canAdd = Math.max(0, 1 - totalRadiant(prevDeck));
+        if (canAdd <= 0) return prevDeck;
+        if (idx >= 0) {
+          return prevDeck.map((c, i) => i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c);
+        }
+        return [...prevDeck, { ...cardToAdd, count: 1 }];
+      }
+
+      if (isStar(cardToAdd)) {
+        const canAdd = Math.max(0, 1 - totalStar(prevDeck));
+        if (canAdd <= 0) return prevDeck;
+        if (idx >= 0) {
+          return prevDeck.map((c, i) => i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c);
+        }
+        return [...prevDeck, { ...cardToAdd, count: 1 }];
+      }
+
+      if (isNameSingleton(cardToAdd)) {
+        const byName = totalByExactName(prevDeck, cardToAdd.name);
+        if (byName >= 1) return prevDeck;
+        if (idx >= 0) {
+          return prevDeck.map((c, i) => i === idx ? { ...c, count: Math.min(c.count + 1, 1) } : c);
+        }
+        return [...prevDeck, { ...cardToAdd, count: 1 }];
+      }
+
+      const totalSameName = totalByNameNonSingleton(prevDeck, cardToAdd.name);
+      if (totalSameName >= 4) return prevDeck;
+
+      if (idx >= 0) {
+        const totalOther = totalByNameNonSingleton(prevDeck, cardToAdd.name, idx);
+        const maxForThisPrinting = Math.max(0, 4 - totalOther);
+        return prevDeck.map((c, i) =>
+          i === idx ? { ...c, count: Math.min(c.count + 1, maxForThisPrinting) } : c
+        );
+      }
+
+      return [...prevDeck, { ...cardToAdd, count: 1 }];
     });
   }
 
   function updateCount(index, newCount) {
-    setDeck(d => d
-      .map((c, i) => i === index ? { ...c, count: newCount } : c)
-      .filter(c => c.count > 0)
-    )
+    setDeck(prev => {
+      const card = prev[index];
+
+      if (!limitCounts || isBasicEnergy(card) || isUnlimitedByRules(card)) {
+        return prev
+          .map((c, i) => i === index ? { ...c, count: newCount } : c)
+          .filter(c => c.count > 0);
+      }
+
+      if (isAceSpec(card)) {
+        const others = prev.reduce((sum, c, i) =>
+          i === index ? sum : sum + (isAceSpec(c) ? (Number(c.count) || 0) : 0), 0);
+        const maxForThis = Math.max(0, 1 - others);
+        const clamped = Math.min(Math.max(newCount, 0), maxForThis);
+        return prev.map((c, i) => i === index ? { ...c, count: clamped } : c).filter(c => c.count > 0);
+      }
+
+      if (isRadiant(card)) {
+        const others = prev.reduce((sum, c, i) =>
+          i === index ? sum : sum + (isRadiant(c) ? (Number(c.count) || 0) : 0), 0);
+        const maxForThis = Math.max(0, 1 - others);
+        const clamped = Math.min(Math.max(newCount, 0), maxForThis);
+        return prev.map((c, i) => i === index ? { ...c, count: clamped } : c).filter(c => c.count > 0);
+      }
+
+      if (isStar(card)) {
+        const others = prev.reduce((sum, c, i) =>
+          i === index ? sum : sum + (isStar(c) ? (Number(c.count) || 0) : 0), 0);
+        const maxForThis = Math.max(0, 1 - others);
+        const clamped = Math.min(Math.max(newCount, 0), maxForThis);
+        return prev.map((c, i) => i === index ? { ...c, count: clamped } : c).filter(c => c.count > 0);
+      }
+
+      if (isNameSingleton(card)) {
+        const othersByName = totalByExactName(prev, card.name, index);
+        const maxForThis = Math.max(0, 1 - othersByName);
+        const clamped = Math.min(Math.max(newCount, 0), maxForThis);
+        return prev
+          .map((c, i) => i === index ? { ...c, count: clamped } : c)
+          .filter(c => c.count > 0);
+      }
+
+      const totalOther = totalByNameNonSingleton(prev, card.name, index);
+      const maxForThis = Math.max(0, 4 - totalOther);
+      const clamped = Math.min(Math.max(newCount, 0), maxForThis);
+
+      return prev
+        .map((c, i) => i === index ? { ...c, count: clamped } : c)
+        .filter(c => c.count > 0);
+    });
   }
 
   const [importing, setImporting] = useState(false)
   const [dragOver, setDragOver] = useState(false)
 
   async function importDeck(overwrite = false) {
-    setImporting(true)
+    setImporting(true);
     try {
       const startingDeck = overwrite ? [] : [...deck];
-      if (overwrite) setDeck([])
-      const text = await navigator.clipboard.readText()
+      if (overwrite) setDeck([]);
+
+      const text = await navigator.clipboard.readText();
       const lines = text
         .split(/\r?\n/)
         .map(l => l.trim())
         .filter(l => l && !l.endsWith(':'))
-        .filter(l => /^\d+\s/.test(l))
+        .filter(l => /^\d+\s/.test(l));
+
       const merged = [...startingDeck];
 
       for (const line of lines) {
-        const parts = line.split(/\s+/)
-        const count = parseInt(parts[0], 10)
-        const number = parts.pop()
-        const setAbbrev = parts.pop()
-        const name = parts.slice(1).join(' ')
+        const parts = line.split(/\s+/);
+        const count = parseInt(parts[0], 10);
+        const number = parts.pop();
+        const setAbbrev = parts.pop();
+        const name = parts.slice(1).join(' ');
+
         const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
         const url = `/api/cards/searchbyname/partial/${safeName}`;
 
@@ -332,33 +458,77 @@ export default function DeckBuilder() {
         }
         const results = await res.json();
 
-        const match = results.find(
-          c => c.setAbbrev === setAbbrev && c.number === number
-        )
-        if (match) {
-          const idx = merged.findIndex(
-            c => c.setAbbrev === setAbbrev && c.number === number
-          )
-          if (idx > -1) {
-            if (!limitCounts) {
-              merged[idx].count += count
-            } else if (match.supertype !== 'Energy') {
-              merged[idx].count = Math.min(merged[idx].count + count, 4)
-            } else {
-              merged[idx].count += count
-            }
-          } else {
-            merged.push({ ...match, count })
+        const match = results.find(c => c.setAbbrev === setAbbrev && c.number === number);
+        if (!match) {
+          console.warn('Could not import:', name, setAbbrev, number);
+          continue;
+        }
+
+        const idx = merged.findIndex(c => c.setAbbrev === setAbbrev && c.number === number);
+
+        if (!limitCounts || isBasicEnergy(match) || isUnlimitedByRules(match)) {
+          if (idx > -1) merged[idx].count += count;
+          else merged.push({ ...match, count });
+          continue;
+        }
+
+        if (isAceSpec(match)) {
+          const canAdd = Math.max(0, 1 - totalAceSpec(merged));
+          if (canAdd <= 0) { console.warn('Skipped ACE SPEC (only one allowed):', match.name); continue; }
+          if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+          else merged.push({ ...match, count: Math.min(count, 1) });
+          continue;
+        }
+
+        if (isRadiant(match)) {
+          const canAdd = Math.max(0, 1 - totalRadiant(merged));
+          if (canAdd <= 0) { console.warn('Skipped Radiant (only one allowed):', match.name); continue; }
+          if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+          else merged.push({ ...match, count: Math.min(count, 1) });
+          continue;
+        }
+
+        if (isStar(match)) {
+          const canAdd = Math.max(0, 1 - totalStar(merged));
+          if (canAdd <= 0) { console.warn('Skipped Star (only one allowed):', match.name); continue; }
+          if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+          else merged.push({ ...match, count: Math.min(count, 1) });
+          continue;
+        }
+
+        if (isNameSingleton(match)) {
+          const canAddByName = Math.max(0, 1 - totalByExactName(merged, match.name));
+          if (canAddByName <= 0) {
+            console.warn('Skipped singleton-by-name (already have one):', match.name);
+            continue;
           }
+          if (idx > -1) {
+            merged[idx].count = Math.min(merged[idx].count + count, 1);
+          } else {
+            merged.push({ ...match, count: Math.min(count, canAddByName) });
+          }
+          continue;
+        }
+
+        if (idx > -1) {
+          const totalOther = totalByNameNonSingleton(merged, match.name, idx);
+          const maxForThis = Math.max(0, 4 - totalOther);
+          merged[idx].count = Math.min(merged[idx].count + count, maxForThis);
         } else {
-          console.warn('Could not import:', name, setAbbrev, number)
+          const remaining = Math.max(0, 4 - totalByNameNonSingleton(merged, match.name));
+          if (remaining > 0) {
+            merged.push({ ...match, count: Math.min(count, remaining) });
+          } else {
+            console.warn('Skipped (already 4 of this name):', match.name);
+          }
         }
       }
-      setDeck(merged)
+
+      setDeck(merged);
     } catch (err) {
-      console.error('Import failed', err)
+      console.error('Import failed', err);
     } finally {
-      setImporting(false)
+      setImporting(false);
     }
   }
 
@@ -423,7 +593,7 @@ export default function DeckBuilder() {
   useEffect(() => {
     localStorage.setItem('decklistZoomScale', zoomScale);
   }, [zoomScale]);
-  
+
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
@@ -439,7 +609,6 @@ export default function DeckBuilder() {
             <meta name="twitter:title" content={eventData.name} />
             <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
             <meta name="twitter:image" content={eventData.thumbnail} /> */}
-            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></meta>
       </Helmet>
       {exportingImage && (
         <div className="image-export-overlay">
@@ -472,6 +641,26 @@ export default function DeckBuilder() {
           }
         };
 
+        const deckAceTotal = totalAceSpec(deck);
+        const deckRadiantTotal = totalRadiant(deck);
+        const deckStarTotal = totalStar(deck);
+        const nameSingletonInDeck = totalByExactName(deck, zoomCard?.name);
+        const remainingRegular = Math.max(0, 4 - totalByNameNonSingleton(deck, zoomCard?.name));
+
+        const plusDisabled =
+          !limitCounts ? false
+            : isBasicEnergy(zoomCard) ? false
+              : isUnlimitedByRules(zoomCard) ? false
+                : isAceSpec(zoomCard)
+                  ? ((deckAceTotal >= 1 && (currentCount || 0) === 0) || (currentCount || 0) >= 1)
+                  : isRadiant(zoomCard)
+                    ? ((deckRadiantTotal >= 1 && (currentCount || 0) === 0) || (currentCount || 0) >= 1)
+                    : isStar(zoomCard)
+                      ? ((deckStarTotal >= 1 && (currentCount || 0) === 0) || (currentCount || 0) >= 1)
+                      : isNameSingleton(zoomCard)
+                        ? ((nameSingletonInDeck >= 1 && (currentCount || 0) === 0) || (currentCount || 0) >= 1)
+                        : remainingRegular <= 0;
+
         return (
           <div
             className="card-modal-overlay"
@@ -501,7 +690,6 @@ export default function DeckBuilder() {
                 alt={zoomCard.name}
                 className="card-modal-image"
               />
-              {/* <p style={{ textAlign: 'center', margin: '20px 0 5px 0', opacity: 0.5 }}>In Deck:</p> */}
               <div className="modal-count-controls">
                 <button
                   className='btn-minus-r'
@@ -514,7 +702,7 @@ export default function DeckBuilder() {
                   className='btn-plus-l'
                   type="button"
                   onClick={() => handleDelta(1)}
-                  disabled={zoomCard.supertype !== 'Energy' && currentCount >= 4}
+                  disabled={plusDisabled}
                 >＋</button>
               </div>
 
@@ -771,7 +959,6 @@ export default function DeckBuilder() {
             </div>
             <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
               <img src={patreonImg} />
-              {/* <p>Support this Project</p> */}
               <p>Support Us</p>
             </a>
           </div>
