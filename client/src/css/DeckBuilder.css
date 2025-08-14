@@ -187,7 +187,6 @@ body.deckbuilder-page .deck-builder {
   height: 2.1rem;
   font-size: 1.2rem;
   border: none;
-  background-color: #1290eb;
   color: white;
   font-weight: 600;
 }
@@ -197,6 +196,7 @@ body.deckbuilder-page .deck-builder {
   border-top-left-radius: 15px;
   border-right: none !important;
   margin-right: -23px;
+  background-image: linear-gradient(to top right, rgb(6, 174, 174), #1290eb, #1290eb);
 }
 
 .btn-plus-l {
@@ -204,6 +204,7 @@ body.deckbuilder-page .deck-builder {
   border-top-right-radius: 15px;
   border-left: none !important;
   margin-left: -23px;
+  background-image: linear-gradient(to bottom left, rgb(6, 174, 174), #1290eb, #1290eb);
 }
 
 .modal-count-controls button:hover {
@@ -249,14 +250,14 @@ body.deckbuilder-page .deck-builder {
   height: 40px;
   width: 200px;
   border-radius: 2px;
-  background-color: #1290eb;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
   color: white;
   font-weight: 600;
 }
 
 .bottom-db-modal-bts button:hover {
   cursor: pointer;
-  background-color: grey;
+  background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff);
 }
 
 .bottom-db-modal-bts .tcgplayer-btn {
@@ -826,7 +827,7 @@ body.deckbuilder-page .deck-builder {
 }
 
 .save-deck-btn:hover {
-  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
+  background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
 
 .options-row button span {
@@ -996,6 +997,12 @@ body.deckbuilder-page .deck-builder {
   font-weight: 600;
   margin-left: 3px;
 }
+.deck-count-green {
+  color: green;
+}
+.deck-count-red {
+  color: red;
+}
 
 #deck-reset,
 #deck-sort {
@@ -1029,7 +1036,7 @@ body.deckbuilder-page .deck-builder {
 #deck-sort:hover {
   background-color: grey;
   cursor: pointer;
-  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
+  background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
 
 .limit-menu-container {
@@ -1050,7 +1057,7 @@ body.deckbuilder-page .deck-builder {
 
 .limit-menu-btn:hover {
   background-color: grey;
-  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
+  background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
 
 .limit-menu-dropdown {
@@ -1849,7 +1856,7 @@ body.deckbuilder-page .deck-builder {
 .slider-zoomin:hover,
 .slider-zoomout:hover {
   cursor: pointer;
-  background-image: linear-gradient(to bottom right, rgb(3, 119, 143), #0260a2) !important;
+  background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
 
 .savedeck-modal-overlay {
@@ -2251,6 +2258,12 @@ body.deckbuilder-page .deck-builder {
     font-size: 26px;
     margin-bottom: 16px;
   }
+
+  .card-modal-content {
+    width: 85%;
+    max-width: 85%;
+    transform: scale(0.8);
+  }
 }
 
 @media screen and (max-width: 850px) {
@@ -2398,6 +2411,11 @@ body.deckbuilder-page .deck-builder {
 
   .save-deck-btn {
     margin-right: 10px !important;
+  }
+
+  .card-modal-content {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -2569,6 +2587,12 @@ body.deckbuilder-page .deck-builder {
   .search-mode-dropdown {
     height: 25px;
     font-size: 12px;
+  }
+
+  .card-modal-content {
+    width: 100%;
+    max-width: 100%;
+    /* transform: scale(0.65); */
   }
 }
 

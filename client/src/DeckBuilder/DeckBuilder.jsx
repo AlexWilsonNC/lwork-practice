@@ -781,31 +781,28 @@ export default function DeckBuilder() {
                 {zoomCard.supertype === 'Pokémon' && (
                   <hr className='zoomed-card-db-hr'></hr>
                 )}
-                {(zoomCard.retreatCost != null || zoomCard.convertedRetreatCost != null) && (
-                  <div className="modal-retreat-cost">
-                    <strong>Retreat:</strong>&nbsp;&nbsp;{' '}
-                    {(() => {
-                      if (zoomCard.convertedRetreatCost != null) {
-                        return zoomCard.convertedRetreatCost;
-                      }
-                      if (Array.isArray(zoomCard.retreatCost)) {
-                        return zoomCard.retreatCost.length;
-                      }
-                      return 0;
-                    })()}
-                  </div>
-                )}
-                {zoomCard.weaknesses && (
-                  <p>
-                    <strong>Weakness:</strong>{' '}
-                    {zoomCard.weaknesses.map(w => `${w.type} ${w.value}`).join(', ')}
-                  </p>
-                )}
-                {zoomCard.resistances && (
-                  <p>
-                    <strong>Resistanc:</strong>{' '}
-                    {zoomCard.resistances.map(r => `${r.type} ${r.value}`).join(', ')}
-                  </p>
+                {zoomCard.supertype === 'Pokémon' && (
+                  <>
+                    <p>Weakness:&nbsp;
+                      {zoomCard.weaknesses && zoomCard.weaknesses.length > 0 ? (
+                        zoomCard.weaknesses.map((weakness, index) => (
+                          <span key={index}>&nbsp;{weakness.type} {weakness.value}</span>
+                        ))
+                      ) : (
+                        <span className='grey'>--</span>
+                      )}
+                    </p>
+                    <p>Resistance:&nbsp;
+                      {zoomCard.resistances && zoomCard.resistances.length > 0 ? (
+                        zoomCard.resistances.map((resistance, index) => (
+                          <span key={index}>&nbsp;{resistance.type} {resistance.value}</span>
+                        ))
+                      ) : (
+                        <span className='grey'>--</span>
+                      )}
+                    </p>
+                    <p>Retreat Cost: &nbsp;{zoomCard.convertedRetreatCost || 0}</p>
+                  </>
                 )}
                 <hr className='zoomed-card-db-hr'></hr>
                 {zoomCard.set && (
@@ -893,7 +890,17 @@ export default function DeckBuilder() {
           <div className='deck-stats'>
             <div className='moveit-moveit'>
               <p className='stat-count'>
-                Card Count: <span className='current-deck-count'>{totalCount}</span>
+                Card Count:{' '}
+                <span
+                  className={`current-deck-count ${totalCount === 60
+                    ? 'deck-count-green'
+                    : totalCount > 60
+                      ? 'deck-count-red'
+                      : ''
+                    }`}
+                >
+                  {totalCount}
+                </span>
               </p>
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <div id='deck-sort' style={{ cursor: 'pointer' }} onClick={handleSort}>

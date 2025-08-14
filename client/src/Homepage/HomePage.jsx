@@ -151,7 +151,7 @@ const Homepage = () => {
                                         <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds, plus some important corrections!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Aug 9, 2025</p>
+                                        <p>Aug 13, 2025</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -394,7 +394,7 @@ const Homepage = () => {
                                     <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds and more!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Aug 9, 2025</p>
+                                    <p>Aug 13, 2025</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>
