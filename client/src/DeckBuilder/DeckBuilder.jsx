@@ -857,7 +857,21 @@ export default function DeckBuilder() {
         );
       })()}
       <div className="deck-builder">
-        <CardSearch onAddCard={addCard} onCardClick={handleCardClick} />
+        <CardSearch
+          onAddCard={addCard}
+          onCardClick={handleCardClick}
+          onRemoveFromDeck={({ setAbbrev, number }) => {
+            setDeck(prev => {
+              const next = prev.map(c => ({ ...c }));
+              const idx = next.findIndex(c => c.setAbbrev === setAbbrev && c.number === number);
+              if (idx !== -1) {
+                next[idx].count = Math.max(0, (next[idx].count || 0) - 1);
+                if (next[idx].count === 0) next.splice(idx, 1);
+              }
+              return next;
+            });
+          }}
+        />
         <div
           className={`active-deck-container${dragOver ? ' drag-over' : ''}`}
           onDragOver={e => {
@@ -1051,10 +1065,19 @@ export default function DeckBuilder() {
               onUpdateCount={updateCount}
               onCardClick={handleCardClick}
               loading={importing}
-              onCardDrop={addCard}
               limitCounts={limitCounts}
               viewMode={viewMode}
               zoomScale={zoomScale}
+              onCardDrop={addCard}
+              onAddFromSearch={({ fromIndex, toIndex }) => {
+                setDeck(prev => {
+                  const next = [...prev];
+                  const [moved] = next.splice(fromIndex, 1);
+                  const insertAt = fromIndex < toIndex ? toIndex - 1 : toIndex;
+                  next.splice(insertAt, 0, moved);
+                  return next;
+                });
+              }}
             />
           </div>
         </div>

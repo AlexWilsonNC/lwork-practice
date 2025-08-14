@@ -180,7 +180,7 @@
 
 .decks-account-btn.active,
 .profile-account-btn.active {
-  background-color: #1290eb;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
   border-radius: 10px;
 }
 

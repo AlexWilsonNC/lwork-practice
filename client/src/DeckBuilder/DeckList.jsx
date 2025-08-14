@@ -8,7 +8,8 @@ const isUnlimitedByRules = (c) => {
   return Array.isArray(r) ? r.some(s => rx.test(s)) : rx.test(r);
 };
 
-export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, limitCounts = true, viewMode = 'image', zoomScale = 1 }) {
+export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, onAddFromSearch, limitCounts = true, viewMode = 'image', zoomScale = 1 }) {
+
   const shrink = Array.isArray(deck) && deck.length > 45
   const BASE_CARD_WIDTH = 70;
   const BASE_MARGIN = 2.5;
@@ -71,9 +72,59 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
               margin: `${cardMargin}px`,
               position: 'relative'
             }}
+            draggable
+            onDragStart={e => {
+              e.dataTransfer.setData(
+                'application/ptcg-card',
+                JSON.stringify({
+                  setAbbrev: c.setAbbrev,
+                  number: c.number,
+                  action: 'decrement'
+                })
+              );
+              e.dataTransfer.setData('application/ptcg-reorder', String(i));
+              e.dataTransfer.effectAllowed = 'move';
+            }}
+            onDragOver={e => {
+              if (!Array.from(e.dataTransfer?.types || []).includes('application/ptcg-reorder')) return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+              const rect = e.currentTarget.getBoundingClientRect();
+              const threshold = rect.left + rect.width * 0.5;
+              const before = e.clientX < threshold - 6;
+              e.currentTarget.classList.toggle('drop-before', before);
+              e.currentTarget.classList.toggle('drop-after', !before);
+              e.currentTarget.__dropAfter = !before;
+            }}
+            onDragLeave={e => {
+              const el = e.currentTarget;
+              const r = el.getBoundingClientRect();
+              const x = e.clientX ?? -1;
+              const y = e.clientY ?? -1;
+              if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return;
+              el.classList.remove('drop-before', 'drop-after');
+              el.__dropAfter = null;
+            }}
+            onDrop={e => {
+              const types = Array.from(e.dataTransfer?.types || []);
+              if (!types.includes('application/ptcg-reorder')) return;
+              e.preventDefault();
+              e.currentTarget.classList.remove('drop-before');
+              e.currentTarget.classList.remove('drop-after');
+              const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
+              const after = !!e.currentTarget.__dropAfter;
+              const to = after ? i + 1 : i;
+              if (Number.isInteger(from) && from !== -1 && from !== to) {
+                if (typeof onAddFromSearch === 'function') {
+                  onAddFromSearch({ fromIndex: from, toIndex: to });
+                }
+              }
+            }}
           >
             <img
               src={c.images.small}
+              draggable={false}
+              onDragStart={e => e.preventDefault()}
               alt={c.name}
               className="database-card-in-list"
               style={{ width: '100%', height: 'auto' }}
@@ -124,6 +175,29 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
           </div>
         )
       })}
+      {/* <div
+        className="deck-tail-dropzone"
+        onDragOver={e => {
+          if (!Array.from(e.dataTransfer?.types || []).includes('application/ptcg-reorder')) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          e.currentTarget.classList.add('active');
+        }}
+        onDragLeave={e => e.currentTarget.classList.remove('active')}
+        onDrop={e => {
+          const types = Array.from(e.dataTransfer?.types || []);
+          if (!types.includes('application/ptcg-reorder')) return;
+          e.preventDefault();
+          e.currentTarget.classList.remove('active');
+          const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
+          const to = deck.length;
+          if (Number.isInteger(from) && from !== -1 && from !== to) {
+            if (typeof onAddFromSearch === 'function') {
+              onAddFromSearch({ fromIndex: from, toIndex: to });
+            }
+          }
+        }}
+      /> */}
     </div>
   )
 }

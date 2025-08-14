@@ -638,19 +638,64 @@ body.deckbuilder-page .deck-builder {
   transition: ease all 0.3s;
 }
 
+.drag-helper-card {
+  opacity: 1;
+}
+
+.deckbuilt-card-container.drop-before::before,
+.deckbuilt-card-container.drop-after::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 25px;
+  border: 1px solid white;
+  border-radius: 2px;
+  color: white;
+  font-weight: 600;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.deckbuilt-card-container.drop-before::before {
+  content: "\2039";
+  background: #1290eb;
+  left: -4px;
+}
+.deckbuilt-card-container.drop-after::after {
+  content: "\203A";
+  background: red;
+  right: -4px;
+}
+
+/*
+.deck-tail-dropzone {
+  width: 0;        
+  height: 0;          
+  margin: 0;          
+  overflow: hidden;      
+}
+.deck-tail-dropzone.active {
+  position: absolute;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  background: #1290eb;
+  box-shadow: 2px 2px 5px white;
+  border-radius: 2px;
+}
+*/
+
 .deckbuilt-card-container:hover {
   transform: scale(1.05);
 }
 
 .database-card-in-list {
-  /* if 27 or less */
-  /* width: 115px; */
-
   height: auto;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
   border-radius: 4px;
-
-  /* if 28 or more */
   width: 6vw;
 }
 

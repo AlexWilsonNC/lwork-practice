@@ -12,7 +12,7 @@ import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
 
 import sv4Img from '../assets/sets/scarlet-violet/logos/sv4-paradox-rift.png'
 
-export default function CardSearch({ onAddCard, onCardClick }) {
+export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck }) {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
@@ -53,6 +53,25 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             sets: { ...f.sets, [key]: !f.sets[key] }
         }))
     }
+
+    const handleDragOver = e => {
+        if (Array.from(e.dataTransfer?.types || []).includes('application/ptcg-card')) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+    };
+
+    const handleDrop = e => {
+        const types = Array.from(e.dataTransfer?.types || []);
+        if (!types.includes('application/ptcg-card')) return;
+        e.preventDefault();
+        try {
+            const payload = JSON.parse(e.dataTransfer.getData('application/ptcg-card') || '{}');
+            if (payload?.action === 'decrement' && onRemoveFromDeck) {
+                onRemoveFromDeck(payload);
+            }
+        } catch { /* no-op */ }
+    };
 
     function aliasNormalize(input = '') {
         let s = (input || '')
@@ -285,7 +304,11 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     return (
         <>
             <div className={`card-search-container ${isSearchVisible ? 'visible' : ''}`}>
-                <div className="card-search-content">
+                <div
+                    className="card-search-content"
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                >
                     <button
                         className="advanced-search-button"
                         onClick={() => setShowAdvanced(true)}
@@ -496,8 +519,12 @@ export default function CardSearch({ onAddCard, onCardClick }) {
                                     }}
                                     onClick={() => onCardClick(card)}
                                     style={{ cursor: 'pointer' }}
+                                    
                                 >
-                                    <img src={card.images.small} alt={card.name} className='database-card-in-list' />
+                                    <img
+                                        draggable={false}
+                                        onDragStart={e => e.preventDefault()}
+                                        src={card.images.small} alt={card.name} className='database-card-in-list' />
                                     <button
                                         type="button"
                                         onClick={e => {
