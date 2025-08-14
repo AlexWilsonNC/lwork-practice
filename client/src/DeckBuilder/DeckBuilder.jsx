@@ -13,7 +13,7 @@ import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png'
 import { isGLCLegal, isExpandedLegal, isStandardLegal } from '../Tools/CardLegality';
 
-fetch('https://api.pokemontcg.io/v2/sets').then(res => { console.log('List of All Sets', res.json()) })
+// fetch('https://api.pokemontcg.io/v2/sets').then(res => { console.log('List of All Sets', res.json()) })
 // /* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"zsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
 // /* set */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:"rsv10pt5"').then(res => { console.log('Download New Set', res.json()) })
 // /* set 250+ */ fetch('https://api.pokemontcg.io/v2/cards?q=set.id:svp&page=2').then(res => { console.log('Download Page 2', res.json()) })

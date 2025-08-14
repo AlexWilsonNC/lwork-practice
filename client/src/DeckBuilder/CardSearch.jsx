@@ -53,6 +53,68 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         }))
     }
 
+    function aliasNormalize(input = '') {
+        // 1) NFC→NFD and strip combining accents
+        let s = (input || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+
+        // 2) unify multi-word aliases to single tokens (before removing spaces)
+        //    order matters: match the longest phrases first
+        s = s
+            .replace(/\bprism\s*star\b/g, 'prismstar')
+            .replace(/\bgold\s*star\b/g, 'goldstar')
+            .replace(/\bdelta\s*species\b/g, 'deltaspecies');
+
+        // 3) single-word aliases
+        s = s
+            .replace(/\bprism\b/g, 'prismstar')
+            .replace(/\bgoldstar\b/g, 'goldstar') // already handled, harmless
+            .replace(/\bstar\b/g, 'goldstar')
+            .replace(/\bdelta\b/g, 'deltaspecies')
+            .replace(/\bspecies\b/g, 'deltaspecies');
+
+        // 4) symbols → tokens
+        s = s
+            .replace(/[♢◆]/g, 'prismstar')
+            .replace(/★/g, 'goldstar')
+            .replace(/δ/g, 'deltaspecies');
+
+        // 5) finally remove whitespace
+        s = s.replace(/\s+/g, '');
+
+        return s;
+    }
+
+    function expandAliasToSymbolQueries(q) {
+        const base = q.trim();
+        const variants = new Set([base]);
+
+        // build symbol variants from words
+        let sym = base.toLowerCase();
+
+        // longest phrases first
+        sym = sym.replace(/\bprism\s*star\b/g, '♢');
+        sym = sym.replace(/\bgold\s*star\b/g, '★');
+        sym = sym.replace(/\bdelta\s*species\b/g, 'δ');
+
+        // single words
+        sym = sym.replace(/\bprism\b/g, '♢');
+        // be conservative with "star" so "starter" doesn't trigger:
+        sym = sym.replace(/\bstar\b/g, '★');
+        sym = sym.replace(/\bdelta\b/g, 'δ');
+        sym = sym.replace(/\bspecies\b/g, 'δ');
+
+        if (sym !== base.toLowerCase()) {
+            variants.add(sym);
+        }
+
+        // Also, if user pasted a symbol, keep it as-is (already in base)
+
+        return Array.from(variants);
+    }
+
     useEffect(() => {
         const newestSet = setOrder[0]
         fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
@@ -75,85 +137,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             })
     }, [])
 
-    // useEffect(() => {
-    //     const trimmed = query.trim()
-
-    //     if (trimmed === '') {
-    //         if (suppressDefault) {
-    //             setResults([])
-    //         } else {
-    //             setResults(defaultCards)
-    //         }
-    //         return
-    //     }
-
-    //     if (trimmed.length < 2 && trimmed.toUpperCase() !== 'N') {
-    //         setResults([])
-    //         return
-    //     }
-    //     const t = setTimeout(() => {
-    //         // ➊ normalize the user’s query: remove accents & spaces, lowercase
-    //         const normalizedQuery = query
-    //             .normalize('NFD')
-    //             .replace(/[\u0300-\u036f]/g, '')
-    //             .replace(/\s+/g, '')
-    //             .toLowerCase();
-
-    //         // hit your existing endpoint with the normalized query
-    //         fetch(`/api/cards/searchbyname/partial/${encodeURIComponent(normalizedQuery)}`)
-    //             .then(res => {
-    //                 if (!res.ok) throw new Error(`Network ${res.status}`)
-    //                 return res.json()
-    //             })
-    //             .then(data => {
-    //                 let arr = Array.isArray(data) ? data : []
-
-    //                 // preserve your special “N” logic
-    //                 if (trimmed.toUpperCase() === 'N') {
-    //                     arr = arr.filter(c => c.name.toUpperCase() === 'N')
-    //                 }
-    //                 // ➋ now client‐side filter to ignore accents/spaces in names too
-    //                 const normalize = str =>
-    //                     str
-    //                         .normalize('NFD')
-    //                         .replace(/[\u0300-\u036f]/g, '')
-    //                         .replace(/\s+/g, '')
-    //                         .toLowerCase();
-    //                 arr = arr.filter(c => {
-    //                     if (searchMode === 'name') {
-    //                         return normalize(c.name).includes(normalizedQuery);
-    //                     } else {
-    //                         // Search name + attacks + abilities
-    //                         const texts = [
-    //                             c.name || '',
-    //                             ...(c.attacks?.map(a => a.name) || []),
-    //                             ...(c.attacks?.map(a => a.text) || []),
-    //                             ...(c.abilities?.map(a => a.name) || []),
-    //                             ...(c.abilities?.map(a => a.text) || [])
-    //                         ];
-    //                         return texts.some(t => normalize(t).includes(normalizedQuery));
-    //                     }
-    //                 });
-
-    //                 arr.sort((a, b) => {
-    //                     const idxA = setOrder.indexOf(a.setAbbrev)
-    //                     const idxB = setOrder.indexOf(b.setAbbrev)
-    //                     if (idxA !== idxB) return idxA - idxB
-    //                     const numA = parseInt(a.number, 10) || 0
-    //                     const numB = parseInt(b.number, 10) || 0
-    //                     return numA - numB
-    //                 })
-
-    //                 setResults(arr)
-    //             })
-    //             .catch(err => {
-    //                 console.error('Search failed:', err)
-    //                 setResults([])
-    //             })
-    //     }, 300)
-    //     return () => clearTimeout(t)
-    // }, [query, defaultCards])
-
     useEffect(() => {
         const trimmed = query.trim()
 
@@ -163,58 +146,66 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             return
         }
 
-        if (trimmed.length < 2 && trimmed.toUpperCase() !== 'N') {
-            setResults([])
-            return
+        const allowOneChar = /^[N★δ♢◆]$/i.test(trimmed);
+        if (trimmed.length < 2 && !allowOneChar) {
+            setResults([]);
+            return;
         }
 
         const t = setTimeout(() => {
-            const normalizedQuery = query
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                .replace(/\s+/g, '')
-                .toLowerCase();
+            const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
+            const variants = expandAliasToSymbolQueries(rawQuery); // e.g. "delta" -> ["delta", "δ"]
 
-            const route =
-                searchMode === 'name'
-                    ? `/api/cards/searchbyname/partial/${encodeURIComponent(rawQuery)}`
-                    : `/api/cards/searchbytext/partial/${encodeURIComponent(rawQuery)}`;
+// Build all routes (name OR text)
+const routes =
+  searchMode === 'name'
+    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
 
-            fetch(route)
-                .then(res => {
-                    if (!res.ok) throw new Error(`Network ${res.status}`)
-                    return res.json()
-                })
-                .then(data => {
-                    let arr = Array.isArray(data) ? data : []
+// fetch all variants in parallel and merge unique cards
+Promise.all(
+  routes.map(r =>
+    fetch(r)
+      .then(res => (res.ok ? res.json() : []))
+      .catch(() => [])
+  )
+).then(resLists => {
+  // flatten & de-dup by a stable key (setAbbrev+number is good here)
+  const byKey = new Map();
+  for (const list of resLists) {
+    for (const c of Array.isArray(list) ? list : []) {
+      const key = `${c.setAbbrev}|${c.number}`;
+      if (!byKey.has(key)) byKey.set(key, c);
+    }
+  }
+  let arr = Array.from(byKey.values());
 
-                    if (trimmed.toUpperCase() === 'N') {
-                        arr = arr.filter(c => (c.name || '').toUpperCase() === 'N')
-                    }
+  // exact "N" safeguard
+  if (trimmed.toUpperCase() === 'N') {
+    arr = arr.filter(c => (c.name || '').toUpperCase() === 'N');
+  }
 
-                    const normalize = str =>
-                        (str || '')
-                            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                            .replace(/\s+/g, '')
-                            .toLowerCase();
+  // For NAME mode, apply your alias-aware client filter ONCE.
+  // For TEXT mode, do NOT filter by name here (or you’ll hide legit text hits).
+  if (searchMode === 'name') {
+    const normalizedQuery = aliasNormalize(rawQuery);
+    arr = arr.filter(c => aliasNormalize(c.name).includes(normalizedQuery));
+  }
 
-                    if (searchMode === 'name') {
-                        arr = arr.filter(c => normalize(c.name).includes(normalizedQuery));
-                    }
+  // sort (set order, then number)
+  arr.sort((a, b) => {
+    const idxA = setOrder.indexOf(a.setAbbrev);
+    const idxB = setOrder.indexOf(b.setAbbrev);
+    if (idxA !== idxB) return idxA - idxB;
+    const numA = parseInt(a.number, 10) || 0;
+    const numB = parseInt(b.number, 10) || 0;
+    return numA - numB;
+  });
 
-                    arr.sort((a, b) => {
-                        const idxA = setOrder.indexOf(a.setAbbrev)
-                        const idxB = setOrder.indexOf(b.setAbbrev)
-                        if (idxA !== idxB) return idxA - idxB
-                        const numA = parseInt(a.number, 10) || 0
-                        const numB = parseInt(b.number, 10) || 0
-                        return numA - numB
-                    })
-
-                    setResults(arr)
-                })
-                .catch(() => setResults([]))
+  setResults(arr);
+}).catch(() => setResults([]));
         }, 300)
 
         return () => clearTimeout(t)
