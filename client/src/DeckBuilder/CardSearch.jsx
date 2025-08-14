@@ -22,6 +22,7 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     const widthRef = useRef(window.innerWidth);
     const toggleBtnRef = useRef(null);
     const [searchMode, setSearchMode] = useState('name');
+    const latestReqId = useRef(0);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -54,34 +55,28 @@ export default function CardSearch({ onAddCard, onCardClick }) {
     }
 
     function aliasNormalize(input = '') {
-        // 1) NFC→NFD and strip combining accents
         let s = (input || '')
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
             .toLowerCase();
 
-        // 2) unify multi-word aliases to single tokens (before removing spaces)
-        //    order matters: match the longest phrases first
         s = s
             .replace(/\bprism\s*star\b/g, 'prismstar')
             .replace(/\bgold\s*star\b/g, 'goldstar')
             .replace(/\bdelta\s*species\b/g, 'deltaspecies');
 
-        // 3) single-word aliases
         s = s
             .replace(/\bprism\b/g, 'prismstar')
-            .replace(/\bgoldstar\b/g, 'goldstar') // already handled, harmless
+            .replace(/\bgoldstar\b/g, 'goldstar')
             .replace(/\bstar\b/g, 'goldstar')
             .replace(/\bdelta\b/g, 'deltaspecies')
             .replace(/\bspecies\b/g, 'deltaspecies');
 
-        // 4) symbols → tokens
         s = s
             .replace(/[♢◆]/g, 'prismstar')
             .replace(/★/g, 'goldstar')
             .replace(/δ/g, 'deltaspecies');
 
-        // 5) finally remove whitespace
         s = s.replace(/\s+/g, '');
 
         return s;
@@ -91,17 +86,13 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         const base = q.trim();
         const variants = new Set([base]);
 
-        // build symbol variants from words
         let sym = base.toLowerCase();
 
-        // longest phrases first
         sym = sym.replace(/\bprism\s*star\b/g, '♢');
         sym = sym.replace(/\bgold\s*star\b/g, '★');
         sym = sym.replace(/\bdelta\s*species\b/g, 'δ');
 
-        // single words
         sym = sym.replace(/\bprism\b/g, '♢');
-        // be conservative with "star" so "starter" doesn't trigger:
         sym = sym.replace(/\bstar\b/g, '★');
         sym = sym.replace(/\bdelta\b/g, 'δ');
         sym = sym.replace(/\bspecies\b/g, 'δ');
@@ -109,8 +100,6 @@ export default function CardSearch({ onAddCard, onCardClick }) {
         if (sym !== base.toLowerCase()) {
             variants.add(sym);
         }
-
-        // Also, if user pasted a symbol, keep it as-is (already in base)
 
         return Array.from(variants);
     }
@@ -152,60 +141,81 @@ export default function CardSearch({ onAddCard, onCardClick }) {
             return;
         }
 
+        setResults([]);
+
+        const reqId = ++latestReqId.current;
+
         const t = setTimeout(() => {
             const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
-            const variants = expandAliasToSymbolQueries(rawQuery); // e.g. "delta" -> ["delta", "δ"]
+            const variants = expandAliasToSymbolQueries(rawQuery);
 
-// Build all routes (name OR text)
-const routes =
-  searchMode === 'name'
-    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+            const routes =
+                searchMode === 'name'
+                    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+                    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
 
-// fetch all variants in parallel and merge unique cards
-Promise.all(
-  routes.map(r =>
-    fetch(r)
-      .then(res => (res.ok ? res.json() : []))
-      .catch(() => [])
-  )
-).then(resLists => {
-  // flatten & de-dup by a stable key (setAbbrev+number is good here)
-  const byKey = new Map();
-  for (const list of resLists) {
-    for (const c of Array.isArray(list) ? list : []) {
-      const key = `${c.setAbbrev}|${c.number}`;
-      if (!byKey.has(key)) byKey.set(key, c);
-    }
-  }
-  let arr = Array.from(byKey.values());
+            Promise.all(
+                routes.map(r =>
+                    fetch(r)
+                        .then(res => (res.ok ? res.json() : []))
+                        .catch(() => [])
+                )
+            ).then(resLists => {
+                if (reqId !== latestReqId.current) return;
+                const byKey = new Map();
+                for (const list of resLists) {
+                    for (const c of Array.isArray(list) ? list : []) {
+                        const key = `${c.setAbbrev}|${c.number}`;
+                        if (!byKey.has(key)) byKey.set(key, c);
+                    }
+                }
+                let arr = Array.from(byKey.values());
 
-  // exact "N" safeguard
-  if (trimmed.toUpperCase() === 'N') {
-    arr = arr.filter(c => (c.name || '').toUpperCase() === 'N');
-  }
+                if (/^[N★δ♢◆]$/i.test(trimmed)) {
+                    const t = trimmed.toUpperCase();
 
-  // For NAME mode, apply your alias-aware client filter ONCE.
-  // For TEXT mode, do NOT filter by name here (or you’ll hide legit text hits).
-  if (searchMode === 'name') {
-    const normalizedQuery = aliasNormalize(rawQuery);
-    arr = arr.filter(c => aliasNormalize(c.name).includes(normalizedQuery));
-  }
+                    if (t === 'N') {
+                        // exact "N" only (prevents unrelated trainers/items with an 'n' somewhere)
+                        arr = arr.filter(c => (c.name || '').toUpperCase() === 'N');
+                    } else if (t === '★') {
+                        // gold star: name must actually contain the star OR alias match
+                        arr = arr.filter(c =>
+                            (c.name || '').includes('★') ||
+                            aliasNormalize(c.name).includes('goldstar')
+                        );
+                    } else if (t === 'δ') {
+                        // delta species: must contain delta symbol OR alias match
+                        arr = arr.filter(c =>
+                            (c.name || '').includes('δ') ||
+                            aliasNormalize(c.name).includes('deltaspecies')
+                        );
+                    } else { // ♢ or ◆ (prism star)
+                        arr = arr.filter(c =>
+                            (c.name || '').includes('♢') ||
+                            (c.name || '').includes('◆') ||
+                            aliasNormalize(c.name).includes('prismstar')
+                        );
+                    }
+                }
 
-  // sort (set order, then number)
-  arr.sort((a, b) => {
-    const idxA = setOrder.indexOf(a.setAbbrev);
-    const idxB = setOrder.indexOf(b.setAbbrev);
-    if (idxA !== idxB) return idxA - idxB;
-    const numA = parseInt(a.number, 10) || 0;
-    const numB = parseInt(b.number, 10) || 0;
-    return numA - numB;
-  });
+                if (searchMode === 'name') {
+                    const normalizedQuery = aliasNormalize(rawQuery);
+                    arr = arr.filter(c => aliasNormalize(c.name).includes(normalizedQuery));
+                }
 
-  setResults(arr);
-}).catch(() => setResults([]));
+                arr.sort((a, b) => {
+                    const idxA = setOrder.indexOf(a.setAbbrev);
+                    const idxB = setOrder.indexOf(b.setAbbrev);
+                    if (idxA !== idxB) return idxA - idxB;
+                    const numA = parseInt(a.number, 10) || 0;
+                    const numB = parseInt(b.number, 10) || 0;
+                    return numA - numB;
+                });
+
+                setResults(arr);
+            }).catch(() => setResults([]));
         }, 300)
 
         return () => clearTimeout(t)
@@ -233,17 +243,14 @@ Promise.all(
 
         const onTouchEnd = (e) => {
             const t = e.changedTouches[0];
-            const dy = startY - t.clientY;   // up = positive, down = negative
+            const dy = startY - t.clientY;
             const dx = Math.abs(startX - t.clientX);
 
-            // ignore mostly-horizontal swipes
             if (Math.abs(dy) < 50 || dx > 40) return;
 
             if (dy > 0 && !isSearchVisible) {
-                // swipe up on button -> open
                 setIsSearchVisible(true);
             } else if (dy < 0 && isSearchVisible) {
-                // swipe down on button -> close
                 setIsSearchVisible(false);
             }
         };
@@ -260,13 +267,11 @@ Promise.all(
     useEffect(() => {
         const onResize = () => {
             const w = window.innerWidth;
-            if (w === widthRef.current) return; // keyboard changed height only → ignore
+            if (w === widthRef.current) return;
             widthRef.current = w;
 
             if (w < 1160) {
                 document.body.classList.add('no-scroll');
-                // don't auto-close if user already opened it
-                // setIsSearchVisible(false); <-- remove this line
             } else {
                 document.body.classList.remove('no-scroll');
                 setIsSearchVisible(true);
@@ -284,6 +289,7 @@ Promise.all(
                     <button
                         className="advanced-search-button"
                         onClick={() => setShowAdvanced(true)}
+                        style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -467,6 +473,7 @@ Promise.all(
                             <button
                                 className="advanced-search-button-small"
                                 onClick={() => setShowAdvanced(true)}
+                                style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>

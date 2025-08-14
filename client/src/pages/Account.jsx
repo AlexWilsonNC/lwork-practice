@@ -38,9 +38,6 @@ const AccountSection = styled.div`
     .sort-favorites-btn {
         margin-bottom: 1rem;
     }
-    .create-new-deck-link-btn {
-        background-color: ${({ theme }) => theme.profileDarkBlue};
-    }
     .account-tabs {
         background-color: ${({ theme }) => theme.profileSliderBg};
     }
@@ -319,6 +316,31 @@ export default function Account() {
             console.error(err);
             alert(err.message);
         }
+    };
+
+    const openPrintDecklist = (deckObj) => {
+        if (!deckObj) return;
+
+        const raw = deckObj.decklist;
+        const cards = Array.isArray(raw)
+            ? raw
+            : [
+                ...(raw?.pokemon || []),
+                ...(raw?.trainer || []),
+                ...(raw?.energy || []),
+            ];
+
+        const minimal = cards.map(c => ({
+            supertype: c.supertype,
+            set: c.setAbbrev || c.set,
+            name: c.name,
+            number: c.number,
+            count: c.count,
+            regMark: c.regulationMark || ''
+        }));
+
+        const payload = encodeURIComponent(JSON.stringify(minimal));
+        window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
     };
 
     function goToDeckbuilder(deck, newTab = false) {
@@ -661,16 +683,15 @@ export default function Account() {
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
     useEffect(() => {
-        function handleGlobalClick() {
-            if (mobileActionsOpen) {
-                setMobileActionsOpen(false);
-            }
-        }
-        document.addEventListener('click', handleGlobalClick, true);
-        return () => {
-            document.removeEventListener('click', handleGlobalClick, true);
-        };
-    }, [mobileActionsOpen]);
+  function handleGlobalClick(e) {
+    if (!mobileActionsOpen) return;
+    const modal = document.querySelector('.mobile-modal-box');
+    if (modal && modal.contains(e.target)) return; // don't close if click is inside modal
+    setMobileActionsOpen(false);
+  }
+  document.addEventListener('click', handleGlobalClick); // bubble (no third arg)
+  return () => document.removeEventListener('click', handleGlobalClick);
+}, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
@@ -859,7 +880,7 @@ export default function Account() {
                                 <a href='/bobthebuilder' style={{ color: '#1290eb' }}>open the deckbuilder</a> and start your journey!
                                 <br></br>
                                 <br></br>
-                                <span style={{opacity: 0.5}}>(You can also save decks to your collection by selecting the heart icon from any tournament result)</span>
+                                <span style={{ opacity: 0.5 }}>(You can also save decks to your collection by selecting the heart icon from any tournament result)</span>
                             </p>
                         )
                     ) : (
@@ -1458,7 +1479,6 @@ export default function Account() {
                                                 <div className="public-actions">
                                                     <button
                                                         onClick={() => {
-                                                            // flatten old vs new decklist
                                                             const raw = selectedDeck.decklist;
                                                             const cards = Array.isArray(raw)
                                                                 ? raw
@@ -1467,7 +1487,6 @@ export default function Account() {
                                                                     ...(raw.trainer || []),
                                                                     ...(raw.energy || []),
                                                                 ];
-                                                            // copy as text
                                                             const text = cards
                                                                 .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
                                                                 .join('\n');
@@ -1476,6 +1495,9 @@ export default function Account() {
                                                         className="public-action-btn"
                                                     >
                                                         Copy as Text
+                                                    </button>
+                                                    <button onClick={() => openPrintDecklist(selectedDeck)}>
+                                                        Print List
                                                     </button>
                                                     <button
                                                         onClick={() => goToDeckbuilder(selectedDeck, true)}
@@ -1488,43 +1510,30 @@ export default function Account() {
                                                 <div>
                                                     {!isSmallViewport ? (
                                                         <>
-                                                            <button onClick={() => {
-                                                                setModalDeck(selectedDeck);
-                                                                setNewValue(selectedDeck.name);
-                                                                setShowRenameModal(true);
-                                                            }}>
-                                                                Rename
+                                                            <button
+                                                                onClick={() => {
+                                                                    const raw = selectedDeck.decklist;
+                                                                    const cards = Array.isArray(raw)
+                                                                        ? raw
+                                                                        : [
+                                                                            ...(raw.pokemon || []),
+                                                                            ...(raw.trainer || []),
+                                                                            ...(raw.energy || []),
+                                                                        ];
+                                                                    const text = cards
+                                                                        .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
+                                                                        .join('\n');
+                                                                    navigator.clipboard.writeText(text);
+                                                                }}
+                                                                className="public-action-btn"
+                                                            >
+                                                                Copy as Text
                                                             </button>
-                                                            <button onClick={() => {
-                                                                setModalDeck(selectedDeck);
-                                                                setNewValue(selectedDeck.description || '');
-                                                                setShowDescModal(true);
-                                                            }}>
-                                                                Edit Description
-                                                            </button>
-                                                            <button onClick={e => {
-                                                                setModalDeck(selectedDeck);
-                                                                setPrimaryMascot(selectedDeck.mascotCard);
-                                                                setSecondaryMascot(selectedDeck.secondaryMascotCard || '');
-                                                                setShowMascotModal(true);
-                                                            }}>
-                                                                Edit Mascots
+                                                            <button onClick={() => openPrintDecklist(selectedDeck)}>
+                                                                Print List
                                                             </button>
                                                             <button onClick={() => goToDeckbuilder(selectedDeck)}>
                                                                 Open in Deckbuilder
-                                                            </button>
-                                                            <button onClick={() => {
-                                                                handleDuplicate(selectedDeck)
-                                                                closeModal()
-                                                            }}>
-                                                                Duplicate
-                                                            </button>
-                                                            <button onClick={() => {
-                                                                setMoveModalDeck(selectedDeck);
-                                                                setSelectedFolderId(selectedDeck.folderId || '');
-                                                                setShowMoveModal(true);
-                                                            }}>
-                                                                Move
                                                             </button>
                                                             <button
                                                                 className="danger"
@@ -1555,13 +1564,29 @@ export default function Account() {
                                                                         className="deck-collection-modal-box mobile-modal-box"
                                                                         onClick={e => e.stopPropagation()}
                                                                     >
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowRenameModal(true); setModalDeck(selectedDeck); }}>Rename</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowDescModal(true); setModalDeck(selectedDeck); }}>Edit Description</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMascotModal(true); setModalDeck(selectedDeck); }}>Edit Mascots</button>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                const raw = selectedDeck.decklist;
+                                                                                const cards = Array.isArray(raw)
+                                                                                    ? raw
+                                                                                    : [
+                                                                                        ...(raw.pokemon || []),
+                                                                                        ...(raw.trainer || []),
+                                                                                        ...(raw.energy || []),
+                                                                                    ];
+                                                                                const text = cards
+                                                                                    .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
+                                                                                    .join('\n');
+                                                                                navigator.clipboard.writeText(text);
+                                                                            }}
+                                                                            className="small-deck-modal-options-brn-list"
+                                                                        >
+                                                                            Copy as Text
+                                                                        </button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => openPrintDecklist(selectedDeck)}>
+                                                                            Print List
+                                                                        </button>
                                                                         <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { handleDuplicate(selectedDeck); closeModal(); }}>Duplicate</button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => { setShowMoveModal(true); setMoveModalDeck(selectedDeck); }}>Move</button>
-                                                                        <button className='small-deck-modal-options-brn-list danger' onClick={() => handleDelete(selectedDeck)}>Delete</button>
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -1625,9 +1650,7 @@ export default function Account() {
                                         <div className='buttons-row-modal'>
                                             <button className='cancel-button' onClick={() => setShowFolderModal(false)}>Cancel</button>
                                             <button
-                                                style={{
-                                                    backgroundColor: newFolderName.trim() ? '#1290eb' : '#1290eb'
-                                                }}
+                                                className='save-button'
                                                 disabled={!newFolderName.trim()}
                                                 onClick={async () => {
                                                     try {
