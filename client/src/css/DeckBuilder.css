@@ -2526,10 +2526,10 @@ body.deckbuilder-page .deck-builder {
     width: 200px !important;
   }
   .card-modal-image {
-    width: 75%;
+    width: 70%;
   }
   .modal-count-controls {
-    width: 70%;
+    width: 66%;
   }
   .modal-count-controls button {
     height: 2.5rem;
@@ -2615,6 +2615,8 @@ body.deckbuilder-page .deck-builder {
     width: 100%;
     max-width: 100%;
     transform: scale(0.9);
+    height: 100%;
+    max-height: 100%;
   }
 }
 
