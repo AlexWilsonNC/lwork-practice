@@ -617,6 +617,7 @@ export default function DeckBuilder() {
     if (ok == null) return null;
     return (
       <span
+        className='legality-badge-zoomed'
         style={{
           padding: '4px 8px',
           borderRadius: 6,

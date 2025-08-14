@@ -2524,6 +2524,18 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
     width: 200px !important;
   }
+  .bottom-db-modal-bts {
+    margin-top: 15px;
+  }
+  .bottom-db-modal-bts button {
+    font-size: 12px;
+    height: 30px;
+    width: 150px;
+  }
+  .legality-badge-zoomed {
+    font-size: 9px !important;
+    border-radius: 2px !important;
+  }
 
   .add-card-to-deck:hover {
     background: rgba(0, 0, 0, 0.82);
@@ -2592,7 +2604,7 @@ body.deckbuilder-page .deck-builder {
   .card-modal-content {
     width: 100%;
     max-width: 100%;
-    /* transform: scale(0.65); */
+    transform: scale(0.9);
   }
 }
 
