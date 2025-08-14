@@ -230,7 +230,11 @@
   transition: ease all 0.2s;
 }
 
-.deck-card:hover > .deck-card-img {
+.test-the-img-hover {
+  overflow: hidden;
+}
+
+.deck-card:hover > .test-the-img-hover .deck-card-img {
     transform: scale(1.05);
     transform-origin: 50% 50%;
 }
@@ -559,12 +563,12 @@
 }
 
 .buttons-row-modal {
-  margin-top: 15px;
+  margin-top: 25px;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .buttons-row-modal button {
@@ -1061,12 +1065,37 @@
   margin-top: 25px;
 }
 
+.modal-close-account {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  height: 25px;
+  width: 25px;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-close-account:hover {
+  background: rgba(145, 145, 145, 0.25);
+}
+
 @media (max-width: 1100px) {
   .account-decks .card-modal-content-account {
     transform: scale(1.2);
     width: 100%;
   }
-
+.modal-close-account {
+  height: 20px;
+  width: 20px;
+  font-size: 28px;
+  background-color: transparent;
+}
   .account-decks .deck-add-minus {
     margin-bottom: 5px;
     width: 100% !important;
@@ -1357,7 +1386,10 @@
   .hide-on515 {
     display: none;
   }
-
+.modal-close-account {
+  margin-top: -10px;
+  margin-right: -10px;
+}
   .favorite-heart {
     margin-right: 0;
     padding: 1px;

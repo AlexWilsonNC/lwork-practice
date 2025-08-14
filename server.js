@@ -605,7 +605,6 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
-    // Save email to MongoDB
     const newEmail = new EmailSubscription({ email });
     await newEmail.save();
     console.log(`Successfully subscribed email: ${email}`);
@@ -917,7 +916,16 @@ app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
         projection: {
           _id: 0,
           id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
-          attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1
+          attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
+          types: 1,
+          hp: 1,
+          weaknesses: 1,
+          resistances: 1,
+          retreatCost: 1,
+          convertedRetreatCost: 1,
+          set: 1,
+          rarity: 1,
+          tcgplayer: 1
         }
       }
     )

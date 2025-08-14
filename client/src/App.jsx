@@ -39,7 +39,7 @@ export function PrivateRoute({ children }) {
 function App() {
   const { pathname } = useLocation()
   const noNavBarOn = ['/print']
-  const noFooterOn = ['/ljhksdgbnksgkjsiodsfi', '/print']
+  const noFooterOn = ['/bobthebuilder', '/print']
 
   return (
     <AuthProvider>
@@ -78,7 +78,7 @@ function App() {
             <Route path="/articles/:articleId" element={<ArticleComponent />} />
             <Route path="/about" element={<About />} />
             {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
-            <Route path="/ljhksdgbnksgkjsiodsfi" element={<DeckBuilder />} />
+            <Route path="/bobthebuilder" element={<DeckBuilder />} />
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
             <Route path="*" element={<NotFound />} />

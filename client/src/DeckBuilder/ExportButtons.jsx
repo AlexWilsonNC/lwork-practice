@@ -86,7 +86,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       count: c.count
     }));
     const fragment = encodeURIComponent(JSON.stringify(minimal));
-    const url = `${window.location.origin}/ljhksdgbnksgkjsiodsfi#deck=${fragment}`;
+    const url = `${window.location.origin}/bobthebuilder#deck=${fragment}`;
     navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
     setShowCopyMenu(false)
     setShowSuccess(true)
