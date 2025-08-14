@@ -1389,6 +1389,7 @@ body.deckbuilder-page .deck-builder {
 
 .advanced-search-button:hover {
   cursor: pointer;
+  background-color: #43b1ff;
 }
 
 .inverted-arrow {
@@ -2524,6 +2525,15 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
     width: 200px !important;
   }
+  .card-modal-image {
+    width: 75%;
+  }
+  .modal-count-controls {
+    width: 70%;
+  }
+  .modal-count-controls button {
+    height: 2.5rem;
+  }
   .bottom-db-modal-bts {
     margin-top: 15px;
   }
@@ -2661,7 +2671,9 @@ body.deckbuilder-page .deck-builder {
   .showon450 {
     display: flex;
   }
-
+  .deck-stats {
+    padding: 10px;
+  }
   .add-card-to-deck {
     padding: 15px;
     font-size: 22px;
