@@ -1419,6 +1419,9 @@
 }
 
 @media (max-width: 450px) {
+  .account-page {
+    padding: 25px 15px;
+  }
   .account-tabs {
     transform: scale(1);
     width: 75%;
@@ -1445,11 +1448,11 @@
 
   .deck-card {
     border-radius: 3px;
-    width: 160px;
+    width: 155px;
   }
 
   .decks-grid {
-    grid-template-columns: repeat(auto-fill, 160px);
+    grid-template-columns: repeat(auto-fill, 155px);
     gap: 1rem;
   }
 
