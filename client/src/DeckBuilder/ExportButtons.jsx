@@ -2,6 +2,180 @@ import React, { useState, useRef, useEffect, useContext } from 'react'
 import { toPng } from 'html-to-image'
 import { AuthContext } from '../contexts/AuthContext'
 
+function MascotSelect({
+  value,
+  onChange,
+  deck,
+  placeholder = 'Select a card',
+  allowNone = false,
+  noneLabel = 'None',
+  className = 'mascot-select'
+}) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+
+  const keyFor = c => `${c.setAbbrev || c.set}-${c.number}`;
+
+  const options = deck.map(c => ({
+    key: keyFor(c),
+    name: c.name,
+    img: c?.images?.small || ''
+  }));
+
+  const selected = options.find(o => o.key === value);
+
+  const hasCurrent = !!selected;
+  const displayLabel = selected ? selected.name : (value || placeholder);
+
+  React.useEffect(() => {
+    const onDocClick = e => {
+      if (!ref.current || ref.current.contains(e.target)) return;
+      setOpen(false);
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
+
+  return (
+    <div className={className} ref={ref} style={{ position: 'relative' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className={`${className}-trigger`}
+        style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        {selected?.img ? (
+          <div style={{
+            position: 'relative',
+            width: 50,
+            height: 30,
+            overflow: 'hidden',
+            borderRadius: 2
+          }}>
+            <img
+              src={selected.img}
+              alt=""
+              style={{
+                position: 'absolute',
+                top: '-40%',
+                left: '-10%',
+                width: '120%',
+                height: 'auto',
+                transform: 'scale(1)',
+                transformOrigin: 'top left'
+              }}
+            />
+          </div>
+        ) : (
+          <span style={{ width: 24, height: 34 }} />
+        )}
+        <span style={{ flex: 1, textAlign: 'left' }}>
+          {hasCurrent ? selected.name : (value ? value : placeholder)}
+        </span>
+        <span className="material-symbols-outlined">expand_more</span>
+      </button>
+
+      {open && (
+        <div
+          className={`${className}-menu`}
+          role="listbox"
+          style={{
+            position: 'absolute',
+            zIndex: 1000,
+            top: '100%',
+            left: 0,
+            right: 0,
+            maxHeight: 260,
+            overflowY: 'auto',
+            borderRadius: 6,
+            border: '1px solid rgba(0,0,0,0.12)',
+            background: 'var(--card, #1f1f22)',
+            marginTop: 6,
+            boxShadow: '0 6px 16px rgba(0,0,0,0.2)'
+          }}
+        >
+          {allowNone && (
+            <div
+              role="option"
+              tabIndex={0}
+              className={`${className}-item`}
+              onClick={() => { onChange(''); setOpen(false); }}
+              onKeyDown={e => { if (e.key === 'Enter') { onChange(''); setOpen(false); } }}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
+            >
+              <span style={{ width: 24, height: 34 }} />
+              <span>{noneLabel}</span>
+            </div>
+          )}
+
+          {!hasCurrent && value && (
+            <div
+              role="option"
+              tabIndex={0}
+              className={`${className}-item`}
+              onClick={() => { onChange(value); setOpen(false); }}
+              onKeyDown={e => { if (e.key === 'Enter') { onChange(value); setOpen(false); } }}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
+            >
+              <span style={{ width: 24, height: 34 }} />
+              <span>(Original) {value}</span>
+            </div>
+          )}
+
+          {options.map(opt => (
+            <div
+              key={opt.key}
+              role="option"
+              aria-selected={opt.key === value}
+              tabIndex={0}
+              className={`${className}-item`}
+              onClick={() => { onChange(opt.key); setOpen(false); }}
+              onKeyDown={e => { if (e.key === 'Enter') { onChange(opt.key); setOpen(false); } }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '8px 10px',
+                cursor: 'pointer',
+                background: opt.key === value ? 'rgba(255,255,255,0.06)' : 'transparent'
+              }}
+            >
+              {opt.img ? (
+                <div style={{
+                  position: 'relative',
+                  width: 50,
+                  height: 30,
+                  overflow: 'hidden',
+                  borderRadius: 2
+                }}>
+                  <img
+                    src={opt.img}
+                    alt=""
+                    style={{
+                      position: 'absolute',
+                      top: '-33%',
+                      left: '-10%',
+                      width: '120%',
+                      height: 'auto',
+                      transform: 'scale(1)',
+                      transformOrigin: 'top left'
+                    }}
+                  />
+                </div>
+              ) : (
+                <span style={{ width: 24, height: 34 }} />
+              )}
+              <span>{opt.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ExportButtons({ deck, originalDeckId, onImportDeck, deckRef, onExportStart, onExportEnd }) {
   const { user } = useContext(AuthContext)
   const [importing, setImporting] = useState(false)
@@ -15,6 +189,67 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const [description, setDescription] = useState('')
   const [saving, setSaving] = useState(false)
   const menuRef = useRef(null)
+  const [overwriteDeckName, setOverwriteDeckName] = useState('')
+  const [overwriteMascot, setOverwriteMascot] = useState('')
+  const [overwriteSecondary, setOverwriteSecondary] = useState('')
+  const [overwriteDescription, setOverwriteDescription] = useState('')
+  const overwritePrefilledRef = useRef(false)
+
+
+  const [originalMeta, setOriginalMeta] = useState(null);
+  const prefilledOnceRef = useRef(false);
+
+  useEffect(() => {
+    if (!originalDeckId) return;
+    try {
+      const raw = localStorage.getItem('PTCGLegendsOriginalDeckMeta');
+      if (!raw) return;
+      const meta = JSON.parse(raw);
+      if (meta && meta.id === originalDeckId) {
+        setOriginalMeta({
+          name: meta.name || '',
+          mascotCard: meta.mascotCard || '',
+          secondaryMascotCard: meta.secondaryMascotCard || '',
+          description: meta.description || '',
+        });
+      }
+    } catch { }
+  }, [originalDeckId]);
+
+  useEffect(() => {
+    if (originalDeckId && originalMeta) setOverwriteMode(true);
+  }, [originalDeckId, originalMeta]);
+
+  useEffect(() => {
+    if (!originalDeckId) return;
+    const token = localStorage.getItem('PTCGLegendsToken');
+    (async () => {
+      try {
+        const res = await fetch(`/api/user/decks/${originalDeckId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        setOriginalMeta({
+          name: data.name || '',
+          mascotCard: data.mascotCard || '',
+          secondaryMascotCard: data.secondaryMascotCard || '',
+          description: data.description || ''
+        });
+      } catch { /* no-op */ }
+    })();
+  }, [originalDeckId]);
+
+  useEffect(() => {
+    if (!showSaveModal || !overwriteMode || !originalMeta) return;
+    if (overwritePrefilledRef.current) return;
+    setOverwriteDeckName(v => v || originalMeta.name);
+    setOverwriteMascot(v => v || originalMeta.mascotCard);
+    setOverwriteSecondary(v => v || originalMeta.secondaryMascotCard);
+    setOverwriteDescription(v => v || originalMeta.description);
+    overwritePrefilledRef.current = true;
+    try { localStorage.removeItem('PTCGLegendsOriginalDeckMeta'); } catch { }
+  }, [showSaveModal, overwriteMode, originalMeta]);
 
   useEffect(() => {
     if (!showCopyMenu) return
@@ -236,11 +471,33 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   };
 
   const handleSaveClick = () => {
-    setShowSaveModal(true)
+    const hasPrefill = !!(originalMeta && (originalMeta.name || originalMeta.mascotCard || originalMeta.description));
+    setOverwriteMode(hasPrefill);
+
+    if (!hasPrefill) {
+      setOverwriteDeckName('');
+      setOverwriteMascot('');
+      setOverwriteSecondary('');
+      setOverwriteDescription('');
+    }
+    overwritePrefilledRef.current = false;
+    setShowSaveModal(true);
   }
 
   const handleModalSave = async () => {
-    if (!deckName.trim() || !selectedMascot) return
+    const name = overwriteMode ? overwriteDeckName : deckName;
+    const mascotCard = overwriteMode ? overwriteMascot : selectedMascot;
+    const secondaryMascotCard = overwriteMode ? overwriteSecondary : secondaryMascot;
+    const desc = overwriteMode ? overwriteDescription : description;
+
+    if (!name.trim() || !mascotCard) return;
+
+    const flatDeck = deck.map(c => ({
+      set: c.setAbbrev || c.set,
+      number: c.number,
+      count: c.count
+    }));
+
     setSaving(true)
     try {
       const token = localStorage.getItem('PTCGLegendsToken')
@@ -255,11 +512,11 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          name: deckName,
-          mascotCard: selectedMascot,
-          secondaryMascotCard: secondaryMascot,
-          description,
-          decklist: deck
+          name,
+          mascotCard,
+          secondaryMascotCard,
+          description: desc,
+          decklist: flatDeck
         })
       })
       if (res.ok) {
@@ -270,6 +527,10 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         setSelectedMascot('')
         setSecondaryMascot('')
         setDescription('')
+        setOverwriteDeckName('')
+        setOverwriteMascot('')
+        setOverwriteSecondary('')
+        setOverwriteDescription('')
       } else {
         console.error('Failed to save deck')
       }
@@ -279,59 +540,6 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       setSaving(false)
     }
   }
-
-  // const handleModalSave = async () => {
-  //   if (!deckName.trim() || !selectedMascot) return
-  //   setSaving(true)
-  //   const pokemon = deck
-  //     .filter(c => c.supertype === 'Pokémon')
-  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-  //   const trainer = deck
-  //     .filter(c => c.supertype === 'Trainer')
-  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-  //   const energy = deck
-  //     .filter(c => c.supertype === 'Energy')
-  //     .map(({ count, name, setAbbrev, number }) => ({ count, name, set: setAbbrev, number }))
-  //   const decklist = { pokemon, trainer, energy }
-  //   setSaving(true)
-  //   try {
-  //     const token = localStorage.getItem('PTCGLegendsToken')
-  //     const url = overwriteMode && originalDeckId
-  //       ? `/api/user/decks/${originalDeckId}`
-  //       : '/api/user/decks';
-  //     const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
-  //           const res = await fetch(url, {
-  //       method,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //       body: JSON.stringify({
-  //         name: deckName,
-  //         mascotCard: selectedMascot,
-  //         secondaryMascotCard: secondaryMascot,
-  //         description,
-  //         decklist
-  //       })
-  //     });
-
-  //     if (res.ok) {
-  //       window.location.href = '/account'
-  //       setSaving(false)
-  //       setShowSaveModal(false)
-  //       setDeckName('')
-  //       setSelectedMascot('')
-  //       setSecondaryMascot('')
-  //       setDescription('')
-  //     } else {
-  //       console.error('Failed to save deck')
-  //     }
-  //   } catch (err) {
-  //     console.error('Error saving deck', err)
-  //   } finally {
-  //     setSaving(false)
-  //   }
-  // }
 
   return (
     <>
@@ -404,68 +612,105 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       </div>
       {showSaveModal && (
         <div className="deck-collection-modal-overlay">
-          <div className="deck-collection-modal-box">
+          <div className="deck-collection-modal-box save-deck-modal">
             {!user ? (
               <>
                 <p>You need to be logged in to save decks and view your deck collection.</p>
                 <div className='buttons-row-modal'>
-                  <button className='save-button' onClick={() => window.open(`${window.location.origin}/login`, '_blank')}>Login</button>
+                  <button
+                    className='save-button'
+                    onClick={handleModalSave}
+                    disabled={
+                      saving ||
+                      (overwriteMode
+                        ? !overwriteDeckName.trim() || !overwriteMascot
+                        : !deckName.trim() || !selectedMascot)
+                    }
+                  ></button>
                   <button className='cancel-button' onClick={() => setShowSaveModal(false)}>Cancel</button>
                 </div>
               </>
             ) : (
               <>
-                {originalDeckId && (
-                  <div style={{ marginBottom: '1em' }}>
-                    <label>
+                {originalDeckId && originalMeta && (
+                  <>
+                    <label
+                      className={`folder-tab tab-new ${!overwriteMode ? 'active' : ''}`}
+                      onClick={() => setOverwriteMode(false)}
+                    >
                       <input
                         type="radio"
                         checked={!overwriteMode}
                         onChange={() => setOverwriteMode(false)}
+                        className="visually-hidden"
+                        aria-label="Save as new deck"
                       />
-                      {' '}Save as new deck
+                      <span>Save New Deck</span>
                     </label>
-                    <label style={{ marginLeft: '1em' }}>
+                    <label
+                      className={`folder-tab tab-overwrite ${overwriteMode ? 'active' : ''}`}
+                      onClick={() => setOverwriteMode(true)}
+                    >
                       <input
                         type="radio"
                         checked={overwriteMode}
                         onChange={() => setOverwriteMode(true)}
+                        className="visually-hidden"
+                        aria-label="Overwrite existing deck"
                       />
-                      {' '}Overwrite existing deck
+                      <span>Overwrite Deck</span>
                     </label>
-                  </div>
+                    <div className="save-overwrite-decks-container only-overwrite" style={{ display: 'none' }} />
+                  </>
                 )}
-                <h3 className='push-ttl-dwn'>{overwriteMode ? 'Overwrite Deck' : 'Save Deck'}</h3>
+                <h3 className='push-ttl-dwn'>{overwriteMode ? 'Overwrite Deck (Opened from Collection)' : 'Save as New Deck'}</h3>
                 <label>
                   Name*<br />
-                  <input type="text" value={deckName} onChange={e => setDeckName(e.target.value)} />
+                  <input
+                    type="text"
+                    value={overwriteMode ? overwriteDeckName : deckName}
+                    onChange={e => overwriteMode ? setOverwriteDeckName(e.target.value) : setDeckName(e.target.value)}
+                  />
                 </label>
                 <label>
                   Mascot*<br />
-                  <select value={selectedMascot} onChange={e => setSelectedMascot(e.target.value)}>
-                    <option value="">Select a card</option>
-                    {deck.map(card => (
-                      <option key={`${card.setAbbrev}-${card.number}`} value={`${card.setAbbrev}-${card.number}`}> {`${card.count}x ${card.name}`} </option>
-                    ))}
-                  </select>
+                  <MascotSelect
+                    value={overwriteMode ? overwriteMascot : selectedMascot}
+                    onChange={val => overwriteMode ? setOverwriteMascot(val) : setSelectedMascot(val)}
+                    deck={deck}
+                    placeholder="Select a card"
+                  />
                 </label>
                 <label>
                   Secondary Mascot<br />
-                  <select value={secondaryMascot} onChange={e => setSecondaryMascot(e.target.value)}>
-                    <option value="">None</option>
-                    {deck.map(card => (
-                      <option key={`${card.setAbbrev}-${card.number}`} value={`${card.setAbbrev}-${card.number}`}>{`${card.count}x ${card.name}`}</option>
-                    ))}
-                  </select>
+                  <MascotSelect
+                    value={overwriteMode ? overwriteSecondary : secondaryMascot}
+                    onChange={val => overwriteMode ? setOverwriteSecondary(val) : setSecondaryMascot(val)}
+                    deck={deck}
+                    placeholder="None"
+                    allowNone
+                    noneLabel="None"
+                  />
                 </label>
                 <label>
                   Description<br />
-                  <textarea value={description} onChange={e => setDescription(e.target.value)} />
+                  <textarea
+                    value={overwriteMode ? overwriteDescription : description}
+                    onChange={e => overwriteMode ? setOverwriteDescription(e.target.value) : setDescription(e.target.value)}
+                  />
                 </label>
                 <div className="buttons-row-modal push-more-dwn">
                   <button className='cancel-button' onClick={() => setShowSaveModal(false)} disabled={saving}>Cancel</button>
-                  <button className='save-button' onClick={handleModalSave} disabled={!deckName.trim() || !selectedMascot || saving}>
-                    {saving ? 'Saving...' : 'Save'}
+                  <button
+                    className='save-button'
+                    onClick={handleModalSave}
+                    disabled={
+                      saving ||
+                      (overwriteMode
+                        ? !overwriteDeckName.trim() || !overwriteMascot
+                        : !deckName.trim() || !selectedMascot)
+                    }
+                  >Save
                   </button>
                 </div>
               </>

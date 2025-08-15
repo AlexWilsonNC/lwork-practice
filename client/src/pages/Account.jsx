@@ -67,6 +67,123 @@ const AccountSection = styled.div`
     }
 `;
 
+function ArtCrop({ src, alt = '' }) {
+    return (
+        <div style={{ position: 'relative', width: 50, height: 30, overflow: 'hidden', borderRadius: 2 }}>
+            <img
+                src={src}
+                alt={alt}
+                className="secondary-mascot-img"
+                style={{
+                    position: 'absolute',
+                    top: '-40%',
+                    left: '-10%',
+                    width: '120%',
+                    height: 'auto',
+                    transform: 'scale(1)',
+                    transformOrigin: 'top left'
+                }}
+            />
+        </div>
+    );
+}
+function MascotPicker({ value, onChange, decklist, allowNone = false, noneLabel = 'None' }) {
+    const [open, setOpen] = React.useState(false);
+    const ref = React.useRef(null);
+
+    const options = (decklist || []).map(c => ({
+        key: `${c.setAbbrev || c.set}-${c.number}`,
+        name: c.name,
+        img: c?.images?.small || c?.imageUrl || ''
+    }));
+
+    const selected = options.find(o => o.key === value);
+
+    React.useEffect(() => {
+        const onDocClick = e => {
+            if (!ref.current || ref.current.contains(e.target)) return;
+            setOpen(false);
+        };
+        document.addEventListener('mousedown', onDocClick);
+        return () => document.removeEventListener('mousedown', onDocClick);
+    }, []);
+
+    return (
+        <div ref={ref} style={{ position: 'relative' }}>
+            <button
+                type="button"
+                onClick={() => setOpen(o => !o)}
+                className="mascot-select-trigger"
+                style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+            >
+                {selected?.img ? <ArtCrop src={selected.img} /> : <span style={{ width: 24, height: 34 }} />}
+                <span style={{ flex: 1, textAlign: 'left' }}>{selected ? selected.name : (value || 'Select a card')}</span>
+                <span className="material-symbols-outlined">expand_more</span>
+            </button>
+
+            {open && (
+                <div
+                    role="listbox"
+                    className="mascot-select-menu"
+                    style={{
+                        position: 'absolute',
+                        zIndex: 1000,
+                        top: '100%',
+                        left: 0,
+                        right: 0,
+                        maxHeight: 260,
+                        overflowY: 'auto',
+                        borderRadius: 6,
+                        border: '1px solid rgba(0,0,0,0.12)',
+                        background: 'var(--card, #1f1f22)',
+                        marginTop: 6,
+                        boxShadow: '0 6px 16px rgba(0,0,0,0.2)'
+                    }}
+                >
+                    {allowNone && (
+                        <div
+                            role="option"
+                            tabIndex={0}
+                            className="mascot-select-item"
+                            onClick={() => { onChange(''); setOpen(false); }}
+                            onKeyDown={e => { if (e.key === 'Enter') { onChange(''); setOpen(false); } }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
+                        >
+                            <span style={{ width: 24, height: 34 }} />
+                            <span>{noneLabel}</span>
+                        </div>
+                    )}
+
+                    {options.map(opt => (
+                        <div
+                            key={opt.key}
+                            role="option"
+                            aria-selected={opt.key === value}
+                            tabIndex={0}
+                            className="mascot-select-item"
+                            onClick={() => { onChange(opt.key); setOpen(false); }}
+                            onKeyDown={e => { if (e.key === 'Enter') { onChange(opt.key); setOpen(false); } }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                                padding: '8px 10px',
+                                cursor: 'pointer',
+                                background: opt.key === value ? 'rgba(255,255,255,0.06)' : 'transparent'
+                            }}
+                        >
+                            {opt.img ? <ArtCrop src={opt.img} /> : <span style={{ width: 24, height: 34 }} />}
+                            <span>{opt.name}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function Account() {
     const { user, logout, updateUserProfile, changePassword } = useContext(AuthContext);
     const token = user?.token;
@@ -352,6 +469,19 @@ export default function Account() {
                 ...(raw.trainer || []),
                 ...(raw.energy || []),
             ];
+
+        try {
+            localStorage.setItem(
+                'PTCGLegendsOriginalDeckMeta',
+                JSON.stringify({
+                    id: deck._id,
+                    name: deck.name || '',
+                    mascotCard: deck.mascotCard || '',
+                    secondaryMascotCard: deck.secondaryMascotCard || '',
+                    description: deck.description || ''
+                })
+            );
+        } catch { }
 
         const minimal = cards.map(c => ({
             set: c.setAbbrev || c.set,
@@ -683,15 +813,15 @@ export default function Account() {
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
     useEffect(() => {
-  function handleGlobalClick(e) {
-    if (!mobileActionsOpen) return;
-    const modal = document.querySelector('.mobile-modal-box');
-    if (modal && modal.contains(e.target)) return; // don't close if click is inside modal
-    setMobileActionsOpen(false);
-  }
-  document.addEventListener('click', handleGlobalClick); // bubble (no third arg)
-  return () => document.removeEventListener('click', handleGlobalClick);
-}, [mobileActionsOpen]);
+        function handleGlobalClick(e) {
+            if (!mobileActionsOpen) return;
+            const modal = document.querySelector('.mobile-modal-box');
+            if (modal && modal.contains(e.target)) return; // don't close if click is inside modal
+            setMobileActionsOpen(false);
+        }
+        document.addEventListener('click', handleGlobalClick); // bubble (no third arg)
+        return () => document.removeEventListener('click', handleGlobalClick);
+    }, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="error">{error}</p>;
@@ -1356,36 +1486,21 @@ export default function Account() {
                                         <h4>Edit Mascots</h4>
                                         <label>
                                             Primary Mascot*<br />
-                                            <select
+                                            <MascotPicker
                                                 value={primaryMascot}
-                                                onChange={e => setPrimaryMascot(e.target.value)}
-                                            >
-                                                {modalDeck.decklist.map(c => (
-                                                    <option
-                                                        key={`${c.setAbbrev || c.set}-${c.number}`}
-                                                        value={`${c.setAbbrev || c.set}-${c.number}`}
-                                                    >
-                                                        {c.count}× {c.name}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                onChange={val => setPrimaryMascot(val)}
+                                                decklist={modalDeck.decklist}
+                                            />
                                         </label>
                                         <label>
                                             Secondary Mascot<br />
-                                            <select
+                                            <MascotPicker
                                                 value={secondaryMascot}
-                                                onChange={e => setSecondaryMascot(e.target.value)}
-                                            >
-                                                <option value="">None</option>
-                                                {modalDeck.decklist.map(c => (
-                                                    <option
-                                                        key={`${c.setAbbrev || c.set}-${c.number}`}
-                                                        value={`${c.setAbbrev || c.set}-${c.number}`}
-                                                    >
-                                                        {c.count}× {c.name}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                onChange={val => setSecondaryMascot(val)}
+                                                decklist={modalDeck.decklist}
+                                                allowNone
+                                                noneLabel="None"
+                                            />
                                         </label>
                                         <div className="buttons-row-modal">
                                             <button className="cancel-button" onClick={() => setShowMascotModal(false)}>
