@@ -220,7 +220,7 @@ export default function Account() {
     const [showFolderModal, setShowFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [newFolderColor, setNewFolderColor] = useState('#1290eb');
-    const colorOptions = ['#cd4036', '#e86914', '#dfb704', '#23b809', '#1a740a', '#02ac7f', '#1290eb', '#0251ac', '#663ac4', '#9d14dc', '#c814dc', '#e381ee', '#da0c8b', '#181819', '#515151', '#ffffff', '#5d3a27'];
+    const colorOptions = ['#cd4036', '#e86914', '#FFEA00', '#23b809', '#1a740a', '#02ac7f', '#1290eb', '#0251ac', '#663ac4', '#9d14dc', '#c814dc', '#e381ee', '#da0c8b', '#714228', '#b39813', '#181819', '#515151', '#ffffff'];
     const [showMoveModal, setShowMoveModal] = useState(false);
     const [moveModalDeck, setMoveModalDeck] = useState(null);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -247,6 +247,11 @@ export default function Account() {
     const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [publicFolders, setPublicFolders] = useState([]);
+
+    const [showAssignModal, setShowAssignModal] = useState(false);
+    const [assignDeckId, setAssignDeckId] = useState('');
+    const [assignSearch, setAssignSearch] = useState('');
+
 
     const handleLogout = () => {
         logout();
@@ -812,14 +817,74 @@ export default function Account() {
     };
     const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
+    const folderActionLabel = d => (d?.folderId ? 'Change Folder' : 'Add to Folder');
+
+    async function handleAssignToActiveFolder(deckId) {
+        if (!deckId || !activeFolder) return;
+        const deck = decks.find(d => d._id === deckId);
+        if (!deck) return;
+
+        try {
+            // If deck is unassigned → MOVE it into this folder (no surprises)
+            if (!deck.folderId) {
+                const res = await fetch(`/api/user/decks/${deck._id}/move`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ folderId: activeFolder }),
+                });
+                if (!res.ok) throw new Error('Move failed');
+                const { deck: updatedDeck } = await res.json();
+                setDecks(ds => ds.map(d => d._id === deck._id ? { ...d, ...updatedDeck, folderId: activeFolder } : d));
+                return;
+            }
+
+            // If deck already belongs to a folder → DUPLICATE it, then assign the duplicate here
+            const dupRes = await fetch(`/api/user/decks/${deck._id}/duplicate`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!dupRes.ok) throw new Error('Duplicate failed');
+            const { deck: newDeck } = await dupRes.json();
+
+            // Move the new duplicate into this folder
+            let dup = {
+                ...newDeck,
+                // keep mascot images so UI shows instantly (you do this already in handleDuplicate)
+                mascotImageUrl: deck.mascotImageUrl,
+                secondaryMascotImageUrl: deck.secondaryMascotImageUrl,
+            };
+
+            const moveDup = await fetch(`/api/user/decks/${dup._id}/move`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ folderId: activeFolder }),
+            });
+
+            if (moveDup.ok) {
+                const { deck: moved } = await moveDup.json();
+                dup = { ...dup, ...moved, folderId: activeFolder };
+            } else {
+                dup = { ...dup, folderId: activeFolder }; // local fallback
+            }
+
+            setDecks(ds => [...ds, dup]);
+        } catch (err) {
+            console.error(err);
+            alert(err.message || 'Could not add deck to folder.');
+        }
+    }
+
     useEffect(() => {
         function handleGlobalClick(e) {
             if (!mobileActionsOpen) return;
             const modal = document.querySelector('.mobile-modal-box');
-            if (modal && modal.contains(e.target)) return; // don't close if click is inside modal
+            if (modal && modal.contains(e.target)) return;
             setMobileActionsOpen(false);
         }
-        document.addEventListener('click', handleGlobalClick); // bubble (no third arg)
+        document.addEventListener('click', handleGlobalClick);
         return () => document.removeEventListener('click', handleGlobalClick);
     }, [mobileActionsOpen]);
 
@@ -1069,7 +1134,7 @@ export default function Account() {
                                                 className={`folder-btn${isActive ? ' active' : ''}`}
                                                 onClick={() => setActiveFolder(f._id)}
                                                 style={{
-                                                    borderLeft: `4px solid ${f.color}`
+                                                    borderLeft: `6px solid ${f.color}`
                                                 }}
                                             >
                                                 {f.name}
@@ -1183,7 +1248,7 @@ export default function Account() {
                                     )}
                                 </div>
                                 <button
-                                    className="sort-favorites-btn hide-on-mobile550"
+                                    className="sort-favorites-btn hide-on-mobile550 no-margin-right"
                                     onClick={() => setSortMode(m => (m + 1) % 4)}
                                 >
                                     <span className='not-blue-p'>Sorted:&nbsp;</span>
@@ -1195,9 +1260,36 @@ export default function Account() {
                                             3: "Folder Order"
                                         }[sortMode]}
                                     </p>
-                                    {/* <span className="material-symbols-outlined">sort</span> */}
                                 </button>
                             </div>
+                            {activeFolder && !isPublicView && (
+                                <div className='adddecktothisfolder'>
+                                    <button
+                                        className='adddeck-to-fold-brtn'
+                                        onClick={() => {
+                                            setAssignDeckId('');
+                                            setAssignSearch('');
+                                            setShowAssignModal(true);
+                                        }}
+                                    >
+                                        <p>Add Deck to Folder</p>
+                                    </button>
+                                    <button
+                                        className="sort-favorites-btn show-on-mobile550 no-margin-right"
+                                        onClick={() => setSortMode(m => (m + 1) % 4)}
+                                    >
+                                        <span className='not-blue-p'>Sorted:&nbsp;</span>
+                                        <p>
+                                            {{
+                                                0: "Most Recent",
+                                                1: "Least Recent",
+                                                2: "Alphabetically",
+                                                3: "Folder Order"
+                                            }[sortMode]}
+                                        </p>
+                                    </button>
+                                </div>
+                            )}
                             {viewMode === 'grid' ? (
                                 <div className='decks-grid-wrapper'>
                                     <div className="decks-grid">
@@ -1238,9 +1330,8 @@ export default function Account() {
                                                                 {!activeFolder && d.folderId && (() => {
                                                                     const folderObj = folders.find(f => f._id === d.folderId) || {};
                                                                     const bgColor = folderObj.color;
-                                                                    const txtColor = ['#ffffff'].includes(bgColor)
-                                                                        ? 'black'
-                                                                        : 'white';
+                                                                    const hex = String(bgColor || '').toLowerCase();
+                                                                    const txtColor = ['#ffffff', '#ffea00'].includes(hex) ? 'black' : 'white';
 
                                                                     return (
                                                                         <span
@@ -1328,7 +1419,7 @@ export default function Account() {
                                                                                     setMoveModalDeck(d);
                                                                                     setSelectedFolderId(d.folderId || '');
                                                                                     setShowMoveModal(true);
-                                                                                }}>Move</button>
+                                                                                }}>{folderActionLabel(d)}</button>
                                                                                 <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
                                                                                     Delete
                                                                                 </button>
@@ -1414,7 +1505,7 @@ export default function Account() {
                                                                 </button>
                                                                 <button onClick={() => goToDeckbuilder(d)}>Open in Deckbuilder</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
-                                                                <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>Move</button>
+                                                                <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>{folderActionLabel(d)}</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
                                                             </div>
                                                         )}
@@ -1804,6 +1895,58 @@ export default function Account() {
                                     </div>
                                 </div>
                             )}
+                            {showAssignModal && (
+                                <div className="deck-collection-modal-overlay" onClick={() => setShowAssignModal(false)}>
+                                    <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                        <h4>Add Deck to “{folders.find(f => f._id === activeFolder)?.name || ''}”</h4>
+                                        <p style={{ fontSize: '10px' }}>If a deck is already assigned to another folder,</p>
+                                        <p style={{ fontSize: '10px' }}>it will be automatically duplicated and placed in this one.</p>
+                                        <br></br>
+                                        <input
+                                            placeholder="Search decks…"
+                                            value={assignSearch}
+                                            onChange={e => setAssignSearch(e.target.value)}
+                                            style={{ marginBottom: 8 }}
+                                        />
+
+                                        <select
+                                            size={8}
+                                            value={assignDeckId}
+                                            onChange={e => setAssignDeckId(e.target.value)}
+                                            style={{ width: '100%', height: '100px' }}
+                                        >
+                                            {decks
+                                                .filter(d => String(d.folderId) !== String(activeFolder))
+                                                .filter(d => !assignSearch || d.name.toLowerCase().includes(assignSearch.toLowerCase()))
+                                                .sort((a, b) => a.name.localeCompare(b.name))
+                                                .map(d => {
+                                                    const labelFolder = d.folderId
+                                                        ? (folders.find(f => f._id === d.folderId)?.name || 'Other folder')
+                                                        : 'Unassigned';
+                                                    return (
+                                                        <option key={d._id} value={d._id}>
+                                                            {d.name} — {labelFolder}
+                                                        </option>
+                                                    );
+                                                })}
+                                        </select>
+
+                                        <div className="buttons-row-modal" style={{ marginTop: 10 }}>
+                                            <button className="cancel-button" onClick={() => setShowAssignModal(false)}>Cancel</button>
+                                            <button
+                                                className="save-button"
+                                                disabled={!assignDeckId}
+                                                onClick={async () => {
+                                                    await handleAssignToActiveFolder(assignDeckId);
+                                                    setShowAssignModal(false);
+                                                }}
+                                            >
+                                                Add to Folder
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             {showMoveModal && (
                                 <div className="deck-collection-modal-overlay">
                                     <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
@@ -1855,7 +1998,7 @@ export default function Account() {
                                                 } finally {
                                                     setShowMoveModal(false);
                                                 }
-                                            }}>Move</button>
+                                            }}>{folderActionLabel(moveModalDeck)}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1877,14 +2020,13 @@ export default function Account() {
                                                         type="button"
                                                         onClick={() => setNewFolderColor(c)}
                                                         title={c}
+                                                        className={`color-swatch ${newFolderColor === c ? 'selected' : ''}`}
                                                         style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            borderRadius: '50%',
                                                             border: newFolderColor === c ? '2px solid white' : '1px solid #444',
                                                             backgroundColor: c,
                                                             cursor: 'pointer'
                                                         }}
+                                                        aria-pressed={newFolderColor === c}
                                                     />
                                                 ))}
                                             </div>

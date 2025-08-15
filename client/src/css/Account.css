@@ -6,17 +6,21 @@
 .nodisplay {
   display: none;
 }
+
 .scrollable-90vh {
   max-height: 90vh;
   overflow-y: auto;
 }
+
 .scrollable-90vh {
   display: flex;
   flex-direction: column;
 }
+
 .scrollable-90vh .modal-body {
   overflow-y: auto;
 }
+
 .profile-settings-display-edit {
   width: 65%;
   margin: 0 auto;
@@ -108,6 +112,7 @@
   border-radius: 2px;
   cursor: pointer;
 }
+
 .small-txt-info-act {
   font-size: 12px;
   font-style: italic;
@@ -133,6 +138,12 @@
 @media (max-width: 1000px) {
   .profile-settings-display-edit {
     width: 90%;
+  }
+
+  .color-circle {
+    width: 12px !important;
+    height: 12px !important;
+    margin-right: 6.5px !important;
   }
 
   .change-password-btn {
@@ -244,9 +255,9 @@
   overflow: hidden;
 }
 
-.deck-card:hover > .test-the-img-hover .deck-card-img {
-    transform: scale(1.05);
-    transform-origin: 50% 50%;
+.deck-card:hover>.test-the-img-hover .deck-card-img {
+  transform: scale(1.05);
+  transform-origin: 50% 50%;
 }
 
 .cropped-mascot-card {
@@ -263,12 +274,77 @@
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
+  padding-bottom: 10px;
 }
+
 .color-swatch {
+  position: relative;
   width: 24px;
   height: 24px;
   border-radius: 50%;
   cursor: pointer;
+  display: inline-block;
+}
+
+.color-swatch.selected::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -14px;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.no-margin-right {
+  margin-right: 0px !important;
+  padding-right: 0px !important;
+}
+
+.adddecktothisfolder {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin: 0 0 25px 0;
+}
+
+.adddeck-to-fold-brtn {
+  text-align: center;
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adddeck-to-fold-brtn:hover {
+  color: white;
+  text-decoration: none !important;
+}
+
+@media screen and (max-width: 1000px) {
+  .adddeck-to-fold-brtn {
+    font-size: 10px;
+    padding: 8px 7px;
+    margin: -10px 0 0 0;
+  }
+}
+@media screen and (max-width: 550px) {
+  .adddecktothisfolder {
+    justify-content: space-between !important;
+  }
+}
+@media screen and (max-width: 450px) {
+  .adddeck-to-fold-brtn {
+    font-size: 8px;
+    padding: 7px 5px;
+    margin: -10px 0 0 0;
+  }
 }
 
 .secondary-mascot-container {
@@ -596,6 +672,7 @@
 .save-button {
   background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
 }
+
 .cancel-button {
   background-image: linear-gradient(to bottom right, grey, rgb(103, 103, 103));
 }
@@ -671,6 +748,7 @@
 .sort-opts-wrapper {
   position: relative;
 }
+
 .sort-opts-btn {
   background-color: rgb(221, 229, 235);
   border: none;
@@ -684,6 +762,7 @@
   height: 25px;
   color: rgb(75, 75, 75);
 }
+
 .deckcollection-menu-dropdown-folder-organize {
   position: absolute;
   top: 100%;
@@ -875,7 +954,7 @@
 }
 
 .folders-list button {
-  background-color: grey;
+  background-color: rgb(148, 148, 148);
   width: auto;
   padding: 5px 6px;
   margin-right: 5px;
@@ -1095,18 +1174,23 @@
 .modal-close-account:hover {
   background: rgba(145, 145, 145, 0.25);
 }
+.show-on-mobile550 {
+  display: none;
+}
 
 @media (max-width: 1100px) {
   .account-decks .card-modal-content-account {
     transform: scale(1.2);
     width: 100%;
   }
-.modal-close-account {
-  height: 20px;
-  width: 20px;
-  font-size: 28px;
-  background-color: transparent;
-}
+
+  .modal-close-account {
+    height: 20px;
+    width: 20px;
+    font-size: 28px;
+    background-color: transparent;
+  }
+
   .account-decks .deck-add-minus {
     margin-bottom: 5px;
     width: 100% !important;
@@ -1376,16 +1460,34 @@
   .color-picker {
     gap: 5px;
   }
+
   .color-swatch {
     width: 20px;
     height: 20px;
   }
 }
+
 @media (max-width: 550px) {
   .hide-on-mobile550 {
     display: none;
   }
-
+  .show-on-mobile550 {
+    display: flex;
+    margin-bottom: 0;
+  }
+  .adddecktothisfolder {
+    margin-bottom: 0;
+  }
+  .adddeck-to-fold-brtn {
+    background-image: linear-gradient(to bottom right, rgba(6, 174, 174, 0), #1291eb00, #1291eb00);
+    padding: 20px 0;
+    color: #1290eb;
+    border: none;
+  }
+  .sort-favorites-btn {
+    padding: 10px 7px 7px 0;
+    margin-right: 5px;
+  }
   .folder-options button,
   .folder-options-icon {
     font-size: 9px;
@@ -1396,10 +1498,12 @@
   .hide-on515 {
     display: none;
   }
-.modal-close-account {
-  margin-top: -10px;
-  margin-right: -10px;
-}
+
+  .modal-close-account {
+    margin-top: -10px;
+    margin-right: -10px;
+  }
+
   .favorite-heart {
     margin-right: 0;
     padding: 1px;
@@ -1464,20 +1568,24 @@
   .account-page {
     padding: 25px 15px;
   }
+
   .account-tabs {
     transform: scale(1);
     width: 75%;
     padding: 5px;
     border-radius: 12px;
   }
+
   .cropped-mascot-card.legend {
     left: 180px;
     top: -32%;
   }
+
   .cropped-mascot-card.lugia {
     left: 180px;
     top: 0%;
   }
+
   .viewing-other-profile-h2 {
     font-size: 14px;
   }

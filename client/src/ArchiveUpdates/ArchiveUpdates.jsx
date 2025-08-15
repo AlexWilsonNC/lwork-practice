@@ -211,7 +211,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Ross Cawthon (Masters) - 54<sup>th</sup> Place <span>2013 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <p className='shortcircuited'><strong>Correction:</strong> Completely different list...</p>
+          <p className='shortcircuited'><strong>Correction:</strong> Completely wrong list accidently...</p>
 
           <a href='/tournaments/2010_WORLDS/masters/Tomi%20Sjöblom-FI' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
