@@ -72,7 +72,6 @@ body.deckbuilder-page .deck-builder {
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
-  background-image: linear-gradient(to bottom right, rgb(47, 49, 54), rgb(21, 25, 35));
   border-radius: 10px;
   width: 60%;
   height: auto;
@@ -156,7 +155,7 @@ body.deckbuilder-page .deck-builder {
 
 .card-details {
   margin-bottom: 1rem;
-  background-color: rgba(6, 12, 29, 0.317);
+  background-color: rgba(6, 12, 29, 0.45);
   padding: 15px;
   border-radius: 10px;
 }
@@ -184,7 +183,7 @@ body.deckbuilder-page .deck-builder {
 
 .modal-count-controls button {
   width: 50%;
-  height: 2.1rem;
+  height: 2.5rem;
   font-size: 1.2rem;
   border: none;
   color: white;
@@ -220,6 +219,20 @@ body.deckbuilder-page .deck-builder {
   text-shadow: 1px 1px 3px black;
   font-weight: 600;
   width: 1ch;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-count p {
+  font-size: 8px;
+  position: absolute;
+  margin-top: -8px;
+  text-wrap: nowrap;
+  text-shadow: none;
+  font-weight: 400;
+  opacity: 0.75;
+  font-style: italic;
 }
 
 .zoomed-card-db-hr {
@@ -2634,9 +2647,6 @@ body.deckbuilder-page .deck-builder {
   .modal-count-controls {
     width: 66%;
   }
-  .modal-count-controls button {
-    height: 2.5rem;
-  }
   .bottom-db-modal-bts {
     margin-top: 15px;
   }
@@ -2648,6 +2658,7 @@ body.deckbuilder-page .deck-builder {
   .legality-badge-zoomed {
     font-size: 9px !important;
     border-radius: 2px !important;
+    width: 75px !important;
   }
 
   .add-card-to-deck:hover {
@@ -2718,7 +2729,7 @@ body.deckbuilder-page .deck-builder {
     width: 100%;
     max-width: 100%;
     transform: scale(0.9);
-    height: 100%;
+    height: auto;
     max-height: 100%;
   }
 }

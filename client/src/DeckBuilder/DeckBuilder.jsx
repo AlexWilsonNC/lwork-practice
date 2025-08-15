@@ -196,6 +196,9 @@ const DeckBuilderComp = styled.div`
       background-image: ${({ theme }) => theme.supportPatreonBtn};
       border: ${({ theme }) => theme.supportPatreonBg};
     }
+    .card-modal-content {
+      background-image: ${({ theme }) => theme.cardModalContentZoomCard};
+    }
 `;
 
 export default function DeckBuilder() {
@@ -621,10 +624,13 @@ export default function DeckBuilder() {
         className='legality-badge-zoomed'
         style={{
           padding: '4px 8px',
-          borderRadius: 6,
+          borderRadius: 3,
+          width: 110,
+          textAlign: 'center',
           fontSize: 12,
-          border: `1px solid ${ok ? '#2ecc71' : '#e74c3c'}`,
-          color: ok ? '#2ecc71' : '#e74c3c'
+          backgroundColor: ok ? '#3a9a22ab' : '#9a2e2287',
+          border: `1px solid ${ok ? '#094a00' : '#6b0b00'}`,
+          color: ok ? '#FFF' : '#FFF'
         }}
         title={ok ? `${label}: Legal` : `${label}: Illegal`}
       >
@@ -740,7 +746,10 @@ export default function DeckBuilder() {
                   onClick={() => handleDelta(-1)}
                   disabled={currentCount <= 0}
                 >–</button>
-                <span className="modal-count">{currentCount}</span>
+                <span className="modal-count">
+                  <p>( in deck )</p>
+                  {currentCount}
+                  </span>
                 <button
                   className='btn-plus-l'
                   type="button"
@@ -758,7 +767,7 @@ export default function DeckBuilder() {
                 <hr className="zoomed-card-db-hr" />
                 {zoomCard.abilities?.map((ab, i) => (
                   <p key={i}>
-                    <strong><span style={{ color: 'red' }}>Ability:</span> {ab.name}</strong>
+                    <strong><span style={{ color: '#aa0300' }}>Ability:</span> {ab.name}</strong>
                     <br></br>{ab.text}
                   </p>
                 ))}
