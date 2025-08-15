@@ -75,8 +75,9 @@ function sortDeck(deck) {
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
     const subB = b.subtypes?.[0] ?? "";
-    const priA = trainerPriority[subA] ?? 99;
-    const priB = trainerPriority[subB] ?? 99;
+    const fallback = trainerPriority["Item"] ?? 1;
+    const priA = trainerPriority[subA] ?? fallback;
+    const priB = trainerPriority[subB] ?? fallback;
     if (priA !== priB) return priA - priB;
     return b.count - a.count;
   });
