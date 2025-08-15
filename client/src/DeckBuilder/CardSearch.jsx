@@ -168,12 +168,21 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
+            const primeMode = /\bprime\b/i.test(rawQuery);
             const variants = expandAliasToSymbolQueries(rawQuery);
 
-            const routes =
-                searchMode === 'name'
-                    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-                    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+            const routes = (() => {
+                if (!primeMode) {
+                    return (searchMode === 'name'
+                        ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+                        : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+                }
+                const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
+                if (!primeSetCodes.length) {
+                    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+                }
+                return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
+            })();
 
             Promise.all(
                 routes.map(r =>
@@ -191,6 +200,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     }
                 }
                 let arr = Array.from(byKey.values());
+                if (primeMode) {
+                    const getSubtypes = c => {
+                        if (Array.isArray(c.subtypes)) return c.subtypes;
+                        if (Array.isArray(c.subtype)) return c.subtype;
+                        if (typeof c.subtypes === 'string') return [c.subtypes];
+                        if (typeof c.subtype === 'string') return [c.subtype];
+                        return [];
+                    };
+                    arr = arr.filter(c =>
+                        getSubtypes(c).some(st => (st || '').toLowerCase().includes('prime'))
+                    );
+                }
 
                 if (/^[N★δ♢◆]$/i.test(trimmed)) {
                     const t = trimmed.toUpperCase();
@@ -219,7 +240,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     }
                 }
 
-                if (searchMode === 'name') {
+                if (searchMode === 'name' && !primeMode) {
                     const normalizedQuery = aliasNormalize(rawQuery);
                     arr = arr.filter(c => aliasNormalize(c.name).includes(normalizedQuery));
                 }
@@ -519,7 +540,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     }}
                                     onClick={() => onCardClick(card)}
                                     style={{ cursor: 'pointer' }}
-                                    
+
                                 >
                                     <img
                                         draggable={false}
