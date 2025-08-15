@@ -6,7 +6,17 @@
 .nodisplay {
   display: none;
 }
-
+.scrollable-90vh {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.scrollable-90vh {
+  display: flex;
+  flex-direction: column;
+}
+.scrollable-90vh .modal-body {
+  overflow-y: auto;
+}
 .profile-settings-display-edit {
   width: 65%;
   margin: 0 auto;

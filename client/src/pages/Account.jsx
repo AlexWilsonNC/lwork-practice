@@ -1907,7 +1907,7 @@ export default function Account() {
                             )}
                             {showSortModal && (
                                 <div className="deck-collection-modal-overlay">
-                                    <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                    <div className="deck-collection-modal-box scrollable-90vh" onClick={e => e.stopPropagation()}>
                                         <h4>Sort Folders</h4>
                                         <div className="preset-sort-folders-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                                             <button onClick={() => {
@@ -2092,7 +2092,7 @@ export default function Account() {
                             )}
                             {showPrivacyModal && (
                                 <div className="deck-collection-modal-overlay" onClick={() => setShowPrivacyModal(false)}>
-                                    <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                                    <div className="deck-collection-modal-box scrollable-90vh" onClick={e => e.stopPropagation()}>
                                         <h4>Folder Visibility</h4>
                                         <div className='folder-visi-info'>
                                             <p>
