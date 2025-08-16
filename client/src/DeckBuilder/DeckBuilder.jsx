@@ -1108,7 +1108,7 @@ export default function DeckBuilder() {
             />
           </div>
         </div>
-        <p className='info-db-icon'>hi</p>
+        <span class="material-symbols-outlined info-db-icon">info</span>
       </div>
     </DeckBuilderComp>
   )

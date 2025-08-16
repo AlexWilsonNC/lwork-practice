@@ -8,6 +8,11 @@
   position: fixed;
   bottom: 15px;
   right: 15px;
+  color: grey;
+}
+.info-db-icon:hover {
+  color: #1290eb;
+  cursor: pointer;
 }
 
 @keyframes pokeball-spin {

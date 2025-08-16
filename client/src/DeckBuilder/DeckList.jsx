@@ -27,37 +27,37 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
         fr.readAsDataURL(file);
       });
 
-      const loadImage = (src) =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+    const loadImage = (src) =>
+      new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
 
-async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
-  const src = await readAsDataURL(file);
-  const img = await loadImage(src);
-  const ratio = img.height / img.width;
-  const w = targetW;
-  const h = Math.round(w * ratio);
-  const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0, w, h);
-  try {
-    return canvas.toDataURL('image/webp', quality);
-  } catch {
-    return canvas.toDataURL('image/jpeg', quality);
-  }
-}
+    async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
+      const src = await readAsDataURL(file);
+      const img = await loadImage(src);
+      const ratio = img.height / img.width;
+      const w = targetW;
+      const h = Math.round(w * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      try {
+        return canvas.toDataURL('image/webp', quality);
+      } catch {
+        return canvas.toDataURL('image/jpeg', quality);
+      }
+    }
 
     const now = Date.now();
     const cards = [];
     let n = 0;
     for (const f of files) {
-  const dataUrl = await toThumbnailDataURL(f, 360, 0.85);
+      const dataUrl = await toThumbnailDataURL(f, 360, 0.85);
       cards.push({
         uid: `CUSTOM-${now}-${n++}`,
         isCustom: true,
@@ -108,9 +108,10 @@ async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
   return (
     <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}
       onDragOver={e => {
-        const hasFiles = (e.dataTransfer?.files?.length || 0) > 0;
+        const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
         if (hasFiles) {
           e.preventDefault();
+          e.stopPropagation();
           e.dataTransfer.dropEffect = 'copy';
         }
       }}
@@ -118,6 +119,7 @@ async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
         const hasFiles = (e.dataTransfer?.files?.length || 0) > 0;
         if (!hasFiles) return;
         e.preventDefault();
+        e.stopPropagation();
         await handleFilesDrop(e.dataTransfer.files, deck.length);
       }}>
       {loading && (
@@ -151,23 +153,26 @@ async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
             }}
             draggable
             onDragStart={e => {
-              e.dataTransfer.setData(
-                'application/ptcg-card',
-                JSON.stringify({
-                  setAbbrev: c.setAbbrev,
-                  number: c.number,
-                  action: 'decrement'
-                })
-              );
+              if (!c.isCustom) {
+                e.dataTransfer.setData(
+                  'application/ptcg-card',
+                  JSON.stringify({
+                    setAbbrev: c.setAbbrev,
+                    number: c.number,
+                    action: 'decrement'
+                  })
+                );
+              }
               e.dataTransfer.setData('application/ptcg-reorder', String(i));
               e.dataTransfer.effectAllowed = 'move';
             }}
             onDragOver={e => {
               const types = Array.from(e.dataTransfer?.types || []);
               const isReorder = types.includes('application/ptcg-reorder');
-              const isFiles = (e.dataTransfer?.files?.length || 0) > 0;
+              const isFiles = types.includes('Files');
               if (!isReorder && !isFiles) return;
               e.preventDefault();
+              e.stopPropagation();
               e.dataTransfer.dropEffect = isFiles ? 'copy' : 'move';
               const rect = e.currentTarget.getBoundingClientRect();
               const threshold = rect.left + rect.width * 0.5;
@@ -191,6 +196,7 @@ async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
               const isReorder = types.includes('application/ptcg-reorder');
               if (!isReorder && !isFiles) return;
               e.preventDefault();
+              e.stopPropagation();
               e.currentTarget.classList.remove('drop-before');
               e.currentTarget.classList.remove('drop-after');
               const after = !!e.currentTarget.__dropAfter;
