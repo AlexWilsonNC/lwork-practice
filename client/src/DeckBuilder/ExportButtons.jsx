@@ -2,28 +2,6 @@ import React, { useState, useRef, useEffect, useContext } from 'react'
 import { toPng } from 'html-to-image'
 import { AuthContext } from '../contexts/AuthContext'
 
-function loadImg(src) {
-  return new Promise((res, rej) => {
-    const img = new Image();
-    img.onload = () => res(img);
-    img.onerror = rej;
-    img.src = src;
-  });
-}
-
-async function downscaleDataURL(dataUrl, targetW = 220, quality = 0.82) {
-  const img = await loadImg(dataUrl);
-  const ratio = img.height / img.width;
-  const w = targetW;
-  const h = Math.round(w * ratio);
-  const c = document.createElement('canvas');
-  c.width = w; c.height = h;
-  const ctx = c.getContext('2d');
-  ctx.drawImage(img, 0, 0, w, h);
-  try { return c.toDataURL('image/webp', quality); }
-  catch { return c.toDataURL('image/jpeg', quality); }
-}
-
 function MascotSelect({
   value,
   onChange,
@@ -216,6 +194,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const [overwriteSecondary, setOverwriteSecondary] = useState('')
   const [overwriteDescription, setOverwriteDescription] = useState('')
   const overwritePrefilledRef = useRef(false)
+
 
   const [originalMeta, setOriginalMeta] = useState(null);
   const prefilledOnceRef = useRef(false);
@@ -513,49 +492,11 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
     if (!name.trim() || !mascotCard) return;
 
-    // Build a lean payload: compress data URLs; keep URLs as-is; avoid "large"
-    const prepared = await Promise.all(deck.map(async (c) => {
-      let images;
-      const small = c?.images?.small;
-      if (typeof small === 'string' && small.startsWith('data:image')) {
-        // shrink base64 to a tiny thumbnail for transport
-        const tiny = await downscaleDataURL(small, 220, 0.82);
-        images = { small: tiny };
-      } else if (small) {
-        // normal URL from DB cards
-        images = { small };
-      }
-      return {
-        set: c.setAbbrev || c.set,
-        number: c.number,
-        count: c.count,
-        name: c.name,
-        supertype: c.supertype,
-        setAbbrev: c.setAbbrev || c.set,
-        regulationMark: c.regulationMark || '',
-        images,
-      };
+    const flatDeck = deck.map(c => ({
+      set: c.setAbbrev || c.set,
+      number: c.number,
+      count: c.count
     }));
-
-    // Size guard: if still large (many customs), strip images for customs for this request
-    let body = {
-      name,
-      mascotCard,
-      secondaryMascotCard,
-      description: desc,
-      decklist: prepared
-    };
-    let s = JSON.stringify(body);
-    if (s.length > 900_000) {
-      body = {
-        ...body,
-        decklist: prepared.map((c, i) => {
-          const orig = deck[i];
-          if (orig?.isCustom) return { ...c, images: undefined };
-          return c;
-        })
-      };
-    }
 
     setSaving(true)
     try {
@@ -570,7 +511,13 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({
+          name,
+          mascotCard,
+          secondaryMascotCard,
+          description: desc,
+          decklist: flatDeck
+        })
       })
       if (res.ok) {
         window.location.href = '/taco'

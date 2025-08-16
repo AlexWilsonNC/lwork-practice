@@ -175,8 +175,7 @@ function sortDeck(deck) {
     sortedPokemons.push(...fam);
   });
 
-  const others = deck.filter(c => !['Pokémon', 'Trainer', 'Energy'].includes(c.supertype || ''));
-  return [...sortedPokemons, ...sortedTrainers, ...sortedEnergies, ...others];
+  return [...sortedPokemons, ...sortedTrainers, ...sortedEnergies];
 }
 
 const STORAGE_KEY = 'deckbuilder-deck'
@@ -255,76 +254,29 @@ export default function DeckBuilder() {
     }
   });
 
-  function addCustomCards({ cards = [], toIndex }) {
-    setDeck(prev => {
-      const insertAt = Math.max(0, Math.min(
-        typeof toIndex === 'number' ? toIndex : prev.length,
-        prev.length
-      ));
-      const next = [...prev];
-      next.splice(insertAt, 0, ...cards);
-      return next;
-    });
-  }
-
-useEffect(() => {
-  const hash = window.location.hash.slice(1);
-  const params = new URLSearchParams(hash);
-  if (!params.has('deck')) return;
-
-  let minimal;
-  try {
-    minimal = JSON.parse(decodeURIComponent(params.get('deck')))
-      .map(c => ({ ...c, count: Number(c.count) }));
-  } catch {
-    return;
-  }
-
-  setLoadingHash(true);
-
-  // pull the image map saved by Account.goToDeckbuilder
-  const customMap = (() => {
-    try { return JSON.parse(localStorage.getItem('PTCGLegendsCustomCardMap') || '{}'); }
-    catch { return {}; }
-  })();
-
-  const toCard = ({ set, number, count }) => {
-    if (set === 'CUSTOM') {
-      const img = customMap[String(number)];
-      return Promise.resolve({
-        uid: `CUSTOM-${number}`,
-        isCustom: true,
-        name: 'Custom Image',
-        supertype: 'Custom',
-        setAbbrev: 'CUSTOM',
-        number: String(number),
-        count,
-        rules: 'You may have as many of this card in your deck as you like.',
-        images: img ? { small: img, large: img } : undefined,
-      });
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    const params = new URLSearchParams(hash);
+    if (!params.has('deck')) return;
+    let minimal;
+    try {
+      minimal = JSON.parse(decodeURIComponent(params.get('deck')));
+      minimal = minimal.map(c => ({ ...c, count: Number(c.count) }));
+    } catch {
+      return;
     }
-    // normal cards still fetch from your API
-    return fetch(`/api/cards/${set}/${number}`)
-      .then(r => r.ok ? r.json() : Promise.reject(new Error('not ok')))
-      .then(card => ({ ...card, count }))
-      .catch(() => ({
-        // safe fallback if a single fetch fails
-        name: `${set} ${number}`,
-        setAbbrev: set,
-        number: String(number),
-        count,
-        images: {},
-      }));
-  };
 
-  Promise.all(minimal.map(toCard))
-    .then(full => setDeck(full))
-    .finally(() => {
-      setLoadingHash(false);
-      // avoid stale carryover on the next open
-      localStorage.removeItem('PTCGLegendsCustomCardMap');
-    });
-}, []);
+    setLoadingHash(true);
+    Promise.all(
+      minimal.map(({ set, number, count }) =>
+        fetch(`/api/cards/${set}/${number}`)
+          .then(r => r.json())
+          .then(card => ({ ...card, count }))
+      )
+    ).then(fullDeck => setDeck(fullDeck))
+      .catch(console.error)
+      .finally(() => setLoadingHash(false))
+  }, []);
 
   const [zoomCard, setZoomCard] = useState(null);
 
@@ -544,22 +496,6 @@ useEffect(() => {
         const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
         const url = `/api/cards/searchbyname/partial/${safeName}`;
 
-
-        if (set === 'CUSTOM') {
-          // Build a local custom card object — no API call, no crash.
-          return {
-            uid: entry.uid || `CUSTOM-${num}`,
-            isCustom: true,
-            name: entry.name || 'Custom Image',
-            supertype: 'Custom',
-            setAbbrev: 'CUSTOM',
-            number: String(num),
-            count: entry.count || 1,
-            rules: 'You may have as many of this card in your deck as you like.',
-            images: entry.images && entry.images.small ? { small: entry.images.small } : undefined
-          };
-        }
-
         const res = await fetch(url);
         if (!res.ok) {
           console.error('search error', res.status, await res.text());
@@ -641,10 +577,7 @@ useEffect(() => {
     }
   }
 
-  const handleCardClick = card => {
-    if (card?.isCustom) return;
-    setZoomCard(card);
-  };
+  const handleCardClick = card => setZoomCard(card);
 
   const totalCount = deck.reduce((sum, c) => sum + c.count, 0);
 
@@ -816,7 +749,7 @@ useEffect(() => {
                 <span className="modal-count">
                   <p>( in deck )</p>
                   {currentCount}
-                </span>
+                  </span>
                 <button
                   className='btn-plus-l'
                   type="button"
@@ -834,7 +767,7 @@ useEffect(() => {
                 <hr className="zoomed-card-db-hr" />
                 {zoomCard.abilities?.map((ab, i) => (
                   <p key={i}>
-                    <strong><span style={{ color: '#aa0300' }}>Ability:</span> {ab.name}</strong>
+                    <strong><span style={{ color: '#aa0300', textShadow: '0 0 1px black' }}>Ability:</span> {ab.name}</strong>
                     <br></br>{ab.text}
                   </p>
                 ))}
@@ -1155,11 +1088,9 @@ useEffect(() => {
                   return next;
                 });
               }}
-              onAddCustomCard={addCustomCards}
             />
           </div>
         </div>
-        <span class="material-symbols-outlined info-db-icon">info</span>
       </div>
     </DeckBuilderComp>
   )
