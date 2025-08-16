@@ -639,7 +639,7 @@
 .deck-collection-modal-box label {
   height: 25px;
   padding-left: 7px;
-  width: 90%;
+  width: 100%;
 }
 
 .deck-collection-modal-box textarea {
@@ -1036,28 +1036,33 @@
   color: var(--text-muted);
 }
 
-.cropped-mascot-card.tagteam {
+.cropped-mascot-card.tagteam,
+.secondary-mascot-img.tagteam {
   top: -50%;
 }
 
-.cropped-mascot-card.ancient {
+.cropped-mascot-card.ancient,
+.secondary-mascot-card.ancient {
   top: -80%;
 }
 
-.cropped-mascot-card.break {
+.cropped-mascot-card.break,
+.secondary-mascot-img.break {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 375px;
 }
 
-.cropped-mascot-card.legend {
+.cropped-mascot-card.legend,
+.secondary-mascot-img.legend {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 300px;
   width: 85%;
 }
 
-.cropped-mascot-card.lugia {
+.cropped-mascot-card.lugia,
+.secondary-mascot-img.lugia {
   transform: rotate(90deg);
   transform-origin: top left;
   left: 315px;
@@ -1065,7 +1070,8 @@
   top: 0%;
 }
 
-.cropped-mascot-card.zoroark {
+.cropped-mascot-card.zoroark,
+.secondary-mascot-img.zoroark {
   top: -55%;
 }
 
@@ -1304,18 +1310,21 @@
     font-size: 1.25rem !important;
   }
 
-  .cropped-mascot-card.break {
+  .cropped-mascot-card.break,
+.secondary-mascot-img.break {
     left: 235px;
     top: -38%;
   }
 
-  .cropped-mascot-card.legend {
+  .cropped-mascot-card.legend,
+.secondary-mascot-img.legend {
     left: 220px;
     width: 100%;
     top: -32%;
   }
 
-  .cropped-mascot-card.lugia {
+  .cropped-mascot-card.lugia,
+.secondary-mascot-img.lugia {
     left: 220px;
     width: 100%;
     top: 0%;
@@ -1477,9 +1486,13 @@
   }
   .adddecktothisfolder {
     margin-bottom: 0;
+    margin-top: -10px;
   }
   .adddeck-to-fold-brtn {
-    background-image: linear-gradient(to bottom right, rgba(6, 174, 174, 0), #1291eb00, #1291eb00);
+    background: none;          /* clears image + color */
+    background-image: none;    /* extra-safe for gradients */
+    background-color: transparent;
+    color: inherit;            /* optional: use surrounding text color */
     padding: 20px 0;
     color: #1290eb;
     border: none;
@@ -1576,12 +1589,14 @@
     border-radius: 12px;
   }
 
-  .cropped-mascot-card.legend {
+  .cropped-mascot-card.legend,
+  .secondary-mascot-card.legend {
     left: 180px;
     top: -32%;
   }
 
-  .cropped-mascot-card.lugia {
+  .cropped-mascot-card.lugia,
+  .secondary-mascot-card.lugia {
     left: 180px;
     top: 0%;
   }

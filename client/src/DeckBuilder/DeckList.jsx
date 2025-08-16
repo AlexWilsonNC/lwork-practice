@@ -1,4 +1,3 @@
-import React from 'react'
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png'
 
 const isUnlimitedByRules = (c) => {
@@ -8,11 +7,76 @@ const isUnlimitedByRules = (c) => {
   return Array.isArray(r) ? r.some(s => rx.test(s)) : rx.test(r);
 };
 
-export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, onAddFromSearch, limitCounts = true, viewMode = 'image', zoomScale = 1 }) {
-
+export default function DeckList({ deck, onUpdateCount, onCardClick, loading = false, onCardDrop, onAddFromSearch, limitCounts = true, viewMode = 'image', zoomScale = 1, onAddCustomCard }) {
   const shrink = Array.isArray(deck) && deck.length > 45
   const BASE_CARD_WIDTH = 70;
   const BASE_MARGIN = 2.5;
+
+  const handleFilesDrop = async (fileList, toIndex = deck.length) => {
+    const files = Array.from(fileList || []).filter(f => {
+      const hasImageMime = f.type && f.type.startsWith('image/');
+      const byExt = /\.(png|jpe?g|webp|gif|bmp|svg|avif)$/i.test(f.name || '');
+      return hasImageMime || byExt;
+    });
+    if (!files.length) return;
+
+    const readAsDataURL = (file) =>
+      new Promise(resolve => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.readAsDataURL(file);
+      });
+
+      const loadImage = (src) =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+
+async function toThumbnailDataURL(file, targetW = 360, quality = 0.85) {
+  const src = await readAsDataURL(file);
+  const img = await loadImage(src);
+  const ratio = img.height / img.width;
+  const w = targetW;
+  const h = Math.round(w * ratio);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+  try {
+    return canvas.toDataURL('image/webp', quality);
+  } catch {
+    return canvas.toDataURL('image/jpeg', quality);
+  }
+}
+
+    const now = Date.now();
+    const cards = [];
+    let n = 0;
+    for (const f of files) {
+  const dataUrl = await toThumbnailDataURL(f, 360, 0.85);
+      cards.push({
+        uid: `CUSTOM-${now}-${n++}`,
+        isCustom: true,
+        name: f.name.replace(/\.(png|jpe?g|webp|gif)$/i, '') || 'Custom Image',
+        supertype: 'Custom',
+        setAbbrev: 'CUSTOM',
+        number: String(now + n),
+        count: 1,
+        rules: 'You may have as many of this card in your deck as you like.',
+        images: { small: dataUrl },
+      });
+    }
+
+    if (typeof onAddCustomCard === 'function') {
+      onAddCustomCard({ cards, toIndex });
+    } else if (typeof onAddFromSearch === 'function') {
+      onAddFromSearch({ cards, toIndex, from: 'files' });
+    }
+  };
 
   if (viewMode === 'list') {
     return (
@@ -42,7 +106,20 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
   }
 
   return (
-    <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}>
+    <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}
+      onDragOver={e => {
+        const hasFiles = (e.dataTransfer?.files?.length || 0) > 0;
+        if (hasFiles) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'copy';
+        }
+      }}
+      onDrop={async e => {
+        const hasFiles = (e.dataTransfer?.files?.length || 0) > 0;
+        if (!hasFiles) return;
+        e.preventDefault();
+        await handleFilesDrop(e.dataTransfer.files, deck.length);
+      }}>
       {loading && (
         <div className="deck-spinner">
           <img src={blueUltraBallSpinner}
@@ -64,7 +141,7 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
 
         return (
           <div
-            key={`${c.setAbbrev}-${c.number}`}
+            key={c.uid || `${c.setAbbrev || 'CUSTOM'}-${c.number || i}`}
             className="deckbuilt-card-container"
             onClick={() => onCardClick(c)}
             style={{
@@ -86,9 +163,12 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
               e.dataTransfer.effectAllowed = 'move';
             }}
             onDragOver={e => {
-              if (!Array.from(e.dataTransfer?.types || []).includes('application/ptcg-reorder')) return;
+              const types = Array.from(e.dataTransfer?.types || []);
+              const isReorder = types.includes('application/ptcg-reorder');
+              const isFiles = (e.dataTransfer?.files?.length || 0) > 0;
+              if (!isReorder && !isFiles) return;
               e.preventDefault();
-              e.dataTransfer.dropEffect = 'move';
+              e.dataTransfer.dropEffect = isFiles ? 'copy' : 'move';
               const rect = e.currentTarget.getBoundingClientRect();
               const threshold = rect.left + rect.width * 0.5;
               const before = e.clientX < threshold - 6;
@@ -105,15 +185,21 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
               el.classList.remove('drop-before', 'drop-after');
               el.__dropAfter = null;
             }}
-            onDrop={e => {
+            onDrop={async e => {
               const types = Array.from(e.dataTransfer?.types || []);
-              if (!types.includes('application/ptcg-reorder')) return;
+              const isFiles = (e.dataTransfer?.files?.length || 0) > 0;
+              const isReorder = types.includes('application/ptcg-reorder');
+              if (!isReorder && !isFiles) return;
               e.preventDefault();
               e.currentTarget.classList.remove('drop-before');
               e.currentTarget.classList.remove('drop-after');
-              const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
               const after = !!e.currentTarget.__dropAfter;
               const to = after ? i + 1 : i;
+              if (isFiles) {
+                await handleFilesDrop(e.dataTransfer.files, to);
+                return;
+              }
+              const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
               if (Number.isInteger(from) && from !== -1 && from !== to) {
                 if (typeof onAddFromSearch === 'function') {
                   onAddFromSearch({ fromIndex: from, toIndex: to });
@@ -127,7 +213,11 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
               onDragStart={e => e.preventDefault()}
               alt={c.name}
               className="database-card-in-list"
-              style={{ width: '100%', height: 'auto' }}
+              style={
+                c.isCustom
+                  ? { width: '100%', aspectRatio: '0.71', objectFit: 'cover' }
+                  : { width: '100%', height: 'auto' }
+              }
             />
             <div
               className="deck-add-minus"
@@ -175,29 +265,6 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
           </div>
         )
       })}
-      {/* <div
-        className="deck-tail-dropzone"
-        onDragOver={e => {
-          if (!Array.from(e.dataTransfer?.types || []).includes('application/ptcg-reorder')) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          e.currentTarget.classList.add('active');
-        }}
-        onDragLeave={e => e.currentTarget.classList.remove('active')}
-        onDrop={e => {
-          const types = Array.from(e.dataTransfer?.types || []);
-          if (!types.includes('application/ptcg-reorder')) return;
-          e.preventDefault();
-          e.currentTarget.classList.remove('active');
-          const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
-          const to = deck.length;
-          if (Number.isInteger(from) && from !== -1 && from !== to) {
-            if (typeof onAddFromSearch === 'function') {
-              onAddFromSearch({ fromIndex: from, toIndex: to });
-            }
-          }
-        }}
-      /> */}
     </div>
   )
 }

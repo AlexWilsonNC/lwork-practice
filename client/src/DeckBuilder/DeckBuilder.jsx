@@ -175,7 +175,8 @@ function sortDeck(deck) {
     sortedPokemons.push(...fam);
   });
 
-  return [...sortedPokemons, ...sortedTrainers, ...sortedEnergies];
+  const others = deck.filter(c => !['Pokémon', 'Trainer', 'Energy'].includes(c.supertype || ''));
+  return [...sortedPokemons, ...sortedTrainers, ...sortedEnergies, ...others];
 }
 
 const STORAGE_KEY = 'deckbuilder-deck'
@@ -253,6 +254,18 @@ export default function DeckBuilder() {
       return [];
     }
   });
+
+  function addCustomCards({ cards = [], toIndex }) {
+    setDeck(prev => {
+      const insertAt = Math.max(0, Math.min(
+        typeof toIndex === 'number' ? toIndex : prev.length,
+        prev.length
+      ));
+      const next = [...prev];
+      next.splice(insertAt, 0, ...cards);
+      return next;
+    });
+  }
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -577,7 +590,10 @@ export default function DeckBuilder() {
     }
   }
 
-  const handleCardClick = card => setZoomCard(card);
+  const handleCardClick = card => {
+    if (card?.isCustom) return;
+    setZoomCard(card);
+  };
 
   const totalCount = deck.reduce((sum, c) => sum + c.count, 0);
 
@@ -749,7 +765,7 @@ export default function DeckBuilder() {
                 <span className="modal-count">
                   <p>( in deck )</p>
                   {currentCount}
-                  </span>
+                </span>
                 <button
                   className='btn-plus-l'
                   type="button"
@@ -1088,9 +1104,11 @@ export default function DeckBuilder() {
                   return next;
                 });
               }}
+              onAddCustomCard={addCustomCards}
             />
           </div>
         </div>
+        <p className='info-db-icon'>hi</p>
       </div>
     </DeckBuilderComp>
   )

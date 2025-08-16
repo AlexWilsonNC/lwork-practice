@@ -4,6 +4,12 @@
   animation: pokeball-spin 1.2s linear infinite;
 }
 
+.info-db-icon {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
 @keyframes pokeball-spin {
   from {
     transform: rotate(0deg);
@@ -38,7 +44,6 @@ body.deckbuilder-page .deck-builder {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  /* above everything */
 }
 
 .spinner-icon {
