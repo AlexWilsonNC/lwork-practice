@@ -493,10 +493,22 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     if (!name.trim() || !mascotCard) return;
 
     const flatDeck = deck.map(c => ({
-      set: c.setAbbrev || c.set,
-      number: c.number,
-      count: c.count
-    }));
+  // required minimal fields
+  set: c.setAbbrev || c.set,
+  number: c.number,
+  count: c.count,
+
+  // keep these so collection rendering works like before
+  name: c.name,
+  supertype: c.supertype,
+  setAbbrev: c.setAbbrev || c.set,
+  regulationMark: c.regulationMark || '',
+
+  // keep small+large URLs for DB cards (they're short URLs, not base64)
+  images: c.images
+    ? { small: c.images.small, large: c.images.large }
+    : undefined,
+}));
 
     setSaving(true)
     try {

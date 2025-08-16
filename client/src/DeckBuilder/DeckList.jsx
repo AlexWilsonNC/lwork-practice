@@ -175,29 +175,6 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
           </div>
         )
       })}
-      {/* <div
-        className="deck-tail-dropzone"
-        onDragOver={e => {
-          if (!Array.from(e.dataTransfer?.types || []).includes('application/ptcg-reorder')) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          e.currentTarget.classList.add('active');
-        }}
-        onDragLeave={e => e.currentTarget.classList.remove('active')}
-        onDrop={e => {
-          const types = Array.from(e.dataTransfer?.types || []);
-          if (!types.includes('application/ptcg-reorder')) return;
-          e.preventDefault();
-          e.currentTarget.classList.remove('active');
-          const from = parseInt(e.dataTransfer.getData('application/ptcg-reorder') || '-1', 10);
-          const to = deck.length;
-          if (Number.isInteger(from) && from !== -1 && from !== to) {
-            if (typeof onAddFromSearch === 'function') {
-              onAddFromSearch({ fromIndex: from, toIndex: to });
-            }
-          }
-        }}
-      /> */}
     </div>
   )
 }
