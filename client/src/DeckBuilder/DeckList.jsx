@@ -57,7 +57,7 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
     const cards = [];
     let n = 0;
     for (const f of files) {
-      const dataUrl = await toThumbnailDataURL(f, 360, 0.85);
+      const dataUrl = await toThumbnailDataURL(f, 240, 0.82);
       cards.push({
         uid: `CUSTOM-${now}-${n++}`,
         isCustom: true,

@@ -267,29 +267,64 @@ export default function DeckBuilder() {
     });
   }
 
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    const params = new URLSearchParams(hash);
-    if (!params.has('deck')) return;
-    let minimal;
-    try {
-      minimal = JSON.parse(decodeURIComponent(params.get('deck')));
-      minimal = minimal.map(c => ({ ...c, count: Number(c.count) }));
-    } catch {
-      return;
-    }
+useEffect(() => {
+  const hash = window.location.hash.slice(1);
+  const params = new URLSearchParams(hash);
+  if (!params.has('deck')) return;
 
-    setLoadingHash(true);
-    Promise.all(
-      minimal.map(({ set, number, count }) =>
-        fetch(`/api/cards/${set}/${number}`)
-          .then(r => r.json())
-          .then(card => ({ ...card, count }))
-      )
-    ).then(fullDeck => setDeck(fullDeck))
-      .catch(console.error)
-      .finally(() => setLoadingHash(false))
-  }, []);
+  let minimal;
+  try {
+    minimal = JSON.parse(decodeURIComponent(params.get('deck')))
+      .map(c => ({ ...c, count: Number(c.count) }));
+  } catch {
+    return;
+  }
+
+  setLoadingHash(true);
+
+  // pull the image map saved by Account.goToDeckbuilder
+  const customMap = (() => {
+    try { return JSON.parse(localStorage.getItem('PTCGLegendsCustomCardMap') || '{}'); }
+    catch { return {}; }
+  })();
+
+  const toCard = ({ set, number, count }) => {
+    if (set === 'CUSTOM') {
+      const img = customMap[String(number)];
+      return Promise.resolve({
+        uid: `CUSTOM-${number}`,
+        isCustom: true,
+        name: 'Custom Image',
+        supertype: 'Custom',
+        setAbbrev: 'CUSTOM',
+        number: String(number),
+        count,
+        rules: 'You may have as many of this card in your deck as you like.',
+        images: img ? { small: img, large: img } : undefined,
+      });
+    }
+    // normal cards still fetch from your API
+    return fetch(`/api/cards/${set}/${number}`)
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('not ok')))
+      .then(card => ({ ...card, count }))
+      .catch(() => ({
+        // safe fallback if a single fetch fails
+        name: `${set} ${number}`,
+        setAbbrev: set,
+        number: String(number),
+        count,
+        images: {},
+      }));
+  };
+
+  Promise.all(minimal.map(toCard))
+    .then(full => setDeck(full))
+    .finally(() => {
+      setLoadingHash(false);
+      // avoid stale carryover on the next open
+      localStorage.removeItem('PTCGLegendsCustomCardMap');
+    });
+}, []);
 
   const [zoomCard, setZoomCard] = useState(null);
 
@@ -508,6 +543,22 @@ export default function DeckBuilder() {
 
         const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
         const url = `/api/cards/searchbyname/partial/${safeName}`;
+
+
+        if (set === 'CUSTOM') {
+          // Build a local custom card object — no API call, no crash.
+          return {
+            uid: entry.uid || `CUSTOM-${num}`,
+            isCustom: true,
+            name: entry.name || 'Custom Image',
+            supertype: 'Custom',
+            setAbbrev: 'CUSTOM',
+            number: String(num),
+            count: entry.count || 1,
+            rules: 'You may have as many of this card in your deck as you like.',
+            images: entry.images && entry.images.small ? { small: entry.images.small } : undefined
+          };
+        }
 
         const res = await fetch(url);
         if (!res.ok) {
