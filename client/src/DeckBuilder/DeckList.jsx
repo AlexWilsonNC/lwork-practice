@@ -122,7 +122,7 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
             }}
           >
             <img
-              src={c.images.small}
+              src={c.images.small || ''}
               draggable={false}
               onDragStart={e => e.preventDefault()}
               alt={c.name}

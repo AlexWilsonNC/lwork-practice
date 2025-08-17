@@ -220,7 +220,7 @@ export default function Account() {
     const [showFolderModal, setShowFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [newFolderColor, setNewFolderColor] = useState('#1290eb');
-    const colorOptions = ['#cd4036', '#e86914', '#FFEA00', '#23b809', '#1a740a', '#02ac7f', '#1290eb', '#0251ac', '#663ac4', '#9d14dc', '#c814dc', '#e381ee', '#da0c8b', '#714228', '#b39813', '#181819', '#515151', '#ffffff'];
+    const colorOptions = ['#cd4036', '#e86914', '#FFEA00', '#23b809', '#1a740a', 'rgb(6, 174, 174)', '#1290eb', '#0251ac', '#663ac4', '#9d14dc', '#c814dc', '#e381ee', '#da0c8b', '#714228', '#b39813', '#181819', '#515151', '#ffffff'];
     const [showMoveModal, setShowMoveModal] = useState(false);
     const [moveModalDeck, setMoveModalDeck] = useState(null);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -2192,6 +2192,7 @@ export default function Account() {
                                                             <span
                                                                 className="material-symbols-outlined"
                                                                 title={lockedFolders.has(id) ? 'Locked' : 'Unlocked'}
+                                                                onClick={() => { toggleLockFolder(id); setSortMenuOpenId(null); }}
                                                                 style={{
                                                                     margin: '0 4px',
                                                                     color: lockedFolders.has(id)
