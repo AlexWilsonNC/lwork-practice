@@ -17,10 +17,10 @@ import mechV from '../assets/icons/v.png';
 import mechGX from '../assets/icons/gx.png';
 import mechAceSpec from '../assets/icons/acespec.png';
 import mechPrism from '../assets/icons/prism.png';
-import mechGoldStar from '../assets/icons/prism.png';
+import mechGoldStar from '../assets/icons/gold-star.png';
 import mechFusion from '../assets/icons/fusion.png';
-import mechRapid from '../assets/icons/prism.png';
-import mechSingle from '../assets/icons/prism.png';
+import mechRapid from '../assets/icons/rs.png';
+import mechSingle from '../assets/icons/ss.png';
 import mechMega from '../assets/icons/mega.png';
 import mechAncient from '../assets/icons/omega.png';
 import mechLegend from '../assets/icons/legend.png';
@@ -117,13 +117,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
-    const [suppressDefault, setSuppressDefault] = useState(false)
+    const [suppressDefault, setSuppressDefault] = useState(true) // PT2 - Auto load most recent set - value=false
     const [showSets, setShowSets] = useState(false)
     const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
     const toggleBtnRef = useRef(null);
     const [searchMode, setSearchMode] = useState('name');
     const latestReqId = useRef(0);
+    const lastAutoSig = useRef('');
+    const PAGE = 40;
+    const [visibleCount, setVisibleCount] = useState(PAGE);
+    const listRootRef = useRef(null);
+    const loadMoreRef = useRef(null);
+
     const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'ace spec', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
 
@@ -320,6 +326,81 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         const cardTypes = getCardPokeTypes(card);
         return cardTypes.some(t => activeSet.has(t));
     }
+    async function prefillResultsForActiveFilters() {
+        if ((query || '').trim() !== '') return;
+
+        const hasMechanics = Object.values(filters.mechanics || {}).some(Boolean);
+        const hasTypes = Object.values(filters.supertypes || {}).some(Boolean);
+        const hasPokeTypes = Object.values(filters.pokeTypes || {}).some(Boolean);
+        if (!(hasMechanics || hasTypes || hasPokeTypes)) return;
+
+        const sig = JSON.stringify({
+            mech: filters.mechanics,
+            types: filters.supertypes,
+            poke: filters.pokeTypes
+        });
+        if (sig === lastAutoSig.current && results.length) return;
+        lastAutoSig.current = sig;
+
+        const setsToScan = setOrder;
+
+        try {
+            const lists = await Promise.all(
+                setsToScan.map(code =>
+                    fetch(`/api/cards/${encodeURIComponent(code)}`)
+                        .then(r => (r.ok ? r.json() : []))
+                        .catch(() => [])
+                )
+            );
+
+            const byKey = new Map();
+            for (const list of lists) {
+                for (const c of Array.isArray(list) ? list : []) {
+                    const key = `${c.setAbbrev}|${c.number}`;
+                    if (!byKey.has(key)) byKey.set(key, c);
+                }
+            }
+            const arr = Array.from(byKey.values());
+
+            arr.sort((a, b) => {
+                const idxA = setOrder.indexOf(a.setAbbrev);
+                const idxB = setOrder.indexOf(b.setAbbrev);
+                if (idxA !== idxB) return idxA - idxB;
+                const numA = parseInt(a.number, 10) || 0;
+                const numB = parseInt(b.number, 10) || 0;
+                return numA - numB;
+            });
+
+            setResults(arr);
+            setSuppressDefault(true);
+        } catch {
+        }
+    }
+
+    function takeFirstMatching(arr, limit) {
+        const out = [];
+        let taken = 0;
+
+        for (let i = 0; i < arr.length; i++) {
+            const card = arr[i];
+
+            if (!inSelectedEras(card, filters.eras)) continue;
+
+            const setsChecked = Object.values(filters.sets).some(Boolean);
+            if (setsChecked && !filters.sets[card.setAbbrev]) continue;
+
+            if (!matchesSelectedTypes(card, filters.supertypes)) continue;
+            if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
+            if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
+
+            out.push(card);
+            taken++;
+            if (taken >= limit) {
+                return { items: out, hasMore: true };
+            }
+        }
+        return { items: out, hasMore: false };
+    }
 
     const [showAdvanced, setShowAdvanced] = useState(false)
     const [filters, setFilters] = useState({
@@ -415,27 +496,28 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return Array.from(variants);
     }
 
-    useEffect(() => {
-        const newestSet = setOrder[0]
-        fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
-            .then(res => {
-                if (!res.ok) throw new Error(`Network ${res.status}`)
-                return res.json()
-            })
-            .then(data => {
-                const arr = Array.isArray(data) ? data : []
-                arr.sort((a, b) => {
-                    const nA = parseInt(a.number, 10) || 0
-                    const nB = parseInt(b.number, 10) || 0
-                    return nA - nB
-                })
-                setDefault(arr)
-                setResults(arr)
-            })
-            .catch(err => {
-                console.error('Failed to load default set:', err)
-            })
-    }, [])
+    // LOAD MOST RECENT SET IN CARD SEARCH ON LOAD - SEARCH FOR PT2 TO ADD BACK
+    // useEffect(() => {
+    //     const newestSet = setOrder[0]
+    //     fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
+    //         .then(res => {
+    //             if (!res.ok) throw new Error(`Network ${res.status}`)
+    //             return res.json()
+    //         })
+    //         .then(data => {
+    //             const arr = Array.isArray(data) ? data : []
+    //             arr.sort((a, b) => {
+    //                 const nA = parseInt(a.number, 10) || 0
+    //                 const nB = parseInt(b.number, 10) || 0
+    //                 return nA - nB
+    //             })
+    //             setDefault(arr)
+    //             setResults(arr)
+    //         })
+    //         .catch(err => {
+    //             console.error('Failed to load default set:', err)
+    //         })
+    // }, [])
 
     useEffect(() => {
         const trimmed = query.trim()
@@ -553,17 +635,36 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return () => clearTimeout(t)
     }, [query, defaultCards, searchMode])
 
-    const displayResults = results.filter(card => {
-        if (!inSelectedEras(card, filters.eras)) return false;
+    useEffect(() => {
+        const t = setTimeout(() => { prefillResultsForActiveFilters(); }, 150);
+        return () => clearTimeout(t);
+    }, [filters.mechanics, filters.supertypes, filters.pokeTypes, query]);
 
-        const setsChecked = Object.values(filters.sets).some(Boolean);
-        if (setsChecked && !filters.sets[card.setAbbrev]) return false;
-        if (!matchesSelectedTypes(card, filters.supertypes)) return false;
-        if (!matchesSelectedMechanics(card, filters.mechanics)) return false;
-        if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) return false;
+    const { items: displayResults, hasMore } = React.useMemo(() => {
+        return takeFirstMatching(results, visibleCount);
+    }, [results, filters, visibleCount]);
 
-        return true;
-    });
+    useEffect(() => {
+        const root = listRootRef.current;
+        const target = loadMoreRef.current;
+        if (!root || !target) return;
+
+        const io = new IntersectionObserver(
+            entries => {
+                if (entries.some(e => e.isIntersecting)) {
+                    setVisibleCount(c => c + PAGE);
+                }
+            },
+            { root, rootMargin: '400px 0px 400px 0px', threshold: 0.01 }
+        );
+
+        io.observe(target);
+        return () => io.disconnect();
+    }, [hasMore]);
+
+    useEffect(() => {
+        setVisibleCount(PAGE);
+    }, [query, searchMode, filters]);
 
     useEffect(() => {
         const btn = toggleBtnRef.current;
@@ -648,9 +749,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         <span className="material-symbols-outlined">close</span>
                                     </button>
                                 </div>
-                                <hr></hr>
+                                <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
-                                    <h3>Eras</h3>
+                                    <h3>Eras:</h3>
                                     <div className="era-buttons">
                                         {ERA_OPTIONS.map(({ key, name, src }) => (
                                             <button
@@ -674,7 +775,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 </div>
                                 <div className="filter-group sets-dropdown">
                                     <h3 onClick={() => setShowSets(s => !s)}>
-                                        Sets
+                                        Sets:
                                     </h3>
                                     <div className="toggle-sets-wrapper">
                                         <button
@@ -711,60 +812,63 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         )}
                                     </div>
                                 </div>
+                                <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
                                     <h3>Card Type:</h3>
-                                    {[
-                                        'Pokémon',
-                                        'Trainer',
-                                        // 'Energy',
-                                        'Item',
-                                        'Supporter',
-                                        'Stadium',
-                                        'Tool'
-                                        // 'Basic Energy',
-                                        // 'Special Energy'
-                                    ].map(type => (
-                                        <button
-                                            key={type}
-                                            type="button"
-                                            className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
-                                            style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
-                                            onClick={() => {
-                                                setFilters(f => ({
-                                                    ...f,
-                                                    supertypes: {
-                                                        ...f.supertypes,
-                                                        [type]: !f.supertypes[type]
-                                                    }
-                                                }))
-                                            }}
-                                        >
-                                            {type}
-                                        </button>
-                                    ))}
-                                    <span className='cardtypeenergy'>Energy:</span>
-                                    {[
-                                        'Basic',
-                                        'Special'
-                                    ].map(type => (
-                                        <button
-                                            key={type}
-                                            type="button"
-                                            className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
-                                            style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
-                                            onClick={() => {
-                                                setFilters(f => ({
-                                                    ...f,
-                                                    supertypes: {
-                                                        ...f.supertypes,
-                                                        [type]: !f.supertypes[type]
-                                                    }
-                                                }))
-                                            }}
-                                        >
-                                            {type}
-                                        </button>
-                                    ))}
+                                    <div className="type-buttons">
+                                        {[
+                                            'Pokémon',
+                                            'Trainer',
+                                            // 'Energy',
+                                            'Item',
+                                            'Supporter',
+                                            'Stadium',
+                                            'Tool'
+                                            // 'Basic Energy',
+                                            // 'Special Energy'
+                                        ].map(type => (
+                                            <button
+                                                key={type}
+                                                type="button"
+                                                className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
+                                                style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
+                                                onClick={() => {
+                                                    setFilters(f => ({
+                                                        ...f,
+                                                        supertypes: {
+                                                            ...f.supertypes,
+                                                            [type]: !f.supertypes[type]
+                                                        }
+                                                    }))
+                                                }}
+                                            >
+                                                {type}
+                                            </button>
+                                        ))}
+                                        <span className='cardtypeenergy'>Energy:</span>
+                                        {[
+                                            'Basic',
+                                            'Special'
+                                        ].map(type => (
+                                            <button
+                                                key={type}
+                                                type="button"
+                                                className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
+                                                style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
+                                                onClick={() => {
+                                                    setFilters(f => ({
+                                                        ...f,
+                                                        supertypes: {
+                                                            ...f.supertypes,
+                                                            [type]: !f.supertypes[type]
+                                                        }
+                                                    }))
+                                                }}
+                                            >
+                                                {type}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className="filter-group">
                                     <h3>Mechanics:</h3>
@@ -798,7 +902,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             onClick={() => setShowMoreMechs(v => !v)}
                                             aria-expanded={showMoreMechs}
                                         >
-                                            {showMoreMechs ? 'Show less' : 'Show more'}
+                                            <span className="toggle-label">{showMoreMechs ? 'Show less' : 'Show more'}</span>
+                                            <span className="material-symbols-outlined" aria-hidden="true">
+                                                {showMoreMechs ? 'expand_less' : 'expand_more'}
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -891,7 +998,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                             </button>
                         </div>
                     </div>
-                    <div className="all-cards-container">
+                    <div className="all-cards-container" ref={listRootRef}>
                         <div className='all-cards-displayed'>
                             {displayResults.map(card => (
                                 <div
@@ -912,6 +1019,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     <img
                                         draggable={false}
                                         onDragStart={e => e.preventDefault()}
+                                        loading="lazy"
                                         src={card.images.small} alt={card.name} className='database-card-in-list' />
                                     <button
                                         type="button"
@@ -926,6 +1034,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     ></button>
                                 </div>
                             ))}
+                            {hasMore && <div ref={loadMoreRef} className="infinite-sentinel" aria-hidden="true" />}
                         </div>
                     </div>
                 </div>

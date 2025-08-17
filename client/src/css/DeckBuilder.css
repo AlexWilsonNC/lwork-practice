@@ -1263,11 +1263,11 @@ body.deckbuilder-page .deck-builder {
 }
 
 .filter-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.75rem;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: flex-start;
+  flex-wrap: nowrap;
 }
 
 .filter-group h3 {
@@ -1277,7 +1277,8 @@ body.deckbuilder-page .deck-builder {
 .filter-group > h3 {
   flex: 0 0 100px;
   width: 100px;
-  margin: 0 8px 0 0;
+  margin: 6px 8px 0 0;
+  align-self: flex-start;
 }
 
 .cardtypeenergy {
@@ -1289,7 +1290,7 @@ body.deckbuilder-page .deck-builder {
   background-color: transparent;
   color: rgb(229, 229, 229);
   padding: 7px;
-  height: auto;
+  height: 32px;
   width: 210px;
   border: 1px solid grey;
   margin: 0 5px;
@@ -1308,6 +1309,8 @@ body.deckbuilder-page .deck-builder {
 
 .era-buttons {
   display: flex;
+  height: 32px;
+  overflow: hidden;
 }
 
 .era-btn {
@@ -1330,7 +1333,7 @@ body.deckbuilder-page .deck-builder {
 
 .type-btn {
   background-color: transparent;
-  color: white;
+  color: rgb(240, 240, 240);
   padding: 7px;
   height: auto;
   min-width: 100px;
@@ -1388,14 +1391,12 @@ body.deckbuilder-page .deck-builder {
   align-items: flex-start;
   gap: 0.5rem 0.25px;
 }
-.filter-group .mechanics-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  flex: 1 1 auto;
-  min-width: 0;
-}
 .mechanics-buttons .mechanics-toggle { order: 999; }
+.mechanics-toggle {
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
 
 .flex-end {
   display: flex;
