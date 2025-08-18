@@ -416,6 +416,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('zacian-crowned');
         secondSprite  = getPokemonSpriteURL('snorlax');
     }               
+    else if (hasPokemon('Gardevoir ex') && hasPokemon('Jellicent ex')) {
+        firstSprite  = getPokemonSpriteURL('gardevoir');
+        secondSprite  = getPokemonSpriteURL('jellicent');
+    }               
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Archaludon ex')) {
         secondSprite  = getPokemonSpriteURL('archaludon');
     }               

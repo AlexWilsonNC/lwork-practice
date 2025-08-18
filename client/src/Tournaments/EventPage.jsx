@@ -1285,6 +1285,11 @@ const EventPage = () => {
             'zoroark'
         ];
     }
+    if (deckTypeCount['Gardevoir ex']) {
+        deckTypeCount['Gardevoir ex'].sprites = [
+            'gardevoir'
+        ];
+    }
     if (deckTypeCount['Darkrai']) {
         deckTypeCount['Darkrai'].sprites = [
             'darkrai'

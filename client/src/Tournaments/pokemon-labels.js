@@ -1,6 +1,7 @@
 const customLabelsConfig = {
     '2025': {
         'blank-gardevoir': 'Gardevoir ex',
+        'gardevoir-jellicent': 'Gardevoir ex',
         'chien-pao-baxcalibur': 'Chien-Pao Baxcalibur',
         'lugia-archeops': 'Lugia Archeops',
         'raging-bolt-ogerpon': 'Raging Bolt',
