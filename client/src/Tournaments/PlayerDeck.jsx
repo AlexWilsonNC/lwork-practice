@@ -45,7 +45,7 @@ const PlayerDeckCenter = styled.div`
 
 // NOTE: energy that are in their own set must now be ordered before and after each format
 const orderedSets = [
-  "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
+  "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
   "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
   "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
   "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
@@ -63,6 +63,8 @@ const orderedSets = [
 ];
 
 const promoSets = {
+    "BLK": "PR-SV",
+    "WHT": "PR-SV",
     "DRI": "PR-SV",
     "JTG": "PR-SV",
     "PRE": "PR-SV",

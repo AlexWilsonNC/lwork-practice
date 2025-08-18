@@ -8,6 +8,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  "SVI-BLK",
   "SVI-DRI",
   "SVI-JTG",
   "BRS-SCR",
@@ -339,6 +340,7 @@ const Decks = () => {
                 <option value="">All Formats</option>
 
                 <optgroup label="2025">
+                  <option value="SVI-BLK">SVI-BLK</option>
                   <option value="SVI-DRI">SVI-DRI</option>
                   <option value="SVI-JTG">SVI-JTG</option>
                   <option value="BRS-SCR">BRS-SCR</option>

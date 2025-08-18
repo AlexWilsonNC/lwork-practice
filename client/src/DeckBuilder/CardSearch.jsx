@@ -129,6 +129,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [visibleCount, setVisibleCount] = useState(PAGE);
     const listRootRef = useRef(null);
     const loadMoreRef = useRef(null);
+    const PREFILL_CAP = 100; // first batch size you want rendered
+    const [prefillCursor, setPrefillCursor] = useState(0);      // index into setOrder where we stopped
+    const [prefillHasMore, setPrefillHasMore] = useState(false); // there are more sets to scan
+    const prefillRunId = useRef(0);                              // cancels older prefill runs
+    const prefillControllers = useRef([]);
+    const prefillSetListRef = useRef(setOrder);
 
     const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'ace spec', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
@@ -326,55 +332,178 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         const cardTypes = getCardPokeTypes(card);
         return cardTypes.some(t => activeSet.has(t));
     }
-    async function prefillResultsForActiveFilters() {
-        if ((query || '').trim() !== '') return;
 
-        const hasMechanics = Object.values(filters.mechanics || {}).some(Boolean);
-        const hasTypes = Object.values(filters.supertypes || {}).some(Boolean);
-        const hasPokeTypes = Object.values(filters.pokeTypes || {}).some(Boolean);
-        if (!(hasMechanics || hasTypes || hasPokeTypes)) return;
+   function isAutoFilterActive() {
+  if ((query || '').trim() !== '') return false;
+  const f = filters;
+  return (
+    Object.values(f.mechanics || {}).some(Boolean) ||
+    Object.values(f.supertypes || {}).some(Boolean) ||
+    Object.values(f.pokeTypes || {}).some(Boolean) ||
+    Object.values(f.eras || {}).some(Boolean)       // ← enable era-only prefill
+  );
+}
 
-        const sig = JSON.stringify({
-            mech: filters.mechanics,
-            types: filters.supertypes,
-            poke: filters.pokeTypes
-        });
-        if (sig === lastAutoSig.current && results.length) return;
-        lastAutoSig.current = sig;
+    // Apply ALL current filters to a single card (early reject during prefill)
+    function cardPassesCurrentFilters(card) {
+        if (!inSelectedEras(card, filters.eras)) return false;
 
-        const setsToScan = setOrder;
+        const setsChecked = Object.values(filters.sets).some(Boolean);
+        if (setsChecked && !filters.sets[card.setAbbrev]) return false;
 
-        try {
-            const lists = await Promise.all(
-                setsToScan.map(code =>
-                    fetch(`/api/cards/${encodeURIComponent(code)}`)
-                        .then(r => (r.ok ? r.json() : []))
-                        .catch(() => [])
-                )
-            );
+        if (!matchesSelectedTypes(card, filters.supertypes)) return false;
+        if (!matchesSelectedMechanics(card, filters.mechanics)) return false;
+        if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) return false;
 
-            const byKey = new Map();
-            for (const list of lists) {
-                for (const c of Array.isArray(list) ? list : []) {
-                    const key = `${c.setAbbrev}|${c.number}`;
-                    if (!byKey.has(key)) byKey.set(key, c);
-                }
-            }
-            const arr = Array.from(byKey.values());
+        return true;
+    }
 
-            arr.sort((a, b) => {
-                const idxA = setOrder.indexOf(a.setAbbrev);
-                const idxB = setOrder.indexOf(b.setAbbrev);
-                if (idxA !== idxB) return idxA - idxB;
-                const numA = parseInt(a.number, 10) || 0;
-                const numB = parseInt(b.number, 10) || 0;
-                return numA - numB;
-            });
+    // Cancel any running prefill (called when query starts typing or filters change)
+    function cancelPrefill() {
+        prefillRunId.current += 1;
+        prefillControllers.current.forEach(c => { try { c.abort(); } catch { } });
+        prefillControllers.current = [];
+        setPrefillHasMore(false);
+    }
 
-            setResults(arr);
-            setSuppressDefault(true);
-        } catch {
+    const ERA_PATTERNS = {
+  SV1:   /^SV/i,
+  SSH1:  /^(SWSH|SSH)/i,
+  SM1:   /^SM/i,
+  XY1:   /^XY/i,
+  BW1:   /^BW/i,
+  HGSS1: /^(HS|UL|UD|TM|HGSS)/i,
+  DP1:   /^(DP|PL)/i,
+  RS1:   /^(EX|RS)/i,
+  WOTC:  /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])/i
+};
+
+// If these are selected, start with OLDER sets first.
+function preferOldestForCurrentFilters() {
+  const f = filters;
+  return !!(
+    f.mechanics?.['star'] ||
+    f.mechanics?.['legend'] ||
+    f.mechanics?.['delta species'] ||
+    f.mechanics?.['ancient trait'] ||
+    f.eras?.['HGSS1'] || f.eras?.['DP1'] || f.eras?.['RS1'] || f.eras?.['WOTC']
+  );
+}
+
+// Build the set list we’ll scan for prefill.
+function getSetsToScanForCurrentFilters() {
+  const activeEras = Object.keys(filters.eras || {}).filter(k => filters.eras[k]);
+  let list = setOrder;
+
+  if (activeEras.length) {
+    const regexes = activeEras.map(k => ERA_PATTERNS[k]).filter(Boolean);
+    const narrowed = setOrder.filter(code => regexes.some(rx => rx.test(code)));
+    if (narrowed.length) list = narrowed;
+  }
+
+  if (preferOldestForCurrentFilters()) list = list.slice().reverse(); // oldest → newest
+  return list;
+}
+
+async function prefillResultsForActiveFilters() {
+  if (!isAutoFilterActive()) return;
+
+  // cancel any older run and mark this one
+  cancelPrefill();
+  const runId = prefillRunId.current;
+
+  const sig = JSON.stringify({
+    mech: filters.mechanics,
+    types: filters.supertypes,
+    poke: filters.pokeTypes,
+    eras: filters.eras
+  });
+  if (sig === lastAutoSig.current && results.length) return;
+  lastAutoSig.current = sig;
+
+  // fresh start
+  setResults([]);
+  setPrefillCursor(0);
+  setPrefillHasMore(false);
+  setSuppressDefault(true);
+
+  const setsToScan = getSetsToScanForCurrentFilters();
+  prefillSetListRef.current = setsToScan;
+
+  let matches = [];
+  let cursor = 0;
+
+  while (cursor < setsToScan.length && matches.length < PREFILL_CAP) {
+    // abort if user starts typing or a new run began
+    if ((query || '').trim() !== '' || runId !== prefillRunId.current) return;
+
+    const code = setsToScan[cursor];
+    const ctrl = new AbortController();
+    prefillControllers.current.push(ctrl);
+
+    const list = await fetch(`/api/cards/${encodeURIComponent(code)}`, { signal: ctrl.signal })
+      .then(r => (r.ok ? r.json() : []))
+      .catch(() => []);
+
+    const before = matches.length;
+
+    const filtered = (Array.isArray(list) ? list : [])
+      .filter(cardPassesCurrentFilters)
+      .sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
+
+    if (filtered.length) {
+      matches = matches.concat(filtered);
+
+      // 👉 Stream partial results immediately (cap to PREFILL_CAP for consistency)
+      setResults(matches.slice(0, PREFILL_CAP));
+      // yield so the browser can paint immediately
+      await new Promise(requestAnimationFrame);
+    }
+
+    cursor += 1;
+  }
+
+  if (runId !== prefillRunId.current) return;
+
+  setPrefillCursor(cursor);
+  setPrefillHasMore(cursor < setsToScan.length);
+}
+
+    async function resumePrefill() {
+        if (!isAutoFilterActive()) return;
+
+        const runId = prefillRunId.current;  // continue the current run
+ const setsToScan = prefillSetListRef.current || setOrder;
+ let cursor = prefillCursor;
+        let acc = results.slice();           // start from what’s already shown
+        let added = 0;
+
+        while (cursor < setsToScan.length && added < PREFILL_CAP) {
+            if (!isAutoFilterActive() || runId !== prefillRunId.current) return;
+
+            const code = setsToScan[cursor];
+            const ctrl = new AbortController();
+            prefillControllers.current.push(ctrl);
+
+            const list = await fetch(`/api/cards/${encodeURIComponent(code)}`, { signal: ctrl.signal })
+                .then(r => (r.ok ? r.json() : []))
+                .catch(() => []);
+
+            const before = acc.length;
+            const filtered = (Array.isArray(list) ? list : [])
+                .filter(cardPassesCurrentFilters)
+                .sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
+
+            acc = acc.concat(filtered);
+            added += (acc.length - before);
+            cursor += 1;
         }
+
+        if (!isAutoFilterActive() || runId !== prefillRunId.current) return;
+
+        setResults(acc);
+        setPrefillCursor(cursor);
+        setPrefillHasMore(cursor < setsToScan.length);
     }
 
     function takeFirstMatching(arr, limit) {
@@ -520,7 +649,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     // }, [])
 
     useEffect(() => {
+        // Preload era and set images
+        const imgs = [
+            ...ERA_OPTIONS.map(o => o.src),
+            ...SET_OPTIONS.map(o => o.img),
+        ];
+        imgs.forEach(src => { const im = new Image(); im.src = src; });
+    }, []);
+
+    useEffect(() => {
         const trimmed = query.trim()
+
+        // typing should pre-empt any running prefill
+        if (trimmed !== '') cancelPrefill();
 
         if (trimmed === '') {
             if (suppressDefault) setResults([])
@@ -638,7 +779,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     useEffect(() => {
         const t = setTimeout(() => { prefillResultsForActiveFilters(); }, 150);
         return () => clearTimeout(t);
-    }, [filters.mechanics, filters.supertypes, filters.pokeTypes, query]);
+    }, [filters.mechanics, filters.supertypes, filters.pokeTypes, filters.eras, query]);
 
     const { items: displayResults, hasMore } = React.useMemo(() => {
         return takeFirstMatching(results, visibleCount);
@@ -963,7 +1104,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         setQuery(e.target.value)
                                     }}
                                 />
-                                {/* {query && (
+                                {query && (
                                     <button
                                         type="button"
                                         className={`clear-input-btn ${query ? '' : 'is-hidden'}`}
@@ -974,7 +1115,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         }}
                                         aria-label="Clear search"
                                     >×</button>
-                                )} */}
+                                )}
                                 <button
                                     type="button"
                                     id="search-reset"
@@ -984,7 +1125,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         setResults([])
                                     }}
                                 >
-                                    <span className="material-symbols-outlined">autorenew</span>
+                                    {/* <span className="material-symbols-outlined">autorenew</span> */}
                                 </button>
                                 {/* <span className="material-symbols-outlined search-mag">search</span> */}
                             </div>
@@ -1035,6 +1176,16 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 </div>
                             ))}
                             {hasMore && <div ref={loadMoreRef} className="infinite-sentinel" aria-hidden="true" />}
+                            {(query.trim() === '' && prefillHasMore) && (
+                                <button
+                                    type="button"
+                                    className="show-more-cards"
+                                    onClick={resumePrefill}
+                                    style={{ margin: '12px auto', display: 'block' }}
+                                >
+                                    Show more
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
