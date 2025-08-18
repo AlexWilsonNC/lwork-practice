@@ -271,48 +271,42 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     setShowSuccess(true)
   }
 
-  const copyJson = () => {
-    const pokemon = deck
-      .filter(c => c.supertype === 'Pokémon')
-      .map(({ count, name, setAbbrev, number }) => ({
-        count,
-        name,
-        set: setAbbrev,
-        number
-      }))
+const copyJson = () => {
+  const pokemon = deck
+    .filter(c => c.supertype === 'Pokémon')
+    .map(({ count, name, setAbbrev, set, number }) => ({
+      count,
+      name,
+      set: setAbbrev || set, // fallback just in case
+      number
+    }));
 
-    const trainer = deck
-      .filter(c => c.supertype === 'Trainer')
-      .map(({ count, name, setAbbrev, number }) => ({
-        count,
-        name,
-        set: setAbbrev,
-        number
-      }))
+  const trainer = deck
+    .filter(c => c.supertype === 'Trainer')
+    .map(({ count, name, setAbbrev, set, number }) => ({
+      count,
+      name,
+      set: setAbbrev || set,
+      number
+    }));
 
-    const energy = deck
-      .filter(c => c.supertype === 'Energy')
-      .map(({ count, name, setAbbrev, number }) => ({
-        count,
-        name,
-        set: setAbbrev,
-        number
-      }))
+  const energy = deck
+    .filter(c => c.supertype === 'Energy')
+    .map(({ count, name, setAbbrev, set, number }) => ({
+      count,
+      name,
+      set: setAbbrev || set,
+      number
+    }));
 
-    const output = {
-      decklist: {
-        pokemon,
-        trainer,
-        energy
-      }
-    }
+  const decklist = { pokemon, trainer, energy };
 
-    navigator.clipboard.writeText(
-      JSON.stringify(output, null, 2)
-    )
-    setShowCopyMenu(false)
-    setShowSuccess(true)
-  }
+  const text = `"decklist": ${JSON.stringify(decklist, null, 2)}`;
+
+  navigator.clipboard.writeText(text);
+  setShowCopyMenu(false);
+  setShowSuccess(true);
+};
 
   const shareLink = () => {
     const minimal = deck.map(c => ({

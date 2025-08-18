@@ -646,18 +646,18 @@ export default function DeckBuilder() {
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
-        {/* <title>{isFeatured ? `${formatName(playerData.name)}'s Featured Deck` : `${formatName(playerData.name)}'s Decklist`}</title>
-            <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta property="og:title" content={eventData.name} />
-            <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta property="og:image" content={eventData.thumbnail} />
-            <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
-            <meta property="og:type" content="website" />
-            <meta name="author" content="PTCG Legends" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={eventData.name} />
-            <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-            <meta name="twitter:image" content={eventData.thumbnail} /> */}
+        <title>Deck Builder</title>
+            {/* <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+            {/* <meta property="og:title" content={eventData.name} /> */}
+            {/* <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+            {/* <meta property="og:image" content={eventData.thumbnail} /> */}
+            {/* <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} /> */}
+            {/* <meta property="og:type" content="website" /> */}
+            {/* <meta name="author" content="PTCG Legends" /> */}
+            {/* <meta name="twitter:card" content="summary_large_image" /> */}
+            {/* <meta name="twitter:title" content={eventData.name} /> */}
+            {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+            {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
       </Helmet>
       {exportingImage && (
         <div className="image-export-overlay">
