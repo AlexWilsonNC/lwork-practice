@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+// GREAT SPOT!
 import setOrder from '../Tournaments/setorder'
 import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
@@ -124,17 +125,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const toggleBtnRef = useRef(null);
     const [searchMode, setSearchMode] = useState('name');
     const latestReqId = useRef(0);
-    const lastAutoSig = useRef('');
-    const PAGE = 40;
-    const [visibleCount, setVisibleCount] = useState(PAGE);
-    const listRootRef = useRef(null);
-    const loadMoreRef = useRef(null);
-    const PREFILL_CAP = 100; // first batch size you want rendered
-    const [prefillCursor, setPrefillCursor] = useState(0);      // index into setOrder where we stopped
-    const [prefillHasMore, setPrefillHasMore] = useState(false); // there are more sets to scan
-    const prefillRunId = useRef(0);                              // cancels older prefill runs
-    const prefillControllers = useRef([]);
-    const prefillSetListRef = useRef(setOrder);
+    const skipNextQueryEffectRef = useRef(false);
 
     const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'ace spec', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
@@ -151,15 +142,36 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { key: 'WOTC', name: 'Wizards of the Coast', src: wotc }
     ];
     const SERIES_TO_ERA = {
+        // modern
         'scarlet & violet': 'SV1',
+        'scarlet and violet': 'SV1',
+
         'sword & shield': 'SSH1',
+        'sword and shield': 'SSH1',
+
         'sun & moon': 'SM1',
+        'sun and moon': 'SM1',
+
         'xy': 'XY1',
+
         'black & white': 'BW1',
+        'black and white': 'BW1',
+
         'heartgold & soulsilver': 'HGSS1',
+        'heartgold and soulsilver': 'HGSS1',
+        'heartgold soulsilver': 'HGSS1',
+
+        // DP era (treat “Platinum” series as part of the DP era selection, as you wanted)
         'diamond & pearl': 'DP1',
+        'diamond and pearl': 'DP1',
+        'diamond pearl': 'DP1',
         'platinum': 'DP1',
+
+        // EX era
         'ex': 'RS1',
+        'ex series': 'RS1',
+
+        // WotC era families
         'base': 'WOTC',
         'jungle': 'WOTC',
         'fossil': 'WOTC',
@@ -167,26 +179,47 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         'neo': 'WOTC',
         'legendary collection': 'WOTC',
         'e-card': 'WOTC',
+        'ecard': 'WOTC',
     };
     const SET_OPTIONS = [
         { key: 'SV4', name: 'Paradox Rift', img: sv4Img, css: 'paradox-rift' },
         { key: 'SV1', name: 'Scarlet & Violet', img: sv1, css: 'scarlet-violet' },
     ]
+
     function inSelectedEras(card, eras) {
         const activeEraKeys = Object.keys(eras).filter(k => eras[k]);
         if (activeEraKeys.length === 0) return true;
 
         const series = getCardSeries(card);
-        const eraKey = SERIES_TO_ERA[series] || null;
+        const eraFromSeries = SERIES_TO_ERA[series] || null;
+        if (eraFromSeries && activeEraKeys.includes(eraFromSeries)) return true;
 
-        if (!eraKey) return false;
+        const abbr = (card.setAbbrev || '').toString();
+        for (const eraKey of activeEraKeys) {
+            const rx = ERA_PATTERNS[eraKey];
+            if (rx && rx.test(abbr)) return true;
+        }
 
-        return activeEraKeys.includes(eraKey);
+        return false;
+    }
+
+    function anyFilterActive(filters) {
+        return (
+            Object.values(filters.supertypes || {}).some(Boolean) ||
+            Object.values(filters.sets || {}).some(Boolean) ||
+            Object.values(filters.eras || {}).some(Boolean) ||
+            Object.values(filters.mechanics || {}).some(Boolean) ||
+            Object.values(filters.pokeTypes || {}).some(Boolean)
+        );
     }
 
     function getCardSeries(card) {
-        const s =
-            (card.setSeries ?? card.series ?? card.set?.series ?? '').toString().trim().toLowerCase();
+        let s = (card.setSeries ?? card.series ?? card.set?.series ?? '')
+            .toString()
+            .trim()
+            .toLowerCase();
+
+        s = s.replace(/&/g, 'and').replace(/\s+/g, ' ').trim();
         return s;
     }
 
@@ -221,7 +254,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             : typeof card.rules === 'string' ? [card.rules] : [];
         if (rules.some(r => N(r).includes('ancient trait'))) return true;
         const nm = card.name || '';
-        if (/[αθω]/i.test(nm)) return true; // Alpha/Theta/Omega markers
+        if (/[αθω]/i.test(nm)) return true;
         return false;
     }
 
@@ -333,182 +366,37 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return cardTypes.some(t => activeSet.has(t));
     }
 
-   function isAutoFilterActive() {
-  if ((query || '').trim() !== '') return false;
-  const f = filters;
-  return (
-    Object.values(f.mechanics || {}).some(Boolean) ||
-    Object.values(f.supertypes || {}).some(Boolean) ||
-    Object.values(f.pokeTypes || {}).some(Boolean) ||
-    Object.values(f.eras || {}).some(Boolean)       // ← enable era-only prefill
-  );
-}
-
-    // Apply ALL current filters to a single card (early reject during prefill)
-    function cardPassesCurrentFilters(card) {
-        if (!inSelectedEras(card, filters.eras)) return false;
-
-        const setsChecked = Object.values(filters.sets).some(Boolean);
-        if (setsChecked && !filters.sets[card.setAbbrev]) return false;
-
-        if (!matchesSelectedTypes(card, filters.supertypes)) return false;
-        if (!matchesSelectedMechanics(card, filters.mechanics)) return false;
-        if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) return false;
-
-        return true;
-    }
-
-    // Cancel any running prefill (called when query starts typing or filters change)
-    function cancelPrefill() {
-        prefillRunId.current += 1;
-        prefillControllers.current.forEach(c => { try { c.abort(); } catch { } });
-        prefillControllers.current = [];
-        setPrefillHasMore(false);
-    }
-
     const ERA_PATTERNS = {
-  SV1:   /^SV/i,
-  SSH1:  /^(SWSH|SSH)/i,
-  SM1:   /^SM/i,
-  XY1:   /^XY/i,
-  BW1:   /^BW/i,
-  HGSS1: /^(HS|UL|UD|TM|HGSS)/i,
-  DP1:   /^(DP|PL)/i,
-  RS1:   /^(EX|RS)/i,
-  WOTC:  /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])/i
-};
+        // Scarlet & Violet
+        SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR)/i,
 
-// If these are selected, start with OLDER sets first.
-function preferOldestForCurrentFilters() {
-  const f = filters;
-  return !!(
-    f.mechanics?.['star'] ||
-    f.mechanics?.['legend'] ||
-    f.mechanics?.['delta species'] ||
-    f.mechanics?.['ancient trait'] ||
-    f.eras?.['HGSS1'] || f.eras?.['DP1'] || f.eras?.['RS1'] || f.eras?.['WOTC']
-  );
-}
+        // Sword & Shield
+        SSH1: /^(SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|FST|BRS|ASR|LOR|SIT|CRZ)/i,
 
-// Build the set list we’ll scan for prefill.
-function getSetsToScanForCurrentFilters() {
-  const activeEras = Object.keys(filters.eras || {}).filter(k => filters.eras[k]);
-  let list = setOrder;
+        // Sun & Moon
+        SM1: /^(SM|SUM|GRI|BUS|CIN|UPR|FLI|CES|LOT|TEU|UNB|UNM|CEC|DRM|HIF|DET|TM)/i,
 
-  if (activeEras.length) {
-    const regexes = activeEras.map(k => ERA_PATTERNS[k]).filter(Boolean);
-    const narrowed = setOrder.filter(code => regexes.some(rx => rx.test(code)));
-    if (narrowed.length) list = narrowed;
-  }
+        // XY
+        XY1: /^(XY|FLF|FFI|PHF|PRC|ROS|AOR|BKT|BKP|FCO|STS|EVO|GEN)/i,
 
-  if (preferOldestForCurrentFilters()) list = list.slice().reverse(); // oldest → newest
-  return list;
-}
+        // Black & White
+        BW1: /^(BW|NVI|EPO|DEX|DRX|BCR|PLS|PLF|PLB|LTR)/i,
 
-async function prefillResultsForActiveFilters() {
-  if (!isAutoFilterActive()) return;
+        // HeartGold & SoulSilver
+        HGSS1: /^(HGSS|HS|UL|UD|TM|CL)/i,
 
-  // cancel any older run and mark this one
-  cancelPrefill();
-  const runId = prefillRunId.current;
+        // Diamond & Pearl (+ Platinum)
+        DP1: /^(DP|MT|SW|GE|MD|LA|SF|PL)/i,
 
-  const sig = JSON.stringify({
-    mech: filters.mechanics,
-    types: filters.supertypes,
-    poke: filters.pokeTypes,
-    eras: filters.eras
-  });
-  if (sig === lastAutoSig.current && results.length) return;
-  lastAutoSig.current = sig;
+        // EX (ADV/RS era)
+        RS1: /^(RS|SS|DR|MA|HL|TRR|DX|EM|UF|DS|LM|HP|CG|DF|PK)/i,
 
-  // fresh start
-  setResults([]);
-  setPrefillCursor(0);
-  setPrefillHasMore(false);
-  setSuppressDefault(true);
+        // Wizards of the Coast
+        WOTC: /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])\/?/i
+    };
 
-  const setsToScan = getSetsToScanForCurrentFilters();
-  prefillSetListRef.current = setsToScan;
-
-  let matches = [];
-  let cursor = 0;
-
-  while (cursor < setsToScan.length && matches.length < PREFILL_CAP) {
-    // abort if user starts typing or a new run began
-    if ((query || '').trim() !== '' || runId !== prefillRunId.current) return;
-
-    const code = setsToScan[cursor];
-    const ctrl = new AbortController();
-    prefillControllers.current.push(ctrl);
-
-    const list = await fetch(`/api/cards/${encodeURIComponent(code)}`, { signal: ctrl.signal })
-      .then(r => (r.ok ? r.json() : []))
-      .catch(() => []);
-
-    const before = matches.length;
-
-    const filtered = (Array.isArray(list) ? list : [])
-      .filter(cardPassesCurrentFilters)
-      .sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
-
-    if (filtered.length) {
-      matches = matches.concat(filtered);
-
-      // 👉 Stream partial results immediately (cap to PREFILL_CAP for consistency)
-      setResults(matches.slice(0, PREFILL_CAP));
-      // yield so the browser can paint immediately
-      await new Promise(requestAnimationFrame);
-    }
-
-    cursor += 1;
-  }
-
-  if (runId !== prefillRunId.current) return;
-
-  setPrefillCursor(cursor);
-  setPrefillHasMore(cursor < setsToScan.length);
-}
-
-    async function resumePrefill() {
-        if (!isAutoFilterActive()) return;
-
-        const runId = prefillRunId.current;  // continue the current run
- const setsToScan = prefillSetListRef.current || setOrder;
- let cursor = prefillCursor;
-        let acc = results.slice();           // start from what’s already shown
-        let added = 0;
-
-        while (cursor < setsToScan.length && added < PREFILL_CAP) {
-            if (!isAutoFilterActive() || runId !== prefillRunId.current) return;
-
-            const code = setsToScan[cursor];
-            const ctrl = new AbortController();
-            prefillControllers.current.push(ctrl);
-
-            const list = await fetch(`/api/cards/${encodeURIComponent(code)}`, { signal: ctrl.signal })
-                .then(r => (r.ok ? r.json() : []))
-                .catch(() => []);
-
-            const before = acc.length;
-            const filtered = (Array.isArray(list) ? list : [])
-                .filter(cardPassesCurrentFilters)
-                .sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
-
-            acc = acc.concat(filtered);
-            added += (acc.length - before);
-            cursor += 1;
-        }
-
-        if (!isAutoFilterActive() || runId !== prefillRunId.current) return;
-
-        setResults(acc);
-        setPrefillCursor(cursor);
-        setPrefillHasMore(cursor < setsToScan.length);
-    }
-
-    function takeFirstMatching(arr, limit) {
+    function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
-        let taken = 0;
 
         for (let i = 0; i < arr.length; i++) {
             const card = arr[i];
@@ -523,31 +411,45 @@ async function prefillResultsForActiveFilters() {
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
 
             out.push(card);
-            taken++;
-            if (taken >= limit) {
-                return { items: out, hasMore: true };
-            }
+        }
+
+        // --- Unified sort: newest set first (per setOrder), then card number ascending
+        const setIdx = (abbr) => {
+            const i = setOrder.indexOf(abbr);
+            return i === -1 ? Number.MAX_SAFE_INTEGER : i; // unknown sets go last
+        };
+        out.sort((a, b) => {
+            const ia = setIdx(a.setAbbrev);
+            const ib = setIdx(b.setAbbrev);
+            if (ia !== ib) return ia - ib;
+            const na = parseInt(a.number, 10) || 0;
+            const nb = parseInt(b.number, 10) || 0;
+            return na - nb;
+        });
+
+        if (out.length > limit) {
+            return { items: out.slice(0, limit), hasMore: true };
         }
         return { items: out, hasMore: false };
     }
 
-    const [showAdvanced, setShowAdvanced] = useState(false)
-    const [filters, setFilters] = useState({
-        supertypes: { Pokémon: false, Trainer: false, Energy: false },
+    const [showAdvanced, setShowAdvanced] = useState(false);
+
+    const emptyFilters = React.useMemo(() => ({
+        supertypes: {},
         sets: {},
         eras: ERA_OPTIONS.reduce((acc, e) => ({ ...acc, [e.key]: false }), {}),
         mechanics: {},
         pokeTypes: {}
-    })
-    const resetAdvancedFilters = React.useCallback(() => {
-        setFilters({
-            supertypes: {},
-            sets: {},
-            eras: ERA_OPTIONS.reduce((acc, e) => ({ ...acc, [e.key]: false }), {}),
-            mechanics: {},
-            pokeTypes: {}
-        });
-    }, []);
+    }), [ERA_OPTIONS]);
+
+    const [filters, setFilters] = useState(emptyFilters);
+
+    const [draftFilters, setDraftFilters] = useState(emptyFilters);
+
+    const resetDraftAdvancedFilters = React.useCallback(() => {
+        setDraftFilters(emptyFilters);
+    }, [emptyFilters]);
 
     const toggleSet = key => {
         setFilters(f => ({
@@ -649,7 +551,6 @@ async function prefillResultsForActiveFilters() {
     // }, [])
 
     useEffect(() => {
-        // Preload era and set images
         const imgs = [
             ...ERA_OPTIONS.map(o => o.src),
             ...SET_OPTIONS.map(o => o.img),
@@ -658,10 +559,11 @@ async function prefillResultsForActiveFilters() {
     }, []);
 
     useEffect(() => {
+        if (skipNextQueryEffectRef.current) {
+        skipNextQueryEffectRef.current = false;
+        return;
+    }
         const trimmed = query.trim()
-
-        // typing should pre-empt any running prefill
-        if (trimmed !== '') cancelPrefill();
 
         if (trimmed === '') {
             if (suppressDefault) setResults([])
@@ -776,36 +678,9 @@ async function prefillResultsForActiveFilters() {
         return () => clearTimeout(t)
     }, [query, defaultCards, searchMode])
 
-    useEffect(() => {
-        const t = setTimeout(() => { prefillResultsForActiveFilters(); }, 150);
-        return () => clearTimeout(t);
-    }, [filters.mechanics, filters.supertypes, filters.pokeTypes, filters.eras, query]);
-
-    const { items: displayResults, hasMore } = React.useMemo(() => {
-        return takeFirstMatching(results, visibleCount);
-    }, [results, filters, visibleCount]);
-
-    useEffect(() => {
-        const root = listRootRef.current;
-        const target = loadMoreRef.current;
-        if (!root || !target) return;
-
-        const io = new IntersectionObserver(
-            entries => {
-                if (entries.some(e => e.isIntersecting)) {
-                    setVisibleCount(c => c + PAGE);
-                }
-            },
-            { root, rootMargin: '400px 0px 400px 0px', threshold: 0.01 }
-        );
-
-        io.observe(target);
-        return () => io.disconnect();
-    }, [hasMore]);
-
-    useEffect(() => {
-        setVisibleCount(PAGE);
-    }, [query, searchMode, filters]);
+    const { items: displayResults } = React.useMemo(() => {
+        return takeFirstMatching(results);
+    }, [results, filters]);
 
     useEffect(() => {
         const btn = toggleBtnRef.current;
@@ -871,7 +746,10 @@ async function prefillResultsForActiveFilters() {
                 >
                     <button
                         className="advanced-search-button"
-                        onClick={() => setShowAdvanced(true)}
+                        onClick={() => {
+                            setDraftFilters(filters);
+                            setShowAdvanced(true);
+                        }}
                     style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
@@ -898,9 +776,9 @@ async function prefillResultsForActiveFilters() {
                                             <button
                                                 key={key}
                                                 type="button"
-                                                className={`era-btn ${filters.eras[key] ? 'active' : ''}`}
+                                                className={`era-btn ${draftFilters.eras[key] ? 'active' : ''}`}
                                                 onClick={() =>
-                                                    setFilters(f => ({
+                                                    setDraftFilters(f => ({
                                                         ...f,
                                                         eras: {
                                                             ...f.eras,
@@ -939,7 +817,7 @@ async function prefillResultsForActiveFilters() {
                                                         <button
                                                             key={key}
                                                             type="button"
-                                                            className={`set-cube ${css} ${filters.sets[key] ? 'darkon' : ''}`}
+                                                            className={`set-cube ${css} ${draftFilters.sets[key] ? 'darkon' : ''}`}
                                                             onClick={() => toggleSet(key)}
                                                         >
                                                             <p>
@@ -971,10 +849,10 @@ async function prefillResultsForActiveFilters() {
                                             <button
                                                 key={type}
                                                 type="button"
-                                                className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
+                                                className={`type-btn ${draftFilters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
                                                 style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
                                                 onClick={() => {
-                                                    setFilters(f => ({
+                                                    setDraftFilters(f => ({
                                                         ...f,
                                                         supertypes: {
                                                             ...f.supertypes,
@@ -994,10 +872,10 @@ async function prefillResultsForActiveFilters() {
                                             <button
                                                 key={type}
                                                 type="button"
-                                                className={`type-btn ${filters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
+                                                className={`type-btn ${draftFilters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
                                                 style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
                                                 onClick={() => {
-                                                    setFilters(f => ({
+                                                    setDraftFilters(f => ({
                                                         ...f,
                                                         supertypes: {
                                                             ...f.supertypes,
@@ -1021,12 +899,12 @@ async function prefillResultsForActiveFilters() {
                                             <button
                                                 key={key}
                                                 type="button"
-                                                className={`type-btn ${filters.mechanics[key] ? 'active' : ''}`}
+                                                className={`type-btn ${draftFilters.mechanics[key] ? 'active' : ''}`}
                                                 style={{
                                                     '--typeIcon': MECH_BG[key] ? `url("${MECH_BG[key]}")` : 'none'
                                                 }}
                                                 onClick={() => {
-                                                    setFilters(f => ({
+                                                    setDraftFilters(f => ({
                                                         ...f,
                                                         mechanics: { ...f.mechanics, [key]: !f.mechanics[key] }
                                                     }));
@@ -1036,18 +914,6 @@ async function prefillResultsForActiveFilters() {
                                                 {label}
                                             </button>
                                         ))}
-                                        <button
-                                            type="button"
-                                            className="type-btn mechanics-toggle"
-                                            style={{ '--typeIcon': 'none' }}
-                                            onClick={() => setShowMoreMechs(v => !v)}
-                                            aria-expanded={showMoreMechs}
-                                        >
-                                            <span className="toggle-label">{showMoreMechs ? 'Show less' : 'Show more'}</span>
-                                            <span className="material-symbols-outlined" aria-hidden="true">
-                                                {showMoreMechs ? 'expand_less' : 'expand_more'}
-                                            </span>
-                                        </button>
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -1057,10 +923,10 @@ async function prefillResultsForActiveFilters() {
                                             <button
                                                 key={key}
                                                 type="button"
-                                                className={`type-btn ${filters.pokeTypes[key] ? 'active' : ''}`}
+                                                className={`type-btn ${draftFilters.pokeTypes[key] ? 'active' : ''}`}
                                                 style={{ '--typeIcon': `url("${img}")` }}
                                                 onClick={() => {
-                                                    setFilters(f => ({
+                                                    setDraftFilters(f => ({
                                                         ...f,
                                                         pokeTypes: { ...f.pokeTypes, [key]: !f.pokeTypes[key] }
                                                     }));
@@ -1074,11 +940,68 @@ async function prefillResultsForActiveFilters() {
                                     </div>
                                 </div>
                                 <div className="buttons-row-modal flex-end">
-                                    <button className='cancel-button' onClick={resetAdvancedFilters}>
+                                    <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
                                         Reset
                                     </button>
-                                    <button className='save-button' onClick={() => setShowAdvanced(false)}>
+                                    <button
+                                        className='save-button'
+                                        onClick={() => {
+                                            const noneActive =
+                                                !Object.values(draftFilters.supertypes || {}).some(Boolean) &&
+                                                !Object.values(draftFilters.sets || {}).some(Boolean) &&
+                                                !Object.values(draftFilters.eras || {}).some(Boolean) &&
+                                                !Object.values(draftFilters.mechanics || {}).some(Boolean) &&
+                                                !Object.values(draftFilters.pokeTypes || {}).some(Boolean);
+
+                                            setFilters(draftFilters);
+                                            setShowAdvanced(false);
+
+                                            if (noneActive) {
+                                                setResults([]);
+                                                setQuery('');
+                                                setSuppressDefault(true);
+                                            }
+                                        }}
+                                    >
                                         Apply
+                                    </button>
+                                    <button
+                                        className='save-button'
+                                        style={{ marginLeft: 8, backgroundImage: 'linear-gradient(to bottom right, grey, green)' }}
+                                        disabled={!anyFilterActive(draftFilters)}
+                                        onClick={async () => {
+                                            try {
+                                                setFilters(draftFilters);
+
+                                                const payload = {
+                                                    filters: {
+                                                        supertypes: draftFilters.supertypes || {},
+                                                        sets: draftFilters.sets || {},
+                                                        eras: draftFilters.eras || {},
+                                                        mechanics: draftFilters.mechanics || {},
+                                                        pokeTypes: draftFilters.pokeTypes || {}
+                                                    }
+                                                };
+
+                                                const resp = await fetch('/api/cards/filter-search', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify(payload)
+                                                });
+
+                                                const list = resp.ok ? await resp.json() : [];
+                                                skipNextQueryEffectRef.current = true;
+                                                setSuppressDefault(true);
+                                                setQuery('');
+                                                setResults(Array.isArray(list) ? list : []);
+                                                setShowAdvanced(false);
+                                            } catch (e) {
+                                                console.error('Search all failed:', e);
+                                            }
+                                        }}
+                                        title="Fetch and show all cards that match your filters"
+                                    >
+                                        Search all
                                     </button>
                                 </div>
                             </div>
@@ -1131,15 +1054,18 @@ async function prefillResultsForActiveFilters() {
                             </div>
                             <button
                                 className="advanced-search-button-small"
-                                onClick={() => setShowAdvanced(true)}
-                            style={{ pointerEvents: 'none' }}
+                                onClick={() => {
+                                    setDraftFilters(filters);
+                                    setShowAdvanced(true);
+                                }}
+                                style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>
                             </button>
                         </div>
                     </div>
-                    <div className="all-cards-container" ref={listRootRef}>
+                    <div className="all-cards-container">
                         <div className='all-cards-displayed'>
                             {displayResults.map(card => (
                                 <div
@@ -1175,17 +1101,6 @@ async function prefillResultsForActiveFilters() {
                                     ></button>
                                 </div>
                             ))}
-                            {hasMore && <div ref={loadMoreRef} className="infinite-sentinel" aria-hidden="true" />}
-                            {(query.trim() === '' && prefillHasMore) && (
-                                <button
-                                    type="button"
-                                    className="show-more-cards"
-                                    onClick={resumePrefill}
-                                    style={{ margin: '12px auto', display: 'block' }}
-                                >
-                                    Show more
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>

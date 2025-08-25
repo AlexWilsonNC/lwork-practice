@@ -31,6 +31,7 @@ const customLabelsConfig = {
         'gholdengo-palkia-origin': 'Gholdengo',
         'gholdengo-scizor': 'Gholdengo Scizor',
         'gholdengo-dragapult': 'Gholdengo Dragapult',
+        'gholdengo-joltik': 'Gholdengo',
         'dragapult-xatu': 'Dragapult Xatu',
         'dialga-origin-metang': 'Dialga VSTAR',
         'roaring-moon-koraidon': 'Ancient Box',

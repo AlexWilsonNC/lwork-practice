@@ -939,6 +939,309 @@ app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
   }
 });
 
+app.post('/api/cards/filter-search', async (req, res) => {
+  try {
+    const { filters = {} } = req.body || {};
+    const {
+      supertypes = {},  // e.g., { 'Pokémon': true, Trainer: false, Energy: false }
+      sets = {},        // e.g., { SV4: true, SV1: true }
+      eras = {},        // e.g., { SV1: true, SSH1: false, ... }
+      mechanics = {},   // e.g., { ex: true, v: true, 'ace spec': false, ... }
+      pokeTypes = {},   // e.g., { grass: true, fire: true, ... }
+    } = filters;
+
+    const cards = cardConnection.collection('card-database');
+
+    const and = [];
+
+    const setAllowList = [];
+const setsChecked = Object.values(sets || {}).some(Boolean);
+
+if (setsChecked) {
+  for (const [code, on] of Object.entries(sets || {})) {
+    if (on) setAllowList.push(code);
+  }
+} else {
+  const ERA_TO_SET_CODES = {
+        SV1: [
+          "BLK",
+          "WHT",
+          "DRI",
+          "JTG",
+          "PRE",
+          "SSP",
+          "SCR",
+          "SFA",
+          "TWM",
+          "TEF",
+          "PAF",
+          "PAR",
+          "MEW",
+          "OBF",
+          "PAL",
+          "SVE",
+          "SVI",
+          "PR-SV"
+        ],
+        SSH1: [
+          "CRZ",
+          "SIT",
+          "LOR",
+          "PGO",
+          "ASR",
+          "BRS",
+          "FST",
+          "CEL",
+          "EVS",
+          "CRE",
+          "BST",
+          "SHF",
+          "VIV",
+          "CPA",
+          "DAA",
+          "RCL",
+          "SSH",
+          "PR-SW"
+        ],
+        SM1: [
+          "CEC",
+          "HIF",
+          "UNM",
+          "UNB",
+          "DPI",
+          "TEU",
+          "LOT",
+          "DRM",
+          "CES",
+          "FLI",
+          "UPR",
+          "CIN",
+          "SLG",
+          "BUS",
+          "GRI",
+          "SUM",
+          "PR-SM"
+        ],
+        XY1: [
+          "EVO",
+          "STS",
+          "FCO",
+          "GEN",
+          "BKP",
+          "BKT",
+          "AOR",
+          "ROS",
+          "DCE",
+          "PRC",
+          "PHF",
+          "FFI",
+          "FLF",
+          "XY",
+          "KSS",
+          "PR-XY"
+        ],
+        BW1: [
+          "LTR",
+          "PLB",
+          "PLF",
+          "PLS",
+          "BCR",
+          "DRX",
+          "DEX",
+          "NXD",
+          "NVI",
+          "EPO",
+          "BLW",
+          "DRV",
+          "PR-BLW"
+        ],
+        HGSS1: [
+          "CL",
+          "TM",
+          "UD",
+          "UL",
+          "HS",
+          "RM",
+          "PR-HS"
+        ],
+        DP1: [
+          "AR",
+          "SV",
+          "RR",
+          "P9",
+          "PL",
+          "SF",
+          "P8",
+          "LA",
+          "MD",
+          "P7",
+          "GE",
+          "SW",
+          "P6",
+          "MT",
+          "DP",
+          "P5",
+          "PR-DP"
+        ],
+        RS1: [
+          "PK",
+          "DF",
+          "CG",
+          "P4",
+          "HP",
+          "P3",
+          "TK2",
+          "LM",
+          "DS",
+          "P2",
+          "UF",
+          "EM",
+          "DX",
+          "TRR",
+          "P1",
+          "FL",
+          "HL",
+          "TK1",
+          "MA",
+          "DR",
+          "SS",
+          "RS",
+          "PR-EX"
+        ],
+        WOTC: [
+          "SK",
+          "AQ",
+          "EX",
+          "N4",
+          "N3",
+          "SI",
+          "N2",
+          "N1",
+          "G2",
+          "G1",
+          "LC",
+          "TR",
+          "B2",
+          "FO",
+          "JU",
+          "BS",
+          "PR-BS"
+        ]
+      };
+
+       const selectedEras = Object.entries(eras || {})
+    .filter(([, on]) => !!on)
+    .map(([k]) => k);
+
+  if (selectedEras.length) {
+    for (const eraKey of selectedEras) {
+      const codes = ERA_TO_SET_CODES[eraKey];
+      if (Array.isArray(codes)) setAllowList.push(...codes);
+    }
+  }
+}
+
+if (setAllowList.length) {
+  and.push({ setAbbrev: { $in: setAllowList } });
+}
+
+    const superOn = Object.entries(supertypes).filter(([, on]) => !!on).map(([k]) => k);
+    if (superOn.length) {
+      const mapSuper = s => {
+        const x = (s || '').toLowerCase();
+        if (x.startsWith('pok')) return 'Pokémon';
+        return s;
+      };
+      and.push({ supertype: { $in: superOn.map(mapSuper) } });
+    }
+
+    const mechOn = Object.entries(mechanics).filter(([, on]) => !!on).map(([k]) => k);
+    if (mechOn.length) {
+      const mechOr = [];
+      for (const m of mechOn) {
+        switch (m) {
+          case 'ex':
+            mechOr.push({ subtypes: /ex/i });
+            break;
+          case 'v':
+            mechOr.push({ subtypes: /v($|[^a-z])/i });
+            mechOr.push({ subtypes: /vmax/i });
+            mechOr.push({ subtypes: /vstar/i });
+            mechOr.push({ subtypes: /v-union/i });
+            break;
+          case 'gx':
+            mechOr.push({ subtypes: /gx/i });
+            break;
+          case 'ace spec':
+            mechOr.push({ subtypes: /ace spec/i });
+            break;
+          case 'prism':
+            mechOr.push({ subtypes: /prism star/i });
+            mechOr.push({ name: /[♢◆]/ });
+            break;
+          case 'star': // Gold Star
+            mechOr.push({ subtypes: /star/i });
+            mechOr.push({ name: /★/ });
+            break;
+          case 'fusion strike':
+            mechOr.push({ subtypes: /fusion strike/i });
+            break;
+          case 'rapid strike':
+            mechOr.push({ subtypes: /rapid strike/i });
+            break;
+          case 'single strike':
+            mechOr.push({ subtypes: /single strike/i });
+            break;
+          case 'mega':
+            mechOr.push({ subtypes: /mega/i });
+            break;
+          case 'ancient trait':
+            mechOr.push({ rules: /ancient trait/i });
+            mechOr.push({ name: /[αθω]/i });
+            break;
+          case 'legend':
+            mechOr.push({ subtypes: /legend/i });
+            break;
+          case 'delta species':
+            mechOr.push({ name: /δ/ });
+            break;
+          default:
+            break;
+        }
+      }
+      if (mechOr.length) and.push({ $or: mechOr });
+    }
+
+    // 4) Pokémon Types (card.types)
+    const pokeOn = Object.entries(pokeTypes).filter(([, on]) => !!on).map(([k]) => k);
+    if (pokeOn.length) {
+      // Match any of selected types
+      and.push({ types: { $elemMatch: { $in: pokeOn.map(s => new RegExp(`^${s}$`, 'i')) } } });
+      // Also ensure we’re only looking at Pokémon for this filter
+      and.push({ supertype: 'Pokémon' });
+    }
+
+    const mongoQuery = and.length ? { $and: and } : {};
+
+    const projection = {
+      _id: 0,
+      id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
+      attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
+      types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1, convertedRetreatCost: 1,
+      set: 1, rarity: 1, tcgplayer: 1
+    };
+
+    const found = await cards.find(mongoQuery, { projection }).toArray();
+    // Sort by setOrder (newest→oldest index already handled on the client; we’ll just do number ascending as a baseline)
+    found.sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
+
+    res.json(found);
+  } catch (err) {
+    console.error('filter-search error:', err);
+    res.status(500).json({ error: 'filter search failed' });
+  }
+});
+
 app.get('/api/cards/:set/:number', async (req, res) => {
   const { set, number } = req.params;
 
@@ -1061,7 +1364,6 @@ app.get('/api/cardDecklists', async (req, res) => {
       return res.status(400).json({ error: 'Missing set or number parameter' });
     }
 
-    // Always upper-case the set code
     set = set.toUpperCase();
     number = String(number);
 
@@ -1069,10 +1371,8 @@ app.get('/api/cardDecklists', async (req, res) => {
     const idKey = `${set}-${number}`;
     console.log(`[cardDecklists] lookup by _id: ${idKey}`);
 
-    // 1) Try the document _id first
     let doc = await collection.findOne({ _id: idKey });
 
-    // 2) Fallback: match on fields if that failed
     if (!doc) {
       console.log(`[cardDecklists] _id miss, trying {set,number}`);
       doc = await collection.findOne({ set, number });

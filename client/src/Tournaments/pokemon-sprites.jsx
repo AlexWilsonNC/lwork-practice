@@ -340,6 +340,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Noctowl') && hasPokemon('Leafeon ex') && hasPokemon('Flareon ex') && hasPokemon('Sylveon ex')) {
         firstSprite  = getPokemonSpriteURL('flareon');
         secondSprite  = getPokemonSpriteURL('noctowl');
+    }    
+    else if (hasPokemon('Joltik') && hasPokemon('Gholdengo ex')) {
+        firstSprite  = getPokemonSpriteURL('gholdengo');
+        secondSprite  = getPokemonSpriteURL('joltik');
     }     
     else if (hasPokemon('Joltik') && hasPokemon('Pikachu ex')) {
         firstSprite  = getPokemonSpriteURL('joltik');
