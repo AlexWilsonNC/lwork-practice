@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 // GREAT SPOT!
 import setOrder from '../Tournaments/setorder'
+import { availableSets as cardsPageSets } from '../Cards/CardsPage';
+import './setsInAdvancedDropdown.css'
+
 import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
 import rs1 from '../assets/sets/ruby-saphire/ex1-ruby-sapphire.png'
@@ -10,8 +13,6 @@ import sv1 from '../assets/sets/scarlet-violet/sv1.png'
 import wotc from '../assets/sets/wizards-of-the-coast/wotc.png'
 import xy1 from '../assets/sets/xy/xy1-xy.png'
 import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
-
-import sv4Img from '../assets/sets/scarlet-violet/logos/sv4-paradox-rift.png'
 
 import mechEX from '../assets/icons/ex.png';
 import mechV from '../assets/icons/v.png';
@@ -114,6 +115,15 @@ const MECH_BG = {
     'delta species': mechDelta,
 };
 
+const slugCss = (s) =>
+  String(s || '')
+    .normalize('NFKD')                      // strip accents (e.g., Pokémon -> Pokemon)
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, 'and')                   // "Scarlet & Violet" -> "scarlet-and-violet"
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')            // non-alphanum -> hyphen
+    .replace(/^-+|-+$/g, ''); 
+
 export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck }) {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
@@ -181,10 +191,36 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         'e-card': 'WOTC',
         'ecard': 'WOTC',
     };
-    const SET_OPTIONS = [
-        { key: 'SV4', name: 'Paradox Rift', img: sv4Img, css: 'paradox-rift' },
-        { key: 'SV1', name: 'Scarlet & Violet', img: sv1, css: 'scarlet-violet' },
-    ]
+
+    const [setLogos, setSetLogos] = useState({});
+
+    useEffect(() => {
+        let cancelled = false;
+        fetch('/api/sets/logos')
+            .then(r => (r.ok ? r.json() : []))
+            .then(arr => {
+                if (cancelled) return;
+                const map = {};
+                for (const it of Array.isArray(arr) ? arr : []) {
+                    if (it?.abbrev && it?.logo) map[it.abbrev] = it.logo;
+                }
+                setSetLogos(map);
+            })
+            .catch(() => { });
+        return () => { cancelled = true; };
+    }, []);
+
+   const SET_OPTIONS = React.useMemo(
+  () =>
+    (cardsPageSets || [])
+      .filter(s => !s.separator && s.abbrev)
+      .map(({ abbrev, name }) => ({
+        key: abbrev,      // e.g. "ROS"
+        name,             // e.g. "Roaring Skies"
+        img: setLogos[abbrev] || ''
+      })),
+  [cardsPageSets, setLogos]
+);
 
     function inSelectedEras(card, eras) {
         const activeEraKeys = Object.keys(eras).filter(k => eras[k]);
@@ -249,79 +285,73 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function hasAncientTrait(card) {
-        if (card.ancientTrait || card.ancienttrait) return true;
-        const rules = Array.isArray(card.rules) ? card.rules
-            : typeof card.rules === 'string' ? [card.rules] : [];
-        if (rules.some(r => N(r).includes('ancient trait'))) return true;
-        const nm = card.name || '';
-        if (/[αθω]/i.test(nm)) return true;
+        return !!(card.ancientTrait || card.ancienttrait);
+    }
+
+    function matchesSelectedMechanics(card, selected) {
+        const active = Object.keys(selected).filter(k => selected[k]);
+        if (active.length === 0) return true;
+
+        const subs = getSubtypesArr(card);
+        const st = getSupertype(card);
+        const nm = (card.name || '').toString();
+        const rulesArr = Array.isArray(card.rules)
+            ? card.rules
+            : (typeof card.rules === 'string' ? [card.rules] : []);
+        const rulesText = rulesArr.join(' ').toLowerCase();
+
+        const hasSub = s => subs.includes(s);
+
+        for (const mech of active) {
+            switch (mech) {
+                case 'prism':
+                    if (hasSub('prism star') || /[♢◆]/.test(nm) || rulesText.includes('prism star')) return true;
+                    break;
+                case 'ex':
+                    if (st === 'pokemon' && hasSub('ex')) return true;
+                    break;
+                case 'v':
+                    if (st === 'pokemon' && (hasSub('v') || hasSub('vmax') || hasSub('vstar') || hasSub('v-union'))) return true;
+                    break;
+                case 'gx':
+                    if (st === 'pokemon' && hasSub('gx')) return true;
+                    break;
+
+                // --- “Show more” mechanics:
+                case 'fusion strike':
+                    if (hasSub('fusion strike') || rulesText.includes('fusion strike')) return true;
+                    break;
+                case 'rapid strike':
+                    if (hasSub('rapid strike') || rulesText.includes('rapid strike')) return true;
+                    break;
+                case 'single strike':
+                    if (hasSub('single strike') || rulesText.includes('single strike')) return true;
+                    break;
+                case 'mega':
+                    if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true; // many Megas start with “M ”
+                    break;
+                case 'ancient trait':
+                    if (st === 'pokemon' && (hasAncientTrait(card) || rulesText.includes('ancient trait'))) return true;
+                    break;
+                case 'legend':
+                    if (st === 'pokemon' && (hasSub('legend') || /\blegend\b/i.test(nm))) return true;
+                    break;
+                case 'delta species':
+                    if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm) || rulesText.includes('delta species'))) return true;
+                    break;
+
+                case 'ace spec':
+                    if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
+                    break;
+                case 'star': // Gold Star (avoid VSTAR false positives by checking symbol/alias)
+                    if (st === 'pokemon' && (hasSub('star') || /★/.test(nm) || rulesText.includes('gold star'))) return true;
+                    break;
+                default:
+                    break;
+            }
+        }
         return false;
     }
-
-function matchesSelectedMechanics(card, selected) {
-  const active = Object.keys(selected).filter(k => selected[k]);
-  if (active.length === 0) return true;
-
-  const subs = getSubtypesArr(card);            // normalized lower-case array
-  const st = getSupertype(card);                // 'pokemon' | 'trainer' | 'energy'
-  const nm = (card.name || '').toString();
-  const rulesArr = Array.isArray(card.rules)
-    ? card.rules
-    : (typeof card.rules === 'string' ? [card.rules] : []);
-  const rulesText = rulesArr.join(' ').toLowerCase();
-
-  const hasSub = s => subs.includes(s);
-
-  for (const mech of active) {
-    switch (mech) {
-      case 'prism':
-        if (hasSub('prism star') || /[♢◆]/.test(nm) || rulesText.includes('prism star')) return true;
-        break;
-      case 'ex':
-        if (st === 'pokemon' && hasSub('ex')) return true;
-        break;
-      case 'v':
-        if (st === 'pokemon' && (hasSub('v') || hasSub('vmax') || hasSub('vstar') || hasSub('v-union'))) return true;
-        break;
-      case 'gx':
-        if (st === 'pokemon' && hasSub('gx')) return true;
-        break;
-
-      // --- “Show more” mechanics:
-      case 'fusion strike':
-        if (hasSub('fusion strike') || rulesText.includes('fusion strike')) return true;
-        break;
-      case 'rapid strike':
-        if (hasSub('rapid strike') || rulesText.includes('rapid strike')) return true;
-        break;
-      case 'single strike':
-        if (hasSub('single strike') || rulesText.includes('single strike')) return true;
-        break;
-      case 'mega':
-        if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true; // many Megas start with “M ”
-        break;
-      case 'ancient trait':
-        if (st === 'pokemon' && (hasAncientTrait(card) || rulesText.includes('ancient trait'))) return true;
-        break;
-      case 'legend':
-        if (st === 'pokemon' && (hasSub('legend') || /\blegend\b/i.test(nm))) return true;
-        break;
-      case 'delta species':
-        if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm) || rulesText.includes('delta species'))) return true;
-        break;
-
-      case 'ace spec':
-        if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
-        break;
-      case 'star': // Gold Star (avoid VSTAR false positives by checking symbol/alias)
-        if (st === 'pokemon' && (hasSub('star') || /★/.test(nm) || rulesText.includes('gold star'))) return true;
-        break;
-      default:
-        break;
-    }
-  }
-  return false;
-}
 
     function matchesSelectedTypes(card, selected) {
         const active = Object.keys(selected).filter(k => selected[k]);
@@ -457,16 +487,41 @@ function matchesSelectedMechanics(card, selected) {
 
     const [draftFilters, setDraftFilters] = useState(emptyFilters);
 
+    const allSetKeys = React.useMemo(() => SET_OPTIONS.map(o => o.key), []);
+
+    const selectedSetKeys = React.useMemo(
+        () => Object.entries(draftFilters.sets || {})
+            .filter(([, on]) => !!on)
+            .map(([k]) => k),
+        [draftFilters.sets]
+    );
+
+    const handleSetsChange = React.useCallback((e) => {
+        const chosen = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
+        setDraftFilters(f => {
+            const next = {};
+            for (const key of allSetKeys) next[key] = chosen.has(key);
+            return { ...f, sets: next };
+        });
+    }, [allSetKeys]);
+
+    const selectAllSets = React.useCallback(() => {
+        setDraftFilters(f => ({
+            ...f,
+            sets: Object.fromEntries(allSetKeys.map(k => [k, true]))
+        }));
+    }, [allSetKeys]);
+
+    const clearAllSets = React.useCallback(() => {
+        setDraftFilters(f => ({ ...f, sets: {} }));
+    }, []);
+
     const resetDraftAdvancedFilters = React.useCallback(() => {
         setDraftFilters(emptyFilters);
     }, [emptyFilters]);
 
-    const toggleSet = key => {
-        setFilters(f => ({
-            ...f,
-            sets: { ...f.sets, [key]: !f.sets[key] }
-        }))
-    }
+    const toggleSet = key =>
+        setDraftFilters(f => ({ ...f, sets: { ...f.sets, [key]: !f.sets[key] } }));
 
     const handleDragOver = e => {
         if (Array.from(e.dataTransfer?.types || []).includes('application/ptcg-card')) {
@@ -566,13 +621,13 @@ function matchesSelectedMechanics(card, selected) {
             ...SET_OPTIONS.map(o => o.img),
         ];
         imgs.forEach(src => { const im = new Image(); im.src = src; });
-    }, []);
+    }, [SET_OPTIONS]);
 
     useEffect(() => {
         if (skipNextQueryEffectRef.current) {
-        skipNextQueryEffectRef.current = false;
-        return;
-    }
+            skipNextQueryEffectRef.current = false;
+            return;
+        }
         const trimmed = query.trim()
 
         if (trimmed === '') {
@@ -595,32 +650,32 @@ function matchesSelectedMechanics(card, selected) {
             const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
-// split on commas for multi-name search (e.g., "totodile, feraligatr")
-const terms = rawQuery.split(',').map(s => s.trim()).filter(Boolean);
+            // split on commas for multi-name search (e.g., "totodile, feraligatr")
+            const terms = rawQuery.split(',').map(s => s.trim()).filter(Boolean);
 
-// detect "prime" shortcut as before
-const primeMode = /\bprime\b/i.test(rawQuery);
+            // detect "prime" shortcut as before
+            const primeMode = /\bprime\b/i.test(rawQuery);
 
-// when in NAME mode, search each comma term separately; otherwise treat as one text query
-const nameTerms = (searchMode === 'name')
-  ? (terms.length ? terms : [rawQuery])
-  : [rawQuery];
+            // when in NAME mode, search each comma term separately; otherwise treat as one text query
+            const nameTerms = (searchMode === 'name')
+                ? (terms.length ? terms : [rawQuery])
+                : [rawQuery];
 
-// build variants (symbol aliases) for every term
-const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
+            // build variants (symbol aliases) for every term
+            const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
 
-const routes = (() => {
-  if (!primeMode) {
-    return (searchMode === 'name'
-      ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-      : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
-  }
-  const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
-  if (!primeSetCodes.length) {
-    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
-  }
-  return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
-})();
+            const routes = (() => {
+                if (!primeMode) {
+                    return (searchMode === 'name'
+                        ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+                        : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+                }
+                const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
+                if (!primeSetCodes.length) {
+                    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+                }
+                return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
+            })();
 
             Promise.all(
                 routes.map(r =>
@@ -679,15 +734,15 @@ const routes = (() => {
                 }
 
                 if (searchMode === 'name' && !primeMode) {
-  const normQueries = nameTerms
-    .map(t => aliasNormalize(t))
-    .filter(Boolean);
+                    const normQueries = nameTerms
+                        .map(t => aliasNormalize(t))
+                        .filter(Boolean);
 
-  arr = arr.filter(c => {
-    const nm = aliasNormalize(c.name);
-    return normQueries.some(nq => nm.includes(nq)); // match ANY comma term
-  });
-}
+                    arr = arr.filter(c => {
+                        const nm = aliasNormalize(c.name);
+                        return normQueries.some(nq => nm.includes(nq)); // match ANY comma term
+                    });
+                }
 
                 arr.sort((a, b) => {
                     const idxA = setOrder.indexOf(a.setAbbrev);
@@ -777,7 +832,7 @@ const routes = (() => {
                             setDraftFilters(filters);
                             setShowAdvanced(true);
                         }}
-                    style={{ pointerEvents: 'none' }}
+                    // style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -819,7 +874,7 @@ const routes = (() => {
                                         ))}
                                     </div>
                                 </div>
-                                <div className="filter-group sets-dropdown">
+                                {/* <div className="filter-group sets-dropdown">
                                     <h3 onClick={() => setShowSets(s => !s)}>
                                         Sets:
                                     </h3>
@@ -846,6 +901,47 @@ const routes = (() => {
                                                             type="button"
                                                             className={`set-cube ${css} ${draftFilters.sets[key] ? 'darkon' : ''}`}
                                                             onClick={() => toggleSet(key)}
+                                                        >
+                                                            <p>
+                                                                <img className="adv-set-logo" src={img} alt={name} title={name} />
+                                                            </p>
+                                                            <div className="set-name">{name}</div>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div> */}
+                                <div className="filter-group sets-dropdown">
+                                    <h3 onClick={() => setShowSets(s => !s)}>Sets:</h3>
+                                    <div className="toggle-sets-wrapper">
+                                        <button
+                                            type="button"
+                                            className="toggle-sets-btn"
+                                            onClick={() => setShowSets(s => !s)}
+                                            aria-expanded={showSets}
+                                        >
+                                            {showSets ? 'Hide sets' : 'Show sets'}
+                                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
+                                        </button>
+
+                                        {showSets && (
+                                            <>
+                                                <div className="sets-overlay" onClick={() => setShowSets(false)} />
+                                                <div className="sets-grid">
+                                                    {SET_OPTIONS.map(({ key, name, img, css }) => (
+                                                        <button
+                                                            key={key}
+                                                            type="button"
+                                                            className={`set-cube ${slugCss(name)} set-${key.toLowerCase()} ${draftFilters.sets[key] ? 'darkon' : ''}`}
+                                                            onClick={() =>
+                                                                setDraftFilters(f => ({
+                                                                    ...f,
+                                                                    sets: { ...f.sets, [key]: !f.sets[key] }
+                                                                }))
+                                                            }
+                                                            aria-pressed={!!draftFilters.sets[key]}
                                                         >
                                                             <p>
                                                                 <img className="adv-set-logo" src={img} alt={name} title={name} />
@@ -916,49 +1012,49 @@ const routes = (() => {
                                         ))}
                                     </div>
                                 </div>
-<div className="filter-group">
-  <h3>Mechanics:</h3>
-  <div className="mechanics-buttons">
-    {(showMoreMechs
-      ? MECHANICS_OPTIONS
-      : MECHANICS_OPTIONS.filter(m => MECH_PRIMARY_KEYS.includes(m.key))
-    ).map(({ key, label }) => (
-      <button
-        key={key}
-        type="button"
-        className={`type-btn ${draftFilters.mechanics[key] ? 'active' : ''}`}
-        style={{
-          '--typeIcon': MECH_BG[key] ? `url("${MECH_BG[key]}")` : 'none'
-        }}
-        onClick={() => {
-          setDraftFilters(f => ({
-            ...f,
-            mechanics: { ...f.mechanics, [key]: !f.mechanics[key] }
-          }));
-        }}
-        aria-pressed={!!draftFilters.mechanics[key]}
-      >
-        {label}
-      </button>
-    ))}
+                                <div className="filter-group">
+                                    <h3>Mechanics:</h3>
+                                    <div className="mechanics-buttons">
+                                        {(showMoreMechs
+                                            ? MECHANICS_OPTIONS
+                                            : MECHANICS_OPTIONS.filter(m => MECH_PRIMARY_KEYS.includes(m.key))
+                                        ).map(({ key, label }) => (
+                                            <button
+                                                key={key}
+                                                type="button"
+                                                className={`type-btn ${draftFilters.mechanics[key] ? 'active' : ''}`}
+                                                style={{
+                                                    '--typeIcon': MECH_BG[key] ? `url("${MECH_BG[key]}")` : 'none'
+                                                }}
+                                                onClick={() => {
+                                                    setDraftFilters(f => ({
+                                                        ...f,
+                                                        mechanics: { ...f.mechanics, [key]: !f.mechanics[key] }
+                                                    }));
+                                                }}
+                                                aria-pressed={!!draftFilters.mechanics[key]}
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
 
-    {/* Show more / Show less toggle */}
-    <button
-      type="button"
-      className="type-btn mechanics-toggle"
-      style={{ '--typeIcon': 'none' }}
-      onClick={() => setShowMoreMechs(v => !v)}
-      aria-expanded={showMoreMechs}
-    >
-      <span className="toggle-label">
-        {showMoreMechs ? 'Show less' : 'Show more'}
-      </span>
-      <span className="material-symbols-outlined" aria-hidden="true">
-        {showMoreMechs ? 'expand_less' : 'expand_more'}
-      </span>
-    </button>
-  </div>
-</div>
+                                        {/* Show more / Show less toggle */}
+                                        <button
+                                            type="button"
+                                            className="type-btn mechanics-toggle"
+                                            style={{ '--typeIcon': 'none' }}
+                                            onClick={() => setShowMoreMechs(v => !v)}
+                                            aria-expanded={showMoreMechs}
+                                        >
+                                            <span className="toggle-label">
+                                                {showMoreMechs ? 'Show less' : 'Show more'}
+                                            </span>
+                                            <span className="material-symbols-outlined" aria-hidden="true">
+                                                {showMoreMechs ? 'expand_less' : 'expand_more'}
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="filter-group">
                                     <h3>Poké Type:</h3>
                                     <div className="poke-type-buttons">
@@ -975,7 +1071,7 @@ const routes = (() => {
                                                     }));
                                                 }}
                                                 title={label}
-                                                aria-pressed={!!filters.pokeTypes[key]}
+                                                aria-pressed={!!draftFilters.pokeTypes[key]}
                                             >
                                                 {label}
                                             </button>
@@ -1008,9 +1104,11 @@ const routes = (() => {
                                     >
                                         Apply
                                     </button>
+                                </div>
+                                <div className="buttons-row-modal flex-end">
                                     <button
-                                        className='save-button'
-                                        style={{ marginLeft: 8, backgroundImage: 'linear-gradient(to bottom right, grey, green)' }}
+                                        className='save-button width-full'
+                                        style={{ backgroundImage: 'linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb)' }}
                                         disabled={!anyFilterActive(draftFilters)}
                                         onClick={async () => {
                                             try {
@@ -1101,7 +1199,7 @@ const routes = (() => {
                                     setDraftFilters(filters);
                                     setShowAdvanced(true);
                                 }}
-                                style={{ pointerEvents: 'none' }}
+                            // style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>

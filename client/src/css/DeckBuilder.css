@@ -1244,7 +1244,7 @@ body.deckbuilder-page .deck-builder {
   height: 95%;
   max-height: 95%;
   overflow-y: auto;
-  border-radius: 4px;
+  border-radius: 15px;
   color: rgb(229, 229, 229);
   border: 3px solid rgba(128, 128, 128, 0.5);
 }
@@ -1397,7 +1397,9 @@ body.deckbuilder-page .deck-builder {
   align-items: center;
   height: 32px;
 }
-
+.width-full {
+  width: 152.5px !important;
+}
 .flex-end {
   display: flex;
   justify-content: flex-end !important;
@@ -1465,7 +1467,7 @@ body.deckbuilder-page .deck-builder {
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  width: 100%;
+  width: 75vw;
 }
 
 /* base cube size */
@@ -1500,13 +1502,13 @@ body.deckbuilder-page .deck-builder {
   padding: 7px 15px;
 }
 
-.set-name {
+/* .set-name {
   margin-top: 0.5rem;
   font-size: 100px;
   text-align: center;
   color: white !important;
   line-height: 1.2;
-}
+} */
 
 .advanced-search-button {
   width: 100%;

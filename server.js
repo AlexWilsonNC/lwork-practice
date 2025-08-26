@@ -955,14 +955,14 @@ app.post('/api/cards/filter-search', async (req, res) => {
     const and = [];
 
     const setAllowList = [];
-const setsChecked = Object.values(sets || {}).some(Boolean);
+    const setsChecked = Object.values(sets || {}).some(Boolean);
 
-if (setsChecked) {
-  for (const [code, on] of Object.entries(sets || {})) {
-    if (on) setAllowList.push(code);
-  }
-} else {
-  const ERA_TO_SET_CODES = {
+    if (setsChecked) {
+      for (const [code, on] of Object.entries(sets || {})) {
+        if (on) setAllowList.push(code);
+      }
+    } else {
+      const ERA_TO_SET_CODES = {
         SV1: [
           "BLK",
           "WHT",
@@ -1129,21 +1129,21 @@ if (setsChecked) {
         ]
       };
 
-       const selectedEras = Object.entries(eras || {})
-    .filter(([, on]) => !!on)
-    .map(([k]) => k);
+      const selectedEras = Object.entries(eras || {})
+        .filter(([, on]) => !!on)
+        .map(([k]) => k);
 
-  if (selectedEras.length) {
-    for (const eraKey of selectedEras) {
-      const codes = ERA_TO_SET_CODES[eraKey];
-      if (Array.isArray(codes)) setAllowList.push(...codes);
+      if (selectedEras.length) {
+        for (const eraKey of selectedEras) {
+          const codes = ERA_TO_SET_CODES[eraKey];
+          if (Array.isArray(codes)) setAllowList.push(...codes);
+        }
+      }
     }
-  }
-}
 
-if (setAllowList.length) {
-  and.push({ setAbbrev: { $in: setAllowList } });
-}
+    if (setAllowList.length) {
+      and.push({ setAbbrev: { $in: setAllowList } });
+    }
 
     const superOn = Object.entries(supertypes).filter(([, on]) => !!on).map(([k]) => k);
     if (superOn.length) {
@@ -1155,69 +1155,69 @@ if (setAllowList.length) {
       and.push({ supertype: { $in: superOn.map(mapSuper) } });
     }
 
-// 3) Mechanics (match via subtypes/name/rules where necessary)
-const mechOn = Object.entries(mechanics || {}).filter(([, on]) => !!on).map(([k]) => k);
-if (mechOn.length) {
-  const mechOr = [];
-  for (const m of mechOn) {
-    switch (m) {
-      case 'ex':
-        mechOr.push({ subtypes: /ex/i });
-        break;
-      case 'v':
-        mechOr.push({ subtypes: /v($|[^a-z])/i });
-        mechOr.push({ subtypes: /vmax/i });
-        mechOr.push({ subtypes: /vstar/i });
-        mechOr.push({ subtypes: /v[-\s]?union/i });
-        break;
-      case 'gx':
-        mechOr.push({ subtypes: /gx/i });
-        break;
-      case 'ace spec':
-        mechOr.push({ subtypes: /ace spec/i }, { rules: /ace spec/i });
-        break;
-      case 'prism':
-        mechOr.push({ subtypes: /prism star/i }, { name: /[♢◆]/ }, { rules: /prism star/i });
-        break;
-      case 'star': // Gold Star
-        mechOr.push({ subtypes: /star/i }, { name: /★/ }, { rules: /gold star/i });
-        break;
+    // 3) Mechanics (match via subtypes/name/rules where necessary)
+    const mechOn = Object.entries(mechanics || {}).filter(([, on]) => !!on).map(([k]) => k);
+    if (mechOn.length) {
+      const mechOr = [];
+      for (const m of mechOn) {
+        switch (m) {
+          case 'ex':
+            mechOr.push({ subtypes: /ex/i });
+            break;
+          case 'v':
+            mechOr.push({ subtypes: /v($|[^a-z])/i });
+            mechOr.push({ subtypes: /vmax/i });
+            mechOr.push({ subtypes: /vstar/i });
+            mechOr.push({ subtypes: /v[-\s]?union/i });
+            break;
+          case 'gx':
+            mechOr.push({ subtypes: /gx/i });
+            break;
+          case 'ace spec':
+            mechOr.push({ subtypes: /ace spec/i }, { rules: /ace spec/i });
+            break;
+          case 'prism':
+            mechOr.push({ subtypes: /prism star/i }, { name: /[♢◆]/ }, { rules: /prism star/i });
+            break;
+          case 'star': // Gold Star
+            mechOr.push({ subtypes: /star/i }, { name: /★/ }, { rules: /gold star/i });
+            break;
 
-      // --- “Show more” mechanics:
-      case 'fusion strike':
-        mechOr.push({ subtypes: /fusion strike/i }, { rules: /fusion strike/i });
-        break;
-      case 'rapid strike':
-        mechOr.push({ subtypes: /rapid strike/i }, { rules: /rapid strike/i });
-        break;
-      case 'single strike':
-        mechOr.push({ subtypes: /single strike/i }, { rules: /single strike/i });
-        break;
-      case 'mega':
-        mechOr.push({ subtypes: /mega/i }, { name: /^m\s/i });
-        break;
-      case 'ancient trait':
-        mechOr.push({ rules: /ancient trait/i }, { name: /[αθω]/i });
-        break;
-      case 'legend':
-        mechOr.push({ subtypes: /legend/i }, { name: /\blegend\b/i });
-        break;
-      case 'delta species':
-        mechOr.push({ subtypes: /delta species/i }, { name: /δ/ }, { rules: /delta species/i });
-        break;
-      default:
-        break;
+          // --- “Show more” mechanics:
+          case 'fusion strike':
+            mechOr.push({ subtypes: /fusion strike/i }, { rules: /fusion strike/i });
+            break;
+          case 'rapid strike':
+            mechOr.push({ subtypes: /rapid strike/i }, { rules: /rapid strike/i });
+            break;
+          case 'single strike':
+            mechOr.push({ subtypes: /single strike/i }, { rules: /single strike/i });
+            break;
+          case 'mega':
+            mechOr.push({ subtypes: /mega/i }, { name: /^m\s/i });
+            break;
+          case 'ancient trait':
+            mechOr.push(
+              { ancientTrait: { $exists: true } },
+              { ancienttrait: { $exists: true } }
+            );
+            break;
+          case 'legend':
+            mechOr.push({ subtypes: /legend/i }, { name: /\blegend\b/i });
+            break;
+          case 'delta species':
+            mechOr.push({ subtypes: /delta species/i }, { name: /δ/ }, { rules: /delta species/i });
+            break;
+          default:
+            break;
+        }
+      }
+      if (mechOr.length) and.push({ $or: mechOr });
     }
-  }
-  if (mechOr.length) and.push({ $or: mechOr });
-}
 
-    // 4) Pokémon Types (card.types)
     const pokeOn = Object.entries(pokeTypes).filter(([, on]) => !!on).map(([k]) => k);
     if (pokeOn.length) {
-      // Match any of selected types
       and.push({ types: { $elemMatch: { $in: pokeOn.map(s => new RegExp(`^${s}$`, 'i')) } } });
-      // Also ensure we’re only looking at Pokémon for this filter
       and.push({ supertype: 'Pokémon' });
     }
 
@@ -1228,17 +1228,48 @@ if (mechOn.length) {
       id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
       attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
       types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1, convertedRetreatCost: 1,
-      set: 1, rarity: 1, tcgplayer: 1
+      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1
     };
 
     const found = await cards.find(mongoQuery, { projection }).toArray();
-    // Sort by setOrder (newest→oldest index already handled on the client; we’ll just do number ascending as a baseline)
     found.sort((a, b) => (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0));
 
     res.json(found);
   } catch (err) {
     console.error('filter-search error:', err);
     res.status(500).json({ error: 'filter search failed' });
+  }
+});
+
+app.get('/api/sets/logos', async (req, res) => {
+  try {
+    const cards = cardConnection.collection('card-database');
+    const cursor = cards.aggregate([
+      { $match: { 'set.images.logo': { $exists: true, $ne: null } } },
+      {
+        $group: {
+          _id: '$setAbbrev',
+          logo: { $first: '$set.images.logo' },
+          name: { $first: '$set.name' },
+          series: { $first: '$set.series' },
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          abbrev: '$_id',
+          name: 1,
+          series: 1,
+          logo: 1
+        }
+      }
+    ], { allowDiskUse: true });
+
+    const list = await cursor.toArray();
+    res.json(list);
+  } catch (e) {
+    console.error('Error /api/sets/logos:', e);
+    res.status(500).json([]);
   }
 });
 

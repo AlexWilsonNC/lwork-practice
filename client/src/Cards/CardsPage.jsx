@@ -137,25 +137,7 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('en-US', options);
 };
 
-const CardsPage = () => {
-  const { theme } = useTheme();
-  const { setName } = useParams();
-  const navigate = useNavigate();
-  const [cards, setCards] = useState([]);
-  const [logoUrl, setLogoUrl] = useState('');
-  const [nameText, setNameText] = useState('');
-  const [setAbbrevTitle, setAbbrevTitleAdd] = useState('');
-  const [setSym, setSymbol] = useState('');
-  const [setRelease, setSetRelease] = useState('');
-  const [setTotal, setSetTotal] = useState('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredCards, setFilteredCards] = useState([]);
-  const dropdownRef = useRef(null);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [normalizedCards, setNormalizedCards] = useState([]);
-
-  const availableSets = [
+  export const availableSets = [
     { separator: true, text: "Scarlet & Violet" },
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { name: "Black Bolt *", abbrev: "BLK", releaseDate: "July 18, 2025", total: "172" },
@@ -313,6 +295,24 @@ const CardsPage = () => {
     { name: "Base Set", abbrev: "BS", releaseDate: "Jan 9, 1999", total: "102" },
     { name: "Wizards Black Star Promos", abbrev: "PR-BS", releaseDate: "-", total: "53" }
   ];
+
+const CardsPage = () => {
+  const { theme } = useTheme();
+  const { setName } = useParams();
+  const navigate = useNavigate();
+  const [cards, setCards] = useState([]);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [nameText, setNameText] = useState('');
+  const [setAbbrevTitle, setAbbrevTitleAdd] = useState('');
+  const [setSym, setSymbol] = useState('');
+  const [setRelease, setSetRelease] = useState('');
+  const [setTotal, setSetTotal] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredCards, setFilteredCards] = useState([]);
+  const dropdownRef = useRef(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [normalizedCards, setNormalizedCards] = useState([]);
 
   useEffect(() => {
     const fetchCards = async () => {

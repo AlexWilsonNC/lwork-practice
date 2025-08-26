@@ -647,17 +647,17 @@ export default function DeckBuilder() {
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
         <title>Deck Builder</title>
-            {/* <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-            {/* <meta property="og:title" content={eventData.name} /> */}
-            {/* <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-            {/* <meta property="og:image" content={eventData.thumbnail} /> */}
-            {/* <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} /> */}
-            {/* <meta property="og:type" content="website" /> */}
-            {/* <meta name="author" content="PTCG Legends" /> */}
-            {/* <meta name="twitter:card" content="summary_large_image" /> */}
-            {/* <meta name="twitter:title" content={eventData.name} /> */}
-            {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-            {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
+        {/* <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+        {/* <meta property="og:title" content={eventData.name} /> */}
+        {/* <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+        {/* <meta property="og:image" content={eventData.thumbnail} /> */}
+        {/* <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} /> */}
+        {/* <meta property="og:type" content="website" /> */}
+        {/* <meta name="author" content="PTCG Legends" /> */}
+        {/* <meta name="twitter:card" content="summary_large_image" /> */}
+        {/* <meta name="twitter:title" content={eventData.name} /> */}
+        {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
+        {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
       </Helmet>
       {exportingImage && (
         <div className="image-export-overlay">
@@ -749,7 +749,7 @@ export default function DeckBuilder() {
                 <span className="modal-count">
                   <p>( in deck )</p>
                   {currentCount}
-                  </span>
+                </span>
                 <button
                   className='btn-plus-l'
                   type="button"
@@ -765,6 +765,38 @@ export default function DeckBuilder() {
                   <p>{zoomCard.types} • {zoomCard.hp}<span className='shrink'> HP</span></p>
                 )}
                 <hr className="zoomed-card-db-hr" />
+                {(() => {
+                  const trait = zoomCard.ancientTrait || zoomCard.ancienttrait;
+                  if (!trait) return null;
+
+                  const nameStr = String(trait.name || '');
+
+                  const match = nameStr.match(/[ΔδαΑθΘΩω]/);
+
+                  const colorMap = {
+                    'Δ': '#138a15', 'δ': '#138a15',  // Delta → green
+                    'α': '#1e88e5', 'Α': '#1e88e5',  // Alpha → blue
+                    'θ': '#7b3fe4', 'Θ': '#7b3fe4',  // Theta → purple
+                    'Ω': '#aa0300', 'ω': '#aa0300'   // Omega → red
+                  };
+
+                  const labelStyle = {
+                    color: match ? colorMap[match[0]] : '#aa0300',
+                    textShadow: '0 0 1px black'
+                  };
+
+                  return (
+                    <p>
+                      <strong>
+                        Ancient Trait:
+                        <span style={labelStyle}>
+                          &nbsp;{trait.name}
+                        </span>
+                      </strong>
+                      <br />{trait.text}
+                    </p>
+                  );
+                })()}
                 {zoomCard.abilities?.map((ab, i) => (
                   <p key={i}>
                     <strong><span style={{ color: '#aa0300', textShadow: '0 0 1px black' }}>Ability:</span> {ab.name}</strong>
