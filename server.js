@@ -1155,62 +1155,62 @@ if (setAllowList.length) {
       and.push({ supertype: { $in: superOn.map(mapSuper) } });
     }
 
-    const mechOn = Object.entries(mechanics).filter(([, on]) => !!on).map(([k]) => k);
-    if (mechOn.length) {
-      const mechOr = [];
-      for (const m of mechOn) {
-        switch (m) {
-          case 'ex':
-            mechOr.push({ subtypes: /ex/i });
-            break;
-          case 'v':
-            mechOr.push({ subtypes: /v($|[^a-z])/i });
-            mechOr.push({ subtypes: /vmax/i });
-            mechOr.push({ subtypes: /vstar/i });
-            mechOr.push({ subtypes: /v-union/i });
-            break;
-          case 'gx':
-            mechOr.push({ subtypes: /gx/i });
-            break;
-          case 'ace spec':
-            mechOr.push({ subtypes: /ace spec/i });
-            break;
-          case 'prism':
-            mechOr.push({ subtypes: /prism star/i });
-            mechOr.push({ name: /[♢◆]/ });
-            break;
-          case 'star': // Gold Star
-            mechOr.push({ subtypes: /star/i });
-            mechOr.push({ name: /★/ });
-            break;
-          case 'fusion strike':
-            mechOr.push({ subtypes: /fusion strike/i });
-            break;
-          case 'rapid strike':
-            mechOr.push({ subtypes: /rapid strike/i });
-            break;
-          case 'single strike':
-            mechOr.push({ subtypes: /single strike/i });
-            break;
-          case 'mega':
-            mechOr.push({ subtypes: /mega/i });
-            break;
-          case 'ancient trait':
-            mechOr.push({ rules: /ancient trait/i });
-            mechOr.push({ name: /[αθω]/i });
-            break;
-          case 'legend':
-            mechOr.push({ subtypes: /legend/i });
-            break;
-          case 'delta species':
-            mechOr.push({ name: /δ/ });
-            break;
-          default:
-            break;
-        }
-      }
-      if (mechOr.length) and.push({ $or: mechOr });
+// 3) Mechanics (match via subtypes/name/rules where necessary)
+const mechOn = Object.entries(mechanics || {}).filter(([, on]) => !!on).map(([k]) => k);
+if (mechOn.length) {
+  const mechOr = [];
+  for (const m of mechOn) {
+    switch (m) {
+      case 'ex':
+        mechOr.push({ subtypes: /ex/i });
+        break;
+      case 'v':
+        mechOr.push({ subtypes: /v($|[^a-z])/i });
+        mechOr.push({ subtypes: /vmax/i });
+        mechOr.push({ subtypes: /vstar/i });
+        mechOr.push({ subtypes: /v[-\s]?union/i });
+        break;
+      case 'gx':
+        mechOr.push({ subtypes: /gx/i });
+        break;
+      case 'ace spec':
+        mechOr.push({ subtypes: /ace spec/i }, { rules: /ace spec/i });
+        break;
+      case 'prism':
+        mechOr.push({ subtypes: /prism star/i }, { name: /[♢◆]/ }, { rules: /prism star/i });
+        break;
+      case 'star': // Gold Star
+        mechOr.push({ subtypes: /star/i }, { name: /★/ }, { rules: /gold star/i });
+        break;
+
+      // --- “Show more” mechanics:
+      case 'fusion strike':
+        mechOr.push({ subtypes: /fusion strike/i }, { rules: /fusion strike/i });
+        break;
+      case 'rapid strike':
+        mechOr.push({ subtypes: /rapid strike/i }, { rules: /rapid strike/i });
+        break;
+      case 'single strike':
+        mechOr.push({ subtypes: /single strike/i }, { rules: /single strike/i });
+        break;
+      case 'mega':
+        mechOr.push({ subtypes: /mega/i }, { name: /^m\s/i });
+        break;
+      case 'ancient trait':
+        mechOr.push({ rules: /ancient trait/i }, { name: /[αθω]/i });
+        break;
+      case 'legend':
+        mechOr.push({ subtypes: /legend/i }, { name: /\blegend\b/i });
+        break;
+      case 'delta species':
+        mechOr.push({ subtypes: /delta species/i }, { name: /δ/ }, { rules: /delta species/i });
+        break;
+      default:
+        break;
     }
+  }
+  if (mechOr.length) and.push({ $or: mechOr });
+}
 
     // 4) Pokémon Types (card.types)
     const pokeOn = Object.entries(pokeTypes).filter(([, on]) => !!on).map(([k]) => k);

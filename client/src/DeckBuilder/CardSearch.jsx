@@ -258,60 +258,70 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return false;
     }
 
-    function matchesSelectedMechanics(card, selected) {
-        const active = Object.keys(selected).filter(k => selected[k]);
-        if (active.length === 0) return true;
+function matchesSelectedMechanics(card, selected) {
+  const active = Object.keys(selected).filter(k => selected[k]);
+  if (active.length === 0) return true;
 
-        const subs = getSubtypesArr(card);    // normalized, e.g. ['basic','ex','single strike']
-        const st = getSupertype(card);       // 'pokemon' | 'trainer' | 'energy'
-        const nm = (card.name || '').toString();
+  const subs = getSubtypesArr(card);            // normalized lower-case array
+  const st = getSupertype(card);                // 'pokemon' | 'trainer' | 'energy'
+  const nm = (card.name || '').toString();
+  const rulesArr = Array.isArray(card.rules)
+    ? card.rules
+    : (typeof card.rules === 'string' ? [card.rules] : []);
+  const rulesText = rulesArr.join(' ').toLowerCase();
 
-        for (const mech of active) {
-            switch (mech) {
-                case 'prism':
-                    if (subs.includes('prism star') || /◇/.test(nm)) return true;
-                    break;
-                case 'ex':
-                    if (st === 'pokemon' && subs.includes('ex')) return true;
-                    break;
-                case 'v':
-                    if (st === 'pokemon' && (subs.includes('v') || subs.includes('vmax') || subs.includes('vstar') || subs.includes('v-union'))) return true;
-                    break;
-                case 'gx':
-                    if (st === 'pokemon' && subs.includes('gx')) return true;
-                    break;
-                case 'fusion strike':
-                    if (subs.includes('fusion strike')) return true;
-                    break;
-                case 'rapid strike':
-                    if (subs.includes('rapid strike')) return true;
-                    break;
-                case 'single strike':
-                    if (subs.includes('single strike')) return true;
-                    break;
-                case 'mega':
-                    if (st === 'pokemon' && subs.includes('mega')) return true;
-                    break;
-                case 'ace spec':
-                    if (subs.includes('ace spec')) return true;   // (Trainer Item: ACE SPEC)
-                    break;
-                case 'star': // Gold Star, avoid VSTAR by checking exact subtype or symbol
-                    if (st === 'pokemon' && (subs.includes('star') || /★/.test(nm))) return true;
-                    break;
-                case 'legend':
-                    if (st === 'pokemon' && subs.includes('legend')) return true;
-                    break;
-                case 'ancient trait':
-                    if (st === 'pokemon' && hasAncientTrait(card)) return true;
-                    break;
-                case 'delta species':
-                    if (st === 'pokemon' && /δ/.test(nm)) return true; // per spec: name contains δ
-                    break;
-                default: break;
-            }
-        }
-        return false;
+  const hasSub = s => subs.includes(s);
+
+  for (const mech of active) {
+    switch (mech) {
+      case 'prism':
+        if (hasSub('prism star') || /[♢◆]/.test(nm) || rulesText.includes('prism star')) return true;
+        break;
+      case 'ex':
+        if (st === 'pokemon' && hasSub('ex')) return true;
+        break;
+      case 'v':
+        if (st === 'pokemon' && (hasSub('v') || hasSub('vmax') || hasSub('vstar') || hasSub('v-union'))) return true;
+        break;
+      case 'gx':
+        if (st === 'pokemon' && hasSub('gx')) return true;
+        break;
+
+      // --- “Show more” mechanics:
+      case 'fusion strike':
+        if (hasSub('fusion strike') || rulesText.includes('fusion strike')) return true;
+        break;
+      case 'rapid strike':
+        if (hasSub('rapid strike') || rulesText.includes('rapid strike')) return true;
+        break;
+      case 'single strike':
+        if (hasSub('single strike') || rulesText.includes('single strike')) return true;
+        break;
+      case 'mega':
+        if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true; // many Megas start with “M ”
+        break;
+      case 'ancient trait':
+        if (st === 'pokemon' && (hasAncientTrait(card) || rulesText.includes('ancient trait'))) return true;
+        break;
+      case 'legend':
+        if (st === 'pokemon' && (hasSub('legend') || /\blegend\b/i.test(nm))) return true;
+        break;
+      case 'delta species':
+        if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm) || rulesText.includes('delta species'))) return true;
+        break;
+
+      case 'ace spec':
+        if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
+        break;
+      case 'star': // Gold Star (avoid VSTAR false positives by checking symbol/alias)
+        if (st === 'pokemon' && (hasSub('star') || /★/.test(nm) || rulesText.includes('gold star'))) return true;
+        break;
+      default:
+        break;
     }
+  }
+  return false;
+}
 
     function matchesSelectedTypes(card, selected) {
         const active = Object.keys(selected).filter(k => selected[k]);
@@ -585,21 +595,32 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
-            const primeMode = /\bprime\b/i.test(rawQuery);
-            const variants = expandAliasToSymbolQueries(rawQuery);
+// split on commas for multi-name search (e.g., "totodile, feraligatr")
+const terms = rawQuery.split(',').map(s => s.trim()).filter(Boolean);
 
-            const routes = (() => {
-                if (!primeMode) {
-                    return (searchMode === 'name'
-                        ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-                        : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
-                }
-                const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
-                if (!primeSetCodes.length) {
-                    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
-                }
-                return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
-            })();
+// detect "prime" shortcut as before
+const primeMode = /\bprime\b/i.test(rawQuery);
+
+// when in NAME mode, search each comma term separately; otherwise treat as one text query
+const nameTerms = (searchMode === 'name')
+  ? (terms.length ? terms : [rawQuery])
+  : [rawQuery];
+
+// build variants (symbol aliases) for every term
+const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
+
+const routes = (() => {
+  if (!primeMode) {
+    return (searchMode === 'name'
+      ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+      : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+  }
+  const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
+  if (!primeSetCodes.length) {
+    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+  }
+  return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
+})();
 
             Promise.all(
                 routes.map(r =>
@@ -658,9 +679,15 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 }
 
                 if (searchMode === 'name' && !primeMode) {
-                    const normalizedQuery = aliasNormalize(rawQuery);
-                    arr = arr.filter(c => aliasNormalize(c.name).includes(normalizedQuery));
-                }
+  const normQueries = nameTerms
+    .map(t => aliasNormalize(t))
+    .filter(Boolean);
+
+  arr = arr.filter(c => {
+    const nm = aliasNormalize(c.name);
+    return normQueries.some(nq => nm.includes(nq)); // match ANY comma term
+  });
+}
 
                 arr.sort((a, b) => {
                     const idxA = setOrder.indexOf(a.setAbbrev);
@@ -889,33 +916,49 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         ))}
                                     </div>
                                 </div>
-                                <div className="filter-group">
-                                    <h3>Mechanics:</h3>
-                                    <div className="mechanics-buttons">
-                                        {(showMoreMechs
-                                            ? MECHANICS_OPTIONS
-                                            : MECHANICS_OPTIONS.filter(m => MECH_PRIMARY_KEYS.includes(m.key))
-                                        ).map(({ key, label }) => (
-                                            <button
-                                                key={key}
-                                                type="button"
-                                                className={`type-btn ${draftFilters.mechanics[key] ? 'active' : ''}`}
-                                                style={{
-                                                    '--typeIcon': MECH_BG[key] ? `url("${MECH_BG[key]}")` : 'none'
-                                                }}
-                                                onClick={() => {
-                                                    setDraftFilters(f => ({
-                                                        ...f,
-                                                        mechanics: { ...f.mechanics, [key]: !f.mechanics[key] }
-                                                    }));
-                                                }}
-                                                aria-pressed={!!filters.mechanics[key]}
-                                            >
-                                                {label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+<div className="filter-group">
+  <h3>Mechanics:</h3>
+  <div className="mechanics-buttons">
+    {(showMoreMechs
+      ? MECHANICS_OPTIONS
+      : MECHANICS_OPTIONS.filter(m => MECH_PRIMARY_KEYS.includes(m.key))
+    ).map(({ key, label }) => (
+      <button
+        key={key}
+        type="button"
+        className={`type-btn ${draftFilters.mechanics[key] ? 'active' : ''}`}
+        style={{
+          '--typeIcon': MECH_BG[key] ? `url("${MECH_BG[key]}")` : 'none'
+        }}
+        onClick={() => {
+          setDraftFilters(f => ({
+            ...f,
+            mechanics: { ...f.mechanics, [key]: !f.mechanics[key] }
+          }));
+        }}
+        aria-pressed={!!draftFilters.mechanics[key]}
+      >
+        {label}
+      </button>
+    ))}
+
+    {/* Show more / Show less toggle */}
+    <button
+      type="button"
+      className="type-btn mechanics-toggle"
+      style={{ '--typeIcon': 'none' }}
+      onClick={() => setShowMoreMechs(v => !v)}
+      aria-expanded={showMoreMechs}
+    >
+      <span className="toggle-label">
+        {showMoreMechs ? 'Show less' : 'Show more'}
+      </span>
+      <span className="material-symbols-outlined" aria-hidden="true">
+        {showMoreMechs ? 'expand_less' : 'expand_more'}
+      </span>
+    </button>
+  </div>
+</div>
                                 <div className="filter-group">
                                     <h3>Poké Type:</h3>
                                     <div className="poke-type-buttons">
