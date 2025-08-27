@@ -1145,17 +1145,55 @@ app.post('/api/cards/filter-search', async (req, res) => {
       and.push({ setAbbrev: { $in: setAllowList } });
     }
 
-    const superOn = Object.entries(supertypes).filter(([, on]) => !!on).map(([k]) => k);
-    if (superOn.length) {
-      const mapSuper = s => {
-        const x = (s || '').toLowerCase();
-        if (x.startsWith('pok')) return 'Pokémon';
-        return s;
-      };
-      and.push({ supertype: { $in: superOn.map(mapSuper) } });
+    const superOnAll = Object.entries(supertypes || {})
+      .filter(([, on]) => !!on)
+      .map(([k]) => k);
+
+    const TRUE_SUPERTYPES = new Set(['Pokémon', 'Trainer', 'Energy', 'Pokemon']); // accept both spellings just in case
+    const validSuper = superOnAll
+      .map(s => (String(s).toLowerCase().startsWith('pok') ? 'Pokémon' : s))
+      .filter(s => TRUE_SUPERTYPES.has(s));
+
+    if (validSuper.length) {
+      and.push({ supertype: { $in: validSuper } });
     }
 
-    // 3) Mechanics (match via subtypes/name/rules where necessary)
+    const detailKeys = new Set(
+      Object.entries(supertypes || {})
+        .filter(([, on]) => !!on)
+        .map(([k]) => String(k))
+    );
+
+    const trainerSubtypeOr = [];
+    if (detailKeys.has('Item')) {
+      trainerSubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^item$/i } } });
+    }
+    if (detailKeys.has('Supporter')) {
+      trainerSubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^supporter$/i } } });
+    }
+    if (detailKeys.has('Stadium')) {
+      trainerSubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^stadium$/i } } });
+    }
+    if (detailKeys.has('Tool')) {
+      trainerSubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^pokémon tool$/i } } });
+    }
+    if (trainerSubtypeOr.length) {
+      and.push({ supertype: 'Trainer' });
+      and.push({ $or: trainerSubtypeOr });
+    }
+
+    const energySubtypeOr = [];
+    if (detailKeys.has('Basic')) {
+      energySubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^basic$/i } } });
+    }
+    if (detailKeys.has('Special')) {
+      energySubtypeOr.push({ subtypes: { $elemMatch: { $regex: /^special$/i } } });
+    }
+    if (energySubtypeOr.length) {
+      and.push({ supertype: 'Energy' });
+      and.push({ $or: energySubtypeOr });
+    }
+
     const mechOn = Object.entries(mechanics || {}).filter(([, on]) => !!on).map(([k]) => k);
     if (mechOn.length) {
       const mechOr = [];

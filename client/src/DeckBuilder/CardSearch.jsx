@@ -18,13 +18,17 @@ import mechEX from '../assets/icons/ex.png';
 import mechV from '../assets/icons/v.png';
 import mechGX from '../assets/icons/gx.png';
 import mechAceSpec from '../assets/icons/acespec.png';
+import mechTagTeam from '../assets/icons/tagteam.png';
 import mechPrism from '../assets/icons/prism.png';
+import mechTera from '../assets/icons/tera.png';
+import mechFuture from '../assets/icons/future.webp';
+import mechAncient from '../assets/icons/ancient.png';
 import mechGoldStar from '../assets/icons/gold-star.png';
 import mechFusion from '../assets/icons/fusion.png';
 import mechRapid from '../assets/icons/rs.png';
 import mechSingle from '../assets/icons/ss.png';
 import mechMega from '../assets/icons/mega.png';
-import mechAncient from '../assets/icons/omega.png';
+import mechAncientTrait from '../assets/icons/omega.png';
 import mechLegend from '../assets/icons/legend.png';
 import mechDelta from '../assets/icons/ds.png';
 
@@ -46,7 +50,7 @@ const POKE_TYPE_OPTIONS = [
     { key: 'lightning', label: 'Lightning', img: typeLightning },
     { key: 'psychic', label: 'Psychic', img: typePsychic },
     { key: 'fighting', label: 'Fighting', img: typeFighting },
-    { key: 'darkness', label: 'Dark', img: typeDark },
+    { key: 'darkness', label: 'Darkness', img: typeDark },
     { key: 'metal', label: 'Metal', img: typeMetal },
     { key: 'dragon', label: 'Dragon', img: typeDragon },
     { key: 'fairy', label: 'Fairy', img: typeFairy },
@@ -62,7 +66,7 @@ import toolWrench from '../assets/icons/tool.png';
 import basicEnergyIcon from '../assets/icons/basic-e.png';
 import specialEnergyIcon from '../assets/icons/special-e.png';
 const TYPE_BG = {
-    'Pokémon': pikachuImg,
+    Pokémon: pikachuImg,
     Item: pokeballImg,
     Trainer: trainerCap,
     Supporter: supporterIcon,
@@ -76,17 +80,33 @@ const MECHANICS_OPTIONS = [
     { key: 'ex', label: 'ex / EX' },
     { key: 'v', label: 'V' },
     { key: 'gx', label: 'GX' },
-    { key: 'ace spec', label: 'Ace Spec' },
+    { key: 'tera', label: 'Tera' },
     { key: 'prism', label: 'Prism' },
+    { key: 'mega', label: 'Mega' },
     { key: 'star', label: 'Gold Star' },
-
+    { key: 'ace spec', label: 'Ace Spec' },
+    { key: 'ancient', label: 'Ancient' },
+    { key: 'future', label: 'Future' },
     { key: 'fusion strike', label: 'Fusion Strike' },
     { key: 'rapid strike', label: 'Rapid Strike' },
     { key: 'single strike', label: 'Single Strike' },
-    { key: 'mega', label: 'Mega' },
+    { key: 'tag team', label: 'Tag Team' },
     { key: 'ancient trait', label: 'Ancient Trait' },
     { key: 'legend', label: 'Legend' },
     { key: 'delta species', label: 'Delta Species' },
+];
+const STAGE_OPTIONS = [
+    { key: 'basic', label: 'Basic' },
+    { key: 'stage 1', label: 'Stage 1' },
+    { key: 'stage 2', label: 'Stage 2' },
+    { key: 'vstar', label: 'VSTAR' },
+    { key: 'vmax', label: 'VMAX' },
+    { key: 'v-union', label: 'V-UNION' },
+    { key: 'mega', label: 'MEGA' },
+    { key: 'break', label: 'BREAK' },
+    { key: 'restored', label: 'Restored' },
+    { key: 'legend', label: 'Legend' },
+    { key: 'lv.x', label: 'LV.X' }
 ];
 const mechBadge = (text, bg = '#222', fg = '#fff') => {
     const svg =
@@ -103,26 +123,30 @@ const MECH_BG = {
     'v': mechV,
     'gx': mechGX,
     'ace spec': mechAceSpec,
+    'tag team': mechTagTeam,
     'prism': mechPrism,
+    'future': mechFuture,
+    'ancient': mechAncient,
+    'tera': mechTera,
     'star': mechGoldStar,
 
     'fusion strike': mechFusion,
     'rapid strike': mechRapid,
     'single strike': mechSingle,
     'mega': mechMega,
-    'ancient trait': mechAncient,
+    'ancient trait': mechAncientTrait,
     'legend': mechLegend,
     'delta species': mechDelta,
 };
 
 const slugCss = (s) =>
-  String(s || '')
-    .normalize('NFKD')                      // strip accents (e.g., Pokémon -> Pokemon)
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/&/g, 'and')                   // "Scarlet & Violet" -> "scarlet-and-violet"
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')            // non-alphanum -> hyphen
-    .replace(/^-+|-+$/g, ''); 
+    String(s || '')
+        .normalize('NFKD')                      // strip accents (e.g., Pokémon -> Pokemon)
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/&/g, 'and')                   // "Scarlet & Violet" -> "scarlet-and-violet"
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')            // non-alphanum -> hyphen
+        .replace(/^-+|-+$/g, '');
 
 export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck }) {
     const [query, setQuery] = useState('')
@@ -137,7 +161,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const latestReqId = useRef(0);
     const skipNextQueryEffectRef = useRef(false);
 
-    const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'ace spec', 'prism', 'star'];
+    const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'tera', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
 
     const ERA_OPTIONS = [
@@ -210,17 +234,17 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return () => { cancelled = true; };
     }, []);
 
-   const SET_OPTIONS = React.useMemo(
-  () =>
-    (cardsPageSets || [])
-      .filter(s => !s.separator && s.abbrev)
-      .map(({ abbrev, name }) => ({
-        key: abbrev,      // e.g. "ROS"
-        name,             // e.g. "Roaring Skies"
-        img: setLogos[abbrev] || ''
-      })),
-  [cardsPageSets, setLogos]
-);
+    const SET_OPTIONS = React.useMemo(
+        () =>
+            (cardsPageSets || [])
+                .filter(s => !s.separator && s.abbrev)
+                .map(({ abbrev, name }) => ({
+                    key: abbrev,      // e.g. "ROS"
+                    name,             // e.g. "Roaring Skies"
+                    img: setLogos[abbrev] || ''
+                })),
+        [cardsPageSets, setLogos]
+    );
 
     function inSelectedEras(card, eras) {
         const activeEraKeys = Object.keys(eras).filter(k => eras[k]);
@@ -245,7 +269,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             Object.values(filters.sets || {}).some(Boolean) ||
             Object.values(filters.eras || {}).some(Boolean) ||
             Object.values(filters.mechanics || {}).some(Boolean) ||
-            Object.values(filters.pokeTypes || {}).some(Boolean)
+            Object.values(filters.pokeTypes || {}).some(Boolean) ||
+            Object.values(filters.stage || {}).some(Boolean)
         );
     }
 
@@ -316,6 +341,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 case 'gx':
                     if (st === 'pokemon' && hasSub('gx')) return true;
                     break;
+                case 'tag team':
+                    if (hasSub('tag team')) return true;
+                    break;
+                case 'ancient':
+                    if (hasSub('ancient')) return true;
+                    break;
+                case 'future':
+                    if (hasSub('future')) return true;
+                    break;
+                case 'tera':
+                    if (st === 'pokemon' && hasSub('tera')) return true;
+                    break;
 
                 // --- “Show more” mechanics:
                 case 'fusion strike':
@@ -328,7 +365,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     if (hasSub('single strike') || rulesText.includes('single strike')) return true;
                     break;
                 case 'mega':
-                    if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true; // many Megas start with “M ”
+                    if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true;
                     break;
                 case 'ancient trait':
                     if (st === 'pokemon' && (hasAncientTrait(card) || rulesText.includes('ancient trait'))) return true;
@@ -343,7 +380,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 case 'ace spec':
                     if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
                     break;
-                case 'star': // Gold Star (avoid VSTAR false positives by checking symbol/alias)
+                case 'star':
                     if (st === 'pokemon' && (hasSub('star') || /★/.test(nm) || rulesText.includes('gold star'))) return true;
                     break;
                 default:
@@ -406,6 +443,38 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return cardTypes.some(t => activeSet.has(t));
     }
 
+    function matchesSelectedStage(card, selected) {
+        const active = Object.keys(selected || {}).filter(k => selected[k]);
+        if (active.length === 0) return true;
+
+        if (getSupertype(card) !== 'pokemon') return false;
+
+        const subs = getSubtypesArr(card);
+        const has = (needle) => subs.includes(needle) || subs.some(s => s.includes(needle));
+
+        const nameLower = (card.name || '').toLowerCase();
+
+        for (const k of active) {
+            switch (k) {
+                case 'basic': if (has('basic')) return true; break;
+                case 'stage 1': if (has('stage 1') || has('stage1')) return true; break;
+                case 'stage 2': if (has('stage 2') || has('stage2')) return true; break;
+                case 'vstar': if (has('vstar')) return true; break;
+                case 'vmax': if (has('vmax')) return true; break;
+                case 'v-union': if (has('v-union') || has('v union')) return true; break;
+                case 'mega': if (has('mega')) return true; break;
+                case 'break': if (has('break')) return true; break;
+                case 'restored': if (has('restored')) return true; break;
+                case 'legend': if (has('legend') || /\blegend\b/i.test(card.name || '')) return true; break;
+                case 'lv.x':
+                    if (has('lv.x') || has('level-up') || nameLower.includes('lv.x') || nameLower.includes('lv. x')) return true;
+                    break;
+                default: break;
+            }
+        }
+        return false;
+    }
+
     const ERA_PATTERNS = {
         // Scarlet & Violet
         SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR)/i,
@@ -449,14 +518,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
+            if (!matchesSelectedStage(card, filters.stage)) continue;
 
             out.push(card);
         }
 
-        // --- Unified sort: newest set first (per setOrder), then card number ascending
         const setIdx = (abbr) => {
             const i = setOrder.indexOf(abbr);
-            return i === -1 ? Number.MAX_SAFE_INTEGER : i; // unknown sets go last
+            return i === -1 ? Number.MAX_SAFE_INTEGER : i;
         };
         out.sort((a, b) => {
             const ia = setIdx(a.setAbbrev);
@@ -480,7 +549,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         sets: {},
         eras: ERA_OPTIONS.reduce((acc, e) => ({ ...acc, [e.key]: false }), {}),
         mechanics: {},
-        pokeTypes: {}
+        pokeTypes: {},
+        stage: {}
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
@@ -650,18 +720,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             const normalizedQuery = aliasNormalize(query);
 
             const rawQuery = query.trim();
-            // split on commas for multi-name search (e.g., "totodile, feraligatr")
             const terms = rawQuery.split(',').map(s => s.trim()).filter(Boolean);
 
-            // detect "prime" shortcut as before
             const primeMode = /\bprime\b/i.test(rawQuery);
 
-            // when in NAME mode, search each comma term separately; otherwise treat as one text query
             const nameTerms = (searchMode === 'name')
                 ? (terms.length ? terms : [rawQuery])
                 : [rawQuery];
 
-            // build variants (symbol aliases) for every term
             const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
 
             const routes = (() => {
@@ -1078,6 +1144,32 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         ))}
                                     </div>
                                 </div>
+                                <div className="filter-group">
+                                    <h3>Stage:</h3>
+                                    <div className="poke-type-buttons">
+                                        {STAGE_OPTIONS.map(({ key, label }) => (
+                                            <button
+                                                key={key}
+                                                type="button"
+                                                className={`type-btn ${(draftFilters.stage && draftFilters.stage[key]) ? 'active' : ''}`}
+                                                style={{ '--typeIcon': 'none' }} // add icons later if you want
+                                                onClick={() => {
+                                                    setDraftFilters(f => {
+                                                        const prev = f.stage || {};
+                                                        return {
+                                                            ...f,
+                                                            stage: { ...prev, [key]: !prev[key] }
+                                                        };
+                                                    });
+                                                }}
+                                                aria-pressed={!!draftFilters.stage[key]}
+                                                title={label}
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div className="buttons-row-modal flex-end">
                                     <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
                                         Reset
@@ -1090,7 +1182,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 !Object.values(draftFilters.sets || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.eras || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.mechanics || {}).some(Boolean) &&
-                                                !Object.values(draftFilters.pokeTypes || {}).some(Boolean);
+                                                !Object.values(draftFilters.pokeTypes || {}).some(Boolean) &&
+                                                !Object.values(draftFilters.stage || {}).some(Boolean);
 
                                             setFilters(draftFilters);
                                             setShowAdvanced(false);
@@ -1120,7 +1213,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                         sets: draftFilters.sets || {},
                                                         eras: draftFilters.eras || {},
                                                         mechanics: draftFilters.mechanics || {},
-                                                        pokeTypes: draftFilters.pokeTypes || {}
+                                                        pokeTypes: draftFilters.pokeTypes || {},
+                                                        stage: draftFilters.stage || {}
                                                     }
                                                 };
 
