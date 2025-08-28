@@ -108,16 +108,15 @@ const STAGE_OPTIONS = [
     { key: 'legend', label: 'Legend' },
     { key: 'lv.x', label: 'LV.X' }
 ];
-const mechBadge = (text, bg = '#222', fg = '#fff') => {
-    const svg =
-        `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>
-       <rect width='64' height='64' rx='12' fill='${bg}'/>
-       <text x='50%' y='55%' text-anchor='middle'
-             font-family='Inter,system-ui,Segoe UI,Arial'
-             font-size='24' font-weight='700' fill='${fg}'>${text}</text>
-     </svg>`;
-    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
-};
+const STAGE_PRIMARY_KEYS = ['basic', 'stage 1', 'stage 2'];
+const HP_OPERATORS = [
+    { value: 'eq', label: '=' },
+    { value: 'gt', label: '>' },
+    { value: 'lt', label: '<' },
+    { value: 'ge', label: '≥' },
+    { value: 'le', label: '≤' },
+];
+const HP_VALUES = Array.from({ length: 32 }, (_, i) => (i + 3) * 10);
 const MECH_BG = {
     'ex': mechEX,
     'v': mechV,
@@ -163,6 +162,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'tera', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
+    const [showMoreStages, setShowMoreStages] = useState(false);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -270,7 +270,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             Object.values(filters.eras || {}).some(Boolean) ||
             Object.values(filters.mechanics || {}).some(Boolean) ||
             Object.values(filters.pokeTypes || {}).some(Boolean) ||
-            Object.values(filters.stage || {}).some(Boolean)
+            Object.values(filters.stage || {}).some(Boolean) ||
+            Number.isFinite(Number((filters.hp || {}).value))
         );
     }
 
@@ -475,6 +476,28 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return false;
     }
 
+    function matchesSelectedHP(card, hpFilter) {
+        const op = hpFilter?.op || 'eq';
+        const val = Number(hpFilter?.value || NaN);
+        // If no value chosen, don't filter by HP
+        if (!Number.isFinite(val)) return true;
+
+        // HP is a Pokémon concept; if a Pokémon is required when HP is active:
+        if (getSupertype(card) !== 'pokemon') return false;
+
+        const hpNum = Number.parseInt(card.hp, 10);
+        if (!Number.isFinite(hpNum)) return false;
+
+        switch (op) {
+            case 'gt': return hpNum > val;
+            case 'lt': return hpNum < val;
+            case 'ge': return hpNum >= val;
+            case 'le': return hpNum <= val;
+            case 'eq':
+            default: return hpNum === val;
+        }
+    }
+
     const ERA_PATTERNS = {
         // Scarlet & Violet
         SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR)/i,
@@ -519,6 +542,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
             if (!matchesSelectedStage(card, filters.stage)) continue;
+            if (!matchesSelectedHP(card, filters.hp)) continue;
 
             out.push(card);
         }
@@ -550,7 +574,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         eras: ERA_OPTIONS.reduce((acc, e) => ({ ...acc, [e.key]: false }), {}),
         mechanics: {},
         pokeTypes: {},
-        stage: {}
+        stage: {},
+        hp: { op: 'eq', value: null }
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
@@ -1146,28 +1171,95 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 </div>
                                 <div className="filter-group">
                                     <h3>Stage:</h3>
-                                    <div className="poke-type-buttons">
-                                        {STAGE_OPTIONS.map(({ key, label }) => (
+                                    <div className="stage-type-buttons">
+                                        {(showMoreStages
+                                            ? STAGE_OPTIONS
+                                            : STAGE_OPTIONS.filter(s => STAGE_PRIMARY_KEYS.includes(s.key))
+                                        ).map(({ key, label }) => (
                                             <button
                                                 key={key}
                                                 type="button"
                                                 className={`type-btn ${(draftFilters.stage && draftFilters.stage[key]) ? 'active' : ''}`}
-                                                style={{ '--typeIcon': 'none' }} // add icons later if you want
+                                                style={{ '--typeIcon': 'none' }}
                                                 onClick={() => {
                                                     setDraftFilters(f => {
                                                         const prev = f.stage || {};
-                                                        return {
-                                                            ...f,
-                                                            stage: { ...prev, [key]: !prev[key] }
-                                                        };
+                                                        return { ...f, stage: { ...prev, [key]: !prev[key] } };
                                                     });
                                                 }}
-                                                aria-pressed={!!draftFilters.stage[key]}
+                                                aria-pressed={!!(draftFilters.stage && draftFilters.stage[key])}
                                                 title={label}
                                             >
                                                 {label}
                                             </button>
                                         ))}
+                                        <button
+                                            type="button"
+                                            className="type-btn mechanics-toggle"
+                                            style={{ '--typeIcon': 'none' }}
+                                            onClick={() => setShowMoreStages(v => !v)}
+                                            aria-expanded={showMoreStages}
+                                        >
+                                            <span className="toggle-label">
+                                                {showMoreStages ? 'Show less' : 'Show more'}
+                                            </span>
+                                            <span className="material-symbols-outlined" aria-hidden="true">
+                                                {showMoreStages ? 'expand_less' : 'expand_more'}
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>HP:</h3>
+                                    <div className="poke-type-buttons" style={{ gap: '0.5rem' }}>
+                                        <select
+                                            aria-label="HP comparison"
+                                            value={(draftFilters.hp && draftFilters.hp.op) || 'eq'}
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    hp: { ...(f.hp || { op: 'eq', value: null }), op: e.target.value }
+                                                }))
+                                            }
+                                            className="search-mode-dropdown"
+                                            style={{ width: 100 }}
+                                        >
+                                            {HP_OPERATORS.map(o => (
+                                                <option key={o.value} value={o.value}>{o.label}</option>
+                                            ))}
+                                        </select>
+
+                                        <select
+                                            aria-label="HP value"
+                                            value={Number.isFinite(Number(draftFilters.hp?.value)) ? Number(draftFilters.hp.value) : ''}
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    hp: {
+                                                        ...(f.hp || { op: 'eq', value: null }),
+                                                        value: e.target.value ? Number(e.target.value) : null
+                                                    }
+                                                }))
+                                            }
+                                            className="search-mode-dropdown"
+                                            style={{ width: 100 }}
+                                        >
+                                            <option value="">All</option>
+                                            {HP_VALUES.map(v => (
+                                                <option key={v} value={v}>{v}</option>
+                                            ))}
+                                        </select>
+
+                                        {Number.isFinite(Number(draftFilters.hp?.value)) && (
+                                            <button
+                                                type="button"
+                                                className="type-btn clear-button-btn"
+                                                style={{ '--typeIcon': 'none' }}
+                                                onClick={() => setDraftFilters(f => ({ ...f, hp: { op: f.hp?.op || 'eq', value: null } }))}
+                                            >
+                                                Clear HP
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="buttons-row-modal flex-end">
@@ -1183,7 +1275,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 !Object.values(draftFilters.eras || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.mechanics || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.pokeTypes || {}).some(Boolean) &&
-                                                !Object.values(draftFilters.stage || {}).some(Boolean);
+                                                !Object.values(draftFilters.stage || {}).some(Boolean) &&
+                                                !Number.isFinite(Number((draftFilters.hp || {}).value));
 
                                             setFilters(draftFilters);
                                             setShowAdvanced(false);
@@ -1214,7 +1307,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                         eras: draftFilters.eras || {},
                                                         mechanics: draftFilters.mechanics || {},
                                                         pokeTypes: draftFilters.pokeTypes || {},
-                                                        stage: draftFilters.stage || {}
+                                                        stage: draftFilters.stage || {},
+                                                        hp: draftFilters.hp || { op: 'eq', value: null }
                                                     }
                                                 };
 

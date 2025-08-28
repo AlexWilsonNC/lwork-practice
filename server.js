@@ -1193,6 +1193,21 @@ app.post('/api/cards/filter-search', async (req, res) => {
       and.push({ supertype: 'Energy' });
       and.push({ $or: energySubtypeOr });
     }
+    const hp = (filters.hp || {});
+    const hpVal = Number(hp.value);
+    if (Number.isFinite(hpVal)) {
+      and.push({ supertype: { $regex: /^(Pokémon|Pokemon)$/i } });
+
+      const hpExpr = { $toInt: { $ifNull: ['$hp', '0'] } };
+      switch ((hp.op || 'eq')) {
+        case 'gt': and.push({ $expr: { $gt: [hpExpr, hpVal] } }); break;
+        case 'lt': and.push({ $expr: { $lt: [hpExpr, hpVal] } }); break;
+        case 'ge': and.push({ $expr: { $gte: [hpExpr, hpVal] } }); break;
+        case 'le': and.push({ $expr: { $lte: [hpExpr, hpVal] } }); break;
+        case 'eq':
+        default: and.push({ $expr: { $eq: [hpExpr, hpVal] } }); break;
+      }
+    }
 
     const mechOn = Object.entries(mechanics || {}).filter(([, on]) => !!on).map(([k]) => k);
     if (mechOn.length) {
@@ -1217,7 +1232,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
           case 'prism':
             mechOr.push({ subtypes: /prism star/i }, { name: /[♢◆]/ }, { rules: /prism star/i });
             break;
-          case 'star': // Gold Star
+          case 'star':
             mechOr.push({ subtypes: /star/i }, { name: /★/ }, { rules: /gold star/i });
             break;
 

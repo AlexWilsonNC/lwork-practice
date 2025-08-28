@@ -1385,11 +1385,17 @@ body.deckbuilder-page .deck-builder {
   border-color: #0056b3;
 }
 .poke-type-buttons,
-.mechanics-buttons {
+.mechanics-buttons,
+.stage-type-buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 0.5rem 0.25px;
+}
+.stage-type-buttons button,
+.clear-button-btn {
+  display: flex;
+  justify-content: center;
 }
 .mechanics-buttons .mechanics-toggle { order: 999; }
 .mechanics-toggle {
