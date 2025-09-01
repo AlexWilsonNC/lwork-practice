@@ -1149,7 +1149,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
       .filter(([, on]) => !!on)
       .map(([k]) => k);
 
-    const TRUE_SUPERTYPES = new Set(['Pokémon', 'Trainer', 'Energy', 'Pokemon']); // accept both spellings just in case
+    const TRUE_SUPERTYPES = new Set(['Pokémon', 'Trainer', 'Energy', 'Pokemon']);
     const validSuper = superOnAll
       .map(s => (String(s).toLowerCase().startsWith('pok') ? 'Pokémon' : s))
       .filter(s => TRUE_SUPERTYPES.has(s));
@@ -1194,6 +1194,21 @@ app.post('/api/cards/filter-search', async (req, res) => {
       and.push({ $or: energySubtypeOr });
     }
     const hp = (filters.hp || {});
+    if (hp && typeof hp === 'object') {
+      const op = String(hp.op || 'eq').toLowerCase();
+      const val = Number(hp.value);
+      if (Number.isFinite(val)) {
+        if (op === 'eq') {
+          and.push({ hp: String(val) });
+        } else {
+          const map = { gt: '$gt', lt: '$lt', ge: '$gte', le: '$lte' };
+          const mongoOp = map[op];
+          if (mongoOp) {
+            and.push({ $expr: { [mongoOp]: [{ $toInt: '$hp' }, val] } });
+          }
+        }
+      }
+    }
     const hpVal = Number(hp.value);
     if (Number.isFinite(hpVal)) {
       and.push({ supertype: { $regex: /^(Pokémon|Pokemon)$/i } });

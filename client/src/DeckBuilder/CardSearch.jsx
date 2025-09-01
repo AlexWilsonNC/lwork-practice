@@ -275,6 +275,66 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         );
     }
 
+    function buildFiltersForRequest(f) {
+        const pickTrue = (obj) =>
+            Object.fromEntries(Object.entries(obj || {}).filter(([, v]) => !!v));
+
+        const out = {};
+
+        const sets = pickTrue(f.sets);
+        if (Object.keys(sets).length) out.sets = sets;
+
+        const eras = pickTrue(f.eras);
+        if (Object.keys(eras).length) out.eras = eras;
+
+        const supertypes = pickTrue(f.supertypes);
+        if (Object.keys(supertypes).length) out.supertypes = supertypes;
+
+        const mechanics = pickTrue(f.mechanics);
+        if (Object.keys(mechanics).length) out.mechanics = mechanics;
+
+        const pokeTypes = pickTrue(f.pokeTypes);
+        if (Object.keys(pokeTypes).length) out.pokeTypes = pokeTypes;
+
+        const stage = pickTrue(f.stage);
+        if (Object.keys(stage).length) out.stage = stage;
+
+        const op = (f.hp && f.hp.op) || 'eq';
+        const val = Number(f.hp && f.hp.value);
+        if (Number.isFinite(val)) {
+            out.hp = { op, value: val };
+        }
+
+        return { filters: out };
+    }
+
+    function trimEmptyFilters(f) {
+        const out = { ...f };
+
+        // prune sets if none selected
+        if (!out.sets || !Object.values(out.sets).some(Boolean)) delete out.sets;
+
+        // prune eras if none selected
+        if (!out.eras || !Object.values(out.eras).some(Boolean)) delete out.eras;
+
+        // prune mechanics if none selected
+        if (!out.mechanics || !Object.values(out.mechanics).some(Boolean)) delete out.mechanics;
+
+        // prune poke types if none selected
+        if (!out.pokeTypes || !Object.values(out.pokeTypes).some(Boolean)) delete out.pokeTypes;
+
+        // prune stage if none selected
+        if (!out.stage || !Object.values(out.stage).some(Boolean)) delete out.stage;
+
+        // prune supertypes if none selected
+        if (!out.supertypes || !Object.values(out.supertypes).some(Boolean)) delete out.supertypes;
+
+        // HP: only send if user actually chose a value (value is a finite number)
+        if (!out.hp || !Number.isFinite(out.hp?.value)) delete out.hp;
+
+        return out;
+    }
+
     function getCardSeries(card) {
         let s = (card.setSeries ?? card.series ?? card.set?.series ?? '')
             .toString()
@@ -1211,7 +1271,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 </div>
                                 <div className="filter-group">
                                     <h3>HP:</h3>
-                                    <div className="poke-type-buttons" style={{ gap: '0.5rem' }}>
+                                    <div className="poke-type-buttons">
                                         <select
                                             aria-label="HP comparison"
                                             value={(draftFilters.hp && draftFilters.hp.op) || 'eq'}
@@ -1221,7 +1281,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     hp: { ...(f.hp || { op: 'eq', value: null }), op: e.target.value }
                                                 }))
                                             }
-                                            className="search-mode-dropdown"
+                                            className="type-btn hp-btn-dropdown"
                                             style={{ width: 100 }}
                                         >
                                             {HP_OPERATORS.map(o => (
@@ -1241,7 +1301,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     }
                                                 }))
                                             }
-                                            className="search-mode-dropdown"
+                                            className="type-btn hp-btn-dropdown"
                                             style={{ width: 100 }}
                                         >
                                             <option value="">All</option>
@@ -1257,7 +1317,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 style={{ '--typeIcon': 'none' }}
                                                 onClick={() => setDraftFilters(f => ({ ...f, hp: { op: f.hp?.op || 'eq', value: null } }))}
                                             >
-                                                Clear HP
+                                                Reset HP
                                             </button>
                                         )}
                                     </div>
@@ -1300,16 +1360,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             try {
                                                 setFilters(draftFilters);
 
+                                                const cleaned = trimEmptyFilters(draftFilters);
+
                                                 const payload = {
-                                                    filters: {
-                                                        supertypes: draftFilters.supertypes || {},
-                                                        sets: draftFilters.sets || {},
-                                                        eras: draftFilters.eras || {},
-                                                        mechanics: draftFilters.mechanics || {},
-                                                        pokeTypes: draftFilters.pokeTypes || {},
-                                                        stage: draftFilters.stage || {},
-                                                        hp: draftFilters.hp || { op: 'eq', value: null }
-                                                    }
+                                                    filters: cleaned
                                                 };
 
                                                 const resp = await fetch('/api/cards/filter-search', {
