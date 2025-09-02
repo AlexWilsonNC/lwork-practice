@@ -271,7 +271,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             Object.values(filters.mechanics || {}).some(Boolean) ||
             Object.values(filters.pokeTypes || {}).some(Boolean) ||
             Object.values(filters.stage || {}).some(Boolean) ||
-            Number.isFinite(Number((filters.hp || {}).value))
+            Number.isFinite(Number((filters.hp || {}).value)) ||
+            Object.values(filters.has || {}).some(Boolean)
         );
     }
 
@@ -298,6 +299,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
         const stage = pickTrue(f.stage);
         if (Object.keys(stage).length) out.stage = stage;
+
+        const has = pickTrue(f.has);
+        if (Object.keys(has).length) out.has = has;
 
         const op = (f.hp && f.hp.op) || 'eq';
         const val = Number(f.hp && f.hp.value);
@@ -328,6 +332,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
         // prune supertypes if none selected
         if (!out.supertypes || !Object.values(out.supertypes).some(Boolean)) delete out.supertypes;
+
+        // prune has if none selected
+        if (!out.has || !Object.values(out.has).some(Boolean)) delete out.has;
 
         // HP: only send if user actually chose a value (value is a finite number)
         if (!out.hp || !Number.isFinite(out.hp?.value)) delete out.hp;
@@ -558,6 +565,47 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         }
     }
 
+    function matchesSelectedHas(card, selected = {}) {
+        const active = Object.keys(selected).filter(k => selected[k]);
+        if (active.length === 0) return true;
+
+        const st = getSupertype(card); // "pokemon" / "trainer" / "energy"
+        const abilArr = Array.isArray(card.abilities)
+            ? card.abilities
+            : (card.ability ? [card.ability] : []);
+        const abilTypes = abilArr
+            .map(a => (a?.type || ''))
+            .map(s => N(s)); // lowercased, accent-stripped
+
+        const hasAbilityType = (needle) =>
+            abilTypes.some(t => t.includes(N(needle)));
+
+        for (const k of active) {
+            switch (k) {
+                case 'Ability':
+                    if (st === 'pokemon' && hasAbilityType('ability')) return true;
+                    break;
+                case 'Poké-Power':
+                    if (st === 'pokemon' && (hasAbilityType('poké-power') || hasAbilityType('poke-power'))) return true;
+                    break;
+                case 'Poké-Body':
+                    if (st === 'pokemon' && hasAbilityType('poké-body')) return true;
+                    break;
+                case 'Rule Box': {
+                    const arr = Array.isArray(card.rules)
+                        ? card.rules
+                        : (typeof card.rules === 'string' ? [card.rules] : []);
+                    const hasRuleBox = arr.some(r => /\brule\s*:/i.test(String(r || '')));
+                    if (hasRuleBox) return true;
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        return false;
+    }
+
     const ERA_PATTERNS = {
         // Scarlet & Violet
         SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR)/i,
@@ -603,6 +651,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
             if (!matchesSelectedStage(card, filters.stage)) continue;
             if (!matchesSelectedHP(card, filters.hp)) continue;
+            if (!matchesSelectedHas(card, filters.has)) continue;
 
             out.push(card);
         }
@@ -635,7 +684,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         mechanics: {},
         pokeTypes: {},
         stage: {},
-        hp: { op: 'eq', value: null }
+        hp: { op: 'eq', value: null },
+        has: {}
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
@@ -1239,7 +1289,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             <button
                                                 key={key}
                                                 type="button"
-                                                className={`type-btn ${(draftFilters.stage && draftFilters.stage[key]) ? 'active' : ''}`}
+                                                className={`type-btn non-bold-typebtn ${(draftFilters.stage && draftFilters.stage[key]) ? 'active' : ''}`}
                                                 style={{ '--typeIcon': 'none' }}
                                                 onClick={() => {
                                                     setDraftFilters(f => {
@@ -1255,7 +1305,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         ))}
                                         <button
                                             type="button"
-                                            className="type-btn mechanics-toggle"
+                                            className="type-btn non-bold-typebtn mechanics-toggle"
                                             style={{ '--typeIcon': 'none' }}
                                             onClick={() => setShowMoreStages(v => !v)}
                                             aria-expanded={showMoreStages}
@@ -1313,13 +1363,33 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         {Number.isFinite(Number(draftFilters.hp?.value)) && (
                                             <button
                                                 type="button"
-                                                className="type-btn clear-button-btn"
+                                                className="type-btn non-bold-typebtn clear-button-btn"
                                                 style={{ '--typeIcon': 'none' }}
                                                 onClick={() => setDraftFilters(f => ({ ...f, hp: { op: f.hp?.op || 'eq', value: null } }))}
                                             >
                                                 Reset HP
                                             </button>
                                         )}
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Has:</h3>
+                                    <div className="stage-type-buttons">
+                                        {['Ability', 'Rule Box', 'Poké-Power', 'Poké-Body'].map(label => (
+                                            <button
+                                                key={label}
+                                                type="button"
+                                                className={`type-btn non-bold-typebtn ${draftFilters.has?.[label] ? 'active' : ''}`}
+                                                onClick={() =>
+                                                    setDraftFilters(f => ({
+                                                        ...f,
+                                                        has: { ...(f.has || {}), [label]: !f.has?.[label] }
+                                                    }))
+                                                }
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="buttons-row-modal flex-end">

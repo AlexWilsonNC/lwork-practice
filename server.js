@@ -948,6 +948,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
       eras = {},        // e.g., { SV1: true, SSH1: false, ... }
       mechanics = {},   // e.g., { ex: true, v: true, 'ace spec': false, ... }
       pokeTypes = {},   // e.g., { grass: true, fire: true, ... }
+      has = {},
     } = filters;
 
     const cards = cardConnection.collection('card-database');
@@ -1281,6 +1282,73 @@ app.post('/api/cards/filter-search', async (req, res) => {
         }
       }
       if (mechOr.length) and.push({ $or: mechOr });
+    }
+
+    const hasActive = Object.entries(has || {}).filter(([, on]) => !!on).map(([k]) => k);
+    if (hasActive.length) {
+      const hasOr = [];
+
+      const pokemonRegex = { $regex: /^(Pokémon|Pokemon)$/i };
+
+      if (hasActive.includes('Ability')) {
+        hasOr.push({
+          $and: [
+            { supertype: pokemonRegex },
+            {
+              $or: [
+                { 'abilities.type': /ability/i },
+                { 'ability.type': /ability/i }
+              ]
+            }
+          ]
+        });
+      }
+
+      if (hasActive.includes('Poké-Power')) {
+        hasOr.push({
+          $and: [
+            { supertype: pokemonRegex },
+            {
+              $or: [
+                { 'abilities.type': /pok[eé]-?power/i },
+                { 'ability.type': /pok[eé]-?power/i }
+              ]
+            }
+          ]
+        });
+      }
+
+      if (hasActive.includes('Poké-Body')) {
+        hasOr.push({
+          $and: [
+            { supertype: pokemonRegex },
+            {
+              $or: [
+                { 'abilities.type': /pok[eé]-?body/i },
+                { 'ability.type': /pok[eé]-?body/i }
+              ]
+            }
+          ]
+        });
+      }
+
+      if (hasActive.includes('Rule Box')) {
+  hasOr.push({
+    $and: [
+      { supertype: { $regex: /^(Pokémon|Pokemon)$/i } },
+      {
+        $or: [
+          { rules: { $elemMatch: { $regex: /\brule\s*:/i } } },
+          { rules: { $regex: /\brule\s*:/i } }
+        ]
+      }
+    ]
+  });
+}
+
+      if (hasOr.length) {
+        and.push({ $or: hasOr });
+      }
     }
 
     const pokeOn = Object.entries(pokeTypes).filter(([, on]) => !!on).map(([k]) => k);

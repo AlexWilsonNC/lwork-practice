@@ -1352,6 +1352,9 @@ body.deckbuilder-page .deck-builder {
   isolation: isolate; 
   text-wrap: nowrap;
 }
+.non-bold-typebtn {
+  font-weight: 400 !important;
+}
 .type-btn::after {
   content: "";
   position: absolute;

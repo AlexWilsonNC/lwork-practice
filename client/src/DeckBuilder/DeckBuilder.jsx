@@ -812,7 +812,7 @@ export default function DeckBuilder() {
                     </p>
                   </div>
                 ))}
-                {zoomCard.supertype != 'Pokémon' && zoomCard.rules?.length > 0 && (
+                {zoomCard.supertype != 'Pokémon' || zoomCard.supertype === 'Pokémon' && zoomCard.rules?.length > 0 && (
                   <div className="modal-rules">
                     <ul>
                       {zoomCard.rules.map((text, i) => (
