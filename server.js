@@ -943,12 +943,16 @@ app.post('/api/cards/filter-search', async (req, res) => {
   try {
     const { filters = {} } = req.body || {};
     const {
-      supertypes = {},  // e.g., { 'Pokémon': true, Trainer: false, Energy: false }
-      sets = {},        // e.g., { SV4: true, SV1: true }
-      eras = {},        // e.g., { SV1: true, SSH1: false, ... }
-      mechanics = {},   // e.g., { ex: true, v: true, 'ace spec': false, ... }
-      pokeTypes = {},   // e.g., { grass: true, fire: true, ... }
+      supertypes = {},
+      sets = {},
+      eras = {},
+      mechanics = {},
+      pokeTypes = {},
       has = {},
+      retreat = {},
+      attackCost = {},
+      artist = '',
+      rarity = {},
     } = filters;
 
     const cards = cardConnection.collection('card-database');
@@ -1285,6 +1289,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
     }
 
     const hasActive = Object.entries(has || {}).filter(([, on]) => !!on).map(([k]) => k);
+
     if (hasActive.length) {
       const hasOr = [];
 
@@ -1310,6 +1315,8 @@ app.post('/api/cards/filter-search', async (req, res) => {
             { supertype: pokemonRegex },
             {
               $or: [
+                { 'abilities.type': /pok[eé]mon[\s-]*power/i },
+                { 'ability.type': /pok[eé]mon[\s-]*power/i },
                 { 'abilities.type': /pok[eé]-?power/i },
                 { 'ability.type': /pok[eé]-?power/i }
               ]
@@ -1332,22 +1339,89 @@ app.post('/api/cards/filter-search', async (req, res) => {
         });
       }
 
-      if (hasActive.includes('Rule Box')) {
-  hasOr.push({
-    $and: [
-      { supertype: { $regex: /^(Pokémon|Pokemon)$/i } },
-      {
-        $or: [
-          { rules: { $elemMatch: { $regex: /\brule\s*:/i } } },
-          { rules: { $regex: /\brule\s*:/i } }
-        ]
+      if (hasActive.includes('Ancient Trait')) {
+        hasOr.push({
+          $and: [
+            { supertype: pokemonRegex },
+            {
+              $or: [
+                { ancientTrait: { $exists: true, $ne: null } },
+                { ancienttrait: { $exists: true, $ne: null } },
+                { rules: { $elemMatch: { $regex: /ancient\s+trait/i } } },
+                { rules: { $regex: /ancient\s+trait/i } }
+              ]
+            }
+          ]
+        });
       }
-    ]
-  });
-}
+
+      if (hasActive.includes('Rule Box')) {
+        hasOr.push({
+          $and: [
+            { supertype: { $regex: /^(Pokémon|Pokemon)$/i } },
+            {
+              $or: [
+                { rules: { $elemMatch: { $regex: /\brule\s*:/i } } },
+                { rules: { $regex: /\brule\s*:/i } }
+              ]
+            }
+          ]
+        });
+      }
 
       if (hasOr.length) {
         and.push({ $or: hasOr });
+      }
+    }
+
+    if (retreat && retreat.value !== '' && retreat.value !== null) {
+      const v = Number(retreat.value);
+      const op = (retreat.op || 'eq').toLowerCase();
+      const cmp = {};
+      if (Number.isFinite(v)) {
+        if (op === 'gt') cmp.$gt = v;
+        else if (op === 'ge') cmp.$gte = v;
+        else if (op === 'lt') cmp.$lt = v;
+        else if (op === 'le') cmp.$lte = v;
+        else cmp.$eq = v;
+        and.push({ supertype: { $regex: /^(Pokémon|Pokemon)$/i } });
+        and.push({ convertedRetreatCost: Object.keys(cmp)[0] === '$eq' ? v : cmp });
+      }
+    }
+
+    // --- Attack Cost (Pokémon only) ---
+    if (attackCost && ((attackCost.value !== '' && attackCost.value !== null) ||
+      (attackCost.energies && Object.values(attackCost.energies).some(Boolean)))) {
+
+      const ABBR_TO_TYPE = { G: 'Grass', R: 'Fire', W: 'Water', L: 'Lightning', P: 'Psychic', F: 'Fighting', D: 'Darkness', M: 'Metal', Y: 'Fairy', C: 'Colorless' };
+      const selectedTypes = Object.entries(attackCost.energies || {})
+        .filter(([, on]) => !!on)
+        .map(([abbr]) => ABBR_TO_TYPE[abbr.toUpperCase()])
+        .filter(Boolean);
+
+      const elem = {};
+
+      // numeric side (convertedEnergyCost)
+      if (attackCost.value !== '' && attackCost.value !== null) {
+        const v = Number(attackCost.value);
+        if (Number.isFinite(v)) {
+          const op = (attackCost.op || 'eq').toLowerCase();
+          if (op === 'gt') elem.convertedEnergyCost = { $gt: v };
+          else if (op === 'ge') elem.convertedEnergyCost = { $gte: v };
+          else if (op === 'lt') elem.convertedEnergyCost = { $lt: v };
+          else if (op === 'le') elem.convertedEnergyCost = { $lte: v };
+          else elem.convertedEnergyCost = v;
+        }
+      }
+
+      // energy type subset: require one attack whose cost includes ALL selected types
+      if (selectedTypes.length) {
+        elem.cost = { $all: selectedTypes.map(t => new RegExp(`^${t}$`, 'i')) };
+      }
+
+      if (Object.keys(elem).length) {
+        and.push({ supertype: { $regex: /^(Pokémon|Pokemon)$/i } });
+        and.push({ attacks: { $elemMatch: elem } });
       }
     }
 
@@ -1357,6 +1431,65 @@ app.post('/api/cards/filter-search', async (req, res) => {
       and.push({ supertype: 'Pokémon' });
     }
 
+    const artistQ = String(artist || '').trim();
+    if (artistQ) {
+      and.push({ artist: { $regex: new RegExp(escapeRegex(artistQ), 'i') } });
+    }
+
+    const rarityOn = Object.entries(rarity || {}).filter(([, on]) => !!on).map(([k]) => k);
+    if (rarityOn.length) {
+      const rarityOr = [];
+      for (const key of rarityOn) {
+        switch (key.toLowerCase()) {
+          case 'common': rarityOr.push({ rarity: /^Common$/i }); break;
+          case 'uncommon': rarityOr.push({ rarity: /^Uncommon$/i }); break;
+          case 'rare': rarityOr.push({ rarity: /^Rare$/i }); break;
+          case 'double rare': rarityOr.push({ rarity: /^Double Rare$/i }); break;
+          case 'ultra rare': rarityOr.push({ rarity: /^Ultra Rare$/i }); break;
+
+          // secret variants:
+          case 'secret rare':
+            rarityOr.push(
+              { rarity: /^Rare Secret$/i },
+              { rarity: /^Rare Rainbow$/i },
+              { rarity: /^Hyper Rare$/i },
+              { rarity: /Secret Rare/i },
+            );
+            break;
+
+          case 'illustration rare': rarityOr.push({ rarity: /^Illustration Rare$/i }); break;
+          case 'rainbow rare': rarityOr.push({ rarity: /^Rare Rainbow$/i }); break;
+          case 'rare secret': rarityOr.push({ rarity: /^Rare Secret$/i }); break;
+          case 'holo rare v': rarityOr.push({ rarity: /^Holo Rare V$/i }, { rarity: /^Rare Holo V$/i }); break;
+          case 'special illustration rare': rarityOr.push({ rarity: /^Special Illustration Rare$/i }); break;
+          case 'rare holo gx': rarityOr.push({ rarity: /^Rare Holo GX$/i }); break;
+          case 'rare holo ex': rarityOr.push({ rarity: /^Rare Holo ex$/i }); break;
+          case 'holo rare vmax': rarityOr.push({ rarity: /^Holo Rare VMAX$/i }, { rarity: /^Rare Holo VMAX$/i }); break;
+          case 'hyper rare': rarityOr.push({ rarity: /^Hyper Rare$/i }); break;
+          case 'rare holo lv.x':
+          case 'rare holo lvx':
+            rarityOr.push({ rarity: /^Rare Holo LV\.?X$/i }); break;
+          case 'holo rare vstar': rarityOr.push({ rarity: /^Holo Rare VSTAR$/i }, { rarity: /^Rare Holo VSTAR$/i }); break;
+          case 'radiant rare': rarityOr.push({ rarity: /^Radiant Rare$/i }); break;
+          case 'amazing rare': rarityOr.push({ rarity: /^Amazing Rare$/i }); break;
+          case 'black white rare': rarityOr.push({ rarity: /^Black White Rare$/i }); break;
+          case 'trainer gallery': {
+            const tgRx = /trainer[^a-z0-9]*gallery/i;
+            rarityOr.push(
+              { rarity: tgRx },
+              { 'set.name': tgRx },
+              { number: /^TG\d+/i }
+            );
+            break;
+          }
+
+          default:
+            rarityOr.push({ rarity: new RegExp(`^${escapeRegex(key)}$`, 'i') });
+        }
+      }
+      if (rarityOr.length) and.push({ $or: rarityOr });
+    }
+
     const mongoQuery = and.length ? { $and: and } : {};
 
     const projection = {
@@ -1364,7 +1497,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
       id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
       attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
       types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1, convertedRetreatCost: 1,
-      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1
+      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1, artist: 1
     };
 
     const found = await cards.find(mongoQuery, { projection }).toArray();

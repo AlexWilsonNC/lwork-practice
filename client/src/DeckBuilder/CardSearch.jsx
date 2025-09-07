@@ -28,7 +28,6 @@ import mechFusion from '../assets/icons/fusion.png';
 import mechRapid from '../assets/icons/rs.png';
 import mechSingle from '../assets/icons/ss.png';
 import mechMega from '../assets/icons/mega.png';
-import mechAncientTrait from '../assets/icons/omega.png';
 import mechLegend from '../assets/icons/legend.png';
 import mechDelta from '../assets/icons/ds.png';
 
@@ -91,7 +90,6 @@ const MECHANICS_OPTIONS = [
     { key: 'rapid strike', label: 'Rapid Strike' },
     { key: 'single strike', label: 'Single Strike' },
     { key: 'tag team', label: 'Tag Team' },
-    { key: 'ancient trait', label: 'Ancient Trait' },
     { key: 'legend', label: 'Legend' },
     { key: 'delta species', label: 'Delta Species' },
 ];
@@ -111,12 +109,77 @@ const STAGE_OPTIONS = [
 const STAGE_PRIMARY_KEYS = ['basic', 'stage 1', 'stage 2'];
 const HP_OPERATORS = [
     { value: 'eq', label: '=' },
-    { value: 'gt', label: '>' },
-    { value: 'lt', label: '<' },
     { value: 'ge', label: '≥' },
     { value: 'le', label: '≤' },
+    { value: 'gt', label: '>' },
+    { value: 'lt', label: '<' },
 ];
 const HP_VALUES = Array.from({ length: 32 }, (_, i) => (i + 3) * 10);
+const RETREAT_VALUES = [0, 1, 2, 3, 4, 5];
+const ENERGY_ABBR_TO_FULL = {
+    G: 'Grass',
+    R: 'Fire',
+    W: 'Water',
+    L: 'Lightning',
+    P: 'Psychic',
+    F: 'Fighting',
+    D: 'Darkness',
+    M: 'Metal',
+    Y: 'Fairy',
+    C: 'Colorless',
+};
+const ENERGY_OPTIONS = Object.entries(ENERGY_ABBR_TO_FULL).map(([abbr, label]) => ({ abbr, label }));
+const ENERGY_ABBR_TO_IMG = {
+    G: typeGrass,
+    R: typeFire,
+    W: typeWater,
+    L: typeLightning,
+    P: typePsychic,
+    F: typeFighting,
+    D: typeDark,
+    M: typeMetal,
+    Y: typeFairy,
+    C: typeColorless,
+};
+const RARITY_PRIMARY = [
+    'Common', 'Uncommon', 'Rare', 'Double Rare',
+    'Ultra Rare', 'Secret Rare', 'Illustration Rare',
+];
+
+const RARITY_ALL = [
+  ...RARITY_PRIMARY,
+  'Rainbow Rare', 'Rare Secret',
+  'Holo Rare V', 'Special Illustration Rare',
+  'Rare Holo GX', 'Rare Holo ex', 'Holo Rare VMAX',
+  'Hyper Rare', 'Rare Holo LV.X',
+  'Holo Rare VSTAR', 'Radiant Rare', 'Amazing Rare', 'Black White Rare',
+  'Trainer Gallery'
+];
+
+const RARITY_TO_PATTERNS = {
+  'Common': [/^Common$/i],
+  'Uncommon': [/^Uncommon$/i],
+  'Rare': [/^Rare$/i],
+  'Double Rare': [/^Double Rare$/i],
+  'Ultra Rare': [/^Ultra Rare$/i],
+  'Secret Rare': [/^Rare Secret$/i, /^rare rainbow$/i, /^Hyper Rare$/i, /Secret Rare/i],
+  'Illustration Rare': [/^Illustration Rare$/i],
+  'Rainbow Rare': [/^rare rainbow$/i],
+  'Rare Secret': [/^Rare Secret$/i],
+  'Holo Rare V': [/^Holo Rare V$/i, /^Rare Holo V$/i],
+  'Special Illustration Rare': [/^Special Illustration Rare$/i],
+  'Rare Holo GX': [/^Rare Holo GX$/i],
+  'Rare Holo ex': [/^Rare Holo ex$/i],
+  'Holo Rare VMAX': [/^Holo Rare VMAX$/i, /^Rare Holo VMAX$/i],
+  'Hyper Rare': [/^Hyper Rare$/i],
+  'Rare Holo LV.X': [/^Rare Holo LV\.?X$/i],
+  'Holo Rare VSTAR': [/^Holo Rare VSTAR$/i, /^Rare Holo VSTAR$/i],
+  'Radiant Rare': [/^Radiant Rare$/i],
+  'Amazing Rare': [/^Amazing Rare$/i],
+  'Black White Rare': [/^Black White Rare$/i],
+  'Trainer Gallery': [/trainer[^a-z0-9]*gallery/i],
+};
+
 const MECH_BG = {
     'ex': mechEX,
     'v': mechV,
@@ -133,7 +196,6 @@ const MECH_BG = {
     'rapid strike': mechRapid,
     'single strike': mechSingle,
     'mega': mechMega,
-    'ancient trait': mechAncientTrait,
     'legend': mechLegend,
     'delta species': mechDelta,
 };
@@ -163,6 +225,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'tera', 'prism', 'star'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
     const [showMoreStages, setShowMoreStages] = useState(false);
+    const [showEnergyMenu, setShowEnergyMenu] = useState(false);
+    const [showMoreRarity, setShowMoreRarity] = useState(false);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -263,83 +327,70 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return false;
     }
 
-    function anyFilterActive(filters) {
-        return (
-            Object.values(filters.supertypes || {}).some(Boolean) ||
-            Object.values(filters.sets || {}).some(Boolean) ||
-            Object.values(filters.eras || {}).some(Boolean) ||
-            Object.values(filters.mechanics || {}).some(Boolean) ||
-            Object.values(filters.pokeTypes || {}).some(Boolean) ||
-            Object.values(filters.stage || {}).some(Boolean) ||
-            Number.isFinite(Number((filters.hp || {}).value)) ||
-            Object.values(filters.has || {}).some(Boolean)
-        );
+    function anyFilterActive(f) {
+        const basic =
+            Object.values(f.supertypes || {}).some(Boolean) ||
+            Object.values(f.sets || {}).some(Boolean) ||
+            Object.values(f.eras || {}).some(Boolean) ||
+            Object.values(f.mechanics || {}).some(Boolean) ||
+            Object.values(f.pokeTypes || {}).some(Boolean) ||
+            Object.values(f.stage || {}).some(Boolean) ||
+            (f.hp && f.hp.value !== '' && f.hp.value !== null) ||
+            Object.values(f.has || {}).some(Boolean) ||
+            (f.artist && String(f.artist).trim() !== '') ||
+            Object.values(f.rarity || {}).some(Boolean)
+
+        const retreatActive = f.retreat && f.retreat.value !== '' && f.retreat.value !== null;
+
+        const attackValActive = f.attackCost && f.attackCost.value !== '' && f.attackCost.value !== null;
+        const attackEnergyActive = f.attackCost && f.attackCost.energies &&
+            Object.values(f.attackCost.energies).some(Boolean);
+
+        return basic || retreatActive || attackValActive || attackEnergyActive;
     }
 
     function buildFiltersForRequest(f) {
-        const pickTrue = (obj) =>
-            Object.fromEntries(Object.entries(obj || {}).filter(([, v]) => !!v));
-
-        const out = {};
-
-        const sets = pickTrue(f.sets);
-        if (Object.keys(sets).length) out.sets = sets;
-
-        const eras = pickTrue(f.eras);
-        if (Object.keys(eras).length) out.eras = eras;
-
-        const supertypes = pickTrue(f.supertypes);
-        if (Object.keys(supertypes).length) out.supertypes = supertypes;
-
-        const mechanics = pickTrue(f.mechanics);
-        if (Object.keys(mechanics).length) out.mechanics = mechanics;
-
-        const pokeTypes = pickTrue(f.pokeTypes);
-        if (Object.keys(pokeTypes).length) out.pokeTypes = pokeTypes;
-
-        const stage = pickTrue(f.stage);
-        if (Object.keys(stage).length) out.stage = stage;
-
-        const has = pickTrue(f.has);
-        if (Object.keys(has).length) out.has = has;
-
-        const op = (f.hp && f.hp.op) || 'eq';
-        const val = Number(f.hp && f.hp.value);
-        if (Number.isFinite(val)) {
-            out.hp = { op, value: val };
+        const out = {
+            supertypes: f.supertypes || {},
+            sets: f.sets || {},
+            eras: f.eras || {},
+            mechanics: f.mechanics || {},
+            pokeTypes: f.pokeTypes || {},
+            stage: f.stage || {},
+            hp: f.hp || { op: 'eq', value: '' },
+            has: f.has || {},
+            retreat: f.retreat || { op: 'eq', value: '' },
+            attackCost: f.attackCost || { op: 'eq', value: '', energies: {} }
+        };
+        if (f.artist && String(f.artist).trim() !== '') {
+            out.artist = String(f.artist).trim();
         }
 
-        return { filters: out };
+        // rarity (only send selected = true)
+        if (f.rarity && Object.values(f.rarity).some(Boolean)) {
+  const picked = {};
+  for (const [k, v] of Object.entries(f.rarity)) if (v) picked[k] = true;
+  out.rarity = picked;
+}
+        return trimEmptyFilters(out);
     }
 
     function trimEmptyFilters(f) {
-        const out = { ...f };
-
-        // prune sets if none selected
-        if (!out.sets || !Object.values(out.sets).some(Boolean)) delete out.sets;
-
-        // prune eras if none selected
-        if (!out.eras || !Object.values(out.eras).some(Boolean)) delete out.eras;
-
-        // prune mechanics if none selected
-        if (!out.mechanics || !Object.values(out.mechanics).some(Boolean)) delete out.mechanics;
-
-        // prune poke types if none selected
-        if (!out.pokeTypes || !Object.values(out.pokeTypes).some(Boolean)) delete out.pokeTypes;
-
-        // prune stage if none selected
-        if (!out.stage || !Object.values(out.stage).some(Boolean)) delete out.stage;
-
-        // prune supertypes if none selected
-        if (!out.supertypes || !Object.values(out.supertypes).some(Boolean)) delete out.supertypes;
-
-        // prune has if none selected
-        if (!out.has || !Object.values(out.has).some(Boolean)) delete out.has;
-
-        // HP: only send if user actually chose a value (value is a finite number)
-        if (!out.hp || !Number.isFinite(out.hp?.value)) delete out.hp;
-
-        return out;
+        const g = { ...f };
+        if (!g.hp || g.hp.value === '' || g.hp.value === null) delete g.hp;
+        if (!g.has || !Object.values(g.has).some(Boolean)) delete g.has;
+        if (!g.retreat || g.retreat.value === '' || g.retreat.value === null) delete g.retreat;
+        const ac = g.attackCost;
+        const acValOn = ac && ac.value !== '' && ac.value !== null;
+        const acEOn = ac && ac.energies && Object.values(ac.energies).some(Boolean);
+        if (!acValOn && !acEOn) delete g.attackCost;
+        if (!g.supertypes || !Object.values(g.supertypes).some(Boolean)) delete g.supertypes;
+        if (!g.sets || !Object.values(g.sets).some(Boolean)) delete g.sets;
+        if (!g.eras || !Object.values(g.eras).some(Boolean)) delete g.eras;
+        if (!g.mechanics || !Object.values(g.mechanics).some(Boolean)) delete g.mechanics;
+        if (!g.pokeTypes || !Object.values(g.pokeTypes).some(Boolean)) delete g.pokeTypes;
+        if (!g.stage || !Object.values(g.stage).some(Boolean)) delete g.stage;
+        return g;
     }
 
     function getCardSeries(card) {
@@ -398,7 +449,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         for (const mech of active) {
             switch (mech) {
                 case 'prism':
-                    if (hasSub('prism star') || /[♢◆]/.test(nm) || rulesText.includes('prism star')) return true;
+                    if (hasSub('prism star') || /[♢◆]/.test(nm)) return true;
                     break;
                 case 'ex':
                     if (st === 'pokemon' && hasSub('ex')) return true;
@@ -435,16 +486,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 case 'mega':
                     if (st === 'pokemon' && (hasSub('mega') || /^m\s/i.test(nm))) return true;
                     break;
-                case 'ancient trait':
-                    if (st === 'pokemon' && (hasAncientTrait(card) || rulesText.includes('ancient trait'))) return true;
-                    break;
                 case 'legend':
                     if (st === 'pokemon' && (hasSub('legend') || /\blegend\b/i.test(nm))) return true;
                     break;
                 case 'delta species':
                     if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm) || rulesText.includes('delta species'))) return true;
                     break;
-
                 case 'ace spec':
                     if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
                     break;
@@ -565,6 +612,85 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         }
     }
 
+    function compareByOp(x, v, op) {
+        switch (op) {
+            case 'gt': return x > v;
+            case 'ge': return x >= v;
+            case 'lt': return x < v;
+            case 'le': return x <= v;
+            case 'eq':
+            default: return x === v;
+        }
+    }
+
+    function parseAttackCostText(text = '') {
+        const raw = String(text || '').toUpperCase().trim();
+
+        const m = raw.match(/\d+/);
+        const num = m ? Number(m[0]) : '';
+
+        const energies = {};
+        for (const ch of raw.replace(/\d+/g, '').replace(/[^A-Z]/g, '')) {
+            if ('GRWLPFDMYC'.includes(ch)) energies[ch] = true;
+        }
+        return { value: num, energies };
+    }
+
+    function buildAttackCostText(ac = {}) {
+        const parts = [];
+        if (ac.value !== '' && ac.value != null) parts.push(String(ac.value));
+        const picks = Object.keys(ac.energies || {}).filter(k => ac.energies[k]);
+        if (picks.length) parts.push(picks.join(''));
+        return parts.join(' ').trim();
+    }
+
+    function matchesSelectedRetreat(card, retreat) {
+        if (!retreat || retreat.value === '' || retreat.value === null) return true;
+        const st = (card.supertype || '').toLowerCase();
+        if (!/pokémon|pokemon/.test(st)) return false;
+
+        const crc = Number(card.convertedRetreatCost ?? card.retreatCost?.length ?? 0) || 0;
+        const v = Number(retreat.value);
+        return compareByOp(crc, v, retreat.op || 'eq');
+    }
+
+    function typeToAbbr(s) {
+        const t = String(s || '').toLowerCase();
+        const map = {
+            grass: 'G', fire: 'R', water: 'W', lightning: 'L', electric: 'L',
+            psychic: 'P', fighting: 'F', darkness: 'D', dark: 'D',
+            metal: 'M', steel: 'M', fairy: 'Y', colorless: 'C'
+        };
+        return map[t] || '';
+    }
+
+    function attackHasEnergies(attack, energiesObj) {
+        const required = Object.entries(energiesObj || {})
+            .filter(([, on]) => !!on)
+            .map(([abbr]) => abbr.toUpperCase());
+        if (!required.length) return true;
+
+        const have = new Set((attack?.cost || []).map(typeToAbbr).filter(Boolean));
+        return required.every(r => have.has(r));
+    }
+
+    function matchesSelectedAttackCost(card, attackCost) {
+        if (!attackCost) return true;
+        const valActive = attackCost.value !== '' && attackCost.value !== null;
+        const energyActive = attackCost.energies && Object.values(attackCost.energies).some(Boolean);
+        if (!valActive && !energyActive) return true;
+
+        const v = Number(attackCost.value);
+        const op = attackCost.op || 'eq';
+        const attacks = Array.isArray(card.attacks) ? card.attacks : [];
+        return attacks.some(a => {
+            let ok = true;
+            if (valActive) ok = compareByOp(Number(a.convertedEnergyCost || a.cost?.length || 0), v, op);
+            if (ok && energyActive) ok = attackHasEnergies(a, attackCost.energies);
+            return ok;
+        });
+    }
+
     function matchesSelectedHas(card, selected = {}) {
         const active = Object.keys(selected).filter(k => selected[k]);
         if (active.length === 0) return true;
@@ -586,11 +712,20 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     if (st === 'pokemon' && hasAbilityType('ability')) return true;
                     break;
                 case 'Poké-Power':
-                    if (st === 'pokemon' && (hasAbilityType('poké-power') || hasAbilityType('poke-power'))) return true;
+                    if (st === 'pokemon' && (hasAbilityType('poké-power') || hasAbilityType('poke-power') || hasAbilityType('pokemon power'))) return true;
                     break;
                 case 'Poké-Body':
                     if (st === 'pokemon' && hasAbilityType('poké-body')) return true;
                     break;
+                case 'Ancient Trait': {
+                    if (st !== 'pokemon') break;
+                    const rulesArr = Array.isArray(card.rules)
+                        ? card.rules
+                        : (typeof card.rules === 'string' ? [card.rules] : []);
+                    const rulesText = rulesArr.join(' ').toLowerCase();
+                    if (hasAncientTrait(card) || rulesText.includes('ancient trait')) return true;
+                    break;
+                }
                 case 'Rule Box': {
                     const arr = Array.isArray(card.rules)
                         ? card.rules
@@ -606,32 +741,44 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return false;
     }
 
+    function matchesArtist(card, artistInput) {
+        const q = String(artistInput || '').trim();
+        if (!q) return true;
+        const have = String(card.artist || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const want = q.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        return have.includes(want);
+    }
+
+    function matchesSelectedRarity(card, selected = {}) {
+  const active = Object.keys(selected || {}).filter(k => selected[k]);
+  if (active.length === 0) return true;
+
+  const r = String(card.rarity || '');
+  const setName = String(card.set?.name || '');
+  const num = String(card.number || '');
+  const tgRx = /trainer[^a-z0-9]*gallery/i;
+
+  return active.some(key => {
+    if (key === 'Trainer Gallery') {
+      if (tgRx.test(r)) return true;
+      if (tgRx.test(setName)) return true;
+      if (/^TG\d+/i.test(num)) return true;
+      return false;
+    }
+    const pats = RARITY_TO_PATTERNS[key] || [new RegExp(`^${key}$`, 'i')];
+    return pats.some(rx => rx.test(r));
+  });
+}
+
     const ERA_PATTERNS = {
-        // Scarlet & Violet
-        SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR)/i,
-
-        // Sword & Shield
+        SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR|PAF)/i,
         SSH1: /^(SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|FST|BRS|ASR|LOR|SIT|CRZ)/i,
-
-        // Sun & Moon
         SM1: /^(SM|SUM|GRI|BUS|CIN|UPR|FLI|CES|LOT|TEU|UNB|UNM|CEC|DRM|HIF|DET|TM)/i,
-
-        // XY
         XY1: /^(XY|FLF|FFI|PHF|PRC|ROS|AOR|BKT|BKP|FCO|STS|EVO|GEN)/i,
-
-        // Black & White
         BW1: /^(BW|NVI|EPO|DEX|DRX|BCR|PLS|PLF|PLB|LTR)/i,
-
-        // HeartGold & SoulSilver
         HGSS1: /^(HGSS|HS|UL|UD|TM|CL)/i,
-
-        // Diamond & Pearl (+ Platinum)
         DP1: /^(DP|MT|SW|GE|MD|LA|SF|PL)/i,
-
-        // EX (ADV/RS era)
         RS1: /^(RS|SS|DR|MA|HL|TRR|DX|EM|UF|DS|LM|HP|CG|DF|PK)/i,
-
-        // Wizards of the Coast
         WOTC: /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])\/?/i
     };
 
@@ -652,6 +799,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedStage(card, filters.stage)) continue;
             if (!matchesSelectedHP(card, filters.hp)) continue;
             if (!matchesSelectedHas(card, filters.has)) continue;
+            if (!matchesSelectedRetreat(card, filters.retreat)) continue;
+            if (!matchesSelectedAttackCost(card, filters.attackCost)) continue;
+            if (!matchesSelectedRarity(card, filters.rarity)) continue;
+            if (!matchesArtist(card, filters.artist)) continue;
 
             out.push(card);
         }
@@ -685,12 +836,21 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         pokeTypes: {},
         stage: {},
         hp: { op: 'eq', value: null },
-        has: {}
+        has: {},
+        retreat: { op: 'eq', value: '' },
+        attackCost: { op: 'eq', value: '', energies: {} },
+        artist: '',
+        rarity: {}
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
 
     const [draftFilters, setDraftFilters] = useState(emptyFilters);
+
+    const attackCostText = React.useMemo(
+        () => buildAttackCostText(draftFilters.attackCost),
+        [draftFilters.attackCost]
+    );
 
     const allSetKeys = React.useMemo(() => SET_OPTIONS.map(o => o.key), []);
 
@@ -1033,7 +1193,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                             setDraftFilters(filters);
                             setShowAdvanced(true);
                         }}
-                    style={{ pointerEvents: 'none' }}
+                    // style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -1238,11 +1398,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 {label}
                                             </button>
                                         ))}
-
-                                        {/* Show more / Show less toggle */}
                                         <button
                                             type="button"
-                                            className="type-btn mechanics-toggle"
+                                            className="type-btn mechanics-toggle non-bold-typebtn"
                                             style={{ '--typeIcon': 'none' }}
                                             onClick={() => setShowMoreMechs(v => !v)}
                                             aria-expanded={showMoreMechs}
@@ -1320,6 +1478,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     </div>
                                 </div>
                                 <div className="filter-group">
+                                    <h3>Has:</h3>
+                                    <div className="stage-type-buttons">
+                                        {['Ability', 'Rule Box', 'Ancient Trait', 'Poké-Power', 'Poké-Body'].map(label => (
+                                            <button
+                                                key={label}
+                                                type="button"
+                                                className={`type-btn non-bold-typebtn ${draftFilters.has?.[label] ? 'active' : ''}`}
+                                                onClick={() =>
+                                                    setDraftFilters(f => ({
+                                                        ...f,
+                                                        has: { ...(f.has || {}), [label]: !f.has?.[label] }
+                                                    }))
+                                                }
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="filter-group">
                                     <h3>HP:</h3>
                                     <div className="poke-type-buttons">
                                         <select
@@ -1331,7 +1509,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     hp: { ...(f.hp || { op: 'eq', value: null }), op: e.target.value }
                                                 }))
                                             }
-                                            className="type-btn hp-btn-dropdown"
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
                                             style={{ width: 100 }}
                                         >
                                             {HP_OPERATORS.map(o => (
@@ -1351,16 +1529,16 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     }
                                                 }))
                                             }
-                                            className="type-btn hp-btn-dropdown"
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
                                             style={{ width: 100 }}
                                         >
-                                            <option value="">All</option>
+                                            <option value="">Any</option>
                                             {HP_VALUES.map(v => (
                                                 <option key={v} value={v}>{v}</option>
                                             ))}
                                         </select>
 
-                                        {Number.isFinite(Number(draftFilters.hp?.value)) && (
+                                        {/* {Number.isFinite(Number(draftFilters.hp?.value)) && (
                                             <button
                                                 type="button"
                                                 className="type-btn non-bold-typebtn clear-button-btn"
@@ -1369,28 +1547,203 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             >
                                                 Reset HP
                                             </button>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                                 <div className="filter-group">
-                                    <h3>Has:</h3>
-                                    <div className="stage-type-buttons">
-                                        {['Ability', 'Rule Box', 'Poké-Power', 'Poké-Body'].map(label => (
-                                            <button
-                                                key={label}
-                                                type="button"
-                                                className={`type-btn non-bold-typebtn ${draftFilters.has?.[label] ? 'active' : ''}`}
-                                                onClick={() =>
+                                    <h3>Retreat:</h3>
+                                    <div className="poke-type-buttons">
+                                        <select
+                                            value={draftFilters.retreat?.op || 'eq'}
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            onChange={(e) => setDraftFilters(f => ({ ...f, retreat: { ...(f.retreat || {}), op: e.target.value } }))}
+                                        >
+                                            {HP_OPERATORS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                                        </select>
+                                        <select
+                                            value={draftFilters.retreat?.value ?? ''}
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            onChange={(e) => setDraftFilters(f => ({ ...f, retreat: { ...(f.retreat || {}), value: e.target.value === '' ? '' : Number(e.target.value) } }))}
+                                        >
+                                            <option value="">Any</option>
+                                            {RETREAT_VALUES.map(v => <option key={v} value={v}>{v}</option>)}
+                                        </select>
+                                        {/* <button
+                                            onClick={() => setDraftFilters(f => ({ ...f, retreat: { op: 'eq', value: '' } }))}
+                                            className='type-btn non-bold-typebtn'
+                                        >Reset</button> */}
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Attack Cost:</h3>
+                                    <div className="poke-type-buttons" style={{ gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <select
+                                            value={draftFilters.attackCost?.op || 'eq'}
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({ ...f, attackCost: { ...(f.attackCost || {}), op: e.target.value } }))
+                                            }
+                                        >
+                                            {HP_OPERATORS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                                        </select>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            <input
+                                                type="text"
+                                                inputMode="numeric"
+                                                placeholder="# or energy type >"
+                                                className="type-btn non-bold-typebtn"
+                                                style={{ width: 180 }}
+                                                value={attackCostText}
+                                                onChange={(e) => {
+                                                    const parsed = parseAttackCostText(e.target.value);
                                                     setDraftFilters(f => ({
                                                         ...f,
-                                                        has: { ...(f.has || {}), [label]: !f.has?.[label] }
-                                                    }))
-                                                }
+                                                        attackCost: {
+                                                            ...(f.attackCost || { op: 'eq' }),
+                                                            value: parsed.value,
+                                                            energies: parsed.energies
+                                                        }
+                                                    }));
+                                                }}
+                                            />
+                                            <div
+                                                className="energy-picker"
+                                                style={{ position: 'relative' }}
+                                                tabIndex={-1}
+                                                onBlur={(e) => {
+                                                    if (!e.currentTarget.contains(e.relatedTarget)) setShowEnergyMenu(false);
+                                                }}
                                             >
-                                                {label}
-                                            </button>
-                                        ))}
+                                                <button
+                                                    type="button"
+                                                    className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                                    onClick={() => setShowEnergyMenu(v => !v)}
+                                                    aria-haspopup="listbox"
+                                                    aria-expanded={showEnergyMenu}
+                                                >
+                                                    Add energy
+                                                    <span className="material-symbols-outlined" aria-hidden>expand_more</span>
+                                                </button>
+
+                                                {showEnergyMenu && (
+                                                    <div
+                                                        role="listbox"
+                                                        className="energy-menu"
+                                                        style={{
+                                                            position: 'absolute',
+                                                            zIndex: 20,
+                                                            top: '100%',
+                                                            left: 0,
+                                                            marginTop: 4,
+                                                            background: 'var(--dropdown-bg, #fff)',
+                                                            border: '1px solid rgba(0,0,0,0.15)',
+                                                            borderRadius: 8,
+                                                            boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                                                            padding: 6,
+                                                            minWidth: 180,
+                                                            maxHeight: 240,
+                                                            overflowY: 'auto'
+                                                        }}
+                                                    >
+                                                        {ENERGY_OPTIONS.map(({ abbr, label }) => (
+                                                            <button
+                                                                key={abbr}
+                                                                role="option"
+                                                                className="energy-menu-item"
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: 8,
+                                                                    padding: '6px 8px',
+                                                                    width: '100%'
+                                                                }}
+                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onClick={() => {
+                                                                    const nextText = (attackCostText ? (attackCostText + ' ') : '') + abbr;
+                                                                    const parsed = parseAttackCostText(nextText);
+                                                                    setDraftFilters(f => ({
+                                                                        ...f,
+                                                                        attackCost: {
+                                                                            ...(f.attackCost || { op: 'eq' }),
+                                                                            value: parsed.value,
+                                                                            energies: parsed.energies
+                                                                        }
+                                                                    }));
+                                                                    setShowEnergyMenu(false);
+                                                                }}
+                                                                title={`${abbr} — ${label}`}
+                                                            >
+                                                                <img
+                                                                    src={ENERGY_ABBR_TO_IMG[abbr]}
+                                                                    alt=""
+                                                                    width={20}
+                                                                    height={20}
+                                                                    style={{ display: 'inline-block', borderRadius: 2 }}
+                                                                />
+                                                                <span style={{ fontFamily: 'monospace', width: 18 }}>{abbr}</span>
+                                                                <span>{label}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* <button
+                                                onClick={() => setDraftFilters(f => ({ ...f, attackCost: { op: 'eq', value: '', energies: {} } }))}
+                                                className='type-btn non-bold-typebtn'
+                                            >
+                                                Clear
+                                            </button> */}
+                                        </div>
                                     </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Artist:</h3>
+                                    <input
+                                        type="text"
+                                        className="type-btn hp-input"
+                                        placeholder="e.g. Mitsuhiro Arita"
+                                        value={draftFilters.artist || ''}
+                                        onChange={(e) => setDraftFilters(f => ({ ...f, artist: e.target.value }))}
+                                    />
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Rarity:</h3>
+                                    <div className="stage-type-buttons">
+                                        {(showMoreRarity ? RARITY_ALL : RARITY_PRIMARY).map(r => {
+                                            const on = !!(draftFilters.rarity && draftFilters.rarity[r]);
+                                            return (
+                                                <button
+                                                    key={r}
+                                                    type="button"
+                                                    className={`type-btn non-bold-typebtn ${on ? 'active' : ''}`}
+                                                    aria-pressed={!!on}
+                                                    onClick={() => {
+                                                        const on = draftFilters.rarity?.[r];
+                                                        setDraftFilters(f => ({
+                                                            ...f,
+                                                            rarity: { ...(f.rarity || {}), [r]: !on }
+                                                        }));
+                                                    }}
+                                                >
+                                                    {r}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    <button
+                                            type="button"
+                                            className="type-btn mechanics-toggle non-bold-typebtn"
+                                            style={{ '--typeIcon': 'none' }}
+                                            onClick={() => setShowMoreRarity(v => !v)}
+                                            aria-expanded={showMoreRarity}
+                                        >
+                                            <span className="toggle-label">
+                                                {showMoreRarity ? 'Show less' : 'Show more'}
+                                            </span>
+                                             <span className="material-symbols-outlined" aria-hidden="true">
+                                                {showMoreRarity ? 'expand_less' : 'expand_more'}
+                                            </span>
+                                        </button>
                                 </div>
                                 <div className="buttons-row-modal flex-end">
                                     <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
@@ -1406,7 +1759,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 !Object.values(draftFilters.mechanics || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.pokeTypes || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.stage || {}).some(Boolean) &&
-                                                !Number.isFinite(Number((draftFilters.hp || {}).value));
+                                                !Number.isFinite(Number((draftFilters.hp || {}).value)) &&
+                                                !(draftFilters.artist && String(draftFilters.artist).trim() !== '') &&
+                                                !Object.values(draftFilters.rarity || {}).some(Boolean);
 
                                             setFilters(draftFilters);
                                             setShowAdvanced(false);
@@ -1430,7 +1785,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             try {
                                                 setFilters(draftFilters);
 
-                                                const cleaned = trimEmptyFilters(draftFilters);
+                                                const cleaned = buildFiltersForRequest(draftFilters);
 
                                                 const payload = {
                                                     filters: cleaned
@@ -1511,7 +1866,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     setDraftFilters(filters);
                                     setShowAdvanced(true);
                                 }}
-                            style={{ pointerEvents: 'none' }}
+                            // style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>

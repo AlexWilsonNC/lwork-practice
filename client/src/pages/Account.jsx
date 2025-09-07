@@ -1124,7 +1124,7 @@ export default function Account() {
                             {!isPublicView && (
                                 <div className="folders-bar">
                                     <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
-                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/bobthebuilder')}>+ New Deck</button>
+                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/bobthebuilder')}>Deck Builder</button>
                                 </div>
                             )}
                             {/* {isPublicView && (
@@ -1455,7 +1455,7 @@ export default function Account() {
                                                                                     Edit Mascots
                                                                                 </button>
                                                                                 <button onClick={() => goToDeckbuilder(d)}>
-                                                                                    Open in Deckbuilder
+                                                                                    Edit in Deckbuilder
                                                                                 </button>
                                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
                                                                                     Duplicate
@@ -1549,7 +1549,7 @@ export default function Account() {
                                                                 }}>
                                                                     Edit Mascots
                                                                 </button>
-                                                                <button onClick={() => goToDeckbuilder(d)}>Open in Deckbuilder</button>
+                                                                <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
                                                                 <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>{folderActionLabel(d)}</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>
@@ -1768,7 +1768,7 @@ export default function Account() {
                                                         onClick={() => goToDeckbuilder(selectedDeck, true)}
                                                         className="public-action-btn"
                                                     >
-                                                        Open in Deckbuilder
+                                                        Edit in Deckbuilder
                                                     </button>
                                                 </div>
                                             ) : (
@@ -1798,7 +1798,7 @@ export default function Account() {
                                                                 Print List
                                                             </button>
                                                             <button onClick={() => goToDeckbuilder(selectedDeck)}>
-                                                                Open in Deckbuilder
+                                                                Edit in Deckbuilder
                                                             </button>
                                                             <button
                                                                 className="danger"
@@ -1851,7 +1851,7 @@ export default function Account() {
                                                                         <button className='small-deck-modal-options-brn-list' onClick={() => openPrintDecklist(selectedDeck)}>
                                                                             Print List
                                                                         </button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Open in Deckbuilder</button>
+                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Edit in Deckbuilder</button>
                                                                     </div>
                                                                 </div>
                                                             )}
