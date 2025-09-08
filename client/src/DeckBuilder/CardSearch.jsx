@@ -173,7 +173,7 @@ const RARITY_TO_PATTERNS = {
     'Uncommon': [/^Uncommon$/i],
     'Rare': [/^Rare$/i],
     'Double Rare': [/^Double Rare$/i],
-    'Ultra Rare': [/^Ultra Rare$/i],
+    'Ultra Rare': [/^Ultra Rare$/i, /^Rare Ultra$/i],
     'Secret Rare': [/^Rare Secret$/i, /^rare rainbow$/i, /^Hyper Rare$/i, /Secret Rare/i],
     'Illustration Rare': [/^Illustration Rare$/i],
     'Rainbow Rare': [/^rare rainbow$/i],
@@ -775,6 +775,13 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     if (st !== 'pokemon') break;
                     const n = getCardPokeTypes(card).length;
                     if (n >= 2) return true;
+                    break;
+                }
+                case 'Held Item': {
+                    if (st !== 'pokemon') break;
+                    const held =
+                        card.heldItem ?? card.helditem ?? card['held item'] ?? false;
+                    if (held === true || String(held).toLowerCase() === 'true') return true;
                     break;
                 }
                 default:
@@ -1523,7 +1530,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Has:</h3>
                                     <div className="stage-type-buttons">
-                                        {['Ability', 'Rule Box', 'Ancient Trait', 'Poké-Power', 'Poké-Body', 'Dual Type'].map(label => (
+                                        {['Ability', 'Rule Box', 'Ancient Trait', 'Poké-Power', 'Poké-Body', 'Dual Type', 'Held Item'].map(label => (
                                             <button
                                                 key={label}
                                                 type="button"

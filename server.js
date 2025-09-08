@@ -1385,6 +1385,22 @@ app.post('/api/cards/filter-search', async (req, res) => {
         });
       }
 
+      if (hasActive.includes('Held Item')) {
+        hasOr.push({
+          $and: [
+            { supertype: pokemonRegex },
+            {
+              $or: [
+                { heldItem: true },
+                { heldItem: 'true' },
+                { helditem: true },
+                { helditem: 'true' }
+              ]
+            }
+          ]
+        });
+      }
+
       if (hasOr.length) {
         and.push({ $or: hasOr });
       }
@@ -1461,7 +1477,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
           case 'uncommon': rarityOr.push({ rarity: /^Uncommon$/i }); break;
           case 'rare': rarityOr.push({ rarity: /^Rare$/i }); break;
           case 'double rare': rarityOr.push({ rarity: /^Double Rare$/i }); break;
-          case 'ultra rare': rarityOr.push({ rarity: /^Ultra Rare$/i }); break;
+          case 'ultra rare': rarityOr.push({ rarity: /^Ultra Rare$/i }, { rarity: /^Rare Ultra$/i }); break;
 
           // secret variants:
           case 'secret rare':
@@ -1513,7 +1529,8 @@ app.post('/api/cards/filter-search', async (req, res) => {
       id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
       attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
       types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1, convertedRetreatCost: 1,
-      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1, artist: 1
+      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1, artist: 1,
+      heldItem: 1, helditem: 1, 'held item': 1, 'held-item': 1
     };
 
     const found = await cards.find(mongoQuery, { projection }).toArray();
