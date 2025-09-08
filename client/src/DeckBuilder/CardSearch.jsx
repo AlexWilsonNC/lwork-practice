@@ -15,6 +15,7 @@ import xy1 from '../assets/sets/xy/xy1-xy.png'
 import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
 
 import mechEX from '../assets/icons/ex.png';
+import mechCapEX from '../assets/icons/capital-ex.png';
 import mechV from '../assets/icons/v.png';
 import mechGX from '../assets/icons/gx.png';
 import mechAceSpec from '../assets/icons/acespec.png';
@@ -30,6 +31,11 @@ import mechSingle from '../assets/icons/ss.png';
 import mechMega from '../assets/icons/mega.png';
 import mechLegend from '../assets/icons/legend.png';
 import mechDelta from '../assets/icons/ds.png';
+import mechPlasma from '../assets/icons/plasma.png';
+import mechSP from '../assets/icons/sp.png';
+import mechUltraBeast from '../assets/icons/ub.png';
+import mechRadiant from '../assets/icons/other-shiny.png';
+import mechShining from '../assets/icons/shiny.png';
 
 import typeGrass from '../assets/energy-symbols/grass.png';
 import typeFire from '../assets/energy-symbols/fire.png';
@@ -76,22 +82,28 @@ const TYPE_BG = {
 };
 
 const MECHANICS_OPTIONS = [
-    { key: 'ex', label: 'ex / EX' },
+    { key: 'ex', label: 'ex' },
     { key: 'v', label: 'V' },
     { key: 'gx', label: 'GX' },
+    { key: 'EX', label: 'EX' },
     { key: 'tera', label: 'Tera' },
-    { key: 'prism', label: 'Prism' },
-    { key: 'mega', label: 'Mega' },
-    { key: 'star', label: 'Gold Star' },
     { key: 'ace spec', label: 'Ace Spec' },
+    { key: 'mega', label: 'Mega' },
     { key: 'ancient', label: 'Ancient' },
     { key: 'future', label: 'Future' },
+    { key: 'radiant', label: 'Radiant' },
     { key: 'fusion strike', label: 'Fusion Strike' },
     { key: 'rapid strike', label: 'Rapid Strike' },
     { key: 'single strike', label: 'Single Strike' },
+    { key: 'prism', label: 'Prism' },
     { key: 'tag team', label: 'Tag Team' },
+    { key: 'ultra beast', label: 'Ultra Beast' },
+    { key: 'plasma', label: 'Team Plasma' },
     { key: 'legend', label: 'Legend' },
+    { key: 'sp', label: 'SP' },
+    { key: 'star', label: 'Gold Star' },
     { key: 'delta species', label: 'Delta Species' },
+    { key: 'shining', label: 'Shining' },
 ];
 const STAGE_OPTIONS = [
     { key: 'basic', label: 'Basic' },
@@ -147,41 +159,42 @@ const RARITY_PRIMARY = [
 ];
 
 const RARITY_ALL = [
-  ...RARITY_PRIMARY,
-  'Rainbow Rare', 'Rare Secret',
-  'Holo Rare V', 'Special Illustration Rare',
-  'Rare Holo GX', 'Rare Holo ex', 'Holo Rare VMAX',
-  'Hyper Rare', 'Rare Holo LV.X',
-  'Holo Rare VSTAR', 'Radiant Rare', 'Amazing Rare', 'Black White Rare',
-  'Trainer Gallery'
+    ...RARITY_PRIMARY,
+    'Rainbow Rare', 'Rare Secret',
+    'Holo Rare V', 'Special Illustration Rare',
+    'Rare Holo GX', 'Rare Holo ex', 'Holo Rare VMAX',
+    'Hyper Rare', 'Rare Holo LV.X',
+    'Holo Rare VSTAR', 'Radiant Rare', 'Amazing Rare', 'Black White Rare',
+    'Trainer Gallery'
 ];
 
 const RARITY_TO_PATTERNS = {
-  'Common': [/^Common$/i],
-  'Uncommon': [/^Uncommon$/i],
-  'Rare': [/^Rare$/i],
-  'Double Rare': [/^Double Rare$/i],
-  'Ultra Rare': [/^Ultra Rare$/i],
-  'Secret Rare': [/^Rare Secret$/i, /^rare rainbow$/i, /^Hyper Rare$/i, /Secret Rare/i],
-  'Illustration Rare': [/^Illustration Rare$/i],
-  'Rainbow Rare': [/^rare rainbow$/i],
-  'Rare Secret': [/^Rare Secret$/i],
-  'Holo Rare V': [/^Holo Rare V$/i, /^Rare Holo V$/i],
-  'Special Illustration Rare': [/^Special Illustration Rare$/i],
-  'Rare Holo GX': [/^Rare Holo GX$/i],
-  'Rare Holo ex': [/^Rare Holo ex$/i],
-  'Holo Rare VMAX': [/^Holo Rare VMAX$/i, /^Rare Holo VMAX$/i],
-  'Hyper Rare': [/^Hyper Rare$/i],
-  'Rare Holo LV.X': [/^Rare Holo LV\.?X$/i],
-  'Holo Rare VSTAR': [/^Holo Rare VSTAR$/i, /^Rare Holo VSTAR$/i],
-  'Radiant Rare': [/^Radiant Rare$/i],
-  'Amazing Rare': [/^Amazing Rare$/i],
-  'Black White Rare': [/^Black White Rare$/i],
-  'Trainer Gallery': [/trainer[^a-z0-9]*gallery/i],
+    'Common': [/^Common$/i],
+    'Uncommon': [/^Uncommon$/i],
+    'Rare': [/^Rare$/i],
+    'Double Rare': [/^Double Rare$/i],
+    'Ultra Rare': [/^Ultra Rare$/i],
+    'Secret Rare': [/^Rare Secret$/i, /^rare rainbow$/i, /^Hyper Rare$/i, /Secret Rare/i],
+    'Illustration Rare': [/^Illustration Rare$/i],
+    'Rainbow Rare': [/^rare rainbow$/i],
+    'Rare Secret': [/^Rare Secret$/i],
+    'Holo Rare V': [/^Holo Rare V$/i, /^Rare Holo V$/i],
+    'Special Illustration Rare': [/^Special Illustration Rare$/i],
+    'Rare Holo GX': [/^Rare Holo GX$/i],
+    'Rare Holo ex': [/^Rare Holo ex$/i],
+    'Holo Rare VMAX': [/^Holo Rare VMAX$/i, /^Rare Holo VMAX$/i],
+    'Hyper Rare': [/^Hyper Rare$/i],
+    'Rare Holo LV.X': [/^Rare Holo LV\.?X$/i],
+    'Holo Rare VSTAR': [/^Holo Rare VSTAR$/i, /^Rare Holo VSTAR$/i],
+    'Radiant Rare': [/^Radiant Rare$/i],
+    'Amazing Rare': [/^Amazing Rare$/i],
+    'Black White Rare': [/^Black White Rare$/i],
+    'Trainer Gallery': [/trainer[^a-z0-9]*gallery/i],
 };
 
 const MECH_BG = {
     'ex': mechEX,
+    'EX': mechCapEX,
     'v': mechV,
     'gx': mechGX,
     'ace spec': mechAceSpec,
@@ -191,13 +204,17 @@ const MECH_BG = {
     'ancient': mechAncient,
     'tera': mechTera,
     'star': mechGoldStar,
-
     'fusion strike': mechFusion,
     'rapid strike': mechRapid,
     'single strike': mechSingle,
     'mega': mechMega,
     'legend': mechLegend,
     'delta species': mechDelta,
+    'plasma': mechPlasma,
+    'sp': mechSP,
+    'ultra beast': mechUltraBeast,
+    'radiant': mechRadiant,
+    'shining': mechShining,
 };
 
 const slugCss = (s) =>
@@ -222,7 +239,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const latestReqId = useRef(0);
     const skipNextQueryEffectRef = useRef(false);
 
-    const MECH_PRIMARY_KEYS = ['ex', 'v', 'gx', 'tera', 'prism', 'star'];
+    const MECH_PRIMARY_KEYS = ['ex', 'EX', 'v', 'gx', 'tera', 'ace spec', 'mega'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
     const [showMoreStages, setShowMoreStages] = useState(false);
     const [showEnergyMenu, setShowEnergyMenu] = useState(false);
@@ -240,36 +257,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { key: 'WOTC', name: 'Wizards of the Coast', src: wotc }
     ];
     const SERIES_TO_ERA = {
-        // modern
         'scarlet & violet': 'SV1',
         'scarlet and violet': 'SV1',
-
         'sword & shield': 'SSH1',
         'sword and shield': 'SSH1',
-
         'sun & moon': 'SM1',
         'sun and moon': 'SM1',
-
         'xy': 'XY1',
-
         'black & white': 'BW1',
         'black and white': 'BW1',
-
         'heartgold & soulsilver': 'HGSS1',
         'heartgold and soulsilver': 'HGSS1',
         'heartgold soulsilver': 'HGSS1',
-
-        // DP era (treat “Platinum” series as part of the DP era selection, as you wanted)
         'diamond & pearl': 'DP1',
         'diamond and pearl': 'DP1',
         'diamond pearl': 'DP1',
         'platinum': 'DP1',
-
-        // EX era
         'ex': 'RS1',
         'ex series': 'RS1',
-
-        // WotC era families
         'base': 'WOTC',
         'jungle': 'WOTC',
         'fossil': 'WOTC',
@@ -368,10 +373,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
         // rarity (only send selected = true)
         if (f.rarity && Object.values(f.rarity).some(Boolean)) {
-  const picked = {};
-  for (const [k, v] of Object.entries(f.rarity)) if (v) picked[k] = true;
-  out.rarity = picked;
-}
+            const picked = {};
+            for (const [k, v] of Object.entries(f.rarity)) if (v) picked[k] = true;
+            out.rarity = picked;
+        }
         return trimEmptyFilters(out);
     }
 
@@ -427,6 +432,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                         : [];
         return raw.map(N);
     }
+    function getSubtypesRaw(card) {
+        const raw = Array.isArray(card.subtypes) ? card.subtypes
+            : Array.isArray(card.subtype) ? card.subtype
+                : typeof card.subtypes === 'string' ? [card.subtypes]
+                    : typeof card.subtype === 'string' ? [card.subtype]
+                        : [];
+        return raw.map(s => (s ?? '').toString());
+    }
 
     function hasAncientTrait(card) {
         return !!(card.ancientTrait || card.ancienttrait);
@@ -451,9 +464,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 case 'prism':
                     if (hasSub('prism star') || /[♢◆]/.test(nm)) return true;
                     break;
-                case 'ex':
-                    if (st === 'pokemon' && hasSub('ex')) return true;
+                case 'ex': {
+                    if (st !== 'pokemon') break;
+                    const rawSubs = getSubtypesRaw(card);
+                    if (rawSubs.some(s => s === 'ex')) return true;
                     break;
+                }
+                case 'EX': {
+                    if (st !== 'pokemon') break;
+                    const rawSubs = getSubtypesRaw(card);
+                    if (rawSubs.some(s => s === 'EX')) return true;
+                    break;
+                }
                 case 'v':
                     if (st === 'pokemon' && (hasSub('v') || hasSub('vmax') || hasSub('vstar') || hasSub('v-union'))) return true;
                     break;
@@ -490,7 +512,22 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     if (st === 'pokemon' && (hasSub('legend') || /\blegend\b/i.test(nm))) return true;
                     break;
                 case 'delta species':
-                    if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm) || rulesText.includes('delta species'))) return true;
+                    if (st === 'pokemon' && (hasSub('delta species') || /δ/.test(nm))) return true;
+                    break;
+                case 'plasma':
+                    if (st === 'pokemon' && (hasSub('team plasma'))) return true;
+                    break;
+                case 'ultra beast':
+                    if (st === 'pokemon' && (hasSub('ultra beast'))) return true;
+                    break;
+                case 'radiant':
+                    if (st === 'pokemon' && (hasSub('radiant'))) return true;
+                    break;
+                case 'shining':
+                    if (st === 'pokemon' && /\bshining\b/i.test(nm)) return true;
+                    break;
+                case 'sp':
+                    if (st === 'pokemon' && (hasSub('sp'))) return true;
                     break;
                 case 'ace spec':
                     if (hasSub('ace spec') || rulesText.includes('ace spec')) return true;
@@ -695,13 +732,13 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         const active = Object.keys(selected).filter(k => selected[k]);
         if (active.length === 0) return true;
 
-        const st = getSupertype(card); // "pokemon" / "trainer" / "energy"
+        const st = getSupertype(card);
         const abilArr = Array.isArray(card.abilities)
             ? card.abilities
             : (card.ability ? [card.ability] : []);
         const abilTypes = abilArr
             .map(a => (a?.type || ''))
-            .map(s => N(s)); // lowercased, accent-stripped
+            .map(s => N(s));
 
         const hasAbilityType = (needle) =>
             abilTypes.some(t => t.includes(N(needle)));
@@ -734,6 +771,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     if (hasRuleBox) return true;
                     break;
                 }
+                case 'Dual Type': {
+                    if (st !== 'pokemon') break;
+                    const n = getCardPokeTypes(card).length;
+                    if (n >= 2) return true;
+                    break;
+                }
                 default:
                     break;
             }
@@ -750,25 +793,25 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function matchesSelectedRarity(card, selected = {}) {
-  const active = Object.keys(selected || {}).filter(k => selected[k]);
-  if (active.length === 0) return true;
+        const active = Object.keys(selected || {}).filter(k => selected[k]);
+        if (active.length === 0) return true;
 
-  const r = String(card.rarity || '');
-  const setName = String(card.set?.name || '');
-  const num = String(card.number || '');
-  const tgRx = /trainer[^a-z0-9]*gallery/i;
+        const r = String(card.rarity || '');
+        const setName = String(card.set?.name || '');
+        const num = String(card.number || '');
+        const tgRx = /trainer[^a-z0-9]*gallery/i;
 
-  return active.some(key => {
-    if (key === 'Trainer Gallery') {
-      if (tgRx.test(r)) return true;
-      if (tgRx.test(setName)) return true;
-      if (/^TG\d+/i.test(num)) return true;
-      return false;
+        return active.some(key => {
+            if (key === 'Trainer Gallery') {
+                if (tgRx.test(r)) return true;
+                if (tgRx.test(setName)) return true;
+                if (/^TG\d+/i.test(num)) return true;
+                return false;
+            }
+            const pats = RARITY_TO_PATTERNS[key] || [new RegExp(`^${key}$`, 'i')];
+            return pats.some(rx => rx.test(r));
+        });
     }
-    const pats = RARITY_TO_PATTERNS[key] || [new RegExp(`^${key}$`, 'i')];
-    return pats.some(rx => rx.test(r));
-  });
-}
 
     const ERA_PATTERNS = {
         SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR|PAF)/i,
@@ -1193,7 +1236,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                             setDraftFilters(filters);
                             setShowAdvanced(true);
                         }}
-                    // style={{ pointerEvents: 'none' }}
+                    style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -1374,6 +1417,29 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     </div>
                                 </div>
                                 <div className="filter-group">
+                                    <h3>Poké Type:</h3>
+                                    <div className="poke-type-buttons">
+                                        {POKE_TYPE_OPTIONS.map(({ key, label, img }) => (
+                                            <button
+                                                key={key}
+                                                type="button"
+                                                className={`type-btn ${draftFilters.pokeTypes[key] ? 'active' : ''}`}
+                                                style={{ '--typeIcon': `url("${img}")` }}
+                                                onClick={() => {
+                                                    setDraftFilters(f => ({
+                                                        ...f,
+                                                        pokeTypes: { ...f.pokeTypes, [key]: !f.pokeTypes[key] }
+                                                    }));
+                                                }}
+                                                title={label}
+                                                aria-pressed={!!draftFilters.pokeTypes[key]}
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="filter-group">
                                     <h3>Mechanics:</h3>
                                     <div className="mechanics-buttons">
                                         {(showMoreMechs
@@ -1412,29 +1478,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 {showMoreMechs ? 'expand_less' : 'expand_more'}
                                             </span>
                                         </button>
-                                    </div>
-                                </div>
-                                <div className="filter-group">
-                                    <h3>Poké Type:</h3>
-                                    <div className="poke-type-buttons">
-                                        {POKE_TYPE_OPTIONS.map(({ key, label, img }) => (
-                                            <button
-                                                key={key}
-                                                type="button"
-                                                className={`type-btn ${draftFilters.pokeTypes[key] ? 'active' : ''}`}
-                                                style={{ '--typeIcon': `url("${img}")` }}
-                                                onClick={() => {
-                                                    setDraftFilters(f => ({
-                                                        ...f,
-                                                        pokeTypes: { ...f.pokeTypes, [key]: !f.pokeTypes[key] }
-                                                    }));
-                                                }}
-                                                title={label}
-                                                aria-pressed={!!draftFilters.pokeTypes[key]}
-                                            >
-                                                {label}
-                                            </button>
-                                        ))}
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -1480,7 +1523,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Has:</h3>
                                     <div className="stage-type-buttons">
-                                        {['Ability', 'Rule Box', 'Ancient Trait', 'Poké-Power', 'Poké-Body'].map(label => (
+                                        {['Ability', 'Rule Box', 'Ancient Trait', 'Poké-Power', 'Poké-Body', 'Dual Type'].map(label => (
                                             <button
                                                 key={label}
                                                 type="button"
@@ -1696,6 +1739,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         </div>
                                     </div>
                                 </div>
+                                <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
                                     <h3>Artist:</h3>
                                     <input
@@ -1731,19 +1775,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         })}
                                     </div>
                                     <button
-                                            type="button"
-                                            className="type-btn mechanics-toggle non-bold-typebtn"
-                                            style={{ '--typeIcon': 'none' }}
-                                            onClick={() => setShowMoreRarity(v => !v)}
-                                            aria-expanded={showMoreRarity}
-                                        >
-                                            <span className="toggle-label">
-                                                {showMoreRarity ? 'Show less' : 'Show more'}
-                                            </span>
-                                             <span className="material-symbols-outlined" aria-hidden="true">
-                                                {showMoreRarity ? 'expand_less' : 'expand_more'}
-                                            </span>
-                                        </button>
+                                        type="button"
+                                        className="type-btn mechanics-toggle non-bold-typebtn"
+                                        style={{ '--typeIcon': 'none' }}
+                                        onClick={() => setShowMoreRarity(v => !v)}
+                                        aria-expanded={showMoreRarity}
+                                    >
+                                        <span className="toggle-label">
+                                            {showMoreRarity ? 'Show less' : 'Show more'}
+                                        </span>
+                                        <span className="material-symbols-outlined" aria-hidden="true">
+                                            {showMoreRarity ? 'expand_less' : 'expand_more'}
+                                        </span>
+                                    </button>
                                 </div>
                                 <div className="buttons-row-modal flex-end">
                                     <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
@@ -1866,7 +1910,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     setDraftFilters(filters);
                                     setShowAdvanced(true);
                                 }}
-                            // style={{ pointerEvents: 'none' }}
+                            style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>

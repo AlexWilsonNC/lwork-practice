@@ -1235,7 +1235,10 @@ app.post('/api/cards/filter-search', async (req, res) => {
       for (const m of mechOn) {
         switch (m) {
           case 'ex':
-            mechOr.push({ subtypes: /ex/i });
+            mechOr.push({ subtypes: /^ex$/ });
+            break;
+          case 'EX':
+            mechOr.push({ subtypes: /^EX$/ });
             break;
           case 'v':
             mechOr.push({ subtypes: /v($|[^a-z])/i });
@@ -1255,8 +1258,6 @@ app.post('/api/cards/filter-search', async (req, res) => {
           case 'star':
             mechOr.push({ subtypes: /star/i }, { name: /★/ }, { rules: /gold star/i });
             break;
-
-          // --- “Show more” mechanics:
           case 'fusion strike':
             mechOr.push({ subtypes: /fusion strike/i }, { rules: /fusion strike/i });
             break;
@@ -1268,6 +1269,21 @@ app.post('/api/cards/filter-search', async (req, res) => {
             break;
           case 'mega':
             mechOr.push({ subtypes: /mega/i }, { name: /^m\s/i });
+            break;
+          case 'plasma':
+            mechOr.push({ subtypes: /team plasma/i });
+            break;
+          case 'ultra beast':
+            mechOr.push({ subtypes: /ultra beast/i });
+            break;
+          case 'sp':
+            mechOr.push({ subtypes: /sp/i });
+            break;
+          case 'radiant':
+            mechOr.push({ subtypes: /radiant/i });
+            break;
+          case 'shining':
+            mechOr.push({ name: /shining/i });
             break;
           case 'ancient trait':
             mechOr.push(
