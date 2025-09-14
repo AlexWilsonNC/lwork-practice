@@ -1243,7 +1243,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                             setDraftFilters(filters);
                             setShowAdvanced(true);
                         }}
-                    style={{ pointerEvents: 'none' }}
+                    // style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -1917,7 +1917,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     setDraftFilters(filters);
                                     setShowAdvanced(true);
                                 }}
-                            style={{ pointerEvents: 'none' }}
+                            // style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>

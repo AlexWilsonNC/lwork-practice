@@ -74,6 +74,24 @@ export const bannedInGLC = [
   { name: 'Twin Energy', set: 'RCL', number: '209' },
 ];
 
+const ccNumber = (card) => {
+  const raw = (card?.number || '').toString().trim().toUpperCase(); // e.g. "CC16"
+  if (!raw.startsWith('CC')) return null;
+  const n = parseInt(raw.slice(2).replace(/^0+/, '') || '0', 10);
+  return Number.isFinite(n) ? n : null;
+};
+
+const isCelClassicCollection = (card) => {
+  const abbrev  = (card?.setAbbrev || '').toUpperCase(); // "CEL"
+  const setId   = (card?.set?.id || '').toLowerCase();   // "cel25c"
+  const setName = (card?.set?.name || '');               // "Celebrations: Classic Collection"
+  return (
+    abbrev === 'CEL' ||
+    setId === 'cel25c' ||
+    /Celebrations:\s*Classic Collection/i.test(setName)
+  );
+};
+
 const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
 const excludedGLCSubtypes = new Set(
   ["EX","GX","ex","V","VMAX","VSTAR","Prism Star","Radiant","ACE SPEC","V-UNION"].map(s=>s.toLowerCase())
@@ -97,6 +115,10 @@ export const isBannedInGLC = (card) => {
 };
 
 export function isGLCLegal(card) {
+  if (isCelClassicCollection(card)) {
+    const n = ccNumber(card);
+    if (n && n >= 1 && n <= 19) return false;
+  }
   // subtype exclusions
   if (card.subtypes?.some(s => excludedGLCSubtypes.has(String(s).toLowerCase()))) return false;
   if (isBannedInGLC(card)) return false;

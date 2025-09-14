@@ -96,12 +96,9 @@ const Homepage = () => {
                                     <img className='card-image' src={latestEvent} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>The <span className='new-color'>2025 World Championships</span> results are available!</h3>
+                                        <h3>View the <span className='new-color'>2025 World Championships</span> results!</h3>
                                         {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
-                                        <p>
-                                            Check out all the lists & player matchups from Masters, Seniors & Juniors from the World Championships, plus deck stats and this event's meta shares.
-                                            {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
-                                        </p>
+                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                     </div>
                                     <div className='card-date-plus-read'>
                                         <p>Aug 17, 2025</p>
@@ -312,11 +309,8 @@ const Homepage = () => {
                                 <img className='card-image' src={latestEvent} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                        <h3>The <span className='new-color'>2025 World Championships</span> results are available!</h3>
-                                        <p>
-                                            Check out all the lists & player matchups from Masters, Seniors & Juniors from the World Championships, plus deck stats and this event's meta shares.
-                                        {/* Check out some of the top lists from this event while we wait for all Day 2 lists, Seniors & Juniors results, and complete statistics. */}
-                                    </p>
+                                        <h3>View the <span className='new-color'>2025 World Championships</span> results!</h3>
+                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                 </div>
                                 <div className='card-date-plus-read'>
                                     <p>Aug 17, 2025</p>

@@ -767,6 +767,8 @@ const EventPage = () => {
     }));
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
+    const is2026Event = eventId.includes('2026');
+    const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
     if (is2025Event) {
@@ -1480,11 +1482,11 @@ const EventPage = () => {
                 return (
                     <>
                         <p>
-                            <strong>Day 1:</strong> {day1Count}{' '}
+                            <strong>{label(1, true)}</strong> {day1Count}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                         <p>
-                            <strong>Day 2:</strong> {day2Count}{' '}
+                            <strong>{label(2, true)}</strong> {day2Count}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                     </>
@@ -1499,7 +1501,7 @@ const EventPage = () => {
                         )}
                         {eventData?.dayTwoMasters && (
                             <p>
-                                <strong>Day 2:</strong> {eventData.dayTwoMasters}
+                                <strong>{label(2, true)}</strong> {eventData.dayTwoMasters}
                             </p>
                         )}
                         {eventData?.dayOnePlayers && (
@@ -1514,12 +1516,12 @@ const EventPage = () => {
                     <>
                         {eventData?.dayOneMasters && (
                             <p>
-                                <strong>Day 1:</strong> {eventData.dayOneMasters}
+                                <strong>{label(1, true)}</strong> {eventData.dayOneMasters}
                             </p>
                         )}
                         {eventData?.dayTwoMasters && (
                             <p>
-                                <strong>Day 2:</strong> {eventData.dayTwoMasters}
+                                <strong>{label(2, true)}</strong> {eventData.dayTwoMasters}
                             </p>
                         )}
                     </>
@@ -1532,11 +1534,11 @@ const EventPage = () => {
                 return (
                     <>
                         <p>
-                            <strong>Day 1:</strong> {day1CountSrs}{' '}
+                            <strong>{label(1, true)}</strong> {day1CountSrs}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                         <p>
-                            <strong>Day 2:</strong> {day2CountSrs}{' '}
+                            <strong>{label(2, true)}</strong> {day2CountSrs}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                     </>
@@ -1549,11 +1551,11 @@ const EventPage = () => {
                 return (
                     <>
                         <p>
-                            <strong>Day 1:</strong> {day1CountJrs}{' '}
+                            <strong>{label(1, true)}</strong> {day1CountJrs}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                         <p>
-                            <strong>Day 2:</strong> {day2CountJrs}{' '}
+                            <strong>{label(2, true)}</strong> {day2CountJrs}{' '}
                             {division.charAt(0).toUpperCase() + division.slice(1)}
                         </p>
                     </>
@@ -1563,7 +1565,7 @@ const EventPage = () => {
                     <>
                         {eventData?.dayOneSeniors && (
                             <p>
-                                <strong>Day 1:</strong> {eventData.dayOneSeniors}
+                                <strong>{label(1, true)}</strong> {eventData.dayOneSeniors}
                             </p>
                         )}
                     </>
@@ -1573,7 +1575,7 @@ const EventPage = () => {
                     <>
                         {eventData?.dayOneJuniors && (
                             <p>
-                                <strong>Day 1:</strong> {eventData.dayOneJuniors}
+                                <strong>{label(1, true)}</strong> {eventData.dayOneJuniors}
                             </p>
                         )}
                     </>
@@ -2246,28 +2248,28 @@ const EventPage = () => {
                                             {eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                     <button onClick={loadEliminated} className="day1buttons">
-                                                        Show Day 1 Results
+                                                        Show {label(1)} Results
                                                     </button>
                                                 </div>
                                             )}
 
                                             {loadingEliminatedDecks && (
                                                 <p style={{ textAlign: 'center', margin: '1rem 0' }}>
-                                                    Loading Day 1 Results
+                                                    Loading {label(1)} Results
                                                 </p>
                                             )}
 
                                             {showAllDecks && eliminatedDecks.length > 0 && (
                                                 <>
                                                     <div className="day-divider">
-                                                        <span>Day 2 cutoff</span>
+                                                        <span>{label(2)} cutoff</span>
                                                     </div>
                                                     <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                         <button
                                                             onClick={() => setShowAllDecks(false)}
                                                             className="day1buttons"
                                                         >
-                                                            Hide Day 1 Results
+                                                            Hide {label(1)} Results
                                                         </button>
                                                     </div>
                                                     {displayResults(
@@ -2280,7 +2282,7 @@ const EventPage = () => {
                                                             onClick={() => setShowAllDecks(false)}
                                                             className="day1buttons"
                                                         >
-                                                            Hide Day 1 Results
+                                                            Hide {label(1)} Results
                                                         </button>
                                                     </div>
                                                 </>
@@ -2338,7 +2340,7 @@ const EventPage = () => {
                                             })}
                                         </ul>
                                         <div className="day-divider">
-                                            <span>Day 2</span>
+                                            <span>{label(2)}</span>
                                         </div>
 
                                         {/* ─── Day 1 players ─── */}
@@ -2425,7 +2427,7 @@ const EventPage = () => {
                                                         <button
                                                             className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
                                                             onClick={handleDayOneClick}
-                                                        >Day 1</button>
+                                                        >{label(1)}</button>
                                                         <button
                                                             className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
                                                             onClick={handleConversionRateClick}
@@ -2437,10 +2439,10 @@ const EventPage = () => {
                                         </div>
                                         {eventId.includes('2025') && chartResults.length > 16 && (
                                             <div className='chart-description'>
-                                                {showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from Day 1</p>}
-                                                {!showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from Day 2</p>}
+                                                {showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(1)}</p>}
+                                                {!showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(2)}</p>}
                                                 {showConversionRate && (
-                                                    <p>* Conversion rate of each archetype, from Day 1 into Day 2<br />
+                                                    <p>* Conversion rate of each archetype, from {label(1)} into {label(2)}<br />
                                                         &nbsp;&nbsp;&nbsp;&nbsp;(decimal values = percentage)
                                                     </p>
                                                 )}
@@ -2452,7 +2454,7 @@ const EventPage = () => {
                                         <div className='chart-container-wrapper' style={{ overflowX: 'auto', paddingBottom: showDayOneMeta ? '1rem' : undefined }}>
                                             {!eventId.includes('2025') && !eventId.includes('2024') && chartResults.length > 1 && (
                                                 <div className='chart-description'>
-                                                    <p>* Total count for each deck archetype from Day 2</p>
+                                                    <p>* Total count for each deck archetype from {label(2)}</p>
                                                 </div>
                                             )}
                                             <div className='chart-container' style={{ minWidth: `${Math.max(chartData.labels.length * 50, 600)}px`, height: '400px' }}>
@@ -2468,8 +2470,8 @@ const EventPage = () => {
                                             <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
                                             {is2025Event && (
                                                 <div className="day-toggle-buttons" style={{ margin: '0.5rem 0' }}>
-                                                    <button onClick={() => handleDataDayChange('day2')} className={dataDay === 'day2' ? 'active-button' : ''}>Day 2</button>
-                                                    <button onClick={() => handleDataDayChange('day1')} className={dataDay === 'day1' ? 'active-button' : ''}>Day 1</button>
+                                                    <button onClick={() => handleDataDayChange('day2')} className={dataDay === 'day2' ? 'active-button' : ''}>{label(2)}</button>
+                                                    <button onClick={() => handleDataDayChange('day1')} className={dataDay === 'day1' ? 'active-button' : ''}>{label(1)}</button>
                                                 </div>
                                             )}
                                             <div className='filter-container'>
@@ -2488,7 +2490,7 @@ const EventPage = () => {
                                         </div>
                                         {selectedArchetype && (
                                             <div className='average-card-counts'>
-                                                <p>Average card count from all {dataDay === 'day2' ? 'Day 2' : 'Day 1'}{' '}
+                                                <p>Average card count from all {dataDay === 'day2' ? label(2) : label(1)}{' '}
                                                     <strong style={{ color: '#1290eb' }}>
                                                         {selectedArchetype === 'blank-' ? 'Unknown' : selectedArchetype}
                                                     </strong> lists
@@ -2511,7 +2513,7 @@ const EventPage = () => {
                                             </div>
                                         )}
                                         <div className='filtered-results'>
-                                            <p>All {dataDay === 'day2' ? 'Day 2' : 'Day 1'} <strong>{selectedArchetype}</strong> results
+                                            <p>All {dataDay === 'day2' ? label(2) : label(1)} <strong>{selectedArchetype}</strong> results
                                                 <span style={{ opacity: 0.25 }}>
                                                     &nbsp;• {eventData.name} ({division.charAt(0).toUpperCase() + division.slice(1)})
                                                 </span>
@@ -2531,11 +2533,11 @@ const EventPage = () => {
                                             <button
                                                 onClick={() => setMatchupDay('day2')}
                                                 className={matchupDay === 'day2' ? 'active-button' : ''}
-                                            >Day 2</button>
+                                            >{label(2)}</button>
                                             <button
                                                 onClick={() => setMatchupDay('day1')}
                                                 className={matchupDay === 'day1' ? 'active-button' : ''}
-                                            >Day 1</button>
+                                            >{label(1)}</button>
                                             <button
                                                 onClick={() => setMatchupDay('combined')}
                                                 className={matchupDay === 'combined' ? 'active-button' : ''}

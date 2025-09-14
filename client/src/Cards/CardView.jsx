@@ -233,22 +233,13 @@ const CardView = () => {
                     };
 
                     const compareRetreatCost = (card1, card2) => {
-                        const retreat1 = card1.retreatCost || card1.convertedRetreatCost || 0;
-                        const retreat2 = card2.retreatCost || card2.convertedRetreatCost || 0;
-
-                        if (retreat1 === 0 && retreat2 === 0) {
-                            return true;
-                        }
-
-                        if (typeof retreat1 === 'number' && typeof retreat2 === 'number') {
-                            return retreat1 === retreat2;
-                        }
-
-                        if (Array.isArray(retreat1) && Array.isArray(retreat2)) {
-                            return retreat1.length === retreat2.length;
-                        }
-
-                        return false;
+                        const toVal = (c) => {
+                            if (Array.isArray(c?.retreatCost)) return c.retreatCost.length;
+                            if (typeof c?.convertedRetreatCost === 'number') return c.convertedRetreatCost;
+                            if (typeof c?.retreatCost === 'number') return c.retreatCost;
+                            return 0;
+                        };
+                        return toVal(card1) === toVal(card2);
                     };
 
                     const compareWeaknesses = (weaknesses1 = [], weaknesses2 = []) => {
@@ -892,10 +883,10 @@ const CardView = () => {
                                                 <Link
                                                     className="event-separator-content"
                                                     to={`/tournaments/${eventId}${eventId === '2002_WORLDS' || /* … */ false
-                                                            ? '/seniors'
-                                                            : eventId.toLowerCase().includes('retro')
-                                                                ? '/all'
-                                                                : ''
+                                                        ? '/seniors'
+                                                        : eventId.toLowerCase().includes('retro')
+                                                            ? '/all'
+                                                            : ''
                                                         }`}
                                                 >
                                                     <strong>{eventName}</strong><span style={{ opacity: 0.5 }}>&nbsp;-&nbsp;{eventDate.replace(/ - [^,]*/, '')}&nbsp;({eventFormat})</span>
