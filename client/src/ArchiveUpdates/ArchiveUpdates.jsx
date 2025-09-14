@@ -35,6 +35,7 @@ import unownexclamation from '../../public/assets/sprites/unown-exclamation.png'
 import kyurem from '../../public/assets/sprites/kyurem.png'
 import deoxys from '../../public/assets/sprites/deoxys.png'
 import sableye from '../../public/assets/sprites/sableye.png'
+import gallade from '../../public/assets/sprites/gallade.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -75,7 +76,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Aug 15, 2025</p>
+          <p>Last Updated: Sept 14, 2025</p>
         </div>
 
         {/* Article Image */}
@@ -86,6 +87,20 @@ const ArchiveUpdates = () => {
           <hr className='title-hr' />
           <br />
           
+          <h3 className='boxxed'>September 2025</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2010_NATS_US/masters/Ryan%20Murray-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gardevoir} alt="sprite" />
+              <img className="sprite second-sprite" src={gallade} alt="sprite" />
+            </div>
+            <p>Ryan Murray (Masters) - 43<sup>rd</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          
+          <hr className='title-hr' />
+          <br />
           <h3 className='boxxed'>August 2025</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>

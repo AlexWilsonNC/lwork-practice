@@ -272,6 +272,12 @@ export default function Account() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [menuOpenId]);
 
+    useEffect(() => {
+        if (!isPublicView && error && /relogin/i.test(error)) {
+            navigate('/pizza', { replace: true });
+        }
+    }, [error, isPublicView, navigate]);
+
     const openMenu = (e, id) => {
         e.stopPropagation();
         setMenuOpenId(menuOpenId === id ? null : id);
@@ -619,6 +625,7 @@ export default function Account() {
         } else {
             if (!token) {
                 setLoading(false);
+                navigate('/pizza', { replace: true });
                 return;
             }
 
@@ -927,7 +934,10 @@ export default function Account() {
     }, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
-    if (error) return <p className="error">{error}</p>;
+    if (error) {
+        if (!isPublicView && /relogin/i.test(error)) return null;
+        return <p className="error">{error}</p>;
+    }
 
     return (
         <AccountSection className="account-page">
