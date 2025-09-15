@@ -2191,7 +2191,7 @@ export default function Account() {
                                             }}
                                         >
                                             <h4>Edit Folder</h4>
-                                            <div className="color-picker" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                            <div className="color-picker" style={{ display: 'flex', marginBottom: '12px' }}>
                                                 {colorOptions.map(c => (
                                                     <button
                                                         key={c}

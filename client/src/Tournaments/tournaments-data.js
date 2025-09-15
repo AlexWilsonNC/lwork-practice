@@ -1397,8 +1397,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 13, 2025",
         "flag": mexico,
-        "location": "Monterrey, Mexico",
-        "results": false
+        "location": "Monterrey, Mexico"
     },
     {
         "id": "2026_PITTSBURGH",

@@ -768,10 +768,11 @@ const EventPage = () => {
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
     const is2026Event = eventId.includes('2026');
+    const isModernEvent = is2025Event || is2026Event;
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
-    if (is2025Event) {
+    if (isModernEvent) {
         // only for 2025+ events do we cut on Swiss rounds
         const totalPlayers = results.length;
         const day1Rounds =
@@ -846,7 +847,7 @@ const EventPage = () => {
     }, [eventId]);
 
     useEffect(() => {
-        if (!eventData || !eventId.includes('2025')) return;
+        if (!eventData || !isModernEvent) return;
         if (didFetchCounts.current[division]) return;
 
         (async () => {
@@ -1135,9 +1136,9 @@ const EventPage = () => {
 
     const chartResults =
         eventId === '2018_NAIC' && division === 'masters'
-        ? mastersResults.slice(0, 64)
+            ? mastersResults.slice(0, 64)
             : (eventId === '2007_WORLDS' && division === 'masters')
-            ? mastersResults.slice(0, 16)
+                ? mastersResults.slice(0, 16)
                 : results;
 
     const deckTypeCount = chartResults.reduce((acc, player) => {
@@ -1619,7 +1620,7 @@ const EventPage = () => {
     };
 
     const dayOneTypeArray = React.useMemo(() => {
-        if (is2025Event) {
+        if (isModernEvent) {
             const allDayOneDecks = [...eliminatedDecks, ...day2Results];
             const dayOneMap = allDayOneDecks.reduce((acc, player) => {
                 let s1 = player.sprite1 || '';
@@ -1664,7 +1665,7 @@ const EventPage = () => {
             .sort((a, b) => b.count - a.count);
     },
         [
-            is2025Event,
+            isModernEvent,
             eliminatedDecks,
             day2Results,
             eventData?.dayOneMeta,
@@ -1742,16 +1743,16 @@ const EventPage = () => {
     }, [archetypes, headToHead]);
 
     // useEffect(() => {
-    //     if (is2025Event && (showDayOneMeta || showConversionRate) && eliminatedDecks.length === 0) {
+    //     if (isModernEvent && (showDayOneMeta || showConversionRate) && eliminatedDecks.length === 0) {
     //         loadEliminated();
     //     }
-    // }, [is2025Event, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
+    // }, [isModernEvent, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
 
     useEffect(() => {
-        if (is2025Event && eliminatedDecks.length === 0) {
+        if (isModernEvent && eliminatedDecks.length === 0) {
             loadEliminated();
         }
-    }, [is2025Event, eliminatedDecks.length]);
+    }, [isModernEvent, eliminatedDecks.length]);
 
     if (!eventData) {
         return null;
@@ -1765,7 +1766,7 @@ const EventPage = () => {
 
     let combinedData;
 
-    if (is2025Event) {
+    if (isModernEvent) {
         // ——— NEW 2025+ logic ———
         // Build Day 1 counts off of your dynamic "dayOneTypeArray"
         const dayOneItems = dayOneTypeArray.map(e => ({ label: e.key, count: e.count }));
@@ -2412,7 +2413,7 @@ const EventPage = () => {
                                     <button onClick={() => setStatView('decklists')}
                                         className={statView === 'decklists' ? 'active-button' : ''}>Decks
                                     </button>
-                                    {is2025Event && (
+                                    {isModernEvent && (
                                         <button onClick={() => setStatView('matchups')}
                                             className={statView === 'matchups' ? 'active-button' : ''}
                                             style={{ opacity: '0.1', pointerEvents: 'none' }}
@@ -2430,9 +2431,9 @@ const EventPage = () => {
                                                 <button
                                                     className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
                                                     onClick={handleDayTwoClick}
-                                                >Day 2
+                                                >{label(2, true)}
                                                 </button>
-                                                {(is2025Event || (eventData?.dayOneMeta?.length > 0 && division === 'masters')) && (
+                                                {(isModernEvent || (eventData?.dayOneMeta?.length > 0 && division === 'masters')) && (
                                                     <>
                                                         <button
                                                             className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
@@ -2478,7 +2479,7 @@ const EventPage = () => {
                                     <>
                                         <div className='deck-archetypes'>
                                             <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
-                                            {is2025Event && (
+                                            {isModernEvent && (
                                                 <div className="day-toggle-buttons" style={{ margin: '0.5rem 0' }}>
                                                     <button onClick={() => handleDataDayChange('day2')} className={dataDay === 'day2' ? 'active-button' : ''}>{label(2)}</button>
                                                     <button onClick={() => handleDataDayChange('day1')} className={dataDay === 'day1' ? 'active-button' : ''}>{label(1)}</button>
