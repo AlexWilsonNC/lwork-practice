@@ -810,6 +810,35 @@ export default function Account() {
         });
     };
 
+    const toggleActiveFolderPublic = async (nextVal) => {
+        const id = activeFolder;
+        if (!id) return;
+
+        setFolders(fs => fs.map(f => f._id === id ? { ...f, isPublic: nextVal } : f));
+        setPublicFolders(pfs => pfs?.map(x => x.id === id ? { ...x, isPublic: nextVal } : x));
+
+        try {
+            const res = await fetch(`/api/user/folders/${id}/public`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ isPublic: nextVal }),
+            });
+
+            if (!res.ok) {
+                setFolders(fs => fs.map(f => f._id === id ? { ...f, isPublic: !nextVal } : f));
+                setPublicFolders(pfs => pfs?.map(x => x.id === id ? { ...x, isPublic: !nextVal } : x));
+                throw new Error(await res.text() || 'Failed to update folder privacy');
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
+    };
+
     const toggleLockFolder = id => {
         setLockedFolders(s => {
             const next = new Set(s);
@@ -1319,16 +1348,25 @@ export default function Account() {
                                                 <span
                                                     className="color-circle"
                                                     style={{
-                                                        width: '16px',
-                                                        height: '16px',
-                                                        borderRadius: '50%',
-                                                        display: 'inline-block',
-                                                        marginRight: '8px',
                                                         backgroundColor: (folders.find(f => f._id === activeFolder) || {}).color
                                                     }}
                                                 />
                                                 <p>Edit Folder</p>
                                             </button>
+                                            {(() => {
+                                                const fol = folders.find(f => f._id === activeFolder);
+                                                if (!fol) return null;
+                                                return (
+                                                    <label className="sort-favorites-btn" title="Make this folder public">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={!!fol.isPublic}
+                                                            onChange={e => toggleActiveFolderPublic(e.target.checked)}
+                                                        />
+                                                        <p>Public</p>
+                                                    </label>
+                                                );
+                                            })()}
                                             <button
                                                 className="sort-favorites-btn"
                                                 onClick={handleDeleteFolder}

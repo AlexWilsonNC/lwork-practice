@@ -496,6 +496,13 @@
   justify-content: flex-start;
 }
 
+.color-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
 .sort-favorites-btn {
   background-color: transparent;
   width: auto;
@@ -510,6 +517,9 @@
   justify-content: flex-start;
   transition: ease all 0.2s;
   margin-right: 15px;
+}
+.sort-favorites-btn input {
+  margin-right: 5px;
 }
 
 .sort-favorites-btn:hover {
@@ -1314,6 +1324,10 @@
   left: 3px;
   width: 10px;
   height: 10px;
+}
+.sort-favorites-btn input {
+  height: 10px;
+  width: 10px;
 }
 .folder-counts-toggle input:checked + .switch-track::after {
   transform: translateX(10px);
