@@ -38,6 +38,7 @@ import sableye from '../../public/assets/sprites/sableye.png'
 import gallade from '../../public/assets/sprites/gallade.png'
 import gliscor from '../../public/assets/sprites/gliscor.png'
 import spiritomb from '../../public/assets/sprites/spiritomb.png'
+import tyrantiar from '../../public/assets/sprites/tyranitar.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -106,6 +107,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={spiritomb} alt="sprite" />
             </div>
             <p>Chris Abernathy (Masters) - 60<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2010_NATS_US/masters/Stephen%20Silvestro-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyrantiar} alt="sprite" />
+              <img className="sprite second-sprite" src={machamp} alt="sprite" />
+            </div>
+            <p>Stephen Silvestro (Masters) - 88<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2009_WORLDS/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">

@@ -634,6 +634,7 @@ const customLabelsConfig = {
         'gengar-garchomp': 'Gengar C (Garchomp)',
         'blank-shuppet': 'Shuppet Donk',
         'blank-tyranitar': 'Tyranitar PRIME',
+        'tyranitar-machamp': 'Tyranitar PRIME',
         'kingdra-machamp': 'Kingdra Machamp',
         'blank-machamp': 'Machamp',
         'blank-garchomp': 'Garchomp SV',

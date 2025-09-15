@@ -1232,6 +1232,11 @@ const EventPage = () => {
             'gliscor'
         ];
     }
+    if (deckTypeCount['Tyranitar PRIME']) {
+        deckTypeCount['Tyranitar PRIME'].sprites = [
+            'tyranitar'
+        ];
+    }
     if (deckTypeCount['Malamar']) {
         deckTypeCount['Malamar'].sprites = [
             'malamar'
