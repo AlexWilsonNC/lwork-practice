@@ -642,6 +642,7 @@ const customLabelsConfig = {
         'blank-palkia': 'Palkia Lock',
         'blaziken-garchomp': 'BlazeChomp',
         'blank-gliscor': 'Gliscor',
+        'gliscor-spiritomb': 'Gliscor',
         'donphan-entei-raikou': 'Donphan PRIME',
         'gengar-machamp': 'Gengar Machamp',
         'gardevoir-azelf': 'Gardevoir AMU',

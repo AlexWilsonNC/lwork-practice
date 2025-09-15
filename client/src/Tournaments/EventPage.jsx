@@ -1227,6 +1227,11 @@ const EventPage = () => {
             'gardevoir-sylveon-tagteam'
         ];
     }
+    if (deckTypeCount['Gliscor']) {
+        deckTypeCount['Gliscor'].sprites = [
+            'gliscor'
+        ];
+    }
     if (deckTypeCount['Malamar']) {
         deckTypeCount['Malamar'].sprites = [
             'malamar'
