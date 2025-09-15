@@ -1,4 +1,5 @@
 import argentina from '../assets/flags/argentina.png';
+import andorra from '../assets/flags/andorra.png';
 import australia from '../assets/flags/australia.png';
 import austria from '../assets/flags/austria.png';
 import belarus from '../assets/flags/belarus.png';
@@ -71,10 +72,19 @@ import georgia from '../assets/flags/georgia.png';
 import venezuela from '../assets/flags/venezuela.png';
 import gibraltar from '../assets/flags/gibraltar.png';
 import romania from '../assets/flags/romania.png';
+import kuwait from '../assets/flags/kuwait.png';
+import india from '../assets/flags/india.png';
+import ukraine from '../assets/flags/ukraine.png';
+import kazakhstan from '../assets/flags/kazakhstan.png';
+import guernsey from '../assets/flags/guernsey.png';
+import paraguay from '../assets/flags/paraguay.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
     AR: argentina,
+    KZ: kazakhstan,
+    KW: kuwait,
+    AD: andorra,
      AU: australia,
      AT: austria,
      BY: belarus,
@@ -92,6 +102,7 @@ export const flags = {
      SV: elSalvador,
      FI: finland,
      FR: france,
+     PA: paraguay,
      DE: germany,
      GR: greece,
      HK: hongKong,
@@ -147,15 +158,21 @@ export const flags = {
      GI: gibraltar,
      RO: romania,
      JM: jamaica,
+     IN: india,
+     GG: guernsey,
+     UA: ukraine,
     unknown: unknown
 };
 
 export const countryNames = {
     AR: 'Argentina (Latin America)',
+    AD: 'Andorra (Europe)',
+    KW: 'Kuwait (Middle East-South Africa)',
     AU: 'Australia (Oceania)',
     AT: 'Austria (Europe)',
     BY: 'Belarus (Europe)',
     BE: 'Belgium (Europe)',
+    KZ: 'Kazakhstan (Asia-Pacific)',
     BR: 'Brazil (Latin America)',
     CA: 'Canada (North America)',
     CL: 'Chile (Latin America)',
@@ -185,6 +202,7 @@ export const countryNames = {
     MY: 'Malaysia (Asia-Pacific)',
     MT: 'Malta (Europe)',
     MX: 'Mexico (Latin America)',
+    PA: 'Paraguay (Latin America)',
     MA: 'Moroco (Europe)',
     NL: 'Netherlands (Europe)',
     NZ: 'New Zealand (Oceania)',
@@ -219,16 +237,21 @@ export const countryNames = {
     CY: 'Cyprus (Europe)',
     GE: 'Georgia (Europe)',
     GI: 'Gibraltar (Europe)',
+    GG: 'Guernsey (Europe)',
     RO: 'Romania (Europe)',
     TT: 'Trinidad & Topago (Latin America)',
     DO: 'Dominican Republic (Latin America)',
     JM: 'Jamaica (Latin America)',
     VE: 'venezuela (Latin America)',
+    IN: 'India (Asia-Pacific)',
+    UA: 'Ukraine (Europe)',
     EC: 'Ecuador (Latin America)'
 };
 
 export const playerCountryDropdown = {
     AL: 'Albania',
+    KW: 'Kuwait',
+    AD: 'Andorra',
     LU: 'Luxembourg',
     BO: 'Bolivia',
     AR: 'Argentina',
@@ -273,6 +296,7 @@ export const playerCountryDropdown = {
     NO: 'Norway',
     PE: 'Peru',
     PH: 'Philippines',
+    PA: 'Paraguay',
     PL: 'Poland',
     PT: 'Portugal',
     PR: 'Puerto Rico',
@@ -292,6 +316,7 @@ export const playerCountryDropdown = {
     US: 'USA',
     UK: 'UK',
     UY: 'Uruguay',
+    UA: 'Ukraine',
     GT: 'Guatemala',
     CY: 'Cyprus',
     BG: 'Bulgaria',
@@ -301,15 +326,18 @@ export const playerCountryDropdown = {
     GI: 'Gibraltar',
     RO: 'Romania',
     JM: 'Jamaica',
-    TT: 'Trinidad & Topago'
+    TT: 'Trinidad & Topago',
+    KZ: 'Kazakhstan',
+    GG: 'Guernsey',
+    IN: 'India'
     // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','AR','PE','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM'],
-  EU: ['DE','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
+  LA: ['BR','AR','PE','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM'],
+  EU: ['DE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
-  AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH'],
-  MS: ['ZA','TR']
+  AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
+  MS: ['ZA','TR','KW']
 };

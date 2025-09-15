@@ -5,7 +5,8 @@ import '../css/decklist.css';
 import DecklistOptions from '../Tools/DecklistOptions';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
-import DisplayPokemonSprites from './pokemon-sprites';
+import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
+import { flags, countryNames } from '../Tools/flags';
 
 const PlayerDeckCenter = styled.div`
     background: ${({ theme }) => theme.body};
@@ -43,23 +44,22 @@ const PlayerDeckCenter = styled.div`
     }
 `;
 
-// NOTE: energy that are in their own set must now be ordered before and after each format
 const orderedSets = [
-  "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
-  "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
-  "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
-  "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
-  "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
-  "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
-  "FLF", "KSS", "XY", "PR-XY",
-  "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
-  "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
-  "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
-  "MT", "DP", "PR-DP",
-  "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
-  "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
-  "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
-  "FO", "JU", "BS", "PR-BS",
+    "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
+    "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
+    "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
+    "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
+    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCE", "PRC", "PHF", "FFI",
+    "FLF", "KSS", "XY", "PR-XY",
+    "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
+    "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
+    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
+    "MT", "DP", "PR-DP",
+    "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
+    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
+    "FO", "JU", "BS", "PR-BS",
 ];
 
 const promoSets = {
@@ -240,18 +240,18 @@ const getPlacementSuffix = (number) => {
 
 const normalizeName = (name) => {
     return name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-      .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
-      .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
-  };
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
+        .replace(/(^-|-$)/g, ''); // Remove leading and trailing hyphens
+};
 
-  const formatName = (name) => {
+const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
-    
+
     const specialCases = {
         'de haes damien': 'De Haes Damien',
         'jamie depamphilis': 'Jamie DePamphilis',
@@ -309,7 +309,7 @@ const formatToCollections = (format) => {
             collections.push(promoSets[set]);
         }
     });
-    
+
     return collections;
 };
 
@@ -334,19 +334,19 @@ const PlayerDeck = () => {
                 const collections = formatToCollections(format);
                 const collectionsParam = collections.join(',');
                 const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
-        
+
                 const response = await fetch(url);
-        
+
                 if (response.ok) {
                     const cards = await response.json();
                     const newCardData = {};
                     const cardMap = {};
                     const cardNameMap = {};
-        
+
                     cards.forEach(card => {
                         const key = `${card.setAbbrev}-${card.number}`;
                         cardMap[key] = card;
-        
+
                         const nameKey = normalizeString(card.name);
                         if (!cardNameMap[nameKey]) {
                             cardNameMap[nameKey] = [];
@@ -370,66 +370,66 @@ const PlayerDeck = () => {
                 const eventData = await response.json();
                 setEventData(eventData);
                 const divisionData = eventData[division];
-        
+
                 if (divisionData) {
                     const decodedPlayerId = decodeURIComponent(playerId);
                     const [rawName, rawFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
-                    const playerName       = rawName;
-                    const playerFlag       = rawFlag === 'undefined' ? undefined : rawFlag;  
+                    const playerName = rawName;
+                    const playerFlag = rawFlag === 'undefined' ? undefined : rawFlag;
                     const normalizedPlayerName = normalizeString(playerName);
-        
-                let player = divisionData.find(p =>
-                    normalizeString(p.name) === normalizedPlayerName
-                    && ( playerFlag
-                        ? p.flag === playerFlag        // exact match when a real flag was provided
-                        : (p.flag === undefined || p.flag === null)  // match missing flags
+
+                    let player = divisionData.find(p =>
+                        normalizeString(p.name) === normalizedPlayerName
+                        && (playerFlag
+                            ? p.flag === playerFlag        // exact match when a real flag was provided
+                            : (p.flag === undefined || p.flag === null)  // match missing flags
                         )
                     );
 
-       // 2) If not there, pull in the Day-1 static JSON and search that:
-       if (!player) {
-         try {
-           const eliminated = await fetchEliminatedJson(eventId, division);
-           player = eliminated.find(p =>
-             normalizeString(p.name) === normalizedPlayerName &&
-             p.flag === playerFlag
-           );
-           // optionally capture their “placing” if it’s in the JSON
-           if (player && typeof player.placing === 'number') {
-             setPlacement(player.placing);
-           }
-         } catch (e) {
-           console.error('Error loading Day-1 JSON:', e);
-         }
-       }
+                    // 2) If not there, pull in the Day-1 static JSON and search that:
+                    if (!player) {
+                        try {
+                            const eliminated = await fetchEliminatedJson(eventId, division);
+                            player = eliminated.find(p =>
+                                normalizeString(p.name) === normalizedPlayerName &&
+                                p.flag === playerFlag
+                            );
+                            // optionally capture their “placing” if it’s in the JSON
+                            if (player && typeof player.placing === 'number') {
+                                setPlacement(player.placing);
+                            }
+                        } catch (e) {
+                            console.error('Error loading Day-1 JSON:', e);
+                        }
+                    }
 
-       // 3) If we *still* don’t have them, bail out:
-       if (!player) {
-         console.error('Player not found in any source:', decodedPlayerId);
-         return;
-       }
+                    // 3) If we *still* don’t have them, bail out:
+                    if (!player) {
+                        console.error('Player not found in any source:', decodedPlayerId);
+                        return;
+                    }
 
-       // 4) Finally set state & kick off card fetch:
-       setPlayerData(player);
-       setPlayerData(player);
+                    // 4) Finally set state & kick off card fetch:
+                    setPlayerData(player);
+                    setPlayerData(player);
 
-        // Determine placement: use explicit if available, otherwise fallback to index+1
-        let pl = null;
-        if (typeof player.placing === 'number' && player.placing > 0) {
-          pl = player.placing;
-        } else {
-          const idx = divisionData.findIndex(p =>
-            normalizeString(p.name) === normalizeString(player.name)
-            && p.flag === player.flag
-          );
-          pl = idx >= 0 ? idx + 1 : null;
-        }
-        setPlacement(pl);
+                    // Determine placement: use explicit if available, otherwise fallback to index+1
+                    let pl = null;
+                    if (typeof player.placing === 'number' && player.placing > 0) {
+                        pl = player.placing;
+                    } else {
+                        const idx = divisionData.findIndex(p =>
+                            normalizeString(p.name) === normalizeString(player.name)
+                            && p.flag === player.flag
+                        );
+                        pl = idx >= 0 ? idx + 1 : null;
+                    }
+                    setPlacement(pl);
 
-       const fmt = division === 'professors'
-         ? eventData.formatProfessors
-         : eventData.format;
-       fetchCardData(fmt);
+                    const fmt = division === 'professors'
+                        ? eventData.formatProfessors
+                        : eventData.format;
+                    fetchCardData(fmt);
 
                 } else {
                     console.error('Division not found in event data');
@@ -438,7 +438,7 @@ const PlayerDeck = () => {
                 console.error('Failed to fetch player data');
             }
         };
-        
+
         fetchPlayerData();
     }, [eventId, division, playerId]);
 
@@ -448,8 +448,44 @@ const PlayerDeck = () => {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Eliminated JSON ${res.status}`);
         const data = await res.json();
-        const key  = `${division}`;
+        const key = `${division}`;
         return Array.isArray(data[key]) ? data[key] : [];
+    };
+
+    const [eliminatedRecords, setEliminatedRecords] = useState([]);
+
+    useEffect(() => {
+        if (!eventId || !division) return;
+        (async () => {
+            try {
+                const data = await fetchEliminatedJson(eventId, division);
+                setEliminatedRecords(Array.isArray(data) ? data : []);
+            } catch (e) {
+                console.warn('No eliminated JSON for opponents:', e);
+            }
+        })();
+    }, [eventId, division]);
+
+    const parseOpponent = (val = '') => {
+        const m = val.match(/\[([A-Z]{2})\]\s*$/);
+        const code = m ? m[1] : 'unknown';
+        const name = val.replace(/\s*\[[A-Z]{2}\]\s*$/, '').trim();
+        return { code, name };
+    };
+
+    // const getCountryNameSafe = (code) => {
+    //     if (typeof countryNames !== 'undefined' && countryNames) {
+    //         return countryNames[code] || 'Unknown';
+    //     }
+    //     return code || 'Unknown';
+    // };
+
+    const flagSrc = (code) => flags[code] || flags.unknown;
+
+    const normalizeSpriteKey = (val) => {
+        if (!val) return '';
+        const base = String(val).split('/').pop();
+        return base.replace(/\.png$/i, '');
     };
 
     useEffect(() => {
@@ -465,11 +501,11 @@ const PlayerDeck = () => {
 
     useEffect(() => {
         if (cardData) {
-            const totalImages = 
-            Number(playerData.decklist.pokemon.length) + 
-            Number(playerData.decklist.trainer.length) + 
-            Number(playerData.decklist.energy.length);
-                if (imagesLoadedCount === totalImages) {
+            const totalImages =
+                Number(playerData.decklist.pokemon.length) +
+                Number(playerData.decklist.trainer.length) +
+                Number(playerData.decklist.energy.length);
+            if (imagesLoadedCount === totalImages) {
                 setLoadingImages(false);
             }
         }
@@ -478,16 +514,16 @@ const PlayerDeck = () => {
     const handleImageLoad = () => {
         setImagesLoadedCount(prevCount => prevCount + 1);
     };
-          
+
     const energyKeyMap = {
-        'grass energy - basic':   'SVE-1',
-        'fire energy - basic':    'SVE-2',
-        'water energy - basic':   'SVE-3',
+        'grass energy - basic': 'SVE-1',
+        'fire energy - basic': 'SVE-2',
+        'water energy - basic': 'SVE-3',
         'lightning energy - basic': 'SVE-4',
         'psychic energy - basic': 'SVE-5',
         'fighting energy - basic': 'SVE-6',
         'darkness energy - basic': 'SVE-7',
-        'metal energy - basic':   'SVE-8',
+        'metal energy - basic': 'SVE-8',
     };
 
     const cardImageUrl = (card) => {
@@ -500,7 +536,7 @@ const PlayerDeck = () => {
     const countCards = (decklist, type) => {
         return decklist[type].reduce((total, card) => total + Number(card.count), 0);
     };
-    
+
     const switchToGridView = () => {
         setViewMode('grid');
         localStorage.setItem('viewMode', 'grid');
@@ -519,11 +555,11 @@ const PlayerDeck = () => {
     }
 
     const cleanedDecklist = {
-        pokemon:   playerData.decklist.pokemon  .map(c => ({ ...c, name: cleanCardName(c.name) })),
-        trainer:   playerData.decklist.trainer  .map(c => ({ ...c, name: cleanCardName(c.name) })),
-        energy:    playerData.decklist.energy   .map(c => ({ ...c, name: cleanCardName(c.name) })),
+        pokemon: playerData.decklist.pokemon.map(c => ({ ...c, name: cleanCardName(c.name) })),
+        trainer: playerData.decklist.trainer.map(c => ({ ...c, name: cleanCardName(c.name) })),
+        energy: playerData.decklist.energy.map(c => ({ ...c, name: cleanCardName(c.name) })),
     };
-    
+
     return (
         <PlayerDeckCenter className='center' theme={theme}>
             <Helmet>
@@ -567,7 +603,7 @@ const PlayerDeck = () => {
                                 <p>
                                     <span className='bold'>
                                         {placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place
-                                    </span> 
+                                    </span>
                                     {division !== 'all' && (
                                         <> ({capitalizeFirstLetter(division)})</>
                                     )}
@@ -582,12 +618,12 @@ const PlayerDeck = () => {
                         <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
                             <button className="decklist-modal-button-deckprofile">Player Profile</button>
                         </Link>
-                        { cardData && (
+                        {cardData && (
                             <DecklistOptions
                                 decklist={cleanedDecklist}
                                 cardMap={cardData.cardMap}
                             />
-                        ) }
+                        )}
                         <div className='deckview-switcher'>
                             <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
                                 <span className="material-symbols-outlined">reorder</span>
@@ -617,17 +653,17 @@ const PlayerDeck = () => {
                         ))}
                         {playerData.decklist.trainer.map((card, index) => (
                             <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                 {
+                                {
                                     (() => {
                                         const mapKey = `${card.set}-${card.number}`;
-                                        const info   = cardData?.cardMap?.[mapKey];
+                                        const info = cardData?.cardMap?.[mapKey];
                                         const altTxt = info?.name ?? card.name;  // fallback to decklist name
                                         return (
-                                        <img
-                                            src={cardImageUrl(card)}
-                                            alt={altTxt}
-                                            onLoad={handleImageLoad}
-                                        />
+                                            <img
+                                                src={cardImageUrl(card)}
+                                                alt={altTxt}
+                                                onLoad={handleImageLoad}
+                                            />
                                         );
                                     })()
                                 }
@@ -675,6 +711,100 @@ const PlayerDeck = () => {
                         </div>
                     </div>
                 )}
+                {/* {playerData?.rounds && (
+                    <div style={{ marginTop: 24 }}>
+                        <h3 style={{ margin: '8px 0' }}>Opponents</h3>
+                        <table className="matchup-table" style={{ width: '100%' }}>
+                            <thead>
+                                <tr>
+                                    <th style={{ textAlign: 'center' }}>Round</th>
+                                    <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
+                                    <th>&nbsp;Opponent</th>
+                                    <th style={{ textAlign: 'center' }}>Deck</th>
+                                    <th style={{ textAlign: 'center' }}>List</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Object.entries(playerData.rounds).reverse().map(([rnd, info]) => {
+                                    const { code, name } = parseOpponent(info.name);
+
+                                    const results = Array.isArray(eventData?.[division]) ? eventData[division] : [];
+                                    const allPlayers = [...results, ...eliminatedRecords];
+                                    const opponent = allPlayers.find(p => p?.name === name && p?.flag === code);
+
+                                    let sprites = null;
+                                    if (opponent?.sprite1 || opponent?.sprite2) {
+                                        const first = normalizeSpriteKey(opponent.sprite1);
+                                        const second = normalizeSpriteKey(opponent.sprite2);
+                                        sprites = (first || second) ? { first, second } : null;
+                                    } else if (opponent?.decklist) {
+                                        const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
+                                        const first = normalizeSpriteKey(firstSprite);
+                                        const second = normalizeSpriteKey(secondSprite);
+                                        sprites = (first || second) ? { first, second } : null;
+                                    }
+
+                                    const bgColor =
+                                        info.result === 'W' ? 'rgba(144,238,144,0.6)' :
+                                            info.result === 'L' ? 'rgba(255,182,193,0.6)' :
+                                                info.result === 'T' ? 'rgba(255,255,102,0.6)' : 'transparent';
+                                    const textColor =
+                                        info.result === 'W' ? 'rgb(1, 63, 1)' :
+                                            info.result === 'L' ? 'darkred' :
+                                                info.result === 'T' ? 'rgb(78, 78, 7)' : 'inherit';
+
+                                    const isBye = name === 'BYE';
+
+                                    return (
+                                        <tr key={rnd}>
+                                            <td style={{ textAlign: 'center' }}>{rnd}</td>
+                                            <td className="player-result-wlt"
+                                                style={{ backgroundColor: bgColor, textAlign: 'center', color: textColor }}>
+                                                {info.result}
+                                            </td>
+
+                                            <td className="name-n-flag-recmodal" style={{ marginLeft: 3 }}>
+                                                <div className="flag-container" style={{ opacity: isBye ? 0 : 1 }}>
+                                                    <img className="flag-size" src={flagSrc(code)} alt={code} />
+                                                </div>
+
+                                                <span className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>
+                                                    {isBye ? 'BYE' : name}
+                                                </span>
+                                            </td>
+
+                                            <td style={{ textAlign: 'center' }}>
+                                                {sprites ? (
+                                                    <DisplayPokemonSprites
+                                                        decklist={opponent?.decklist}
+                                                        sprite1={sprites.first}
+                                                        sprite2={sprites.second}
+                                                    />
+                                                ) : (
+                                                    <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : 'No data'}</em>
+                                                )}
+                                            </td>
+
+                                            <td className="player-decklink-cell" style={{ textAlign: 'center' }}>
+                                                {opponent?.decklist ? (
+                                                    <Link
+                                                        to={`/tournaments/${eventId}/${division}/${encodeURIComponent(opponent.name)}-${opponent.flag}`}
+                                                        className="decklist-icon"
+                                                        title="Decklist"
+                                                    >
+                                                        ↗
+                                                    </Link>
+                                                ) : (
+                                                    <span style={{ opacity: 0.4 }}>—</span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )} */}
             </div>
         </PlayerDeckCenter>
     );

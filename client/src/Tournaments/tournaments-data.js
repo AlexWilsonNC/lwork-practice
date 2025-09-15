@@ -1387,8 +1387,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 13, 2025",
         "flag": germany,
-        "location": "Frankfurt, Germany",
-        "results": false
+        "location": "Frankfurt, Germany"
     },
     {
         "id": "2026_MONTERREY",

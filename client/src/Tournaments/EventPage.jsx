@@ -49,6 +49,7 @@ import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 import championsLeague from '../assets/event-logo/champions-league.png';
 
 import argentina from '../assets/flags/argentina.png';
+import andorra from '../assets/flags/andorra.png';
 import australia from '../assets/flags/australia.png';
 import austria from '../assets/flags/austria.png';
 import belarus from '../assets/flags/belarus.png';
@@ -2345,6 +2346,24 @@ const EventPage = () => {
                                                                     {wins}-{losses}-{ties}
                                                                 </span>
                                                             </div>
+                                                            {(() => {
+                                                                let sprites;
+                                                                if (p?.sprite1) {
+                                                                    sprites = { first: p.sprite1, second: p.sprite2 };
+                                                                } else if (p?.decklist) {
+                                                                    const { firstSprite, secondSprite } = getPokemonSprites(p.decklist, '', '');
+                                                                    sprites = { first: firstSprite, second: secondSprite };
+                                                                }
+                                                                return sprites ? (
+                                                                    <span className="record-sprites" style={{ display: 'inline-flex', gap: 6, marginLeft: 8 }}>
+                                                                        <DisplayPokemonSprites
+                                                                            decklist={p.decklist}
+                                                                            sprite1={sprites.first}
+                                                                            sprite2={sprites.second}
+                                                                        />
+                                                                    </span>
+                                                                ) : null;
+                                                            })()}
                                                         </div>
                                                     </li>
                                                 );
@@ -2396,6 +2415,24 @@ const EventPage = () => {
                                                                     {wins}-{losses}-{ties}
                                                                 </span>
                                                             </div>
+                                                            {(() => {
+                                                                let sprites;
+                                                                if (p?.sprite1) {
+                                                                    sprites = { first: p.sprite1, second: p.sprite2 };
+                                                                } else if (p?.decklist) {
+                                                                    const { firstSprite, secondSprite } = getPokemonSprites(p.decklist, '', '');
+                                                                    sprites = { first: firstSprite, second: secondSprite };
+                                                                }
+                                                                return sprites ? (
+                                                                    <span className="record-sprites" style={{ display: 'inline-flex', gap: 6, marginLeft: 8 }}>
+                                                                        <DisplayPokemonSprites
+                                                                            decklist={p.decklist}
+                                                                            sprite1={sprites.first}
+                                                                            sprite2={sprites.second}
+                                                                        />
+                                                                    </span>
+                                                                ) : null;
+                                                            })()}
                                                         </div>
                                                     </li>
                                                 );
