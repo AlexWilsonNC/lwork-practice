@@ -59,9 +59,9 @@ const Homepage = () => {
 
     // Find the latest article
     const latestArticle = articles.reduce((latest, article) => {
-      return new Date(article.date) > new Date(latest.date) ? article : latest;
+        return new Date(article.date) > new Date(latest.date) ? article : latest;
     }, articles[0]);
-  
+
     const upcomingEvents = sortedEvents
         .filter(event => new Date(event.date) >= new Date())
         .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -91,17 +91,17 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/2025_WORLDS'>
+                            <a href='./tournaments/completed'>
                                 <WrappedFeature className='wrapped-feature'>
                                     <img className='card-image' src={latestEvent} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>View the <span className='new-color'>2025 World Championships</span> results!</h3>
+                                        <h3>Results from <span className='new-color'>Frankfurt <span style={{ color: 'black' }}>&</span> Monterrey Regionals</span> are here!</h3>
                                         {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
                                         <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Aug 17, 2025</p>
+                                        <p>Sep 15, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -111,13 +111,13 @@ const Homepage = () => {
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
                                 <a href='/articles/all' className='blue not-ready'>View All</a>
-                                </div>
+                            </div>
                             <a href={`/articles/${latestArticle.id}`}>
                                 <WrappedFeature className="wrapped-feature">
                                     <div className="article-thumbnail">
                                         <img src={latestArticle.headerImage} alt={latestArticle.title} />
                                         <ArticleType className="article-type retro-article">
-                                        {latestArticle.type || 'Article'}
+                                            {latestArticle.type || 'Article'}
                                         </ArticleType>
                                     </div>
                                     <p className="card-profile-author" style={{ opacity: 0.5 }}>{latestArticle.author}</p>
@@ -181,7 +181,7 @@ const Homepage = () => {
                                     ))}
                                 </ul>
                                 {upcomingEvents.length < 5 && (
-                                   <p className="tba-text">Awaiting future events to be announced...</p>
+                                    <p className="tba-text">Awaiting future events to be announced...</p>
                                 )}
                             </UpcomingEventsHome>
                         </div>
@@ -304,16 +304,16 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/2025_WORLDS'>
+                        <a href='./tournaments/completed'>
                             <WrappedFeature className='wrapped-feature'>
                                 <img className='card-image' src={latestEvent} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                        <h3>View the <span className='new-color'>2025 World Championships</span> results!</h3>
-                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
+                                    <h3>Results from <span className='new-color'>Frankfurt <span style={{ color: 'black' }}>&</span> Monterrey Regionals</span> are here!</h3>
+                                    <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Aug 17, 2025</p>
+                                    <p>Sep 15, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>
@@ -325,29 +325,29 @@ const Homepage = () => {
                             <a href='/articles/all' className='blue not-ready'>View All</a>
                         </div>
                         <a href={`/articles/${latestArticle.id}`}>
-                                <WrappedFeature className="wrapped-feature">
-                                    <div className="article-thumbnail">
-                                        <img src={latestArticle.headerImage} alt={latestArticle.title} />
-                                        <ArticleType className="article-type retro-article">
+                            <WrappedFeature className="wrapped-feature">
+                                <div className="article-thumbnail">
+                                    <img src={latestArticle.headerImage} alt={latestArticle.title} />
+                                    <ArticleType className="article-type retro-article">
                                         {latestArticle.type || 'Article'}
-                                        </ArticleType>
-                                    </div>
-                                    <p className="card-profile-author" style={{ opacity: 0.5 }}>{latestArticle.author}</p>
-                                    <img
-                                        className="card-profile-pic"
-                                        src={latestArticle.authorImage}
-                                        alt={latestArticle.author}
-                                    />
-                                    <div className="homepage-box-content">
-                                        <h3>{latestArticle.title}</h3>
-                                        <p>{latestArticle.sneakPeakText}</p>
-                                    </div>
-                                    <div className="card-date-plus-read">
-                                        <p>{latestArticle.date}</p>
-                                        <p>Read More</p>
-                                    </div>
-                                </WrappedFeature>
-                            </a>
+                                    </ArticleType>
+                                </div>
+                                <p className="card-profile-author" style={{ opacity: 0.5 }}>{latestArticle.author}</p>
+                                <img
+                                    className="card-profile-pic"
+                                    src={latestArticle.authorImage}
+                                    alt={latestArticle.author}
+                                />
+                                <div className="homepage-box-content">
+                                    <h3>{latestArticle.title}</h3>
+                                    <p>{latestArticle.sneakPeakText}</p>
+                                </div>
+                                <div className="card-date-plus-read">
+                                    <p>{latestArticle.date}</p>
+                                    <p>Read More</p>
+                                </div>
+                            </WrappedFeature>
+                        </a>
                     </div>
                     <div className='homepage-box3 zmore'>
                         <div className='flex-row-wide'>
@@ -355,27 +355,27 @@ const Homepage = () => {
                             <a href='/tournaments/upcoming' className='blue'>View All</a>
                         </div>
                         <UpcomingEventsHome className='upcoming-events-home'>
-                                <ul>
-                                    {upcomingEvents.map((event, index) => (
-                                        <li key={index}>
-                                            <img className='event-type-logo' src={event.eventLogo} alt="Event logo" />
-                                            <div className='event-date'>
-                                                <h4><a className='white-letters' href={`/tournaments/${event.id}`}>{event.name}</a></h4>
-                                                <div className='upcoming-loc'>
-                                                    <div className='flag-place'>
-                                                        <img src={event.flag} alt="Country flag" />
-                                                        <p className='white-letters'>{event.location}</p>
-                                                    </div>
-                                                    <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                            <ul>
+                                {upcomingEvents.map((event, index) => (
+                                    <li key={index}>
+                                        <img className='event-type-logo' src={event.eventLogo} alt="Event logo" />
+                                        <div className='event-date'>
+                                            <h4><a className='white-letters' href={`/tournaments/${event.id}`}>{event.name}</a></h4>
+                                            <div className='upcoming-loc'>
+                                                <div className='flag-place'>
+                                                    <img src={event.flag} alt="Country flag" />
+                                                    <p className='white-letters'>{event.location}</p>
                                                 </div>
+                                                <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                                             </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                                {upcomingEvents.length < 5 && (
-                                   <p className="tba-text">Awaiting future events to be announced...</p>
-                                )}
-                            </UpcomingEventsHome>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            {upcomingEvents.length < 5 && (
+                                <p className="tba-text">Awaiting future events to be announced...</p>
+                            )}
+                        </UpcomingEventsHome>
                     </div>
                     <div className='homepage-box'>
                         <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
@@ -400,10 +400,10 @@ const Homepage = () => {
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                        <h3>View the lastest TCG expansions: <span className='new-color'>Black Bolt & White Flare</span>!</h3>
-                                        <p>View every Pokémon card from every expansion ever, in our database
-                                            here! From Base Set through the latest release, we have them all!</p>
-                                    </div>
+                                    <h3>View the lastest TCG expansions: <span className='new-color'>Black Bolt & White Flare</span>!</h3>
+                                    <p>View every Pokémon card from every expansion ever, in our database
+                                        here! From Base Set through the latest release, we have them all!</p>
+                                </div>
                             </WrappedFeature>
                         </a>
                     </div>
