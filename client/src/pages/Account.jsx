@@ -242,7 +242,7 @@ export default function Account() {
     const [primaryMascot, setPrimaryMascot] = useState('');
     const [secondaryMascot, setSecondaryMascot] = useState('');
     // const [compactMode, setCompactMode] = useState(false);
-    const [showAllFolders, setShowAllFolders] = useState(false);
+    const [showAllFolders, setShowAllFolders] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 850);
     const [isSmallViewport, setIsSmallViewport] = useState(window.innerWidth <= 515);
     const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
@@ -1277,12 +1277,12 @@ export default function Account() {
                                             {showFavorites ? (
                                                 <>
                                                     <span className="material-symbols-outlined">all_inclusive</span>
-                                                    <p>Show All Decks</p>
+                                                    <p>Show All</p>
                                                 </>
                                             ) : (
                                                 <>
                                                     <span className="material-symbols-outlined">favorite</span>
-                                                    <p>Favorites Only</p>
+                                                    <p>Favorites</p>
                                                 </>
                                             )}
                                         </button>
@@ -1295,12 +1295,12 @@ export default function Account() {
                                             {showFavorites ? (
                                                 <>
                                                     <span className="material-symbols-outlined">all_inclusive</span>
-                                                    <p>Show All Decks</p>
+                                                    <p>Show All</p>
                                                 </>
                                             ) : (
                                                 <>
                                                     <span className="material-symbols-outlined">favorite</span>
-                                                    <p>{username}'s Favorites Only</p>
+                                                    <p>{username}'s Favorites</p>
                                                 </>
                                             )}
                                         </button>
@@ -1339,20 +1339,22 @@ export default function Account() {
                                         </div>
                                     )}
                                 </div>
-                                <button
-                                    className="sort-favorites-btn hide-on-mobile550 no-margin-right"
-                                    onClick={() => setSortMode(m => (m + 1) % 4)}
-                                >
-                                    <span className='not-blue-p'>Sorted:&nbsp;</span>
-                                    <p>
-                                        {{
-                                            0: "Most Recent",
-                                            1: "Least Recent",
-                                            2: "Alphabetically",
-                                            3: "Folder Order"
-                                        }[sortMode]}
-                                    </p>
-                                </button>
+                                {!activeFolder && (
+                                    <button
+                                        className="sort-favorites-btn no-margin-right"
+                                        onClick={() => setSortMode(m => (m + 1) % 4)}
+                                    >
+                                        <span className='not-blue-p'>Sorted:&nbsp;</span>
+                                        <p>
+                                            {{
+                                                0: "Most Recent",
+                                                1: "Least Recent",
+                                                2: "Alphabetically",
+                                                3: "Folder Order"
+                                            }[sortMode]}
+                                        </p>
+                                    </button>
+                                )}
                             </div>
                             {activeFolder && !isPublicView && (
                                 <div className='adddecktothisfolder'>
@@ -1367,7 +1369,7 @@ export default function Account() {
                                         <p>Add Deck to Folder</p>
                                     </button>
                                     <button
-                                        className="sort-favorites-btn show-on-mobile550 no-margin-right"
+                                        className="sort-favorites-btn no-margin-right"
                                         onClick={() => setSortMode(m => (m + 1) % 4)}
                                     >
                                         <span className='not-blue-p'>Sorted:&nbsp;</span>
@@ -1397,6 +1399,17 @@ export default function Account() {
                                                     >
                                                         <div className='test-the-img-hover'>
                                                             <div className="deck-card-img">
+                                                                {!activeFolder && !isPublicView && d.folderId && (() => {
+                                                                    const fol = folders.find(f => f._id === d.folderId);
+                                                                    return fol?.isPublic ? (
+                                                                        <span
+                                                                            className="material-symbols-outlined public-globe-badge"
+                                                                            aria-label="In a public folder"
+                                                                        >
+                                                                            public
+                                                                        </span>
+                                                                    ) : null;
+                                                                })()}
                                                                 <img
                                                                     src={d.mascotImageUrl}
                                                                     alt={`${d.name} mascot`}
