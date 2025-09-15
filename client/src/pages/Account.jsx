@@ -15,7 +15,8 @@ const AccountSection = styled.div`
     .viewing-other-profile-h2,
     .you-havent,
     .profile-item,
-    .profile-settings p {
+    .profile-settings p,
+    .active-folder-meta {
         color: ${({ theme }) => theme.text};
     }
     .deck-card {
@@ -824,6 +825,24 @@ export default function Account() {
         setShowPrivacyModal(true);
     };
 
+    const [showFolderCounts, setShowFolderCounts] = useState(
+        () => localStorage.getItem('showFolderCounts') === 'true'
+    );
+
+    useEffect(() => {
+        localStorage.setItem('showFolderCounts', String(showFolderCounts));
+    }, [showFolderCounts]);
+
+    const folderCounts = React.useMemo(() => {
+        const m = new Map();
+        (decks || []).forEach(d => {
+            if (!d?.folderId) return;
+            const id = String(d.folderId);
+            m.set(id, (m.get(id) || 0) + 1);
+        });
+        return m;
+    }, [decks]);
+
     useEffect(() => {
         const handleResize = () => setIsMobileView(window.innerWidth < 850);
         window.addEventListener('resize', handleResize);
@@ -1147,23 +1166,36 @@ export default function Account() {
                                 )} */}
                             {!isPublicView && (
                                 <div className='organize-and-public-row'>
-                                    <button
-                                        className="folder-options-icon"
-                                        onClick={() => {
-                                            setFoldersOrder(folders.map(f => f._id));
-                                            setShowSortModal(true);
-                                        }}
-                                    >
-                                        <span className="material-symbols-outlined">swap_horiz</span>
-                                        <p>Organize Folders</p>
-                                    </button>
-                                    <button
-                                        className="folder-options-icon"
-                                        onClick={openPrivacyModal}
-                                    >
-                                        <span className="material-symbols-outlined">public</span>
-                                        <p>Folder Privacy</p>
-                                    </button>
+                                    <div>
+                                        <button
+                                            className="folder-options-icon"
+                                            onClick={() => {
+                                                setFoldersOrder(folders.map(f => f._id));
+                                                setShowSortModal(true);
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined">swap_horiz</span>
+                                            <p>Organize Folders</p>
+                                        </button>
+                                        <button
+                                            className="folder-options-icon"
+                                            onClick={openPrivacyModal}
+                                        >
+                                            <span className="material-symbols-outlined">public</span>
+                                            <p>Folder Privacy</p>
+                                        </button>
+                                    </div>
+                                    <label className="folder-counts-toggle folder-options-icon no-margin" title="Show folder counts">
+                                        <input
+                                            type="checkbox"
+                                            role="switch"
+                                            aria-label="Show folder counts"
+                                            checked={showFolderCounts}
+                                            onChange={e => setShowFolderCounts(e.target.checked)}
+                                        />
+                                        <span className="switch-track" aria-hidden="true"></span>
+                                        <span className="toggle-text">Folder Counts</span>
+                                    </label>
                                 </div>
                             )}
                             <div className="folders-list">
@@ -1185,7 +1217,7 @@ export default function Account() {
                                                     borderLeft: `6px solid ${f.color}`
                                                 }}
                                             >
-                                                {f.name}
+                                                {f.name}{showFolderCounts ? ` (${folderCounts.get(f._id) || 0})` : ''}
                                             </button>
                                         );
                                     })
@@ -1202,6 +1234,18 @@ export default function Account() {
                                     </button>
                                 )}
                             </div>
+                            {activeFolder && !isPublicView && (() => {
+                                const f = folders.find(ff => ff._id === activeFolder);
+                                if (!f) return null;
+                                const total = folderCounts.get(f._id) || 0;
+                                return (
+                                    <div className="active-folder-meta" style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '10px 0 2.5px' }}>
+                                        <h3 style={{ margin: 0 }}>{f.name}
+                                            &nbsp;<span className="active-folder-count" style={{ opacity: .8, fontWeight: 400 }}>({total} deck{total === 1 ? '' : 's'})</span>
+                                        </h3>
+                                    </div>
+                                );
+                            })()}
                             <div className='decks-in-folder-options-sort-list-views'>
                                 <div className='folder-options'>
                                     {/* ADD BACK one day */}

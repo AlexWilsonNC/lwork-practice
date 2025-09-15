@@ -909,7 +909,62 @@
 .organize-and-public-row {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+.organize-and-public-row div {
+  display: flex;
+  flex-direction: row;
+}
+.no-margin {
+  margin-right: 0 !important;
+}
+.folder-counts-toggle {
+  display: inline-flex;
+  height: 100%;
   align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: #1290eb;
+  font-weight: 600;
+}
+.folder-counts-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.folder-counts-toggle .switch-track {
+  width: 32px;
+  height: 18px;
+  background: rgba(151, 151, 151, 0.35);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.2s ease;
+  outline: 1px solid rgba(0,0,0,0.08);
+}
+.folder-counts-toggle .switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2.75px;
+  left: 3.5px;
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25);
+  transition: transform 0.2s ease;
+}
+.folder-counts-toggle input:checked + .switch-track {
+  background: #1290eb;
+}
+.folder-counts-toggle input:checked + .switch-track::after {
+  transform: translateX(13px);
+}
+.folder-counts-toggle .toggle-text {
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 .folder-options-icon {
@@ -1241,7 +1296,25 @@
   .account-decks {
     margin: 0px;
   }
-
+  .folder-counts-toggle {
+    gap: 3.5px;
+}
+.folder-counts-toggle .switch-track {
+  width: 26.5px;
+  height: 14px;
+}
+.folder-counts-toggle .switch-track::after {
+  top: 2px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+}
+.folder-counts-toggle input:checked + .switch-track::after {
+  transform: translateX(10px);
+}
+.folder-counts-toggle .toggle-text {
+  font-size: 10px;
+}
   .viewing-other-profile-h2 {
     font-size: 20px;
   }

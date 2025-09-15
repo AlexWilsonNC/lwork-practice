@@ -36,6 +36,8 @@ import kyurem from '../../public/assets/sprites/kyurem.png'
 import deoxys from '../../public/assets/sprites/deoxys.png'
 import sableye from '../../public/assets/sprites/sableye.png'
 import gallade from '../../public/assets/sprites/gallade.png'
+import gliscor from '../../public/assets/sprites/gliscor.png'
+import spiritomb from '../../public/assets/sprites/spiritomb.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -76,7 +78,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 14, 2025</p>
+          <p>Last Updated: Aug 15, 2025</p>
         </div>
 
         {/* Article Image */}
@@ -84,9 +86,9 @@ const ArchiveUpdates = () => {
 
         {/* Article Content */}
         <div className='article-content archive-updates'>
-          <hr className='title-hr' />
+
+          {/* <hr className='title-hr' />
           <br />
-          
           <h3 className='boxxed'>September 2025</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
@@ -98,6 +100,27 @@ const ArchiveUpdates = () => {
             </div>
             <p>Ryan Murray (Masters) - 43<sup>rd</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <a href='/tournaments/2010_NATS_US/masters/Chris%20Abernathy-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gliscor} alt="sprite" />
+              <img className="sprite second-sprite" src={spiritomb} alt="sprite" />
+            </div>
+            <p>Chris Abernathy (Masters) - 60<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2009_WORLDS/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={flygon} alt="sprite" />
+              <img className="sprite second-sprite" src={machamp} alt="sprite" />
+            </div>
+            <p>Chris Fulop (Masters) - 19<sup>th</sup> Place <span>2009 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2007_WORLDS/masters/Jason%20Windham-AU' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={flygon} alt="sprite" />
+              <img className="sprite second-sprite" src={exeggutor} alt="sprite" />
+            </div>
+            <p>Jason Windham (Masters) - 26<sup>th</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a> */}
           
           <hr className='title-hr' />
           <br />
@@ -204,7 +227,7 @@ const ArchiveUpdates = () => {
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={unownexclamation} alt="sprite" />
             </div>
-            <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Place <span className='small-text-archive archive-update-nolist'>no lists</span></p>
+            <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Placements <span className='small-text-archive archive-update-nolist'>no lists</span></p>
           </a>
 
           <br></br>
