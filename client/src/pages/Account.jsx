@@ -854,9 +854,10 @@ export default function Account() {
         setShowPrivacyModal(true);
     };
 
-    const [showFolderCounts, setShowFolderCounts] = useState(
-        () => localStorage.getItem('showFolderCounts') === 'true'
-    );
+    const [showFolderCounts, setShowFolderCounts] = useState(() => {
+  const v = localStorage.getItem('showFolderCounts');
+  return v == null ? true : v === 'true';
+});
 
     useEffect(() => {
         localStorage.setItem('showFolderCounts', String(showFolderCounts));
@@ -1263,7 +1264,20 @@ export default function Account() {
                                     </button>
                                 )}
                             </div>
-                            {activeFolder && !isPublicView && (() => {
+                            {!activeFolder && (
+                                <div
+                                    className="active-folder-meta"
+                                    style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '10px 0 2.5px' }}
+                                >
+                                    <h3 style={{ margin: 0 }}>
+                                        All Decks&nbsp;
+                                        <span className="active-folder-count" style={{ opacity: .8, fontWeight: 400 }}>
+                                            ({decks.length} deck{decks.length === 1 ? '' : 's'})
+                                        </span>
+                                    </h3>
+                                </div>
+                            )}
+                            {activeFolder && (() => {
                                 const f = folders.find(ff => ff._id === activeFolder);
                                 if (!f) return null;
                                 const total = folderCounts.get(f._id) || 0;
