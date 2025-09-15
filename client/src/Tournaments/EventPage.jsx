@@ -1994,7 +1994,7 @@ const EventPage = () => {
     const resultsAvailable = results.length > 0;
     const statisticsTabStyle = !resultsAvailable ? { opacity: 0.1, pointerEvents: 'none' } : {};
     const hasDayOneMeta = eventData?.dayOneMeta !== undefined;
-    const is2024Event = eventId.includes('2024') || eventId.includes('2025') && !eventId.toLowerCase().includes('retro');
+    const is2024Event = eventId.includes('2024') || isModernEvent && !eventId.toLowerCase().includes('retro');
 
     return (
         <EventPageContent className='center' theme={theme}>
@@ -2233,7 +2233,7 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results'>
-                                {(eventId.includes('2025')) && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
+                                {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
                                     <div className="decks-records-btns">
                                         <button
                                             onClick={() => handleTabChange('Decks')}
@@ -2256,7 +2256,7 @@ const EventPage = () => {
                                         <>
                                             {displayResults(day2Results, eventId, division)}
 
-                                            {eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
+                                            {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                     <button onClick={loadEliminated} className="day1buttons">
                                                         Show {label(1)} Results
@@ -2448,7 +2448,7 @@ const EventPage = () => {
                                                 )}
                                             </div>
                                         </div>
-                                        {eventId.includes('2025') && chartResults.length > 16 && (
+                                        {isModernEvent && chartResults.length > 16 && (
                                             <div className='chart-description'>
                                                 {showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(1)}</p>}
                                                 {!showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(2)}</p>}
@@ -2463,7 +2463,7 @@ const EventPage = () => {
                                             <div className='chart-description'><p>* No known decks available for this division</p></div>
                                         )}
                                         <div className='chart-container-wrapper' style={{ overflowX: 'auto', paddingBottom: showDayOneMeta ? '1rem' : undefined }}>
-                                            {!eventId.includes('2025') && !eventId.includes('2024') && chartResults.length > 1 && (
+                                            {!isModernEvent && !eventId.includes('2024') && chartResults.length > 1 && (
                                                 <div className='chart-description'>
                                                     <p>* Total count for each deck archetype from {label(2)}</p>
                                                 </div>
