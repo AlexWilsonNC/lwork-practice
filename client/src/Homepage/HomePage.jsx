@@ -96,12 +96,12 @@ const Homepage = () => {
                                     <img className='card-image' src={latestEvent} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Results from <span className='new-color'>Frankfurt <span style={{ color: 'black' }}>&</span> Monterrey Regionals</span> are here!</h3>
+                                        <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
                                         {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
                                         <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Sep 15, 2025</p>
+                                        <p>Sep 22, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -309,11 +309,11 @@ const Homepage = () => {
                                 <img className='card-image' src={latestEvent} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Results from <span className='new-color'>Frankfurt <span style={{ color: 'black' }}>&</span> Monterrey Regionals</span> are here!</h3>
+                                    <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
                                     <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Sep 15, 2025</p>
+                                    <p>Sep 22, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>

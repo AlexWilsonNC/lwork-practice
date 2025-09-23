@@ -2782,7 +2782,7 @@ const EventPage = () => {
                                             </p>
                                         )}
                                         <p style={{ marginTop: '3px' }}>{eventData.name}</p>
-                                        <p style={{ marginTop: '3px' }}><span className='bold'>Record: </span>({modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties})</p>
+                                        <p style={{ marginTop: '3px' }}><span className='bold'>Record: </span>{modalPlayer.record.wins}-{modalPlayer.record.losses}-{modalPlayer.record.ties}</p>
                                         <div className='decklist-modal-btns'>
                                             <Link className='link-to-playerprofile' to={`/player/${normalizeName(modalPlayer.name)}-${modalPlayer.flag}`}>
                                                 <button className="decklist-modal-button">Player Profile</button>

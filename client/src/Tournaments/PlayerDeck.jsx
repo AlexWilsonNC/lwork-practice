@@ -488,6 +488,21 @@ const PlayerDeck = () => {
         return base.replace(/\.png$/i, '');
     };
 
+    const makeDisplayPair = (firstIn, secondIn) => {
+        const first = normalizeSpriteKey(firstIn);
+        const second = normalizeSpriteKey(secondIn);
+
+        // both present → keep order
+        if (first && second) return { first, second };
+
+        // exactly one present → put it in SECOND slot, and use "blank" for first
+        const only = first || second;
+        if (only) return { first: 'blank', second: only };
+
+        // nothing → no sprites
+        return null;
+    };
+
     useEffect(() => {
         if (playerData) {
             const pokemonCount = countCards(playerData.decklist, 'pokemon');
@@ -576,148 +591,148 @@ const PlayerDeck = () => {
                 <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
                 <meta name="twitter:image" content={eventData.thumbnail} />
             </Helmet>
-            <div className="player-deck">
-                <div className='player-deck-top'>
-                    <div>
-                        {!isFeatured && (
-                            <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
-                                <h2>
-                                    {playerData.label ? formatName(playerData.label) : formatName(playerData.name)}
-                                    {/* &nbsp;
-                                    <span className="material-symbols-outlined">article_person</span>       */}
-                                </h2>
+            <div className='playerlistnewcolumn'>
+                <div className="player-deck">
+                    <div className='player-deck-top'>
+                        <div>
+                            {!isFeatured && (
+                                <Link className='link-to-playerprofile' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
+                                    <h2>
+                                        {playerData.label ? formatName(playerData.label) : formatName(playerData.name)}
+                                    </h2>
+                                </Link>
+                            )}
+                            {isFeatured ? (
+                                <>
+                                    <h2>{playerData && playerData.label && <p>{playerData.label}</p>}</h2>
+                                    <hr className='playerdeck-hr'></hr>
+                                    {playerData && playerData.source && <p><span className='bold'>Source:</span> {playerData.source}</p>}
+                                    {eventData && <p><Link className='blue-link bold' to={`/decks-by-era`}>{eventData.name}</Link></p>}
+                                    {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
+                                    {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
+                                </>
+                            ) : (
+                                <>
+                                    <hr className='playerdeck-hr'></hr>
+                                    <p>
+                                        <span className='bold'>
+                                            {placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place
+                                        </span>
+                                        {division !== 'all' && (
+                                            <> ({capitalizeFirstLetter(division)})</>
+                                        )}
+                                    </p>
+                                    {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
+                                    {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
+                                    {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
+                                </>
+                            )}
+                        </div>
+                        <div className='deck-top-right-options'>
+                            <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
+                                <button className="decklist-modal-button-deckprofile">Player Profile</button>
                             </Link>
-                        )}
-                        {isFeatured ? (
-                            <>
-                                <h2>{playerData && playerData.label && <p>{playerData.label}</p>}</h2>
-                                <hr className='playerdeck-hr'></hr>
-                                {playerData && playerData.source && <p><span className='bold'>Source:</span> {playerData.source}</p>}
-                                {eventData && <p><Link className='blue-link bold' to={`/decks-by-era`}>{eventData.name}</Link></p>}
-                                {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
-                                {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
-                            </>
-                        ) : (
-                            <>
-                                <hr className='playerdeck-hr'></hr>
-                                <p>
-                                    <span className='bold'>
-                                        {placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place
-                                    </span>
-                                    {division !== 'all' && (
-                                        <> ({capitalizeFirstLetter(division)})</>
-                                    )}
-                                </p>
-                                {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
-                                {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
-                                {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
-                            </>
-                        )}
-                    </div>
-                    <div className='deck-top-right-options'>
-                        <Link className='link-to-playerprofile-btn' to={`/player/${normalizeName(playerData.name)}-${playerData.flag}`}>
-                            <button className="decklist-modal-button-deckprofile">Player Profile</button>
-                        </Link>
-                        {cardData && (
-                            <DecklistOptions
-                                decklist={cleanedDecklist}
-                                cardMap={cardData.cardMap}
-                            />
-                        )}
-                        <div className='deckview-switcher'>
-                            <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
-                                <span className="material-symbols-outlined">reorder</span>
-                            </div>
-                            <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
-                                <span className="material-symbols-outlined">grid_view</span>
+                            {cardData && (
+                                <DecklistOptions
+                                    decklist={cleanedDecklist}
+                                    cardMap={cardData.cardMap}
+                                />
+                            )}
+                            <div className='deckview-switcher'>
+                                <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
+                                    <span className="material-symbols-outlined">reorder</span>
+                                </div>
+                                <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
+                                    <span className="material-symbols-outlined">grid_view</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {totalCardCount !== 60 && (
+                        <div className="warning-message">
+                            Warning: Deck contains {totalCardCount} cards.
+                        </div>
+                    )}
+                    {!playerData ? (
+                        null
+                    ) : !cardData ? (
+                        <div className="spinner"></div>
+                    ) : viewMode === 'grid' ? (
+                        <div className="deck-cards">
+                            {playerData.decklist.pokemon.map((card, index) => (
+                                <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                    <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                    <div className="card-count">{card.count}</div>
+                                </div>
+                            ))}
+                            {playerData.decklist.trainer.map((card, index) => (
+                                <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                    {
+                                        (() => {
+                                            const mapKey = `${card.set}-${card.number}`;
+                                            const info = cardData?.cardMap?.[mapKey];
+                                            const altTxt = info?.name ?? card.name;
+                                            return (
+                                                <img
+                                                    src={cardImageUrl(card)}
+                                                    alt={altTxt}
+                                                    onLoad={handleImageLoad}
+                                                />
+                                            );
+                                        })()
+                                    }
+                                    <div className="card-count">{card.count}</div>
+                                </div>
+                            ))}
+                            {playerData.decklist.energy.map((card, index) => (
+                                <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
+                                    <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                    <div className="card-count">{card.count}</div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="deck-list">
+                            <div className='column-section'>
+                                <div className='list-category'><h3>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h3></div>
+                                <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
+                                    <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                        <p className='list-card-count'>{card.count}</p>
+                                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                        <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                    </div>
+                                ))}</div>
+                            </div>
+                            <div className='column-section'>
+                                <div className='list-category'><h3>Trainer ({countCards(playerData.decklist, 'trainer')})</h3></div>
+                                <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
+                                    <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                        <p className='list-card-count'>{card.count}</p>
+                                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                        <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                    </div>
+                                ))}</div>
+                            </div>
+                            <div className='column-section'>
+                                <div className='list-category'><h3>Energy ({countCards(playerData.decklist, 'energy')})</h3></div>
+                                <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
+                                    <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
+                                        <p className='list-card-count'>{card.count}</p>
+                                        <p className='bold-name'>{cleanCardName(card.name)}</p>
+                                        <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
+                                    </div>
+                                ))}</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-                {totalCardCount !== 60 && (
-                    <div className="warning-message">
-                        Warning: Deck contains {totalCardCount} cards.
-                    </div>
-                )}
-                {!playerData ? (
-                    null
-                ) : !cardData ? (
-                    <div className="spinner"></div>
-                ) : viewMode === 'grid' ? (
-                    <div className="deck-cards">
-                        {playerData.decklist.pokemon.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
-                        {playerData.decklist.trainer.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                {
-                                    (() => {
-                                        const mapKey = `${card.set}-${card.number}`;
-                                        const info = cardData?.cardMap?.[mapKey];
-                                        const altTxt = info?.name ?? card.name;  // fallback to decklist name
-                                        return (
-                                            <img
-                                                src={cardImageUrl(card)}
-                                                alt={altTxt}
-                                                onLoad={handleImageLoad}
-                                            />
-                                        );
-                                    })()
-                                }
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
-                        {playerData.decklist.energy.map((card, index) => (
-                            <div key={index} className="card-container" onClick={() => handleCardClick(card)}>
-                                <img src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
-                                <div className="card-count">{card.count}</div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="deck-list">
-                        <div className='column-section'>
-                            <div className='list-category'><h3>Pokémon ({countCards(playerData.decklist, 'pokemon')})</h3></div>
-                            <div className='list-of-cards'>{playerData.decklist.pokemon.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='pokemon-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
-                                </div>
-                            ))}</div>
-                        </div>
-                        <div className='column-section'>
-                            <div className='list-category'><h3>Trainer ({countCards(playerData.decklist, 'trainer')})</h3></div>
-                            <div className='list-of-cards'>{playerData.decklist.trainer.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='trainer-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
-                                </div>
-                            ))}</div>
-                        </div>
-                        <div className='column-section'>
-                            <div className='list-category'><h3>Energy ({countCards(playerData.decklist, 'energy')})</h3></div>
-                            <div className='list-of-cards'>{playerData.decklist.energy.map((card, index) => (
-                                <div key={index} className="list-item" onClick={() => handleCardClick(card)}>
-                                    <p className='list-card-count'>{card.count}</p>
-                                    <p className='bold-name'>{cleanCardName(card.name)}</p>
-                                    <img className='energy-list-img' src={cardImageUrl(card)} alt={card.name} onLoad={handleImageLoad} />
-                                </div>
-                            ))}</div>
-                        </div>
-                    </div>
-                )}
                 {/* {playerData?.rounds && (
-                    <div style={{ marginTop: 24 }}>
+                    <div className='opponents-playerdeck-list'>
                         <h3 style={{ margin: '8px 0' }}>Opponents</h3>
                         <table className="matchup-table" style={{ width: '100%' }}>
                             <thead>
                                 <tr>
-                                    <th style={{ textAlign: 'center' }}>Round</th>
+                                    <th style={{ textAlign: 'center' }}>Rd</th>
                                     <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
                                     <th>&nbsp;Opponent</th>
                                     <th style={{ textAlign: 'center' }}>Deck</th>
@@ -730,18 +745,16 @@ const PlayerDeck = () => {
 
                                     const results = Array.isArray(eventData?.[division]) ? eventData[division] : [];
                                     const allPlayers = [...results, ...eliminatedRecords];
-                                    const opponent = allPlayers.find(p => p?.name === name && p?.flag === code);
+                                    const opponent = allPlayers.find(
+                                        p => normalizeName(p?.name || '') === normalizeName(name) && p?.flag === code
+                                    );
 
                                     let sprites = null;
                                     if (opponent?.sprite1 || opponent?.sprite2) {
-                                        const first = normalizeSpriteKey(opponent.sprite1);
-                                        const second = normalizeSpriteKey(opponent.sprite2);
-                                        sprites = (first || second) ? { first, second } : null;
+                                        sprites = makeDisplayPair(opponent.sprite1, opponent.sprite2);
                                     } else if (opponent?.decklist) {
                                         const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
-                                        const first = normalizeSpriteKey(firstSprite);
-                                        const second = normalizeSpriteKey(secondSprite);
-                                        sprites = (first || second) ? { first, second } : null;
+                                        sprites = makeDisplayPair(firstSprite, secondSprite);
                                     }
 
                                     const bgColor =
@@ -769,7 +782,7 @@ const PlayerDeck = () => {
                                                 </div>
 
                                                 <span className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>
-                                                    {isBye ? 'BYE' : name}
+                                                    {isBye ? 'BYE' : formatName(name)}
                                                 </span>
                                             </td>
 
@@ -788,7 +801,7 @@ const PlayerDeck = () => {
                                             <td className="player-decklink-cell" style={{ textAlign: 'center' }}>
                                                 {opponent?.decklist ? (
                                                     <Link
-                                                        to={`/tournaments/${eventId}/${division}/${encodeURIComponent(opponent.name)}-${opponent.flag}`}
+                                                        to={`/tournaments/${eventId}/${division}/${normalizeName(opponent?.name || name)}-${opponent?.flag || code}`}
                                                         className="decklist-icon"
                                                         title="Decklist"
                                                     >
