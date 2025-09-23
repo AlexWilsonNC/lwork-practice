@@ -657,6 +657,9 @@
     .regional-container a {
         font-size: 12px;
     }
+    .player-decklink-cell span {
+        font-size: 21px;
+    }
     .regional-info h2 {
         font-size: 20px;
     }
