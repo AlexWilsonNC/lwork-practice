@@ -39,7 +39,9 @@ const PlayerDeckCenter = styled.div`
     .link-to-playerprofile:hover .turned-link {
         color: #1290eb;
     }
-    .turned-link {
+    .turned-link,
+    .player-decklink-cell a,
+    .opponents-playerdeck-list {
         color: ${({ theme }) => theme.text};
     }
 `;
@@ -726,16 +728,16 @@ const PlayerDeck = () => {
                         </div>
                     )}
                 </div>
-                {/* {playerData?.rounds && (
+                {playerData?.rounds && (
                     <div className='opponents-playerdeck-list'>
-                        <h3 style={{ margin: '8px 0' }}>Opponents</h3>
+                        <h3>Matchups</h3>
                         <table className="matchup-table" style={{ width: '100%' }}>
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>Rd</th>
                                     <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
-                                    <th>&nbsp;Opponent</th>
-                                    <th style={{ textAlign: 'center' }}>Deck</th>
+                                    <th>&nbsp;&nbsp;&nbsp;Opponent</th>
+                                    <th style={{ textAlign: 'start',paddingLeft:'47.5px' }}>Deck</th>
                                     <th style={{ textAlign: 'center' }}>List</th>
                                 </tr>
                             </thead>
@@ -776,17 +778,17 @@ const PlayerDeck = () => {
                                                 {info.result}
                                             </td>
 
-                                            <td className="name-n-flag-recmodal" style={{ marginLeft: 3 }}>
+                                            <td className="name-n-flag-recmodal name-n-flag-recmodal-decklistpage" style={{ marginLeft: 3 }}>
                                                 <div className="flag-container" style={{ opacity: isBye ? 0 : 1 }}>
                                                     <img className="flag-size" src={flagSrc(code)} alt={code} />
                                                 </div>
 
-                                                <span className="link-to-playerrecords" style={{ pointerEvents: 'none' }}>
+                                                <span className="link-to-playerrecords">
                                                     {isBye ? 'BYE' : formatName(name)}
                                                 </span>
                                             </td>
 
-                                            <td style={{ textAlign: 'center' }}>
+                                            <td className='opponent-sprites-cell sing-cells-sprites'>
                                                 {sprites ? (
                                                     <DisplayPokemonSprites
                                                         decklist={opponent?.decklist}
@@ -794,18 +796,19 @@ const PlayerDeck = () => {
                                                         sprite2={sprites.second}
                                                     />
                                                 ) : (
-                                                    <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : 'No data'}</em>
+                                                    <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : ''}</em>
                                                 )}
                                             </td>
 
                                             <td className="player-decklink-cell" style={{ textAlign: 'center' }}>
                                                 {opponent?.decklist ? (
                                                     <Link
-                                                        to={`/tournaments/${eventId}/${division}/${normalizeName(opponent?.name || name)}-${opponent?.flag || code}`}
-                                                        className="decklist-icon"
+                                                        to={`/tournaments/${eventId}/${division}/${encodeURIComponent(opponent?.name || name)}-${opponent?.flag || code}`}
                                                         title="Decklist"
                                                     >
-                                                        ↗
+                                                        <span className="material-symbols-outlined">
+                                                            format_list_bulleted
+                                                        </span>
                                                     </Link>
                                                 ) : (
                                                     <span style={{ opacity: 0.4 }}>—</span>
@@ -817,7 +820,7 @@ const PlayerDeck = () => {
                             </tbody>
                         </table>
                     </div>
-                )} */}
+                )}
             </div>
         </PlayerDeckCenter>
     );

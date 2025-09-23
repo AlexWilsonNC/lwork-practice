@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 .player-deck {
     padding: 20px;
@@ -352,7 +353,20 @@
     font-weight: 300;   
 }
 .opponents-playerdeck-list {
-    /* margin-top: 24px; */
+    width: 87%;
+    margin-bottom: 25px;
+}
+.name-n-flag-recmodal-decklistpage {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 15px !important;
+    margin-top: 6.5px;
+}
+.name-n-flag-recmodal-decklistpage .flag-container {
+    display: flex;
+    align-items: center;
 }
 
 @media screen and (max-width: 1900px){
@@ -530,6 +544,9 @@
         font-weight: bold;
         height: 25.5px;
         width: 25.5px;
+    }
+    .opponents-playerdeck-list h3 {
+        font-size: 14px;
     }
     .deck-cards {
         grid-template-columns: repeat(7, 1fr);

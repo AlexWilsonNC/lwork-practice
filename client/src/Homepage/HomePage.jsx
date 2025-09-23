@@ -91,7 +91,7 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/completed'>
+                            <a href='./tournaments/2026_PITTSBURGH'>
                                 <WrappedFeature className='wrapped-feature'>
                                     <img className='card-image' src={latestEvent} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
@@ -304,7 +304,7 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/completed'>
+                        <a href='./tournaments/2026_PITTSBURGH'>
                             <WrappedFeature className='wrapped-feature'>
                                 <img className='card-image' src={latestEvent} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
