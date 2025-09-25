@@ -353,8 +353,8 @@
     font-weight: 300;   
 }
 .opponents-playerdeck-list {
-    width: 87%;
-    margin-bottom: 25px;
+    width: 98%;
+    margin: 25px 0 5px;
 }
 .name-n-flag-recmodal-decklistpage {
     display: flex;

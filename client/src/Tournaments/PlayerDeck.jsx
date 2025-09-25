@@ -330,6 +330,12 @@ const PlayerDeck = () => {
 
     const isFeatured = isFeaturedEvent(eventId);
 
+    const API_BASE = 'https://ptcg-legends-6abc11783376.herokuapp.com';
+    const DEBUG_SAME60 = true;
+
+    const [sameSixtyDoc, setSameSixtyDoc] = useState(null);
+    const [sameSixtyLoading, setSameSixtyLoading] = useState(false);
+
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
@@ -532,6 +538,132 @@ const PlayerDeck = () => {
         setImagesLoadedCount(prevCount => prevCount + 1);
     };
 
+    const normalizeNameKey = (s = '') =>
+        s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+    // unify common Basic Energy variants
+    const normalizeTEName = (card = {}) => {
+        let n = normalizeNameKey(card.name || '');
+        n = n.replace(/^basic\s+(\w+)\s+energy$/, '$1 energy basic');
+        n = n.replace(/^(\w+)\s+energy\s*-\s*basic$/, '$1 energy basic');
+        return n;
+    };
+
+    // infer supertype if missing (safe default = pokemon)
+    const inferSupertype = (card = {}) => {
+        const st = normalizeNameKey(card.supertype || '');
+        if (st) return st; // 'pokemon' / 'trainer' / 'energy'
+        const n = normalizeNameKey(card.name || '');
+        if (/\benergy\b/.test(n)) return 'energy';
+        if (/\b(supporter|stadium|item|tool|ball|candy|potion|rod|band|stone|seeker|rope|switch|blower|professor|guzma|brigette|colress|sycamore|n)\b/.test(n)) {
+            return 'trainer';
+        }
+        return 'pokemon';
+    };
+
+    // Pokémon by set+number; Trainers/Energy by name
+    const canonicalCardId = (card) => {
+        const kind = inferSupertype(card);
+        if (kind === 'pokemon') {
+            const set = (card.setAbbrev || card.set || '').toUpperCase();
+            const num = String(card.number || '').toUpperCase();
+            return (set && num) ? `PKM:${set}-${num}` : `PKM_NAME:${normalizeNameKey(card.name)}`;
+        }
+        if (kind === 'trainer' || kind === 'energy') return `NE:${normalizeTEName(card)}`;
+        return `NE:${normalizeNameKey(card.name)}`;
+    };
+
+    // Build the order-insensitive 60-card signature string
+    const canonicalDeckSignature = (decklist) => {
+        if (!decklist) return null;
+        const pool = [
+            ...(decklist.pokemon || []),
+            ...(decklist.trainer || []),
+            ...(decklist.energy || [])
+        ];
+        let total = 0;
+        const counts = new Map();
+        for (const c of pool) {
+            const id = canonicalCardId(c);
+            const n = Number(c?.count ?? 1) || 1;
+            total += n;
+            counts.set(id, (counts.get(id) || 0) + n);
+        }
+        if (total !== 60) return null;
+        return [...counts.entries()]
+            .sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
+            .map(([id, n]) => `${id}#${n}`)
+            .join('|');
+    };
+
+    // Browser SHA-1 (fallback if your API expects hash)
+    const sha1Hex = async (text) => {
+        const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(text));
+        return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    useEffect(() => {
+  (async () => {
+    try {
+      if (!playerData?.decklist) return;
+      const sig = canonicalDeckSignature(playerData.decklist);
+      if (!sig) return;
+
+      // compute hash for hash-based route
+      const hash = await sha1Hex(sig);
+
+      if (DEBUG_SAME60) {
+        console.log('%c[same-60] signature', 'color:#1290eb;font-weight:bold', sig);
+        console.log('%c[same-60] hash     ', 'color:#1290eb;font-weight:bold', hash);
+      }
+
+      setSameSixtyLoading(true);
+
+      // Try signature-based endpoint
+      let urls = [
+  `${API_BASE}/api/same-sixty?signature=${encodeURIComponent(sig)}`,
+  `${API_BASE}/api/same-sixty?sig=${encodeURIComponent(sig)}`,
+  `${API_BASE}/api/same-sixty/by-hash/${hash}`,
+
+  // NEW: endpoints that mirror the collection name
+  `${API_BASE}/api/same-sixty-data?signature=${encodeURIComponent(sig)}`,
+  `${API_BASE}/api/same-sixty-data?sig=${encodeURIComponent(sig)}`,
+  `${API_BASE}/api/same-sixty-data/by-hash/${hash}`,
+];
+
+let res, urlUsed = null;
+for (const u of urls) {
+  const r = await fetch(u);
+  if (DEBUG_SAME60) console.log('[same-60] GET', u, '→', r.status);
+  if (r.ok) { res = r; urlUsed = u; break; }
+}
+if (!res) {
+  const txt = await (await fetch(urls[0]).catch(() => ({ text: async () => '' }))).text().catch(() => '');
+  if (DEBUG_SAME60) console.warn('[same-60] no doc from any route');
+  setSameSixtyDoc(null);
+  return;
+}
+
+let payload;
+try { payload = await res.json(); }
+catch (e) { if (DEBUG_SAME60) console.warn('[same-60] json parse error:', e); setSameSixtyDoc(null); return; }
+
+const doc = payload?.doc || payload || null;
+if (DEBUG_SAME60) {
+  console.log('[same-60] using', urlUsed);
+  console.log('[same-60] occurrences:', Array.isArray(doc?.occurrences) ? doc.occurrences.length : 0);
+  console.log('[same-60] sample:', Array.isArray(doc?.occurrences) ? doc.occurrences.slice(0, 3) : null);
+}
+setSameSixtyDoc(doc);
+    } catch (e) {
+      console.warn('same-sixty lookup failed:', e);
+      setSameSixtyDoc(null);
+    } finally {
+      setSameSixtyLoading(false);
+    }
+  })();
+}, [playerData?.decklist]);
+
     const energyKeyMap = {
         'grass energy - basic': 'SVE-1',
         'fire energy - basic': 'SVE-2',
@@ -727,8 +859,7 @@ const PlayerDeck = () => {
                             </div>
                         </div>
                     )}
-                </div>
-                {playerData?.rounds && (
+                    {playerData?.rounds && (
                     <div className='opponents-playerdeck-list'>
                         <h3>Matchups</h3>
                         <table className="matchup-table" style={{ width: '100%' }}>
@@ -737,7 +868,7 @@ const PlayerDeck = () => {
                                     <th style={{ textAlign: 'center' }}>Rd</th>
                                     <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
                                     <th>&nbsp;&nbsp;&nbsp;Opponent</th>
-                                    <th style={{ textAlign: 'start',paddingLeft:'47.5px' }}>Deck</th>
+                                    <th style={{ textAlign: 'start', paddingLeft: '47.5px' }}>Deck</th>
                                     <th style={{ textAlign: 'center' }}>List</th>
                                 </tr>
                             </thead>
@@ -819,6 +950,37 @@ const PlayerDeck = () => {
                                 })}
                             </tbody>
                         </table>
+                    </div>
+                )}
+                </div>
+                
+                {sameSixtyDoc && Array.isArray(sameSixtyDoc.occurrences) && sameSixtyDoc.occurrences.length > 1 && (
+                    <div className="opponents-playerdeck-list" style={{ marginTop: 12 }}>
+                        <h3>Decklist additional accomplishments</h3>
+                        <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+                            {sameSixtyDoc.occurrences
+                                .filter(o =>
+                                    // hide the current page's deck from this list
+                                    !(o.eventId === eventId &&
+                                        normalizeString(o.playerName) === normalizeString(playerData.name) &&
+                                        (o.flag || '') === (playerData.flag || '') &&
+                                        o.division === division)
+                                )
+                                .sort((a, b) => new Date(b.eventDate || 0) - new Date(a.eventDate || 0))
+                                .map(o => (
+                                    <li key={`${o.eventId}-${o.division}-${normalizeName(o.playerName)}-${o.flag}`} style={{ margin: '4px 0' }}>
+                                        <Link
+                                            to={`/tournaments/${o.eventId}/${o.division}/${normalizeName(o.playerName)}-${o.flag || ''}`}
+                                            className="blue-link"
+                                            title={`${o.eventName || o.eventId} — ${o.playerName}`}
+                                        >
+                                            <span style={{ marginRight: 6 }}>{getPlacementSuffix(o.placement)}</span>
+                                            <span style={{ marginRight: 6 }}>— {o.eventName || o.eventId}</span>
+                                            <span>— {formatName(o.playerName)}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                        </ul>
                     </div>
                 )}
             </div>
