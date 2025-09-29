@@ -80,7 +80,7 @@ const EventSeparator = styled.tr`
 `;
 
 const orderedSets = [
-  "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "PR-SV",
+  "MEG", "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "PR-SV",
   "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
   "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
   "CEC", "HIF", "UNM", "UNB", "DPI", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
@@ -98,6 +98,7 @@ const orderedSets = [
 ];
 
 const promoSets = {
+  "MEG": "PR-SV",
   "BLK": "PR-SV",
   "WHT": "PR-SV",
   "DRI": "PR-SV",

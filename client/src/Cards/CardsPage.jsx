@@ -140,8 +140,9 @@ const formatDate = (dateString) => {
   export const availableSets = [
     { separator: true, text: "Scarlet & Violet" },
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
-    { name: "Black Bolt *", abbrev: "BLK", releaseDate: "July 18, 2025", total: "172" },
-    { name: "White Flare *", abbrev: "WHT", releaseDate: "July 18, 2025", total: "173" },
+    { name: "Mega Evolution", abbrev: "MEG", releaseDate: "Sep 26, 2025", total: "188" },
+    { name: "Black Bolt *", abbrev: "BLK", releaseDate: "Jul 18, 2025", total: "172" },
+    { name: "White Flare *", abbrev: "WHT", releaseDate: "Jul 18, 2025", total: "173" },
     { name: "Destined Rivals", abbrev: "DRI", releaseDate: "May 30, 2025", total: "244" },
     { name: "Journey Together", abbrev: "JTG", releaseDate: "Mar 28, 2025", total: "190" },
     { name: "Prismatic Evolutions *", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "180" },

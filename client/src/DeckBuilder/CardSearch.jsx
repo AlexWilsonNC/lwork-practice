@@ -821,7 +821,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const ERA_PATTERNS = {
-        SV1: /^(SV|SVI|PAL|OBF|PAR|TEF|TWM|SCR|PAF)/i,
+        SV1: /^(SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEG)/i,
         SSH1: /^(SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|FST|BRS|ASR|LOR|SIT|CRZ)/i,
         SM1: /^(SM|SUM|GRI|BUS|CIN|UPR|FLI|CES|LOT|TEU|UNB|UNM|CEC|DRM|HIF|DET|TM)/i,
         XY1: /^(XY|FLF|FFI|PHF|PRC|ROS|AOR|BKT|BKP|FCO|STS|EVO|GEN)/i,

@@ -67,7 +67,7 @@ const SidebarComponent = () => {
           {/* Trigger interstitial for the "Decks by Era" link */}
           <li><a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')}>Decks by Era</a></li>
           <li><Link to='/rules-by-era'>Rules by Era</Link></li>
-          <li><Link to='/cards/BLK'>Card Database</Link></li>
+          <li><Link to='/cards/MEG'>Card Database</Link></li>
           <li><Link to='' className='not-ready'>World's Booklets</Link></li>
           <li><a href='https://www.seagrovetcg.com/event-finder' target='_blank' rel='noopener noreferrer'>Local Event Finder</a></li>
         </ul>
