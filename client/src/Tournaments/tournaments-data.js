@@ -1088,7 +1088,7 @@ const tournamentList = [
     {
         "id": "2016_NATS_US",
         "name": "US Nationals 2016",
-        "eventType": "oldNationals",
+        "eventType": "nationals",
         "eventLogo": nationals,
         "date": "Jul 1, 2016",
         "flag": usa,
@@ -1096,8 +1096,8 @@ const tournamentList = [
     },
     {
         "id": "2015_NATS_US",
-        "name": "2015 US Nationals",
-        "eventType": "oldNationals",
+        "name": "US Nationals 2015",
+        "eventType": "nationals",
         "eventLogo": nationals,
         "date": "Jul 3, 2015",
         "flag": usa,

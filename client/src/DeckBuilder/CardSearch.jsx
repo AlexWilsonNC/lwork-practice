@@ -1175,6 +1175,38 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return takeFirstMatching(results);
     }, [results, filters]);
 
+    const SET_NAME_TO_KEY = React.useMemo(() => {
+        const m = {};
+        for (const { key, name } of SET_OPTIONS) {
+            m[name.toLowerCase()] = key;
+            m[key.toLowerCase()] = key;
+        }
+        return m;
+    }, [SET_OPTIONS]);
+
+    const [setsInput, setSetsInput] = useState('');
+
+    useEffect(() => {
+        const selected = Object.entries(draftFilters.sets || {})
+            .filter(([, on]) => on)
+            .map(([k]) => k);
+        setSetsInput(selected.join(', '));
+    }, [draftFilters.sets]);
+
+    const applySetsFromInput = React.useCallback((raw) => {
+        const tokens = String(raw || '')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+
+        const picked = {};
+        for (const t of tokens) {
+            const key = SET_NAME_TO_KEY[t.toLowerCase()];
+            if (key) picked[key] = true;
+        }
+        setDraftFilters(f => ({ ...f, sets: picked }));
+    }, [SET_NAME_TO_KEY, setDraftFilters]);
+
     useEffect(() => {
         const btn = toggleBtnRef.current;
         if (!btn) return;
@@ -1285,84 +1317,57 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         ))}
                                     </div>
                                 </div>
-                                {/* <div className="filter-group sets-dropdown">
-                                    <h3 onClick={() => setShowSets(s => !s)}>
-                                        Sets:
-                                    </h3>
-                                    <div className="toggle-sets-wrapper">
-                                        <button
-                                            type="button"
-                                            className="toggle-sets-btn"
-                                            onClick={() => setShowSets(s => !s)}
-                                            aria-expanded={showSets}
+                                <div className="filter-group">
+                                    <h3>Sets:</h3>
+                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <select
+                                        className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            aria-label="Add a set"
+                                            onChange={(e) => {
+                                                const key = e.target.value;
+                                                if (!key) return;
+                                                const current = setsInput.split(',').map(s => s.trim()).filter(Boolean);
+                                                if (!current.some(t => t.toLowerCase() === key.toLowerCase())) {
+                                                    const next = current.concat([key]).join(', ');
+                                                    setSetsInput(next);
+                                                    applySetsFromInput(next);
+                                                }
+                                                e.target.value = '';
+                                            }}
+                                            style={{ padding: '8px', minWidth: 220 }}
+                                            defaultValue=""
                                         >
-                                            {showSets ? 'Hide sets' : 'Show sets'}
-                                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
-                                        </button>
-                                        {showSets && (
-                                            <>
-                                                <div
-                                                    className="sets-overlay"
-                                                    onClick={() => setShowSets(false)}
-                                                />
-                                                <div className="sets-grid">
-                                                    {SET_OPTIONS.map(({ key, name, img, css }) => (
-                                                        <button
-                                                            key={key}
-                                                            type="button"
-                                                            className={`set-cube ${css} ${draftFilters.sets[key] ? 'darkon' : ''}`}
-                                                            onClick={() => toggleSet(key)}
-                                                        >
-                                                            <p>
-                                                                <img className="adv-set-logo" src={img} alt={name} title={name} />
-                                                            </p>
-                                                            <div className="set-name">{name}</div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </div> */}
-                                <div className="filter-group sets-dropdown">
-                                    <h3 onClick={() => setShowSets(s => !s)}>Sets:</h3>
-                                    <div className="toggle-sets-wrapper">
-                                        <button
-                                            type="button"
-                                            className="toggle-sets-btn"
-                                            onClick={() => setShowSets(s => !s)}
-                                            aria-expanded={showSets}
-                                        >
-                                            {showSets ? 'Hide sets' : 'Show sets'}
-                                            <span className="material-symbols-outlined bold-span">keyboard_arrow_down</span>
-                                        </button>
+                                            <option value="" disabled>Select a set…</option>
+                                            {SET_OPTIONS.map(({ key, name }) => (
+                                                <option key={key} value={key}>
+                                                    {name} ({key})
+                                                </option>
+                                            ))}
+                                        </select>
 
-                                        {showSets && (
-                                            <>
-                                                <div className="sets-overlay" onClick={() => setShowSets(false)} />
-                                                <div className="sets-grid">
-                                                    {SET_OPTIONS.map(({ key, name, img, css }) => (
-                                                        <button
-                                                            key={key}
-                                                            type="button"
-                                                            className={`set-cube ${slugCss(name)} set-${key.toLowerCase()} ${draftFilters.sets[key] ? 'darkon' : ''}`}
-                                                            onClick={() =>
-                                                                setDraftFilters(f => ({
-                                                                    ...f,
-                                                                    sets: { ...f.sets, [key]: !f.sets[key] }
-                                                                }))
-                                                            }
-                                                            aria-pressed={!!draftFilters.sets[key]}
-                                                        >
-                                                            <p>
-                                                                <img className="adv-set-logo" src={img} alt={name} title={name} />
-                                                            </p>
-                                                            <div className="set-name">{name}</div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        )}
+                                        <input
+                                            type="text"
+                                            placeholder="Type set codes or names, comma-separated (e.g., PAF, OBF)"
+                                            className='type-btn non-bold-typebtn'
+                                            value={setsInput}
+                                            onChange={(e) => {
+                                                const v = e.target.value;
+                                                setSetsInput(v);
+                                                applySetsFromInput(v);
+                                            }}
+                                            style={{ flex: 1, minWidth: 280, padding: '8px' }}
+                                        />
+
+                                        <button
+                                            type="button"
+                                            className="type-btn non-bold-typebtn"
+                                            onClick={() => {
+                                                setSetsInput('');
+                                                applySetsFromInput('');
+                                            }}
+                                        >
+                                            Clear
+                                        </button>
                                     </div>
                                 </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>

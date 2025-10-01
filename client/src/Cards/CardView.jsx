@@ -253,13 +253,22 @@ const CardView = () => {
                     const compareAttacks = (attacks1 = [], attacks2 = []) => {
                         if (attacks1.length !== attacks2.length) return false;
                         return attacks1.every((attack, index) => {
-                            const otherAttack = attacks2[index];
+                            const other = attacks2[index];
+
+                            const normCost = c => {
+                                if (!c || c.length === 0) return [];
+                                if (c.length === 1 && String(c[0]).toLowerCase() === 'free') return [];
+                                return c;
+                            };
+
+                            const cost1 = normCost(attack.cost);
+                            const cost2 = normCost(other.cost);
+
                             return (
-                                attack.name === otherAttack.name &&
-                                arraysEqual(attack.cost, otherAttack.cost) &&
-                                attack.convertedEnergyCost === otherAttack.convertedEnergyCost &&
-                                attack.damage === otherAttack.damage &&
-                                attack.text === otherAttack.text
+                                attack.name === other.name &&
+                                JSON.stringify(cost1) === JSON.stringify(cost2) &&
+                                attack.damage === other.damage &&
+                                attack.text === other.text
                             );
                         });
                     };
