@@ -79,7 +79,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Aug 15, 2025</p>
+          <p>Last Updated: Sept 18, 2025</p>
         </div>
 
         {/* Article Image */}
@@ -88,7 +88,7 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
-          {/* <hr className='title-hr' />
+          <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>September 2025</h3>
           <br />
@@ -128,7 +128,7 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={exeggutor} alt="sprite" />
             </div>
             <p>Jason Windham (Masters) - 26<sup>th</sup> Place <span>2007 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
-          </a> */}
+          </a>
           
           <hr className='title-hr' />
           <br />

@@ -659,9 +659,9 @@ const CardView = () => {
                         )}
                         {cardInfo.supertype === 'Pokémon' && (
                             <>
-                                <hr className='small-grey-hr' />
                                 {cardInfo.rules && (
                                     <div className='attack-ability rules-text'>
+                                        <hr className='small-grey-hr' />
                                         <ul>
                                             {cardInfo.rules.map((rule, index) => (
                                                 <li key={index}>{rule}</li>
