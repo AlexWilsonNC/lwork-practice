@@ -244,6 +244,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [showMoreStages, setShowMoreStages] = useState(false);
     const [showEnergyMenu, setShowEnergyMenu] = useState(false);
     const [showMoreRarity, setShowMoreRarity] = useState(false);
+    const setsInputFocusedRef = useRef(false);
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -351,7 +352,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         const attackEnergyActive = f.attackCost && f.attackCost.energies &&
             Object.values(f.attackCost.energies).some(Boolean);
 
-        return basic || retreatActive || attackValActive || attackEnergyActive;
+        const formatActive = f.formatRange && f.formatRange.from && f.formatRange.to;
+
+        return basic || retreatActive || attackValActive || attackEnergyActive || formatActive;
     }
 
     function buildFiltersForRequest(f) {
@@ -371,7 +374,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             out.artist = String(f.artist).trim();
         }
 
-        // rarity (only send selected = true)
+        if (f.formatRange?.from && f.formatRange?.to) {
+            const fi = setOrder.indexOf(f.formatRange.from);
+            const ti = setOrder.indexOf(f.formatRange.to);
+            if (fi !== -1 && ti !== -1) {
+                const lo = Math.min(fi, ti);
+                const hi = Math.max(fi, ti);
+                const rangeKeys = setOrder.slice(lo, hi + 1);
+                const mergedSets = { ...(out.sets || {}) };
+                for (const key of rangeKeys) mergedSets[key] = true;
+                out.sets = mergedSets;
+            }
+        }
+
         if (f.rarity && Object.values(f.rarity).some(Boolean)) {
             const picked = {};
             for (const [k, v] of Object.entries(f.rarity)) if (v) picked[k] = true;
@@ -832,6 +847,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         WOTC: /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])\/?/i
     };
 
+    const setIndexMap = React.useMemo(
+        () => Object.fromEntries(setOrder.map((k, i) => [k, i])),
+        []
+    );
+
+    const SET_OPTIONS_SORTED = React.useMemo(() => {
+        const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
+        return [...SET_OPTIONS].sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
+    }, [SET_OPTIONS, setIndexMap]);
+
+    const isAbbrevInRange = (abbr, fromKey, toKey) => {
+        const ai = setIndexMap[abbr];
+        const fi = setIndexMap[fromKey];
+        const ti = setIndexMap[toKey];
+        if (ai == null || fi == null || ti == null) return false;
+        const lo = Math.min(fi, ti);
+        const hi = Math.max(fi, ti);
+        return ai >= lo && ai <= hi;
+    };
+
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
 
@@ -842,6 +877,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
             const setsChecked = Object.values(filters.sets).some(Boolean);
             if (setsChecked && !filters.sets[card.setAbbrev]) continue;
+
+            const fr = filters.formatRange?.from;
+            const to = filters.formatRange?.to;
+            if (fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
 
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
@@ -890,7 +929,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         retreat: { op: 'eq', value: '' },
         attackCost: { op: 'eq', value: '', energies: {} },
         artist: '',
-        rarity: {}
+        rarity: {},
+        formatRange: { from: '', to: '' }
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
@@ -1151,7 +1191,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                     arr = arr.filter(c => {
                         const nm = aliasNormalize(c.name);
-                        return normQueries.some(nq => nm.includes(nq)); // match ANY comma term
+                        return normQueries.some(nq => nm.includes(nq));
                     });
                 }
 
@@ -1163,7 +1203,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     const numB = parseInt(b.number, 10) || 0;
                     return numA - numB;
                 });
-
+                const fr = draftFilters.formatRange?.from;
+                const to = draftFilters.formatRange?.to;
+                if (fr && to) {
+                    arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
+                }
                 setResults(arr);
             }).catch(() => setResults([]));
         }, 300)
@@ -1187,6 +1231,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [setsInput, setSetsInput] = useState('');
 
     useEffect(() => {
+        if (setsInputFocusedRef.current) return;
         const selected = Object.entries(draftFilters.sets || {})
             .filter(([, on]) => on)
             .map(([k]) => k);
@@ -1321,7 +1366,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     <h3>Sets:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                                         <select
-                                        className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown'
                                             aria-label="Add a set"
                                             onChange={(e) => {
                                                 const key = e.target.value;
@@ -1350,10 +1395,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             placeholder="Type set codes or names, comma-separated (e.g., PAF, OBF)"
                                             className='type-btn non-bold-typebtn'
                                             value={setsInput}
+                                            onFocus={() => { setsInputFocusedRef.current = true; }}
+                                            onBlur={(e) => {
+                                                setsInputFocusedRef.current = false;
+                                                applySetsFromInput(e.target.value);
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    applySetsFromInput(setsInput);
+                                                }
+                                            }}
                                             onChange={(e) => {
-                                                const v = e.target.value;
-                                                setSetsInput(v);
-                                                applySetsFromInput(v);
+                                                setSetsInput(e.target.value);
                                             }}
                                             style={{ flex: 1, minWidth: 280, padding: '8px' }}
                                         />
@@ -1369,6 +1423,57 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             Clear
                                         </button>
                                     </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Format:</h3>
+                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        {/* <label style={{ opacity: 0.85 }}>From</label> */}
+                                        <select
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                            value={draftFilters.formatRange?.from || ''}
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    formatRange: { ...(f.formatRange || {}), from: e.target.value }
+                                                }))
+                                            }
+                                            style={{ minWidth: 220 }}
+                                        >
+                                            <option value="">Select first set…</option>
+                                            {SET_OPTIONS_SORTED.map(({ key, name }) => (
+                                                <option key={key} value={key}>{name} ({key})</option>
+                                            ))}
+                                        </select>
+
+                                        <label style={{ opacity: 0.85 }}>through</label>
+                                        <select
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                            value={draftFilters.formatRange?.to || ''}
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    formatRange: { ...(f.formatRange || {}), to: e.target.value }
+                                                }))
+                                            }
+                                            style={{ minWidth: 220 }}
+                                        >
+                                            <option value="">Select second set…</option>
+                                            {SET_OPTIONS_SORTED.map(({ key, name }) => (
+                                                <option key={key} value={key}>{name} ({key})</option>
+                                            ))}
+                                        </select>
+
+                                        <button
+                                            type="button"
+                                            className="type-btn non-bold-typebtn"
+                                            onClick={() => setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))}
+                                        >
+                                            Clear
+                                        </button>
+                                    </div>
+                                    {/* <p style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
+                                        Picks all cards from the “From” set through the “Through” set (inclusive), based on chronological <code>setOrder</code>.
+                                    </p> */}
                                 </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
@@ -1854,6 +1959,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 });
 
                                                 const list = resp.ok ? await resp.json() : [];
+
+                                                const fr = draftFilters.formatRange?.from;
+                                                const to = draftFilters.formatRange?.to;
+                                                let arr = Array.isArray(list) ? list : [];
+                                                if (fr && to) {
+                                                    arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
+                                                }
+
                                                 skipNextQueryEffectRef.current = true;
                                                 setSuppressDefault(true);
                                                 setQuery('');
