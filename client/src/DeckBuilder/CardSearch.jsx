@@ -354,7 +354,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
         const formatActive = f.formatRange && f.formatRange.from && f.formatRange.to;
 
-        return basic || retreatActive || attackValActive || attackEnergyActive || formatActive;
+        return basic || retreatActive || attackValActive || attackEnergyActive || formatActive || f.includePromos;
     }
 
     function buildFiltersForRequest(f) {
@@ -381,8 +381,15 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                 const lo = Math.min(fi, ti);
                 const hi = Math.max(fi, ti);
                 const rangeKeys = setOrder.slice(lo, hi + 1);
-                const mergedSets = { ...(out.sets || {}) };
+
+                let mergedSets = { ...(out.sets || {}) };
                 for (const key of rangeKeys) mergedSets[key] = true;
+
+                if (f.includePromos) {
+                    const withPromos = addPromosForRange(new Set(Object.keys(mergedSets)));
+                    mergedSets = Object.fromEntries(Array.from(withPromos).map(k => [k, true]));
+                }
+
                 out.sets = mergedSets;
             }
         }
@@ -852,11 +859,58 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         []
     );
 
-    const SET_OPTIONS_SORTED = React.useMemo(() => {
+    const WORLDS_FORMATS = [
+        { label: '2025 Worlds', from: 'SVI', to: 'BLK' },
+        { label: '2024 Worlds', from: 'BRS', to: 'SFA' },
+        { label: '2023 Worlds', from: 'BST', to: 'PAL' },
+        { label: '2022 Worlds', from: 'SSH', to: 'PGO' },
+        { label: '2019 Worlds', from: 'UPR', to: 'UNM' },
+        { label: '2018 Worlds', from: 'BKT', to: 'CES' },
+        { label: '2017 Worlds', from: 'PRC', to: 'BUS' },
+        { label: '2016 Worlds', from: 'XY', to: 'STS' },
+        { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
+        { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
+        { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
+        { label: '2012 Worlds', from: 'HS', to: 'DEX' },
+        { label: '2011 Worlds', from: 'HS', to: 'BLW' },
+        { label: '2010 Worlds', from: 'DP', to: 'UL' },
+        { label: '2009 Worlds', from: 'DP', to: 'RR' },
+        { label: '2008 Worlds', from: 'HP', to: 'MD' },
+        { label: '2007 Worlds', from: 'DX', to: 'DP' },
+        { label: '2006 Worlds', from: 'HL', to: 'HP' },
+        { label: '2005 Worlds', from: 'RS', to: 'EM' },
+        { label: '2004 Worlds', from: 'EX', to: 'HL' },
+    ];
+
+    const POPULAR_FORMATS = [
+        { label: '2017 NAIC', from: 'PRC', to: 'GRI' },
+        { label: 'SUM-LOT', from: 'SUM', to: 'LOT' },
+        { label: 'RS-PK', from: 'RS', to: 'PK' },
+    ];
+
+    // TODO: replace promo set codes below with YOUR actual promo abbrevs (e.g., 'WOTC-P', 'NP', 'DP-P', etc.).
+    const PROMO_RULES = [
+        { label: 'Wizards Black Star Promos', mainFrom: 'BS', mainTo: 'SK', promoKey: 'WOTC-P' },
+        { label: 'Nintendo Black Star Promos', mainFrom: 'RS', mainTo: 'PK', promoKey: 'NP' },
+        { label: 'DP Black Star Promos', mainFrom: 'DP', mainTo: 'AR', promoKey: 'DP-P' },
+        { label: 'HGSS Black Star Promos', mainFrom: 'HS', mainTo: 'CL', promoKey: 'HSP' },
+        { label: 'BW Black Star Promos', mainFrom: 'BLW', mainTo: 'LTR', promoKey: 'BWP' },
+        { label: 'XY Black Star Promos', mainFrom: 'XY', mainTo: 'EVO', promoKey: 'XYP' },
+        { label: 'SM Black Star Promos', mainFrom: 'SUM', mainTo: 'CEC', promoKey: 'SMP' },
+        { label: 'SWSH Black Star Promos', mainFrom: 'SSH', mainTo: 'CRZ', promoKey: 'SWSHP' },
+        { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'MEG', promoKey: 'SVP' },
+    ];
+
+    const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
+
+    const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
         const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
-        return [...SET_OPTIONS].sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
+        return SET_OPTIONS
+            .filter(o => !PROMO_SET_KEYS.has(o.key))
+            .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
     }, [SET_OPTIONS, setIndexMap]);
 
+    // Inclusive range check
     const isAbbrevInRange = (abbr, fromKey, toKey) => {
         const ai = setIndexMap[abbr];
         const fi = setIndexMap[fromKey];
@@ -866,6 +920,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         const hi = Math.max(fi, ti);
         return ai >= lo && ai <= hi;
     };
+
+    // Given a set of included main-set keys, add matching promos based on PROMO_RULES
+    function addPromosForRange(selectedKeysSet) {
+        const keys = new Set(selectedKeysSet);
+        for (const rule of PROMO_RULES) {
+            // If any main set from the block is present, include the promo key
+            const fi = setIndexMap[rule.mainFrom];
+            const ti = setIndexMap[rule.mainTo];
+            if (fi === -1 || ti === -1 || fi == null || ti == null) continue;
+            const lo = Math.min(fi, ti), hi = Math.max(fi, ti);
+            const hit = Array.from(keys).some(k => {
+                const ki = setIndexMap[k];
+                return ki != null && ki >= lo && ki <= hi;
+            });
+            if (hit && rule.promoKey) keys.add(rule.promoKey);
+        }
+        return keys;
+    }
 
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
@@ -930,7 +1002,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         attackCost: { op: 'eq', value: '', energies: {} },
         artist: '',
         rarity: {},
-        formatRange: { from: '', to: '' }
+        formatRange: { from: '', to: '' },
+        includePromos: false
     }), [ERA_OPTIONS]);
 
     const [filters, setFilters] = useState(emptyFilters);
@@ -1427,38 +1500,70 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Format:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        {/* <label style={{ opacity: 0.85 }}>From</label> */}
                                         <select
                                             className="type-btn non-bold-typebtn hp-btn-dropdown"
-                                            value={draftFilters.formatRange?.from || ''}
-                                            onChange={(e) =>
-                                                setDraftFilters(f => ({
-                                                    ...f,
-                                                    formatRange: { ...(f.formatRange || {}), from: e.target.value }
-                                                }))
-                                            }
-                                            style={{ minWidth: 220 }}
+                                            defaultValue=""
+                                            onChange={(e) => {
+                                                const v = e.target.value;
+                                                if (!v) return;
+                                                const [from, to] = v.split('|');
+                                                setDraftFilters(f => ({ ...f, formatRange: { from, to } }));
+                                                e.target.value = '';
+                                            }}
+                                            style={{ minWidth: 290 }}
                                         >
-                                            <option value="">Select first set…</option>
-                                            {SET_OPTIONS_SORTED.map(({ key, name }) => (
+                                            <option value="" disabled style={{ opacity: 0.55 }}>Select a quick format…</option>
+
+                                            <optgroup label="Worlds Championships">
+                                                {WORLDS_FORMATS.map(({ label, from, to }) => (
+                                                    <option key={label} value={`${from}|${to}`}>{label} ({from}–{to})</option>
+                                                ))}
+                                            </optgroup>
+
+                                            <optgroup label="Other Popular Formats">
+                                                {POPULAR_FORMATS.map(({ label, from, to }) => (
+                                                    <option key={label} value={`${from}|${to}`}>{label} ({from}–{to})</option>
+                                                ))}
+                                            </optgroup>
+                                        </select>
+
+                                        {/* <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={!!draftFilters.includePromos}
+                                                onChange={(e) => setDraftFilters(f => ({ ...f, includePromos: e.target.checked }))}
+                                            />
+                                            <span>Include promos? <span style={{ opacity: 0.7 }}>
+                                                Some legalities may be inaccurate; preselected formats are more accurate.
+                                            </span></span>
+                                        </label> */}
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3></h3>
+                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <select
+                                            className={`type-btn non-bold-typebtn hp-btn-dropdown ${draftFilters.formatRange?.from ? '' : 'is-placeholder'}`}
+                                            value={draftFilters.formatRange?.from || ''}
+                                            onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), from: e.target.value } }))}
+                                            style={{ minWidth: 220, color: draftFilters.formatRange?.from ? 'inherit' : 'rgba(255,255,255,0.55)' }}
+                                        >
+                                            <option value="" disabled>Select first set…</option>
+                                            {SET_OPTIONS_SORTED_NO_PROMOS.map(({ key, name }) => (
                                                 <option key={key} value={key}>{name} ({key})</option>
                                             ))}
                                         </select>
 
                                         <label style={{ opacity: 0.85 }}>through</label>
+
                                         <select
-                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                            className={`type-btn non-bold-typebtn hp-btn-dropdown ${draftFilters.formatRange?.to ? '' : 'is-placeholder'}`}
                                             value={draftFilters.formatRange?.to || ''}
-                                            onChange={(e) =>
-                                                setDraftFilters(f => ({
-                                                    ...f,
-                                                    formatRange: { ...(f.formatRange || {}), to: e.target.value }
-                                                }))
-                                            }
-                                            style={{ minWidth: 220 }}
+                                            onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), to: e.target.value } }))}
+                                            style={{ minWidth: 220, color: draftFilters.formatRange?.to ? 'inherit' : 'rgba(255,255,255,0.55)' }}
                                         >
-                                            <option value="">Select second set…</option>
-                                            {SET_OPTIONS_SORTED.map(({ key, name }) => (
+                                            <option value="" disabled>Select second set…</option>
+                                            {SET_OPTIONS_SORTED_NO_PROMOS.map(({ key, name }) => (
                                                 <option key={key} value={key}>{name} ({key})</option>
                                             ))}
                                         </select>
@@ -1471,9 +1576,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             Clear
                                         </button>
                                     </div>
-                                    {/* <p style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
-                                        Picks all cards from the “From” set through the “Through” set (inclusive), based on chronological <code>setOrder</code>.
-                                    </p> */}
                                 </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
