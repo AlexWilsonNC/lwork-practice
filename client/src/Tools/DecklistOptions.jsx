@@ -128,7 +128,6 @@ const DecklistOptions = ({ decklist, cardMap }) => {
       setSaving(true);
       const token = localStorage.getItem('PTCGLegendsToken');
 
-      // 1) Create the deck
       const res = await fetch('/api/user/decks', {
         method: 'POST',
         headers: {
@@ -137,7 +136,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         },
         body: JSON.stringify({
           name: deckName,
-          mascotCard: selectedMascot,           // "SET-NUM"
+          mascotCard: selectedMascot, // "SET-NUM"
           secondaryMascotCard: secondaryMascot || '',
           description,
           decklist: flatDeck,
@@ -147,9 +146,8 @@ const DecklistOptions = ({ decklist, cardMap }) => {
       if (!res.ok) throw new Error('Failed to save deck');
 
       const created = await res.json();
-      const deck = created.deck || created;     // API sometimes returns { deck }
+      const deck = created.deck || created;
 
-      // 2) If user picked a folder, move the deck into it
       if (selectedFolderId) {
         await fetch(`/api/user/decks/${deck._id}/move`, {
           method: 'PATCH',
@@ -158,10 +156,9 @@ const DecklistOptions = ({ decklist, cardMap }) => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ folderId: selectedFolderId }),
-        }).catch(console.error); // non-blocking; if it fails, the deck is still saved
+        }).catch(console.error);
       }
 
-      // 3) Your redirect (kept as-is)
       window.location.href = '/taco';
     } catch (e) {
       console.error(e);
@@ -177,12 +174,12 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Copy to Clipboard</span>
       </div>
 
-      <div className="open-in-deckbuilder-btn" onClick={openInDeckbuilder}>
+      <div className="open-in-deckbuilder-btn not-ready" onClick={openInDeckbuilder}>
         <span className="material-symbols-outlined">construction</span>
         <span className="tooltip-text">Open in Deckbuilder</span>
       </div>
 
-      <div className="save-to-collection-btn" onClick={handleSaveClick}>
+      <div className="save-to-collection-btn not-ready" onClick={handleSaveClick}>
         <span className="material-symbols-outlined">favorite</span>
         <span className="tooltip-text">Save to Collection</span>
       </div>
