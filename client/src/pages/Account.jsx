@@ -490,7 +490,8 @@ export default function Account() {
                     name: deck.name || '',
                     mascotCard: deck.mascotCard || '',
                     secondaryMascotCard: deck.secondaryMascotCard || '',
-                    description: deck.description || ''
+                    description: deck.description || '',
+                    folderId: deck.folderId ? String(deck.folderId) : ''
                 })
             );
         } catch { }
@@ -1585,7 +1586,7 @@ export default function Account() {
                                                                                     setSelectedFolderId(d.folderId || '');
                                                                                     setShowMoveModal(true);
                                                                                 }}>{folderActionLabel(d)}</button>
-                                                                                <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>
+                                                                                <button className='redhover' onClick={e => { e.stopPropagation(); handleDelete(d); }}>
                                                                                     Delete
                                                                                 </button>
                                                                             </div>

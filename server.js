@@ -445,20 +445,22 @@ app.patch('/api/user/decks/:deckId/move', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not move deck' });
   }
 });
-// app.get('/api/user/decks/:deckId', requireAuth, async (req, res) => {
-//     try {
-//       const user = await User.findById(req.userId);
-//       const deck = user.decks.id(req.params.deckId);
-//       if (!deck) {
-//         return res.status(404).json({ error: 'Deck not found' });
-//       }
-//       res.json(deck);
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).json({ error: 'Could not load deck' });
-//     }
-//   }
-// );
+app.get('/api/user/decks/:deckId', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const deck = user.decks.id(req.params.deckId);
+    if (!deck) return res.status(404).json({ error: 'Deck not found' });
+
+    const out = deck.toObject ? deck.toObject() : deck;
+    out.folderId = out.folderId ? String(out.folderId) : '';
+    res.json(out);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Could not fetch deck' });
+  }
+});
 app.delete('/api/user/folders/:folderId', requireAuth, async (req, res) => {
   const { folderId } = req.params;
   try {

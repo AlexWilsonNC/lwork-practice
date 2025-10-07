@@ -1095,28 +1095,57 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             .replace(/★/g, 'goldstar')
             .replace(/δ/g, 'deltaspecies');
 
+        s = s.replace(/[-–—·•'._/]/g, '');
+
         s = s.replace(/\s+/g, '');
 
         return s;
     }
 
     function expandAliasToSymbolQueries(q) {
-        const base = q.trim();
+        const base = String(q || '').trim();
         const variants = new Set([base]);
 
         let sym = base.toLowerCase();
-
         sym = sym.replace(/\bprism\s*star\b/g, '♢');
         sym = sym.replace(/\bgold\s*star\b/g, '★');
         sym = sym.replace(/\bdelta\s*species\b/g, 'δ');
-
         sym = sym.replace(/\bprism\b/g, '♢');
         sym = sym.replace(/\bstar\b/g, '★');
         sym = sym.replace(/\bdelta\b/g, 'δ');
         sym = sym.replace(/\bspecies\b/g, 'δ');
+        if (sym !== base.toLowerCase()) variants.add(sym);
 
-        if (sym !== base.toLowerCase()) {
-            variants.add(sym);
+        const SUFFIX_MAP = {
+            'ex': 'EX',
+            'gx': 'GX',
+            'v': 'V',
+            'vmax': 'VMAX',
+            'vstar': 'VSTAR',
+            'lv.x': 'LV.X',
+            'lvx': 'LV.X',
+            'lv x': 'LV.X',
+        };
+
+        const tokens = base.split(/\s+/).filter(Boolean);
+        if (tokens.length >= 2) {
+            const lastRaw = tokens[tokens.length - 1];
+            const stem = tokens.slice(0, -1).join(' ');
+            const key = lastRaw.toLowerCase().replace(/\./g, '');
+            const cap = SUFFIX_MAP[key];
+
+            if (cap) {
+                variants.add(`${stem}-${cap}`);
+                variants.add(`${stem} ${cap}`);
+                variants.add(`${stem}-${key.toUpperCase()}`);
+            }
+
+            const secondLast = tokens[tokens.length - 2];
+            if (/^ho$/i.test(secondLast) && /^oh$/i.test(lastRaw)) {
+                variants.add('Ho-Oh');
+                variants.add('Ho oh');
+                variants.add('Hooh');
+            }
         }
 
         return Array.from(variants);
@@ -1395,7 +1424,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                             setDraftFilters(filters);
                             setShowAdvanced(true);
                         }}
-                    // style={{ pointerEvents: 'none' }}
                     >
                         Advanced Search
                         <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -1581,7 +1609,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             className="type-btn non-bold-typebtn"
                                             onClick={() => {
                                                 setSelectedQuickFormat('');
-                                                setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))}
+                                                setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))
+                                            }
                                             }
                                         >
                                             Clear
@@ -2148,7 +2177,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     setDraftFilters(filters);
                                     setShowAdvanced(true);
                                 }}
-                            // style={{ pointerEvents: 'none' }}
                             >
                                 Advanced Search
                                 <span className="material-symbols-outlined">keyboard_arrow_down</span>
@@ -2171,7 +2199,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     }}
                                     onClick={() => onCardClick(card)}
                                     style={{ cursor: 'pointer' }}
-
                                 >
                                     <img
                                         draggable={false}

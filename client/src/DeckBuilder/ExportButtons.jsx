@@ -193,6 +193,8 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const [overwriteMascot, setOverwriteMascot] = useState('')
   const [overwriteSecondary, setOverwriteSecondary] = useState('')
   const [overwriteDescription, setOverwriteDescription] = useState('')
+  const [folders, setFolders] = useState([]);
+  const [selectedFolderId, setSelectedFolderId] = useState('');
   const overwritePrefilledRef = useRef(false)
 
 
@@ -234,7 +236,8 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           name: data.name || '',
           mascotCard: data.mascotCard || '',
           secondaryMascotCard: data.secondaryMascotCard || '',
-          description: data.description || ''
+          description: data.description || '',
+          folderId: data.folderId || ''
         });
       } catch { /* no-op */ }
     })();
@@ -250,6 +253,29 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     overwritePrefilledRef.current = true;
     try { localStorage.removeItem('PTCGLegendsOriginalDeckMeta'); } catch { }
   }, [showSaveModal, overwriteMode, originalMeta]);
+
+  useEffect(() => {
+    if (!showSaveModal || !user) return;
+    const token = localStorage.getItem('PTCGLegendsToken');
+
+    fetch('/api/user/folders', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        const list = (data.folders || data || []).slice().sort((a, b) => a.order - b.order);
+        setFolders(list);
+
+        // If overwriting an existing deck, preselect its current folder once
+        if (overwriteMode && originalMeta?.folderId && !selectedFolderId) {
+          setSelectedFolderId(String(originalMeta.folderId));
+        }
+      })
+      .catch(console.error);
+  }, [showSaveModal, user, overwriteMode, originalMeta, selectedFolderId]);
 
   useEffect(() => {
     if (!showCopyMenu) return
@@ -271,42 +297,42 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     setShowSuccess(true)
   }
 
-const copyJson = () => {
-  const pokemon = deck
-    .filter(c => c.supertype === 'Pokémon')
-    .map(({ count, name, setAbbrev, set, number }) => ({
-      count,
-      name,
-      set: setAbbrev || set, // fallback just in case
-      number
-    }));
+  const copyJson = () => {
+    const pokemon = deck
+      .filter(c => c.supertype === 'Pokémon')
+      .map(({ count, name, setAbbrev, set, number }) => ({
+        count,
+        name,
+        set: setAbbrev || set, // fallback just in case
+        number
+      }));
 
-  const trainer = deck
-    .filter(c => c.supertype === 'Trainer')
-    .map(({ count, name, setAbbrev, set, number }) => ({
-      count,
-      name,
-      set: setAbbrev || set,
-      number
-    }));
+    const trainer = deck
+      .filter(c => c.supertype === 'Trainer')
+      .map(({ count, name, setAbbrev, set, number }) => ({
+        count,
+        name,
+        set: setAbbrev || set,
+        number
+      }));
 
-  const energy = deck
-    .filter(c => c.supertype === 'Energy')
-    .map(({ count, name, setAbbrev, set, number }) => ({
-      count,
-      name,
-      set: setAbbrev || set,
-      number
-    }));
+    const energy = deck
+      .filter(c => c.supertype === 'Energy')
+      .map(({ count, name, setAbbrev, set, number }) => ({
+        count,
+        name,
+        set: setAbbrev || set,
+        number
+      }));
 
-  const decklist = { pokemon, trainer, energy };
+    const decklist = { pokemon, trainer, energy };
 
-  const text = `"decklist": ${JSON.stringify(decklist, null, 2)}`;
+    const text = `"decklist": ${JSON.stringify(decklist, null, 2)}`;
 
-  navigator.clipboard.writeText(text);
-  setShowCopyMenu(false);
-  setShowSuccess(true);
-};
+    navigator.clipboard.writeText(text);
+    setShowCopyMenu(false);
+    setShowSuccess(true);
+  };
 
   const shareLink = () => {
     const minimal = deck.map(c => ({
@@ -508,32 +534,50 @@ const copyJson = () => {
         ? `/api/user/decks/${originalDeckId}`
         : '/api/user/decks';
       const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
+      const payload = {
+        name,
+        mascotCard,
+        secondaryMascotCard,
+        description: desc,
+        decklist: flatDeck,
+        ...(overwriteMode ? {} : { folderId: selectedFolderId || null })
+      };
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          name,
-          mascotCard,
-          secondaryMascotCard,
-          description: desc,
-          decklist: flatDeck
-        })
+        body: JSON.stringify(payload)
       })
       if (res.ok) {
-        window.location.href = '/taco'
-        setSaving(false)
-        setShowSaveModal(false)
-        setDeckName('')
-        setSelectedMascot('')
-        setSecondaryMascot('')
-        setDescription('')
-        setOverwriteDeckName('')
-        setOverwriteMascot('')
-        setOverwriteSecondary('')
-        setOverwriteDescription('')
+        const data = await res.json();
+        const deckId = overwriteMode && originalDeckId
+          ? originalDeckId
+          : (data.deck?._id || data._id);
+
+        if (selectedFolderId && deckId) {
+          await fetch(`/api/user/decks/${deckId}/move`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ folderId: selectedFolderId })
+          }).catch(console.error);
+        }
+
+        window.location.href = '/taco';
+        setShowSaveModal(false);
+        setDeckName('');
+        setSelectedMascot('');
+        setSecondaryMascot('');
+        setDescription('');
+        setOverwriteDeckName('');
+        setOverwriteMascot('');
+        setOverwriteSecondary('');
+        setOverwriteDescription('');
+        setSelectedFolderId('');
       } else {
         console.error('Failed to save deck')
       }
@@ -674,6 +718,20 @@ const copyJson = () => {
                     value={overwriteMode ? overwriteDeckName : deckName}
                     onChange={e => overwriteMode ? setOverwriteDeckName(e.target.value) : setDeckName(e.target.value)}
                   />
+                </label>
+                <label>
+                  Assign to Folder<br />
+                  <select
+                    value={selectedFolderId}
+                    onChange={e => setSelectedFolderId(e.target.value)}
+                  >
+                    <option value="">None</option>
+                    {folders.map(f => (
+                      <option key={f._id} value={f._id}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <label>
                   Mascot*<br />

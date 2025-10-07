@@ -573,6 +573,9 @@
 .deckcollection-menu-dropdown button:hover {
   background: rgba(255, 255, 255, 0.185);
 }
+.deckcollection-menu-dropdown .redhover:hover {
+  background: rgba(255, 0, 0, 0.5);
+}
 
 .deck-edit-modal {
   position: fixed;
