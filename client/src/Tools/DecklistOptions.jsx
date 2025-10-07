@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -11,32 +11,60 @@ const DecklistOptions = ({ decklist, cardMap }) => {
   const [selectedMascot, setSelectedMascot] = useState('');
   const [secondaryMascot, setSecondaryMascot] = useState('');
   const [description, setDescription] = useState('');
+  const [folders, setFolders] = useState([]);
+  const [selectedFolderId, setSelectedFolderId] = useState('');
   const [saving, setSaving] = useState(false);
 
   const cleanCardName = (name) => name.replace(' - ACESPEC', '');
 
+  const imgFor = (set, number) => {
+    const k = `${set}-${number}`;
+    const cm = cardMap[k] || {};
+    const small = cm?.images?.small || cm?.imageUrl || '';
+    const large = cm?.images?.large || small || '';
+    return small ? { small, large } : undefined;
+  };
+
   const flatDeck = [
-    ...(decklist?.pokemon ?? []).map(c => ({
-      count: Number(c.count),
-      name: cardMap[`${c.set}-${c.number}`]?.name ?? cleanCardName(c.name),
-      setAbbrev: c.set,
-      number: c.number,
-      supertype: 'Pokémon',
-    })),
-    ...(decklist?.trainer ?? []).map(c => ({
-      count: Number(c.count),
-      name: cardMap[`${c.set}-${c.number}`]?.name ?? cleanCardName(c.name),
-      setAbbrev: c.set,
-      number: c.number,
-      supertype: 'Trainer',
-    })),
-    ...(decklist?.energy ?? []).map(c => ({
-      count: Number(c.count),
-      name: cardMap[`${c.set}-${c.number}`]?.name ?? cleanCardName(c.name),
-      setAbbrev: c.set,
-      number: c.number,
-      supertype: 'Energy',
-    })),
+    ...(decklist?.pokemon ?? []).map(c => {
+      const images = imgFor(c.set, c.number);
+      const k = `${c.set}-${c.number}`;
+      return {
+        count: Number(c.count),
+        name: cardMap[k]?.name ?? cleanCardName(c.name),
+        setAbbrev: c.set,
+        set: c.set,
+        number: c.number,
+        supertype: 'Pokémon',
+        ...(images ? { images, imageUrl: images.small } : {})
+      };
+    }),
+    ...(decklist?.trainer ?? []).map(c => {
+      const images = imgFor(c.set, c.number);
+      const k = `${c.set}-${c.number}`;
+      return {
+        count: Number(c.count),
+        name: cardMap[k]?.name ?? cleanCardName(c.name),
+        setAbbrev: c.set,
+        set: c.set,
+        number: c.number,
+        supertype: 'Trainer',
+        ...(images ? { images, imageUrl: images.small } : {})
+      };
+    }),
+    ...(decklist?.energy ?? []).map(c => {
+      const images = imgFor(c.set, c.number);
+      const k = `${c.set}-${c.number}`;
+      return {
+        count: Number(c.count),
+        name: cardMap[k]?.name ?? cleanCardName(c.name),
+        setAbbrev: c.set,
+        set: c.set,
+        number: c.number,
+        supertype: 'Energy',
+        ...(images ? { images, imageUrl: images.small } : {})
+      };
+    }),
   ];
 
   const copyToClipboard = () => {
@@ -70,16 +98,37 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     ].map(c => ({ set: c.set, number: c.number, count: Number(c.count) }));
 
     const hash = `deck=${encodeURIComponent(JSON.stringify(minimal))}`;
-    navigate(`/deckbuilder#${hash}`);
+    navigate(`/bobthebuilder#${hash}`);
   };
 
   const handleSaveClick = () => setShowSaveModal(true);
+
+  useEffect(() => {
+    if (!showSaveModal || !user) return;
+    const token = localStorage.getItem('PTCGLegendsToken');
+
+    fetch('/api/user/folders', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        const list = data.folders || data;
+        list.sort((a, b) => a.order - b.order);
+        setFolders(list);
+      })
+      .catch(console.error);
+  }, [showSaveModal, user]);
 
   const handleModalSave = async () => {
     if (!deckName.trim() || !selectedMascot) return;
     try {
       setSaving(true);
       const token = localStorage.getItem('PTCGLegendsToken');
+
+      // 1) Create the deck
       const res = await fetch('/api/user/decks', {
         method: 'POST',
         headers: {
@@ -88,14 +137,32 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         },
         body: JSON.stringify({
           name: deckName,
-          mascotCard: selectedMascot,              // "SET-NUM"
+          mascotCard: selectedMascot,           // "SET-NUM"
           secondaryMascotCard: secondaryMascot || '',
           description,
           decklist: flatDeck,
+          folderId: selectedFolderId || null
         }),
       });
       if (!res.ok) throw new Error('Failed to save deck');
-      window.location.href = '/account';
+
+      const created = await res.json();
+      const deck = created.deck || created;     // API sometimes returns { deck }
+
+      // 2) If user picked a folder, move the deck into it
+      if (selectedFolderId) {
+        await fetch(`/api/user/decks/${deck._id}/move`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ folderId: selectedFolderId }),
+        }).catch(console.error); // non-blocking; if it fails, the deck is still saved
+      }
+
+      // 3) Your redirect (kept as-is)
+      window.location.href = '/taco';
     } catch (e) {
       console.error(e);
     } finally {
@@ -110,12 +177,12 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Copy to Clipboard</span>
       </div>
 
-      <div className="open-in-deckbuilder-btn not-ready" onClick={openInDeckbuilder}>
+      <div className="open-in-deckbuilder-btn" onClick={openInDeckbuilder}>
         <span className="material-symbols-outlined">construction</span>
         <span className="tooltip-text">Open in Deckbuilder</span>
       </div>
 
-      <div className="save-to-collection-btn not-ready" onClick={handleSaveClick}>
+      <div className="save-to-collection-btn" onClick={handleSaveClick}>
         <span className="material-symbols-outlined">favorite</span>
         <span className="tooltip-text">Save to Collection</span>
       </div>
@@ -148,6 +215,20 @@ const DecklistOptions = ({ decklist, cardMap }) => {
                     value={deckName}
                     onChange={e => setDeckName(e.target.value)}
                   />
+                </label>
+                <label>
+                  Assign to Folder<br />
+                  <select
+                    value={selectedFolderId}
+                    onChange={e => setSelectedFolderId(e.target.value)}
+                  >
+                    <option value="">None</option>
+                    {folders.map(f => (
+                      <option key={f._id} value={f._id}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <label>
                   Mascot*<br />

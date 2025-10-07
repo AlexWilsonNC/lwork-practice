@@ -181,12 +181,41 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/user/decks', requireAuth, async (req, res) => {
-  const { name, mascotCard, secondaryMascotCard, description, decklist } = req.body;
+  const {
+    name,
+    mascotCard,
+    secondaryMascotCard,
+    description,
+    decklist,
+    folderId
+  } = req.body;
+
   try {
     const user = await User.findById(req.userId);
-    user.decks.push({ name, mascotCard, secondaryMascotCard, description, decklist });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    let folderObjectId = null;
+    if (folderId) {
+      const folder = user.folders.id(folderId);
+      if (!folder) return res.status(400).json({ error: 'Invalid folderId' });
+      folderObjectId = folder._id;
+    }
+
+    const deckDoc = {
+      name,
+      mascotCard,
+      secondaryMascotCard: secondaryMascotCard || null,
+      description: description || '',
+      decklist,
+      folderId: folderObjectId,
+      createdAt: new Date(),
+    };
+
+    user.decks.push(deckDoc);
     await user.save();
-    res.json({ success: true });
+
+    const created = user.decks[user.decks.length - 1];
+    res.json({ success: true, deck: created });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not save deck' });

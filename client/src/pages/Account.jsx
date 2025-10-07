@@ -1554,7 +1554,7 @@ export default function Account() {
                                                                                     setNewValue(d.name);
                                                                                     setShowRenameModal(true);
                                                                                 }}>
-                                                                                    Rename
+                                                                                    Edit Name
                                                                                 </button>
                                                                                 <button onClick={e => {
                                                                                     e.stopPropagation();
