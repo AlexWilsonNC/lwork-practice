@@ -245,6 +245,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [showEnergyMenu, setShowEnergyMenu] = useState(false);
     const [showMoreRarity, setShowMoreRarity] = useState(false);
     const setsInputFocusedRef = useRef(false);
+    const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
 
     const ERA_OPTIONS = [
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
@@ -1046,6 +1047,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const resetDraftAdvancedFilters = React.useCallback(() => {
         setDraftFilters(emptyFilters);
+        setSelectedQuickFormat('');
     }, [emptyFilters]);
 
     const toggleSet = key =>
@@ -1502,27 +1504,33 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                                         <select
                                             className="type-btn non-bold-typebtn hp-btn-dropdown"
-                                            defaultValue=""
+                                            value={selectedQuickFormat}
                                             onChange={(e) => {
                                                 const v = e.target.value;
                                                 if (!v) return;
                                                 const [from, to] = v.split('|');
                                                 setDraftFilters(f => ({ ...f, formatRange: { from, to } }));
-                                                e.target.value = '';
+                                                setSelectedQuickFormat(v);
                                             }}
                                             style={{ minWidth: 290 }}
                                         >
-                                            <option value="" disabled style={{ opacity: 0.55 }}>Select a quick format…</option>
+                                            <option value="" disabled style={{ opacity: 0.55 }}>
+                                                Select a quick format…
+                                            </option>
 
                                             <optgroup label="Worlds Championships">
                                                 {WORLDS_FORMATS.map(({ label, from, to }) => (
-                                                    <option key={label} value={`${from}|${to}`}>{label} ({from}–{to})</option>
+                                                    <option key={label} value={`${from}|${to}`}>
+                                                        {label} ({from}–{to})
+                                                    </option>
                                                 ))}
                                             </optgroup>
 
                                             <optgroup label="Other Popular Formats">
                                                 {POPULAR_FORMATS.map(({ label, from, to }) => (
-                                                    <option key={label} value={`${from}|${to}`}>{label} ({from}–{to})</option>
+                                                    <option key={label} value={`${from}|${to}`}>
+                                                        {label} ({from}–{to})
+                                                    </option>
                                                 ))}
                                             </optgroup>
                                         </select>
@@ -1571,7 +1579,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         <button
                                             type="button"
                                             className="type-btn non-bold-typebtn"
-                                            onClick={() => setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))}
+                                            onClick={() => {
+                                                setSelectedQuickFormat('');
+                                                setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))}
+                                            }
                                         >
                                             Clear
                                         </button>
