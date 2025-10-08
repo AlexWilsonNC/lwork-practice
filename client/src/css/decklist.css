@@ -164,7 +164,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    color: rgba(128, 128, 128, 0.071);
+    color: rgba(128, 128, 128, 0.025);
     font-size: 100px;
 }
 .copy-decklist-btn:hover,
