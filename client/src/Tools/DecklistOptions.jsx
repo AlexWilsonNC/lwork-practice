@@ -184,6 +184,10 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Save to Collection</span>
       </div>
 
+      <div className="classhiddendot" onClick={handleSaveClick}>
+        <span className="tooltip-text">.</span>
+      </div>
+
       {showSaveModal && (
         <div className="deck-collection-modal-overlay">
           <div className="deck-collection-modal-box">

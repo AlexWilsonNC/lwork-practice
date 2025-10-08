@@ -160,6 +160,13 @@
     margin-right: 10px;
     position: relative;
 }
+.classhiddendot {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    color: rgba(128, 128, 128, 0.071);
+    font-size: 100px;
+}
 .copy-decklist-btn:hover,
 .open-in-deckbuilder-btn:hover,
 .save-to-collection-btn:hover {
