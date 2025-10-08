@@ -58,6 +58,49 @@ const decksConnection = mongoose.createConnection(DECKS_MONGODB_URI, { useNewUrl
 const decklistsDb = mongoose.createConnection(CARDSINDECKLISTS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const emailsConnection = mongoose.createConnection(EMAILS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+async function getCardByKey(key) {
+  if (!key) return null;
+  const i = key.lastIndexOf('-');
+  if (i < 0) return null;
+  const set = key.slice(0, i);
+  const number = key.slice(i + 1);
+  const collection = cardConnection.collection(set);
+  if (!collection) return null;
+  return await collection.findOne({ number: String(number) });
+}
+
+function pickMascotFields(card, prefix = '') {
+  if (!card) return {};
+  const img = card.images?.large || null;
+  const trait = {
+    HasAncientTrait: !!card.ancientTrait,
+    IsTagTeam: !!(card.subtypes || []).includes('TAG TEAM'),
+    HasBreakTrait: !!(card.subtypes || []).includes('BREAK'),
+    IsLegendCard: !!(card.subtypes || []).includes('LEGEND'),
+    SpecificallyLugiaLegend: card.name === 'Lugia LEGEND',
+    SpecificallyZoroarkGX: card.name === 'Zoroark-GX',
+  };
+  return prefix
+    ? {
+      [`${prefix}MascotImageUrl`]: img,
+      [`${prefix}HasAncientTrait`]: trait.HasAncientTrait,
+      [`${prefix}IsTagTeam`]: trait.IsTagTeam,
+      [`${prefix}HasBreakTrait`]: trait.HasBreakTrait,
+      [`${prefix}IsLegendCard`]: trait.IsLegendCard,
+      [`${prefix}SpecificallyLugiaLegend`]: trait.SpecificallyLugiaLegend,
+      [`${prefix}SpecificallyZoroarkGX`]: trait.SpecificallyZoroarkGX,
+    }
+    : {
+      mascotImageUrl: img,
+      hasAncientTrait: trait.HasAncientTrait,
+      isTagTeam: trait.IsTagTeam,
+      hasBreakTrait: trait.HasBreakTrait,
+      isLegendCard: trait.IsLegendCard,
+      specificallyLugiaLegend: trait.SpecificallyLugiaLegend,
+      specificallyZoroarkGX: trait.SpecificallyZoroarkGX,
+    };
+}
+
 [eventConnection, cardConnection, playersConnection, decksConnection, emailsConnection]
   .forEach(conn => {
     conn.on('error', console.error.bind(console, `MongoDB connection error for ${conn.name}:`));
@@ -76,7 +119,21 @@ const userSchema = new mongoose.Schema({
     decklist: { type: Object, required: true },
     createdAt: { type: Date, default: Date.now },
     folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
-    favorite: { type: Boolean, default: false }
+    favorite: { type: Boolean, default: false },
+    mascotImageUrl: { type: String, default: null },
+    secondaryMascotImageUrl: { type: String, default: null },
+    hasAncientTrait: { type: Boolean, default: false },
+    isTagTeam: { type: Boolean, default: false },
+    hasBreakTrait: { type: Boolean, default: false },
+    isLegendCard: { type: Boolean, default: false },
+    specificallyLugiaLegend: { type: Boolean, default: false },
+    specificallyZoroarkGX: { type: Boolean, default: false },
+    secondaryHasAncientTrait: { type: Boolean, default: false },
+    secondaryIsTagTeam: { type: Boolean, default: false },
+    secondaryHasBreakTrait: { type: Boolean, default: false },
+    secondaryIsLegendCard: { type: Boolean, default: false },
+    secondarySpecificallyLugiaLegend: { type: Boolean, default: false },
+    secondarySpecificallyZoroarkGX: { type: Boolean, default: false }
   }],
   folders: [{
     name: { type: String, required: true },
@@ -201,6 +258,9 @@ app.post('/api/user/decks', requireAuth, async (req, res) => {
       folderObjectId = folder._id;
     }
 
+    const primary = await getCardByKey(mascotCard);
+    const secondary = secondaryMascotCard ? await getCardByKey(secondaryMascotCard) : null;
+
     const deckDoc = {
       name,
       mascotCard,
@@ -209,6 +269,9 @@ app.post('/api/user/decks', requireAuth, async (req, res) => {
       decklist,
       folderId: folderObjectId,
       createdAt: new Date(),
+
+      ...pickMascotFields(primary),
+      ...pickMascotFields(secondary, 'secondary')
     };
 
     user.decks.push(deckDoc);
@@ -278,12 +341,29 @@ app.patch(
   async (req, res) => {
     const { mascotCard, secondaryMascotCard } = req.body;
     try {
+      const primary = await getCardByKey(mascotCard);
+      const secondary = secondaryMascotCard ? await getCardByKey(secondaryMascotCard) : null;
+
       await User.updateOne(
         { _id: req.userId, 'decks._id': req.params.deckId },
         {
           $set: {
             'decks.$.mascotCard': mascotCard,
-            'decks.$.secondaryMascotCard': secondaryMascotCard
+            'decks.$.secondaryMascotCard': secondaryMascotCard || null,
+            'decks.$.mascotImageUrl': pickMascotFields(primary).mascotImageUrl,
+            'decks.$.hasAncientTrait': pickMascotFields(primary).hasAncientTrait,
+            'decks.$.isTagTeam': pickMascotFields(primary).isTagTeam,
+            'decks.$.hasBreakTrait': pickMascotFields(primary).hasBreakTrait,
+            'decks.$.isLegendCard': pickMascotFields(primary).isLegendCard,
+            'decks.$.specificallyLugiaLegend': pickMascotFields(primary).specificallyLugiaLegend,
+            'decks.$.specificallyZoroarkGX': pickMascotFields(primary).specificallyZoroarkGX,
+            'decks.$.secondaryMascotImageUrl': pickMascotFields(secondary, 'secondary').secondaryMascotImageUrl,
+            'decks.$.secondaryHasAncientTrait': pickMascotFields(secondary, 'secondary').secondaryHasAncientTrait,
+            'decks.$.secondaryIsTagTeam': pickMascotFields(secondary, 'secondary').secondaryIsTagTeam,
+            'decks.$.secondaryHasBreakTrait': pickMascotFields(secondary, 'secondary').secondaryHasBreakTrait,
+            'decks.$.secondaryIsLegendCard': pickMascotFields(secondary, 'secondary').secondaryIsLegendCard,
+            'decks.$.secondarySpecificallyLugiaLegend': pickMascotFields(secondary, 'secondary').secondarySpecificallyLugiaLegend,
+            'decks.$.secondarySpecificallyZoroarkGX': pickMascotFields(secondary, 'secondary').secondarySpecificallyZoroarkGX,
           }
         }
       );
@@ -311,7 +391,21 @@ app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
       mascotCard: original.mascotCard,
       secondaryMascotCard: original.secondaryMascotCard,
       description: original.description,
-      decklist: original.decklist
+      decklist: original.decklist,
+      mascotImageUrl: original.mascotImageUrl,
+      secondaryMascotImageUrl: original.secondaryMascotImageUrl,
+      hasAncientTrait: original.hasAncientTrait,
+      isTagTeam: original.isTagTeam,
+      hasBreakTrait: original.hasBreakTrait,
+      isLegendCard: original.isLegendCard,
+      specificallyLugiaLegend: original.specificallyLugiaLegend,
+      specificallyZoroarkGX: original.specificallyZoroarkGX,
+      secondaryHasAncientTrait: original.secondaryHasAncientTrait,
+      secondaryIsTagTeam: original.secondaryIsTagTeam,
+      secondaryHasBreakTrait: original.secondaryHasBreakTrait,
+      secondaryIsLegendCard: original.secondaryIsLegendCard,
+      secondarySpecificallyLugiaLegend: original.secondarySpecificallyLugiaLegend,
+      secondarySpecificallyZoroarkGX: original.secondarySpecificallyZoroarkGX,
     });
     await user.save();
     res.json({ success: true, deck: user.decks[user.decks.length - 1] });
@@ -345,15 +439,38 @@ app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
     deck.description = description;
     deck.decklist = decklist;
     deck.createdAt = Date.now();
+
+    const primary = await getCardByKey(deck.mascotCard);
+    const secondary = deck.secondaryMascotCard ? await getCardByKey(deck.secondaryMascotCard) : null;
+
+    Object.assign(deck, pickMascotFields(primary));
+    Object.assign(deck, pickMascotFields(secondary, 'secondary'));
+
     await user.save();
-    res.json({ success: true });
+    res.json({ success: true, deck });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not update deck' });
   }
 });
 userDeckSchema.add({
-  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null }
+  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
+  mascotImageUrl: { type: String, default: null },
+  secondaryMascotImageUrl: { type: String, default: null },
+
+  hasAncientTrait: { type: Boolean, default: false },
+  isTagTeam: { type: Boolean, default: false },
+  hasBreakTrait: { type: Boolean, default: false },
+  isLegendCard: { type: Boolean, default: false },
+  specificallyLugiaLegend: { type: Boolean, default: false },
+  specificallyZoroarkGX: { type: Boolean, default: false },
+
+  secondaryHasAncientTrait: { type: Boolean, default: false },
+  secondaryIsTagTeam: { type: Boolean, default: false },
+  secondaryHasBreakTrait: { type: Boolean, default: false },
+  secondaryIsLegendCard: { type: Boolean, default: false },
+  secondarySpecificallyLugiaLegend: { type: Boolean, default: false },
+  secondarySpecificallyZoroarkGX: { type: Boolean, default: false }
 });
 app.get('/api/user/folders', requireAuth, async (req, res) => {
   try {

@@ -68,6 +68,23 @@ const AccountSection = styled.div`
     }
 `;
 
+const cardCache = new Map();
+
+async function fetchCardByKey(key) {
+    if (!key) return null;
+    if (cardCache.has(key)) return cardCache.get(key);
+
+    const sep = key.lastIndexOf('-');
+    const set = key.slice(0, sep);
+    const num = key.slice(sep + 1);
+
+    const res = await fetch(`/api/cards/${set}/${num}`).catch(() => null);
+    const data = res && res.ok ? await res.json() : null;
+
+    if (data) cardCache.set(key, data);
+    return data;
+}
+
 function ArtCrop({ src, alt = '' }) {
     return (
         <div style={{ position: 'relative', width: 50, height: 30, overflow: 'hidden', borderRadius: 2 }}>
@@ -252,7 +269,6 @@ export default function Account() {
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [assignDeckId, setAssignDeckId] = useState('');
     const [assignSearch, setAssignSearch] = useState('');
-
 
     const handleLogout = () => {
         logout();
@@ -556,67 +572,46 @@ export default function Account() {
                 .then(async ({ folders: pubFolders, decks: pubDecks }) => {
                     const sortedFolders = [...pubFolders].sort((a, b) => a.order - b.order);
                     setFolders(sortedFolders);
-                    // 2) capture that order for the "Folder Order" sortMode
                     setFoldersOrder(sortedFolders.map(f => f._id));
 
-                    const withImages = await Promise.all(
-                        pubDecks.map(async deck => {
-                            const sep = deck.mascotCard.lastIndexOf('-');
-                            const set = deck.mascotCard.slice(0, sep);
-                            const num = deck.mascotCard.slice(sep + 1);
+                    setDecks(pubDecks || []);
 
-                            let secondaryMascotImageUrl = null;
-                            let secondaryHasAncientTrait = false;
-                            let secondaryIsTagTeam = false;
-                            let secondaryHasBreakTrait = false;
-                            let secondaryIsLegendCard = false;
-                            let secondarySpecificallyLugiaLegend = false;
-                            let secondarySpecificallyZoroarkGX = false;
-
-                            if (deck.secondaryMascotCard) {
-                                const sep2 = deck.secondaryMascotCard.lastIndexOf('-');
-                                const set2 = deck.secondaryMascotCard.slice(0, sep2);
-                                const num2 = deck.secondaryMascotCard.slice(sep2 + 1);
+                    (async () => {
+                        const hydrated = await Promise.all(
+                            (pubDecks || []).map(async deck => {
                                 try {
-                                    const r2 = await fetch(`/api/cards/${set2}/${num2}`);
-                                    const card2 = await r2.json();
-                                    secondaryMascotImageUrl =
-                                        card2.images?.large || card2.images?.small;
-                                    secondaryHasAncientTrait = !!card2.ancientTrait;
-                                    secondaryIsTagTeam = card2.subtypes?.includes('TAG TEAM');
-                                    secondaryHasBreakTrait = card2.subtypes?.includes('BREAK');
-                                    secondaryIsLegendCard = card2.subtypes?.includes('LEGEND');
-                                    secondarySpecificallyLugiaLegend = card2.name === 'Lugia LEGEND';
-                                    secondarySpecificallyZoroarkGX = card2.name === 'Zoroark-GX';
-                                } catch { /* ignore */ }
-                            }
+                                    const needPrimary = !deck.mascotImageUrl;
+                                    const needSecondary = deck.secondaryMascotCard && !deck.secondaryMascotImageUrl;
 
-                            try {
-                                const r = await fetch(`/api/cards/${set}/${num}`);
-                                const card = await r.json();
-                                return {
-                                    ...deck,
-                                    mascotImageUrl: card.images?.large || card.images?.small,
-                                    secondaryMascotImageUrl,
-                                    hasAncientTrait: !!card.ancientTrait,
-                                    isTagTeam: card.subtypes?.includes('TAG TEAM'),
-                                    hasBreakTrait: card.subtypes?.includes('BREAK'),
-                                    isLegendCard: card.subtypes?.includes('LEGEND'),
-                                    specificallyLugiaLegend: card.name === 'Lugia LEGEND',
-                                    specificallyZoroarkGX: card.name === 'Zoroark-GX',
-                                    secondaryHasAncientTrait,
-                                    secondaryIsTagTeam,
-                                    secondaryHasBreakTrait,
-                                    secondaryIsLegendCard,
-                                    secondarySpecificallyLugiaLegend,
-                                    secondarySpecificallyZoroarkGX,
-                                };
-                            } catch {
-                                return { ...deck, secondaryMascotImageUrl };
-                            }
-                        })
-                    );
-                    setDecks(withImages);
+                                    const p1 = needPrimary ? fetchCardByKey(deck.mascotCard) : Promise.resolve(null);
+                                    const p2 = needSecondary ? fetchCardByKey(deck.secondaryMascotCard) : Promise.resolve(null);
+
+                                    const [card, card2] = await Promise.all([p1, p2]);
+
+                                    return {
+                                        ...deck,
+                                        mascotImageUrl: deck.mascotImageUrl || card?.images?.large || card?.images?.small,
+                                        hasAncientTrait: deck.hasAncientTrait ?? !!card?.ancientTrait,
+                                        isTagTeam: deck.isTagTeam ?? !!card?.subtypes?.includes('TAG TEAM'),
+                                        hasBreakTrait: deck.hasBreakTrait ?? !!card?.subtypes?.includes('BREAK'),
+                                        isLegendCard: deck.isLegendCard ?? !!card?.subtypes?.includes('LEGEND'),
+                                        specificallyLugiaLegend: deck.specificallyLugiaLegend ?? (card?.name === 'Lugia LEGEND'),
+                                        specificallyZoroarkGX: deck.specificallyZoroarkGX ?? (card?.name === 'Zoroark-GX'),
+                                        secondaryMascotImageUrl: deck.secondaryMascotImageUrl || card2?.images?.large || card2?.images?.small || null,
+                                        secondaryHasAncientTrait: deck.secondaryHasAncientTrait ?? !!card2?.ancientTrait,
+                                        secondaryIsTagTeam: deck.secondaryIsTagTeam ?? !!card2?.subtypes?.includes('TAG TEAM'),
+                                        secondaryHasBreakTrait: deck.secondaryHasBreakTrait ?? !!card2?.subtypes?.includes('BREAK'),
+                                        secondaryIsLegendCard: deck.secondaryIsLegendCard ?? !!card2?.subtypes?.includes('LEGEND'),
+                                        secondarySpecificallyLugiaLegend: deck.secondarySpecificallyLugiaLegend ?? (card2?.name === 'Lugia LEGEND'),
+                                        secondarySpecificallyZoroarkGX: deck.secondarySpecificallyZoroarkGX ?? (card2?.name === 'Zoroark-GX'),
+                                    };
+                                } catch {
+                                    return deck;
+                                }
+                            })
+                        );
+                        setDecks(hydrated);
+                    })();
                 })
                 .catch(err => {
                     console.error(err);
@@ -642,76 +637,52 @@ export default function Account() {
                     return res.json();
                 })
                 .then(async decks => {
-                    const withImages = await Promise.all(
-                        decks.map(async deck => {
-                            const sep = deck.mascotCard.lastIndexOf('-');
-                            const set = deck.mascotCard.slice(0, sep);
-                            const num = deck.mascotCard.slice(sep + 1);
-
-                            let secondaryMascotImageUrl = null;
-                            let secondaryHasAncientTrait = false;
-                            let secondaryIsTagTeam = false;
-                            let secondaryHasBreakTrait = false;
-                            let secondaryIsLegendCard = false;
-                            let secondarySpecificallyLugiaLegend = false;
-                            let secondarySpecificallyZoroarkGX = false;
-
-                            if (deck.secondaryMascotCard) {
-                                const sep2 = deck.secondaryMascotCard.lastIndexOf('-');
-                                const set2 = deck.secondaryMascotCard.slice(0, sep2);
-                                const num2 = deck.secondaryMascotCard.slice(sep2 + 1);
-                                try {
-                                    const r2 = await fetch(`/api/cards/${set2}/${num2}`);
-                                    const card2 = await r2.json();
-                                    secondaryMascotImageUrl =
-                                        card2.images?.large || card2.images?.small;
-                                    secondaryHasAncientTrait = !!card2.ancientTrait;
-                                    secondaryIsTagTeam = card2.subtypes?.includes('TAG TEAM');
-                                    secondaryHasBreakTrait = card2.subtypes?.includes('BREAK');
-                                    secondaryIsLegendCard = card2.subtypes?.includes('LEGEND');
-                                    secondarySpecificallyLugiaLegend = card2.name === 'Lugia LEGEND';
-                                    secondarySpecificallyZoroarkGX = card2.name === 'Zoroark-GX';
-
-                                } catch { /* ignore */ }
-                            }
-
-                            try {
-                                const r = await fetch(`/api/cards/${set}/${num}`);
-                                const card = await r.json();
-                                return {
-                                    ...deck,
-                                    mascotImageUrl: card.images?.large || card.images?.small,
-                                    secondaryMascotImageUrl,
-                                    hasAncientTrait: !!card.ancientTrait,
-                                    isTagTeam: card.subtypes?.includes('TAG TEAM'),
-                                    hasBreakTrait: card.subtypes?.includes('BREAK'),
-                                    isLegendCard: card.subtypes?.includes('LEGEND'),
-                                    specificallyLugiaLegend: card.name === 'Lugia LEGEND',
-                                    specificallyZoroarkGX: card.name === 'Zoroark-GX',
-                                    secondaryHasAncientTrait,
-                                    secondaryIsTagTeam,
-                                    secondaryHasBreakTrait,
-                                    secondaryIsLegendCard,
-                                    secondarySpecificallyLugiaLegend,
-                                    secondarySpecificallyZoroarkGX,
-                                };
-                            } catch {
-                                return { ...deck, secondaryMascotImageUrl };
-                            }
-                        })
-                    );
-                    const favs = new Set(
-                        withImages.filter(d => d.favorite).map(d => d._id)
-                    );
-                    setFavorites(favs);
-                    setDecks(withImages);
-
-                    return fetch('/api/user/folders', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`
-                        }
+                    const foldersReq = fetch('/api/user/folders', {
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
                     });
+
+                    setFavorites(new Set(decks.filter(d => d.favorite).map(d => d._id)));
+                    setDecks(decks);
+
+                    (async () => {
+                        const hydrated = await Promise.all(
+                            decks.map(async deck => {
+                                try {
+                                    const needPrimary = !deck.mascotImageUrl;
+                                    const needSecondary = deck.secondaryMascotCard && !deck.secondaryMascotImageUrl;
+
+                                    const p1 = needPrimary ? fetchCardByKey(deck.mascotCard) : Promise.resolve(null);
+                                    const p2 = needSecondary ? fetchCardByKey(deck.secondaryMascotCard) : Promise.resolve(null);
+
+                                    const [card, card2] = await Promise.all([p1, p2]);
+
+                                    return {
+                                        ...deck,
+                                        mascotImageUrl: deck.mascotImageUrl || card?.images?.large || card?.images?.small,
+                                        hasAncientTrait: deck.hasAncientTrait ?? !!card?.ancientTrait,
+                                        isTagTeam: deck.isTagTeam ?? !!card?.subtypes?.includes('TAG TEAM'),
+                                        hasBreakTrait: deck.hasBreakTrait ?? !!card?.subtypes?.includes('BREAK'),
+                                        isLegendCard: deck.isLegendCard ?? !!card?.subtypes?.includes('LEGEND'),
+                                        specificallyLugiaLegend: deck.specificallyLugiaLegend ?? (card?.name === 'Lugia LEGEND'),
+                                        specificallyZoroarkGX: deck.specificallyZoroarkGX ?? (card?.name === 'Zoroark-GX'),
+                                        secondaryMascotImageUrl: deck.secondaryMascotImageUrl || card2?.images?.large || card2?.images?.small || null,
+                                        secondaryHasAncientTrait: deck.secondaryHasAncientTrait ?? !!card2?.ancientTrait,
+                                        secondaryIsTagTeam: deck.secondaryIsTagTeam ?? !!card2?.subtypes?.includes('TAG TEAM'),
+                                        secondaryHasBreakTrait: deck.secondaryHasBreakTrait ?? !!card2?.subtypes?.includes('BREAK'),
+                                        secondaryIsLegendCard: deck.secondaryIsLegendCard ?? !!card2?.subtypes?.includes('LEGEND'),
+                                        secondarySpecificallyLugiaLegend: deck.secondarySpecificallyLugiaLegend ?? (card2?.name === 'Lugia LEGEND'),
+                                        secondarySpecificallyZoroarkGX: deck.secondarySpecificallyZoroarkGX ?? (card2?.name === 'Zoroark-GX'),
+                                    };
+                                } catch {
+                                    return deck;
+                                }
+                            })
+                        );
+
+                        setDecks(hydrated);
+                    })();
+
+                    return foldersReq;
                 })
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to load folders');
@@ -856,9 +827,9 @@ export default function Account() {
     };
 
     const [showFolderCounts, setShowFolderCounts] = useState(() => {
-  const v = localStorage.getItem('showFolderCounts');
-  return v == null ? true : v === 'true';
-});
+        const v = localStorage.getItem('showFolderCounts');
+        return v == null ? true : v === 'true';
+    });
 
     useEffect(() => {
         localStorage.setItem('showFolderCounts', String(showFolderCounts));
@@ -1475,6 +1446,9 @@ export default function Account() {
                                                                         d.specificallyLugiaLegend && "lugia",
                                                                         d.specificallyZoroarkGX && "zoroark"
                                                                     ].filter(Boolean).join(" ")}
+                                                                    fetchpriority={i < 12 ? 'high' : 'auto'}
+                                                                    loading={i < 12 ? 'eager' : 'lazy'}
+                                                                    decoding="async"
                                                                 />
                                                                 {d.secondaryMascotImageUrl && (
                                                                     <div className='secondary-mascot-container'>
@@ -1625,6 +1599,9 @@ export default function Account() {
                                                             d.isLegendCard && "legend",
                                                             d.specificallyLugiaLegend && "lugia"
                                                         ].filter(Boolean).join(" ")}
+                                                        fetchpriority={i < 12 ? 'high' : 'auto'}
+                                                        loading={i < 12 ? 'eager' : 'lazy'}
+                                                        decoding="async"
                                                     />
                                                 </div>
                                                 <div className="list-info">

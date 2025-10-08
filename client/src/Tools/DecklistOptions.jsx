@@ -13,6 +13,8 @@ const DecklistOptions = ({ decklist, cardMap }) => {
   const [description, setDescription] = useState('');
   const [folders, setFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState('');
+  const [isAlreadySaved, setIsAlreadySaved] = useState(false);
+  const [existingDeckId, setExistingDeckId] = useState('');
   const [saving, setSaving] = useState(false);
 
   const cleanCardName = (name) => name.replace(' - ACESPEC', '');
@@ -66,6 +68,37 @@ const DecklistOptions = ({ decklist, cardMap }) => {
       };
     }),
   ];
+
+  const flatten = raw => Array.isArray(raw)
+    ? raw
+    : [...(raw?.pokemon || []), ...(raw?.trainer || []), ...(raw?.energy || [])];
+
+  const norm = (s = '') =>
+    String(s)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[-–—·•'’._/]/g, '')
+      .replace(/\s+/g, '');
+
+  const mechSuffix = (name = '') => {
+    const m = name.match(/\b(ex|gx|vmax|vstar|lv\.?x)\b/i);
+    return m ? m[1].toLowerCase().replace(/\./g, '') : '';
+  };
+
+  const canonicalKey = (c) => {
+    const supertype = (c.supertype || '').toLowerCase();
+    const name = c.name || '';
+    if (supertype === 'trainer' || supertype === 'energy') {
+      return `${supertype}:${norm(name)}`;
+    }
+    return `pokemon:${norm(name)}:${mechSuffix(name)}`;
+  };
+
+  const signature = (cards = []) => {
+    const parts = cards.map(c => `${canonicalKey(c)}#${Number(c.count || 0)}`);
+    parts.sort();
+    return parts.join('|');
+  };
 
   const copyToClipboard = () => {
     if (!decklist) return;
@@ -167,6 +200,32 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     }
   };
 
+  useEffect(() => {
+    if (!user) return;
+    const token = localStorage.getItem('PTCGLegendsToken');
+    const targetSig = signature(flatDeck);
+
+    (async () => {
+      try {
+        const res = await fetch('/api/user/decks', {
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+
+        const decks = await res.json();
+        const match = decks.find(d => {
+          const sig = signature(flatten(d.decklist));
+          return sig === targetSig;
+        });
+
+        setIsAlreadySaved(!!match);
+        setExistingDeckId(match?._id || '');
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [user, decklist]);
+
   return (
     <div className="deck-top-right-options">
       <div className="copy-decklist-btn" onClick={copyToClipboard}>
@@ -179,9 +238,20 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Open in Deckbuilder</span>
       </div>
 
-      <div className="save-to-collection-btn not-ready" onClick={handleSaveClick}>
-        <span className="material-symbols-outlined">favorite</span>
-        <span className="tooltip-text">Save to Collection</span>
+      <div
+        className="save-to-collection-btn not-ready"
+        onClick={handleSaveClick}
+        title={isAlreadySaved ? 'Already saved in your collection' : 'Save to Collection'}
+      >
+        <span
+          className="material-symbols-outlined"
+          style={{ color: isAlreadySaved ? 'rgb(220, 93, 93)' : undefined }}
+        >
+          favorite
+        </span>
+        <span className="tooltip-text">
+          {isAlreadySaved ? 'Already saved' : 'Save to Collection'}
+        </span>
       </div>
 
       <div className="classhiddendot" onClick={handleSaveClick}>
