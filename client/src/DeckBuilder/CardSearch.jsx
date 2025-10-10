@@ -889,7 +889,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { label: 'RS-PK', from: 'RS', to: 'PK' },
     ];
 
-    // TODO: replace promo set codes below with YOUR actual promo abbrevs (e.g., 'WOTC-P', 'NP', 'DP-P', etc.).
+    // TODO: replace promo set codes below with actual promo abbrevs...
     const PROMO_RULES = [
         { label: 'Wizards Black Star Promos', mainFrom: 'BS', mainTo: 'SK', promoKey: 'WOTC-P' },
         { label: 'Nintendo Black Star Promos', mainFrom: 'RS', mainTo: 'PK', promoKey: 'NP' },
@@ -911,7 +911,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
     }, [SET_OPTIONS, setIndexMap]);
 
-    // Inclusive range check
     const isAbbrevInRange = (abbr, fromKey, toKey) => {
         const ai = setIndexMap[abbr];
         const fi = setIndexMap[fromKey];
@@ -922,11 +921,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return ai >= lo && ai <= hi;
     };
 
-    // Given a set of included main-set keys, add matching promos based on PROMO_RULES
     function addPromosForRange(selectedKeysSet) {
         const keys = new Set(selectedKeysSet);
         for (const rule of PROMO_RULES) {
-            // If any main set from the block is present, include the promo key
             const fi = setIndexMap[rule.mainFrom];
             const ti = setIndexMap[rule.mainTo];
             if (fi === -1 || ti === -1 || fi == null || ti == null) continue;
@@ -940,20 +937,76 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return keys;
     }
 
+    function getActiveOverride(selectedQuickFormat, filters) {
+        const fmtKey =
+            (selectedQuickFormat && selectedQuickFormat.includes('|'))
+                ? selectedQuickFormat
+                : (filters.formatRange?.from && filters.formatRange?.to
+                    ? `${filters.formatRange.from}|${filters.formatRange.to}`
+                    : '');
+        return FORMAT_MANUAL_OVERRIDES[fmtKey] || null;
+    }
+
+    function isForceIncluded(card, override) {
+        if (!override) return false;
+        const incKeys = parseListToSet(override.includeKeys || '');
+        const incNames = parseListToSet(override.includeNames || '');
+        const key = buildCardKey(card);
+        const nm = normalizeCardNameForBan(card.name || '');
+        return incKeys.has(key) || incNames.has(nm);
+    }
+
+    function getForcedIncludeKeysForFilters(f) {
+        const ov = getActiveOverride(selectedQuickFormat, f);
+        if (!ov?.includeKeys) return [];
+
+        const raw = parseListToSet(ov.includeKeys);
+        return Array.from(raw).map(normalizeKeyString);
+    }
+
+    async function fetchCardsByKeys(keys) {
+        const routes = keys.map(k => {
+            const sep = k.lastIndexOf('-');
+            const set = k.slice(0, sep);
+            const num = k.slice(sep + 1);
+            return `/api/cards/${encodeURIComponent(set)}/${encodeURIComponent(num)}`;
+        });
+        const chunks = await Promise.all(
+            routes.map(r =>
+                fetch(r)
+                    .then(res => (res.ok ? res.json() : null))
+                    .catch(() => null)
+            )
+        );
+        return chunks.filter(Boolean);
+    }
+
+    function normalizeKeyString(key = '') {
+        const [set = '', num = ''] = String(key).split('-');
+        const cleanNum = String(num).replace(/^0+/, '');
+        return `${set.toUpperCase()}-${cleanNum}`;
+    }
+
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
+
+        const override = getActiveOverride(selectedQuickFormat, filters);
+        const bannedNameSet = parseListToSet(override?.bannedNames || '');
+        const bannedKeySet = parseListToSet(override?.bannedKeys || '');
 
         for (let i = 0; i < arr.length; i++) {
             const card = arr[i];
 
+            const forceIncluded = isForceIncluded(card, override);
+
             if (!inSelectedEras(card, filters.eras)) continue;
 
             const setsChecked = Object.values(filters.sets).some(Boolean);
-            if (setsChecked && !filters.sets[card.setAbbrev]) continue;
+            if (!forceIncluded && setsChecked && !filters.sets[card.setAbbrev]) continue;
 
             const fr = filters.formatRange?.from;
             const to = filters.formatRange?.to;
-            if (fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
+            if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
 
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
@@ -965,6 +1018,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedAttackCost(card, filters.attackCost)) continue;
             if (!matchesSelectedRarity(card, filters.rarity)) continue;
             if (!matchesArtist(card, filters.artist)) continue;
+
+            const nm = normalizeCardNameForBan(card.name || '');
+            const k = buildCardKey(card);
+            if (bannedNameSet.has(nm) || bannedKeySet.has(k)) continue;
 
             out.push(card);
         }
@@ -1100,6 +1157,39 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         s = s.replace(/\s+/g, '');
 
         return s;
+    }
+
+    const FORMAT_MANUAL_OVERRIDES = {
+        'XY|STS': {
+            bannedNames: "Lysandre's Trump Card",
+            bannedKeys: 'PHF-99, PHF-118',
+            includeKeys: 'XYP-XY67, XYP-XY83', // <- sample promos
+            includeNames: ''
+        },
+        'BCR|ROS': {
+            bannedNames: "Lysandre's Trump Card",
+            bannedKeys: 'PHF-99, PHF-118',
+            includeKeys: 'XYP-XY67, OBF-80', // <- sample promos
+            includeNames: ''
+        },
+    };
+
+    function parseListToSet(raw = '') {
+        return new Set(
+            String(raw || '')
+                .split(/[,\n]/)
+                .map(s => s.trim())
+                .filter(Boolean)
+                .map(s => s.toLowerCase())
+        );
+    }
+
+    function normalizeCardNameForBan(name = '') {
+        return aliasNormalize(name).toLowerCase();
+    }
+
+    function buildCardKey(card) {
+        return `${card.setAbbrev}-${card.number}`.toLowerCase();
     }
 
     function expandAliasToSymbolQueries(q) {
@@ -1307,11 +1397,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     const numB = parseInt(b.number, 10) || 0;
                     return numA - numB;
                 });
-                const fr = draftFilters.formatRange?.from;
-                const to = draftFilters.formatRange?.to;
-                if (fr && to) {
-                    arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
-                }
+                // const fr = draftFilters.formatRange?.from;
+                // const to = draftFilters.formatRange?.to;
+                // if (fr && to) {
+                //     arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
+                // }
                 setResults(arr);
             }).catch(() => setResults([]));
         }, 300)
@@ -1546,7 +1636,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 Select a quick format…
                                             </option>
 
-                                            <optgroup label="Worlds Championships">
+                                            <optgroup label="World Championships">
                                                 {WORLDS_FORMATS.map(({ label, from, to }) => (
                                                     <option key={label} value={`${from}|${to}`}>
                                                         {label} ({from}–{to})
@@ -2109,10 +2199,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
                                                 }
 
+                                                const includeKeys = getForcedIncludeKeysForFilters(draftFilters);
+                                                if (includeKeys.length) {
+                                                    const forcedCards = await fetchCardsByKeys(includeKeys);
+
+                                                    const seen = new Set(arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase()));
+                                                    for (const c of forcedCards) {
+                                                        const key = `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase();
+                                                        if (!seen.has(key)) {
+                                                            arr.push(c);
+                                                            seen.add(key);
+                                                        }
+                                                    }
+                                                }
+
                                                 skipNextQueryEffectRef.current = true;
                                                 setSuppressDefault(true);
                                                 setQuery('');
-                                                setResults(Array.isArray(list) ? list : []);
+                                                setResults(arr);
                                                 setShowAdvanced(false);
                                             } catch (e) {
                                                 console.error('Search all failed:', e);
