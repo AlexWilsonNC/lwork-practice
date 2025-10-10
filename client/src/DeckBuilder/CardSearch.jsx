@@ -937,15 +937,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return keys;
     }
 
-    function getActiveOverride(selectedQuickFormat, filters) {
-        const fmtKey =
-            (selectedQuickFormat && selectedQuickFormat.includes('|'))
-                ? selectedQuickFormat
-                : (filters.formatRange?.from && filters.formatRange?.to
-                    ? `${filters.formatRange.from}|${filters.formatRange.to}`
-                    : '');
-        return FORMAT_MANUAL_OVERRIDES[fmtKey] || null;
-    }
+    function getActiveOverride(selectedQuickFormat) {
+  return FORMAT_MANUAL_OVERRIDES[selectedQuickFormat] || null;
+}
 
     function isForceIncluded(card, override) {
         if (!override) return false;
@@ -957,7 +951,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function getForcedIncludeKeysForFilters(f) {
-        const ov = getActiveOverride(selectedQuickFormat, f);
+        const ov = getActiveOverride(selectedQuickFormat);
         if (!ov?.includeKeys) return [];
 
         const raw = parseListToSet(ov.includeKeys);
@@ -990,7 +984,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
 
-        const override = getActiveOverride(selectedQuickFormat, filters);
+        const override = getActiveOverride(selectedQuickFormat);
         const bannedNameSet = parseListToSet(override?.bannedNames || '');
         const bannedKeySet = parseListToSet(override?.bannedKeys || '');
 
@@ -1160,17 +1154,23 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const FORMAT_MANUAL_OVERRIDES = {
-        'XY|STS': {
-            bannedNames: "Lysandre's Trump Card",
-            bannedKeys: 'PHF-99, PHF-118',
-            includeKeys: 'XYP-XY67, XYP-XY83', // <- sample promos
+        'UPR|UNM': { // 2019 Worlds
+            bannedNames: "Blaine's Quiz Show",
+            bannedKeys: 'UNM-186',
+            includeKeys: '',
             includeNames: ''
         },
-        'BCR|ROS': {
+        'XY|STS': { // 2016 Worlds
             bannedNames: "Lysandre's Trump Card",
             bannedKeys: 'PHF-99, PHF-118',
-            includeKeys: 'XYP-XY67, OBF-80', // <- sample promos
+            includeKeys: '',
             includeNames: ''
+        },
+        'BCR|ROS': { // 2015 Worlds
+            bannedNames: "Lysandre's Trump Card",
+            bannedKeys: 'PHF-99, PHF-118',
+            includeNames: 'Cleffa test',
+            includeKeys: 'OBF-80'
         },
     };
 
