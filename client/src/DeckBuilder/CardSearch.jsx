@@ -844,15 +844,23 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const ERA_PATTERNS = {
-        SV1: /^(SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEG)/i,
-        SSH1: /^(SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|FST|BRS|ASR|LOR|SIT|CRZ)/i,
-        SM1: /^(SM|SUM|GRI|BUS|CIN|UPR|FLI|CES|LOT|TEU|UNB|UNM|CEC|DRM|HIF|DET|TM)/i,
-        XY1: /^(XY|FLF|FFI|PHF|PRC|ROS|AOR|BKT|BKP|FCO|STS|EVO|GEN)/i,
-        BW1: /^(BW|NVI|EPO|DEX|DRX|BCR|PLS|PLF|PLB|LTR)/i,
-        HGSS1: /^(HGSS|HS|UL|UD|TM|CL)/i,
-        DP1: /^(DP|MT|SW|GE|MD|LA|SF|PL)/i,
-        RS1: /^(RS|SS|DR|MA|HL|TRR|DX|EM|UF|DS|LM|HP|CG|DF|PK)/i,
-        WOTC: /^(BS|JU|FO|G[12]|N[1-4]|LC|E[1-3])\/?/i
+        SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEG)$/i,
+
+        SSH1: /^(?:SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|CEL|FST|BRS|ASR|PGO|LOR|SIT|CRZ)$/i,
+
+        SM1: /^(?:SM|SUM|GRI|BUS|SLG|CIN|UPR|FLI|CES|DRM|LOT|TEU|UNB|UNM|CEC|HIF|DET|DPI)$/i,
+
+        XY1: /^(?:XY|KSS|FLF|FFI|PHF|PRC|DCE|ROS|AOR|BKT|BKP|FCO|STS|EVO|GEN)$/i,
+
+        BW1: /^(?:BW|BLW|NVI|EPO|NXD|DEX|DRX|DRV|BCR|PLS|PLF|PLB|LTR)$/i,
+
+        HGSS1: /^(?:HGSS|HS|UL|UD|TM|CL)$/i,
+
+        DP1: /^(?:DP|MT|SW|GE|MD|LA|SF|PL|RR|SV|AR|P6|P7|P8|P9)$/i,
+
+        RS1: /^(?:RS|PR-EX|SS|DR|MA|HL|TK1|FL|P1|TRR|DX|EM|UF|P2|DS|LM|TK2|P3|P4|P5|HP|CG|DF|PK)$/i,
+
+        WOTC: /^(?:BS|JU|FO|B2|TR|SI|G1|G2|N1|N2|N3|N4|LC|E1|E2|E3|EX|AQ|SK)$/i
     };
 
     const setIndexMap = React.useMemo(
@@ -938,8 +946,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function getActiveOverride(selectedQuickFormat) {
-  return FORMAT_MANUAL_OVERRIDES[selectedQuickFormat] || null;
-}
+        return FORMAT_MANUAL_OVERRIDES[selectedQuickFormat] || null;
+    }
 
     function isForceIncluded(card, override) {
         if (!override) return false;
