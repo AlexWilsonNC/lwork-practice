@@ -1754,7 +1754,7 @@ export default function Account() {
                                                             },
                                                             body: JSON.stringify({
                                                                 mascotCard: primaryMascot,
-                                                                secondaryMascotCard: secondaryMascot
+                                                                secondaryMascotCard: secondaryMascot || null
                                                             })
                                                         }
                                                     );

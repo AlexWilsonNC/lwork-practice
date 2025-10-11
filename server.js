@@ -335,47 +335,65 @@ app.patch('/api/user/decks/:deckId/description', requireAuth, async (req, res) =
     res.status(500).json({ error: 'Could not update description' });
   }
 });
-app.patch(
-  '/api/user/decks/:deckId/mascots',
-  requireAuth,
-  async (req, res) => {
-    const { mascotCard, secondaryMascotCard } = req.body;
-    try {
-      const primary = await getCardByKey(mascotCard);
-      const secondary = secondaryMascotCard ? await getCardByKey(secondaryMascotCard) : null;
+app.patch('/api/user/decks/:deckId/mascots', requireAuth, async (req, res) => {
+  try {
+    const { mascotCard } = req.body;
+    const rawSecondary = req.body.secondaryMascotCard;
+    const hasSecondary = !!(rawSecondary && String(rawSecondary).trim());
+    const secondaryMascotCard = hasSecondary ? String(rawSecondary).trim() : null;
 
-      await User.updateOne(
-        { _id: req.userId, 'decks._id': req.params.deckId },
-        {
-          $set: {
-            'decks.$.mascotCard': mascotCard,
-            'decks.$.secondaryMascotCard': secondaryMascotCard || null,
-            'decks.$.mascotImageUrl': pickMascotFields(primary).mascotImageUrl,
-            'decks.$.hasAncientTrait': pickMascotFields(primary).hasAncientTrait,
-            'decks.$.isTagTeam': pickMascotFields(primary).isTagTeam,
-            'decks.$.hasBreakTrait': pickMascotFields(primary).hasBreakTrait,
-            'decks.$.isLegendCard': pickMascotFields(primary).isLegendCard,
-            'decks.$.specificallyLugiaLegend': pickMascotFields(primary).specificallyLugiaLegend,
-            'decks.$.specificallyZoroarkGX': pickMascotFields(primary).specificallyZoroarkGX,
-            'decks.$.secondaryMascotImageUrl': pickMascotFields(secondary, 'secondary').secondaryMascotImageUrl,
-            'decks.$.secondaryHasAncientTrait': pickMascotFields(secondary, 'secondary').secondaryHasAncientTrait,
-            'decks.$.secondaryIsTagTeam': pickMascotFields(secondary, 'secondary').secondaryIsTagTeam,
-            'decks.$.secondaryHasBreakTrait': pickMascotFields(secondary, 'secondary').secondaryHasBreakTrait,
-            'decks.$.secondaryIsLegendCard': pickMascotFields(secondary, 'secondary').secondaryIsLegendCard,
-            'decks.$.secondarySpecificallyLugiaLegend': pickMascotFields(secondary, 'secondary').secondarySpecificallyLugiaLegend,
-            'decks.$.secondarySpecificallyZoroarkGX': pickMascotFields(secondary, 'secondary').secondarySpecificallyZoroarkGX,
-          }
-        }
-      );
-      const user = await User.findById(req.userId).select('decks');
-      const deck = user.decks.id(req.params.deckId);
-      res.json({ success: true, deck });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Could not update mascots' });
+    const primary = await getCardByKey(mascotCard);
+    const primaryFields = pickMascotFields(primary);
+
+    const $set = {
+      'decks.$.mascotCard': mascotCard,
+      'decks.$.mascotImageUrl': primaryFields.mascotImageUrl,
+      'decks.$.hasAncientTrait': primaryFields.hasAncientTrait,
+      'decks.$.isTagTeam': primaryFields.isTagTeam,
+      'decks.$.hasBreakTrait': primaryFields.hasBreakTrait,
+      'decks.$.isLegendCard': primaryFields.isLegendCard,
+      'decks.$.specificallyLugiaLegend': primaryFields.specificallyLugiaLegend,
+      'decks.$.specificallyZoroarkGX': primaryFields.specificallyZoroarkGX,
+    };
+
+    if (secondaryMascotCard) {
+      const secondary = await getCardByKey(secondaryMascotCard);
+      const sec = pickMascotFields(secondary, 'secondary');
+      Object.assign($set, {
+        'decks.$.secondaryMascotCard': secondaryMascotCard,
+        'decks.$.secondaryMascotImageUrl': sec.secondaryMascotImageUrl || null,
+        'decks.$.secondaryHasAncientTrait': !!sec.secondaryHasAncientTrait,
+        'decks.$.secondaryIsTagTeam': !!sec.secondaryIsTagTeam,
+        'decks.$.secondaryHasBreakTrait': !!sec.secondaryHasBreakTrait,
+        'decks.$.secondaryIsLegendCard': !!sec.secondaryIsLegendCard,
+        'decks.$.secondarySpecificallyLugiaLegend': !!sec.secondarySpecificallyLugiaLegend,
+        'decks.$.secondarySpecificallyZoroarkGX': !!sec.secondarySpecificallyZoroarkGX,
+      });
+    } else {
+      Object.assign($set, {
+        'decks.$.secondaryMascotCard': null,
+        'decks.$.secondaryMascotImageUrl': null,
+        'decks.$.secondaryHasAncientTrait': false,
+        'decks.$.secondaryIsTagTeam': false,
+        'decks.$.secondaryHasBreakTrait': false,
+        'decks.$.secondaryIsLegendCard': false,
+        'decks.$.secondarySpecificallyLugiaLegend': false,
+        'decks.$.secondarySpecificallyZoroarkGX': false,
+      });
     }
+
+    await User.updateOne(
+      { _id: req.userId, 'decks._id': req.params.deckId },
+      { $set }
+    );
+
+    const user = await User.findById(req.userId).select('decks');
+    res.json({ success: true, deck: user.decks.id(req.params.deckId) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update mascots' });
   }
-);
+});
 app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
   const { deckId } = req.params;
   try {
@@ -441,10 +459,19 @@ app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
     deck.createdAt = Date.now();
 
     const primary = await getCardByKey(deck.mascotCard);
-    const secondary = deck.secondaryMascotCard ? await getCardByKey(deck.secondaryMascotCard) : null;
-
-    Object.assign(deck, pickMascotFields(primary));
-    Object.assign(deck, pickMascotFields(secondary, 'secondary'));
+   Object.assign(deck, pickMascotFields(primary));
+   if (deck.secondaryMascotCard) {
+     const secondary = await getCardByKey(deck.secondaryMascotCard);
+     Object.assign(deck, pickMascotFields(secondary, 'secondary'));
+   } else {
+     deck.secondaryMascotImageUrl = null;
+     deck.secondaryHasAncientTrait = false;
+     deck.secondaryIsTagTeam = false;
+     deck.secondaryHasBreakTrait = false;
+     deck.secondaryIsLegendCard = false;
+     deck.secondarySpecificallyLugiaLegend = false;
+     deck.secondarySpecificallyZoroarkGX = false;
+   }
 
     await user.save();
     res.json({ success: true, deck });

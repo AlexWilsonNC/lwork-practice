@@ -673,7 +673,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                         ? !overwriteDeckName.trim() || !overwriteMascot
                         : !deckName.trim() || !selectedMascot)
                     }
-                  ></button>
+                  >Login</button>
                   <button className='cancel-button' onClick={() => setShowSaveModal(false)}>Cancel</button>
                 </div>
               </>
