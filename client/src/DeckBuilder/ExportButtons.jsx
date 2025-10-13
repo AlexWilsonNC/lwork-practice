@@ -666,15 +666,13 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                 <div className='buttons-row-modal'>
                   <button
                     className='save-button'
-                    onClick={handleModalSave}
-                    disabled={
-                      saving ||
-                      (overwriteMode
-                        ? !overwriteDeckName.trim() || !overwriteMascot
-                        : !deckName.trim() || !selectedMascot)
-                    }
-                  >Login</button>
-                  <button className='cancel-button' onClick={() => setShowSaveModal(false)}>Cancel</button>
+                    onClick={() => { window.location.href = '/pizza'; }}
+                  >
+                    Login
+                  </button>
+                  <button className='cancel-button' onClick={() => setShowSaveModal(false)}>
+                    Cancel
+                  </button>
                 </div>
               </>
             ) : (
