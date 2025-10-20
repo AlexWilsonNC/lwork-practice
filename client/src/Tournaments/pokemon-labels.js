@@ -1,5 +1,12 @@
 const customLabelsConfig = {
     '2026': {
+        'absol-mega-kangaskhan-mega': 'Mega Absol Box',
+        'kangaskhan-mega-bouffalant': 'Mega Kangaskhan',
+        'blank-kangaskhan-mega': 'Mega Kangaskhan',
+        'gholdengo-lunatone': 'Gholdengo Lunatone',
+        'lucario-mega-hariyama': 'Lucario Hariyama',
+        'alakazam-dudunsparce': 'Alakazam',
+        'manectric-mega-eelektrik': 'Mega Manectric Eels',
         'blank-gardevoir': 'Gardevoir ex',
         'gardevoir-jellicent': 'Gardevoir ex',
         'chien-pao-baxcalibur': 'Chien-Pao Baxcalibur',
