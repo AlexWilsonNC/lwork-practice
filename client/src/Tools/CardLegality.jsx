@@ -92,7 +92,7 @@ const isCelClassicCollection = (card) => {
   );
 };
 
-const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
+const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet', 'mega evolution'];
 const excludedGLCSubtypes = new Set(
   ["EX","GX","ex","V","VMAX","VSTAR","Prism Star","Radiant","ACE SPEC","V-UNION"].map(s=>s.toLowerCase())
 );

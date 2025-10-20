@@ -445,8 +445,6 @@ const CardView = () => {
         return `/tournaments/${eventId}`;
     };
 
-    const expandedSets = ['black & white', 'xy', 'sun & moon', 'sword & shield', 'scarlet & violet'];
-
     const monthMap = {
         Jan: 0, January: 0,
         Feb: 1, February: 1,

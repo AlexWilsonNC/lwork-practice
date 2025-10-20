@@ -160,7 +160,7 @@ body.deckbuilder-page .deck-builder {
   margin-bottom: 1rem;
   margin: 0 auto 1rem;
   display: block;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .card-details {
@@ -2600,6 +2600,10 @@ body.deckbuilder-page .deck-builder {
     font-size: 12px;
   }
 
+  .card-modal-image {
+    border-radius: 16.5px;
+  }
+
   .zoom-slider input[type="range"]::-webkit-slider-thumb {
     width: 13px;
     height: 13px;
@@ -2735,6 +2739,7 @@ body.deckbuilder-page .deck-builder {
   }
   .card-modal-image {
     width: 70%;
+    
   }
   .modal-count-controls {
     width: 66%;

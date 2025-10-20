@@ -1415,6 +1415,7 @@ const tournamentList = [
         "date": "Oct 10, 2025",
         "flag": usa,
         "location": "Milwaukee, Wisconsin",
+        "results": false
     },
     {
         "id": "2026_BELO-HORIZONTE",
