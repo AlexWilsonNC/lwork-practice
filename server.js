@@ -1145,6 +1145,8 @@ app.post('/api/cards/filter-search', async (req, res) => {
       const ERA_TO_SET_CODES = {
         SV1: [
           "MEG",
+          "MEE",
+          "MEP",
           "BLK",
           "WHT",
           "DRI",

@@ -1,6 +1,7 @@
 const orderedSets = [
 // sv
     "MEG",
+    "MEE",
     "MEP",
     "BLK",
     "WHT",

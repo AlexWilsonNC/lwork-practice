@@ -141,6 +141,7 @@ const formatDate = (dateString) => {
     { separator: true, text: "Scarlet & Violet" },
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { name: "Mega Evolution", abbrev: "MEG", releaseDate: "Sep 26, 2025", total: "188" },
+    { name: "ME Energy", abbrev: "MEE", releaseDate: "Sep 26, 2025", total: "8" },
     { name: "Mega Evolution Black Star Promos", abbrev: "MEP", releaseDate: "--", total: "--" },
     { name: "Black Bolt *", abbrev: "BLK", releaseDate: "Jul 18, 2025", total: "172" },
     { name: "White Flare *", abbrev: "WHT", releaseDate: "Jul 18, 2025", total: "173" },

@@ -844,7 +844,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const ERA_PATTERNS = {
-        SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEP|MEG)$/i,
+        SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEP|MEE|MEG)$/i,
 
         SSH1: /^(?:SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|CEL|FST|BRS|ASR|PGO|LOR|SIT|CRZ)$/i,
 
