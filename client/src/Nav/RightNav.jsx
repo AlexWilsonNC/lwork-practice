@@ -75,7 +75,7 @@ const ToggleButton = styled.div`
   background-color: ${({ theme }) => theme.themeBg};
   margin-left: 215px;
   span::before {
-    content: ${({ theme }) => theme.themeName === 'dark' ? "'flare'" : "'dark_mode'"}; 
+    content: ${({ theme }) => theme.themeName === 'dark' ? "'sunny'" : "'dark_mode'"}; 
     color: ${({ theme }) => theme.themeColor};
   }
 `;
