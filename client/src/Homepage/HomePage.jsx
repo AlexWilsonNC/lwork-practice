@@ -91,17 +91,21 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            <a href='./tournaments/2026_PITTSBURGH'>
+                            {/* <a href='./tournaments/2026_PITTSBURGH'> */}
+                            <a href='./tournaments/completed'>
                                 <WrappedFeature className='wrapped-feature'>
                                     <img className='card-image' src={latestEvent} />
                                     <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
                                         {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
-                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
+
+                                        {/* <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
+                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p> */}
+                                        <h3>Results from <span className='new-color'>Milwaukee</span> & <span className='new-color'>Belo Horizonte Regionals</span> are here!</h3>
+                                        <p>Check out all the lists & matchups from each division, plus deck stats and these event's meta shares.</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Sep 22, 2025</p>
+                                        <p>Oct 15, 2025</p>
                                         <p>View Results</p>
                                     </div>
                                 </WrappedFeature>
@@ -304,16 +308,19 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        <a href='./tournaments/2026_PITTSBURGH'>
+                        {/* <a href='./tournaments/2026_PITTSBURGH'> */}
+                        <a href='./tournaments/completed'>
                             <WrappedFeature className='wrapped-feature'>
                                 <img className='card-image' src={latestEvent} />
                                 <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
-                                    <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
+                                    {/* <h3>Results from <span className='new-color'>Pittsburgh Regionals</span> are here!</h3>
+                                    <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p> */}
+                                    <h3>Results from <span className='new-color'>Milwaukee</span> & <span className='new-color'>Belo Horizonte Regionals</span> are here!</h3>
+                                    <p>Check out all the lists & matchups from each division, plus deck stats and these event's meta shares.</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Sep 22, 2025</p>
+                                    <p>Oct 15, 2025</p>
                                     <p>View Results</p>
                                 </div>
                             </WrappedFeature>

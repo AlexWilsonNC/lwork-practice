@@ -289,6 +289,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('grimmsnarl');
         secondSprite  = getPokemonSpriteURL('froslass');
     }
+    else if(hasPokemon('Marnie\'s Grimmsnarl ex') && !hasPokemon('Froslass')) {
+        secondSprite  = getPokemonSpriteURL('grimmsnarl');
+    }
     else if (hasPokemon('Froslass') && hasPokemon('Espathra ex')) {
         firstSprite  = getPokemonSpriteURL('espathra');
         secondSprite  = getPokemonSpriteURL('froslass');
@@ -466,6 +469,14 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('lucario-mega');
         secondSprite  = getPokemonSpriteURL('hariyama');
     }               
+    else if (hasPokemon('Mega Venusaur ex') && hasPokemon('Meganium')) {
+        firstSprite  = getPokemonSpriteURL('venusaur-mega');
+        secondSprite  = getPokemonSpriteURL('meganium');
+    }       
+    else if (hasPokemon('Ethan\'s Ho-Oh ex') && hasPokemon('Armarouge')) {
+        firstSprite  = getPokemonSpriteURL('ho-oh');
+        secondSprite  = getPokemonSpriteURL('armarouge');
+    }          
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
@@ -528,11 +539,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if(hasPokemon('Pidgeot ex')) {
             secondSprite  = getPokemonSpriteURL('pidgeot');
         }
-    }
-    else if (hasPokemon('Ethan\'s Ho-Oh ex') && hasPokemon('Armarouge')) {
-        firstSprite  = getPokemonSpriteURL('ho-oh');
-        secondSprite  = getPokemonSpriteURL('armarouge');
-    }       
+    }     
 
     if (!firstSprite && !secondSprite) {
       firstSprite  = getPokemonSpriteURL('blank');

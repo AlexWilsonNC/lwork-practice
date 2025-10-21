@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'venusaur-mega-meganium': 'Mega Venusaur',
         'absol-mega-kangaskhan-mega': 'Mega Absol Box',
         'kangaskhan-mega-bouffalant': 'Mega Kangaskhan',
         'blank-kangaskhan-mega': 'Mega Kangaskhan',
@@ -83,6 +84,7 @@ const customLabelsConfig = {
         'joltik-miraidon': 'Joltik Box',
         'tinkaton-dudunsparce': 'Tinkaton',
         'grimmsnarl-froslass': 'Marnie\'s Grimmsnarl',
+        'blank-grimmsnarl': 'Marnie\'s Grimmsnarl',
         'magmortar-volcanion': 'Magmortar Volcanion',
         'zacian-crowned-snorlax': 'Hop\'s Zacian',
         'blank-substitute': 'Other',
