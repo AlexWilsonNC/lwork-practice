@@ -387,7 +387,7 @@ object-assign
     <p><i>Simon is a retro enthusiast for all card games, but his main passion lies within the Pokémon TCG. You can often find him poring over old articles and tournament reports to find inspiration for his next retro project. You can follow him on X/Twitter or view his Linktree which has a link to the Google Drive with all of his decks <a href='https://linktr.ee/starshinesimon' target='_blank'>here</a>!</i></p>
 </div>
 </div>
-`},$A="/assets/latest-event-cWTYfKmc.png",W2=Ne.div`
+`},$A="/assets/latest-event-CXHEVqQ6.png",W2=Ne.div`
   background: ${({theme:e})=>e.body};
   color: ${({theme:e})=>e.text};
 `,Qn=Ne.h2`
