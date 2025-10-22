@@ -10,6 +10,7 @@ import rs1 from '../assets/sets/ruby-saphire/ex1-ruby-sapphire.png'
 import sm1 from '../assets/sets/sun-moon/sm1-sm.png'
 import ssh1 from '../assets/sets/sword-shield/ssh1.webp'
 import sv1 from '../assets/sets/scarlet-violet/sv1.png'
+import me1 from '../assets/sets/mega-evolution/me1.png'
 import wotc from '../assets/sets/wizards-of-the-coast/wotc.png'
 import xy1 from '../assets/sets/xy/xy1-xy.png'
 import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
@@ -248,6 +249,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
 
     const ERA_OPTIONS = [
+        { key: 'ME1', name: 'Mega Evolution', src: me1 },
         { key: 'SV1', name: 'Scarlet & Violet', src: sv1 },
         { key: 'SSH1', name: 'Sword & Shield', src: ssh1 },
         { key: 'SM1', name: 'Sun & Moon', src: sm1 },
@@ -259,6 +261,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { key: 'WOTC', name: 'Wizards of the Coast', src: wotc }
     ];
     const SERIES_TO_ERA = {
+        'mega evolution': 'ME1',
         'scarlet & violet': 'SV1',
         'scarlet and violet': 'SV1',
         'sword & shield': 'SSH1',
@@ -844,7 +847,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const ERA_PATTERNS = {
-        SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK|MEP|MEE|MEG)$/i,
+        ME1: /^(?:MEP|MEE|MEG)$/i,
+
+        SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK)$/i,
 
         SSH1: /^(?:SWSH|SSH|RCL|DAA|CPA|VIV|SHF|BST|CRE|EVS|CEL|FST|BRS|ASR|PGO|LOR|SIT|CRZ)$/i,
 
@@ -907,7 +912,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { label: 'XY Black Star Promos', mainFrom: 'XY', mainTo: 'EVO', promoKey: 'XYP' },
         { label: 'SM Black Star Promos', mainFrom: 'SUM', mainTo: 'CEC', promoKey: 'SMP' },
         { label: 'SWSH Black Star Promos', mainFrom: 'SSH', mainTo: 'CRZ', promoKey: 'SWSHP' },
-        { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'MEG', promoKey: 'SVP' },
+        { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'BLK', promoKey: 'SVP' },
+        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'MEG', promoKey: 'MEP' },
     ];
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
@@ -950,13 +956,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function isForceIncluded(card, override) {
-        if (!override) return false;
-        const incKeys = parseListToSet(override.includeKeys || '');
-        const incNames = parseListToSet(override.includeNames || '');
-        const key = buildCardKey(card);
-        const nm = normalizeCardNameForBan(card.name || '');
-        return incKeys.has(key) || incNames.has(nm);
-    }
+  if (!override) return false;
+
+  const incKeySet = new Set(
+    Array.from(parseListToSet(override.includeKeys || '')).map(normalizeKeyString)
+  );
+
+  const cardKey = normalizeKeyString(buildCardKey(card));
+
+  if (incKeySet.has(cardKey)) return true;
+
+  return false;
+}
 
     function getForcedIncludeKeysForFilters(f) {
         const ov = getActiveOverride(selectedQuickFormat);
@@ -1162,23 +1173,29 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const FORMAT_MANUAL_OVERRIDES = {
+        'SSH|PGO': { // 2022 Worlds
+            bannedNames: "",
+            bannedKeys: "",
+            includeNames: "Grookey",
+            includeKeys: "PR-SW-001"
+        },
         'UPR|UNM': { // 2019 Worlds
             bannedNames: "Blaine's Quiz Show",
             bannedKeys: 'UNM-186',
-            includeKeys: '',
-            includeNames: ''
+            includeNames: "",
+            includeKeys: ""
         },
         'XY|STS': { // 2016 Worlds
             bannedNames: "Lysandre's Trump Card",
             bannedKeys: 'PHF-99, PHF-118',
-            includeKeys: '',
-            includeNames: ''
+            includeNames: "",
+            includeKeys: "",
         },
         'BCR|ROS': { // 2015 Worlds
             bannedNames: "Lysandre's Trump Card",
             bannedKeys: 'PHF-99, PHF-118',
-            includeNames: 'Cleffa test',
-            includeKeys: 'OBF-80'
+            includeNames: "",
+            includeKeys: ""
         },
     };
 
@@ -1713,6 +1730,41 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         >
                                             Clear
                                         </button>
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3></h3>
+                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        {(() => {
+                                            const ov = getActiveOverride(selectedQuickFormat);
+                                            if (!ov) return null;
+
+                                            const bannedNames = Array.from(parseListToSet(ov.bannedNames || ''));
+
+                                            const hasBans = bannedNames.length;
+                                            if (!hasBans) return null;
+
+                                            return (
+                                                <div
+                                                    className="banned-cards-note"
+                                                    role="note"
+                                                    style={{
+                                                        marginTop: 8,
+                                                        padding: '8px 10px',
+                                                        borderRadius: 6,
+                                                        border: '1px solid rgba(255,255,255,0.15)',
+                                                        background: 'rgba(255,255,255,0.06)',
+                                                        fontSize: 12,
+                                                        lineHeight: 1.4,
+                                                        maxWidth: 680
+                                                    }}
+                                                >
+                                                    <span class="material-symbols-outlined">info</span>
+                                                    <strong>Banned Cards:</strong>{' '}
+                                                    {ov.bannedNames}
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>

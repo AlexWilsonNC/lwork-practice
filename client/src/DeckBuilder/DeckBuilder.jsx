@@ -73,6 +73,16 @@ function sortDeck(deck) {
       .replace(/\s*(?:[☆★]\s*)?δ\s*$/u, '')
       .trim();
 
+  const speciesKey = (s = '') =>
+    baseName(s).replace(/\s+(?:VSTAR|VMAX|V)\s*$/i, '').trim();
+
+  const isV = c => (c.subtypes?.includes('V')) || /\sV\s*$/i.test(c.name);
+  const isVSTAR = c => (c.subtypes?.includes('VSTAR')) || /\sVSTAR\s*$/i.test(c.name);
+  const isVMAX = c => (c.subtypes?.includes('VMAX')) || /\sVMAX\s*$/i.test(c.name);
+  const isVLine = c => isV(c) || isVSTAR(c) || isVMAX(c);
+
+  const vTier = c => (isVMAX(c) ? 0 : isVSTAR(c) ? 1 : isV(c) ? 2 : 99);
+
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
     const subB = b.subtypes?.[0] ?? "";
@@ -112,6 +122,27 @@ function sortDeck(deck) {
     });
   });
 
+  const speciesGroups = {};
+  pokemons.forEach(c => {
+    if (!isVLine(c)) return;
+    const key = speciesKey(c.name);
+    (speciesGroups[key] ||= []).push(c);
+  });
+
+  Object.values(speciesGroups).forEach(group => {
+    if (group.length < 2) return;
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        const a = baseName(group[i].name);
+        const b = baseName(group[j].name);
+        evoGraph[a] = evoGraph[a] || new Set();
+        evoGraph[b] = evoGraph[b] || new Set();
+        evoGraph[a].add(b);
+        evoGraph[b].add(a);
+      }
+    }
+  });
+
   const visited = new Set();
   const families = [];
   pokemons.forEach(card => {
@@ -149,6 +180,12 @@ function sortDeck(deck) {
       const aLU = Array.isArray(a.subtypes) && a.subtypes.includes('Level-Up');
       const bLU = Array.isArray(b.subtypes) && b.subtypes.includes('Level-Up');
       if (aLU !== bLU) return aLU ? -1 : 1;
+
+      const sameSpecies = speciesKey(a.name) === speciesKey(b.name);
+      if (sameSpecies && (isVLine(a) || isVLine(b))) {
+        const ta = vTier(a), tb = vTier(b);
+        if (ta !== tb) return ta - tb;
+      }
 
       const pa = stageOrder[a.subtypes?.[0] ?? "Basic"];
       const pb = stageOrder[b.subtypes?.[0] ?? "Basic"];

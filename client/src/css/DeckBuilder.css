@@ -1576,6 +1576,20 @@ body.deckbuilder-page .deck-builder {
   z-index: 1000;
 }
 
+.banned-cards-note {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.banned-cards-note span {
+  font-size: 16px;
+  margin-right: 5px;
+  margin-top: -2.5px;
+}
+.banned-cards-note strong {
+  margin-right: 5px;
+}
+
 .advanced-p-btn:hover {
   background-image: linear-gradient(to top left, rgb(157, 172, 192), rgb(137, 139, 147));
 }
