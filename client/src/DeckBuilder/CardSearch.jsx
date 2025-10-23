@@ -956,25 +956,52 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function isForceIncluded(card, override) {
-  if (!override) return false;
+        if (!override) return false;
+        const incKeySet = new Set(expandIncludeKeyTokens(override.includeKeys || []));
+        const cardKey = normalizeKeyString(buildCardKey(card));
+        return incKeySet.has(cardKey);
+    }
 
-  const incKeySet = new Set(
-    Array.from(parseListToSet(override.includeKeys || '')).map(normalizeKeyString)
-  );
+    function expandIncludeKeyTokens(raw) {
+        const rawStr = Array.isArray(raw) ? raw.join(',') : String(raw || '');
+        const tokens = rawStr.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
 
-  const cardKey = normalizeKeyString(buildCardKey(card));
+        const out = new Set();
 
-  if (incKeySet.has(cardKey)) return true;
+        for (const t of tokens) {
+            if (t.includes('..')) {
+                const [aRaw, bRaw] = t.split('..').map(s => s.trim());
+                if (!aRaw || !bRaw) continue;
 
-  return false;
-}
+                const a = normalizeKeyString(aRaw);
+                const b = normalizeKeyString(bRaw);
+
+                const sepA = a.lastIndexOf('-');
+                const sepB = b.lastIndexOf('-');
+                const setA = (sepA === -1 ? a : a.slice(0, sepA));
+                const setB = (sepB === -1 ? setA : b.slice(0, sepB));
+
+                if (setA !== setB) continue;
+
+                const start = parseInt(a.slice(sepA + 1), 10);
+                const end = parseInt(b.slice(sepB + 1), 10);
+                if (!Number.isFinite(start) || !Number.isFinite(end)) continue;
+
+                const lo = Math.min(start, end);
+                const hi = Math.max(start, end);
+                for (let i = lo; i <= hi; i++) out.add(`${setA}-${i}`);
+            } else {
+                out.add(normalizeKeyString(t));
+            }
+        }
+
+        return Array.from(out);
+    }
 
     function getForcedIncludeKeysForFilters(f) {
         const ov = getActiveOverride(selectedQuickFormat);
         if (!ov?.includeKeys) return [];
-
-        const raw = parseListToSet(ov.includeKeys);
-        return Array.from(raw).map(normalizeKeyString);
+        return expandIncludeKeyTokens(ov.includeKeys);
     }
 
     async function fetchCardsByKeys(keys) {
@@ -995,17 +1022,40 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function normalizeKeyString(key = '') {
-        const [set = '', num = ''] = String(key).split('-');
-        const cleanNum = String(num).replace(/^0+/, '');
-        return `${set.toUpperCase()}-${cleanNum}`;
+        const s = String(key || '');
+        const sep = s.lastIndexOf('-');
+        const set = (sep === -1 ? s : s.slice(0, sep)).toUpperCase();
+        const rawNum = (sep === -1 ? '' : s.slice(sep + 1)).toUpperCase();
+        const cleanNum = rawNum.replace(/^[A-Z]+/, '').replace(/^0+/, '');
+        return `${set}-${cleanNum}`;
+    }
+
+    function getOverrideBannedSets(ov) {
+        const pairs = Array.isArray(ov?.bannedCards) ? ov.bannedCards : [];
+
+        const names = new Set(
+            pairs
+                .map(p => normalizeCardNameForBan(p?.name || ''))
+                .filter(Boolean)
+        );
+
+        const keys = new Set(
+            pairs
+                .map(p => normalizeKeyString(p?.key || ''))
+                .filter(Boolean)
+        );
+
+        for (const s of parseListToSet(ov?.bannedNames || '')) names.add(s);
+        for (const s of parseListToSet(ov?.bannedKeys || '')) keys.add(normalizeKeyString(s));
+
+        return { names, keys, pairs };
     }
 
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
 
         const override = getActiveOverride(selectedQuickFormat);
-        const bannedNameSet = parseListToSet(override?.bannedNames || '');
-        const bannedKeySet = parseListToSet(override?.bannedKeys || '');
+        const { names: bannedNameSet, keys: bannedKeySet } = getOverrideBannedSets(override);
 
         for (let i = 0; i < arr.length; i++) {
             const card = arr[i];
@@ -1033,7 +1083,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesArtist(card, filters.artist)) continue;
 
             const nm = normalizeCardNameForBan(card.name || '');
-            const k = buildCardKey(card);
+            const k = normalizeKeyString(buildCardKey(card));
             if (bannedNameSet.has(nm) || bannedKeySet.has(k)) continue;
 
             out.push(card);
@@ -1174,26 +1224,29 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const FORMAT_MANUAL_OVERRIDES = {
         'SSH|PGO': { // 2022 Worlds
-            bannedNames: "",
-            bannedKeys: "",
-            includeNames: "Grookey",
-            includeKeys: "PR-SW-001"
+            includeNames: "",
+            includeKeys: ["PR-SW-001..PR-SW-239", "PR-SW-296"]
         },
         'UPR|UNM': { // 2019 Worlds
-            bannedNames: "Blaine's Quiz Show",
-            bannedKeys: 'UNM-186',
+            bannedCards: [
+                { name: "Blaine's Quiz Show", key: "UNM-186" }
+            ],
             includeNames: "",
             includeKeys: ""
         },
         'XY|STS': { // 2016 Worlds
-            bannedNames: "Lysandre's Trump Card",
-            bannedKeys: 'PHF-99, PHF-118',
+            bannedCards: [
+                { name: "Lysandre's Trump Card", key: "PHF-99" },
+                { name: "Lysandre's Trump Card", key: "PHF-118" },
+            ],
             includeNames: "",
             includeKeys: "",
         },
         'BCR|ROS': { // 2015 Worlds
-            bannedNames: "Lysandre's Trump Card",
-            bannedKeys: 'PHF-99, PHF-118',
+            bannedCards: [
+                { name: "Lysandre's Trump Card", key: "PHF-99" },
+                { name: "Lysandre's Trump Card", key: "PHF-118" },
+            ],
             includeNames: "",
             includeKeys: ""
         },
@@ -1214,7 +1267,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     function buildCardKey(card) {
-        return `${card.setAbbrev}-${card.number}`.toLowerCase();
+        return `${card.setAbbrev}-${card.number}`;
     }
 
     function expandAliasToSymbolQueries(q) {
@@ -1739,11 +1792,46 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             const ov = getActiveOverride(selectedQuickFormat);
                                             if (!ov) return null;
 
-                                            const bannedNames = Array.from(parseListToSet(ov.bannedNames || ''));
+                                            const { pairs } = getOverrideBannedSets(ov);
+                                            const legacyNames = Array.from(parseListToSet(ov.bannedNames || ''));
 
-                                            const hasBans = bannedNames.length;
-                                            if (!hasBans) return null;
+                                            if (!pairs.length && !legacyNames.length) return null;
 
+                                            const norm = s => (s ?? '').trim().toLowerCase();
+
+                                            const uniquePairs = [];
+                                            const seen = new Set();
+                                            for (const p of pairs) {
+                                                const n = norm(p?.name);
+                                                if (!n || seen.has(n)) continue;
+                                                seen.add(n);
+                                                uniquePairs.push(p);
+                                            }
+                                            const renderPairs = () => {
+                                                if (!uniquePairs.length) {
+                                                    return legacyNames.join(', ');
+                                                }
+
+                                                return uniquePairs.map((p, i) => {
+                                                    const [rawSet = '', rawNum = ''] = String(p.key || '').split('-');
+                                                    const setUpper = rawSet.toUpperCase();
+                                                    const num = rawNum;
+                                                    const name = p.name;
+                                                    const label = `${name}`;
+                                                    return (
+                                                        <span key={`${setUpper}-${num}-${i}`}>
+                                                            <a
+                                                                href={`/card/${setUpper}/${num}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {label}
+                                                            </a>
+                                                            {i < uniquePairs.length - 1 ? ', ' : ''}
+                                                        </span>
+                                                    );
+                                                });
+                                            };
                                             return (
                                                 <div
                                                     className="banned-cards-note"
@@ -1759,9 +1847,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                         maxWidth: 680
                                                     }}
                                                 >
-                                                    <span class="material-symbols-outlined">info</span>
+                                                    <span className="material-symbols-outlined" style={{ verticalAlign: '-2px', marginRight: 6 }}>info</span>
                                                     <strong>Banned Cards:</strong>{' '}
-                                                    {ov.bannedNames}
+                                                    {renderPairs()}
                                                 </div>
                                             );
                                         })()}

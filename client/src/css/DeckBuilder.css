@@ -1589,6 +1589,14 @@ body.deckbuilder-page .deck-builder {
 .banned-cards-note strong {
   margin-right: 5px;
 }
+.banned-cards-note a {
+  font-size: 13px;
+  color: rgb(182, 182, 182);
+  margin-left: 5px;
+}
+.banned-cards-note a:hover {
+  color:#1290eb;
+}
 
 .advanced-p-btn:hover {
   background-image: linear-gradient(to top left, rgb(157, 172, 192), rgb(137, 139, 147));
