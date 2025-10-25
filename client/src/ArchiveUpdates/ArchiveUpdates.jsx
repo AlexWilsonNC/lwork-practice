@@ -39,6 +39,8 @@ import gallade from '../../public/assets/sprites/gallade.png'
 import gliscor from '../../public/assets/sprites/gliscor.png'
 import spiritomb from '../../public/assets/sprites/spiritomb.png'
 import tyrantiar from '../../public/assets/sprites/tyranitar.png'
+import shiftry from '../../public/assets/sprites/shiftry.png'
+import glaceon from '../../public/assets/sprites/glaceon.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -79,7 +81,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 18, 2025</p>
+          <p>Last Updated: Oct 24, 2025</p>
         </div>
 
         {/* Article Image */}
@@ -87,6 +89,30 @@ const ArchiveUpdates = () => {
 
         {/* Article Content */}
         <div className='article-content archive-updates'>
+
+          <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>October 2025</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Corrections:</p>
+
+          <a href='/tournaments/2008_WORLDS/masters/Esa%20Juntunen-FI' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={glaceon} alt="sprite" />
+              <img className="sprite second-sprite" src={absol} alt="sprite" />
+            </div>
+            <p>Esa Juntunen (Masters) - 8<sup>th</sup> Place <span>2008 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <p className='shortcircuited'><strong>Correction:</strong> -4 Team Galactic's Wager | +4 Team Galactic's Mars</p>
+
+          <a href='/tournaments/2004_WORLDS/masters/Kenneth%20Wong-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={shiftry} alt="sprite" />
+            </div>
+            <p>Kenneth Wong (Masters) - 7<sup>th</sup> Place <span>2004 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <p className='shortcircuited'><strong>Correction:</strong> -2 Sentret (62 cards)</p>
 
           <hr className='title-hr' />
           <br />
