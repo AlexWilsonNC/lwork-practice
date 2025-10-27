@@ -220,11 +220,11 @@ const MECH_BG = {
 
 const slugCss = (s) =>
     String(s || '')
-        .normalize('NFKD')                      // strip accents (e.g., Pokémon -> Pokemon)
+        .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
-        .replace(/&/g, 'and')                   // "Scarlet & Violet" -> "scarlet-and-violet"
+        .replace(/&/g, 'and')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')            // non-alphanum -> hyphen
+        .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
 export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck }) {
@@ -656,10 +656,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     function matchesSelectedHP(card, hpFilter) {
         const op = hpFilter?.op || 'eq';
         const val = Number(hpFilter?.value || NaN);
-        // If no value chosen, don't filter by HP
         if (!Number.isFinite(val)) return true;
 
-        // HP is a Pokémon concept; if a Pokémon is required when HP is active:
         if (getSupertype(card) !== 'pokemon') return false;
 
         const hpNum = Number.parseInt(card.hp, 10);
@@ -918,6 +916,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
 
+    const FORMAT_COLLECTIONS = {
+        'SSH|PGO': 'format_2022_worlds', // 2022 Worlds
+        // add more here later (e.g., 'BST|PAL': 'format_2023_worlds')
+    };
+
     const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
         const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
         return SET_OPTIONS
@@ -955,6 +958,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return FORMAT_MANUAL_OVERRIDES[selectedQuickFormat] || null;
     }
 
+    function getActiveFormatCollection(selectedQuickFormat) {
+        const name = FORMAT_COLLECTIONS[selectedQuickFormat];
+        return name ? String(name) : null;
+    }
+
     function isForceIncluded(card, override) {
         if (!override) return false;
         const incKeySet = new Set(expandIncludeKeyTokens(override.includeKeys || []));
@@ -989,7 +997,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                 const lo = Math.min(start, end);
                 const hi = Math.max(start, end);
-                for (let i = lo; i <= hi; i++) out.add(`${setA}-${i}`);
+                for (let i = lo; i <= hi; i++) {
+                    const isPromo = /^(SWSHP|PR-SW|SVP|PR-SV)$/i.test(setA);
+                    const num = isPromo ? String(i).padStart(3, '0') : String(i);
+                    out.add(`${setA}-${num}`);
+                }
             } else {
                 out.add(normalizeKeyString(t));
             }
@@ -1007,16 +1019,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     async function fetchCardsByKeys(keys) {
         const routes = keys.map(k => {
             const sep = k.lastIndexOf('-');
-            const set = k.slice(0, sep);
-            const num = k.slice(sep + 1);
+            let set = k.slice(0, sep).toUpperCase();
+            let num = k.slice(sep + 1);
+
+            if (/^(PR-SW|PR-SV)$/i.test(set)) {
+                num = String(num).replace(/^[A-Z]+/i, '').padStart(3, '0');
+            }
+
             return `/api/cards/${encodeURIComponent(set)}/${encodeURIComponent(num)}`;
         });
+
         const chunks = await Promise.all(
-            routes.map(r =>
-                fetch(r)
-                    .then(res => (res.ok ? res.json() : null))
-                    .catch(() => null)
-            )
+            routes.map(r => fetch(r).then(res => (res.ok ? res.json() : null)).catch(() => null))
         );
         return chunks.filter(Boolean);
     }
@@ -1067,10 +1081,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             const setsChecked = Object.values(filters.sets).some(Boolean);
             if (!forceIncluded && setsChecked && !filters.sets[card.setAbbrev]) continue;
 
-            const fr = filters.formatRange?.from;
-            const to = filters.formatRange?.to;
-            if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
-
+            const activeColl = getActiveFormatCollection(selectedQuickFormat);
+            if (!activeColl) {
+                const fr = filters.formatRange?.from;
+                const to = filters.formatRange?.to;
+                if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
+            }
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
@@ -1350,6 +1366,34 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         imgs.forEach(src => { const im = new Image(); im.src = src; });
     }, [SET_OPTIONS]);
 
+    React.useEffect(() => {
+        const coll = getActiveFormatCollection(selectedQuickFormat);
+        if (!coll) return;
+
+        const trimmed = (query || '').trim();
+        if (trimmed !== '') return;
+
+        let cancelled = false;
+        setResults([]);
+        fetch(`/api/collections/${encodeURIComponent(coll)}`)
+            .then(r => (r.ok ? r.json() : []))
+            .then(arr => {
+                if (cancelled) return;
+                arr.sort((a, b) => {
+                    const idxA = setOrder.indexOf(a.setAbbrev);
+                    const idxB = setOrder.indexOf(b.setAbbrev);
+                    if (idxA !== idxB) return idxA - idxB;
+                    const numA = parseInt(a.number, 10) || 0;
+                    const numB = parseInt(b.number, 10) || 0;
+                    return numA - numB;
+                });
+                setResults(arr);
+            })
+            .catch(() => { /* swallow */ });
+
+        return () => { cancelled = true; };
+    }, [selectedQuickFormat, query]);
+
     useEffect(() => {
         if (skipNextQueryEffectRef.current) {
             skipNextQueryEffectRef.current = false;
@@ -1388,11 +1432,23 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
 
             const routes = (() => {
+                const coll = getActiveFormatCollection(selectedQuickFormat);
+
                 if (!primeMode) {
+                    if (coll) {
+                        return (searchMode === 'name'
+                            ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`)
+                            : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`));
+                    }
                     return (searchMode === 'name'
                         ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
                         : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
                 }
+
+                if (coll) {
+                    return [`/api/collections/${encodeURIComponent(coll)}`];
+                }
+
                 const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
                 if (!primeSetCodes.length) {
                     return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
