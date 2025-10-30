@@ -1366,6 +1366,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         imgs.forEach(src => { const im = new Image(); im.src = src; });
     }, [SET_OPTIONS]);
 
+    //      *********************** so made a dedicated collection for 2022 worlds format, and it's using that which is great, but promos 1-99 dont work and we need to delete the nolonger needed forced promo keys. + remove all unneeded data from the new collection, only card name and set number stuff, for memory. tell chatgpt that i reverted and to kick rocks
+
     React.useEffect(() => {
         const coll = getActiveFormatCollection(selectedQuickFormat);
         if (!coll) return;

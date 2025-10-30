@@ -1442,6 +1442,7 @@ const tournamentList = [
         "date": "Oct 25, 2025",
         "flag": france,
         "location": "Lille, France",
+        "results": false
     },
     {
         "id": "2026_GDANSK",

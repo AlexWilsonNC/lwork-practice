@@ -1898,6 +1898,12 @@ app.get('/api/cardDecklists', async (req, res) => {
   }
 });
 
+app.get('/api/collections/:name', async (req, res) => {
+  const coll = db.collection(req.params.name);
+  const docs = await coll.find({}).toArray();
+  res.json(docs);
+});
+
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
 app.get('*', (req, res) => {
