@@ -1452,6 +1452,7 @@ const tournamentList = [
         "date": "Nov 1, 2025",
         "flag": poland,
         "location": "Gdańsk, Poland",
+        "results": false
     },
     {
         "id": "2026_LAS-VEGAS",
@@ -1605,6 +1606,7 @@ const tournamentList = [
     "date": "Nov 1, 2025",
     "flag": australia,
     "location": "Brisbane, Australia",
+    "results": false
     },
     {
  "id": "2026_CURITIBA",
