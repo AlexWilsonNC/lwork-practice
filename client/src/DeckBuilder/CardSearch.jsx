@@ -1558,6 +1558,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         return m;
     }, [SET_OPTIONS]);
 
+   SET_NAME_TO_KEY['fl'] = 'FL';
+SET_NAME_TO_KEY['rg'] = 'FL';
+SET_NAME_TO_KEY['fireredleafgreen'] = 'FL';
+SET_NAME_TO_KEY['fire red leaf green'] = 'FL';
+SET_NAME_TO_KEY['fire red'] = 'FL';
+SET_NAME_TO_KEY['leaf green'] = 'FL';
+SET_NAME_TO_KEY['frlg'] = 'FL';
+
     const [setsInput, setSetsInput] = useState('');
 
     useEffect(() => {
