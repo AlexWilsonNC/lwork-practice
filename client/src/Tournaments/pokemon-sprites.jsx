@@ -477,6 +477,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('ho-oh');
         secondSprite  = getPokemonSpriteURL('armarouge');
     }          
+    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Meganium')) {
+        firstSprite  = getPokemonSpriteURL('ogerpon');
+        secondSprite  = getPokemonSpriteURL('meganium');
+    }          
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {

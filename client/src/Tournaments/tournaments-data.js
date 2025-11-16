@@ -286,7 +286,7 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Nov 21, 2025",
         "flag": brazil,
-        "location": "São Paulo, Brazil",
+        "location": "São Paulo, Brazil"
     },
     {
         "id": '2025_LOUISVILLE/masters',
@@ -1451,8 +1451,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 1, 2025",
         "flag": poland,
-        "location": "Gdańsk, Poland",
-        "results": false
+        "location": "Gdańsk, Poland"
     },
     {
         "id": "2026_LAS-VEGAS",
@@ -1462,6 +1461,7 @@ const tournamentList = [
         "date": "Nov 14, 2025",
         "flag": usa,
         "location": "Las Vegas, Nevada",
+        "results": false
     },
     {
         "id": "2026_BUENOS-AIRES",
@@ -1471,6 +1471,7 @@ const tournamentList = [
         "date": "Nov 15, 2025",
         "flag": argentina,
         "location": "Buenos Aires, Argentina",
+        "results": false
     },
     {
         "id": "2026_STUTTGART",
@@ -1605,8 +1606,7 @@ const tournamentList = [
     "eventLogo": regional25,
     "date": "Nov 1, 2025",
     "flag": australia,
-    "location": "Brisbane, Australia",
-    "results": false
+    "location": "Brisbane, Australia"
     },
     {
  "id": "2026_CURITIBA",

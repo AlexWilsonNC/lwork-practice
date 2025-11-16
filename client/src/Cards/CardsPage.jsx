@@ -140,6 +140,7 @@ const formatDate = (dateString) => {
   export const availableSets = [
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { separator: true, text: "Mega Evolution" },
+    { name: "Phantasmal Flames", abbrev: "PFL", releaseDate: "Nov 14, 2025", total: "130" },
     { name: "Mega Evolution", abbrev: "MEG", releaseDate: "Sep 26, 2025", total: "188" },
     { name: "ME Energy", abbrev: "MEE", releaseDate: "Sep 26, 2025", total: "8" },
     { name: "Mega Evolution Black Star Promos", abbrev: "MEP", releaseDate: "--", total: "--" },

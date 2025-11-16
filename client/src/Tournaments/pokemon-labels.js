@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'ogerpon-meganium': 'Meganium',
         'venusaur-mega-meganium': 'Mega Venusaur',
         'absol-mega-kangaskhan-mega': 'Mega Absol Box',
         'kangaskhan-mega-bouffalant': 'Mega Kangaskhan',
