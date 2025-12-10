@@ -32,7 +32,7 @@ import Account from './pages/Account';
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
   if (loading) return null;
-  if (!user)   return <Navigate to="/pizza" replace />;
+  if (!user)   return <Navigate to="/login" replace />;
   return children;
 }
 
