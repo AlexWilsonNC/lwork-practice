@@ -41,6 +41,8 @@ import spiritomb from '../../public/assets/sprites/spiritomb.png'
 import tyrantiar from '../../public/assets/sprites/tyranitar.png'
 import shiftry from '../../public/assets/sprites/shiftry.png'
 import glaceon from '../../public/assets/sprites/glaceon.png'
+import blaziken from '../../public/assets/sprites/blaziken.png'
+import ninetales from '../../public/assets/sprites/ninetales.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -90,7 +92,24 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
-          <hr className='title-hr' />
+          {/* <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>December 2025</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2004_S_SC/seniors/Jordan%20D-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blaziken} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetales} alt="sprite" />
+            </div>
+            <p>Jordan D (Seniors) - 3<sup>rd</sup> Place <span>2004 South Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <p className='shout-out'>Shout-out to Zach Lalonde for finding this decklist on <a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>pokegym</a>!</p>
+
+
+          <hr className='title-hr' /> */}
           <br />
           <h3 className='boxxed'>October 2025</h3>
           <br />
