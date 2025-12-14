@@ -80,6 +80,8 @@ import guernsey from '../assets/flags/guernsey.png';
 import paraguay from '../assets/flags/paraguay.png';
 import panama from '../assets/flags/panama.png';
 import honduras from '../assets/flags/honduras.png';
+import qatar from '../assets/flags/qatar.png';
+import eswatini from '../assets/flags/eswatini.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -165,6 +167,8 @@ export const flags = {
      PA: panama,
      UA: ukraine,
      HN: honduras,
+     QA: qatar,
+     SZ: eswatini,
     unknown: unknown
 };
 
@@ -251,6 +255,8 @@ export const countryNames = {
     PA: 'Panama (Latin America)',
     HN: 'honduras (Latin America)',
     UA: 'Ukraine (Europe)',
+    QA: 'Qatar (Middle East-South Africa)',
+    SZ: 'Eswatini (Middle East-South Africa)',
     EC: 'Ecuador (Latin America)'
 };
 
@@ -337,7 +343,9 @@ export const playerCountryDropdown = {
     GG: 'Guernsey',
     PA: 'Panama',
     HN: 'honduras',
-    IN: 'India'
+    IN: 'India',
+    QA: 'Qatar',
+    SZ: 'Eswatini'
     // ,unknown: 'Unknown'
 };
 
@@ -347,5 +355,5 @@ export const regions = {
   EU: ['DE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
-  MS: ['ZA','TR','KW']
+  MS: ['ZA','TR','KW','QA','SZ']
 };

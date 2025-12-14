@@ -24,6 +24,10 @@
     align-items: end;
     position: relative;
 }
+.dq-label {
+    font-family: sans-serif;
+    opacity: 0.75;
+}
 .aligncolumn {
     display: flex;
     flex-direction: column;

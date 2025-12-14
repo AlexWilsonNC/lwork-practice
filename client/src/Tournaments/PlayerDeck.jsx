@@ -44,6 +44,10 @@ const PlayerDeckCenter = styled.div`
     .opponents-playerdeck-list {
         color: ${({ theme }) => theme.text};
     }
+    .dq-player {
+        text-decoration: line-through;
+        opacity: 0.6;
+    }
 `;
 
 const orderedSets = [
@@ -620,12 +624,13 @@ const PlayerDeck = () => {
                                 <>
                                     <hr className='playerdeck-hr'></hr>
                                     <p>
-                                        <span className='bold'>
+                                        <span className={`bold ${playerData.dq ? 'dq-player' : ''}`}>
                                             {placement !== null && placement > 0 ? getPlacementSuffix(placement) : ''} Place
                                         </span>
                                         {division !== 'all' && (
                                             <> ({capitalizeFirstLetter(division)})</>
                                         )}
+                                        {playerData.dq && <span className='dq-label'> DQ’d</span>}
                                     </p>
                                     {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
                                     {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
