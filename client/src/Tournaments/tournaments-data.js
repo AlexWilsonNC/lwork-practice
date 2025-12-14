@@ -1479,8 +1479,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 29, 2025",
         "flag": germany,
-        "location": "Stuttgart, Germany",
-        "results": false
+        "location": "Stuttgart, Germany"
     },
     {
         "id": "2026_MERIDA",

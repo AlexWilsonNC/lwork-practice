@@ -120,52 +120,43 @@ const Players = () => {
     const [regionFilter, setRegionFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // New state for loading
+    const [page, setPage] = useState(1);
+const [limit] = useState(200);
+const [totalPages, setTotalPages] = useState(1);
 
-    useEffect(() => {
-  // Don't load anything by default
-  if (!searchTerm || searchTerm.trim().length < 4) {
-    setPlayers([]);
-    setLoading(false);
-    return;
-  }
-
-  let cancelled = false;
-  const controller = new AbortController();
-
-  setLoading(true);
-
-  const t = setTimeout(async () => {
+useEffect(() => {
+  const fetchPlayers = async () => {
+    setLoading(true);
     try {
-      const q = encodeURIComponent(searchTerm.trim());
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        sortType,
+        sortOrder,
+        q: searchTerm,
+        country: countryFilter || ''
+      });
 
-      // IMPORTANT: this endpoint must support searching server-side
-      // e.g. /api/players?q=Luxray (and ideally pagination)
-      const response = await fetch(
-        `https://ptcg-legends-6abc11783376.herokuapp.com/api/players?q=${q}&limit=50`,
-        { signal: controller.signal }
-      );
+      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players?${params.toString()}`);
+      const json = await response.json();
 
-      const data = await response.json();
-
-      const filteredData = (data.items || data).filter(p => p.name !== '--');
-
-      if (!cancelled) setPlayers(filteredData);
+      const filteredData = (json.items || []).filter(player => player.name !== '--');
+      setPlayers(filteredData);
+      setTotalPages(json.totalPages || 1);
     } catch (error) {
-      if (error.name !== "AbortError") {
-        console.error("Error fetching players:", error);
-      }
+      console.error('Error fetching players:', error);
     } finally {
-      if (!cancelled) setLoading(false);
+      setLoading(false);
     }
-  }, 300); // debounce
-
-  return () => {
-    cancelled = true;
-    controller.abort();
-    clearTimeout(t);
   };
-}, [searchTerm]);
+
+  fetchPlayers();
+}, [page, limit, sortType, sortOrder, searchTerm, countryFilter]);
+
+useEffect(() => {
+  setPage(1);
+}, [sortType, sortOrder, countryFilter, searchTerm]);
 
     const toggleSortOrder = () => {
         setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
@@ -191,16 +182,12 @@ const Players = () => {
     });
 
     const sortedPlayers = filteredPlayers.sort((a, b) => {
-  if (sortType === 'name') {
-    return sortOrder === 'asc'
-      ? a.name.localeCompare(b.name)
-      : b.name.localeCompare(a.name);
-  } else {
-    const ar = a.resultsCount ?? 0;
-    const br = b.resultsCount ?? 0;
-    return sortOrder === 'asc' ? ar - br : br - ar;
-  }
-});
+        if (sortType === 'name') {
+            return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+        } else {
+            return sortOrder === 'asc' ? a.results.length - b.results.length : b.results.length - a.results.length;
+        }
+    });
 
     const sortedCountryCodes = Object.keys(playerCountryDropdown).sort((a, b) => {
         if (playerCountryDropdown[a] < playerCountryDropdown[b]) {
@@ -218,6 +205,7 @@ const Players = () => {
         setSortType('results');
         setSortOrder('desc');
         setSearchTerm('');
+        setPage(1);
     };
 
     return (
@@ -301,9 +289,6 @@ const Players = () => {
                 {loading ? (
                     <div className="spinner"></div>
                 ) : (
-                    searchTerm.trim().length < 2 ? (
-                    <div style={{ padding: 16 }}>Type at least 4 letters to search players.</div>
-                ) : (
                     <table className='results-table'>
                         <thead>
                             <tr>
@@ -315,7 +300,7 @@ const Players = () => {
                         <tbody>
                             {sortedPlayers.map((player, index) => (
                                 <tr key={player._id}>
-                                    <td>{index + 1}</td>
+                                    <td>{(page - 1) * limit + index + 1}</td>
                                     <td className="center-content">
                                         <Link to={`/player/${player.id}`}>
                                             {/* <img className='flag-size-players' src={flags[player.flag]} alt="flag" /> */}
@@ -339,7 +324,7 @@ const Players = () => {
                             ))}
                         </tbody>
                     </table>
-                ))}
+                )}
             </div>
         </PlayerListContainer>
     );

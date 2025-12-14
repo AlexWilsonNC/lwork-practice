@@ -1,5 +1,12 @@
 const customLabelsConfig = {
     '2026': {
+        'blank-lucario-mega': 'Mega Lucario',
+        'blank-greninja': 'Greninja ex',
+        'lopunny-mega-dusknoir': 'Mega Lopunny',
+        'blank-slaking': 'Slaking',
+        'gholdengo-typhlosion': 'Gholdengo',
+        'sharpedo-mega-toxtricity': 'Mega Sharpedo Toxtricity',
+        'kangaskhan-mega-forretress': 'Mega Kangaskhan',
         'blank-palafin-hero': 'Palafin',
         'ursaluna-bloodmoon-lunatone': 'Ursaluna Lunatone',
         'ogerpon-meganium': 'Meganium',
