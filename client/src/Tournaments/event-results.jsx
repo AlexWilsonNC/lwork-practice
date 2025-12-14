@@ -44,6 +44,10 @@ const OlResults = styled.ol`
         visibility: visible;
         opacity: 1;
     }
+    .dq-player {
+        text-decoration: line-through;
+        opacity: 0.6;
+    }
 `;
 
 const getCountryName = (code) => {
@@ -142,7 +146,7 @@ export const displayResults = (players, eventId, division, customPlacement) => {
                                         {getCountryName(player.flag)}
                                     </div>
                                 </div>
-                                <Link className='link-to-playerprofile' to={`/player/${normalizeName(player.name)}-${player.flag}`}>
+                                <Link className={`link-to-playerprofile ${player.dq ? 'dq-player' : ''}`} to={`/player/${normalizeName(player.name)}-${player.flag}`}>
                                     {formatName(player.name)}
                                 </Link>
                             </div>

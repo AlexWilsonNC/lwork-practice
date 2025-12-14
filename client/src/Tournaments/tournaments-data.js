@@ -1460,8 +1460,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 14, 2025",
         "flag": usa,
-        "location": "Las Vegas, Nevada",
-        "results": false
+        "location": "Las Vegas, Nevada"
     },
     {
         "id": "2026_BUENOS-AIRES",
@@ -1481,6 +1480,7 @@ const tournamentList = [
         "date": "Nov 29, 2025",
         "flag": germany,
         "location": "Stuttgart, Germany",
+        "results": false
     },
     {
         "id": "2026_MERIDA",

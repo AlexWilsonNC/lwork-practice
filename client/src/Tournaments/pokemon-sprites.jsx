@@ -432,10 +432,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }               
     else if (hasPokemon('Conkeldurr') && hasPokemon('Dudunsparce')) {
         secondSprite  = getPokemonSpriteURL('conkeldurr');
-    }               
-    else if (hasPokemon('Crustle') && hasPokemon('Cornerstone Mask Ogerpon ex')) {
-        secondSprite  = getPokemonSpriteURL('crustle');
-    }               
+    }                           
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Archaludon ex')) {
         secondSprite  = getPokemonSpriteURL('archaludon');
     }               
@@ -481,13 +478,23 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('meganium');
     }          
+    else if (hasPokemon('Lunatone') && hasPokemon('Solrock') && hasPokemon('Munkidori') && hasPokemon('Bloodmoon Ursaluna')) {
+        firstSprite  = getPokemonSpriteURL('ursaluna-bloodmoon');
+        secondSprite  = getPokemonSpriteURL('lunatone');
+    }          
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
             secondSprite  = getPokemonSpriteURL('gouging-fire');
         }
+        else if (getPokemonCount('Crustle') >= 2) {
+            secondSprite  = getPokemonSpriteURL('crustle');
+        }   
         else if (hasPokemon('Great Tusk')) {
             secondSprite  = getPokemonSpriteURL('great-tusk');
+        }
+        else if (hasPokemon('Palafin ex')) {
+            secondSprite  = getPokemonSpriteURL('palafin-hero');
         }
         else if (hasPokemon('Ethan\'s Typhlosion')) {
             secondSprite  = getPokemonSpriteURL('typhlosion');

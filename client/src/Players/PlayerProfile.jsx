@@ -133,9 +133,9 @@ const PlayerProfileContainer = styled.div`
     .results-table td a:hover {
     color: #1290eb;
   }
-.chart-button.active {
-  background-color: #1290eb;
-}
+    .chart-button.active {
+    background-color: #1290eb;
+    }
     .flag-container {
         position: relative;
         display: inline-block;
@@ -161,6 +161,10 @@ const PlayerProfileContainer = styled.div`
     .flag-container:hover .flag-tooltip {
         visibility: visible;
         opacity: 1;
+    }
+    .dq-player {
+        text-decoration: line-through;
+        opacity: 0.6;
     }
 `;
 const getCountryName = (code) => {

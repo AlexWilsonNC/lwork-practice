@@ -33,12 +33,22 @@ nav {
     color: #1290eb;
     transition: ease all 0.3s;
   }
+  .legends-font span {
+    font-family: 'Permanent Marker', cursive;
+  }
+  .r-red     { color:rgb(242, 81, 81); }
+  .r-orange  { color:rgb(243, 139, 35); }
+  .r-yellow  { color:rgb(255, 217, 0); }
+  .r-green   { color:rgb(78, 231, 78); }
+  .r-blue    { color:rgb(89, 89, 233); }
+  .r-indigo  { color:rgb(151, 47, 224); }
+  .r-violet  { color:rgb(230, 127, 240); }
   .right-nav {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      position: absolute;
-      margin-right: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: absolute;
+    margin-right: 85px;
   }
   .right-links {
     margin-top: -3px;

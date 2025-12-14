@@ -120,24 +120,52 @@ const Players = () => {
     const [regionFilter, setRegionFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [loading, setLoading] = useState(true); // New state for loading
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchPlayers = async () => {
-            try {
-                const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/players');
-                const data = await response.json();
-                const filteredData = data.filter(player => player.name !== '--');
-                setPlayers(filteredData);
-            } catch (error) {
-                console.error('Error fetching players:', error);
-            } finally {
-                setLoading(false); // Set loading to false when data is fetched
-            }
-        };
+  // Don't load anything by default
+  if (!searchTerm || searchTerm.trim().length < 4) {
+    setPlayers([]);
+    setLoading(false);
+    return;
+  }
 
-        fetchPlayers();
-    }, []);
+  let cancelled = false;
+  const controller = new AbortController();
+
+  setLoading(true);
+
+  const t = setTimeout(async () => {
+    try {
+      const q = encodeURIComponent(searchTerm.trim());
+
+      // IMPORTANT: this endpoint must support searching server-side
+      // e.g. /api/players?q=Luxray (and ideally pagination)
+      const response = await fetch(
+        `https://ptcg-legends-6abc11783376.herokuapp.com/api/players?q=${q}&limit=50`,
+        { signal: controller.signal }
+      );
+
+      const data = await response.json();
+
+      const filteredData = (data.items || data).filter(p => p.name !== '--');
+
+      if (!cancelled) setPlayers(filteredData);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Error fetching players:", error);
+      }
+    } finally {
+      if (!cancelled) setLoading(false);
+    }
+  }, 300); // debounce
+
+  return () => {
+    cancelled = true;
+    controller.abort();
+    clearTimeout(t);
+  };
+}, [searchTerm]);
 
     const toggleSortOrder = () => {
         setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
@@ -163,12 +191,16 @@ const Players = () => {
     });
 
     const sortedPlayers = filteredPlayers.sort((a, b) => {
-        if (sortType === 'name') {
-            return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-        } else {
-            return sortOrder === 'asc' ? a.results.length - b.results.length : b.results.length - a.results.length;
-        }
-    });
+  if (sortType === 'name') {
+    return sortOrder === 'asc'
+      ? a.name.localeCompare(b.name)
+      : b.name.localeCompare(a.name);
+  } else {
+    const ar = a.resultsCount ?? 0;
+    const br = b.resultsCount ?? 0;
+    return sortOrder === 'asc' ? ar - br : br - ar;
+  }
+});
 
     const sortedCountryCodes = Object.keys(playerCountryDropdown).sort((a, b) => {
         if (playerCountryDropdown[a] < playerCountryDropdown[b]) {
@@ -269,6 +301,9 @@ const Players = () => {
                 {loading ? (
                     <div className="spinner"></div>
                 ) : (
+                    searchTerm.trim().length < 2 ? (
+                    <div style={{ padding: 16 }}>Type at least 4 letters to search players.</div>
+                ) : (
                     <table className='results-table'>
                         <thead>
                             <tr>
@@ -298,13 +333,13 @@ const Players = () => {
                                         </Link>
                                     </td>
                                     <td>
-                                        {player.results.length}
+                                        {player.resultsCount}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                )}
+                ))}
             </div>
         </PlayerListContainer>
     );
