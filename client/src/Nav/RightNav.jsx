@@ -108,9 +108,9 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
     <div className='right-nav' ref={ref}>
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
-        <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/ASC'>Cards</a></li>
-        {/* <li><a href='/players'>Players</a></li> */}
+        <li><a href='/decks' className='not-ready'>Decks</a></li>
+        <li><a href='/players' className='not-ready'>Players</a></li>
       </ul>
       <Overlay open={open} onClick={() => setOpen(false)} />
       <BurgerOpen open={open} theme={theme} className='burgered-links'>
@@ -127,9 +127,9 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         </div>
         <hr className='burger-nav-hr'></hr>
         <li><a href='/tournaments/completed'>Tournaments</a></li>
-        <li><a href='/decks'>Decks</a></li>
         <li><a href='/cards/ASC'>Cards</a></li>
-        {/* <li><a href='/players'>Players</a></li> */}
+        <li><a href='/decks' className='not-ready'>Decks</a></li>
+        <li><a href='/players' className='not-ready'>Players</a></li>
         <div className='burger-resources'>
           <ul className='burgered-links-more'>
             <li><a href='/archive-updates'>Archive Updates</a></li>

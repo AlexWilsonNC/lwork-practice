@@ -518,7 +518,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }          
     else if (hasPokemon('Greninja ex') && hasPokemon('Pidgeot ex') && hasPokemon('Dusknoir')) {
         secondSprite  = getPokemonSpriteURL('greninja');
-    }                           
+    }     
+    else if (hasPokemon('Greninja ex') && hasPokemon('Noctowl')) {
+        secondSprite  = getPokemonSpriteURL('greninja');
+    }                        
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {

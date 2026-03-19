@@ -321,7 +321,7 @@ const formatToCollections = (format, eventId) => {
     });
 
     // cards not in format , but allowed for display without messing up the event's format
-    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' && !collections.includes('ASC')) {
+    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' || '2026_EUIC' && !collections.includes('ASC')) {
         collections.unshift('ASC');
     }
 
