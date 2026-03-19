@@ -1144,6 +1144,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
     } else {
       const ERA_TO_SET_CODES = {
         SV1: [
+          "ASC",
           "PFL",
           "MEG",
           "MEE",
@@ -1823,9 +1824,59 @@ app.get('/api/cards', async (req, res) => {
 
 app.get('/api/players', async (req, res) => {
   try {
-    const players = await Player.find({});
-    res.json(players);
+    const page = Math.max(parseInt(req.query.page || '1', 10), 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit || '200', 10), 1), 500);
+    const skip = (page - 1) * limit;
+
+    const sortType = (req.query.sortType || 'results').toLowerCase();  // 'results' | 'name'
+    const sortOrder = (req.query.sortOrder || 'desc').toLowerCase();  // 'asc' | 'desc'
+    const q = String(req.query.q || '').trim();
+    const country = String(req.query.country || '').trim(); // flag code
+
+    const match = {};
+    if (country) match.flag = country;
+
+    if (q) {
+      // simple, safe substring match
+      match.name = { $regex: q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), $options: 'i' };
+    }
+
+    // default sort
+    const dir = sortOrder === 'asc' ? 1 : -1;
+    const sort =
+      sortType === 'name'
+        ? { name: dir, _id: 1 }
+        : { resultsCount: dir, name: 1, _id: 1 };
+
+    const [items, total] = await Promise.all([
+      Player.aggregate([
+        { $match: match },
+        {
+          $project: {
+            _id: 1,
+            id: 1,
+            name: 1,
+            flag: 1,
+            resultsCount: { $size: { $ifNull: ['$results', []] } }
+          }
+        },
+        { $sort: sort },
+        { $skip: skip },
+        { $limit: limit }
+      ], { allowDiskUse: true }),
+
+      Player.countDocuments(match)
+    ]);
+
+    res.json({
+      items,
+      page,
+      limit,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / limit))
+    });
   } catch (err) {
+    console.error('Error /api/players:', err);
     res.status(500).json({ message: err.message });
   }
 });

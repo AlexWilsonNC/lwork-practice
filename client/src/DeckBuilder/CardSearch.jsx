@@ -845,7 +845,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     }
 
     const ERA_PATTERNS = {
-        ME1: /^(?:MEP|MEE|MEG|PFL)$/i,
+        ME1: /^(?:MEP|MEE|MEG|PFL|ASC)$/i,
 
         SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK)$/i,
 
@@ -911,7 +911,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         { label: 'SM Black Star Promos', mainFrom: 'SUM', mainTo: 'CEC', promoKey: 'SMP' },
         { label: 'SWSH Black Star Promos', mainFrom: 'SSH', mainTo: 'CRZ', promoKey: 'SWSHP' },
         { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'BLK', promoKey: 'SVP' },
-        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'PFL', promoKey: 'MEP' },
+        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'ASC', promoKey: 'MEP' },
     ];
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
