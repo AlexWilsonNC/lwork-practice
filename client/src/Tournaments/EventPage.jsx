@@ -351,7 +351,7 @@ const promoSets = {
     "BS": "PR-BS"
 };
 
-const formatToCollections = (format) => {
+const formatToCollections = (format, eventId) => {
     if (format === "BS-BS") return ["BS"];
 
     const [startSet, endSet] = format.split('-');
@@ -370,6 +370,10 @@ const formatToCollections = (format) => {
             collections.push(promoSets[set]);
         }
     });
+
+    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' && !collections.includes('ASC')) {
+        collections.unshift('ASC');
+    }
 
     return collections;
 };
@@ -800,7 +804,7 @@ const EventPage = () => {
 
     const fetchCardData = async (format) => {
         try {
-            const collectionsParam = formatToCollections(format).join(',');
+            const collectionsParam = formatToCollections(format, eventId).join(',');
             const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
             const response = await fetch(url);
 
@@ -928,17 +932,37 @@ const EventPage = () => {
         setShowConversionRate(false);
     }, [division]);
 
+    useEffect(() => {
+        const shouldUsePhase1 =
+            isModernEvent &&
+            eventId !== '2025_BALTIMORE' &&
+            eventId !== '2025_TOKYO_CL';
+
+        if (!shouldUsePhase1) return;
+        if (viewTab !== 'Decks') return;
+
+        setEliminatedDecks([]);
+        setShowAllDecks(false);
+
+        loadEliminated();
+    }, [division, eventId, viewTab]);
+
     const loadEliminated = async () => {
         if (viewTab === 'Records') {
             if (loadingEliminatedRecs) return;
             setLoadingEliminatedRecs(true);
+        } else {
+            if (loadingEliminatedDecks) return;
+            setLoadingEliminatedDecks(true);
         }
 
         const [year, slug] = eventId.split('_');
         const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+
         try {
             const res = await fetch(url);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const data = await res.json();
             const key = `${division}`;
             const raw = Array.isArray(data[key]) ? data[key] : [];
@@ -949,19 +973,20 @@ const EventPage = () => {
 
                 if (!sprite1 && !sprite2 && player.decklist) {
                     const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
+
                     const clean = str =>
                         str
                             .split('/')
                             .pop()
                             .replace(/^-?assets-sprites-/, '')
                             .replace(/\.png$/, '');
+
                     sprite1 = clean(firstSprite) || '';
                     sprite2 = clean(secondSprite) || '';
                 }
 
                 if (sprite1 === 'blank') sprite1 = '';
                 if (sprite2 === 'blank') sprite2 = '';
-
                 if (!sprite1) sprite1 = 'blank';
 
                 return { ...player, sprite1, sprite2 };
@@ -976,6 +1001,14 @@ const EventPage = () => {
             }
         } catch (err) {
             console.error('Failed to load eliminated players:', err);
+
+            if (viewTab === 'Decks') {
+                setEliminatedDecks([]);
+                setShowAllDecks(false);
+            } else {
+                setEliminatedRecords([]);
+                setShowAllRecs(false);
+            }
         } finally {
             if (viewTab === 'Decks') {
                 setLoadingEliminatedDecks(false);

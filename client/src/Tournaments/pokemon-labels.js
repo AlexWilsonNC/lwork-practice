@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'toxtricity-brute-bonnet': 'Toxtricity Brute Bonnet',
         'blank-lucario-mega': 'Mega Lucario',
         'blank-greninja': 'Greninja ex',
         'lopunny-mega-dusknoir': 'Mega Lopunny',

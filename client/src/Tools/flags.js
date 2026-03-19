@@ -82,6 +82,10 @@ import panama from '../assets/flags/panama.png';
 import honduras from '../assets/flags/honduras.png';
 import qatar from '../assets/flags/qatar.png';
 import eswatini from '../assets/flags/eswatini.png';
+import uae from '../assets/flags/united-arab-emirates.png';
+import lebanon from '../assets/flags/lebanon.png';
+import belize from '../assets/flags/belize.png';
+import jersey from '../assets/flags/jersey.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -169,6 +173,10 @@ export const flags = {
      HN: honduras,
      QA: qatar,
      SZ: eswatini,
+     AE: uae,
+     LB: lebanon,
+     BZ: belize,
+     JE: jersey,
     unknown: unknown
 };
 
@@ -254,9 +262,13 @@ export const countryNames = {
     IN: 'India (Asia-Pacific)',
     PA: 'Panama (Latin America)',
     HN: 'honduras (Latin America)',
+    JE: 'Jersey (Europe)',
     UA: 'Ukraine (Europe)',
     QA: 'Qatar (Middle East-South Africa)',
     SZ: 'Eswatini (Middle East-South Africa)',
+    AE: 'United Arab Emirates (Middle East-South Africa)',
+    LB: 'Lebanon (Middle East-South Africa)',
+    BZ: 'Belize (Latin America)',
     EC: 'Ecuador (Latin America)'
 };
 
@@ -345,15 +357,19 @@ export const playerCountryDropdown = {
     HN: 'honduras',
     IN: 'India',
     QA: 'Qatar',
+    AE: 'United Arab Emirates',
+    LB: 'Lebanon',
+    BZ: 'Belize',
+    JE: 'Jersey',
     SZ: 'Eswatini'
     // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN'],
-  EU: ['DE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
+  LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN'],
+  EU: ['DE','JE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
-  MS: ['ZA','TR','KW','QA','SZ']
+  MS: ['ZA','TR','KW','QA','SZ','AE','LB']
 };

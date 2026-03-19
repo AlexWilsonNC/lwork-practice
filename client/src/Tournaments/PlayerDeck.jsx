@@ -300,7 +300,7 @@ const formatName = (name) => {
 
 const isFeaturedEvent = (eventId) => eventId.includes("FEATURED");
 
-const formatToCollections = (format) => {
+const formatToCollections = (format, eventId) => {
     if (format === "BS-BS") return ["BS"];
 
     const [startSet, endSet] = format.split('-');
@@ -319,6 +319,11 @@ const formatToCollections = (format) => {
             collections.push(promoSets[set]);
         }
     });
+
+    // cards not in format , but allowed for display without messing up the event's format
+    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' && !collections.includes('ASC')) {
+        collections.unshift('ASC');
+    }
 
     return collections;
 };
@@ -341,7 +346,7 @@ const PlayerDeck = () => {
     useEffect(() => {
         const fetchCardData = async (format) => {
             try {
-                const collections = formatToCollections(format);
+                const collections = formatToCollections(format, eventId);
                 const collectionsParam = collections.join(',');
                 const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
 

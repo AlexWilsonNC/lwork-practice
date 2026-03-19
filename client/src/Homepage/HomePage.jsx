@@ -28,6 +28,8 @@ const WrappedFeature = styled.div`
   h3 {color: ${({ theme }) => theme.text};}
   p {color: ${({ theme }) => theme.text};}
   &:hover { background: ${({ theme }) => theme.hoverWrappedFeatureBg};}
+  border-radius: 5px; 
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
 `;
 const UpcomingEventsHome = styled.ul`
   li {

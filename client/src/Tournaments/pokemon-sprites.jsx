@@ -308,6 +308,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }
+    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Mega Kangaskhan ex') && (!hasPokemon('Noctowl'))) {
+        firstSprite  = getPokemonSpriteURL('ogerpon');
+        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
+    }
     else if(hasPokemon('Marnie\'s Grimmsnarl ex') && hasPokemon('Froslass')) {
         firstSprite  = getPokemonSpriteURL('grimmsnarl');
         secondSprite  = getPokemonSpriteURL('froslass');
@@ -507,6 +511,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Lunatone') && hasPokemon('Solrock') && hasPokemon('Munkidori') && hasPokemon('Bloodmoon Ursaluna')) {
         firstSprite  = getPokemonSpriteURL('ursaluna-bloodmoon');
         secondSprite  = getPokemonSpriteURL('lunatone');
+    }          
+    else if (hasPokemon('Toxtricity') && hasPokemon('Brute Bonnet') && !hasPokemon('Mega Sharpedo ex')) {
+        firstSprite  = getPokemonSpriteURL('toxtricity');
+        secondSprite  = getPokemonSpriteURL('brute-bonnet');
     }          
     else if (hasPokemon('Greninja ex') && hasPokemon('Pidgeot ex') && hasPokemon('Dusknoir')) {
         secondSprite  = getPokemonSpriteURL('greninja');

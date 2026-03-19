@@ -1507,6 +1507,7 @@ const tournamentList = [
         "date": "Jan 24, 2026",
         "flag": newZealand,
         "location": "Auckland, New Zealand",
+        "results": false
     },
     {
     "id": "2026_SYDNEY",
