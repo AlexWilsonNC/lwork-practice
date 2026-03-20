@@ -57,6 +57,7 @@ import thailand from '../assets/flags/thailand.png';
 import turkey from '../assets/flags/turkey.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
+import greatBritain from '../assets/flags/uk.png';
 import uruguay from '../assets/flags/uruguay.png';
 import guatemala from '../assets/flags/guatemala.png';
 import bolivia from '../assets/flags/bolivia.png';
@@ -86,6 +87,7 @@ import uae from '../assets/flags/united-arab-emirates.png';
 import lebanon from '../assets/flags/lebanon.png';
 import belize from '../assets/flags/belize.png';
 import jersey from '../assets/flags/jersey.png';
+import uzbekistan from '../assets/flags/uzbekistan.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -151,6 +153,7 @@ export const flags = {
      TR: turkey,
      US: usa,
      UK: uk,
+     GB: greatBritain,
      UY: uruguay,
      GT: guatemala,
      BO: bolivia,
@@ -177,6 +180,7 @@ export const flags = {
      LB: lebanon,
      BZ: belize,
      JE: jersey,
+     UZ: uzbekistan,
     unknown: unknown
 };
 
@@ -240,6 +244,7 @@ export const countryNames = {
     TH: 'Thailand (Asia-Pacific)',
     TR: 'Turkey (Middle East-South Africa)',
     UK: 'United Kingdom (Europe)',
+    GB: 'United Kingdom (Europe)',
     US: 'USA (North America)',
     unknown: 'Unknown',
     UY: 'Uruguay (Latin America)',
@@ -268,6 +273,7 @@ export const countryNames = {
     SZ: 'Eswatini (Middle East-South Africa)',
     AE: 'United Arab Emirates (Middle East-South Africa)',
     LB: 'Lebanon (Middle East-South Africa)',
+    UZ: 'Uzbekistan (Middle East-South Africa)',
     BZ: 'Belize (Latin America)',
     EC: 'Ecuador (Latin America)'
 };
@@ -339,6 +345,7 @@ export const playerCountryDropdown = {
     TR: 'Turkey',
     US: 'USA',
     UK: 'UK',
+    GB: 'UK',
     UY: 'Uruguay',
     UA: 'Ukraine',
     GT: 'Guatemala',
@@ -361,6 +368,7 @@ export const playerCountryDropdown = {
     LB: 'Lebanon',
     BZ: 'Belize',
     JE: 'Jersey',
+    UZ: 'Uzbekistan',
     SZ: 'Eswatini'
     // ,unknown: 'Unknown'
 };
@@ -368,8 +376,8 @@ export const playerCountryDropdown = {
 export const regions = {
   NA: ['US','CA','PR'],
   LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN'],
-  EU: ['DE','JE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
+  EU: ['DE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
-  MS: ['ZA','TR','KW','QA','SZ','AE','LB']
+  MS: ['ZA','TR','KW','QA','SZ','AE','LB','UZ']
 };

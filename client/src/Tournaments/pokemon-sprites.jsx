@@ -241,7 +241,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('roaring-moon');
         secondSprite  = getPokemonSpriteURL('flutter-mane');
     }
-    else if (hasPokemon('Roaring Moon ex') && hasPokemon('Pecharunt ex')) {
+    else if (hasPokemon('Roaring Moon ex') && hasPokemon('Pecharunt ex') && !hasPokemon("Ethan\'s Ho-Oh ex")) {
         secondSprite  = getPokemonSpriteURL('roaring-moon');
     }
     else if (hasPokemon('Roaring Moon') && hasPokemon('Koraidon')) {
@@ -406,10 +406,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('dragapult');
         secondSprite  = getPokemonSpriteURL('zoroark');
     }   
-    // else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
-    //     firstSprite  = getPokemonSpriteURL('blaziken');
-    //     secondSprite  = getPokemonSpriteURL('zoroark');
-    // }          
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('Blaziken ex')) {
+        firstSprite  = getPokemonSpriteURL('blaziken');
+        secondSprite  = getPokemonSpriteURL('zoroark');
+    }          
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Reshiram')) {
         secondSprite  = getPokemonSpriteURL('zoroark');
     }                        
@@ -548,9 +548,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if (getPokemonCount('Okidogi') === 4) {
             secondSprite  = getPokemonSpriteURL('okidogi');
         }
-        else if (hasPokemon('Roaring Moon ex')) {
-            secondSprite  = getPokemonSpriteURL('roaring-moon');
-        }
+        // else if (hasPokemon('Roaring Moon ex')) {
+        //     secondSprite  = getPokemonSpriteURL('roaring-moon');
+        // }
         else if (hasPokemon('Gardevoir ex')) {
             secondSprite  = getPokemonSpriteURL('gardevoir');
         }

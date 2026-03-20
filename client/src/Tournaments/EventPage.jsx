@@ -371,7 +371,9 @@ const formatToCollections = (format, eventId) => {
         }
     });
 
-    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' || '2026_EUIC' && !collections.includes('ASC')) {
+    // cards not in format , but allowed for display without messing up the event's format
+    // in PlayerDeck.jsx too!
+    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' || '2026_EUIC' || '2026_SEATTLE' && !collections.includes('ASC')) {
         collections.unshift('ASC');
     }
 

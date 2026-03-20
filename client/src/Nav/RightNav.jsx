@@ -109,7 +109,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/cards/ASC'>Cards</a></li>
-        <li><a href='/decks' className='not-ready'>Decks</a></li>
+        <li><a href='/decks'>Decks</a></li>
         <li><a href='/players' className='not-ready'>Players</a></li>
       </ul>
       <Overlay open={open} onClick={() => setOpen(false)} />
@@ -128,7 +128,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <hr className='burger-nav-hr'></hr>
         <li><a href='/tournaments/completed'>Tournaments</a></li>
         <li><a href='/cards/ASC'>Cards</a></li>
-        <li><a href='/decks' className='not-ready'>Decks</a></li>
+        <li><a href='/decks'>Decks</a></li>
         <li><a href='/players' className='not-ready'>Players</a></li>
         <div className='burger-resources'>
           <ul className='burgered-links-more'>

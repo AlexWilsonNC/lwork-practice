@@ -1519,7 +1519,7 @@ const tournamentList = [
     "location": "Sydney, Australia",
     },
     {
-    "id": "2026_SAN_JUAN",
+    "id": "2026_SAN-JUAN",
     "name": "San Juan Special Championships",
     "eventType": "speSeries",
     "eventLogo": speSeries,
