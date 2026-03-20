@@ -175,7 +175,8 @@
 .open-in-deckbuilder-btn:hover,
 .save-to-collection-btn:hover {
     cursor: pointer;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.35);
+    background-color: grey !important;
+    color: white !important;
 }
 .copy-decklist-btn .tooltip-text,
 .open-in-deckbuilder-btn .tooltip-text,
