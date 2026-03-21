@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TwitterWidget from './TweetFeed';
 import styled from 'styled-components';
 import Modal from '../Tools/Interstitial';
+import patreonImg from '../assets/social-media-icons/patreon-red-old-logo.png';
 
 const SideContainer = styled.div`
   h4 {color: ${({ theme }) => theme.text};}
@@ -68,7 +69,7 @@ const SidebarComponent = () => {
           <li><a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')}>Decks by Era</a></li>
           <li><Link to='/rules-by-era'>Rules by Era</Link></li>
           <li><Link to='/cards/ASC'>Card Database</Link></li>
-          <li><Link to='' className='not-ready'>World's Booklets</Link></li>
+          {/* <li><Link to='' className='not-ready'>World's Booklets</Link></li> */}
           <li><a href='https://www.seagrovetcg.com/event-finder' target='_blank' rel='noopener noreferrer'>Local Event Finder</a></li>
         </ul>
       </div>
@@ -92,6 +93,15 @@ const SidebarComponent = () => {
         </div>
         <p>Don't see a certain deck documented? Have a missing decklist or result from a past
           tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
+      </div>
+
+      <div className='side-section'>
+        <div className='flex-row'>
+          <img className='side-icon' src={patreonImg} alt='Help us Archive' />
+          <h4>A Special Thank You!</h4>
+        </div>
+        <p style={{marginBottom: '5px'}}>To the below Legends that support us on Patreon!</p>
+        <p>Jesse Benedict, CachoOfSinnoh</p>
       </div>
 
       <blockquote className="twitter-tweet">

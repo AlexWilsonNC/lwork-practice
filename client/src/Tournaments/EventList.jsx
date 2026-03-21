@@ -397,7 +397,11 @@ const EventList = () => {
         (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
         (countryFilter ? event.flag === countryFilter : true) &&
         (yearFilter ? eventYear === yearFilter : true) &&
-        (showUpcoming ? eventDate >= new Date() : eventDate < new Date()) &&
+        (() => {
+        const cutoffDate = new Date(eventDate);
+          cutoffDate.setDate(cutoffDate.getDate() + 2);
+          return showUpcoming ? cutoffDate >= new Date() : cutoffDate < new Date();
+        })() &&
         event.eventType !== 'retro' &&
         (!showUpcoming && showOnlyWithResults ? event.id && event.results !== false : true);
     }
@@ -476,6 +480,11 @@ const EventList = () => {
                 />
                 <span />
               </ToggleSwitch>
+            </div>
+          )}
+          {showUpcoming && (
+            <div style={{ opacity: 0, gap: '10px', marginTop: '12px' }}>
+              <span id='toggleswitchcopy'>Events with results only</span>
             </div>
           )}
         </div>
@@ -569,7 +578,7 @@ const EventList = () => {
                     <th>Registration</th>
                   )} */}
                 {showUpcoming && (
-                  <th>Information</th>
+                  <th style={{opacity:0}}>Information</th>
                 )}
               </tr>
             </thead>
@@ -638,11 +647,11 @@ const EventList = () => {
                     {/* For upcoming events, show the "note stack" icon */}
                     {showUpcoming && (
                       <td>
-                        {event.id && event.results !== false ? (
+                        {/* {event.id && event.results !== false ? (
                           <a href={event.id} className='event-icon-links'>
                             <span className="material-symbols-outlined">description</span>
                           </a>
-                        ) : null}
+                        ) : null} */}
                       </td>
                     )}
                   </tr>

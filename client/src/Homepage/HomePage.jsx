@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
@@ -14,7 +14,7 @@ import deckBuilder from '../assets/homepage/deckbuilder.png';
 
 import article1 from '../Articles/whenModernBecomesRetro';
 import article2 from '../Articles/forgottenFormat';
-import latestEvent from '../assets/homepage/latest-event.png';
+import patreonImg from '../assets/social-media-icons/patreon-red-old-logo.png';
 
 const Container = styled.div`
   background: ${({ theme }) => theme.body};
@@ -65,9 +65,54 @@ const Homepage = () => {
     }, articles[0]);
 
     const upcomingEvents = sortedEvents
-        .filter(event => new Date(event.date) >= new Date())
+        .filter(event => {
+            const cutoff = new Date(event.date);
+            cutoff.setDate(cutoff.getDate() + 2);
+            return cutoff >= new Date();
+        })
         .sort((a, b) => new Date(a.date) - new Date(b.date))
         .slice(0, 6);
+
+    const now = new Date();
+
+    const latestCompletedEvent = [...sortedEvents]
+        .filter(event => {
+            const cutoff = new Date(event.date);
+            cutoff.setDate(cutoff.getDate() + 2);
+            return cutoff < now && event.id;
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+    const [latestCompletedEventData, setLatestCompletedEventData] = useState(null);
+
+    useEffect(() => {
+        const fetchLatestCompletedEventData = async () => {
+            if (!latestCompletedEvent?.id) return;
+
+            try {
+                const eventId = latestCompletedEvent.id.replace('/tournaments/', '');
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setLatestCompletedEventData(data);
+                } else {
+                    console.error('Failed to fetch latest completed event data');
+                }
+            } catch (error) {
+                console.error('Error fetching latest completed event data:', error);
+            }
+        };
+
+        fetchLatestCompletedEventData();
+    }, [latestCompletedEvent]);
+
+    const latestCompletedEventName = latestCompletedEvent?.name || '';
+    const latestCompletedEventDate = latestCompletedEvent?.date || '';
+    const latestCompletedEventDisplayName = latestCompletedEventName
+        .replace(/^202\d\s+/, '');
+
+    const isResultsReady = latestCompletedEvent.results !== false;
 
     return (
         <Container theme={theme}>
@@ -93,25 +138,33 @@ const Homepage = () => {
                                 <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                                 <a href='/tournaments/completed' className='blue'>View All</a>
                             </div>
-                            {/* <a href='./tournaments/2026_PITTSBURGH'> */}
-                            <a href='./tournaments/2026_CURITIBA'>
-                                <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src={latestEvent} />
-                                    <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
-                                    <div className='homepage-box-content'>
-                                        {/* <hr style={{ borderBottom: '2px solid grey', marginBottom: '5px', opacity: 0.5 }}></hr> */}
-
-                                        <h3>Results from <span className='new-color'>Curitiba Regionals</span> are here!</h3>
-                                        <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
-                                        {/* <h3>Results from <span className='new-color'>Milwaukee</span> & <span className='new-color'>Belo Horizonte Regionals</span> are here!</h3> */}
-                                        {/* <p>Check out all the lists & matchups from each division, plus deck stats and these event's meta shares.</p> */}
-                                    </div>
-                                    <div className='card-date-plus-read'>
-                                        <p>Mar 17, 2026</p>
-                                        <p>View Results</p>
-                                    </div>
-                                </WrappedFeature>
-                            </a>
+                            {latestCompletedEvent && (
+                                <a href={`/tournaments/${latestCompletedEvent.id}`}>
+                                    <WrappedFeature className='wrapped-feature'>
+                                        {latestCompletedEventData?.thumbnail ? (
+                                            <img
+                                                className='card-image'
+                                                src={latestCompletedEventData.thumbnail}
+                                                alt={latestCompletedEvent.name}
+                                            />
+                                        ) : (
+                                            <div className="card-image placeholder" />
+                                        )}
+                                        <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
+                                        <div className='homepage-box-content'>
+                                            <h3>
+                                                Results from <span className='new-color'>{latestCompletedEvent.name}</span>{' '}
+                                                {isResultsReady ? 'are here!' : 'coming soon!'}
+                                            </h3>
+                                            <p>{isResultsReady ? 'Check out' : 'Once available, you\'\ll be able to check out'} all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
+                                        </div>
+                                        <div className='card-date-plus-read'>
+                                            <p>{latestCompletedEventDate}</p>
+                                            <p>View Results</p>
+                                        </div>
+                                    </WrappedFeature>
+                                </a>
+                            )}
                         </div>
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
@@ -197,7 +250,7 @@ const Homepage = () => {
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View the lastest TCG expansion: <span className='new-color'>Phantasmal Flames</span>!</h3>
+                                        <h3>View the lastest TCG expansion: <span className='new-color'>Ascended Heroes</span>!</h3>
                                         <p>View every Pokémon card from every expansion ever, in our database
                                             here! From Base Set through this latest release, we have them all!</p>
                                     </div>
@@ -310,23 +363,33 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Event Results</FeaturedHeaders>
                             <a href='/tournaments/completed' className='blue'>View All</a>
                         </div>
-                        {/* <a href='./tournaments/2026_PITTSBURGH'> */}
-                        <a href='./tournaments/2026_CURITIBA'>
-                            <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src={latestEvent} />
-                                <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
-                                <div className='homepage-box-content'>
-                                    <h3>Results from <span className='new-color'>Curitiba Regionals</span> are here!</h3>
-                                    <p>Check out all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
-                                    {/* <h3>Results from <span className='new-color'>Milwaukee</span> & <span className='new-color'>Belo Horizonte Regionals</span> are here!</h3>
-                                    <p>Check out all the lists & matchups from each division, plus deck stats and these event's meta shares.</p> */}
-                                </div>
-                                <div className='card-date-plus-read'>
-                                    <p>Mar 17, 2026</p>
-                                    <p>View Results</p>
-                                </div>
-                            </WrappedFeature>
-                        </a>
+                        {latestCompletedEvent && (
+                            <a href={`/tournaments/${latestCompletedEvent.id}`}>
+                                <WrappedFeature className='wrapped-feature'>
+                                    {latestCompletedEventData?.thumbnail ? (
+                                        <img
+                                            className='card-image'
+                                            src={latestCompletedEventData.thumbnail}
+                                            alt={latestCompletedEvent.name}
+                                        />
+                                    ) : (
+                                        <div className="card-image placeholder" />
+                                    )}
+                                    <img className='card-profile-pic transparent-profile-pic' src={playPokemonProfile} />
+                                    <div className='homepage-box-content'>
+                                        <h3>
+                                            Results from <span className='new-color'>{latestCompletedEvent.name}</span>{' '}
+                                            {isResultsReady ? 'are here!' : 'coming soon!'}
+                                        </h3>
+                                        <p>{isResultsReady ? 'Check out' : 'Once available, you\'\ll be able to check out'} all the lists & matchups from each division, plus deck stats and this event's meta shares.</p>
+                                    </div>
+                                    <div className='card-date-plus-read'>
+                                        <p>{latestCompletedEventDate}</p>
+                                        <p>View Results</p>
+                                    </div>
+                                </WrappedFeature>
+                            </a>
+                        )}
                     </div>
                     <div className='homepage-box'>
                         <div className='flex-row-wide'>
@@ -409,7 +472,7 @@ const Homepage = () => {
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                    <h3>View the lastest TCG expansion: <span className='new-color'>Phantasmal Flames</span>!</h3>
+                                    <h3>View the lastest TCG expansion: <span className='new-color'>Ascended Heroes</span>!</h3>
                                     <p>View every Pokémon card from every expansion ever, in our database
                                         here! From Base Set through this latest release, we have them all!</p>
                                 </div>
@@ -430,6 +493,14 @@ const Homepage = () => {
                         </a>
                     </div>
                 </HomepageMainContent>
+            </div>
+            <div className='patreonBottom'>
+                <div>
+                    <img src={patreonImg} alt='Help us Archive' />
+                    <h4>A Special Thank You!</h4>
+                </div>
+                <p id='belowLegends'>To the below Legends that support us on Patreon!</p>
+                <p>Jesse Benedict, CachoOfSinnoh</p>
             </div>
         </Container>
     )
