@@ -500,7 +500,10 @@ const Homepage = () => {
                     <h4>A Special Thank You!</h4>
                 </div>
                 <p id='belowLegends'>To the below Legends that support us on Patreon!</p>
-                <p>Jesse Benedict, CachoOfSinnoh</p>
+                <ul className='patreonLegendsUl'>
+                    <li>Jesse Benedict</li>
+                    <li>CachoOfSinnoh</li>
+                </ul>
             </div>
         </Container>
     )

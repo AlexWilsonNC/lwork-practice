@@ -46,6 +46,11 @@
     height: 20px;width:20px;
     margin-right: 10px;
 }
+.patreonLegendsUl {
+    display: flex;
+    margin: 0;
+    gap: 25px;
+}
 .tba-text {
     border: 1px solid grey;
     background-color: #1a1a1a;
@@ -547,6 +552,9 @@
     }
     .patreonBottom {
         display: block;
+    }
+    .patreonLegendsUl {
+        padding-left: 15px;
     }
     .homepage-side {
         display: none;

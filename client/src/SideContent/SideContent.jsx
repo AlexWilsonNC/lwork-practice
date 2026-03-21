@@ -101,7 +101,10 @@ const SidebarComponent = () => {
           <h4>A Special Thank You!</h4>
         </div>
         <p style={{marginBottom: '5px'}}>To the below Legends that support us on Patreon!</p>
-        <p>Jesse Benedict, CachoOfSinnoh</p>
+        <ul className='patreonLegendsUl'>
+          <li>Jesse Benedict</li>
+          <li>CachoOfSinnoh</li>
+        </ul>
       </div>
 
       <blockquote className="twitter-tweet">

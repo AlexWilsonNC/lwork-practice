@@ -1417,8 +1417,11 @@ body.deckbuilder-page .deck-builder {
   background-color: rgb(15, 24, 33) !important;
   display: flex;
   align-items: center;
-}
 
+}
+.whyarentyousmall {
+  height: 32.5px;
+}
 .advanced-search-modal .modal-close-x{
   top:8px;
   right:8px;
@@ -1513,7 +1516,9 @@ body.deckbuilder-page .deck-builder {
   background-color: rgba(0, 0, 0, 0.65);
   padding: 7px 15px;
 }
-
+.buttons-row-modal button {
+  border-radius: 2.5px;
+}
 /* .set-name {
   margin-top: 0.5rem;
   font-size: 100px;

@@ -2214,7 +2214,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             >
                                                 <button
                                                     type="button"
-                                                    className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                                    className="type-btn non-bold-typebtn hp-btn-dropdown whyarentyousmall"
                                                     onClick={() => setShowEnergyMenu(v => !v)}
                                                     aria-haspopup="listbox"
                                                     aria-expanded={showEnergyMenu}
@@ -2285,12 +2285,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     </div>
                                                 )}
                                             </div>
-                                            {/* <button
+                                            <button
                                                 onClick={() => setDraftFilters(f => ({ ...f, attackCost: { op: 'eq', value: '', energies: {} } }))}
                                                 className='type-btn non-bold-typebtn'
                                             >
                                                 Clear
-                                            </button> */}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
