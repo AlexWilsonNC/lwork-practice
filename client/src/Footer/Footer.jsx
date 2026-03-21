@@ -65,10 +65,10 @@ function Footer() {
                             <img src={emailIcon} alt="social-icon" />
                             <p>Send us an Email</p>
                         </a>
-                        <a href='' target='_blank' rel="noopener noreferrer" className='not-ready invisible'>
+                        {/* <a href='' target='_blank' rel="noopener noreferrer" className='not-ready invisible'>
                             <img src={tiktokIcon} alt="social-icon" />
                             <p>Watch us on Tiktok</p>
-                        </a>
+                        </a> */}
                     </div>
                 </div>
                 <div className='unhide-footer'>

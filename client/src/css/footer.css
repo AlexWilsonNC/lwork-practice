@@ -149,6 +149,9 @@
 .bottom-footer img {
     margin: -4px 5px 0 5px;
 }
+.bottom-footer p {
+    line-height: 18px;
+}
 .unhide-footer {
     display: none;
 }
