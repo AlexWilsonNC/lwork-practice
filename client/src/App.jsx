@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import './App.css'
 import Navbar from './Nav/Navbar';
@@ -38,6 +38,15 @@ export function PrivateRoute({ children }) {
 
 function App() {
   const { pathname } = useLocation()
+  useEffect(() => {
+  if (window.gtag) {
+    window.gtag('event', 'page_view', {
+      page_path: pathname,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }
+}, [pathname]);
   const noNavBarOn = ['/print']
   const noFooterOn = ['/bobthebuilder', '/print']
 
