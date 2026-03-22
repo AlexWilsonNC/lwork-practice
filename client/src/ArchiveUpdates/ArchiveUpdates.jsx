@@ -91,7 +91,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Oct 24, 2025</p>
+          <p>Last Updated: Mar 22, 2026</p>
         </div>
 
         {/* Article Image */}
