@@ -1401,12 +1401,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             skipNextQueryEffectRef.current = false;
             return;
         }
-        const trimmed = query.trim()
+
+        const trimmed = query.trim();
+        const filtersActive = anyFilterActive(filters);
 
         if (trimmed === '') {
-            if (suppressDefault) setResults([])
-            else setResults(defaultCards)
-            return
+            if (suppressDefault) setResults([]);
+            else setResults(defaultCards);
+            return;
         }
 
         const allowOneChar = /^[N★δ♢◆]$/i.test(trimmed);
@@ -1419,61 +1421,81 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
         const reqId = ++latestReqId.current;
 
-        const t = setTimeout(() => {
-            const normalizedQuery = aliasNormalize(query);
-
+        const t = setTimeout(async () => {
             const rawQuery = query.trim();
             const terms = rawQuery.split(',').map(s => s.trim()).filter(Boolean);
-
             const primeMode = /\bprime\b/i.test(rawQuery);
-
             const nameTerms = (searchMode === 'name')
                 ? (terms.length ? terms : [rawQuery])
                 : [rawQuery];
 
-            const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
+            try {
+                let arr = [];
 
-            const routes = (() => {
-                const coll = getActiveFormatCollection(selectedQuickFormat);
+                if (filtersActive && !primeMode && rawQuery) {
+                    const cleaned = buildFiltersForRequest(filters);
 
-                if (!primeMode) {
-                    if (coll) {
-                        return (searchMode === 'name'
-                            ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`)
-                            : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`));
+                    const resp = await fetch('/api/cards/filter-search', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            query: rawQuery,
+                            searchMode,
+                            filters: cleaned
+                        })
+                    });
+
+                    if (reqId !== latestReqId.current) return;
+                    arr = resp.ok ? await resp.json() : [];
+                    arr = Array.isArray(arr) ? arr : [];
+                } else {
+                    const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
+
+                    const routes = (() => {
+                        const coll = getActiveFormatCollection(selectedQuickFormat);
+
+                        if (!primeMode) {
+                            if (coll) {
+                                return (searchMode === 'name'
+                                    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`)
+                                    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`));
+                            }
+                            return (searchMode === 'name'
+                                ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
+                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+                        }
+
+                        if (coll) {
+                            return [`/api/collections/${encodeURIComponent(coll)}`];
+                        }
+
+                        const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
+                        if (!primeSetCodes.length) {
+                            return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+                        }
+                        return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
+                    })();
+
+                    const resLists = await Promise.all(
+                        routes.map(r =>
+                            fetch(r)
+                                .then(res => (res.ok ? res.json() : []))
+                                .catch(() => [])
+                        )
+                    );
+
+                    if (reqId !== latestReqId.current) return;
+
+                    const byKey = new Map();
+                    for (const list of resLists) {
+                        for (const c of Array.isArray(list) ? list : []) {
+                            const key = `${c.setAbbrev}|${c.number}`;
+                            if (!byKey.has(key)) byKey.set(key, c);
+                        }
                     }
-                    return (searchMode === 'name'
-                        ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-                        : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+                    arr = Array.from(byKey.values());
                 }
 
-                if (coll) {
-                    return [`/api/collections/${encodeURIComponent(coll)}`];
-                }
-
-                const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
-                if (!primeSetCodes.length) {
-                    return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
-                }
-                return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
-            })();
-
-            Promise.all(
-                routes.map(r =>
-                    fetch(r)
-                        .then(res => (res.ok ? res.json() : []))
-                        .catch(() => [])
-                )
-            ).then(resLists => {
-                if (reqId !== latestReqId.current) return;
-                const byKey = new Map();
-                for (const list of resLists) {
-                    for (const c of Array.isArray(list) ? list : []) {
-                        const key = `${c.setAbbrev}|${c.number}`;
-                        if (!byKey.has(key)) byKey.set(key, c);
-                    }
-                }
-                let arr = Array.from(byKey.values());
                 if (primeMode) {
                     const getSubtypes = c => {
                         if (Array.isArray(c.subtypes)) return c.subtypes;
@@ -1491,21 +1513,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     const t = trimmed.toUpperCase();
 
                     if (t === 'N') {
-                        // exact "N" only (prevents unrelated trainers/items with an 'n' somewhere)
                         arr = arr.filter(c => (c.name || '').toUpperCase() === 'N');
                     } else if (t === '★') {
-                        // gold star: name must actually contain the star OR alias match
                         arr = arr.filter(c =>
                             (c.name || '').includes('★') ||
                             aliasNormalize(c.name).includes('goldstar')
                         );
-                    } else if (t === 'δ') {
-                        // delta species: must contain delta symbol OR alias match
+                    } else if (t === 'Δ' || t === 'δ') {
                         arr = arr.filter(c =>
                             (c.name || '').includes('δ') ||
                             aliasNormalize(c.name).includes('deltaspecies')
                         );
-                    } else { // ♢ or ◆ (prism star)
+                    } else {
                         arr = arr.filter(c =>
                             (c.name || '').includes('♢') ||
                             (c.name || '').includes('◆') ||
@@ -1533,17 +1552,15 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     const numB = parseInt(b.number, 10) || 0;
                     return numA - numB;
                 });
-                // const fr = draftFilters.formatRange?.from;
-                // const to = draftFilters.formatRange?.to;
-                // if (fr && to) {
-                //     arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
-                // }
-                setResults(arr);
-            }).catch(() => setResults([]));
-        }, 300)
 
-        return () => clearTimeout(t)
-    }, [query, defaultCards, searchMode])
+                setResults(arr);
+            } catch {
+                if (reqId === latestReqId.current) setResults([]);
+            }
+        }, 300);
+
+        return () => clearTimeout(t);
+    }, [query, defaultCards, searchMode, filters, selectedQuickFormat, suppressDefault]);
 
     const { items: displayResults } = React.useMemo(() => {
         return takeFirstMatching(results);
@@ -2382,11 +2399,22 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         disabled={!anyFilterActive(draftFilters)}
                                         onClick={async () => {
                                             try {
+                                                // Stop the normal query effect from firing off the old typed query
+                                                skipNextQueryEffectRef.current = true;
+                                                latestReqId.current += 1;
+
+                                                // Clear the current typed query immediately for this workflow
+                                                setSuppressDefault(true);
+                                                setQuery('');
+
+                                                // Apply the filters for future typed searches too
                                                 setFilters(draftFilters);
 
                                                 const cleaned = buildFiltersForRequest(draftFilters);
 
                                                 const payload = {
+                                                    query: '',
+                                                    searchMode,
                                                     filters: cleaned
                                                 };
 
@@ -2409,7 +2437,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 if (includeKeys.length) {
                                                     const forcedCards = await fetchCardsByKeys(includeKeys);
 
-                                                    const seen = new Set(arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase()));
+                                                    const seen = new Set(
+                                                        arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase())
+                                                    );
+
                                                     for (const c of forcedCards) {
                                                         const key = `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase();
                                                         if (!seen.has(key)) {
@@ -2419,9 +2450,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     }
                                                 }
 
-                                                skipNextQueryEffectRef.current = true;
-                                                setSuppressDefault(true);
-                                                setQuery('');
                                                 setResults(arr);
                                                 setShowAdvanced(false);
                                             } catch (e) {

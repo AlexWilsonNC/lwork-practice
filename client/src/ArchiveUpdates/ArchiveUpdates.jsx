@@ -63,7 +63,7 @@ const ArticleContainer = styled.div`
     .top-article-image {
       background-image: url(${archiveImage});
       width: 80%;height:300px;
-      background-position: 50% 50%;
+      background-position: 50% 40%;
       background-repeat: no-repeat;
       background-size: cover;
       border-top-left-radius: 15px;

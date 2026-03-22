@@ -15,9 +15,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-let cachedCards = null;
-let cachedNormalizedNames = null;
-
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const transporter = nodemailer.createTransport({
@@ -970,35 +967,90 @@ app.get('/event-ids', async (req, res) => {
 });
 
 app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
-  const rawQ = (req.params.name || '').trim();
-  const q = rawQ
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, '')
-    .toLowerCase();
-
   try {
-    const collection = cardConnection.collection('card-database');
-    if (!cachedCards) {
-      const cards = await collection.find().toArray();
-      cachedCards = cards;
-      cachedNormalizedNames = cards.map(c => ({
-        raw: c,
-        norm: c.name
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/\s+/g, '')
-          .toLowerCase()
-      }));
-    }
+    const rawQ = (req.params.name || '').trim();
+    if (!rawQ) return res.json([]);
 
-    const matches = cachedNormalizedNames
-      .filter(({ norm }) => norm.includes(q))
-      .map(({ raw }) => raw);
-    return res.json(matches);
+    const cards = cardConnection.collection('card-database');
+
+    const results = await cards.aggregate([
+      {
+        $search: {
+          index: 'default',
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: rawQ,
+                  path: 'name',
+                  fuzzy: {
+                    maxEdits: 1,
+                    prefixLength: 1
+                  }
+                }
+              },
+              {
+                text: {
+                  query: rawQ,
+                  path: 'name',
+                  score: { boost: { value: 3 } }
+                }
+              }
+            ],
+            minimumShouldMatch: 1
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          name: 1,
+          supertype: 1,
+          subtypes: 1,
+          setAbbrev: 1,
+          number: 1,
+          images: 1,
+          attacks: 1,
+          abilities: 1,
+          ability: 1,
+          text: 1,
+          rules: 1,
+          flavorText: 1,
+          types: 1,
+          hp: 1,
+          weaknesses: 1,
+          resistances: 1,
+          retreatCost: 1,
+          convertedRetreatCost: 1,
+          set: 1,
+          rarity: 1,
+          tcgplayer: 1,
+          ancientTrait: 1,
+          ancienttrait: 1,
+          artist: 1,
+          heldItem: 1,
+          helditem: 1,
+          score: { $meta: 'searchScore' }
+        }
+      },
+      { $limit: 200 }
+    ]).toArray();
+
+    results.sort((a, b) => {
+      const scoreDiff = (b.score || 0) - (a.score || 0);
+      if (scoreDiff !== 0) return scoreDiff;
+
+      const nameA = String(a.name || '').localeCompare(String(b.name || ''));
+      if (nameA !== 0) return nameA;
+
+      return (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0);
+    });
+
+    res.json(results);
   } catch (err) {
-    console.error('Error searching cards:', err);
-    return res.status(500).json({ error: 'Server error occurred' });
+    console.error('Error searching cards with Atlas Search:', err);
+    res.status(500).json({ error: 'Server error occurred' });
   }
 });
 
