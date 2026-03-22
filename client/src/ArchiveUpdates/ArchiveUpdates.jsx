@@ -43,6 +43,14 @@ import shiftry from '../../public/assets/sprites/shiftry.png'
 import glaceon from '../../public/assets/sprites/glaceon.png'
 import blaziken from '../../public/assets/sprites/blaziken.png'
 import ninetales from '../../public/assets/sprites/ninetales.png'
+import slaking from '../../public/assets/sprites/slaking.png'
+import gorebyss from '../../public/assets/sprites/gorebyss.png'
+import rayquaza from '../../public/assets/sprites/rayquaza.png'
+import lanturn from '../../public/assets/sprites/lanturn.png'
+import swampert from '../../public/assets/sprites/swampert.png'
+import muk from '../../public/assets/sprites/muk.png'
+import wobbuffet from '../../public/assets/sprites/wobbuffet.png'
+import aggron from '../../public/assets/sprites/aggron.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -92,11 +100,85 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
-          {/* <hr className='title-hr' />
+          <hr className='title-hr' />
           <br />
-          <h3 className='boxxed'>December 2025</h3>
+          <h3 className='boxxed'>March 2026</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2004_WC_SC/masters/Kory%20S-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={slaking} alt="sprite" />
+              <img className="sprite second-sprite" src={gorebyss} alt="sprite" />
+            </div>
+            <p>Kory S (Masters) - 7<sup>th</sup> Place <span>2004 West Coast Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_WC_SC/seniors/Stuart%20B-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gardevoir} alt="sprite" />
+            </div>
+            <p>Stuart B (Seniors) - 1<sup>st</sup> Place <span>2004 West Coast Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_WC_SC/seniors/Mike%20C-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blaziken} alt="sprite" />
+              <img className="sprite second-sprite" src={rayquaza} alt="sprite" />
+            </div>
+            <p>Mike C (Seniors) - 2<sup>nd</sup> Place <span>2004 West Coast Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_WC_SC/seniors/Jon%20Brooks-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={shiftry} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetales} alt="sprite" />
+            </div>
+            <p>Jon Brooks (Seniors) - 3<sup>rd</sup> Place <span>2004 West Coast Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_WC_SC/seniors/Andrew%20Knaack-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blaziken} alt="sprite" />
+              <img className="sprite second-sprite" src={rayquaza} alt="sprite" />
+            </div>
+            <p>Andrew Knaack (Seniors) - 4<sup>th</sup> Place <span>2004 West Coast Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_S_SC/seniors/juniors/Rachael%20B-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={lanturn} alt="sprite" />
+            </div>
+            <p>Rachael B (Juniors) - 1<sup>st</sup> Place <span>2004 West Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_S_SC/seniors/juniors/Reed%20Weichler-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={swampert} alt="sprite" />
+            </div>
+            <p>Reed Weichler (Juniors) - 2<sup>nd</sup> Place <span>2004 West Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_S_SC/seniors/juniors/Josh%20G-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={muk} alt="sprite" />
+              <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
+            </div>
+            <p>Josh G (Juniors) - 3<sup>rd</sup> Place <span>2004 West Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2004_S_SC/seniors/juniors/Patrick%20W-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={machamp} alt="sprite" />
+              <img className="sprite second-sprite" src={aggron} alt="sprite" />
+            </div>
+            <p>Patrick W (Juniors) - 4<sup>th</sup> Place <span>2004 West Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <br></br>
 
           <a href='/tournaments/2004_S_SC/seniors/Jordan%20D-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -106,10 +188,14 @@ const ArchiveUpdates = () => {
             <p>Jordan D (Seniors) - 3<sup>rd</sup> Place <span>2004 South Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <p className='shout-out'>Shout-out to Zach Lalonde for finding this decklist on <a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>pokegym</a>!</p>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these decklists on pokegym!</p>
+          <ul className='shout-out' style={{marginTop: '-15px', marginLeft: '25px', display: 'flex', flexDirection: 'row'}}>
+            <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>source 1</a></li>
+            <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/east-coast-stadium-challenge-report.8765/' target='_blank'>source 2</a></li>
+            <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/10-under-top-4-decks.8761/#post-106724' target='_blank'>source 3</a></li>
+          </ul>
 
-
-          <hr className='title-hr' /> */}
+          <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>October 2025</h3>
           <br />
@@ -160,6 +246,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Stephen Silvestro (Masters) - 88<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
           <a href='/tournaments/2009_WORLDS/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={flygon} alt="sprite" />
@@ -167,6 +254,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Chris Fulop (Masters) - 19<sup>th</sup> Place <span>2009 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
           <a href='/tournaments/2007_WORLDS/masters/Jason%20Windham-AU' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={flygon} alt="sprite" />
@@ -188,28 +276,30 @@ const ArchiveUpdates = () => {
             </div>
             <p>Trevore Read (Masters) - 27<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
 
           <a href='/tournaments/2013_WORLDS/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={terrakion} alt="sprite" />
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
-            <p>Jeremy Gibson (Seniors) - 10<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>no list</span></p>
+            <p>Jeremy Gibson (Seniors) - 10<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
           <a href='/tournaments/2013_WORLDS/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={kyurem} alt="sprite" />
               <img className="sprite second-sprite" src={deoxys} alt="sprite" />
             </div>
-            <p>Alexander Weber (Seniors) - 11<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>no list</span></p>
+            <p>Alexander Weber (Seniors) - 11<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
           <a href='/tournaments/2013_WORLDS/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={darkrai} alt="sprite" />
               <img className="sprite second-sprite" src={sableye} alt="sprite" />
             </div>
-            <p>Jacob Howard (Seniors) - 13<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>no list</span></p>
+            <p>Jacob Howard (Seniors) - 13<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
+          <br></br>
 
           <a href='/tournaments/2012_WORLDS/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -226,6 +316,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Austin Baggs (Masters) - 24<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
 
           <a href='/tournaments/2011_WORLDS/masters/Lorenzo%20Voltolina-IT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -242,6 +333,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Marco Escher (Masters) - 27<sup>th</sup> Place <span>2011 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
 
           <a href='/tournaments/2010_NATS_US/masters/John%20Kettler-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -250,6 +342,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>John Kettler (Masters) - 66<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <br></br>
 
           <a href='/tournaments/2007_WORLDS/masters/Daniel%20Cohen-AT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -280,7 +373,7 @@ const ArchiveUpdates = () => {
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={unownexclamation} alt="sprite" />
             </div>
-            <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Placements <span className='small-text-archive archive-update-nolist'>no lists</span></p>
+            <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Placements <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <br></br>

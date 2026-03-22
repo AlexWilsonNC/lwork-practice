@@ -81,7 +81,7 @@
     padding: 1px 5px 0 5px;
     margin-left: 5px;
     border-radius: 3.5px;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
 }
 .archive-update-nolist {
     border: 1px solid rgb(175, 33, 33);
@@ -89,7 +89,7 @@
     padding: 1px 5px 0 5px;
     margin-left: 5px;
     border-radius: 3.5px;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
 }
 .table-of-contents {
     width: 80%;
