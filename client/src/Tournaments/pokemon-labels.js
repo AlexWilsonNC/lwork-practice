@@ -17,7 +17,7 @@ const customLabelsConfig = {
         'blank-kangaskhan-mega': 'Mega Kangaskhan',
         'gholdengo-lunatone': 'Gholdengo Lunatone',
         'lucario-mega-hariyama': 'Lucario Hariyama',
-        'alakazam-dudunsparce': 'Alakazam',
+        'blank-alakazam': 'Alakazam',
         'manectric-mega-eelektrik': 'Mega Manectric Eels',
         'blank-gardevoir': 'Gardevoir ex',
         'gardevoir-jellicent': 'Gardevoir ex',

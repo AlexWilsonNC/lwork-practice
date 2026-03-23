@@ -3064,3 +3064,11 @@ body.deckbuilder-page .deck-builder {
     width: 50% !important;
   }
 }
+
+/* mobile advanced search modal */
+@media screen and (max-width: 1250px) {
+  .era-buttons {
+    flex-wrap: wrap;
+    overflow:visible;
+  }
+}

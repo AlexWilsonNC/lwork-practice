@@ -272,6 +272,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('vulpix-alola');
     }
+    else if (hasPokemon('Alakazam') && hasPokemon('Dudunsparce')) {
+        firstSprite  = getPokemonSpriteURL('blank');
+        secondSprite  = getPokemonSpriteURL('alakazam');
+    }  
     else if (hasPokemon('Tinkaton ex') && hasPokemon('Dudunsparce')) {
         firstSprite  = getPokemonSpriteURL('tinkaton');
         secondSprite  = getPokemonSpriteURL('dudunsparce');
@@ -305,6 +309,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }    
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && (!hasPokemon('Noctowl'))) {
+        firstSprite  = getPokemonSpriteURL('ogerpon');
+        secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
+    }
+    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Pikachu ex') && hasPokemon('Koraidon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }
@@ -483,11 +491,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }       
     else if (getPokemonCount('Mega Lucario ex') && hasPokemon('Solrock')) {
         secondSprite  = getPokemonSpriteURL('lucario-mega');
-    }            
-    else if (hasPokemon('Alakazam') && hasPokemon('Dudunsparce')) {
-        firstSprite  = getPokemonSpriteURL('alakazam');
-        secondSprite  = getPokemonSpriteURL('dudunsparce');
-    }               
+    }                         
     else if (hasPokemon('Mega Manectric ex') && hasPokemon('Eelektrik')) {
         firstSprite  = getPokemonSpriteURL('manectric-mega');
         secondSprite  = getPokemonSpriteURL('eelektrik');

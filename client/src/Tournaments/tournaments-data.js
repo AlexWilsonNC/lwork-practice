@@ -1535,8 +1535,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Mar 20, 2026",
         "flag": usa,
-        "location": "Houston, Texas",
-        "results": false
+        "location": "Houston, Texas"
     },
     {
         "id": "2026_ORLANDO",
