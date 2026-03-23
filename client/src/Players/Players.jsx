@@ -72,7 +72,7 @@ const getCountryName = (code) => {
 const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
-    
+
     // Define the special case with capital "De"
     const specialCases = {
         'de haes damien': 'De Haes Damien',
@@ -120,43 +120,53 @@ const Players = () => {
     const [regionFilter, setRegionFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [loading, setLoading] = useState(true); // New state for loading
+    const [loading, setLoading] = useState(false); // New state for loading
     const [page, setPage] = useState(1);
-const [limit] = useState(200);
-const [totalPages, setTotalPages] = useState(1);
+    const [limit] = useState(200);
+    const [totalPages, setTotalPages] = useState(1);
 
-useEffect(() => {
-  const fetchPlayers = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: String(limit),
-        sortType,
-        sortOrder,
-        q: searchTerm,
-        country: countryFilter || ''
-      });
+    useEffect(() => {
+        const trimmedSearch = searchTerm.trim();
 
-      const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players?${params.toString()}`);
-      const json = await response.json();
+        // Don't auto-load all players on first page load
+        // Only fetch when user searches or picks a country
+        if (!trimmedSearch && !countryFilter) {
+            setPlayers([]);
+            setTotalPages(1);
+            setLoading(false);
+            return;
+        }
 
-      const filteredData = (json.items || []).filter(player => player.name !== '--');
-      setPlayers(filteredData);
-      setTotalPages(json.totalPages || 1);
-    } catch (error) {
-      console.error('Error fetching players:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const fetchPlayers = async () => {
+            setLoading(true);
+            try {
+                const params = new URLSearchParams({
+                    page: String(page),
+                    limit: String(limit),
+                    sortType,
+                    sortOrder,
+                    q: trimmedSearch,
+                    country: countryFilter || ''
+                });
 
-  fetchPlayers();
-}, [page, limit, sortType, sortOrder, searchTerm, countryFilter]);
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players?${params.toString()}`);
+                const json = await response.json();
 
-useEffect(() => {
-  setPage(1);
-}, [sortType, sortOrder, countryFilter, searchTerm]);
+                const filteredData = (json.items || []).filter(player => player.name !== '--');
+                setPlayers(filteredData);
+                setTotalPages(json.totalPages || 1);
+            } catch (error) {
+                console.error('Error fetching players:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPlayers();
+    }, [page, limit, sortType, sortOrder, searchTerm, countryFilter]);
+    useEffect(() => {
+        setPage(1);
+    }, [sortType, sortOrder, countryFilter, searchTerm]);
 
     const toggleSortOrder = () => {
         setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
@@ -181,11 +191,18 @@ useEffect(() => {
         return isRegionMatch && isCountryMatch && isSearchMatch;
     });
 
-    const sortedPlayers = filteredPlayers.sort((a, b) => {
+    const sortedPlayers = [...filteredPlayers].sort((a, b) => {
         if (sortType === 'name') {
-            return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+            return sortOrder === 'asc'
+                ? (a.name || '').localeCompare(b.name || '')
+                : (b.name || '').localeCompare(a.name || '');
         } else {
-            return sortOrder === 'asc' ? a.results.length - b.results.length : b.results.length - a.results.length;
+            const aCount = a.resultsCount ?? a.results?.length ?? 0;
+            const bCount = b.resultsCount ?? b.results?.length ?? 0;
+
+            return sortOrder === 'asc'
+                ? aCount - bCount
+                : bCount - aCount;
         }
     });
 
@@ -244,12 +261,12 @@ useEffect(() => {
                     </div>
                     <div className='search-input'>
                         <span className="material-symbols-outlined">search</span>
-                        <input 
-                            type="text" 
-                            className='searcheventsfield' 
-                            placeholder="Search players..." 
-                            value={searchTerm} 
-                            onChange={e => setSearchTerm(e.target.value)} 
+                        <input
+                            type="text"
+                            className='searcheventsfield'
+                            placeholder="Search players..."
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
@@ -288,6 +305,8 @@ useEffect(() => {
                 </div>
                 {loading ? (
                     <div className="spinner"></div>
+                ) : !searchTerm.trim() && !countryFilter ? (
+                    <p className="no-results-message center" style={{ margin: '25px 0' }}>Search for a player or choose a country.</p>
                 ) : (
                     <table className='results-table'>
                         <thead>
@@ -305,10 +324,10 @@ useEffect(() => {
                                         <Link to={`/player/${player.id}`}>
                                             {/* <img className='flag-size-players' src={flags[player.flag]} alt="flag" /> */}
                                             <div className="flag-container">
-                                                <img 
-                                                    className='flag-size-player' 
-                                                    src={flags[player.flag]} 
-                                                    alt="flag" 
+                                                <img
+                                                    className='flag-size-player'
+                                                    src={flags[player.flag]}
+                                                    alt="flag"
                                                 />
                                                 <div className="flag-tooltip">
                                                     {getCountryName(player.flag)}
