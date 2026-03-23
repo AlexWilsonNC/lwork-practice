@@ -11,7 +11,7 @@ import sm1 from '../assets/sets/sun-moon/sm1-sm.png'
 import ssh1 from '../assets/sets/sword-shield/ssh1.webp'
 import sv1 from '../assets/sets/scarlet-violet/sv1.png'
 import me1 from '../assets/sets/mega-evolution/me1.png'
-import wotc from '../assets/sets/wizards-of-the-coast/wotc.png'
+import wotc from '../assets/sets/wizards-of-the-coast/wotc-offcenter.png'
 import xy1 from '../assets/sets/xy/xy1-xy.png'
 import hgss1 from '../assets/sets/heartgold-soulsilver/hs1-hgss.png'
 
@@ -1760,13 +1760,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                                         <button
                                             type="button"
-                                            className="type-btn non-bold-typebtn"
+                                            className="clear-x-btn"
                                             onClick={() => {
                                                 setSetsInput('');
                                                 applySetsFromInput('');
                                             }}
-                                        >
-                                            Clear
+                                        ><span class="material-symbols-outlined">
+                                                cancel
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -1849,14 +1850,15 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                                         <button
                                             type="button"
-                                            className="type-btn non-bold-typebtn"
+                                            className="clear-x-btn"
                                             onClick={() => {
                                                 setSelectedQuickFormat('');
                                                 setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))
                                             }
                                             }
-                                        >
-                                            Clear
+                                        ><span class="material-symbols-outlined">
+                                                cancel
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -2153,16 +2155,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             ))}
                                         </select>
 
-                                        {/* {Number.isFinite(Number(draftFilters.hp?.value)) && (
+                                        {Number.isFinite(Number(draftFilters.hp?.value)) && (
                                             <button
                                                 type="button"
-                                                className="type-btn non-bold-typebtn clear-button-btn"
+                                                className="clear-x-btn"
                                                 style={{ '--typeIcon': 'none' }}
                                                 onClick={() => setDraftFilters(f => ({ ...f, hp: { op: f.hp?.op || 'eq', value: null } }))}
                                             >
-                                                Reset HP
+                                                <span class="material-symbols-outlined">
+                                                    cancel
+                                                </span>
                                             </button>
-                                        )} */}
+                                        )}
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -2183,10 +2187,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             <option value="">Any</option>
                                             {RETREAT_VALUES.map(v => <option key={v} value={v}>{v}</option>)}
                                         </select>
-                                        {/* <button
+                                        <button
                                             onClick={() => setDraftFilters(f => ({ ...f, retreat: { op: 'eq', value: '' } }))}
-                                            className='type-btn non-bold-typebtn'
-                                        >Reset</button> */}
+                                            className='clear-x-btn'
+                                        ><span class="material-symbols-outlined">
+                                                cancel
+                                            </span></button>
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -2304,9 +2310,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             </div>
                                             <button
                                                 onClick={() => setDraftFilters(f => ({ ...f, attackCost: { op: 'eq', value: '', energies: {} } }))}
-                                                className='type-btn non-bold-typebtn'
-                                            >
-                                                Clear
+                                                className='clear-x-btn'
+                                        ><span class="material-symbols-outlined">
+                                                cancel
+                                            </span>
                                             </button>
                                         </div>
                                     </div>

@@ -393,6 +393,21 @@ body.deckbuilder-page .deck-builder {
   outline: none;
 }
 
+.clear-x-btn {
+  background-color: transparent;
+  border: none;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-left: 3px;
+}
+.clear-x-btn:hover {
+  color: red;
+  cursor: pointer;
+}
+
 .clear-input-btn {
   transform: translateX(-150%);
   background: transparent;
