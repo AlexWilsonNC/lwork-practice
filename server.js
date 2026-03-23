@@ -1008,6 +1008,8 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
           name: 1,
           supertype: 1,
           subtypes: 1,
+          evolvesFrom: 1,
+          evolvesTo: 1,
           setAbbrev: 1,
           number: 1,
           images: 1,
