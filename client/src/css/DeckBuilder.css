@@ -2237,6 +2237,17 @@ body.deckbuilder-page .deck-builder {
   white-space: nowrap; border: 0;
 }
 
+.search-all-side-spinner {
+  display: inline-block;
+  font-size: 22px;
+  animation: searchAllSpin 0.8s linear infinite;
+}
+
+@keyframes searchAllSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media screen and (min-width: 1160px) and (max-width: 1350px) {
   .search-mag {
     margin-left: -5px;

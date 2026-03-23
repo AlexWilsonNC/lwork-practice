@@ -637,7 +637,7 @@ export default function DeckBuilder() {
       if (zoomCard.supertype !== 'Pokémon' && !std) {
         try {
           const safeName = encodeURIComponent(zoomCard.name).replace(/\./g, '%2E');
-          const res = await fetch(`/api/cards/searchbyname/partial/${safeName}`);
+          const res = await fetch(`/api/cards/searchbyname/${safeName}`);
           if (res.ok) {
             otherVersions = await res.json();
             if (!abort) {
@@ -1052,7 +1052,7 @@ export default function DeckBuilder() {
                         Image View
                       </div>
                       <div
-                        className="menu-item"
+                        className="menu-item not-ready"
                         onClick={() => {
                           setViewMode('list')
                           setShowLimitMenu(false)

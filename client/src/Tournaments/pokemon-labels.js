@@ -902,6 +902,7 @@ const customLabelsConfig = {
         'slaking-salamence': 'Slaking',
     },
     '2004': {
+        'slaking-gorebyss': "Slaking Gorebyss",
         'blank-groudon': "Magma's Groudon",
         'blank-blaziken': 'Blaziken',
         'blank-shiftry': 'Shiftry',

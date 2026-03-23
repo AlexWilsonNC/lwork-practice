@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import setOrder from '../Tournaments/setorder'
 import { availableSets as cardsPageSets } from '../Cards/CardsPage';
 import './setsInAdvancedDropdown.css'
+import { isGLCLegal, isExpandedLegal, isStandardLegal } from '../Tools/CardLegality';
 
 import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
@@ -247,6 +248,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const [showMoreRarity, setShowMoreRarity] = useState(false);
     const setsInputFocusedRef = useRef(false);
     const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
+    const [selectedLegalityPreset, setSelectedLegalityPreset] = useState('');
+    const [isSearchingAll, setIsSearchingAll] = useState(false);
 
     const ERA_OPTIONS = [
         { key: 'ME1', name: 'Mega Evolution', src: me1 },
@@ -335,6 +338,21 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
         }
 
         return false;
+    }
+
+    function matchesSelectedLegalityPreset(card, preset) {
+        if (!preset) return true;
+
+        switch (preset) {
+            case 'standard':
+                return isStandardLegal(card);
+            case 'expanded':
+                return isExpandedLegal(card);
+            case 'glc':
+                return isGLCLegal(card);
+            default:
+                return true;
+        }
     }
 
     function anyFilterActive(f) {
@@ -1097,6 +1115,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
             if (!matchesSelectedAttackCost(card, filters.attackCost)) continue;
             if (!matchesSelectedRarity(card, filters.rarity)) continue;
             if (!matchesArtist(card, filters.artist)) continue;
+            if (!matchesSelectedLegalityPreset(card, selectedLegalityPreset)) continue;
 
             const nm = normalizeCardNameForBan(card.name || '');
             const k = normalizeKeyString(buildCardKey(card));
@@ -1184,6 +1203,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
     const resetDraftAdvancedFilters = React.useCallback(() => {
         setDraftFilters(emptyFilters);
         setSelectedQuickFormat('');
+        setSelectedLegalityPreset('');
     }, [emptyFilters]);
 
     const toggleSet = key =>
@@ -1564,7 +1584,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const { items: displayResults } = React.useMemo(() => {
         return takeFirstMatching(results);
-    }, [results, filters]);
+    }, [results, filters, selectedLegalityPreset]);
 
     const SET_NAME_TO_KEY = React.useMemo(() => {
         const m = {};
@@ -1774,50 +1794,90 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Format:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <select
-                                            className="type-btn non-bold-typebtn hp-btn-dropdown"
-                                            value={selectedQuickFormat}
-                                            onChange={(e) => {
-                                                const v = e.target.value;
-                                                if (!v) return;
-                                                const [from, to] = v.split('|');
-                                                setDraftFilters(f => ({ ...f, formatRange: { from, to } }));
-                                                setSelectedQuickFormat(v);
-                                            }}
-                                            style={{ minWidth: 290 }}
-                                        >
-                                            <option value="" disabled style={{ opacity: 0.55 }}>
-                                                Select a quick format…
-                                            </option>
+                                        <div className='stage-type-buttons' style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+                                            <button
+                                                type="button"
+                                                className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'standard' ? 'active' : ''}`}
+                                                onClick={() => setSelectedLegalityPreset(p => p === 'standard' ? '' : 'standard')}
+                                            >
+                                                Standard
+                                            </button>
 
-                                            <optgroup label="World Championships">
-                                                {WORLDS_FORMATS.map(({ label, from, to }) => (
-                                                    <option key={label} value={`${from}|${to}`}>
-                                                        {label} ({from}–{to})
-                                                    </option>
-                                                ))}
-                                            </optgroup>
+                                            <button
+                                                type="button"
+                                                className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'expanded' ? 'active' : ''}`}
+                                                onClick={() => setSelectedLegalityPreset(p => p === 'expanded' ? '' : 'expanded')}
+                                            >
+                                                Expanded
+                                            </button>
 
-                                            <optgroup label="Other Popular Formats">
-                                                {POPULAR_FORMATS.map(({ label, from, to }) => (
-                                                    <option key={label} value={`${from}|${to}`}>
-                                                        {label} ({from}–{to})
-                                                    </option>
-                                                ))}
-                                            </optgroup>
-                                        </select>
+                                            <button
+                                                type="button"
+                                                className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'glc' ? 'active' : ''}`}
+                                                onClick={() => setSelectedLegalityPreset(p => p === 'glc' ? '' : 'glc')}
+                                            >
+                                                GLC
+                                            </button>
 
-                                        {/* <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                            <input
-                                                type="checkbox"
-                                                checked={!!draftFilters.includePromos}
-                                                onChange={(e) => setDraftFilters(f => ({ ...f, includePromos: e.target.checked }))}
-                                            />
-                                            <span>Include promos? <span style={{ opacity: 0.7 }}>
-                                                Some legalities may be inaccurate; preselected formats are more accurate.
-                                            </span></span>
-                                        </label> */}
+                                            {/* {selectedLegalityPreset && (
+                                                <button
+                                                    type="button"
+                                                    className="clear-x-btn"
+                                                    style={{ '--typeIcon': 'none' }}
+                                                    onClick={() => setSelectedLegalityPreset('')}
+                                                >
+                                                    <span class="material-symbols-outlined">
+                                                cancel
+                                            </span>
+                                                </button>
+                                            )} */}
+                                        </div>
                                     </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3></h3>
+                                    <select
+                                        className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                        value={selectedQuickFormat}
+                                        onChange={(e) => {
+                                            const v = e.target.value;
+                                            if (!v) return;
+                                            const [from, to] = v.split('|');
+                                            setDraftFilters(f => ({ ...f, formatRange: { from, to } }));
+                                            setSelectedQuickFormat(v);
+                                        }}
+                                        style={{ minWidth: 290 }}
+                                    >
+                                        <option value="" disabled style={{ opacity: 0.55 }}>
+                                            Select a quick format…
+                                        </option>
+
+                                        <optgroup label="World Championships">
+                                            {WORLDS_FORMATS.map(({ label, from, to }) => (
+                                                <option key={label} value={`${from}|${to}`}>
+                                                    {label} ({from}–{to})
+                                                </option>
+                                            ))}
+                                        </optgroup>
+
+                                        <optgroup label="Other Popular Formats">
+                                            {POPULAR_FORMATS.map(({ label, from, to }) => (
+                                                <option key={label} value={`${from}|${to}`}>
+                                                    {label} ({from}–{to})
+                                                </option>
+                                            ))}
+                                        </optgroup>
+                                    </select>
+                                    {/* <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={!!draftFilters.includePromos}
+                                            onChange={(e) => setDraftFilters(f => ({ ...f, includePromos: e.target.checked }))}
+                                        />
+                                        <span>Include promos? <span style={{ opacity: 0.7 }}>
+                                            Some legalities may be inaccurate; preselected formats are more accurate.
+                                        </span></span>
+                                    </label> */}
                                 </div>
                                 <div className="filter-group">
                                     <h3></h3>
@@ -1853,6 +1913,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             className="clear-x-btn"
                                             onClick={() => {
                                                 setSelectedQuickFormat('');
+                                                setSelectedLegalityPreset('');
                                                 setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))
                                             }
                                             }
@@ -2311,9 +2372,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             <button
                                                 onClick={() => setDraftFilters(f => ({ ...f, attackCost: { op: 'eq', value: '', energies: {} } }))}
                                                 className='clear-x-btn'
-                                        ><span class="material-symbols-outlined">
-                                                cancel
-                                            </span>
+                                            ><span class="material-symbols-outlined">
+                                                    cancel
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
@@ -2385,6 +2446,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 !Number.isFinite(Number((draftFilters.hp || {}).value)) &&
                                                 !(draftFilters.artist && String(draftFilters.artist).trim() !== '') &&
                                                 !Object.values(draftFilters.rarity || {}).some(Boolean);
+                                            !selectedLegalityPreset;
+
+                                            const trimmedQuery = String(query || '').trim();
+
+                                            setShowAdvanced(false);
+
+                                            if (trimmedQuery) {
+                                                // force the query effect to run again against the current input
+                                                latestReqId.current += 1;
+                                                setFilters({ ...draftFilters });
+                                                return;
+                                            }
 
                                             setFilters(draftFilters);
                                             setShowAdvanced(false);
@@ -2400,21 +2473,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     </button>
                                 </div>
                                 <div className="buttons-row-modal flex-end">
+                                    {isSearchingAll && (
+                                        <span className="material-symbols-outlined search-all-side-spinner">
+                                            progress_activity
+                                        </span>
+                                    )}
+
                                     <button
                                         className='save-button width-full'
-                                        style={{ backgroundImage: 'linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb)' }}
-                                        disabled={!anyFilterActive(draftFilters)}
+                                        style={{ background: 'linear-gradient(to bottom, rgb(6, 174, 174), #1290eb, #1290eb)' }}
+                                        disabled={isSearchingAll || !(anyFilterActive(draftFilters) || !!selectedLegalityPreset)}
                                         onClick={async () => {
+                                            setIsSearchingAll(true);
                                             try {
-                                                // Stop the normal query effect from firing off the old typed query
                                                 skipNextQueryEffectRef.current = true;
                                                 latestReqId.current += 1;
 
-                                                // Clear the current typed query immediately for this workflow
                                                 setSuppressDefault(true);
                                                 setQuery('');
-
-                                                // Apply the filters for future typed searches too
                                                 setFilters(draftFilters);
 
                                                 const cleaned = buildFiltersForRequest(draftFilters);
@@ -2457,10 +2533,16 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                     }
                                                 }
 
+                                                if (selectedLegalityPreset) {
+                                                    arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
+                                                }
+
                                                 setResults(arr);
                                                 setShowAdvanced(false);
                                             } catch (e) {
                                                 console.error('Search all failed:', e);
+                                            } finally {
+                                                setIsSearchingAll(false);
                                             }
                                         }}
                                         title="Fetch and show all cards that match your filters"
