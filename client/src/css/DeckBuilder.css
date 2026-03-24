@@ -1252,7 +1252,6 @@ body.deckbuilder-page .deck-builder {
 }
 
 .advanced-search-modal {
-  background: rgb(15, 24, 33);
   padding: 1.5rem;
   max-width: 95%;
   width: 95%;
@@ -1262,6 +1261,8 @@ body.deckbuilder-page .deck-builder {
   border-radius: 15px;
   color: rgb(229, 229, 229);
   border: 3px solid rgba(128, 128, 128, 0.5);
+  background: rgb(15, 24, 33);
+  /* backdrop-filter: blur(6px); */
 }
 
 .advanced-search-modal h2 {
@@ -3108,6 +3109,75 @@ body.deckbuilder-page .deck-builder {
   /* .hide-on-medium-advanced-filter {
     display: none;
   } */
+  .advanced-search-modal {
+    /* position: relative; */
+    overflow-y: auto;
+    box-sizing: border-box;
+    height: 90%;
+    padding-bottom: 50px;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+    .advanced-search-modal::-webkit-scrollbar {
+    width: 10px;
+  }
+  .advanced-search-modal::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 999px;
+    margin: 10px 0;
+  }
+  .advanced-search-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .advanced-search-modal::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.34);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .advanced-search-modal::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.42);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .advanced-search-modal::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  .bottom-advanced-filter-apply-btns {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    min-height: 100px;
+    box-sizing: border-box;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 12px 14px;
+    background: rgba(15, 24, 33, 0.75);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .bottom-advanced-filter-apply-btns .flex-start {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bottom-advanced-filter-apply-btns .flex-end {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0 !important;
+  }
 }
 @media screen and (max-width: 760px) {
   .sets-filter-div {

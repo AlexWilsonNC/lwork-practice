@@ -2401,44 +2401,30 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     />
                                 </div>
                                 <div className="filter-group">
-                                    <h3>Rarity:</h3>
-                                    <div className="stage-type-buttons">
-                                        {(showMoreRarity ? RARITY_ALL : RARITY_PRIMARY).map(r => {
-                                            const on = !!(draftFilters.rarity && draftFilters.rarity[r]);
-                                            return (
-                                                <button
-                                                    key={r}
-                                                    type="button"
-                                                    className={`type-btn non-bold-typebtn ${on ? 'active' : ''}`}
-                                                    aria-pressed={!!on}
-                                                    onClick={() => {
-                                                        const on = draftFilters.rarity?.[r];
-                                                        setDraftFilters(f => ({
-                                                            ...f,
-                                                            rarity: { ...(f.rarity || {}), [r]: !on }
-                                                        }));
-                                                    }}
-                                                >
-                                                    {r}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="type-btn mechanics-toggle non-bold-typebtn"
-                                        style={{ '--typeIcon': 'none' }}
-                                        onClick={() => setShowMoreRarity(v => !v)}
-                                        aria-expanded={showMoreRarity}
-                                    >
-                                        <span className="toggle-label">
-                                            {showMoreRarity ? 'Show less' : 'Show more'}
-                                        </span>
-                                        <span className="material-symbols-outlined" aria-hidden="true">
-                                            {showMoreRarity ? 'expand_less' : 'expand_more'}
-                                        </span>
-                                    </button>
-                                </div>
+    <h3>Rarity:</h3>
+    <div className="stage-type-buttons">
+        {RARITY_ALL.map(r => {
+            const on = !!(draftFilters.rarity && draftFilters.rarity[r]);
+            return (
+                <button
+                    key={r}
+                    type="button"
+                    className={`type-btn non-bold-typebtn ${on ? 'active' : ''}`}
+                    aria-pressed={!!on}
+                    onClick={() => {
+                        const on = draftFilters.rarity?.[r];
+                        setDraftFilters(f => ({
+                            ...f,
+                            rarity: { ...(f.rarity || {}), [r]: !on }
+                        }));
+                    }}
+                >
+                    {r}
+                </button>
+            );
+        })}
+    </div>
+</div>
                                 <div className="buttons-row-modal bottom-advanced-filter-apply-btns">
                                     <div className="buttons-row-modal flex-start" style={{marginTop:'0'}}>
                                         {isSearchingAll && (
