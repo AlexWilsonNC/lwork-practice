@@ -45,14 +45,14 @@ export const bannedInExpanded = [
 ];
 
 export const bannedInGLC = [
-  { name: 'Chip-Chip Ice Axe', set: 'UNB', number: '165' },
-  { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
-  { name: 'Hiker', set: 'CES', number: '133' },
-  { name: 'Hiker', set: 'HIF', number: 'SV85' },
-  { name: 'Kyogre', set: 'SHF', number: '21' },
   { name: "Lysandre's Trump Card", set: 'PHF', number: '99' },
   { name: "Lysandre's Trump Card", set: 'PHF', number: '118' },
   { name: 'Oranguru', set: 'UPR', number: '114' },
+  { name: 'Forest of Giant Plants', set: 'AOR', number: '74' },
+  { name: 'Chip-Chip Ice Axe', set: 'UNB', number: '165' },
+  { name: 'Hiker', set: 'CES', number: '133' },
+  { name: 'Hiker', set: 'HIF', number: 'SV85' },
+  { name: 'Kyogre', set: 'SHF', number: '21' },
   { name: 'Pokémon Research Lab', set: 'UNM', number: '205' },
   { name: 'Raikou', set: 'VIV', number: '50' },
   { name: 'Marshadow', set: 'SLG', number: '45' },

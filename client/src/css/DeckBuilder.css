@@ -1600,6 +1600,7 @@ body.deckbuilder-page .deck-builder {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 5px;
 }
 .banned-cards-note span {
   font-size: 16px;
@@ -1689,7 +1690,12 @@ body.deckbuilder-page .deck-builder {
   width: auto;
   margin-left: 0px;
 }
-
+.sets-filter-div {
+  display: flex;
+  gap: 8;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .set-logo3 {
   height: 20px;
   width: auto;
@@ -2112,7 +2118,9 @@ body.deckbuilder-page .deck-builder {
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
-
+.sets-filter-div label {
+  margin: 0 5px;
+}
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -3064,11 +3072,64 @@ body.deckbuilder-page .deck-builder {
     width: 50% !important;
   }
 }
-
+.display-on-filter-mobile {
+  display: none;
+}
 /* mobile advanced search modal */
 @media screen and (max-width: 1250px) {
   .era-buttons {
     flex-wrap: wrap;
-    overflow:visible;
+    height:auto;
+    margin-bottom: -5px;
+  }
+  .era-btn {
+    padding: 0 7px;
+    margin: 0 5px 10px 5px;
+    height: 35px;
+    overflow: hidden;
+  }
+  .filter-group {
+    margin-bottom: 25px;
+    flex-direction: column;
+  }
+  .filter-group > h3 {
+    flex: 0 0 35px;
+    margin: 0 5px;
+  }
+  .display-on-filter-mobile {
+    display: flex;
+  }
+  .banned-cards-section {
+    margin-top: -30px;
+  }
+  .card-type-btns-oly {
+    margin-bottom: 0.5rem;
+  }
+  /* .hide-on-medium-advanced-filter {
+    display: none;
+  } */
+}
+@media screen and (max-width: 760px) {
+  .sets-filter-div {
+    display: flex;
+    gap: 8;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .sets-filter-div label {
+    margin: 10px 0 10px 7.5px;
+  }
+  .sets-filter-div input {
+    width: 65%;
+  }
+  .sets-margin-small-mobile {
+    margin-bottom: 10px;
+  }
+  .hide-on-filter-mobile {
+    display: none;
+  }
+  .popular-specific-row {
+    width: 49%;
   }
 }

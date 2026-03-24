@@ -1025,6 +1025,7 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
           resistances: 1,
           retreatCost: 1,
           convertedRetreatCost: 1,
+          regulationMark: 1,
           set: 1,
           rarity: 1,
           tcgplayer: 1,
@@ -1154,6 +1155,7 @@ app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
           convertedRetreatCost: 1,
           set: 1,
           rarity: 1,
+          regulationMark: 1,
           tcgplayer: 1
         }
       }
@@ -1763,7 +1765,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
       id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
       attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
       types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1, convertedRetreatCost: 1,
-      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1, artist: 1,
+      set: 1, rarity: 1, tcgplayer: 1, ancientTrait: 1, ancienttrait: 1, artist: 1, regulationMark: 1,
       heldItem: 1, helditem: 1, 'held item': 1, 'held-item': 1
     };
 

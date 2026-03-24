@@ -1730,9 +1730,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 </div>
                                 <div className="filter-group">
                                     <h3>Sets:</h3>
-                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <div className='sets-filter-div'>
                                         <select
-                                            className='type-btn non-bold-typebtn hp-btn-dropdown'
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown sets-margin-small-mobile'
                                             aria-label="Add a set"
                                             onChange={(e) => {
                                                 const key = e.target.value;
@@ -1780,7 +1780,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                                         <button
                                             type="button"
-                                            className="clear-x-btn"
+                                            className="clear-x-btn hide-on-filter-mobile hide-on-filter-mobile"
                                             onClick={() => {
                                                 setSetsInput('');
                                                 applySetsFromInput('');
@@ -1822,7 +1822,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             {/* {selectedLegalityPreset && (
                                                 <button
                                                     type="button"
-                                                    className="clear-x-btn"
+                                                    className="clear-x-btn hide-on-filter-mobile"
                                                     style={{ '--typeIcon': 'none' }}
                                                     onClick={() => setSelectedLegalityPreset('')}
                                                 >
@@ -1835,9 +1835,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     </div>
                                 </div>
                                 <div className="filter-group">
-                                    <h3></h3>
+                                    <h3><span className='display-on-filter-mobile'>Popular Formats</span></h3>
                                     <select
-                                        className="type-btn non-bold-typebtn hp-btn-dropdown"
+                                        className="type-btn non-bold-typebtn hp-btn-dropdown popular-specific-row"
                                         value={selectedQuickFormat}
                                         onChange={(e) => {
                                             const v = e.target.value;
@@ -1849,7 +1849,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         style={{ minWidth: 290 }}
                                     >
                                         <option value="" disabled style={{ opacity: 0.55 }}>
-                                            Select a quick format…
+                                            Select a popular format…
                                         </option>
 
                                         <optgroup label="World Championships">
@@ -1880,8 +1880,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     </label> */}
                                 </div>
                                 <div className="filter-group">
-                                    <h3></h3>
-                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <h3><span className='display-on-filter-mobile'>Custom Format</span></h3>
+                                    <div className='sets-filter-div'>
                                         <select
                                             className={`type-btn non-bold-typebtn hp-btn-dropdown ${draftFilters.formatRange?.from ? '' : 'is-placeholder'}`}
                                             value={draftFilters.formatRange?.from || ''}
@@ -1910,7 +1910,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
                                         <button
                                             type="button"
-                                            className="clear-x-btn"
+                                            className="clear-x-btn hide-on-filter-mobile hide-on-filter-mobile"
                                             onClick={() => {
                                                 setSelectedQuickFormat('');
                                                 setSelectedLegalityPreset('');
@@ -1923,59 +1923,64 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         </button>
                                     </div>
                                 </div>
-                                <div className="filter-group">
-                                    <h3></h3>
-                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        {(() => {
-                                            const ov = getActiveOverride(selectedQuickFormat);
-                                            if (!ov) return null;
+                                {(() => {
+                                    const ov = getActiveOverride(selectedQuickFormat);
+                                    if (!ov) return null;
 
-                                            const { pairs } = getOverrideBannedSets(ov);
-                                            const legacyNames = Array.from(parseListToSet(ov.bannedNames || ''));
+                                    const { pairs } = getOverrideBannedSets(ov);
+                                    const legacyNames = Array.from(parseListToSet(ov.bannedNames || ''));
 
-                                            if (!pairs.length && !legacyNames.length) return null;
+                                    if (!pairs.length && !legacyNames.length) return null;
 
-                                            const norm = s => (s ?? '').trim().toLowerCase();
+                                    const norm = s => (s ?? '').trim().toLowerCase();
 
-                                            const uniquePairs = [];
-                                            const seen = new Set();
-                                            for (const p of pairs) {
-                                                const n = norm(p?.name);
-                                                if (!n || seen.has(n)) continue;
-                                                seen.add(n);
-                                                uniquePairs.push(p);
-                                            }
-                                            const renderPairs = () => {
-                                                if (!uniquePairs.length) {
-                                                    return legacyNames.join(', ');
-                                                }
+                                    const uniquePairs = [];
+                                    const seen = new Set();
+                                    for (const p of pairs) {
+                                        const n = norm(p?.name);
+                                        if (!n || seen.has(n)) continue;
+                                        seen.add(n);
+                                        uniquePairs.push(p);
+                                    }
 
-                                                return uniquePairs.map((p, i) => {
-                                                    const [rawSet = '', rawNum = ''] = String(p.key || '').split('-');
-                                                    const setUpper = rawSet.toUpperCase();
-                                                    const num = rawNum;
-                                                    const name = p.name;
-                                                    const label = `${name}`;
-                                                    return (
-                                                        <span key={`${setUpper}-${num}-${i}`}>
-                                                            <a
-                                                                href={`/card/${setUpper}/${num}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                {label}
-                                                            </a>
-                                                            {i < uniquePairs.length - 1 ? ', ' : ''}
-                                                        </span>
-                                                    );
-                                                });
-                                            };
+                                    const renderPairs = () => {
+                                        if (!uniquePairs.length) {
+                                            return legacyNames.join(', ');
+                                        }
+
+                                        return uniquePairs.map((p, i) => {
+                                            const [rawSet = '', rawNum = ''] = String(p.key || '').split('-');
+                                            const setUpper = rawSet.toUpperCase();
+                                            const num = rawNum;
+                                            const name = p.name;
+                                            const label = `${name}`;
+
                                             return (
+                                                <span key={`${setUpper}-${num}-${i}`}>
+                                                    <a
+                                                        href={`/card/${setUpper}/${num}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {label}
+                                                    </a>
+                                                    {i < uniquePairs.length - 1 ? ', ' : ''}
+                                                </span>
+                                            );
+                                        });
+                                    };
+
+                                    return (
+                                        <div className="filter-group banned-cards-section">
+                                            <h3></h3>
+                                            <div
+                                                className='banned-filter-cards'
+                                                style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
+                                            >
                                                 <div
                                                     className="banned-cards-note"
                                                     role="note"
                                                     style={{
-                                                        marginTop: 8,
                                                         padding: '8px 10px',
                                                         borderRadius: 6,
                                                         border: '1px solid rgba(255,255,255,0.15)',
@@ -1985,14 +1990,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                         maxWidth: 680
                                                     }}
                                                 >
-                                                    <span className="material-symbols-outlined" style={{ verticalAlign: '-2px', marginRight: 6 }}>info</span>
+                                                    <span
+                                                        className="material-symbols-outlined"
+                                                        style={{ verticalAlign: '-2px', marginRight: 6 }}
+                                                    >
+                                                        info
+                                                    </span>
                                                     <strong>Banned Cards:</strong>{' '}
                                                     {renderPairs()}
                                                 </div>
-                                            );
-                                        })()}
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
                                     <h3>Card Type:</h3>
@@ -2011,7 +2021,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             <button
                                                 key={type}
                                                 type="button"
-                                                className={`type-btn ${draftFilters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
+                                                className={`type-btn card-type-btns-oly ${draftFilters.supertypes[type] ? 'active' : ''} ${typeToClass(type)}`}
                                                 style={{ '--typeIcon': TYPE_BG[type] ? `url("${TYPE_BG[type]}")` : 'none' }}
                                                 onClick={() => {
                                                     setDraftFilters(f => ({
@@ -2026,7 +2036,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 {type}
                                             </button>
                                         ))}
-                                        <span className='cardtypeenergy'>Energy:</span>
+                                        {/* <span className='cardtypeenergy hide-on-medium-advanced-filter'>Energy:</span> */}
                                         {[
                                             'Basic',
                                             'Special'
@@ -2219,7 +2229,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         {Number.isFinite(Number(draftFilters.hp?.value)) && (
                                             <button
                                                 type="button"
-                                                className="clear-x-btn"
+                                                className="clear-x-btn hide-on-filter-mobile"
                                                 style={{ '--typeIcon': 'none' }}
                                                 onClick={() => setDraftFilters(f => ({ ...f, hp: { op: f.hp?.op || 'eq', value: null } }))}
                                             >
@@ -2250,7 +2260,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         </select>
                                         <button
                                             onClick={() => setDraftFilters(f => ({ ...f, retreat: { op: 'eq', value: '' } }))}
-                                            className='clear-x-btn'
+                                            className='clear-x-btn hide-on-filter-mobile'
                                         ><span class="material-symbols-outlined">
                                                 cancel
                                             </span></button>
@@ -2371,7 +2381,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             </div>
                                             <button
                                                 onClick={() => setDraftFilters(f => ({ ...f, attackCost: { op: 'eq', value: '', energies: {} } }))}
-                                                className='clear-x-btn'
+                                                className='clear-x-btn hide-on-filter-mobile'
                                             ><span class="material-symbols-outlined">
                                                     cancel
                                                 </span>
@@ -2429,7 +2439,84 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         </span>
                                     </button>
                                 </div>
-                                <div className="buttons-row-modal flex-end">
+                                <div className="buttons-row-modal bottom-advanced-filter-apply-btns">
+                                    <div className="buttons-row-modal flex-start" style={{marginTop:'0'}}>
+                                        {isSearchingAll && (
+                                            <span className="material-symbols-outlined search-all-side-spinner">
+                                                progress_activity
+                                            </span>
+                                        )}
+                                        <button
+                                            className='save-button width-full'
+                                            style={{ background: 'linear-gradient(to bottom, rgb(6, 174, 174), #1290eb, #1290eb)' }}
+                                            disabled={isSearchingAll || !(anyFilterActive(draftFilters) || !!selectedLegalityPreset)}
+                                            onClick={async () => {
+                                                setIsSearchingAll(true);
+                                                try {
+                                                    skipNextQueryEffectRef.current = true;
+                                                    latestReqId.current += 1;
+
+                                                    setSuppressDefault(true);
+                                                    setQuery('');
+                                                    setFilters(draftFilters);
+
+                                                    const cleaned = buildFiltersForRequest(draftFilters);
+
+                                                    const payload = {
+                                                        query: '',
+                                                        searchMode,
+                                                        filters: cleaned
+                                                    };
+
+                                                    const resp = await fetch('/api/cards/filter-search', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(payload)
+                                                    });
+
+                                                    const list = resp.ok ? await resp.json() : [];
+
+                                                    const fr = draftFilters.formatRange?.from;
+                                                    const to = draftFilters.formatRange?.to;
+                                                    let arr = Array.isArray(list) ? list : [];
+                                                    if (fr && to) {
+                                                        arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
+                                                    }
+
+                                                    const includeKeys = getForcedIncludeKeysForFilters(draftFilters);
+                                                    if (includeKeys.length) {
+                                                        const forcedCards = await fetchCardsByKeys(includeKeys);
+
+                                                        const seen = new Set(
+                                                            arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase())
+                                                        );
+
+                                                        for (const c of forcedCards) {
+                                                            const key = `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase();
+                                                            if (!seen.has(key)) {
+                                                                arr.push(c);
+                                                                seen.add(key);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    if (selectedLegalityPreset) {
+                                                        arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
+                                                    }
+
+                                                    setResults(arr);
+                                                    setShowAdvanced(false);
+                                                } catch (e) {
+                                                    console.error('Search all failed:', e);
+                                                } finally {
+                                                    setIsSearchingAll(false);
+                                                }
+                                            }}
+                                            title="Fetch and show all cards that match your filters"
+                                        >
+                                            Search all
+                                        </button>
+                                    </div>
                                     <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
                                         Reset
                                     </button>
@@ -2470,84 +2557,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         }}
                                     >
                                         Apply
-                                    </button>
-                                </div>
-                                <div className="buttons-row-modal flex-end">
-                                    {isSearchingAll && (
-                                        <span className="material-symbols-outlined search-all-side-spinner">
-                                            progress_activity
-                                        </span>
-                                    )}
-
-                                    <button
-                                        className='save-button width-full'
-                                        style={{ background: 'linear-gradient(to bottom, rgb(6, 174, 174), #1290eb, #1290eb)' }}
-                                        disabled={isSearchingAll || !(anyFilterActive(draftFilters) || !!selectedLegalityPreset)}
-                                        onClick={async () => {
-                                            setIsSearchingAll(true);
-                                            try {
-                                                skipNextQueryEffectRef.current = true;
-                                                latestReqId.current += 1;
-
-                                                setSuppressDefault(true);
-                                                setQuery('');
-                                                setFilters(draftFilters);
-
-                                                const cleaned = buildFiltersForRequest(draftFilters);
-
-                                                const payload = {
-                                                    query: '',
-                                                    searchMode,
-                                                    filters: cleaned
-                                                };
-
-                                                const resp = await fetch('/api/cards/filter-search', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify(payload)
-                                                });
-
-                                                const list = resp.ok ? await resp.json() : [];
-
-                                                const fr = draftFilters.formatRange?.from;
-                                                const to = draftFilters.formatRange?.to;
-                                                let arr = Array.isArray(list) ? list : [];
-                                                if (fr && to) {
-                                                    arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
-                                                }
-
-                                                const includeKeys = getForcedIncludeKeysForFilters(draftFilters);
-                                                if (includeKeys.length) {
-                                                    const forcedCards = await fetchCardsByKeys(includeKeys);
-
-                                                    const seen = new Set(
-                                                        arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase())
-                                                    );
-
-                                                    for (const c of forcedCards) {
-                                                        const key = `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase();
-                                                        if (!seen.has(key)) {
-                                                            arr.push(c);
-                                                            seen.add(key);
-                                                        }
-                                                    }
-                                                }
-
-                                                if (selectedLegalityPreset) {
-                                                    arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
-                                                }
-
-                                                setResults(arr);
-                                                setShowAdvanced(false);
-                                            } catch (e) {
-                                                console.error('Search all failed:', e);
-                                            } finally {
-                                                setIsSearchingAll(false);
-                                            }
-                                        }}
-                                        title="Fetch and show all cards that match your filters"
-                                    >
-                                        Search all
                                     </button>
                                 </div>
                             </div>
