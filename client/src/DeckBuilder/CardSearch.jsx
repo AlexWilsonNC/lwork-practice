@@ -1759,7 +1759,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         <input
                                             type="text"
                                             placeholder="Type set codes or names, comma-separated (e.g., PAF, OBF)"
-                                            className='type-btn non-bold-typebtn'
+                                            className='type-btn non-bold-typebtn sets-input-mobile-advanced'
                                             value={setsInput}
                                             onFocus={() => { setsInputFocusedRef.current = true; }}
                                             onBlur={(e) => {
@@ -1794,7 +1794,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Format:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <div className='stage-type-buttons' style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+                                        <div className='stage-type-buttons'>
                                             <button
                                                 type="button"
                                                 className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'standard' ? 'active' : ''}`}

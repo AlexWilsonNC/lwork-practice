@@ -1342,7 +1342,7 @@ body.deckbuilder-page .deck-builder {
 
 .era-btn img {
   display: block;
-  width: 80px;
+  width: 100%;
   height: auto;
 }
 
@@ -3205,5 +3205,45 @@ body.deckbuilder-page .deck-builder {
   }
   .popular-specific-row {
     width: 49%;
+  }
+}
+@media screen and (max-width: 400px) {
+  .advanced-search-modal h2 {
+    font-size: 16px;
+  }
+  .filter-group h3 {
+    font-size: 14px;
+  }
+  .advanced-search-modal .modal-close-x span{
+    font-size: 18px;
+  }
+  .era-buttons {
+    justify-content: center;
+  }
+  .era-btn {
+    width: 80px;
+    height: 30px;
+  }
+  .sets-margin-small-mobile {
+    width: 100%;
+    font-size: 12px;
+  }
+  .sets-input-mobile-advanced {
+    width: 94% !important;
+    min-width: 1% !important;
+    font-size: 12px;
+  }
+  .stage-type-buttons {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    width: 100%;
+  }
+  .stage-type-buttons button {
+    width: 80px;
+    min-width: 1%;
+    height: 30px;
+    font-size: 12px;
   }
 }
