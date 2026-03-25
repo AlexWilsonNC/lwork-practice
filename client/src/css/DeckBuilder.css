@@ -2896,34 +2896,42 @@ body.deckbuilder-page .deck-builder {
 @media screen and (max-width: 500px) {
   .search-cards-div {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .event-searchbar {
-    padding: 25px 0px 20px 20px;
+    padding: 25px 20px 20px 20px;
   }
 
   .advanced-search-button-small {
     order: -1;
-    width: 90%;
-    margin-left: 12.5px;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
   }
 
   .search-input-wrapper {
     margin-top: 8px;
-    padding-left: 13px;
+    padding-left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+  }
+
+  .search-mode-dropdown {
+    border-top-left-radius: 2.5px;
+    border-bottom-left-radius: 2.5px;
+    flex: 0 0 auto;
   }
 
   .event-searchbar input {
     font-size: 12px;
     border-top-right-radius: 2.5px;
     border-bottom-right-radius: 2.5px;
-    width: 60% !important;
-  }
-
-  .search-mode-dropdown {
-    border-top-left-radius: 2.5px;
-    border-bottom-left-radius: 2.5px;
+    width: auto !important;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
 
@@ -3041,7 +3049,7 @@ body.deckbuilder-page .deck-builder {
   }
 
   .event-searchbar {
-    padding: 75px 0px 20px 10px;
+    padding: 75px 0px 20px 0px;
   }
 
   .copy-menu-dropdown {
@@ -3059,6 +3067,28 @@ body.deckbuilder-page .deck-builder {
 
   .limit-menu-dropdown {
     right: 0px;
+  }
+  .search-cards-div {
+    flex-direction: column;
+    align-items: center;
+  }
+  .advanced-search-button-small {
+    width: 90%;
+  }
+
+  .search-input-wrapper {
+    margin-top: 8px;
+    padding-left: 0;
+    width: 90%;
+  }
+
+  .event-searchbar input {
+    font-size: 12px;
+    border-top-right-radius: 2.5px;
+    border-bottom-right-radius: 2.5px;
+    width: auto !important;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
 
@@ -3225,19 +3255,19 @@ body.deckbuilder-page .deck-builder {
     height: 30px;
   }
   .sets-margin-small-mobile {
-    width: 100%;
+    width: 97.5%;
     font-size: 12px;
   }
   .sets-input-mobile-advanced {
-    width: 94% !important;
+    width: 91.5% !important;
     min-width: 1% !important;
     font-size: 12px;
   }
   .stage-type-buttons {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
     align-items: center;
     justify-content: center;
-    gap: 0px;
+    /* gap: 0px; */
     width: 100%;
   }
   .stage-type-buttons button {
@@ -3245,5 +3275,15 @@ body.deckbuilder-page .deck-builder {
     min-width: 1%;
     height: 30px;
     font-size: 12px;
+  }
+  .popular-specific-row {
+    width: 97.5%;
+    min-width: 1% !important;
+    font-size: 12px;
+  }
+  .select-first-set-drop,
+  .select-second-set-drop {
+    min-width: 1% !important;
+    width: 97.5%;
   }
 }

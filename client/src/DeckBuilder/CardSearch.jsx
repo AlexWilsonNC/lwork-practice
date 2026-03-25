@@ -1794,7 +1794,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Format:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <div className='stage-type-buttons'>
+                                        <div className='stage-type-buttons' style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
                                             <button
                                                 type="button"
                                                 className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'standard' ? 'active' : ''}`}
@@ -1883,7 +1883,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     <h3><span className='display-on-filter-mobile'>Custom Format</span></h3>
                                     <div className='sets-filter-div'>
                                         <select
-                                            className={`type-btn non-bold-typebtn hp-btn-dropdown ${draftFilters.formatRange?.from ? '' : 'is-placeholder'}`}
+                                            className={`type-btn non-bold-typebtn hp-btn-dropdown select-first-set-drop ${draftFilters.formatRange?.from ? '' : 'is-placeholder'}`}
                                             value={draftFilters.formatRange?.from || ''}
                                             onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), from: e.target.value } }))}
                                             style={{ minWidth: 220, color: draftFilters.formatRange?.from ? 'inherit' : 'rgba(255,255,255,0.55)' }}
@@ -1897,7 +1897,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         <label style={{ opacity: 0.85 }}>through</label>
 
                                         <select
-                                            className={`type-btn non-bold-typebtn hp-btn-dropdown ${draftFilters.formatRange?.to ? '' : 'is-placeholder'}`}
+                                            className={`type-btn non-bold-typebtn hp-btn-dropdown select-second-set-drop ${draftFilters.formatRange?.to ? '' : 'is-placeholder'}`}
                                             value={draftFilters.formatRange?.to || ''}
                                             onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), to: e.target.value } }))}
                                             style={{ minWidth: 220, color: draftFilters.formatRange?.to ? 'inherit' : 'rgba(255,255,255,0.55)' }}
@@ -2580,7 +2580,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         aria-label="Clear search"
                                     >×</button>
                                 )}
-                                <button
+                                {/* <button
                                     type="button"
                                     id="search-reset"
                                     onClick={() => {
@@ -2589,8 +2589,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         setResults([])
                                     }}
                                 >
-                                    {/* <span className="material-symbols-outlined">autorenew</span> */}
-                                </button>
+                                    { <span className="material-symbols-outlined">autorenew</span> }
+                                </button> */}
                                 {/* <span className="material-symbols-outlined search-mag">search</span> */}
                             </div>
                             <button
