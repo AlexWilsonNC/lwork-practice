@@ -1253,10 +1253,10 @@ body.deckbuilder-page .deck-builder {
 
 .advanced-search-modal {
   padding: 1.5rem;
-  max-width: 95%;
+  max-width: 100%;
   width: 95%;
   height: 95%;
-  max-height: 95%;
+  max-height: 100%;
   overflow-y: auto;
   border-radius: 15px;
   color: rgb(229, 229, 229);
@@ -3110,15 +3110,15 @@ body.deckbuilder-page .deck-builder {
     display: none;
   } */
   .advanced-search-modal {
-    /* position: relative; */
     overflow-y: auto;
     box-sizing: border-box;
-    height: 90%;
-    padding-bottom: 50px;
+    height: 99%;
+    width: 99%;
+    padding-bottom: 75px;
     scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
   }
-    .advanced-search-modal::-webkit-scrollbar {
+  .advanced-search-modal::-webkit-scrollbar {
     width: 10px;
   }
   .advanced-search-modal::-webkit-scrollbar-track {
@@ -3164,7 +3164,11 @@ body.deckbuilder-page .deck-builder {
     padding: 12px 14px;
     background: rgba(15, 24, 33, 0.75);
     backdrop-filter: blur(6px);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 3px solid rgba(128, 128, 128, 0.5);
+    border-left: 3px solid rgba(128, 128, 128, 0.5);
+    border-right: 3px solid rgba(128, 128, 128, 0.5);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
   .bottom-advanced-filter-apply-btns .flex-start {
     margin-right: auto;
