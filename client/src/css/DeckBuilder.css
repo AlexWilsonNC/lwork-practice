@@ -3263,14 +3263,16 @@ body.deckbuilder-page .deck-builder {
     min-width: 1% !important;
     font-size: 12px;
   }
-  .stage-type-buttons {
+  .stage-type-buttons,
+  .type-buttons {
     flex-wrap: nowrap !important;
     align-items: center;
     justify-content: center;
     /* gap: 0px; */
     width: 100%;
   }
-  .stage-type-buttons button {
+  .stage-type-buttons button,
+  .type-buttons button {
     width: 80px;
     min-width: 1%;
     height: 30px;
