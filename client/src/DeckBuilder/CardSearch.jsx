@@ -228,7 +228,7 @@ const slugCss = (s) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, advancedSearchModalBg, themeName }) {
+export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, themeName }) {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
@@ -1694,12 +1694,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, a
                     {showAdvanced && (
                         <div className="advanced-search-modal-overlay" onClick={() => setShowAdvanced(false)}>
                             <div
-                                className="advanced-search-modal"
+                                className={`advanced-search-modal ${themeName === 'light' ? 'advanced-search-modal-light' : 'advanced-search-modal-dark'}`}
                                 onClick={e => e.stopPropagation()}
-                                style={{
-                                    background: advancedSearchModalBg,
-                                    color: themeName === 'light' ? '#111' : '#f5f5f5'
-                                }}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <h2>Advanced Search</h2>
@@ -2416,11 +2412,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, a
                                 </div>
                                 <div className="buttons-row-modal bottom-advanced-filter-apply-btns">
                                     <div className="buttons-row-modal flex-start" style={{ marginTop: '0' }}>
-                                        {isSearchingAll && (
-                                            <span className="material-symbols-outlined search-all-side-spinner">
-                                                progress_activity
-                                            </span>
-                                        )}
                                         <button
                                             className='save-button width-full'
                                             style={{ background: 'linear-gradient(to bottom, rgb(6, 174, 174), #1290eb, #1290eb)' }}
@@ -2491,6 +2482,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, a
                                         >
                                             Search all
                                         </button>
+                                        {isSearchingAll && (
+                                            <span className="material-symbols-outlined search-all-side-spinner">
+                                                progress_activity
+                                            </span>
+                                        )}
                                     </div>
                                     <button className='cancel-button' onClick={resetDraftAdvancedFilters}>
                                         Reset
@@ -2507,28 +2503,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, a
                                                 !Object.values(draftFilters.stage || {}).some(Boolean) &&
                                                 !Number.isFinite(Number((draftFilters.hp || {}).value)) &&
                                                 !(draftFilters.artist && String(draftFilters.artist).trim() !== '') &&
-                                                !Object.values(draftFilters.rarity || {}).some(Boolean);
-                                            !selectedLegalityPreset;
-
-                                            const trimmedQuery = String(query || '').trim();
+                                                !Object.values(draftFilters.rarity || {}).some(Boolean) &&
+                                                !selectedLegalityPreset;
 
                                             setShowAdvanced(false);
 
+                                            if (noneActive) {
+                                                skipNextQueryEffectRef.current = true;
+                                                setFilters(emptyFilters);
+                                                return;
+                                            }
+
+                                            const trimmedQuery = String(query || '').trim();
+
                                             if (trimmedQuery) {
-                                                // force the query effect to run again against the current input
                                                 latestReqId.current += 1;
                                                 setFilters({ ...draftFilters });
                                                 return;
                                             }
 
                                             setFilters(draftFilters);
-                                            setShowAdvanced(false);
-
-                                            if (noneActive) {
-                                                setResults([]);
-                                                setQuery('');
-                                                setSuppressDefault(true);
-                                            }
                                         }}
                                     >
                                         Apply

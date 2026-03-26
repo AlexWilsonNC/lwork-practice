@@ -10,6 +10,7 @@
   right: 15px;
   color: grey;
 }
+
 .info-db-icon:hover {
   color: #1290eb;
   cursor: pointer;
@@ -234,6 +235,7 @@ body.deckbuilder-page .deck-builder {
   flex-direction: column;
   align-items: center;
 }
+
 .modal-count p {
   font-size: 8px;
   position: absolute;
@@ -403,6 +405,7 @@ body.deckbuilder-page .deck-builder {
   height: 100%;
   margin-left: 3px;
 }
+
 .clear-x-btn:hover {
   color: red;
   cursor: pointer;
@@ -574,11 +577,13 @@ body.deckbuilder-page .deck-builder {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.681);
   transition: ease all 0.2s;
 }
+
 .add-card-to-deck.disabled {
   opacity: 0.35;
   pointer-events: none;
   filter: grayscale(60%);
 }
+
 .add-card-to-deck::before {
   content: "+";
   font-weight: 600;
@@ -702,6 +707,7 @@ body.deckbuilder-page .deck-builder {
   background: #1290eb;
   left: -4px;
 }
+
 .deckbuilt-card-container.drop-after::after {
   content: "\203A";
   background: red;
@@ -1080,9 +1086,11 @@ body.deckbuilder-page .deck-builder {
   font-weight: 600;
   margin-left: 3px;
 }
+
 .deck-count-green {
   color: green;
 }
+
 .deck-count-red {
   color: red;
 }
@@ -1261,7 +1269,7 @@ body.deckbuilder-page .deck-builder {
   border-radius: 15px;
   color: rgb(229, 229, 229);
   border: 3px solid rgba(128, 128, 128, 0.5);
-  background: rgb(15, 24, 33);
+  /* background: rgb(15, 24, 33); */
   /* backdrop-filter: blur(6px); */
 }
 
@@ -1274,7 +1282,6 @@ body.deckbuilder-page .deck-builder {
   opacity: 0.25;
   border: none;
   height: 3px;
-  background-color: white;
   margin: 10px 0;
 }
 
@@ -1290,7 +1297,7 @@ body.deckbuilder-page .deck-builder {
   font-size: 16px;
 }
 
-.filter-group > h3 {
+.filter-group>h3 {
   flex: 0 0 125px;
   margin: 6px 8px 0 0;
   align-self: flex-start;
@@ -1363,12 +1370,14 @@ body.deckbuilder-page .deck-builder {
   z-index: 0;
   overflow: hidden;
   text-align: start;
-  isolation: isolate; 
+  isolation: isolate;
   text-wrap: nowrap;
 }
+
 .non-bold-typebtn {
   font-weight: 400 !important;
 }
+
 .type-btn::after {
   content: "";
   position: absolute;
@@ -1387,20 +1396,30 @@ body.deckbuilder-page .deck-builder {
 
   background-image: var(--typeIcon);
 }
-.type-btn > * { position: relative; z-index: 1; }
-.type-btn.active::after { opacity: 0.5; }
+
+.type-btn>* {
+  position: relative;
+  z-index: 1;
+}
+
+.type-btn.active::after {
+  opacity: 0.5;
+}
+
 .type-btn:hover,
 .era-btn:hover,
 .toggle-sets-btn:hover {
   background-color: rgba(255, 255, 255, 0.169);
   cursor: pointer;
 }
+
 .type-btn.active,
 .era-btn.active {
   background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
   color: white;
   border-color: #0056b3;
 }
+
 .poke-type-buttons,
 .mechanics-buttons,
 .stage-type-buttons {
@@ -1409,40 +1428,50 @@ body.deckbuilder-page .deck-builder {
   align-items: flex-start;
   gap: 0.5rem 0.25px;
 }
+
 .stage-type-buttons button,
 .clear-button-btn {
   display: flex;
   justify-content: center;
 }
-.mechanics-buttons .mechanics-toggle { order: 999; }
+
+.mechanics-buttons .mechanics-toggle {
+  order: 999;
+}
+
 .mechanics-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 32px;
 }
+
 .width-full {
   width: 152.5px !important;
 }
+
 .flex-end {
   display: flex;
   justify-content: flex-end !important;
   gap: 0.5rem;
   margin-top: 25px !important;
 }
+
 .hp-btn-dropdown {
   display: flex;
   align-items: center;
 }
+
 .whyarentyousmall {
   height: 32.5px;
 }
-.advanced-search-modal .modal-close-x{
-  top:8px;
-  right:8px;
-  border:0;
-  background:rgba(128, 128, 128, 0.388);
-  cursor:pointer;
+
+.advanced-search-modal .modal-close-x {
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: rgba(128, 128, 128, 0.388);
+  cursor: pointer;
   color: white;
   display: flex;
   justify-content: center;
@@ -1450,9 +1479,11 @@ body.deckbuilder-page .deck-builder {
   padding: 4px;
   border-radius: 3px;
 }
-.advanced-search-modal .modal-close-x:hover{
-  background:rgba(255, 255, 255, 0.388);
+
+.advanced-search-modal .modal-close-x:hover {
+  background: rgba(255, 255, 255, 0.388);
 }
+
 /* .sets-dropdown {
     display: flex;
     flex-direction: row;
@@ -1528,9 +1559,11 @@ body.deckbuilder-page .deck-builder {
   background-color: rgba(0, 0, 0, 0.65);
   padding: 7px 15px;
 }
+
 .buttons-row-modal button {
   border-radius: 2.5px;
 }
+
 /* .set-name {
   margin-top: 0.5rem;
   font-size: 100px;
@@ -1599,21 +1632,25 @@ body.deckbuilder-page .deck-builder {
   align-items: center;
   margin-left: 5px;
 }
+
 .banned-cards-note span {
   font-size: 16px;
   margin-right: 5px;
   margin-top: -2.5px;
 }
+
 .banned-cards-note strong {
   margin-right: 5px;
 }
+
 .banned-cards-note a {
   font-size: 13px;
   color: rgb(182, 182, 182);
   margin-left: 5px;
 }
+
 .banned-cards-note a:hover {
-  color:#1290eb;
+  color: #1290eb;
 }
 
 .advanced-p-btn:hover {
@@ -1687,12 +1724,14 @@ body.deckbuilder-page .deck-builder {
   width: auto;
   margin-left: 0px;
 }
+
 .sets-filter-div {
   display: flex;
   gap: 8;
   align-items: center;
   flex-wrap: wrap;
 }
+
 .set-logo3 {
   height: 20px;
   width: auto;
@@ -2115,9 +2154,11 @@ body.deckbuilder-page .deck-builder {
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
+
 .sets-filter-div label {
   margin: 0 5px;
 }
+
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -2192,6 +2233,7 @@ body.deckbuilder-page .deck-builder {
   position: relative;
   overflow: visible;
 }
+
 .folder-tab {
   position: absolute;
   background: inherit;
@@ -2212,34 +2254,45 @@ body.deckbuilder-page .deck-builder {
   z-index: 2;
   width: 40% !important;
 }
+
 .save-deck-modal {
   background-color: rgb(79, 91, 104) !important;
 }
+
 .folder-tab span {
   margin-left: -7px;
 }
+
 .tab-new {
   top: -37.5px;
-  left: 12px; 
+  left: 12px;
   width: 40%;
 }
+
 .tab-overwrite {
   top: -37.5px;
   left: 40%;
   width: 45%;
 }
+
 .folder-tab.active {
   z-index: 3;
 }
+
 .folder-tab:not(.active) {
   background: rgb(40, 48, 56);
 }
+
 .visually-hidden {
   position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0 0 0 0);
-  white-space: nowrap; border: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .search-all-side-spinner {
@@ -2248,9 +2301,151 @@ body.deckbuilder-page .deck-builder {
   animation: searchAllSpin 0.8s linear infinite;
 }
 
+.advanced-search-modal-dark {
+  background: rgb(15, 24, 33);
+  color: rgb(229, 229, 229);
+}
+
+.advanced-search-modal-light {
+  background: white;
+  color: #111;
+}
+
+.advanced-search-modal-dark select option {
+  background: rgb(15, 24, 33);
+  color: rgb(229, 229, 229);
+}
+.advanced-search-modal-dark select optgroup {
+  background: rgb(15, 24, 33);
+  color: rgb(229, 229, 229);
+}
+
+.advanced-search-modal-dark hr {
+  background-color: white;
+}
+
+.advanced-search-modal-light hr {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.advanced-search-modal-light .banned-cards-note {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.advanced-search-modal-light .banned-cards-note a {
+  color: black;
+}
+
+.advanced-search-modal-light select,
+.advanced-search-modal-light input,
+.advanced-search-modal-light .type-btn {
+  color: black !important;
+  text-shadow: 1px 1px 3.5px white !important;
+}
+
+.advanced-search-modal-light .type-btn.active,
+.advanced-search-modal-light .era-btn.active {
+  color: white !important;
+  text-shadow: none !important;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.advanced-search-modal-light .type-btn::after {
+  opacity: 0.5;
+}
+.advanced-search-modal .modal-close-x {
+  background: rgba(128, 128, 128, 0.75);
+}
+.advanced-search-modal-light .modal-close-x:hover {
+  background: #1290eb;
+}
+
+.advanced-search-modal {
+  overflow-y: auto;
+  box-sizing: border-box;
+  height: 99%;
+  width: 99%;
+  padding-bottom: 75px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+.advanced-search-modal::-webkit-scrollbar {
+  width: 10px;
+}
+
+.advanced-search-modal::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+  margin: 10px 0;
+}
+
+.advanced-search-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 0.42);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.advanced-search-modal-light {
+  scrollbar-color: rgba(52, 138, 204, 0.75) transparent;
+}
+
+.advanced-search-modal-light::-webkit-scrollbar-thumb {
+  background: rgba(52, 138, 204, 0.75);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal-light::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.advanced-search-modal-light::-webkit-scrollbar-thumb {
+  background: rgba(52, 138, 204, 0.75);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal-light::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 138, 204, 0.75);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.advanced-search-modal-light::-webkit-scrollbar-thumb:active {
+  background: rgba(52, 138, 204, 0.75);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
 @keyframes searchAllSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media screen and (min-width: 1160px) and (max-width: 1350px) {
@@ -2378,6 +2573,7 @@ body.deckbuilder-page .deck-builder {
     margin-right: 3.5px;
   }
 }
+
 @media screen and (max-width: 1160px) {
   .searched-card-wrap:hover {
     transform: scale(1);
@@ -2527,12 +2723,15 @@ body.deckbuilder-page .deck-builder {
     transform: scale(0.8);
   }
 }
+
 @media screen and (max-width: 1000px) {
+
   .tab-new,
   .tab-overwrite {
     top: -37px;
   }
 }
+
 @media screen and (max-width: 850px) {
   .search-mag {
     margin-left: -5px;
@@ -2795,21 +2994,26 @@ body.deckbuilder-page .deck-builder {
     font-size: 14px;
     width: 200px !important;
   }
+
   .card-modal-image {
     width: 70%;
-    
+
   }
+
   .modal-count-controls {
     width: 66%;
   }
+
   .bottom-db-modal-bts {
     margin-top: 15px;
   }
+
   .bottom-db-modal-bts button {
     font-size: 12px;
     height: 30px;
     width: 150px;
   }
+
   .legality-badge-zoomed {
     font-size: 9px !important;
     border-radius: 2px !important;
@@ -2950,9 +3154,11 @@ body.deckbuilder-page .deck-builder {
   .showon450 {
     display: flex;
   }
+
   .deck-stats {
     padding: 10px;
   }
+
   .add-card-to-deck {
     padding: 15px;
     font-size: 22px;
@@ -3064,10 +3270,12 @@ body.deckbuilder-page .deck-builder {
   .limit-menu-dropdown {
     right: 0px;
   }
+
   .search-cards-div {
     flex-direction: column;
     align-items: center;
   }
+
   .advanced-search-button-small {
     width: 90%;
   }
@@ -3099,78 +3307,51 @@ body.deckbuilder-page .deck-builder {
     width: 50% !important;
   }
 }
+
 .display-on-filter-mobile {
   display: none;
 }
+
 /* mobile advanced search modal */
 @media screen and (max-width: 1250px) {
   .era-buttons {
     flex-wrap: wrap;
-    height:auto;
+    height: auto;
     margin-bottom: -5px;
   }
+
   .era-btn {
     padding: 0 7px;
     margin: 0 5px 10px 5px;
     height: 35px;
     overflow: hidden;
   }
+
   .filter-group {
     margin-bottom: 25px;
     flex-direction: column;
   }
-  .filter-group > h3 {
+
+  .filter-group>h3 {
     flex: 0 0 35px;
     margin: 0 5px;
   }
+
   .display-on-filter-mobile {
     display: flex;
   }
+
   .banned-cards-section {
     margin-top: -30px;
   }
+
   .card-type-btns-oly {
     margin-bottom: 0.5rem;
   }
+
   /* .hide-on-medium-advanced-filter {
     display: none;
   } */
-  .advanced-search-modal {
-    overflow-y: auto;
-    box-sizing: border-box;
-    height: 99%;
-    width: 99%;
-    padding-bottom: 75px;
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
-  }
-  .advanced-search-modal::-webkit-scrollbar {
-    width: 10px;
-  }
-  .advanced-search-modal::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 999px;
-    margin: 10px 0;
-  }
-  .advanced-search-modal::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-  .advanced-search-modal::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.34);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-  .advanced-search-modal::-webkit-scrollbar-thumb:active {
-    background: rgba(255, 255, 255, 0.42);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-  .advanced-search-modal::-webkit-scrollbar-corner {
-    background: transparent;
-  }
   .bottom-advanced-filter-apply-btns {
     position: absolute;
     left: 0;
@@ -3196,12 +3377,21 @@ body.deckbuilder-page .deck-builder {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
+
+  .advanced-search-modal-light .bottom-advanced-filter-apply-btns {
+    background: rgba(240, 240, 240, 0.8);
+    border-top: 3px solid rgba(0, 0, 0, 0.15);
+    border-left: 3px solid rgba(0, 0, 0, 0.15);
+    border-right: 3px solid rgba(0, 0, 0, 0.15);
+  }
+
   .bottom-advanced-filter-apply-btns .flex-start {
     margin-right: auto;
     display: flex;
     align-items: center;
     gap: 10px;
   }
+
   .bottom-advanced-filter-apply-btns .flex-end {
     display: flex;
     align-items: center;
@@ -3209,6 +3399,7 @@ body.deckbuilder-page .deck-builder {
     margin-top: 0 !important;
   }
 }
+
 @media screen and (max-width: 760px) {
   .sets-filter-div {
     display: flex;
@@ -3217,45 +3408,57 @@ body.deckbuilder-page .deck-builder {
     align-items: flex-start;
     flex-wrap: wrap;
   }
+
   .sets-filter-div label {
     margin: 10px 0 10px 7.5px;
   }
+
   .sets-filter-div input {
     width: 65%;
   }
+
   .sets-margin-small-mobile {
     margin-bottom: 10px;
   }
+
   .hide-on-filter-mobile {
     display: none;
   }
+
   .popular-specific-row {
     width: 49%;
   }
 }
+
 @media screen and (max-width: 400px) {
   .advanced-search-modal h2 {
     font-size: 16px;
   }
+
   .filter-group h3 {
     font-size: 14px;
   }
-  .advanced-search-modal .modal-close-x span{
+
+  .advanced-search-modal .modal-close-x span {
     font-size: 18px;
   }
+
   .era-btn {
     width: 80px;
     height: 30px;
   }
+
   .sets-margin-small-mobile {
     width: 97.5%;
     font-size: 12px;
   }
+
   .sets-input-mobile-advanced {
     width: 91.5% !important;
     min-width: 1% !important;
     font-size: 12px;
   }
+
   .format-specifically,
   .type-buttons {
     flex-wrap: nowrap !important;
@@ -3263,6 +3466,7 @@ body.deckbuilder-page .deck-builder {
     justify-content: center;
     width: 100%;
   }
+
   .stage-type-buttons button,
   .type-buttons button {
     width: 80px;
@@ -3270,16 +3474,19 @@ body.deckbuilder-page .deck-builder {
     height: 30px;
     font-size: 12px;
   }
+
   .popular-specific-row {
     width: 97.5%;
     min-width: 1% !important;
     font-size: 12px;
   }
+
   .select-first-set-drop,
   .select-second-set-drop {
     min-width: 1% !important;
     width: 97.5%;
   }
+
   .type-btn {
     /* padding: 7px; */
     height: 30px;
@@ -3287,6 +3494,7 @@ body.deckbuilder-page .deck-builder {
     font-size: 12px;
     /* text-shadow: 1px 1px 3.5px black; */
   }
+
   .type-btn::after {
     top: 50%;
     right: -10px;
@@ -3295,20 +3503,25 @@ body.deckbuilder-page .deck-builder {
     width: clamp(32px, 12vw, 56px);
     height: clamp(32px, 12vw, 56px);
   }
+
   .mechanics-toggle .material-symbols-outlined {
     font-size: 18px;
   }
+
   .show-more-stages-btn {
     width: 80% !important;
   }
+
   .energy-picker {
     display: flex;
     flex-direction: column;
     align-items: flex-start !important;
   }
+
   .energy-pickr-input {
     height: 17.5px;
   }
+
   .rarity-btns-sizes {
     width: auto !important;
     font-size: 10px !important;

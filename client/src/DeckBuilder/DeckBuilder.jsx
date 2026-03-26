@@ -387,6 +387,10 @@ export default function DeckBuilder() {
         : sum;
     }, 0);
 
+  const addUploadedImageCard = (customCard) => {
+    setDeck(prev => [...prev, customCard]);
+  };
+
   function addCard(cardToAdd) {
     setDeck(prevDeck => {
       const idx = prevDeck.findIndex(
@@ -951,27 +955,57 @@ export default function DeckBuilder() {
               return next;
             });
           }}
-          advancedSearchModalBg={theme.advancedSearchModalBg}
           themeName={theme.themeName}
         />
         <div
           className={`active-deck-container${dragOver ? ' drag-over' : ''}`}
           onDragOver={e => {
-            e.preventDefault()
-            setDragOver(true)
+            e.preventDefault();
+            setDragOver(true);
+
+            const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
+            e.dataTransfer.dropEffect = hasFiles ? 'copy' : 'move';
           }}
           onDragLeave={e => {
-            e.preventDefault()
-            setDragOver(false)
+            e.preventDefault();
+            setDragOver(false);
           }}
           onDrop={e => {
-            e.preventDefault()
-            setDragOver(false)
-            const json = e.dataTransfer.getData('application/json')
+            e.preventDefault();
+            setDragOver(false);
+
+            const files = Array.from(e.dataTransfer?.files || []);
+            const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
+
+            if (imageFiles.length) {
+              imageFiles.forEach(file => {
+                const objectUrl = URL.createObjectURL(file);
+                const safeBaseName = (file.name || 'Uploaded Card').replace(/\.[^.]+$/, '');
+
+                addUploadedImageCard({
+                  id: `uploaded-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+                  name: safeBaseName,
+                  setAbbrev: 'UPL',
+                  number: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                  supertype: 'Custom',
+                  subtypes: ['Uploaded'],
+                  images: {
+                    small: objectUrl,
+                    large: objectUrl
+                  },
+                  count: 1,
+                  isUploadedImageCard: true,
+                  uploadedFileName: file.name
+                });
+              });
+              return;
+            }
+
+            const json = e.dataTransfer.getData('application/json');
             if (json) {
               try {
-                const card = JSON.parse(json)
-                addCard(card)
+                const card = JSON.parse(json);
+                addCard(card);
               } catch { }
             }
           }}
