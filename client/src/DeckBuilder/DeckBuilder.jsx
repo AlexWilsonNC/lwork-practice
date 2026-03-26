@@ -951,6 +951,8 @@ export default function DeckBuilder() {
               return next;
             });
           }}
+          advancedSearchModalBg={theme.advancedSearchModalBg}
+          themeName={theme.themeName}
         />
         <div
           className={`active-deck-container${dragOver ? ' drag-over' : ''}`}

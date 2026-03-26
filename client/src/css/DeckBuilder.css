@@ -1418,6 +1418,7 @@ body.deckbuilder-page .deck-builder {
 .mechanics-toggle {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 32px;
 }
 .width-full {
@@ -1430,10 +1431,8 @@ body.deckbuilder-page .deck-builder {
   margin-top: 25px !important;
 }
 .hp-btn-dropdown {
-  background-color: rgb(15, 24, 33) !important;
   display: flex;
   align-items: center;
-
 }
 .whyarentyousmall {
   height: 32.5px;
@@ -1445,18 +1444,15 @@ body.deckbuilder-page .deck-builder {
   background:rgba(128, 128, 128, 0.388);
   cursor:pointer;
   color: white;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   padding: 4px;
   border-radius: 3px;
 }
 .advanced-search-modal .modal-close-x:hover{
   background:rgba(255, 255, 255, 0.388);
 }
-
 /* .sets-dropdown {
     display: flex;
     flex-direction: row;
@@ -3247,9 +3243,6 @@ body.deckbuilder-page .deck-builder {
   .advanced-search-modal .modal-close-x span{
     font-size: 18px;
   }
-  .era-buttons {
-    justify-content: center;
-  }
   .era-btn {
     width: 80px;
     height: 30px;
@@ -3263,12 +3256,11 @@ body.deckbuilder-page .deck-builder {
     min-width: 1% !important;
     font-size: 12px;
   }
-  .stage-type-buttons,
+  .format-specifically,
   .type-buttons {
     flex-wrap: nowrap !important;
     align-items: center;
     justify-content: center;
-    /* gap: 0px; */
     width: 100%;
   }
   .stage-type-buttons button,
@@ -3287,5 +3279,38 @@ body.deckbuilder-page .deck-builder {
   .select-second-set-drop {
     min-width: 1% !important;
     width: 97.5%;
+  }
+  .type-btn {
+    /* padding: 7px; */
+    height: 30px;
+    min-width: 80px;
+    font-size: 12px;
+    /* text-shadow: 1px 1px 3.5px black; */
+  }
+  .type-btn::after {
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%) rotate(-20deg);
+    transform-origin: 50% 50%;
+    width: clamp(32px, 12vw, 56px);
+    height: clamp(32px, 12vw, 56px);
+  }
+  .mechanics-toggle .material-symbols-outlined {
+    font-size: 18px;
+  }
+  .show-more-stages-btn {
+    width: 80% !important;
+  }
+  .energy-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  .energy-pickr-input {
+    height: 17.5px;
+  }
+  .rarity-btns-sizes {
+    width: auto !important;
+    font-size: 10px !important;
   }
 }

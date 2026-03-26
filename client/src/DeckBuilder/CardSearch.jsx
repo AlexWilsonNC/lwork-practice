@@ -228,12 +228,12 @@ const slugCss = (s) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck }) {
+export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, advancedSearchModalBg, themeName }) {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
     const [suppressDefault, setSuppressDefault] = useState(true) // PT2 - Auto load most recent set - value=false
-    const [showSets, setShowSets] = useState(false)
+    // const [showSets, setShowSets] = useState(false)
     const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
     const toggleBtnRef = useRef(null);
@@ -243,9 +243,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
 
     const MECH_PRIMARY_KEYS = ['ex', 'EX', 'v', 'gx', 'tera', 'ace spec', 'mega'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
-    const [showMoreStages, setShowMoreStages] = useState(false);
+    // const [showMoreStages, setShowMoreStages] = useState(false);
     const [showEnergyMenu, setShowEnergyMenu] = useState(false);
-    const [showMoreRarity, setShowMoreRarity] = useState(false);
+    // const [showMoreRarity, setShowMoreRarity] = useState(false);
     const setsInputFocusedRef = useRef(false);
     const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
     const [selectedLegalityPreset, setSelectedLegalityPreset] = useState('');
@@ -1693,7 +1693,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                     </button>
                     {showAdvanced && (
                         <div className="advanced-search-modal-overlay" onClick={() => setShowAdvanced(false)}>
-                            <div className="advanced-search-modal" onClick={e => e.stopPropagation()}>
+                            <div
+                                className="advanced-search-modal"
+                                onClick={e => e.stopPropagation()}
+                                style={{
+                                    background: advancedSearchModalBg,
+                                    color: themeName === 'light' ? '#111' : '#f5f5f5'
+                                }}
+                            >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <h2>Advanced Search</h2>
                                     <button
@@ -1794,7 +1801,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Format:</h3>
                                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <div className='stage-type-buttons' style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+                                        <div className='stage-type-buttons format-specifically' style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
                                             <button
                                                 type="button"
                                                 className={`type-btn non-bold-typebtn ${selectedLegalityPreset === 'standard' ? 'active' : ''}`}
@@ -2117,7 +2124,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                             aria-expanded={showMoreMechs}
                                         >
                                             <span className="toggle-label">
-                                                {showMoreMechs ? 'Show less' : 'Show more'}
+                                                {showMoreMechs ? 'Less' : 'More'}
                                             </span>
                                             <span className="material-symbols-outlined" aria-hidden="true">
                                                 {showMoreMechs ? 'expand_less' : 'expand_more'}
@@ -2128,10 +2135,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                 <div className="filter-group">
                                     <h3>Stage:</h3>
                                     <div className="stage-type-buttons">
-                                        {(showMoreStages
-                                            ? STAGE_OPTIONS
-                                            : STAGE_OPTIONS.filter(s => STAGE_PRIMARY_KEYS.includes(s.key))
-                                        ).map(({ key, label }) => (
+                                        {STAGE_OPTIONS.map(({ key, label }) => (
                                             <button
                                                 key={key}
                                                 type="button"
@@ -2149,20 +2153,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 {label}
                                             </button>
                                         ))}
-                                        <button
-                                            type="button"
-                                            className="type-btn non-bold-typebtn mechanics-toggle"
-                                            style={{ '--typeIcon': 'none' }}
-                                            onClick={() => setShowMoreStages(v => !v)}
-                                            aria-expanded={showMoreStages}
-                                        >
-                                            <span className="toggle-label">
-                                                {showMoreStages ? 'Show less' : 'Show more'}
-                                            </span>
-                                            <span className="material-symbols-outlined" aria-hidden="true">
-                                                {showMoreStages ? 'expand_less' : 'expand_more'}
-                                            </span>
-                                        </button>
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -2278,12 +2268,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                         >
                                             {HP_OPERATORS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                                         </select>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} className="energy-picker">
                                             <input
                                                 type="text"
                                                 inputMode="numeric"
-                                                placeholder="# or energy type >"
-                                                className="type-btn non-bold-typebtn"
+                                                placeholder="# or energy type"
+                                                className="type-btn non-bold-typebtn energy-pickr-input"
                                                 style={{ width: 180 }}
                                                 value={attackCostText}
                                                 onChange={(e) => {
@@ -2299,7 +2289,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                                 }}
                                             />
                                             <div
-                                                className="energy-picker"
                                                 style={{ position: 'relative' }}
                                                 tabIndex={-1}
                                                 onBlur={(e) => {
@@ -2394,39 +2383,39 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck })
                                     <h3>Artist:</h3>
                                     <input
                                         type="text"
-                                        className="type-btn hp-input"
+                                        className="type-btn hp-input energy-pickr-input"
                                         placeholder="e.g. Mitsuhiro Arita"
                                         value={draftFilters.artist || ''}
                                         onChange={(e) => setDraftFilters(f => ({ ...f, artist: e.target.value }))}
                                     />
                                 </div>
                                 <div className="filter-group">
-    <h3>Rarity:</h3>
-    <div className="stage-type-buttons">
-        {RARITY_ALL.map(r => {
-            const on = !!(draftFilters.rarity && draftFilters.rarity[r]);
-            return (
-                <button
-                    key={r}
-                    type="button"
-                    className={`type-btn non-bold-typebtn ${on ? 'active' : ''}`}
-                    aria-pressed={!!on}
-                    onClick={() => {
-                        const on = draftFilters.rarity?.[r];
-                        setDraftFilters(f => ({
-                            ...f,
-                            rarity: { ...(f.rarity || {}), [r]: !on }
-                        }));
-                    }}
-                >
-                    {r}
-                </button>
-            );
-        })}
-    </div>
-</div>
+                                    <h3>Rarity:</h3>
+                                    <div className="stage-type-buttons">
+                                        {RARITY_ALL.map(r => {
+                                            const on = !!(draftFilters.rarity && draftFilters.rarity[r]);
+                                            return (
+                                                <button
+                                                    key={r}
+                                                    type="button"
+                                                    className={`rarity-btns-sizes type-btn non-bold-typebtn ${on ? 'active' : ''}`}
+                                                    aria-pressed={!!on}
+                                                    onClick={() => {
+                                                        const on = draftFilters.rarity?.[r];
+                                                        setDraftFilters(f => ({
+                                                            ...f,
+                                                            rarity: { ...(f.rarity || {}), [r]: !on }
+                                                        }));
+                                                    }}
+                                                >
+                                                    {r}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                                 <div className="buttons-row-modal bottom-advanced-filter-apply-btns">
-                                    <div className="buttons-row-modal flex-start" style={{marginTop:'0'}}>
+                                    <div className="buttons-row-modal flex-start" style={{ marginTop: '0' }}>
                                         {isSearchingAll && (
                                             <span className="material-symbols-outlined search-all-side-spinner">
                                                 progress_activity

@@ -104,6 +104,7 @@ export const lightTheme = {
   profilesettingsbg: 'rgba(235, 235, 235, 0.557)',
   dropdownsbg: '#fff',
   cardModalContentZoomCard: 'linear-gradient(to bottom right, rgb(172, 175, 181), rgb(239, 244, 245))',
+  advancedSearchModalBg: 'rgb(235, 238, 241)',
 
 };
 
@@ -203,5 +204,6 @@ export const darkTheme = {
   profilesettingsbg: 'rgba(21, 21, 21, 0.25)',
   dropdownsbg: 'rgba(0, 0, 0, 0.42)',
   cardModalContentZoomCard: 'linear-gradient(to bottom right, rgb(47, 49, 54), rgb(21, 25, 35))',
-
+  advancedSearchModalBg: 'rgb(15, 24, 33)',
+  
 };
