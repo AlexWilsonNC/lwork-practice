@@ -252,7 +252,6 @@ export default function DeckBuilder() {
   const [exportingImage, setExportingImage] = useState(false)
   const deckRef = useRef()
   const menuRef = useRef(null)
-  const uploadImageInputRef = useRef(null);
   const params = new URLSearchParams(window.location.search);
   const originalDeckId = params.get('deckId');
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
@@ -456,15 +455,12 @@ export default function DeckBuilder() {
   };
 
   const handleUploadImageSelect = (e) => {
-    const files = Array.from(e.dataTransfer?.files || []);
-const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
+    const files = Array.from(e.target.files || []);
+    const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
 
-if (imageFiles.length) {
-  imageFiles.forEach(file => {
-    addUploadedImageCard(makeUploadedImageCard(file));
-  });
-  return;
-}
+    imageFiles.forEach(file => {
+      addUploadedImageCard(makeUploadedImageCard(file));
+    });
 
     e.target.value = '';
   };
@@ -1057,26 +1053,7 @@ if (imageFiles.length) {
 
             if (imageFiles.length) {
               imageFiles.forEach(file => {
-                imageFiles.forEach(file => {
-                  addUploadedImageCard(makeUploadedImageCard(file));
-                });
-                const safeBaseName = (file.name || 'Uploaded Card').replace(/\.[^.]+$/, '');
-
-                addUploadedImageCard({
-                  id: `uploaded-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-                  name: safeBaseName,
-                  setAbbrev: 'UPL',
-                  number: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-                  supertype: 'Custom',
-                  subtypes: ['Uploaded'],
-                  images: {
-                    small: objectUrl,
-                    large: objectUrl
-                  },
-                  count: 1,
-                  isUploadedImageCard: true,
-                  uploadedFileName: file.name
-                });
+                addUploadedImageCard(makeUploadedImageCard(file));
               });
               return;
             }
@@ -1123,21 +1100,26 @@ if (imageFiles.length) {
                   <p>Reset</p>
                 </div>
                 <input
-                  ref={uploadImageInputRef}
+                  id="deck-upload-custom-image-input"
                   type="file"
                   accept="image/*"
                   multiple
                   style={{ display: 'none' }}
                   onChange={handleUploadImageSelect}
                 />
-                <div
+
+                <button
+                  type="button"
                   id="deck-upload-custom-image"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => uploadImageInputRef.current?.click()}
                   title="Upload custom image card"
+                  onClick={() => {
+                    const input = document.getElementById('deck-upload-custom-image-input');
+                    if (input) input.click();
+                  }}
                 >
                   <span className="material-symbols-outlined">upload_file</span>
-                </div>
+                </button>
                 <div className="limit-menu-container" ref={menuRef}>
                   <button
                     className="limit-menu-btn"
