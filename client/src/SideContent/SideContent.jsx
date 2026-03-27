@@ -95,17 +95,17 @@ const SidebarComponent = () => {
           tournament? Spot a mistake? Would you like to write articles? Please reach out to us at <a className='one-more-link' href='mailto:ptcglegends@gmail.com'>ptcglegends@gmail.com</a>.</p>
       </div>
 
-      <div className='side-section'>
+      <a className='side-section' href='https://www.patreon.com/PTCGLegends' target='_blank' rel="noopener noreferrer">
         <div className='flex-row'>
           <img className='side-icon' src={patreonImg} alt='Help us Archive' />
           <h4>A Special Thank You!</h4>
         </div>
-        <p style={{marginBottom: '5px'}}>To the below Legends that support us on Patreon!</p>
+        <p style={{marginBottom: '5px'}}>To the below Legends that support us on <span className='blue'>Patreon</span>!</p>
         <ul className='patreonLegendsUl'>
           <li>Jesse Benedict</li>
           <li>CachoOfSinnoh</li>
         </ul>
-      </div>
+      </a>
 
       <blockquote className="twitter-tweet">
         <a href="https://twitter.com/PTCG_Legends/status/1842225599953199256"></a>
