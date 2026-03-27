@@ -170,7 +170,7 @@ function requireAuth(req, res, next) {
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 8 * 1024 * 1024, // 8MB
+    fileSize: 4 * 1024 * 1024,
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype && file.mimetype.startsWith('image/')) {
@@ -497,19 +497,19 @@ app.put('/api/user/decks/:deckId', requireAuth, async (req, res) => {
     deck.createdAt = Date.now();
 
     const primary = await getCardByKey(deck.mascotCard);
-   Object.assign(deck, pickMascotFields(primary));
-   if (deck.secondaryMascotCard) {
-     const secondary = await getCardByKey(deck.secondaryMascotCard);
-     Object.assign(deck, pickMascotFields(secondary, 'secondary'));
-   } else {
-     deck.secondaryMascotImageUrl = null;
-     deck.secondaryHasAncientTrait = false;
-     deck.secondaryIsTagTeam = false;
-     deck.secondaryHasBreakTrait = false;
-     deck.secondaryIsLegendCard = false;
-     deck.secondarySpecificallyLugiaLegend = false;
-     deck.secondarySpecificallyZoroarkGX = false;
-   }
+    Object.assign(deck, pickMascotFields(primary));
+    if (deck.secondaryMascotCard) {
+      const secondary = await getCardByKey(deck.secondaryMascotCard);
+      Object.assign(deck, pickMascotFields(secondary, 'secondary'));
+    } else {
+      deck.secondaryMascotImageUrl = null;
+      deck.secondaryHasAncientTrait = false;
+      deck.secondaryIsTagTeam = false;
+      deck.secondaryHasBreakTrait = false;
+      deck.secondaryIsLegendCard = false;
+      deck.secondarySpecificallyLugiaLegend = false;
+      deck.secondarySpecificallyZoroarkGX = false;
+    }
 
     await user.save();
     res.json({ success: true, deck });
@@ -2072,6 +2072,69 @@ app.post('/api/user/deck-assets', requireAuth, upload.single('image'), async (re
   } catch (err) {
     console.error('Deck asset upload failed:', err);
     res.status(500).json({ error: 'Could not upload deck asset' });
+  }
+});
+
+app.get('/api/export-image-proxy', async (req, res) => {
+  try {
+    const rawUrl = req.query.url;
+    if (!rawUrl) {
+      return res.status(400).send('Missing url');
+    }
+
+    const decodedUrl = decodeURIComponent(rawUrl);
+
+    const allowedHosts = new Set([
+      'images.pokemontcg.io',
+      'images.scrydex.com',
+      'res.cloudinary.com',
+      'pkmncards.com',
+      'www.pkmncards.com',
+      'i.ibb.co',
+      'ibb.co',
+      'limitlesstcg.com',
+      'www.limitlesstcg.com',
+      'assets.limitlesstcg.com',
+      'cdn.limitlesstcg.com'
+    ]);
+
+    const parsed = new URL(decodedUrl);
+
+    const allowedHostSuffixes = [
+      'images.pokemontcg.io',
+      'images.scrydex.com',
+      'res.cloudinary.com',
+      'pkmncards.com',
+      'ibb.co',
+      'i.ibb.co',
+      'limitlesstcg.com',
+      'nyc3.digitaloceanspaces.com'
+    ];
+
+    const hostAllowed = allowedHostSuffixes.some(
+      suffix =>
+        parsed.hostname === suffix ||
+        parsed.hostname.endsWith(`.${suffix}`)
+    );
+
+    if (!hostAllowed) {
+      return res.status(403).send(`Host not allowed: ${parsed.hostname}`);
+    }
+
+    const response = await fetch(decodedUrl);
+    if (!response.ok) {
+      return res.status(502).send('Failed to fetch remote image');
+    }
+
+    const contentType = response.headers.get('content-type') || 'image/png';
+    const arrayBuffer = await response.arrayBuffer();
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(Buffer.from(arrayBuffer));
+  } catch (err) {
+    console.error('export-image-proxy failed:', err);
+    res.status(500).send('Proxy failed');
   }
 });
 

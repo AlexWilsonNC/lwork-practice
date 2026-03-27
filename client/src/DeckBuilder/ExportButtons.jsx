@@ -61,7 +61,18 @@ async function prepareDecklistForSave(deck, token) {
       );
     }
 
-    const asset = await uploadDeckAsset(file, token);
+    if (file.size > 15 * 1024 * 1024) {
+      throw new Error(`"${card.name}" is too large. Please use an image under 15MB.`);
+    }
+
+    const compressedFile = await compressDeckImage(file, {
+      maxWidth: 420,
+      maxHeight: 586,
+      quality: 0.86,
+      mimeType: 'image/jpeg'
+    });
+
+    const asset = await uploadDeckAsset(compressedFile, token);
 
     prepared.push({
       ...card,
@@ -254,6 +265,102 @@ function MascotSelect({
       )}
     </div>
   );
+}
+
+async function compressDeckImage(file, {
+  maxWidth = 420,
+  maxHeight = 586,
+  quality = 0.86,
+  mimeType = 'image/jpeg'
+} = {}) {
+  const objectUrl = URL.createObjectURL(file);
+
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = objectUrl;
+    });
+
+    const scale = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+    const targetWidth = Math.round(img.width * scale);
+    const targetHeight = Math.round(img.height * scale);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, mimeType, quality);
+    });
+
+    if (!blob) {
+      throw new Error('Image compression failed');
+    }
+
+    const originalBase = (file.name || 'custom-card').replace(/\.[^.]+$/, '');
+    const extension = mimeType === 'image/webp' ? 'webp' : 'jpg';
+
+    return new File(
+      [blob],
+      `${originalBase}-compressed.${extension}`,
+      { type: mimeType }
+    );
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+async function blobToDataUrl(blob) {
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function prepareImagesForExport(node) {
+  const imgs = Array.from(node.querySelectorAll('img.database-card-in-list'));
+  const restorers = [];
+
+  for (const img of imgs) {
+    const originalSrc = img.getAttribute('src');
+    if (!originalSrc) continue;
+
+    // Leave inline data URLs alone
+    if (originalSrc.startsWith('data:')) continue;
+
+    // Skip temporary blob images
+    if (originalSrc.startsWith('blob:')) continue;
+
+    const proxiedSrc = `/api/export-image-proxy?url=${encodeURIComponent(originalSrc)}`;
+
+    restorers.push(() => {
+      img.setAttribute('src', originalSrc);
+    });
+
+    img.setAttribute('src', proxiedSrc);
+  }
+
+  await Promise.all(
+    imgs.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        const done = () => resolve();
+        img.onload = done;
+        img.onerror = done;
+      });
+    })
+  );
+
+  return () => {
+    restorers.forEach(fn => fn());
+  };
 }
 
 export default function ExportButtons({ deck, originalDeckId, onImportDeck, deckRef, onExportStart, onExportEnd }) {
@@ -526,29 +633,46 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   </defs>
   <rect width="100%" height="100%" fill="url(#patternBg)"/>
 </svg>`;
+
     const bgUrl = `url('data:image/svg+xml;utf8,${encodeURIComponent(patternSvg)}')`;
     const prevBg = node.style.background;
+    const prevBgSize = node.style.backgroundSize;
     const prevPaddingBottom = node.style.paddingBottom;
-    node.style.background = bgUrl;
-    node.style.backgroundSize = '75px 75px';
-    node.style.paddingBottom = '21px';
 
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
+    let restoreCustomImages = () => { };
 
     try {
-      const dataUrl = await toPng(node, {
-        cacheBust: true,
-        backgroundColor: null,
-        pixelRatio
-      });
+      node.style.background = bgUrl;
+      node.style.backgroundSize = '75px 75px';
+      node.style.paddingBottom = '21px';
 
-      node.style.background = prevBg;
-      node.style.paddingBottom = prevPaddingBottom;
-      node.classList.remove('exporting');
+      restoreCustomImages = await prepareImagesForExport(node);
+
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      const isIOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.userAgent.includes('Mac') && 'ontouchend' in window);
+
+      const dataUrl = await toPng(node, {
+        cacheBust: false,
+        includeQueryParams: true,
+        backgroundColor: null,
+        pixelRatio,
+        skipFonts: true,
+        imagePlaceholder:
+          'data:image/svg+xml;charset=UTF-8,' +
+          encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="420" height="586">
+            <rect width="100%" height="100%" fill="#2e2e32"/>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                  fill="#ffffff" font-size="20" font-family="Arial, sans-serif">
+              Image unavailable
+            </text>
+          </svg>
+        `)
+      });
 
       if (isIOS) {
         const blob = await (await fetch(dataUrl)).blob();
@@ -557,7 +681,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({ files: [file], title: 'PTCG Legends Deck' });
-          } catch (e) {
+          } catch {
             const url = URL.createObjectURL(blob);
             window.location.assign(url);
             setTimeout(() => URL.revokeObjectURL(url), 15000);
@@ -578,13 +702,16 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 4000);
       }
-
     } catch (err) {
       console.error('Could not generate image', err);
-      node.style.background = prevBg;
-      node.classList.remove('exporting');
       alert('Could not generate image. Please contact us at ptcglegends@gmail.com with the decklist so we can look into this error.');
     } finally {
+      restoreCustomImages();
+      node.style.background = prevBg;
+      node.style.backgroundSize = prevBgSize;
+      node.style.paddingBottom = prevPaddingBottom;
+      node.classList.remove('exporting');
+
       setTimeout(() => {
         const ae = document.activeElement;
         if (ae && typeof ae.blur === 'function') ae.blur();

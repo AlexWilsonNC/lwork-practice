@@ -456,12 +456,15 @@ export default function DeckBuilder() {
   };
 
   const handleUploadImageSelect = (e) => {
-    const files = Array.from(e.target.files || []);
-    const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
+    const files = Array.from(e.dataTransfer?.files || []);
+const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
 
-    imageFiles.forEach(file => {
-      addUploadedImageCard(makeUploadedImageCard(file));
-    });
+if (imageFiles.length) {
+  imageFiles.forEach(file => {
+    addUploadedImageCard(makeUploadedImageCard(file));
+  });
+  return;
+}
 
     e.target.value = '';
   };

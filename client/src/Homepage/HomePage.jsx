@@ -259,7 +259,7 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                            <div className='overlay'>Coming Soon</div>
+                            <div className='overlay' style={{textAlign: 'center'}}>Coming April 1st!</div>
                             <a href='/deckbuilder' className='not-ready'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={deckBuilder} />
@@ -481,7 +481,7 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall footerupon-mobile'>
                         <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                        <div className='overlay'>Coming Soon</div>
+                        <div className='overlay' style={{textAlign: 'center'}}>Coming April 1st!</div>
                         <a href='/deckbuilder' className='not-ready'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={deckBuilder} />
