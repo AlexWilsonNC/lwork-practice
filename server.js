@@ -2084,20 +2084,6 @@ app.get('/api/export-image-proxy', async (req, res) => {
 
     const decodedUrl = decodeURIComponent(rawUrl);
 
-    const allowedHosts = new Set([
-      'images.pokemontcg.io',
-      'images.scrydex.com',
-      'res.cloudinary.com',
-      'pkmncards.com',
-      'www.pkmncards.com',
-      'i.ibb.co',
-      'ibb.co',
-      'limitlesstcg.com',
-      'www.limitlesstcg.com',
-      'assets.limitlesstcg.com',
-      'cdn.limitlesstcg.com'
-    ]);
-
     const parsed = new URL(decodedUrl);
 
     const allowedHostSuffixes = [
@@ -2108,7 +2094,9 @@ app.get('/api/export-image-proxy', async (req, res) => {
       'ibb.co',
       'i.ibb.co',
       'limitlesstcg.com',
-      'nyc3.digitaloceanspaces.com'
+      'nyc3.digitaloceanspaces.com',
+      'nyc3.cdn.digitaloceanspaces.com',
+      'storage.googleapis.com'
     ];
 
     const hostAllowed = allowedHostSuffixes.some(
