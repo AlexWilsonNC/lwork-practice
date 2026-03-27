@@ -71,6 +71,14 @@ const IMPORT_SET_ABBREV_ALIASES = {
   NP: 'PR-EX',
   FL: 'RG',
   FRLG: 'RG',
+  DPP: 'PR-DP',
+  HSP: 'PR-HS',
+  BWP: 'PR-BW',
+  BW: 'BLW',
+  XYP: 'PR-XY',
+  SMP: 'PR-SM',
+  SP: 'PR-SW',
+  SVP: 'PR-SV'
 };
 
 const normalizeImportedSetAbbrev = (setAbbrev) => {
