@@ -8,6 +8,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  // "SVI-POR",
   "SVI-ASC",
   "SVI-PFL",
   "SVI-MEG",

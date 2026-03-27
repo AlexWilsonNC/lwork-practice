@@ -1,5 +1,6 @@
 const orderedSets = [
 // sv
+    "POR",
     "ASC",
     "PFL",
     "MEG",
