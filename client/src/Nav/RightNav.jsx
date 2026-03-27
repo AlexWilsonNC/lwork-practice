@@ -108,7 +108,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
     <div className='right-nav' ref={ref}>
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
-        <li><a href='/cards/ASC'>Cards</a></li>
+        <li><a href='/cards/POR'>Cards</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/players'>Players</a></li>
       </ul>
@@ -127,7 +127,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         </div>
         <hr className='burger-nav-hr'></hr>
         <li><a href='/tournaments/completed'>Tournaments</a></li>
-        <li><a href='/cards/ASC'>Cards</a></li>
+        <li><a href='/cards/POR'>Cards</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/players'>Players</a></li>
         <div className='burger-resources'>
