@@ -1897,7 +1897,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                             ))}
                                         </select>
 
-                                        <label style={{ opacity: 0.85 }}>through</label>
+                                        <label class='through-sets-word' style={{ opacity: 0.85 }}>through</label>
 
                                         <select
                                             className={`type-btn non-bold-typebtn hp-btn-dropdown select-second-set-drop ${draftFilters.formatRange?.to ? '' : 'is-placeholder'}`}

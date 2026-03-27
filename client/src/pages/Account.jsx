@@ -109,11 +109,13 @@ function MascotPicker({ value, onChange, decklist, allowNone = false, noneLabel 
     const [open, setOpen] = React.useState(false);
     const ref = React.useRef(null);
 
-    const options = (decklist || []).map(c => ({
-        key: `${c.setAbbrev || c.set}-${c.number}`,
-        name: c.name,
-        img: c?.images?.small || c?.imageUrl || ''
-    }));
+    const options = (decklist || [])
+        .filter(c => !(c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'))
+        .map(c => ({
+            key: `${c.setAbbrev || c.set}-${c.number}`,
+            name: c.name,
+            img: c?.images?.small || c?.imageUrl || ''
+        }));
 
     const selected = options.find(o => o.key === value);
 
@@ -488,45 +490,57 @@ export default function Account() {
         window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
     };
 
-    function goToDeckbuilder(deck, newTab = false) {
-        const raw = deck.decklist;
+    const goToDeckbuilder = (deckObj) => {
+        const raw = deckObj.decklist;
         const cards = Array.isArray(raw)
             ? raw
             : [
                 ...(raw.pokemon || []),
                 ...(raw.trainer || []),
-                ...(raw.energy || []),
+                ...(raw.energy || [])
             ];
 
-        try {
-            localStorage.setItem(
-                'PTCGLegendsOriginalDeckMeta',
-                JSON.stringify({
-                    id: deck._id,
-                    name: deck.name || '',
-                    mascotCard: deck.mascotCard || '',
-                    secondaryMascotCard: deck.secondaryMascotCard || '',
-                    description: deck.description || '',
-                    folderId: deck.folderId ? String(deck.folderId) : ''
-                })
-            );
-        } catch { }
+        const minimal = cards.map(c => {
+            const setCode = c.setAbbrev || c.set;
 
-        const minimal = cards.map(c => ({
-            set: c.setAbbrev || c.set,
-            number: c.number,
-            count: c.count,
-        }));
+            if (c.isUploadedImageCard || setCode === 'UPL') {
+                return {
+                    set: setCode,
+                    number: c.number,
+                    count: c.count,
+                    name: c.name,
+                    supertype: c.supertype,
+                    subtypes: c.subtypes || [],
+                    isUploadedImageCard: true,
+                    imageUrl: c.imageUrl || '',
+                    images: c.images
+                        ? { small: c.images.small, large: c.images.large }
+                        : undefined,
+                    uploadedPublicId: c.uploadedPublicId || '',
+                    uploadedAssetId: c.uploadedAssetId || '',
+                    uploadedFileName: c.uploadedFileName || ''
+                };
+            }
+
+            return {
+                set: setCode,
+                number: c.number,
+                count: c.count
+            };
+        });
 
         const fragment = encodeURIComponent(JSON.stringify(minimal));
-        const url = `/bobthebuilder?deckId=${deck._id}#deck=${fragment}`;
 
-        if (newTab) {
-            window.open(url, '_blank', 'noopener,noreferrer');
-        } else {
-            window.location.href = url;
-        }
-    }
+        localStorage.setItem('PTCGLegendsOriginalDeckMeta', JSON.stringify({
+            id: deckObj._id,
+            name: deckObj.name || '',
+            mascotCard: deckObj.mascotCard || '',
+            secondaryMascotCard: deckObj.secondaryMascotCard || '',
+            description: deckObj.description || ''
+        }));
+
+        navigate(`/bobthebuilder?deckId=${deckObj._id}#deck=${fragment}`);
+    };
 
     const handleCreateFolder = async () => {
         const name = newFolderName.trim();
@@ -1973,7 +1987,16 @@ export default function Account() {
                                             }
                                             loading={false}
                                             onUpdateCount={() => { }}
-                                            onCardClick={card => { window.open(`/card/${card.setAbbrev}/${card.number}`, '_blank'); }}
+                                            onCardClick={(card) => {
+                                                const setCode = card.setAbbrev || card.set;
+
+                                                if (card.isUploadedImageCard || setCode === 'UPL') {
+                                                    alert('This is a custom uploaded image, not found in the database.');
+                                                    return;
+                                                }
+
+                                                navigate(`/card/${setCode}/${card.number}`);
+                                            }}
                                             viewMode="image"
                                         />
                                     </div>

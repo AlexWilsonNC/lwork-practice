@@ -2,6 +2,84 @@ import React, { useState, useRef, useEffect, useContext } from 'react'
 import { toPng } from 'html-to-image'
 import { AuthContext } from '../contexts/AuthContext'
 
+async function uploadDeckAsset(file, token) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch('/api/user/deck-assets', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  });
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error || 'Upload failed');
+  }
+
+  return json.asset;
+}
+
+async function prepareDecklistForSave(deck, token) {
+  const prepared = [];
+
+  for (const card of deck) {
+    if (!card?.isUploadedImageCard) {
+      prepared.push({
+        ...card,
+        uploadedFileObject: undefined
+      });
+      continue;
+    }
+
+    const alreadyPermanent =
+      card.imageUrl &&
+      !String(card.imageUrl).startsWith('blob:') &&
+      !String(card.images?.small || '').startsWith('blob:');
+
+    if (alreadyPermanent) {
+      prepared.push({
+        ...card,
+        uploadedFileObject: undefined
+      });
+      continue;
+    }
+
+    const file = card.uploadedFileObject;
+
+    const isRealFile =
+      typeof File !== 'undefined' && file instanceof File;
+
+    const isRealBlob =
+      typeof Blob !== 'undefined' && file instanceof Blob;
+
+    if (!isRealFile && !isRealBlob) {
+      throw new Error(
+        `Uploaded image for "${card.name}" is no longer a real file in memory. Re-drop the image into the deck before saving.`
+      );
+    }
+
+    const asset = await uploadDeckAsset(file, token);
+
+    prepared.push({
+      ...card,
+      uploadedAssetId: asset.assetId,
+      uploadedPublicId: asset.publicId,
+      uploadedFileName: asset.originalFilename || card.uploadedFileName,
+      imageUrl: asset.url,
+      images: {
+        small: asset.url,
+        large: asset.url
+      },
+      uploadedFileObject: undefined
+    });
+  }
+
+  return prepared;
+}
+
 function MascotSelect({
   value,
   onChange,
@@ -16,11 +94,13 @@ function MascotSelect({
 
   const keyFor = c => `${c.setAbbrev || c.set}-${c.number}`;
 
-  const options = deck.map(c => ({
-    key: keyFor(c),
-    name: c.name,
-    img: c?.images?.small || ''
-  }));
+  const options = deck
+    .filter(c => !(c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'))
+    .map(c => ({
+      key: keyFor(c),
+      name: c.name,
+      img: c?.images?.small || ''
+    }));
 
   const selected = options.find(o => o.key === value);
 
@@ -335,16 +415,40 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   };
 
   const shareLink = () => {
-    const minimal = deck.map(c => ({
-      set: c.setAbbrev,
-      number: c.number,
-      count: c.count
-    }));
+    const minimal = deck.map(c => {
+      const setCode = c.setAbbrev || c.set;
+
+      if (c.isUploadedImageCard || setCode === 'UPL') {
+        return {
+          set: setCode,
+          number: c.number,
+          count: c.count,
+          name: c.name,
+          supertype: c.supertype,
+          subtypes: c.subtypes || [],
+          isUploadedImageCard: true,
+          imageUrl: c.imageUrl || '',
+          images: c.images
+            ? { small: c.images.small, large: c.images.large }
+            : undefined,
+          uploadedPublicId: c.uploadedPublicId || '',
+          uploadedAssetId: c.uploadedAssetId || '',
+          uploadedFileName: c.uploadedFileName || ''
+        };
+      }
+
+      return {
+        set: setCode,
+        number: c.number,
+        count: c.count
+      };
+    });
+
     const fragment = encodeURIComponent(JSON.stringify(minimal));
     const url = `${window.location.origin}/bobthebuilder#deck=${fragment}`;
-    navigator.clipboard.writeText(url).then(/* show “✓ copied” */);
-    setShowCopyMenu(false)
-    setShowSuccess(true)
+    navigator.clipboard.writeText(url);
+    setShowCopyMenu(false);
+    setShowSuccess(true);
   };
 
   useEffect(() => {
@@ -512,15 +616,26 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
     if (!name.trim() || !mascotCard) return;
 
-    const flatDeck = deck.map(c => ({
+    const token = localStorage.getItem('PTCGLegendsToken');
+
+    const preparedDeck = await prepareDecklistForSave(deck, token);
+
+    const flatDeck = preparedDeck.map(c => ({
       set: c.setAbbrev || c.set,
       number: c.number,
       count: c.count,
 
       name: c.name,
       supertype: c.supertype,
+      subtypes: c.subtypes,
       setAbbrev: c.setAbbrev || c.set,
       regulationMark: c.regulationMark || '',
+
+      isUploadedImageCard: !!c.isUploadedImageCard,
+      uploadedAssetId: c.uploadedAssetId || '',
+      uploadedPublicId: c.uploadedPublicId || '',
+      uploadedFileName: c.uploadedFileName || '',
+      imageUrl: c.imageUrl || '',
 
       images: c.images
         ? { small: c.images.small, large: c.images.large }
@@ -529,7 +644,6 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
     setSaving(true)
     try {
-      const token = localStorage.getItem('PTCGLegendsToken')
       const url = overwriteMode && originalDeckId
         ? `/api/user/decks/${originalDeckId}`
         : '/api/user/decks';

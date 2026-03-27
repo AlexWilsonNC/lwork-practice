@@ -737,10 +737,14 @@ body.deckbuilder-page .deck-builder {
 }
 
 .database-card-in-list {
+  display: block;
+  width: 100%;
+  aspect-ratio: 63 / 88;
   height: auto;
+  object-fit: cover;
+  box-sizing: border-box;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
   border-radius: 4px;
-  width: 6vw;
 }
 
 .database-card-in-list:hover {
@@ -1140,13 +1144,28 @@ body.deckbuilder-page .deck-builder {
   background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 2px;
-  padding: 2px 13px;
+  padding: 1.5px 13px;
   color: white;
   font-size: 1.25rem;
   cursor: pointer;
 }
 
-.limit-menu-btn:hover {
+#deck-upload-custom-image {
+  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  padding: 4.5px 6px;
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#deck-upload-custom-image span {
+  font-size: 1.25rem;
+  color: white;
+}
+.limit-menu-btn:hover,
+#deck-upload-custom-image:hover {
   background-color: grey;
   background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
@@ -2535,6 +2554,12 @@ body.deckbuilder-page .deck-builder {
     font-size: 1.15rem;
   }
 
+  #deck-upload-custom-image {
+    border-radius: 3px;
+    padding: 3.5px 5px;
+    margin-left: 0.5rem;
+  }
+
   .zoom-slider {
     margin-left: 0.5rem;
   }
@@ -2836,6 +2861,14 @@ body.deckbuilder-page .deck-builder {
     font-size: 1.15rem;
   }
 
+  #deck-upload-custom-image {
+    padding: 4.5px 6px;
+    margin-left: 0.5rem;
+  }
+  #deck-upload-custom-image span {
+    font-size: 18px;
+  }
+
   .zoom-slider {
     margin-left: 0.5rem;
   }
@@ -2949,6 +2982,14 @@ body.deckbuilder-page .deck-builder {
   .limit-menu-btn {
     padding: 1.5px 10px;
     font-size: 1rem;
+  }
+
+  #deck-upload-custom-image {
+    padding: 3.5px 5px;
+    border-radius: 3px;
+  }
+  #deck-upload-custom-image span {
+    font-size: 16px;
   }
 
   .zoom-slider {
@@ -3150,7 +3191,10 @@ body.deckbuilder-page .deck-builder {
   .hideon450 {
     display: none !important;
   }
-
+  .through-sets-word {
+    font-size: 13px;
+    margin-left: 20px !important;
+  }
   .showon450 {
     display: flex;
   }
@@ -3188,6 +3232,13 @@ body.deckbuilder-page .deck-builder {
   .limit-menu-btn {
     padding: 0;
     width: 24px;
+  }
+
+  #deck-upload-custom-image {
+    padding: 3px 4.5px;
+  }
+  #deck-upload-custom-image span {
+    font-size: 14px;
   }
 
   .my-decks-btn button {

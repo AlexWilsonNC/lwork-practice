@@ -8,6 +8,9 @@ require('dotenv').config();
 // const https = require('https');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
+const streamifier = require('streamifier');
+const { v2: cloudinary } = require('cloudinary');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -40,6 +43,12 @@ const {
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful'))
   .catch(err => console.error('MongoDB connection error:', err));
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const authConnection = mongoose.createConnection(
   USER_MONGODB_URI,
@@ -156,6 +165,38 @@ function requireAuth(req, res, next) {
   } catch {
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
+}
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 8 * 1024 * 1024, // 8MB
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image uploads are allowed'));
+    }
+  }
+});
+
+function uploadBufferToCloudinary(buffer, options = {}) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'ptcg-legends/deck-assets',
+        resource_type: 'image',
+        ...options
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
 }
 
 const userDeckSchema = new mongoose.Schema({
@@ -2003,6 +2044,34 @@ app.get('/api/cardDecklists', async (req, res) => {
   } catch (err) {
     console.error('Error in /api/cardDecklists:', err);
     return res.status(500).json({ error: 'Server error fetching card decklists' });
+  }
+});
+
+app.post('/api/user/deck-assets', requireAuth, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    const result = await uploadBufferToCloudinary(req.file.buffer, {
+      public_id: `user_${req.userId}_${Date.now()}`,
+      overwrite: false
+    });
+
+    res.json({
+      success: true,
+      asset: {
+        publicId: result.public_id,
+        assetId: result.asset_id,
+        url: result.secure_url,
+        width: result.width,
+        height: result.height,
+        originalFilename: req.file.originalname
+      }
+    });
+  } catch (err) {
+    console.error('Deck asset upload failed:', err);
+    res.status(500).json({ error: 'Could not upload deck asset' });
   }
 });
 

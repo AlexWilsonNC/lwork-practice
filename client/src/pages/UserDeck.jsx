@@ -37,27 +37,43 @@ export default function UserDeck() {
         load();
     }, [deckId]);
 
-    // 2) fetch all card data (same as PlayerDeck)
-useEffect(() => {
-  if (!deck) return;
-  (async () => {
-    const all = [
-      ...(deck.decklist.pokemon  || []),
-      ...(deck.decklist.trainer  || []),
-      ...(deck.decklist.energy   || [])
-    ];
-    const map = {};
-    // loop through each deck entry (c)
-    for (let c of all) {
-      const key = `${c.set}-${c.number}`;      // now c is defined
-      const resp = await fetch(`/api/cards/${c.set}/${c.number}`);  // your GET /api/cards/:set/:number
-      if (!resp.ok) continue;
-      const card = await resp.json();
-      map[key] = card;
-    }
-    setCardMap(map);
-  })();
-}, [deck]);
+    useEffect(() => {
+        if (!deck) return;
+
+        (async () => {
+            const all = [
+                ...(deck.decklist.pokemon || []),
+                ...(deck.decklist.trainer || []),
+                ...(deck.decklist.energy || [])
+            ];
+
+            const map = {};
+
+            for (const c of all) {
+                const setCode = c.set || c.setAbbrev;
+                const key = `${setCode}-${c.number}`;
+
+                if (c.isUploadedImageCard || c.set === 'UPL' || c.setAbbrev === 'UPL') {
+                    map[key] = {
+                        ...c,
+                        images: c.images || {
+                            small: c.imageUrl,
+                            large: c.imageUrl
+                        }
+                    };
+                    continue;
+                }
+
+                const resp = await fetch(`/api/cards/${setCode}/${c.number}`);
+                if (!resp.ok) continue;
+
+                const card = await resp.json();
+                map[key] = card;
+            }
+
+            setCardMap(map);
+        })();
+    }, [deck]);
 
     if (!deck) {
         return <div className="spinner"></div>;

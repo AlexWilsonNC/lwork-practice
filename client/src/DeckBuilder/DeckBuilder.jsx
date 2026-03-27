@@ -252,6 +252,7 @@ export default function DeckBuilder() {
   const [exportingImage, setExportingImage] = useState(false)
   const deckRef = useRef()
   const menuRef = useRef(null)
+  const uploadImageInputRef = useRef(null);
   const params = new URLSearchParams(window.location.search);
   const originalDeckId = params.get('deckId');
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
@@ -296,6 +297,7 @@ export default function DeckBuilder() {
     const hash = window.location.hash.slice(1);
     const params = new URLSearchParams(hash);
     if (!params.has('deck')) return;
+
     let minimal;
     try {
       minimal = JSON.parse(decodeURIComponent(params.get('deck')));
@@ -305,22 +307,60 @@ export default function DeckBuilder() {
     }
 
     setLoadingHash(true);
-    Promise.all(
-      minimal.map(({ set, number, count }) =>
-        fetch(`/api/cards/${set}/${number}`)
-          .then(r => r.json())
-          .then(card => ({ ...card, count }))
-      )
-    ).then(fullDeck => setDeck(fullDeck))
-      .catch(console.error)
-      .finally(() => setLoadingHash(false))
+
+    (async () => {
+      try {
+        const fullDeck = [];
+
+        for (const c of minimal) {
+          const setCode = c.set || c.setAbbrev;
+
+          if (c.isUploadedImageCard || setCode === 'UPL') {
+            fullDeck.push({
+              ...c,
+              set: setCode,
+              setAbbrev: setCode,
+              images: c.images || {
+                small: c.imageUrl,
+                large: c.imageUrl
+              }
+            });
+            continue;
+          }
+
+          const resp = await fetch(`/api/cards/${setCode}/${c.number}`);
+          if (!resp.ok) continue;
+
+          const card = await resp.json();
+          fullDeck.push({
+            ...card,
+            count: c.count
+          });
+        }
+
+        setDeck(fullDeck);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingHash(false);
+      }
+    })();
   }, []);
 
   const [zoomCard, setZoomCard] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(deck))
-  }, [deck])
+    const safeDeck = deck.map(card => {
+      if (!card?.isUploadedImageCard) return card;
+
+      return {
+        ...card,
+        uploadedFileObject: undefined
+      };
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(safeDeck));
+  }, [deck]);
 
   const isBasicEnergy = c =>
     c?.supertype === 'Energy' && /^Basic\s/i.test(c?.name || '');
@@ -387,8 +427,43 @@ export default function DeckBuilder() {
         : sum;
     }, 0);
 
+  const makeUploadedImageCard = (file) => {
+    const objectUrl = URL.createObjectURL(file);
+    const baseName = (file.name || 'Uploaded Card').replace(/\.[^.]+$/, '');
+
+    return {
+      id: `uploaded-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      name: baseName,
+      setAbbrev: 'UPL',
+      set: 'UPL',
+      number: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      supertype: 'Custom',
+      subtypes: ['Uploaded'],
+      count: 1,
+      isUploadedImageCard: true,
+      uploadedFileName: file.name,
+      uploadedFileObject: file,
+      imageUrl: objectUrl,
+      images: {
+        small: objectUrl,
+        large: objectUrl
+      }
+    };
+  };
+
   const addUploadedImageCard = (customCard) => {
     setDeck(prev => [...prev, customCard]);
+  };
+
+  const handleUploadImageSelect = (e) => {
+    const files = Array.from(e.target.files || []);
+    const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
+
+    imageFiles.forEach(file => {
+      addUploadedImageCard(makeUploadedImageCard(file));
+    });
+
+    e.target.value = '';
   };
 
   function addCard(cardToAdd) {
@@ -979,7 +1054,9 @@ export default function DeckBuilder() {
 
             if (imageFiles.length) {
               imageFiles.forEach(file => {
-                const objectUrl = URL.createObjectURL(file);
+                imageFiles.forEach(file => {
+                  addUploadedImageCard(makeUploadedImageCard(file));
+                });
                 const safeBaseName = (file.name || 'Uploaded Card').replace(/\.[^.]+$/, '');
 
                 addUploadedImageCard({
@@ -1041,6 +1118,22 @@ export default function DeckBuilder() {
                 <div id="deck-reset" onClick={() => setDeck([])}>
                   <span className="material-symbols-outlined">close</span>
                   <p>Reset</p>
+                </div>
+                <input
+                  ref={uploadImageInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                  onChange={handleUploadImageSelect}
+                />
+                <div
+                  id="deck-upload-custom-image"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => uploadImageInputRef.current?.click()}
+                  title="Upload custom image card"
+                >
+                  <span className="material-symbols-outlined">upload_file</span>
                 </div>
                 <div className="limit-menu-container" ref={menuRef}>
                   <button
