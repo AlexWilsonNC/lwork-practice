@@ -80,8 +80,8 @@ function sortDeck(deck) {
   const isVSTAR = c => (c.subtypes?.includes('VSTAR')) || /\sVSTAR\s*$/i.test(c.name);
   const isVMAX = c => (c.subtypes?.includes('VMAX')) || /\sVMAX\s*$/i.test(c.name);
   const isVLine = c => isV(c) || isVSTAR(c) || isVMAX(c);
-
   const vTier = c => (isVMAX(c) ? 0 : isVSTAR(c) ? 1 : isV(c) ? 2 : 99);
+  const isMega = c => Array.isArray(c.subtypes) && c.subtypes.includes('MEGA');
 
   const sortedTrainers = [...trainers].sort((a, b) => {
     const subA = a.subtypes?.[0] ?? "";
@@ -187,6 +187,8 @@ function sortDeck(deck) {
         if (ta !== tb) return ta - tb;
       }
 
+      if (isMega(a) !== isMega(b)) return isMega(a) ? -1 : 1;
+
       const pa = stageOrder[a.subtypes?.[0] ?? "Basic"];
       const pb = stageOrder[b.subtypes?.[0] ?? "Basic"];
       if (pa !== pb) return pa - pb;
@@ -205,6 +207,7 @@ function sortDeck(deck) {
   const sortedPokemons = [];
   families.forEach(fam => {
     fam.sort((a, b) => {
+      if (isMega(a) !== isMega(b)) return isMega(a) ? -1 : 1;
       const pa = stageOrder[a.subtypes?.[0] ?? "Basic"];
       const pb = stageOrder[b.subtypes?.[0] ?? "Basic"];
       if (pa !== pb) return pa - pb;
