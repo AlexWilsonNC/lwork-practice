@@ -41,6 +41,12 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
     )
   }
 
+  const getCardHref = (c) => {
+  const setCode = c.setAbbrev || c.set;
+  if (c.isUploadedImageCard || setCode === 'UPL') return null;
+  return `/card/${setCode}/${c.number}`;
+};
+
   return (
     <div className={`deck-box${shrink ? ' shrink-cards' : ''}`}>
       {loading && (
@@ -121,15 +127,37 @@ export default function DeckList({ deck, onUpdateCount, onCardClick, loading = f
               }
             }}
           >
-            <img
-              src={c.images?.small || c.imageUrl || c.images?.large || ''}
-              data-export-custom={c.isUploadedImageCard ? 'true' : 'false'}
-              draggable={false}
-              onDragStart={e => e.preventDefault()}
-              alt={c.name}
-              className="database-card-in-list"
-              style={{ width: '100%', height: 'auto' }}
-            />
+            {(() => {
+  const href = getCardHref(c);
+  const imgEl = (
+    <img
+      src={c.images?.small || c.imageUrl || c.images?.large || ''}
+      data-export-custom={c.isUploadedImageCard ? 'true' : 'false'}
+      draggable={false}
+      onDragStart={e => e.preventDefault()}
+      alt={c.name}
+      className="database-card-in-list"
+      style={{ width: '100%', height: 'auto' }}
+    />
+  );
+
+  return href ? (
+    <a
+      href={href}
+      onClick={e => {
+        e.preventDefault();
+        e.stopPropagation();
+        onCardClick(c);
+      }}
+      style={{ display: 'block' }}
+      title={c.name}
+    >
+      {imgEl}
+    </a>
+  ) : (
+    imgEl
+  );
+})()}
             <div
               className="deck-add-minus"
               style={{

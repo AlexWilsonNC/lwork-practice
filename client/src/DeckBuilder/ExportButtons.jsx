@@ -589,6 +589,15 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   }
 
   const openPrintDecklist = () => {
+    const hasCustomUploadedCard = deck.some(
+    c => c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'
+  );
+
+  if (hasCustomUploadedCard) {
+    alert('You cannot print a decklist that contains a custom uploaded image.');
+    setShowCopyMenu(false);
+    return;
+  }
     const minimal = deck.map(c => ({
       supertype: c.supertype,
       set: c.setAbbrev,

@@ -1988,15 +1988,15 @@ export default function Account() {
                                             loading={false}
                                             onUpdateCount={() => { }}
                                             onCardClick={(card) => {
-                                                const setCode = card.setAbbrev || card.set;
+    const setCode = card.setAbbrev || card.set;
 
-                                                if (card.isUploadedImageCard || setCode === 'UPL') {
-                                                    alert('This is a custom uploaded image, not found in the database.');
-                                                    return;
-                                                }
+    if (card.isUploadedImageCard || setCode === 'UPL') {
+        alert('This is a custom uploaded image, not found in the database.');
+        return;
+    }
 
-                                                navigate(`/card/${setCode}/${card.number}`);
-                                            }}
+    window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
+}}
                                             viewMode="image"
                                         />
                                     </div>

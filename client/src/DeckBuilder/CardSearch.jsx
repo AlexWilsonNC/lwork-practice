@@ -2591,8 +2591,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                     <div className="all-cards-container">
                         <div className='all-cards-displayed'>
                             {displayResults.map(card => (
-                                <div
+                                <a
                                     key={`${card.setAbbrev}-${card.number}`}
+                                    href={`/card/${card.setAbbrev}/${card.number}`}
                                     className="searched-card-wrap"
                                     draggable
                                     onDragStart={e => {
@@ -2602,7 +2603,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                         )
                                         e.dataTransfer.effectAllowed = 'copy'
                                     }}
-                                    onClick={() => onCardClick(card)}
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        onCardClick(card);
+                                    }}
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <img
@@ -2621,7 +2625,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                         onTouchStart={e => e.currentTarget.classList.add('pressed')}
                                         onTouchEnd={e => e.currentTarget.classList.remove('pressed')}
                                     ></button>
-                                </div>
+                                </a>
                             ))}
                         </div>
                     </div>
