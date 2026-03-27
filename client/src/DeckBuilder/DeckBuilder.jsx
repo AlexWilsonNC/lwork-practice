@@ -62,6 +62,23 @@ const trainerPriority = {
   "Stadium": 3,
 };
 
+const IMPORT_SET_ABBREV_ALIASES = {
+  BS2: 'B2',
+  WP: 'PR-BS',
+  E1: 'EX',
+  E2: 'AQ',
+  E3: 'SK',
+  NP: 'PR-EX',
+  FL: 'RG',
+  FRLG: 'RG',
+};
+
+const normalizeImportedSetAbbrev = (setAbbrev) => {
+  if (!setAbbrev) return setAbbrev;
+  const cleaned = String(setAbbrev).trim().toUpperCase();
+  return IMPORT_SET_ABBREV_ALIASES[cleaned] || cleaned;
+};
+
 function sortDeck(deck) {
   const pokemons = deck.filter(c => c.supertype === "Pokémon");
   const trainers = deck.filter(c => c.supertype === "Trainer");
@@ -609,7 +626,8 @@ export default function DeckBuilder() {
         const parts = line.split(/\s+/);
         const count = parseInt(parts[0], 10);
         const number = parts.pop();
-        const setAbbrev = parts.pop();
+        const rawSetAbbrev = parts.pop();
+        const setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
         const name = parts.slice(1).join(' ');
 
         const safeName = encodeURIComponent(name).replace(/\./g, '%2E');

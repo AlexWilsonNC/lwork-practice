@@ -63,7 +63,7 @@ const orderedSets = [
     "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
     "MT", "DP", "PR-DP",
     "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
-    "TRR", "P1", "FL", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
+    "TRR", "P1", "RG", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
     "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
     "FO", "JU", "BS", "PR-BS",
 ];
@@ -175,7 +175,7 @@ const promoSets = {
     "DX": "PR-EX",
     "TRR": "PR-EX",
     "P1": "PR-EX",
-    "FL": "PR-EX",
+    "RG": "PR-EX",
     "HL": ["PR-EX", "RS"],
     "TK1": "PR-EX",
     "MA": "PR-EX",

@@ -133,7 +133,7 @@ const orderedSets = [
     "DX",
     "TRR",
     "P1",
-    "FL",
+    "RG",
     "HL",
     "TK1",
     "MA",

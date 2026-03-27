@@ -274,7 +274,7 @@ const formatDate = (dateString) => {
     { name: "Deoxys", abbrev: "DX", releaseDate: "Feb 1, 2005", total: "108" },
     { name: "Team Rocket Returns", abbrev: "TRR", releaseDate: "Nov 1, 2004", total: "111" },
     { name: "POP Series 1 *", abbrev: "P1", releaseDate: "Sep 1, 2004", total: "17" },
-    { name: "FireRed & LeafGreen", abbrev: "FL", releaseDate: "Sep 1, 2004", total: "116" },
+    { name: "FireRed & LeafGreen", abbrev: "RG", releaseDate: "Sep 1, 2004", total: "116" },
     { name: "EX Trainer Kit *", abbrev: "TK1", releaseDate: "Jun 1, 2004", total: "10" },
     { name: "Hidden Legends", abbrev: "HL", releaseDate: "Jun 1, 2004", total: "102" },
     { name: "Team Magma vs Team Aqua", abbrev: "MA", releaseDate: "Mar 1, 2004", total: "97" },
