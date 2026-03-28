@@ -27,6 +27,7 @@ import magnezone from '../../public/assets/sprites/magnezone.png'
 import altaria from '../../public/assets/sprites/altaria.png'
 import garchomp from '../../public/assets/sprites/garchomp.png'
 import blank from '../../public/assets/sprites/blank.png'
+import blastoise from '../../public/assets/sprites/blastoise.png'
 import darkrai from '../../public/assets/sprites/darkrai.png'
 import flygon from '../../public/assets/sprites/flygon.png'
 import exeggutor from '../../public/assets/sprites/exeggutor.png'
@@ -48,6 +49,8 @@ import gorebyss from '../../public/assets/sprites/gorebyss.png'
 import rayquaza from '../../public/assets/sprites/rayquaza.png'
 import lanturn from '../../public/assets/sprites/lanturn.png'
 import swampert from '../../public/assets/sprites/swampert.png'
+import leafeon from '../../public/assets/sprites/leafeon.png'
+import donphan from '../../public/assets/sprites/donphan.png'
 import muk from '../../public/assets/sprites/muk.png'
 import wobbuffet from '../../public/assets/sprites/wobbuffet.png'
 import serperior from '../../public/assets/sprites/serperior.png'
@@ -60,12 +63,14 @@ import gengar from '../../public/assets/sprites/gengar.png'
 import trevenant from '../../public/assets/sprites/trevenant.png'
 import reshiram from '../../public/assets/sprites/reshiram.png'
 import megamanectric from '../../public/assets/sprites/manectric-mega.png'
+import keldeo from '../../public/assets/sprites/keldeo-resolute.png'
 import crobat from '../../public/assets/sprites/crobat.png'
 import landorustherian from '../../public/assets/sprites/landorus-therian.png'
 import seismitoad from '../../public/assets/sprites/seismitoad.png'
 import manectric from '../../public/assets/sprites/manectric.png'
 import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
 import trubbish from '../../public/assets/sprites/trubbish.png'
+import virizion from '../../public/assets/sprites/virizion.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -139,6 +144,38 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={raichu} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Frank Diaz (Masters) - 36<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blastoise} alt="sprite" />
+              <img className="sprite second-sprite" src={keldeo} alt="sprite" />
+            </div>
+            <p>Brandon Cantu (Masters) - 37<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={raichu} alt="sprite" />
+            </div>
+            <p>Clifton Goh (Masters) - 38<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={donphan} alt="sprite" />
+            </div>
+            <p>Gawein Wagner (Masters) - 42<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={groudonprimal} alt="sprite" />
               <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
             </div>
@@ -179,10 +216,26 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Samuel Sosa (Masters) - 69<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={megamanectric} alt="sprite" />
               <img className="sprite second-sprite" src={trubbish} alt="sprite" />
             </div>
             <p>Kyle Sabelhaus (Masters) - 70<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Jordan Nelle (Masters) - 72<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters/Benjamin%20Pham-NL' className='new-div-fix-wrap'>
@@ -226,12 +279,36 @@ const ArchiveUpdates = () => {
             <p>Jit Min Lim (Masters) - 97<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={virizion} alt="sprite" />
+              <img className="sprite second-sprite" src={manectric} alt="sprite" />
+            </div>
+            <p>Long Bui (Masters) - 103<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
           <a href='/tournaments/2015_WORLDS/masters/Kristy%20Britton-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={seismitoad} alt="sprite" />
               <img className="sprite second-sprite" src={manectric} alt="sprite" />
             </div>
             <p>Kristy Britton (Masters) - 104<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manectric} alt="sprite" />
+            </div>
+            <p>Manuel Riemis (Masters) - 106<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={groudonprimal} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Sebastian Lugo (Masters) - 107<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
@@ -256,6 +333,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
             </div>
             <p>Niklas Rappel (Masters) - 113<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={leafeon} alt="sprite" />
+            </div>
+            <p>Brad Curcio (Masters) - 115<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>

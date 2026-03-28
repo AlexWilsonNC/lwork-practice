@@ -607,6 +607,9 @@ const customLabelsConfig = {
         'aegislash-bronzong': 'Metal Box',
         'aromatisse-seismitoad': 'Fairy Box',
         'groudon-primal-wobbuffet': 'Primal Groudon',
+        'groudon-primal-wailord': 'Primal Groudon',
+        'groudon-primal-hippowdon': 'Primal Groudon',
+        'virizion-manectric': 'VirGen Manectric',
         'manectric-mega-genesect': 'Mega Manectric (Plasma)',
         'landorus-therian-crobat': 'Landy Bats',
         'manectric-mega-yanmega': 'Mega Manectric Yanmega',
@@ -656,7 +659,6 @@ const customLabelsConfig = {
         'yveltal-raichu': 'Yveltal Raichu',
         'blank-yveltal': 'Yveltal',
         'virizion-raichu': 'VirGen Raichu',
-      
     },
     '2013': {
         'kyurem-deoxys': 'TDK',
