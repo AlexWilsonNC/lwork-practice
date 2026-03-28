@@ -696,6 +696,11 @@
 .cancel-button {
   background-image: linear-gradient(to bottom right, grey, rgb(103, 103, 103));
 }
+.cancel-button:hover {
+  cursor: pointer;
+  color: white;
+  background-image: linear-gradient(to bottom right, rgb(164, 164, 164), rgb(115, 115, 115));
+}
 
 .preset-sort-folders-buttons button {
   background-color: #1290eb;

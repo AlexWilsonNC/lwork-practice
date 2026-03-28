@@ -797,8 +797,9 @@ body.deckbuilder-page .deck-builder {
 
 .pm-card:hover {
   cursor: pointer;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.85);
   color: black;
+  border: 1px solid rgba(0, 0, 0, 0.85);
 }
 
 .current-cnt-num {
@@ -919,7 +920,8 @@ body.deckbuilder-page .deck-builder {
   color: white !important;
 }
 
-.save-deck-btn:hover {
+.save-deck-btn:hover,
+.save-button:hover {
   background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff) !important;
 }
 

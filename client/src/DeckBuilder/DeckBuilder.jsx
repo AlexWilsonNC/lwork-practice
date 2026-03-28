@@ -638,17 +638,43 @@ export default function DeckBuilder() {
         const setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
         const name = parts.slice(1).join(' ');
 
-        const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
-        const url = `/api/cards/searchbyname/partial/${safeName}`;
+        // const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
+        // const url = `/api/cards/searchbyname/partial/${safeName}`;
 
-        const res = await fetch(url);
-        if (!res.ok) {
-          console.error('search error', res.status, await res.text());
-          continue;
+        // const res = await fetch(url);
+        // if (!res.ok) {
+        //   console.error('search error', res.status, await res.text());
+        //   continue;
+        // }
+        // const results = await res.json();
+
+        // const match = results.find(c => c.setAbbrev === setAbbrev && c.number === number);
+        // if (!match) {
+        //   console.warn('Could not import:', name, setAbbrev, number);
+        //   continue;
+        // }
+
+        // to allow AZ to be importable.
+
+        let match = null;
+
+        const directRes = await fetch(`/api/cards/${setAbbrev}/${number}`);
+        if (directRes.ok) {
+          match = await directRes.json();
         }
-        const results = await res.json();
 
-        const match = results.find(c => c.setAbbrev === setAbbrev && c.number === number);
+        if (!match) {
+          const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
+          const res = await fetch(`/api/cards/searchbyname/partial/${safeName}`);
+          if (!res.ok) {
+            console.error('search error', res.status, await res.text());
+            continue;
+          }
+
+          const results = await res.json();
+          match = results.find(c => c.setAbbrev === setAbbrev && c.number === number);
+        }
+
         if (!match) {
           console.warn('Could not import:', name, setAbbrev, number);
           continue;

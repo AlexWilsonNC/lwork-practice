@@ -594,6 +594,8 @@ const customLabelsConfig = {
         'houndoom-bunnelby': 'Houndoom Mill',
     },
     '2015': {
+        'manectric-mega-reshiram': 'Mega Manectric Reshiram',
+        'raichu-bronzong': 'Raichu Box',
         'joltik-pumpkaboo': 'Night March',
         'blastoise-keldeo-resolute': 'ArchieStoise',
         'trevenant-gengar': 'Trevenant Gengar',

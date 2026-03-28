@@ -984,21 +984,21 @@ const CardView = () => {
                         </table>
                     </>
                 ) : cardInfo.name.toLowerCase().includes('magikarp') ? (
-                    <p className="margintop italic" style={{ textAlign: 'center' }}>
+                    <p className="margintop" style={{ textAlign: 'center' }}>
                         <br />
                         Looks like the Pokédex was right, this Pokémon is utterly useless.
                         It's not in a single deck in our database...
                     </p>
                 ) : (
-                    <p className="margintop italic" style={{ textAlign: 'center' }}>
+                    <p className="margintop" style={{ textAlign: 'center' }}>
                         Looks like this card isn't featured in any of our documented decks, yet.
                         <br />
                         <br />
-                        <span style={{ fontSize: '10px' }}>(Day 1 decklists from modern events are not integrated into our database.)</span>
+                        <span className='italic' style={{ fontSize: '10px' }}>(Day 1 decklists from modern events are not integrated into our database.)</span>
                     </p>
                 )}
                 <br />
-                <p className='margintop smaller-txt italic' style={{ textAlign: 'center' }}>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
+                <p className='margintop smaller-txt' style={{ textAlign: 'center' }}>Have a list featuring {cardInfo.name} that we should know about? Send it in to <a style={{ color: '#1290eb' }} href="mailto:ptcglegends@gmail.com">ptcglegends@gmail.com</a> for review.</p>
             </div>
             {isFullScreen && viewportWidth >= 600 && (
                 <div className="fullscreen-overlay" onClick={handleImageClick}>

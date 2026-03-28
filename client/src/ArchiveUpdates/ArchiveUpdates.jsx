@@ -50,7 +50,20 @@ import lanturn from '../../public/assets/sprites/lanturn.png'
 import swampert from '../../public/assets/sprites/swampert.png'
 import muk from '../../public/assets/sprites/muk.png'
 import wobbuffet from '../../public/assets/sprites/wobbuffet.png'
+import serperior from '../../public/assets/sprites/serperior.png'
 import aggron from '../../public/assets/sprites/aggron.png'
+import pumpkaboo from '../../public/assets/sprites/pumpkaboo.png'
+import joltik from '../../public/assets/sprites/joltik.png'
+import hippowdon from '../../public/assets/sprites/hippowdon.png'
+import raichu from '../../public/assets/sprites/raichu.png'
+import gengar from '../../public/assets/sprites/gengar.png'
+import trevenant from '../../public/assets/sprites/trevenant.png'
+import reshiram from '../../public/assets/sprites/reshiram.png'
+import megamanectric from '../../public/assets/sprites/manectric-mega.png'
+import crobat from '../../public/assets/sprites/crobat.png'
+import landorustherian from '../../public/assets/sprites/landorus-therian.png'
+import seismitoad from '../../public/assets/sprites/seismitoad.png'
+import manectric from '../../public/assets/sprites/manectric.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -91,7 +104,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Mar 22, 2026</p>
+          <p>Last Updated: Mar 28, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -105,6 +118,147 @@ const ArchiveUpdates = () => {
           <h3 className='boxxed'>March 2026</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Grant Manley (Masters) - 33<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Israel Sosa (Masters) - 34<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Kenny Britton (Masters) - 46<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Josh%20Marking-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Josh Marking (Masters) - 52<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Dylan%20Bryan-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={raichu} alt="sprite" />
+              <img className="sprite second-sprite" src={bronzong} alt="sprite" />
+            </div>
+            <p>Dylan Bryan (Masters) - 54<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Christopher%20Schemanske-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={trevenant} alt="sprite" />
+              <img className="sprite second-sprite" src={gengar} alt="sprite" />
+            </div>
+            <p>Christopher Schemanske (Masters) - 56<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Benjamin%20Pham-NL' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={megamanectric} alt="sprite" />
+              <img className="sprite second-sprite" src={reshiram} alt="sprite" />
+            </div>
+            <p>Benjamin Pham (Masters) - 81<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Jonathan%20Paranada-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Jonathan Paranada (Masters) - 88<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Mike%20Fouchet-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={raichu} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Mike Fouchet (Masters) - 95<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Jit%20Min%20Lim-SG' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={raichu} alt="sprite" />
+              <img className="sprite second-sprite" src={bronzong} alt="sprite" />
+            </div>
+            <p>Jit Min Lim (Masters) - 97<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Lukas Peer (Masters) - 111<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Justin%20Aaron-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Justin Aaron (Masters) - 112<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Niklas Rappel (Masters) - 113<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
+            </div>
+            <p>Luca Schuster (Masters) - 116<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manectric} alt="sprite" />
+            </div>
+            <p>Tord Reklev (Masters) - 126<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Fatih Akdemir (Masters) - 127<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <br></br>
+
+          
+          <a href='/tournaments/2010_WORLDS/masters/Stephan%20Nørregård-DK' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gengar} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Stephan Nørregård (Masters) - 30<sup>th</sup> Place <span>2010 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <br></br>
 
           <a href='/tournaments/2004_WC_SC/masters/Kory%20S-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -188,7 +342,29 @@ const ArchiveUpdates = () => {
             <p>Jordan D (Seniors) - 3<sup>rd</sup> Place <span>2004 South Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <p className='shout-out'>Shout-out to <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these decklists on pokegym!</p>
+          <br />
+          <p style={{ fontWeight: 600 }}>Corrections:</p>
+
+          <a href='/tournaments/2011_NATS_US/masters/James%20Arnold-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyranitar} alt="sprite" />
+              <img className="sprite second-sprite" src={serperior} alt="sprite" />
+            </div>
+            <p>James Arnold (Masters) - 7<sup>th</sup> Place <span>2011 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <p className='shortcircuited'><strong>Correction:</strong> -4 Basic Darkness Energy | +4 Special Darkness Energy</p>
+
+          <a href='/tournaments/2008_WORLDS/masters/Esa%20Juntunen-FI' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={glaceon} alt="sprite" />
+              <img className="sprite second-sprite" src={absol} alt="sprite" />
+            </div>
+            <p>Esa Juntunen (Masters) - 8<sup>th</sup> Place <span>2008 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <p className='shortcircuited'><strong>Correction:</strong> Wrong Glaceon corrected</p>
+
+
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for some of the 2015 Worlds lists and the 2010 Worlds list, Limitless for some of the 2015 Worlds lists, and <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these Stadium Challenge lists on pokegym! (all three sources below)</p>
           <ul className='shout-out' style={{marginTop: '-15px', marginLeft: '25px', display: 'flex', flexDirection: 'row'}}>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>source 1</a></li>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/east-coast-stadium-challenge-report.8765/' target='_blank'>source 2</a></li>

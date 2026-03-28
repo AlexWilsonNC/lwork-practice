@@ -1014,72 +1014,129 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
 
     const cards = cardConnection.collection('card-database');
 
-    const results = await cards.aggregate([
-      {
-        $search: {
-          index: 'default',
-          compound: {
-            should: [
-              {
-                autocomplete: {
-                  query: rawQ,
-                  path: 'name',
-                  fuzzy: {
-                    maxEdits: 1,
-                    prefixLength: 1
-                  }
-                }
-              },
-              {
-                text: {
-                  query: rawQ,
-                  path: 'name',
-                  score: { boost: { value: 3 } }
-                }
-              }
-            ],
-            minimumShouldMatch: 1
+    const normalizedRaw = rawQ
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+
+const upperRaw = normalizedRaw.toUpperCase();
+const isShortExactNameQuery =
+  upperRaw === 'N' || upperRaw === 'AZ';
+  
+    let results = [];
+
+    if (isShortExactNameQuery) {
+      results = await cards.find(
+        {
+          name: {
+            $regex: `^${escapeRegex(normalizedRaw)}$`,
+            $options: 'i'
+          }
+        },
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            name: 1,
+            supertype: 1,
+            subtypes: 1,
+            evolvesFrom: 1,
+            evolvesTo: 1,
+            setAbbrev: 1,
+            number: 1,
+            images: 1,
+            attacks: 1,
+            abilities: 1,
+            ability: 1,
+            text: 1,
+            rules: 1,
+            flavorText: 1,
+            types: 1,
+            hp: 1,
+            weaknesses: 1,
+            resistances: 1,
+            retreatCost: 1,
+            convertedRetreatCost: 1,
+            regulationMark: 1,
+            set: 1,
+            rarity: 1,
+            tcgplayer: 1,
+            ancientTrait: 1,
+            ancienttrait: 1,
+            artist: 1,
+            heldItem: 1,
+            helditem: 1
           }
         }
-      },
-      {
-        $project: {
-          _id: 0,
-          id: 1,
-          name: 1,
-          supertype: 1,
-          subtypes: 1,
-          evolvesFrom: 1,
-          evolvesTo: 1,
-          setAbbrev: 1,
-          number: 1,
-          images: 1,
-          attacks: 1,
-          abilities: 1,
-          ability: 1,
-          text: 1,
-          rules: 1,
-          flavorText: 1,
-          types: 1,
-          hp: 1,
-          weaknesses: 1,
-          resistances: 1,
-          retreatCost: 1,
-          convertedRetreatCost: 1,
-          regulationMark: 1,
-          set: 1,
-          rarity: 1,
-          tcgplayer: 1,
-          ancientTrait: 1,
-          ancienttrait: 1,
-          artist: 1,
-          heldItem: 1,
-          helditem: 1,
-          score: { $meta: 'searchScore' }
-        }
-      },
-      { $limit: 200 }
-    ]).toArray();
+      ).limit(200).toArray();
+    } else {
+      results = await cards.aggregate([
+        {
+          $search: {
+            index: 'default',
+            compound: {
+              should: [
+                {
+                  autocomplete: {
+                    query: rawQ,
+                    path: 'name',
+                    fuzzy: {
+                      maxEdits: 1,
+                      prefixLength: 1
+                    }
+                  }
+                },
+                {
+                  text: {
+                    query: rawQ,
+                    path: 'name',
+                    score: { boost: { value: 3 } }
+                  }
+                }
+              ],
+              minimumShouldMatch: 1
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            name: 1,
+            supertype: 1,
+            subtypes: 1,
+            evolvesFrom: 1,
+            evolvesTo: 1,
+            setAbbrev: 1,
+            number: 1,
+            images: 1,
+            attacks: 1,
+            abilities: 1,
+            ability: 1,
+            text: 1,
+            rules: 1,
+            flavorText: 1,
+            types: 1,
+            hp: 1,
+            weaknesses: 1,
+            resistances: 1,
+            retreatCost: 1,
+            convertedRetreatCost: 1,
+            regulationMark: 1,
+            set: 1,
+            rarity: 1,
+            tcgplayer: 1,
+            ancientTrait: 1,
+            ancienttrait: 1,
+            artist: 1,
+            heldItem: 1,
+            helditem: 1,
+            score: { $meta: 'searchScore' }
+          }
+        },
+        { $limit: 200 }
+      ]).toArray();
+    }
 
     results.sort((a, b) => {
       const scoreDiff = (b.score || 0) - (a.score || 0);

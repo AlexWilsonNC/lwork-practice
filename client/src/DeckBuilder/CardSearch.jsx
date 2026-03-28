@@ -1529,25 +1529,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                     );
                 }
 
-                if (/^[N★δ♢◆]$/i.test(trimmed)) {
+                if (/^(N|AZ|★|δ|♢|◆)$/i.test(trimmed)) {
                     const t = trimmed.toUpperCase();
 
-                    if (t === 'N') {
-                        arr = arr.filter(c => (c.name || '').toUpperCase() === 'N');
+                    if (t === 'N' || t === 'AZ') {
+                        arr = arr.filter(c => (c.name || '').toUpperCase() === t);
                     } else if (t === '★') {
                         arr = arr.filter(c =>
                             (c.name || '').includes('★') ||
                             aliasNormalize(c.name).includes('goldstar')
                         );
-                    } else if (t === 'Δ' || t === 'δ') {
+                    } else if (t === 'Δ') {
                         arr = arr.filter(c =>
                             (c.name || '').includes('δ') ||
                             aliasNormalize(c.name).includes('deltaspecies')
                         );
-                    } else {
+                    } else if (t === '♢' || t === '◆') {
                         arr = arr.filter(c =>
-                            (c.name || '').includes('♢') ||
-                            (c.name || '').includes('◆') ||
+                            /[♢◆]/.test(c.name || '') ||
                             aliasNormalize(c.name).includes('prismstar')
                         );
                     }
