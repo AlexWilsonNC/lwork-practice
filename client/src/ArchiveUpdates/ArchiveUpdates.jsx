@@ -64,6 +64,8 @@ import crobat from '../../public/assets/sprites/crobat.png'
 import landorustherian from '../../public/assets/sprites/landorus-therian.png'
 import seismitoad from '../../public/assets/sprites/seismitoad.png'
 import manectric from '../../public/assets/sprites/manectric.png'
+import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
+import trubbish from '../../public/assets/sprites/trubbish.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -137,10 +139,18 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={seismitoad} alt="sprite" />
-              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+              <img className="sprite" src={groudonprimal} alt="sprite" />
+              <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
             </div>
             <p>Kenny Britton (Masters) - 46<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Connor%20Finton-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={groudonprimal} alt="sprite" />
+              <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
+            </div>
+            <p>Connor Finton (Masters) - 51<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters/Josh%20Marking-US' className='new-div-fix-wrap'>
@@ -167,6 +177,14 @@ const ArchiveUpdates = () => {
             <p>Christopher Schemanske (Masters) - 56<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={megamanectric} alt="sprite" />
+              <img className="sprite second-sprite" src={trubbish} alt="sprite" />
+            </div>
+            <p>Kyle Sabelhaus (Masters) - 70<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
           <a href='/tournaments/2015_WORLDS/masters/Benjamin%20Pham-NL' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={megamanectric} alt="sprite" />
@@ -183,6 +201,15 @@ const ArchiveUpdates = () => {
             <p>Jonathan Paranada (Masters) - 88<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
+          
+          <a href='/tournaments/2015_WORLDS/masters/Nathan%20Brower-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={groudonprimal} alt="sprite" />
+              <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
+            </div>
+            <p>Nathan Brower (Masters) - 89<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
           <a href='/tournaments/2015_WORLDS/masters/Mike%20Fouchet-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={raichu} alt="sprite" />
@@ -197,6 +224,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={bronzong} alt="sprite" />
             </div>
             <p>Jit Min Lim (Masters) - 97<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Kristy%20Britton-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manectric} alt="sprite" />
+            </div>
+            <p>Kristy Britton (Masters) - 104<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
@@ -364,7 +399,7 @@ const ArchiveUpdates = () => {
           <p className='shortcircuited'><strong>Correction:</strong> Wrong Glaceon corrected</p>
 
 
-          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for some of the 2015 Worlds lists and the 2010 Worlds list, Limitless for some of the 2015 Worlds lists, and <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these Stadium Challenge lists on pokegym! (all three sources below)</p>
+          <p className='shout-out'>Shout-out to all the people I personally pestered for their lists, <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for some of the 2015 Worlds lists and the 2010 Worlds list, Limitless for some of the 2015 Worlds lists, and <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these Stadium Challenge lists on pokegym! (all three sources below)</p>
           <ul className='shout-out' style={{marginTop: '-15px', marginLeft: '25px', display: 'flex', flexDirection: 'row'}}>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>source 1</a></li>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/east-coast-stadium-challenge-report.8765/' target='_blank'>source 2</a></li>
