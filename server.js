@@ -1039,10 +1039,10 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
 
-const upperRaw = normalizedRaw.toUpperCase();
-const isShortExactNameQuery =
-  upperRaw === 'N' || upperRaw === 'AZ';
-  
+    const upperRaw = normalizedRaw.toUpperCase();
+    const isShortExactNameQuery =
+      upperRaw === 'N' || upperRaw === 'AZ';
+
     let results = [];
 
     if (isShortExactNameQuery) {
@@ -2211,17 +2211,6 @@ app.get('/api/formats/:format/promos', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not load format promos' });
-  }
-});
-
-app.get('/api/collections/:name', async (req, res) => {
-  try {
-    const coll = cardConnection.collection(req.params.name);
-    const docs = await coll.find({}).toArray();
-    res.json(docs);
-  } catch (err) {
-    console.error(`Failed to load collection ${req.params.name}:`, err);
-    res.status(500).json({ error: 'Failed to load collection' });
   }
 });
 

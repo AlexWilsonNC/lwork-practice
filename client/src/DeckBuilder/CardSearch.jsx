@@ -977,11 +977,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
 
-    const FORMAT_COLLECTIONS = {
-        'SSH|PGO': 'format_2022_worlds', // 2022 Worlds
-        // add more here later (e.g., 'BST|PAL': 'format_2023_worlds')
-    };
-
     const FORMAT_PROMO_POOLS = {
         'SSH|PGO': '2022_worlds'
     };
@@ -1021,11 +1016,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     function getActiveOverride(selectedQuickFormat) {
         return FORMAT_MANUAL_OVERRIDES[selectedQuickFormat] || null;
-    }
-
-    function getActiveFormatCollection(selectedQuickFormat) {
-        const name = FORMAT_COLLECTIONS[selectedQuickFormat];
-        return name ? String(name) : null;
     }
 
     function isForceIncluded(card, override) {
@@ -1130,6 +1120,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         return { names, keys, pairs };
     }
 
+    function isFormatPromoPoolCard(card) {
+        const key = `${card.setAbbrev}|${card.number}`;
+        return formatPromoCards.some(c => `${c.setAbbrev}|${c.number}` === key);
+    }
+
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
 
@@ -1139,19 +1134,17 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         for (let i = 0; i < arr.length; i++) {
             const card = arr[i];
 
-            const forceIncluded = isForceIncluded(card, override);
+            const forceIncluded =
+                isForceIncluded(card, override) || isFormatPromoPoolCard(card);
 
             if (!inSelectedEras(card, filters.eras)) continue;
 
             const setsChecked = Object.values(filters.sets).some(Boolean);
             if (!forceIncluded && setsChecked && !filters.sets[card.setAbbrev]) continue;
 
-            const activeColl = getActiveFormatCollection(selectedQuickFormat);
-            if (!activeColl) {
-                const fr = filters.formatRange?.from;
-                const to = filters.formatRange?.to;
-                if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
-            }
+            const fr = filters.formatRange?.from;
+            const to = filters.formatRange?.to;
+            if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
             if (!matchesSelectedPokeTypes(card, filters.pokeTypes)) continue;
@@ -1211,16 +1204,15 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     const [filters, setFilters] = useState(emptyFilters);
 
-        const appliedQuickFormat =
+    const appliedQuickFormat =
         filters.formatRange?.from && filters.formatRange?.to
             ? `${filters.formatRange.from}|${filters.formatRange.to}`
             : '';
 
     const [draftFilters, setDraftFilters] = useState(emptyFilters);
 
-        useEffect(() => {
+    useEffect(() => {
         const format = getActivePromoPoolFormat(appliedQuickFormat);
-
         if (!format) {
             setFormatPromoCards([]);
             return;
@@ -1246,35 +1238,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         () => buildAttackCostText(draftFilters.attackCost),
         [draftFilters.attackCost]
     );
-
-    const allSetKeys = React.useMemo(() => SET_OPTIONS.map(o => o.key), []);
-
-    const selectedSetKeys = React.useMemo(
-        () => Object.entries(draftFilters.sets || {})
-            .filter(([, on]) => !!on)
-            .map(([k]) => k),
-        [draftFilters.sets]
-    );
-
-    const handleSetsChange = React.useCallback((e) => {
-        const chosen = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
-        setDraftFilters(f => {
-            const next = {};
-            for (const key of allSetKeys) next[key] = chosen.has(key);
-            return { ...f, sets: next };
-        });
-    }, [allSetKeys]);
-
-    const selectAllSets = React.useCallback(() => {
-        setDraftFilters(f => ({
-            ...f,
-            sets: Object.fromEntries(allSetKeys.map(k => [k, true]))
-        }));
-    }, [allSetKeys]);
-
-    const clearAllSets = React.useCallback(() => {
-        setDraftFilters(f => ({ ...f, sets: {} }));
-    }, []);
 
     const resetDraftAdvancedFilters = React.useCallback(() => {
         setDraftFilters(emptyFilters);
@@ -1462,36 +1425,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         imgs.forEach(src => { const im = new Image(); im.src = src; });
     }, [SET_OPTIONS]);
 
-    //      *********************** so made a dedicated collection for 2022 worlds format, and it's using that which is great, but promos 1-99 dont work and we need to delete the nolonger needed forced promo keys. + remove all unneeded data from the new collection, only card name and set number stuff, for memory. tell chatgpt that i reverted and to kick rocks
-
-    React.useEffect(() => {
-        const coll = getActiveFormatCollection(selectedQuickFormat);
-        if (!coll) return;
-
-        const trimmed = (query || '').trim();
-        if (trimmed !== '') return;
-
-        let cancelled = false;
-        setResults([]);
-        fetch(`/api/collections/${encodeURIComponent(coll)}`)
-            .then(r => (r.ok ? r.json() : []))
-            .then(arr => {
-                if (cancelled) return;
-                arr.sort((a, b) => {
-                    const idxA = setOrder.indexOf(a.setAbbrev);
-                    const idxB = setOrder.indexOf(b.setAbbrev);
-                    if (idxA !== idxB) return idxA - idxB;
-                    const numA = parseInt(a.number, 10) || 0;
-                    const numB = parseInt(b.number, 10) || 0;
-                    return numA - numB;
-                });
-                setResults(arr);
-            })
-            .catch(() => { /* swallow */ });
-
-        return () => { cancelled = true; };
-    }, [selectedQuickFormat, query]);
-
     useEffect(() => {
         if (skipNextQueryEffectRef.current) {
             skipNextQueryEffectRef.current = false;
@@ -1548,21 +1481,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                     const variants = nameTerms.flatMap(v => expandAliasToSymbolQueries(v));
 
                     const routes = (() => {
-                        const coll = getActiveFormatCollection(selectedQuickFormat);
-
                         if (!primeMode) {
-                            if (coll) {
-                                return (searchMode === 'name'
-                                    ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`)
-                                    : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}?collection=${encodeURIComponent(coll)}`));
-                            }
                             return (searchMode === 'name'
                                 ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
                                 : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
-                        }
-
-                        if (coll) {
-                            return [`/api/collections/${encodeURIComponent(coll)}`];
                         }
 
                         const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
@@ -1571,7 +1493,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                         }
                         return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
                     })();
-
                     const resLists = await Promise.all(
                         routes.map(r =>
                             fetch(r)
@@ -1657,7 +1578,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         }, 300);
 
         return () => clearTimeout(t);
-    }, [query, defaultCards, searchMode, filters, selectedQuickFormat, suppressDefault]);
+    }, [query, defaultCards, searchMode, filters, selectedQuickFormat, suppressDefault, formatPromoCards]);
 
     const { items: displayResults } = React.useMemo(() => {
         return takeFirstMatching(results);
@@ -2502,19 +2423,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     setSuppressDefault(true);
                                                     setQuery('');
 
-                                                    const draftQuickFormat =
-                                                        draftFilters.formatRange?.from && draftFilters.formatRange?.to
-                                                            ? `${draftFilters.formatRange.from}|${draftFilters.formatRange.to}`
-                                                            : '';
-
-                                                    const activeColl = getActiveFormatCollection(draftQuickFormat);
-
-                                                    if (activeColl) {
-                                                        setFilters(draftFilters);
-                                                        setShowAdvanced(false);
-                                                        return;
-                                                    }
-
                                                     const cleaned = buildFiltersForRequest(draftFilters);
 
                                                     const payload = {
@@ -2533,13 +2441,25 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
                                                     const fr = draftFilters.formatRange?.from;
                                                     const to = draftFilters.formatRange?.to;
+                                                    const draftQuickFormat =
+                                                        fr && to ? `${fr}|${to}` : '';
+
+                                                    let promoCardsForThisSearch = formatPromoCards;
+
+                                                    const promoFormat = getActivePromoPoolFormat(draftQuickFormat);
+                                                    if (promoFormat) {
+                                                        const promoResp = await fetch(`/api/formats/${encodeURIComponent(promoFormat)}/promos`);
+                                                        promoCardsForThisSearch = promoResp.ok ? await promoResp.json() : [];
+                                                        promoCardsForThisSearch = Array.isArray(promoCardsForThisSearch) ? promoCardsForThisSearch : [];
+                                                    }
+
                                                     let arr = Array.isArray(list) ? list : [];
 
                                                     if (fr && to) {
                                                         arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
                                                     }
 
-                                                    arr = mergePromoCardsIntoResults(arr, formatPromoCards, '', searchMode);
+                                                    arr = mergePromoCardsIntoResults(arr, promoCardsForThisSearch, '', searchMode);
 
                                                     if (selectedLegalityPreset) {
                                                         arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
