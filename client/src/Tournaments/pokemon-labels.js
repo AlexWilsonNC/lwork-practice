@@ -594,6 +594,7 @@ const customLabelsConfig = {
         'houndoom-bunnelby': 'Houndoom Mill',
     },
     '2015': {
+        'blank-seismitoad': 'Seismitoad',
         'manectric-mega-trubbish': 'Mega Manectric Tool Drop',
         'manectric-mega-reshiram': 'Mega Manectric Reshiram',
         'raichu-bronzong': 'Raichu Box',

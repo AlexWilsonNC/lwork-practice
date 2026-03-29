@@ -293,7 +293,7 @@ export default function Account() {
 
     useEffect(() => {
         if (!isPublicView && error && /relogin/i.test(error)) {
-            navigate('/pizza', { replace: true });
+            navigate('/login', { replace: true });
         }
     }, [error, isPublicView, navigate]);
 
@@ -539,7 +539,7 @@ export default function Account() {
             description: deckObj.description || ''
         }));
 
-        navigate(`/bobthebuilder?deckId=${deckObj._id}#deck=${fragment}`);
+        navigate(`/deckbuilder?deckId=${deckObj._id}#deck=${fragment}`);
     };
 
     const handleCreateFolder = async () => {
@@ -636,7 +636,7 @@ export default function Account() {
         } else {
             if (!token) {
                 setLoading(false);
-                navigate('/pizza', { replace: true });
+                navigate('/login', { replace: true });
                 return;
             }
 
@@ -1155,7 +1155,7 @@ export default function Account() {
                         ) : (
                             <p className='you-havent'>
                                 You don't have any decks in your collection yet,&nbsp;
-                                <a href='/bobthebuilder' style={{ color: '#1290eb' }}>open the deckbuilder</a> and start your journey!
+                                <a href='/deckbuilder' style={{ color: '#1290eb' }}>open the deckbuilder</a> and start your journey!
                                 <br></br>
                                 <br></br>
                                 <span style={{ opacity: 0.5 }}>(You can also save decks to your collection by selecting the heart icon from any tournament result)</span>
@@ -1169,7 +1169,7 @@ export default function Account() {
                             {!isPublicView && (
                                 <div className="folders-bar">
                                     <button className='create-new-folder-btn' onClick={() => setShowFolderModal(true)}><span className="material-symbols-outlined">folder</span>New Folder</button>
-                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/bobthebuilder')}>Deck Builder</button>
+                                    <button className='create-new-deck-link-btn' onClick={() => navigate('/deckbuilder')}>Deck Builder</button>
                                 </div>
                             )}
                             {/* {isPublicView && (

@@ -552,7 +552,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
     });
 
     const fragment = encodeURIComponent(JSON.stringify(minimal));
-    const url = `${window.location.origin}/bobthebuilder#deck=${fragment}`;
+    const url = `${window.location.origin}/deckbuilder#deck=${fragment}`;
     navigator.clipboard.writeText(url);
     setShowCopyMenu(false);
     setShowSuccess(true);
@@ -582,7 +582,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
   const handleMyDecks = () => {
     if (user) {
-      window.location.href = '/taco'
+      window.location.href = '/account'
     } else {
       setShowSaveModal(true)
     }
@@ -817,7 +817,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
           }).catch(console.error);
         }
 
-        window.location.href = '/taco';
+        window.location.href = '/account';
         setShowSaveModal(false);
         setDeckName('');
         setSelectedMascot('');
@@ -916,7 +916,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
                 <div className='buttons-row-modal'>
                   <button
                     className='save-button'
-                    onClick={() => { window.location.href = '/pizza'; }}
+                    onClick={() => { window.location.href = '/login'; }}
                   >
                     Login
                   </button>

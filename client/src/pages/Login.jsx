@@ -40,7 +40,7 @@ export default function Login() {
             } else {
                 await login(identifier, password);
             }
-            nav('/taco');
+            nav('/account');
         } catch (err) {
             setError(err.message);
         }

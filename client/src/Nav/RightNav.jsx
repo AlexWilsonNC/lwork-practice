@@ -117,7 +117,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <div className='top-login-diff'>
           <div className='login-slash-account-btn'>
             {user
-              ? <li><Link to="/taco" onClick={() => setOpen(false)}>Account</Link></li>
+              ? <li><Link to="/account" onClick={() => setOpen(false)}>Account</Link></li>
               : <li className='not-ready'><Link to="/login" onClick={() => setOpen(false)}>Login</Link></li>
             }
           </div>
@@ -133,7 +133,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <div className='burger-resources'>
           <ul className='burgered-links-more'>
             <li><a href='/archive-updates'>Archive Updates</a></li>
-            <li><a href='/articles/all' className='not-ready'>Articles</a></li>
+            <li className='not-ready'><a href=''>Articles</a></li>
             <li className='not-ready'><a href=''>Deck Builder</a></li>
             {/* Trigger interstitial for the "Decks by Era" link */}
             <li>

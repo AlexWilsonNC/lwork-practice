@@ -144,6 +144,14 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={seismitoad} alt="sprite" />
+            </div>
+            <p>Ryan Moorhouse (Masters) - 35<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={raichu} alt="sprite" />
               <img className="sprite second-sprite" src={crobat} alt="sprite" />
             </div>
@@ -166,12 +174,20 @@ const ArchiveUpdates = () => {
             <p>Clifton Goh (Masters) - 38<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
-          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+          <a href='/tournaments/2015_WORLDS/masters/Andrea%20Ceolin-IT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={joltik} alt="sprite" />
               <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
-            <p>Andrea Ceolin (Masters) - 39<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Andrea Ceolin (Masters) - 39<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Marcus Raj (Masters) - 41<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
@@ -228,6 +244,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={hippowdon} alt="sprite" />
             </div>
             <p>Josh Marking (Masters) - 52<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={donphan} alt="sprite" />
+            </div>
+            <p>Steffen Eriksen (Masters) - 53<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters/Dylan%20Bryan-US' className='new-div-fix-wrap'>

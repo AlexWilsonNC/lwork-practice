@@ -48,7 +48,7 @@ function App() {
   }
 }, [pathname]);
   const noNavBarOn = ['/print']
-  const noFooterOn = ['/bobthebuilder', '/print']
+  const noFooterOn = ['/deckbuilder', '/print']
 
   return (
     <AuthProvider>
@@ -56,9 +56,9 @@ function App() {
         { !noNavBarOn.includes(pathname) && <Navbar/> }
         <main className='mainwrapedcontainer'>
           <Routes>
-            <Route path="/pizza" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route
-              path="/taco"
+              path="/account"
               element={
                 <PrivateRoute>
                   <Account/>
@@ -87,7 +87,7 @@ function App() {
             <Route path="/articles/:articleId" element={<ArticleComponent />} />
             <Route path="/about" element={<About />} />
             {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
-            <Route path="/bobthebuilder" element={<DeckBuilder />} />
+            <Route path="/deckbuilder" element={<DeckBuilder />} />
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
             <Route path="*" element={<NotFound />} />

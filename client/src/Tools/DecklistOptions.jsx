@@ -131,7 +131,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     ].map(c => ({ set: c.set, number: c.number, count: Number(c.count) }));
 
     const hash = `deck=${encodeURIComponent(JSON.stringify(minimal))}`;
-    navigate(`/bobthebuilder#${hash}`);
+    navigate(`/deckbuilder#${hash}`);
   };
 
   const handleSaveClick = () => setShowSaveModal(true);
@@ -192,7 +192,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         }).catch(console.error);
       }
 
-      window.location.href = '/taco';
+      window.location.href = '/account';
     } catch (e) {
       console.error(e);
     } finally {
