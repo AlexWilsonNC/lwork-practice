@@ -239,7 +239,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const toggleBtnRef = useRef(null);
     const [searchMode, setSearchMode] = useState('name');
     const latestReqId = useRef(0);
-    const skipNextQueryEffectRef = useRef(false);
+    const skipNextQueryEffectRef = useRef(0);
 
     const MECH_PRIMARY_KEYS = ['ex', 'EX', 'v', 'gx', 'tera', 'ace spec', 'mega'];
     const [showMoreMechs, setShowMoreMechs] = useState(false);
@@ -1426,10 +1426,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     }, [SET_OPTIONS]);
 
     useEffect(() => {
-        if (skipNextQueryEffectRef.current) {
-            skipNextQueryEffectRef.current = false;
-            return;
-        }
+        if (skipNextQueryEffectRef.current > 0) {
+    skipNextQueryEffectRef.current -= 1;
+    return;
+}
 
         const trimmed = query.trim();
         const filtersActive = anyFilterActive(filters);
@@ -2417,7 +2417,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                             onClick={async () => {
                                                 setIsSearchingAll(true);
                                                 try {
-                                                    skipNextQueryEffectRef.current = true;
+                                                    skipNextQueryEffectRef.current = 2;
                                                     latestReqId.current += 1;
 
                                                     setSuppressDefault(true);
@@ -2464,9 +2464,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     if (selectedLegalityPreset) {
                                                         arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
                                                     }
-
-                                                    setResults(arr);
+console.log('Search all using filters:', draftFilters);
+console.log('Search all result count:', arr.length);
                                                     setFilters(draftFilters);
+                                                    setResults(arr);
                                                     setShowAdvanced(false);
                                                 } catch (e) {
                                                     console.error('Search all failed:', e);
@@ -2498,8 +2499,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                 !Object.values(draftFilters.pokeTypes || {}).some(Boolean) &&
                                                 !Object.values(draftFilters.stage || {}).some(Boolean) &&
                                                 !Number.isFinite(Number((draftFilters.hp || {}).value)) &&
+                                                !Object.values(draftFilters.has || {}).some(Boolean) &&
+                                                !(draftFilters.retreat && draftFilters.retreat.value !== '' && draftFilters.retreat.value !== null) &&
+                                                !(
+                                                    draftFilters.attackCost &&
+                                                    (
+                                                        (draftFilters.attackCost.value !== '' && draftFilters.attackCost.value !== null) ||
+                                                        Object.values(draftFilters.attackCost.energies || {}).some(Boolean)
+                                                    )
+                                                ) &&
                                                 !(draftFilters.artist && String(draftFilters.artist).trim() !== '') &&
                                                 !Object.values(draftFilters.rarity || {}).some(Boolean) &&
+                                                !(draftFilters.formatRange?.from && draftFilters.formatRange?.to) &&
+                                                !draftFilters.includePromos &&
                                                 !selectedLegalityPreset;
 
                                             setShowAdvanced(false);
