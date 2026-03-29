@@ -250,6 +250,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
     const [selectedLegalityPreset, setSelectedLegalityPreset] = useState('');
     const [isSearchingAll, setIsSearchingAll] = useState(false);
+    const [formatPromoCards, setFormatPromoCards] = useState([]);
 
     const ERA_OPTIONS = [
         { key: 'ME1', name: 'Mega Evolution', src: me1 },
@@ -338,6 +339,48 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         }
 
         return false;
+    }
+
+    function getActivePromoPoolFormat(quickFormat) {
+        return FORMAT_PROMO_POOLS[quickFormat] || null;
+    }
+
+    function mergePromoCardsIntoResults(arr, promoCards, rawQuery, searchMode) {
+        if (!Array.isArray(promoCards) || !promoCards.length) return arr;
+
+        const q = String(rawQuery || '').trim().toLowerCase();
+
+        let promosToMerge = promoCards;
+
+        if (q) {
+            promosToMerge = promoCards.filter(card => {
+                const name = String(card.name || '').toLowerCase();
+                const text = [
+                    card.name,
+                    card.artist,
+                    ...(Array.isArray(card.rules) ? card.rules : []),
+                    ...(Array.isArray(card.attacks) ? card.attacks.map(a => `${a.name || ''} ${a.text || ''}`) : []),
+                    ...(Array.isArray(card.abilities) ? card.abilities.map(a => `${a.name || ''} ${a.text || ''}`) : [])
+                ].join(' ').toLowerCase();
+
+                return searchMode === 'name' ? name.includes(q) : text.includes(q);
+            });
+        }
+
+        const seen = new Set(
+            arr.map(c => `${c.setAbbrev}|${c.number}`)
+        );
+
+        const merged = [...arr];
+        for (const c of promosToMerge) {
+            const key = `${c.setAbbrev}|${c.number}`;
+            if (!seen.has(key)) {
+                merged.push(c);
+                seen.add(key);
+            }
+        }
+
+        return merged;
     }
 
     function matchesSelectedLegalityPreset(card, preset) {
@@ -929,7 +972,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         { label: 'SM Black Star Promos', mainFrom: 'SUM', mainTo: 'CEC', promoKey: 'SMP' },
         { label: 'SWSH Black Star Promos', mainFrom: 'SSH', mainTo: 'CRZ', promoKey: 'SWSHP' },
         { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'BLK', promoKey: 'SVP' },
-        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'ASC', promoKey: 'MEP' },
+        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'POR', promoKey: 'MEP' },
     ];
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
@@ -937,6 +980,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const FORMAT_COLLECTIONS = {
         'SSH|PGO': 'format_2022_worlds', // 2022 Worlds
         // add more here later (e.g., 'BST|PAL': 'format_2023_worlds')
+    };
+
+    const FORMAT_PROMO_POOLS = {
+        'SSH|PGO': '2022_worlds'
     };
 
     const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
@@ -1164,7 +1211,36 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     const [filters, setFilters] = useState(emptyFilters);
 
+        const appliedQuickFormat =
+        filters.formatRange?.from && filters.formatRange?.to
+            ? `${filters.formatRange.from}|${filters.formatRange.to}`
+            : '';
+
     const [draftFilters, setDraftFilters] = useState(emptyFilters);
+
+        useEffect(() => {
+        const format = getActivePromoPoolFormat(appliedQuickFormat);
+
+        if (!format) {
+            setFormatPromoCards([]);
+            return;
+        }
+
+        let cancelled = false;
+
+        fetch(`/api/formats/${encodeURIComponent(format)}/promos`)
+            .then(r => (r.ok ? r.json() : []))
+            .then(arr => {
+                if (!cancelled) {
+                    setFormatPromoCards(Array.isArray(arr) ? arr : []);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) setFormatPromoCards([]);
+            });
+
+        return () => { cancelled = true; };
+    }, [appliedQuickFormat]);
 
     const attackCostText = React.useMemo(
         () => buildAttackCostText(draftFilters.attackCost),
@@ -1261,7 +1337,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const FORMAT_MANUAL_OVERRIDES = {
         'SSH|PGO': { // 2022 Worlds
             includeNames: "",
-            includeKeys: ["PR-SW-001..PR-SW-239", "PR-SW-296"]
+            includeKeys: ""
         },
         'UPR|UNM': { // 2019 Worlds
             bannedCards: [
@@ -1515,6 +1591,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                     }
                     arr = Array.from(byKey.values());
                 }
+
+                arr = mergePromoCardsIntoResults(arr, formatPromoCards, rawQuery, searchMode);
 
                 if (primeMode) {
                     const getSubtypes = c => {
@@ -2423,7 +2501,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
                                                     setSuppressDefault(true);
                                                     setQuery('');
-                                                    setFilters(draftFilters);
+
+                                                    const draftQuickFormat =
+                                                        draftFilters.formatRange?.from && draftFilters.formatRange?.to
+                                                            ? `${draftFilters.formatRange.from}|${draftFilters.formatRange.to}`
+                                                            : '';
+
+                                                    const activeColl = getActiveFormatCollection(draftQuickFormat);
+
+                                                    if (activeColl) {
+                                                        setFilters(draftFilters);
+                                                        setShowAdvanced(false);
+                                                        return;
+                                                    }
 
                                                     const cleaned = buildFiltersForRequest(draftFilters);
 
@@ -2444,32 +2534,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     const fr = draftFilters.formatRange?.from;
                                                     const to = draftFilters.formatRange?.to;
                                                     let arr = Array.isArray(list) ? list : [];
+
                                                     if (fr && to) {
                                                         arr = arr.filter(c => isAbbrevInRange(c.setAbbrev, fr, to));
                                                     }
 
-                                                    const includeKeys = getForcedIncludeKeysForFilters(draftFilters);
-                                                    if (includeKeys.length) {
-                                                        const forcedCards = await fetchCardsByKeys(includeKeys);
-
-                                                        const seen = new Set(
-                                                            arr.map(c => `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase())
-                                                        );
-
-                                                        for (const c of forcedCards) {
-                                                            const key = `${c.setAbbrev}-${String(c.number).replace(/^0+/, '')}`.toUpperCase();
-                                                            if (!seen.has(key)) {
-                                                                arr.push(c);
-                                                                seen.add(key);
-                                                            }
-                                                        }
-                                                    }
+                                                    arr = mergePromoCardsIntoResults(arr, formatPromoCards, '', searchMode);
 
                                                     if (selectedLegalityPreset) {
                                                         arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
                                                     }
 
                                                     setResults(arr);
+                                                    setFilters(draftFilters);
                                                     setShowAdvanced(false);
                                                 } catch (e) {
                                                     console.error('Search all failed:', e);

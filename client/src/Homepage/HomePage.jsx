@@ -6,7 +6,7 @@ import '../css/homepage.css';
 import { sortedEvents } from '../Tournaments/tournaments-data';
 import SidebarComponent from '../SideContent/SideContent';
 
-import ogInternats from '../assets/archive-updates/july-archive.jpg';
+import archiveUpdateImg from '../assets/archive-updates/apr-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
 import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
 import latestSet from '../assets/homepage/latest-expansion.webp';
@@ -200,14 +200,14 @@ const Homepage = () => {
                             <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
                             <a href='/archive-updates'>
                                 <WrappedFeature className='wrapped-feature'>
-                                    <img className='card-image' src={ogInternats} />
+                                    <img className='card-image' src={archiveUpdateImg} />
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3><span className='new-color'>Long-lost</span> Results Discovered!</h3>
-                                        <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds, plus some important corrections!</p>
+                                        <h3>More <span className='new-color'>Retro</span> Results Discovered!</h3>
+                                        <p>New long-lost decklists from the 2015 World Championships, 2010 World Championships, and some 2004 Stadium Challenges are here, on PTCG Legends only!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Oct 1, 2025</p>
+                                        <p>Mar 29, 2026</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -453,14 +453,14 @@ const Homepage = () => {
                         <FeaturedHeaders className='featured-headers'>Latest Archive Updates</FeaturedHeaders>
                         <a href='/archive-updates'>
                             <WrappedFeature className='wrapped-feature'>
-                                <img className='card-image' src={ogInternats} />
+                                <img className='card-image' src={archiveUpdateImg} />
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3><span className='new-color'>Long-lost</span> Results Discovered!</h3>
-                                    <p>Newly discovered long-lost decklists and results from many events, spanning from 2007 Worlds to 2014 Worlds and more!</p>
+                                    <h3>More <span className='new-color'>Retro</span> Results Discovered!</h3>
+                                    <p>New long-lost decklists from the 2015 World Championships, 2010 World Championships, and some 2004 Stadium Challenges are here, on PTCG Legends only!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Oct 1, 2025</p>
+                                    <p>Mar 29, 2026</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>

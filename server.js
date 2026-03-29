@@ -37,7 +37,8 @@ const {
   CARDSINDECKLISTS_MONGODB_URI,
   JWT_SECRET,
   SALT_ROUNDS = 10,
-  USER_MONGODB_URI
+  USER_MONGODB_URI,
+  PROMOS_PER_FORMAT_MONGODB_URI
 } = process.env;
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -63,6 +64,7 @@ const playersConnection = mongoose.createConnection(PLAYERS_MONGODB_URI, { useNe
 const decksConnection = mongoose.createConnection(DECKS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const decklistsDb = mongoose.createConnection(CARDSINDECKLISTS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const emailsConnection = mongoose.createConnection(EMAILS_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const promosPerFormatConnection = mongoose.createConnection(PROMOS_PER_FORMAT_MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function getCardByKey(key) {
   if (!key) return null;
@@ -73,6 +75,24 @@ async function getCardByKey(key) {
   const collection = cardConnection.collection(set);
   if (!collection) return null;
   return await collection.findOne({ number: String(number) });
+}
+
+async function getPromoCardsForFormat(format) {
+  if (!format) return [];
+
+  const promoDocs = await promosPerFormatConnection
+    .collection('legalPromos')
+    .find({ format: String(format) })
+    .toArray();
+
+  const cards = await Promise.all(
+    promoDocs.map(async doc => {
+      if (!doc?.key) return null;
+      return await getCardByKey(doc.key);
+    })
+  );
+
+  return cards.filter(Boolean);
 }
 
 function pickMascotFields(card, prefix = '') {
@@ -107,7 +127,7 @@ function pickMascotFields(card, prefix = '') {
     };
 }
 
-[eventConnection, cardConnection, playersConnection, decksConnection, emailsConnection]
+[eventConnection, cardConnection, playersConnection, decksConnection, emailsConnection, promosPerFormatConnection]
   .forEach(conn => {
     conn.on('error', console.error.bind(console, `MongoDB connection error for ${conn.name}:`));
     conn.once('open', () => console.log(`Connected to ${conn.name}`));
@@ -2184,10 +2204,25 @@ app.get('/api/export-image-proxy', async (req, res) => {
   }
 });
 
+app.get('/api/formats/:format/promos', async (req, res) => {
+  try {
+    const cards = await getPromoCardsForFormat(req.params.format);
+    res.json(cards);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load format promos' });
+  }
+});
+
 app.get('/api/collections/:name', async (req, res) => {
-  const coll = db.collection(req.params.name);
-  const docs = await coll.find({}).toArray();
-  res.json(docs);
+  try {
+    const coll = cardConnection.collection(req.params.name);
+    const docs = await coll.find({}).toArray();
+    res.json(docs);
+  } catch (err) {
+    console.error(`Failed to load collection ${req.params.name}:`, err);
+    res.status(500).json({ error: 'Failed to load collection' });
+  }
 });
 
 app.use(express.static(path.join(__dirname, "./client/dist")));

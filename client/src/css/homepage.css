@@ -362,10 +362,17 @@
         height: 325px;
     }
 }
+@media screen and (max-width: 1550px) {
+    .blue {
+        font-size: 10px;
+    }
+    .featured-headers {
+        font-size: 16px;
+    }
+}
 @media screen and (max-width: 1500px) {
     .homepage-box {
         height: 345px;
-        /* width: 280px; */
         margin-bottom: 45px;
     }
     .card-date-plus-read {
@@ -390,12 +397,6 @@
     }
     .homepage-hr {
         margin:10px 0 15px;
-    }
-    .featured-headers {
-        font-size: 16px;
-    }
-    .blue {
-        font-size: 10px;
     }
     .event-type-logo {
         width: 47px;

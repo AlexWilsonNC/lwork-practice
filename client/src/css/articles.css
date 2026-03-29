@@ -208,6 +208,14 @@
 .decklist-btn.active {
     background-color: #1290eb;
 }
+.archive-updates-mini-hr {
+    width: 50%;
+    border-top: 3px solid grey;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 20px;
+}
 
 @media screen and (max-width: 812px) {
     .old-card {
@@ -221,6 +229,9 @@
     }
     .ex-era-card {
         padding: 0.5px;
+    }
+    .archive-updates-mini-hr {
+        width: 75%;
     }
 }
 
@@ -346,6 +357,11 @@
         font-size: 16px;
         border-radius: 5px;
         margin-top: -15px;
+    }
+}
+@media screen and (max-width: 500px) {
+.archive-updates-mini-hr {
+        width: 100%;
     }
 }
 @media screen and (max-width: 450px) {

@@ -77,11 +77,11 @@ const SidebarComponent = () => {
       <div className='side-section'>
         <h4>Popular Pages:</h4>
         <ol>
-          <li><Link to='/player/tord-reklev-NO'>Tord Reklev's Player Page</Link></li>
-          <li><Link to='/tournaments/2010_WORLDS'>2010 World Championships</Link></li>
+          <li><Link to='/tournaments/2010_WORLDS'>2015 World Championships</Link></li>
           <li><Link to='/player/jason-klaczynski-US'>Jason Klaczynski's Player Page</Link></li>
+          <li><Link to='/player/tord-reklev-NO'>Tord Reklev's Player Page</Link></li>
+          <li><Link to='/tournaments/2025_WORLDS'>2025 World Championships</Link></li>
           <li><Link to='/tournaments/2002_WORLDS'>2002 World Championships</Link></li>
-          <li><Link to='/tournaments/2024_WORLDS'>2024 World Championships</Link></li>
 
         </ol>
       </div>

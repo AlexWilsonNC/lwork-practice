@@ -6,7 +6,7 @@ import SidebarComponent from '../SideContent/SideContent'
 import '../css/articles.css';
 import fbIcon from '../assets/social-media-icons/facebook.webp';
 import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
-import archiveImage from '../assets/archive-updates/july-archive.jpg';
+import archiveImage from '../assets/archive-updates/apr-archive.jpg';
 
 import yveltal from '../../public/assets/sprites/yveltal.png'
 import garbodor from '../../public/assets/sprites/garbodor.png'
@@ -57,6 +57,7 @@ import serperior from '../../public/assets/sprites/serperior.png'
 import aggron from '../../public/assets/sprites/aggron.png'
 import pumpkaboo from '../../public/assets/sprites/pumpkaboo.png'
 import joltik from '../../public/assets/sprites/joltik.png'
+import genesect from '../../public/assets/sprites/genesect.png'
 import hippowdon from '../../public/assets/sprites/hippowdon.png'
 import raichu from '../../public/assets/sprites/raichu.png'
 import gengar from '../../public/assets/sprites/gengar.png'
@@ -70,7 +71,6 @@ import seismitoad from '../../public/assets/sprites/seismitoad.png'
 import manectric from '../../public/assets/sprites/manectric.png'
 import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
 import trubbish from '../../public/assets/sprites/trubbish.png'
-import virizion from '../../public/assets/sprites/virizion.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -111,7 +111,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Mar 28, 2026</p>
+          <p>Last Updated: Mar 29, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -168,10 +168,34 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Andrea Ceolin (Masters) - 39<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={donphan} alt="sprite" />
             </div>
             <p>Gawein Wagner (Masters) - 42<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Christian%20Cruz%20Esquivel-MX' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={donphan} alt="sprite" />
+            </div>
+            <p>Christian Cruz (Masters) - 43<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Jason Yong (Masters) - 44<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
@@ -180,6 +204,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
             </div>
             <p>Kenny Britton (Masters) - 46<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Johnny Rabus (Masters) - 47<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters/Connor%20Finton-US' className='new-div-fix-wrap'>
@@ -212,6 +244,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={gengar} alt="sprite" />
             </div>
             <p>Christopher Schemanske (Masters) - 56<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={genesect} alt="sprite" />
+            </div>
+            <p>Takuya Yoneda (Masters) - 60<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
@@ -281,8 +321,8 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={virizion} alt="sprite" />
-              <img className="sprite second-sprite" src={manectric} alt="sprite" />
+              <img className="sprite" src={megamanectric} alt="sprite" />
+              <img className="sprite second-sprite" src={genesect} alt="sprite" />
             </div>
             <p>Long Bui (Masters) - 103<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
@@ -353,6 +393,14 @@ const ArchiveUpdates = () => {
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Kolton Day (Masters) - 119<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={seismitoad} alt="sprite" />
               <img className="sprite second-sprite" src={manectric} alt="sprite" />
             </div>
@@ -367,8 +415,7 @@ const ArchiveUpdates = () => {
             <p>Fatih Akdemir (Masters) - 127<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
-          <br></br>
-
+          <hr className='archive-updates-mini-hr'></hr>
           
           <a href='/tournaments/2010_WORLDS/masters/Stephan%20Nørregård-DK' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -378,7 +425,7 @@ const ArchiveUpdates = () => {
             <p>Stephan Nørregård (Masters) - 30<sup>th</sup> Place <span>2010 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2004_WC_SC/masters/Kory%20S-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -452,7 +499,7 @@ const ArchiveUpdates = () => {
             <p>Patrick W (Juniors) - 4<sup>th</sup> Place <span>2004 West Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2004_S_SC/seniors/Jordan%20D-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -462,7 +509,7 @@ const ArchiveUpdates = () => {
             <p>Jordan D (Seniors) - 3<sup>rd</sup> Place <span>2004 South Stadium Challenge</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
-          <br />
+          <hr className='archive-updates-mini-hr'></hr>
           <p style={{ fontWeight: 600 }}>Corrections:</p>
 
           <a href='/tournaments/2011_NATS_US/masters/James%20Arnold-US' className='new-div-fix-wrap'>
@@ -484,7 +531,7 @@ const ArchiveUpdates = () => {
           <p className='shortcircuited'><strong>Correction:</strong> Wrong Glaceon corrected</p>
 
 
-          <p className='shout-out'>Shout-out to all the people I personally pestered for their lists, <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for some of the 2015 Worlds lists and the 2010 Worlds list, Limitless for some of the 2015 Worlds lists, and <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding these Stadium Challenge lists on pokegym! (all three sources below)</p>
+          <p className='shout-out'>Shout-out to all the people I personally pestered for their lists, <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for some of the 2015 Worlds lists and the 2010 Worlds list, Limitless for the Top 128 list, and <a href='https://x.com/2_riskee' target='_blank'>@2_riskee</a> for finding the Stadium Challenge lists on pokegym! (all three sources below)</p>
           <ul className='shout-out' style={{marginTop: '-15px', marginLeft: '25px', display: 'flex', flexDirection: 'row'}}>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/deck-that-got-me-to-worlds.8595/' target='_blank'>source 1</a></li>
             <li style={{marginRight: '35px'}}><a href='https://pokegym.net/community/index.php?threads/east-coast-stadium-challenge-report.8765/' target='_blank'>source 2</a></li>
@@ -542,7 +589,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Stephen Silvestro (Masters) - 88<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
           <a href='/tournaments/2009_WORLDS/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={flygon} alt="sprite" />
@@ -550,7 +597,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Chris Fulop (Masters) - 19<sup>th</sup> Place <span>2009 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
           <a href='/tournaments/2007_WORLDS/masters/Jason%20Windham-AU' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={flygon} alt="sprite" />
@@ -572,7 +619,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Trevore Read (Masters) - 27<sup>th</sup> Place <span>2014 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2013_WORLDS/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -595,7 +642,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Jacob Howard (Seniors) - 13<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2012_WORLDS/masters/Aaron%20Curry-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -612,7 +659,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Austin Baggs (Masters) - 24<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2011_WORLDS/masters/Lorenzo%20Voltolina-IT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -629,7 +676,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Marco Escher (Masters) - 27<sup>th</sup> Place <span>2011 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2010_NATS_US/masters/John%20Kettler-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -638,7 +685,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>John Kettler (Masters) - 66<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2007_WORLDS/masters/Daniel%20Cohen-AT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -672,7 +719,7 @@ const ArchiveUpdates = () => {
             <p><span>2007 Worlds</span> (Masters) &nbsp;33<sup>rd</sup> - 60<sup>th</sup> Placements <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
-          <br></br>
+          <hr className='archive-updates-mini-hr'></hr>
           <p style={{ fontWeight: 600 }}>Corrections:</p>
 
           <a href='/tournaments/2014_WORLDS/masters/Chase%20Moloney-CA' className='new-div-fix-wrap'>
