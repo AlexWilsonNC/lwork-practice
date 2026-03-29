@@ -148,7 +148,7 @@ const ArchiveUpdates = () => {
               <img className="sprite" src={joltik} alt="sprite" />
               <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
-            <p>Ryan Moorhouse (Masters) - 35<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Ryan Moorhouse (Masters) - 35<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
