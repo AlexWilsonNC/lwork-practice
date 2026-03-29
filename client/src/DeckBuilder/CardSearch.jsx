@@ -450,7 +450,14 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                 let mergedSets = { ...(out.sets || {}) };
                 for (const key of rangeKeys) mergedSets[key] = true;
 
-                if (f.includePromos) {
+                const quickFormat =
+                    f.formatRange?.from && f.formatRange?.to
+                        ? `${f.formatRange.from}|${f.formatRange.to}`
+                        : '';
+
+                const hasDedicatedPromoPool = !!getActivePromoPoolFormat(quickFormat);
+
+                if (f.includePromos && !hasDedicatedPromoPool) {
                     const withPromos = addPromosForRange(new Set(Object.keys(mergedSets)));
                     mergedSets = Object.fromEntries(Array.from(withPromos).map(k => [k, true]));
                 }
@@ -933,26 +940,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     );
 
     const WORLDS_FORMATS = [
-        { label: '2025 Worlds', from: 'SVI', to: 'BLK' },
-        { label: '2024 Worlds', from: 'BRS', to: 'SFA' },
-        { label: '2023 Worlds', from: 'BST', to: 'PAL' },
+        // { label: '2025 Worlds', from: 'SVI', to: 'BLK' },
+        // { label: '2024 Worlds', from: 'BRS', to: 'SFA' },
+        // { label: '2023 Worlds', from: 'BST', to: 'PAL' },
         { label: '2022 Worlds', from: 'SSH', to: 'PGO' },
         { label: '2019 Worlds', from: 'UPR', to: 'UNM' },
         { label: '2018 Worlds', from: 'BKT', to: 'CES' },
         { label: '2017 Worlds', from: 'PRC', to: 'BUS' },
-        { label: '2016 Worlds', from: 'XY', to: 'STS' },
-        { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
-        { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
-        { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
-        { label: '2012 Worlds', from: 'HS', to: 'DEX' },
-        { label: '2011 Worlds', from: 'HS', to: 'BLW' },
-        { label: '2010 Worlds', from: 'DP', to: 'UL' },
-        { label: '2009 Worlds', from: 'DP', to: 'RR' },
-        { label: '2008 Worlds', from: 'HP', to: 'MD' },
-        { label: '2007 Worlds', from: 'DX', to: 'DP' },
-        { label: '2006 Worlds', from: 'HL', to: 'HP' },
-        { label: '2005 Worlds', from: 'RS', to: 'EM' },
-        { label: '2004 Worlds', from: 'EX', to: 'HL' },
+        // { label: '2016 Worlds', from: 'XY', to: 'STS' },
+        // { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
+        // { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
+        // { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
+        // { label: '2012 Worlds', from: 'HS', to: 'DEX' },
+        // { label: '2011 Worlds', from: 'HS', to: 'BLW' },
+        // { label: '2010 Worlds', from: 'DP', to: 'UL' },
+        // { label: '2009 Worlds', from: 'DP', to: 'RR' },
+        // { label: '2008 Worlds', from: 'HP', to: 'MD' },
+        // { label: '2007 Worlds', from: 'DX', to: 'DP' },
+        // { label: '2006 Worlds', from: 'HL', to: 'HP' },
+        // { label: '2005 Worlds', from: 'RS', to: 'EM' },
+        // { label: '2004 Worlds', from: 'EX', to: 'HL' },
     ];
 
     const POPULAR_FORMATS = [
@@ -978,7 +985,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
 
     const FORMAT_PROMO_POOLS = {
-        'SSH|PGO': '2022_worlds'
+        'SVI|BLK': '2025_worlds',
+        'BRS|SFA': '2024_worlds',
+        'BST|PAL': '2023_worlds',
+        'SSH|PGO': '2022_worlds',
+        'UPR|UNM': '2019_worlds',
+        'BKT|CES': '2018_worlds',
+        'PRC|BUS': '2017_worlds',
+        'XY|STS': '2016_worlds',
+        'BCR|ROS': '2015_worlds',
+        'NXD|FLF': '2014_worlds',
+        'BLW|PLF': '2013_worlds',
+        'HS|DEX': '2012_worlds',
+        'HS|BLW': '2011_worlds',
+        'DP|UL': '2010_worlds',
+        'DP|RR': '2009_worlds',
+        'HP|MD': '2008_worlds',
+        'DX|DP': '2007_worlds',
+        'HL|HP': '2006_worlds',
+        'RS|EM': '2005_worlds',
+        'EX|HL': '2004_worlds'
     };
 
     const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
@@ -1125,6 +1151,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         return formatPromoCards.some(c => `${c.setAbbrev}|${c.number}` === key);
     }
 
+    function normalizePromoAbbrev(abbr) {
+        const s = String(abbr || '').toUpperCase();
+        if (s === 'PR-XY') return 'XYP';
+        if (s === 'PR-SM') return 'SMP';
+        if (s === 'PR-SW') return 'SWSHP';
+        if (s === 'PR-SV') return 'SVP';
+        return s;
+    }
+
+    function isPromoSetCard(card) {
+        return PROMO_SET_KEYS.has(normalizePromoAbbrev(card.setAbbrev));
+    }
+
     function takeFirstMatching(arr, limit = Number.POSITIVE_INFINITY) {
         const out = [];
 
@@ -1144,6 +1183,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
             const fr = filters.formatRange?.from;
             const to = filters.formatRange?.to;
+
+            const activeQuickFormat =
+                fr && to ? `${fr}|${to}` : '';
+            const hasDedicatedPromoPool = !!getActivePromoPoolFormat(activeQuickFormat);
+
+            if (
+                hasDedicatedPromoPool &&
+                isPromoSetCard(card) &&
+                !isFormatPromoPoolCard(card)
+            ) {
+                continue;
+            }
             if (!forceIncluded && fr && to && !isAbbrevInRange(card.setAbbrev, fr, to)) continue;
             if (!matchesSelectedTypes(card, filters.supertypes)) continue;
             if (!matchesSelectedMechanics(card, filters.mechanics)) continue;
@@ -1298,10 +1349,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     }
 
     const FORMAT_MANUAL_OVERRIDES = {
-        'SSH|PGO': { // 2022 Worlds
-            includeNames: "",
-            includeKeys: ""
-        },
         'UPR|UNM': { // 2019 Worlds
             bannedCards: [
                 { name: "Blaine's Quiz Show", key: "UNM-186" }
@@ -1427,9 +1474,9 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     useEffect(() => {
         if (skipNextQueryEffectRef.current > 0) {
-    skipNextQueryEffectRef.current -= 1;
-    return;
-}
+            skipNextQueryEffectRef.current -= 1;
+            return;
+        }
 
         const trimmed = query.trim();
         const filtersActive = anyFilterActive(filters);
@@ -2464,8 +2511,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     if (selectedLegalityPreset) {
                                                         arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
                                                     }
-console.log('Search all using filters:', draftFilters);
-console.log('Search all result count:', arr.length);
                                                     setFilters(draftFilters);
                                                     setResults(arr);
                                                     setShowAdvanced(false);
