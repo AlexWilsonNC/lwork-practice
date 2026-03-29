@@ -71,6 +71,7 @@ import seismitoad from '../../public/assets/sprites/seismitoad.png'
 import manectric from '../../public/assets/sprites/manectric.png'
 import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
 import trubbish from '../../public/assets/sprites/trubbish.png'
+import flareon from '../../public/assets/sprites/flareon.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -142,10 +143,10 @@ const ArchiveUpdates = () => {
             <p>Israel Sosa (Masters) - 34<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
-          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+          <a href='/tournaments/2015_WORLDS/masters/Ryan%20Moorhouse-GB' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={blank} alt="sprite" />
-              <img className="sprite second-sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
             <p>Ryan Moorhouse (Masters) - 35<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
@@ -276,6 +277,14 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={genesect} alt="sprite" />
             </div>
             <p>Takuya Yoneda (Masters) - 60<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <a href='/tournaments/2015_WORLDS/masters/Bob%20Zhang-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={flareon} alt="sprite" />
+              <img className="sprite second-sprite" src={empoleon} alt="sprite" />
+            </div>
+            <p>Bob Zhang (Masters) - 63<sup>rd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
