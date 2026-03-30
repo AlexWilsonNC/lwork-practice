@@ -1602,8 +1602,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Mar 28, 2026",
         "flag": spain,
-        "location": "Seville, Spain",
-        "results": false
+        "location": "Seville, Spain"
     },
     {
         "id": "2026_QUERETARO",
