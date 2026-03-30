@@ -1029,12 +1029,26 @@ export default function DeckBuilder() {
                     </p>
                   );
                 })()}
-                {zoomCard.abilities?.map((ab, i) => (
-                  <p key={i}>
-                    <strong><span style={{ color: '#aa0300', textShadow: '0 0 1px black' }}>Ability:</span> {ab.name}</strong>
-                    <br></br>{ab.text}
-                  </p>
-                ))}
+                {zoomCard.abilities?.map((ab, i) => {
+                  const abilityType = ab?.type || 'Ability';
+                  const abilityColor =
+                    abilityType === 'Poké-Body'
+                      ? '#2e9b43'
+                      : '#aa0300';
+
+                  return (
+                    <p key={i}>
+                      <strong>
+                        <span style={{ color: abilityColor, textShadow: '0 0 1px black' }}>
+                          {abilityType}:
+                        </span>{' '}
+                        {ab.name}
+                      </strong>
+                      <br />
+                      {ab.text}
+                    </p>
+                  );
+                })}
                 {zoomCard.attacks?.map((atk, i) => (
                   <div key={i}>
                     <p style={{ margin: '15px 0' }}>
