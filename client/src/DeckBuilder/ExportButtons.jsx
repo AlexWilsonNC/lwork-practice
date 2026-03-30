@@ -567,7 +567,7 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const handleImport = async () => {
     if (deck.length > 0) {
       const ok = window.confirm(
-        'You currently have cards in your decklist, are you sure you want to overwrite it?'
+        'Overwrite current decklist?'
       )
       if (!ok) return
     }
@@ -590,14 +590,14 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
 
   const openPrintDecklist = () => {
     const hasCustomUploadedCard = deck.some(
-    c => c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'
-  );
+      c => c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'
+    );
 
-  if (hasCustomUploadedCard) {
-    alert('You cannot print a decklist that contains a custom uploaded image.');
-    setShowCopyMenu(false);
-    return;
-  }
+    if (hasCustomUploadedCard) {
+      alert('You cannot print a decklist that contains a custom uploaded image.');
+      setShowCopyMenu(false);
+      return;
+    }
     const minimal = deck.map(c => ({
       supertype: c.supertype,
       set: c.setAbbrev,

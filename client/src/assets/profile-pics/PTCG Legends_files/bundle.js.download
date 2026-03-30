@@ -218,7 +218,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _assets_social_media_icons_twitter_icon_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/social-media-icons/twitter-icon.svg */ "./src/assets/social-media-icons/twitter-icon.svg");
 /* harmony import */ var _assets_social_media_icons_discord_icon_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/social-media-icons/discord-icon.png */ "./src/assets/social-media-icons/discord-icon.png");
-/* harmony import */ var _assets_social_media_icons_patreon_icon_webp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../assets/social-media-icons/patreon-icon.webp */ "./src/assets/social-media-icons/patreon-icon.webp");
+/* harmony import */ var _assets_social_media_icons_patreon_icon_webp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../assets/social-media-icons/patreon-icon.png */ "./src/assets/social-media-icons/patreon-icon.png");
 /* harmony import */ var _assets_social_media_icons_tiktok_icon_webp__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../assets/social-media-icons/tiktok-icon.webp */ "./src/assets/social-media-icons/tiktok-icon.webp");
 /* harmony import */ var _assets_social_media_icons_email_icon_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../assets/social-media-icons/email-icon.png */ "./src/assets/social-media-icons/email-icon.png");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-dev-runtime */ "./node_modules/react/jsx-dev-runtime.js");
@@ -2948,7 +2948,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _assets_social_media_icons_twitter_icon_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/social-media-icons/twitter-icon.svg */ "./src/assets/social-media-icons/twitter-icon.svg");
 /* harmony import */ var _assets_social_media_icons_discord_icon_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/social-media-icons/discord-icon.png */ "./src/assets/social-media-icons/discord-icon.png");
-/* harmony import */ var _assets_social_media_icons_patreon_icon_webp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/social-media-icons/patreon-icon.webp */ "./src/assets/social-media-icons/patreon-icon.webp");
+/* harmony import */ var _assets_social_media_icons_patreon_icon_webp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/social-media-icons/patreon-icon.png */ "./src/assets/social-media-icons/patreon-icon.png");
 /* harmony import */ var _assets_social_media_icons_email_icon_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../assets/social-media-icons/email-icon.png */ "./src/assets/social-media-icons/email-icon.png");
 /* harmony import */ var _css_nav_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../css/nav.css */ "./src/css/nav.css");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-dev-runtime */ "./node_modules/react/jsx-dev-runtime.js");
@@ -56359,9 +56359,9 @@ module.exports = __webpack_require__.p + "static/media/latest-expansion.673f2cdb
 
 /***/ }),
 
-/***/ "./src/assets/social-media-icons/patreon-icon.webp":
+/***/ "./src/assets/social-media-icons/patreon-icon.png":
 /*!*********************************************************!*\
-  !*** ./src/assets/social-media-icons/patreon-icon.webp ***!
+  !*** ./src/assets/social-media-icons/patreon-icon.png ***!
   \*********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 

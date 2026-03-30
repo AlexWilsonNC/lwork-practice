@@ -1453,12 +1453,12 @@ export default function Account() {
                                                                     alt={`${d.name} mascot`}
                                                                     className={[
                                                                         "cropped-mascot-card",
-                                                                        d.isTagTeam && "tagteam",
-                                                                        d.hasAncientTrait && "ancient",
-                                                                        d.hasBreakTrait && "break",
-                                                                        d.isLegendCard && "legend",
-                                                                        d.specificallyLugiaLegend && "lugia",
-                                                                        d.specificallyZoroarkGX && "zoroark"
+                                                                        d.isTagTeam ? "tagteam" : '',
+                                                                        d.hasAncientTrait ? "ancient" : '',
+                                                                        d.hasBreakTrait ? "break" : '',
+                                                                        d.isLegendCard ? "legend" : '',
+                                                                        d.specificallyLugiaLegend ? "lugia" : '',
+                                                                        d.specificallyZoroarkGX ? "zoroark" : ''
                                                                     ].filter(Boolean).join(" ")}
                                                                     fetchpriority={i < 12 ? 'high' : 'auto'}
                                                                     loading={i < 12 ? 'eager' : 'lazy'}
@@ -1471,12 +1471,12 @@ export default function Account() {
                                                                             alt=""
                                                                             className={[
                                                                                 "secondary-mascot-img",
-                                                                                d.secondaryIsTagTeam && "tagteam",
-                                                                                d.secondaryHasAncientTrait && "ancient",
-                                                                                d.secondaryHasBreakTrait && "break",
-                                                                                d.secondaryIsLegendCard && "legend",
-                                                                                d.secondarySpecificallyLugiaLegend && "lugia",
-                                                                                d.secondarySpecificallyZoroarkGX && "zoroark",
+                                                                                d.secondaryIsTagTeam ? "tagteam" : '',
+                                                                                d.secondaryHasAncientTrait ? "ancient" : '',
+                                                                                d.secondaryHasBreakTrait ? "break" : '',
+                                                                                d.secondaryIsLegendCard ? "legend" : '',
+                                                                                d.secondarySpecificallyLugiaLegend ? "lugia" : '',
+                                                                                d.secondarySpecificallyZoroarkGX ? "zoroark" : ''
                                                                             ].filter(Boolean).join(" ")}
                                                                         />
                                                                     </div>
@@ -1783,6 +1783,12 @@ export default function Account() {
                                                     const r1 = await fetch(`/api/cards/${set1}/${num1}`);
                                                     const c1 = await r1.json();
                                                     const newPrimaryUrl = c1.images?.large || c1.images?.small;
+                                                    const pAncient = !!c1.ancientTrait;
+                                                    const pTag = c1.subtypes?.includes('TAG TEAM');
+                                                    const pBreak = c1.subtypes?.includes('BREAK');
+                                                    const pLegend = c1.subtypes?.includes('LEGEND');
+                                                    const pLugia = c1.name === 'Lugia LEGEND';
+                                                    const pZoroark = c1.name === 'Zoroark-GX';
 
                                                     let newSecondaryUrl = null;
                                                     let sAncient = false, sTag = false, sBreak = false, sLegend = false, sLugia = false, sZoroark = false;
@@ -1809,8 +1815,16 @@ export default function Account() {
                                                                 ? {
                                                                     ...d,
                                                                     mascotCard: primaryMascot,
-                                                                    secondaryMascotCard: secondaryMascot,
+                                                                    secondaryMascotCard: secondaryMascot || null,
                                                                     mascotImageUrl: newPrimaryUrl,
+
+                                                                    hasAncientTrait: pAncient,
+                                                                    isTagTeam: pTag,
+                                                                    hasBreakTrait: pBreak,
+                                                                    isLegendCard: pLegend,
+                                                                    specificallyLugiaLegend: pLugia,
+                                                                    specificallyZoroarkGX: pZoroark,
+
                                                                     secondaryMascotImageUrl: newSecondaryUrl,
                                                                     secondaryHasAncientTrait: sAncient,
                                                                     secondaryIsTagTeam: sTag,
@@ -1821,7 +1835,7 @@ export default function Account() {
                                                                 }
                                                                 : d
                                                         )
-                                                    )
+                                                    );
                                                     setShowMascotModal(false);
                                                     setMenuOpenId(null);
                                                 }}
@@ -1988,15 +2002,15 @@ export default function Account() {
                                             loading={false}
                                             onUpdateCount={() => { }}
                                             onCardClick={(card) => {
-    const setCode = card.setAbbrev || card.set;
+                                                const setCode = card.setAbbrev || card.set;
 
-    if (card.isUploadedImageCard || setCode === 'UPL') {
-        alert('This is a custom uploaded image, not found in the database.');
-        return;
-    }
+                                                if (card.isUploadedImageCard || setCode === 'UPL') {
+                                                    alert('This is a custom uploaded image, not found in the database.');
+                                                    return;
+                                                }
 
-    window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
-}}
+                                                window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
+                                            }}
                                             viewMode="image"
                                         />
                                     </div>

@@ -493,6 +493,17 @@ export default function DeckBuilder() {
     e.target.value = '';
   };
 
+    function handleResetDeck() {
+    if (deck.length === 0) return;
+
+    const ok = window.confirm(
+      'Delete current decklist?'
+    );
+    if (!ok) return;
+
+    setDeck([]);
+  }
+
   function addCard(cardToAdd) {
     setDeck(prevDeck => {
       const idx = prevDeck.findIndex(
@@ -1150,7 +1161,7 @@ export default function DeckBuilder() {
                   <span className="material-symbols-outlined">sort</span>
                   <p>&nbsp;Sort&nbsp;</p>
                 </div>
-                <div id="deck-reset" onClick={() => setDeck([])}>
+                <div id="deck-reset" onClick={handleResetDeck}>
                   <span className="material-symbols-outlined">close</span>
                   <p>Reset</p>
                 </div>
@@ -1167,7 +1178,7 @@ export default function DeckBuilder() {
                   type="button"
                   id="deck-upload-custom-image"
                   style={{ cursor: 'pointer' }}
-                  title="Upload custom image card"
+                  title="Upload custom card image"
                   onClick={() => {
                     const input = document.getElementById('deck-upload-custom-image-input');
                     if (input) input.click();
@@ -1330,7 +1341,7 @@ export default function DeckBuilder() {
             />
           </div>
         </div>
-        <span class="material-symbols-outlined info-db-icon">info</span>
+        {/* <span class="material-symbols-outlined info-db-icon">info</span> */}
       </div>
     </DeckBuilderComp>
   )

@@ -3,7 +3,18 @@
   height: 64px;
   animation: pokeball-spin 1.2s linear infinite;
 }
-
+.card-search-results-spinner {
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-search-results-spinner .spinner-icon {
+  font-size: 2.5rem;
+  color: white;
+  animation: card-search-spin 1s linear infinite;
+}
 .info-db-icon {
   position: fixed;
   bottom: 15px;

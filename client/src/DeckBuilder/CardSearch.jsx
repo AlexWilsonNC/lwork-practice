@@ -9,7 +9,7 @@ import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
 import rs1 from '../assets/sets/ruby-saphire/ex1-ruby-sapphire.png'
 import sm1 from '../assets/sets/sun-moon/sm1-sm.png'
-import ssh1 from '../assets/sets/sword-shield/ssh1.webp'
+import ssh1 from '../assets/sets/sword-shield/ssh1.png'
 import sv1 from '../assets/sets/scarlet-violet/sv1.png'
 import me1 from '../assets/sets/mega-evolution/me1.png'
 import wotc from '../assets/sets/wizards-of-the-coast/wotc-offcenter.png'
@@ -24,7 +24,7 @@ import mechAceSpec from '../assets/icons/acespec.png';
 import mechTagTeam from '../assets/icons/tagteam.png';
 import mechPrism from '../assets/icons/prism.png';
 import mechTera from '../assets/icons/tera.png';
-import mechFuture from '../assets/icons/future.webp';
+import mechFuture from '../assets/icons/future.png';
 import mechAncient from '../assets/icons/ancient.png';
 import mechGoldStar from '../assets/icons/gold-star.png';
 import mechFusion from '../assets/icons/fusion.png';

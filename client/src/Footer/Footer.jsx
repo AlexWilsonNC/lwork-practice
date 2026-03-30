@@ -2,8 +2,7 @@ import '../css/footer.css';
 import React from 'react';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
 import discordIcon from '../assets/social-media-icons/discord-icon.png';
-import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
-import tiktokIcon from '../assets/social-media-icons/patreon-icon.webp';
+import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
 import totodileSprite from '../assets/footer/ho-oh.png';
 import feraligatrSprite from '../assets/footer/lugia.png';
@@ -65,10 +64,6 @@ function Footer() {
                             <img src={emailIcon} alt="social-icon" />
                             <p>Send us an Email</p>
                         </a>
-                        {/* <a href='' target='_blank' rel="noopener noreferrer" className='not-ready invisible'>
-                            <img src={tiktokIcon} alt="social-icon" />
-                            <p>Watch us on Tiktok</p>
-                        </a> */}
                     </div>
                 </div>
                 <div className='unhide-footer'>

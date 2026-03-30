@@ -5,7 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { AuthContext } from '../contexts/AuthContext';
 import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
 import discordIcon from '../assets/social-media-icons/discord-icon.png';
-import patreonIcon from '../assets/social-media-icons/patreon-icon.webp';
+import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
 import Modal from '../Tools/Interstitial';
 import '../css/nav.css';
