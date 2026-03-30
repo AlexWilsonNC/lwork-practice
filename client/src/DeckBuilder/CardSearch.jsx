@@ -1053,7 +1053,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         { label: 'RS-PK', from: 'RS', to: 'PK' },
     ];
 
-    // TODO: replace promo set codes below with actual promo abbrevs...
+    const POPULAR_FORMAT_KEYS = new Set(
+        POPULAR_FORMATS.map(({ from, to }) => `${from}|${to}`)
+    );
+
     const PROMO_RULES = [
         { label: 'Wizards Black Star Promos', mainFrom: 'BS', mainTo: 'SK', promoKey: 'WOTC-P' },
         { label: 'Nintendo Black Star Promos', mainFrom: 'RS', mainTo: 'PK', promoKey: 'NP' },
@@ -2073,13 +2076,13 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                 </div>
                                 {(() => {
                                     const ov = getActiveOverride(selectedQuickFormat);
-                                    if (!ov) return null;
+                                    const isOtherPopularFormat = POPULAR_FORMAT_KEYS.has(selectedQuickFormat);
 
-                                    const { pairs } = getOverrideBannedSets(ov);
-                                    const legacyNames = Array.from(parseListToSet(ov.bannedNames || ''));
+                                    if (!ov && !isOtherPopularFormat) return null;
 
-                                    if (!pairs.length && !legacyNames.length) return null;
-
+                                    const { pairs } = ov ? getOverrideBannedSets(ov) : { pairs: [] };
+                                    const legacyNames = Array.from(parseListToSet(ov?.bannedNames || ''));
+                                    if (!pairs.length && !legacyNames.length && !isOtherPopularFormat) return null;
                                     const norm = s => (s ?? '').trim().toLowerCase();
 
                                     const uniquePairs = [];
@@ -2138,14 +2141,32 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                         maxWidth: 680
                                                     }}
                                                 >
-                                                    <span
-                                                        className="material-symbols-outlined"
-                                                        style={{ verticalAlign: '-2px', marginRight: 6 }}
-                                                    >
-                                                        info
-                                                    </span>
-                                                    <strong>Banned Cards:</strong>{' '}
-                                                    {renderPairs()}
+                                                    {(pairs.length > 0 || legacyNames.length > 0) && (
+                                                        <>
+                                                            <span
+                                                                className="material-symbols-outlined"
+                                                                style={{ verticalAlign: '-2px', marginRight: 6 }}
+                                                            >
+                                                                info
+                                                            </span>
+                                                            <strong>Banned Cards:</strong>{' '}
+                                                            {renderPairs()}
+                                                        </>
+                                                    )}
+
+                                                    {isOtherPopularFormat && (
+                                                        <>
+                                                            <span
+                                                                className="material-symbols-outlined"
+                                                                style={{ verticalAlign: '-2px', marginRight: 6 }}
+                                                            >
+                                                                info
+                                                            </span>
+                                                            <p style={{ marginTop: (pairs.length > 0 || legacyNames.length > 0) ? 8 : undefined, opacity: 0.85, fontStyle: 'italic' }}>
+                                                                We are working on promo legality for this format, for now promos will not be displayed in the results.
+                                                            </p>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -2572,78 +2593,78 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     if (!e.currentTarget.contains(e.relatedTarget)) setShowWeaknessMenu(false);
                                                 }}
                                             >
-                                            <button
-                                                type="button"
-                                                className="type-btn non-bold-typebtn hp-btn-dropdown whyarentyousmall"
-                                                onClick={() => {
-                                                    setShowWeaknessMenu(v => !v);
-                                                    setShowResistanceMenu(false);
-                                                }}
-                                                aria-haspopup="listbox"
-                                                aria-expanded={showWeaknessMenu}
-                                            >
-                                                Select
-                                                <span className="material-symbols-outlined" aria-hidden>expand_more</span>
-                                            </button>
-
-                                            {showWeaknessMenu && (
-                                                <div
-                                                    role="listbox"
-                                                    style={{
-                                                        position: 'absolute',
-                                                        zIndex: 20,
-                                                        top: '100%',
-                                                        left: 0,
-                                                        marginTop: 4,
-                                                        background: 'var(--dropdown-bg, #fff)',
-                                                        border: '1px solid rgba(0,0,0,0.15)',
-                                                        borderRadius: 8,
-                                                        boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
-                                                        padding: 6,
-                                                        minWidth: 180,
-                                                        maxHeight: 240,
-                                                        overflowY: 'auto'
+                                                <button
+                                                    type="button"
+                                                    className="type-btn non-bold-typebtn hp-btn-dropdown whyarentyousmall"
+                                                    onClick={() => {
+                                                        setShowWeaknessMenu(v => !v);
+                                                        setShowResistanceMenu(false);
                                                     }}
+                                                    aria-haspopup="listbox"
+                                                    aria-expanded={showWeaknessMenu}
                                                 >
-                                                    {DEFENSIVE_TYPE_OPTIONS.map(({ key, label, img }) => (
-                                                        <button
-                                                            key={key}
-                                                            role="option"
-                                                            className="energy-menu-item"
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: 8,
-                                                                padding: '6px 8px',
-                                                                width: '100%'
-                                                            }}
-                                                            onMouseDown={(e) => e.preventDefault()}
-                                                            onClick={() => {
-                                                                setDraftFilters(f => ({
-                                                                    ...f,
-                                                                    weakness: key === 'none' ? { none: true } : { [key]: true }
-                                                                }));
-                                                                setShowWeaknessMenu(false);
-                                                            }}
-                                                            title={label}
-                                                        >
-                                                            {img ? (
-                                                                <img
-                                                                    src={img}
-                                                                    alt=""
-                                                                    width={20}
-                                                                    height={20}
-                                                                    style={{ display: 'inline-block', borderRadius: 2 }}
-                                                                />
-                                                            ) : (
-                                                                <span style={{ width: 20, textAlign: 'center' }}>—</span>
-                                                            )}
-                                                            <span>{label}</span>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
+                                                    Select
+                                                    <span className="material-symbols-outlined" aria-hidden>expand_more</span>
+                                                </button>
+
+                                                {showWeaknessMenu && (
+                                                    <div
+                                                        role="listbox"
+                                                        style={{
+                                                            position: 'absolute',
+                                                            zIndex: 20,
+                                                            top: '100%',
+                                                            left: 0,
+                                                            marginTop: 4,
+                                                            background: 'var(--dropdown-bg, #fff)',
+                                                            border: '1px solid rgba(0,0,0,0.15)',
+                                                            borderRadius: 8,
+                                                            boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                                                            padding: 6,
+                                                            minWidth: 180,
+                                                            maxHeight: 240,
+                                                            overflowY: 'auto'
+                                                        }}
+                                                    >
+                                                        {DEFENSIVE_TYPE_OPTIONS.map(({ key, label, img }) => (
+                                                            <button
+                                                                key={key}
+                                                                role="option"
+                                                                className="energy-menu-item"
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: 8,
+                                                                    padding: '6px 8px',
+                                                                    width: '100%'
+                                                                }}
+                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onClick={() => {
+                                                                    setDraftFilters(f => ({
+                                                                        ...f,
+                                                                        weakness: key === 'none' ? { none: true } : { [key]: true }
+                                                                    }));
+                                                                    setShowWeaknessMenu(false);
+                                                                }}
+                                                                title={label}
+                                                            >
+                                                                {img ? (
+                                                                    <img
+                                                                        src={img}
+                                                                        alt=""
+                                                                        width={20}
+                                                                        height={20}
+                                                                        style={{ display: 'inline-block', borderRadius: 2 }}
+                                                                    />
+                                                                ) : (
+                                                                    <span style={{ width: 20, textAlign: 'center' }}>—</span>
+                                                                )}
+                                                                <span>{label}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
 
                                         <input
