@@ -92,6 +92,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('spidops');
         secondSprite  = getPokemonSpriteURL('mewtwo');
     }
+    else if (hasPokemon('Team Rocket\'s Honchkrow') && hasPokemon('Team Rocket\'s Porygon2')) {
+        firstSprite  = getPokemonSpriteURL('honchkrow');
+        secondSprite  = getPokemonSpriteURL('porygon2');
+    }
     else if (hasPokemon('Regidrago VSTAR') && hasPokemon('Teal Mask Ogerpon ex')) {
         firstSprite  = getPokemonSpriteURL('regidrago');
         secondSprite  = getPokemonSpriteURL('ogerpon');

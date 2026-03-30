@@ -88,6 +88,7 @@ import lebanon from '../assets/flags/lebanon.png';
 import belize from '../assets/flags/belize.png';
 import jersey from '../assets/flags/jersey.png';
 import uzbekistan from '../assets/flags/uzbekistan.png';
+import estonia from '../assets/flags/estonia.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -181,6 +182,7 @@ export const flags = {
      BZ: belize,
      JE: jersey,
      UZ: uzbekistan,
+     EE: estonia,
     unknown: unknown
 };
 
@@ -275,6 +277,7 @@ export const countryNames = {
     LB: 'Lebanon (Middle East-South Africa)',
     UZ: 'Uzbekistan (Middle East-South Africa)',
     BZ: 'Belize (Latin America)',
+    EE: 'Estonia (Europe)',
     EC: 'Ecuador (Latin America)'
 };
 
@@ -369,6 +372,7 @@ export const playerCountryDropdown = {
     BZ: 'Belize',
     JE: 'Jersey',
     UZ: 'Uzbekistan',
+    EE: 'Estonia',
     SZ: 'Eswatini'
     // ,unknown: 'Unknown'
 };
@@ -376,7 +380,7 @@ export const playerCountryDropdown = {
 export const regions = {
   NA: ['US','CA','PR'],
   LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN'],
-  EU: ['DE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
+  EU: ['DE','EE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
   OC: ['AU','NZ'],
   AP: ['CN','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
   MS: ['ZA','TR','KW','QA','SZ','AE','LB','UZ']
