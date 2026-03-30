@@ -192,8 +192,19 @@ function MascotSelect({
               role="option"
               tabIndex={0}
               className={`${className}-item`}
-              onClick={() => { onChange(''); setOpen(false); }}
-              onKeyDown={e => { if (e.key === 'Enter') { onChange(''); setOpen(false); } }}
+              onMouseDown={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                setOpen(false);
+                onChange('');
+              }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setOpen(false);
+                  onChange('');
+                }
+              }}
               style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
             >
               <span style={{ width: 24, height: 34 }} />
@@ -206,8 +217,19 @@ function MascotSelect({
               role="option"
               tabIndex={0}
               className={`${className}-item`}
-              onClick={() => { onChange(value); setOpen(false); }}
-              onKeyDown={e => { if (e.key === 'Enter') { onChange(value); setOpen(false); } }}
+              onMouseDown={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                setOpen(false);
+                onChange(value);
+              }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setOpen(false);
+                  onChange(value);
+                }
+              }}
               style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
             >
               <span style={{ width: 24, height: 34 }} />
@@ -222,8 +244,19 @@ function MascotSelect({
               aria-selected={opt.key === value}
               tabIndex={0}
               className={`${className}-item`}
-              onClick={() => { onChange(opt.key); setOpen(false); }}
-              onKeyDown={e => { if (e.key === 'Enter') { onChange(opt.key); setOpen(false); } }}
+              onMouseDown={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                setOpen(false);
+                onChange(opt.key);
+              }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setOpen(false);
+                  onChange(opt.key);
+                }
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
