@@ -1632,9 +1632,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
                     const routes = (() => {
                         if (!primeMode) {
-                            return (searchMode === 'name'
-                                ? variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`)
-                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`));
+                            return searchMode === 'name'
+                                ? [
+                                    ...variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`),
+                                    ...variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`)
+                                ]
+                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
                         }
 
                         const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
@@ -1643,6 +1646,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                         }
                         return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
                     })();
+
                     const resLists = await Promise.all(
                         routes.map(r =>
                             fetch(r)
