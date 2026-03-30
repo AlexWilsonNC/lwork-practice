@@ -2582,7 +2582,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                 aria-haspopup="listbox"
                                                 aria-expanded={showWeaknessMenu}
                                             >
-                                                Add weakness
+                                                Select
                                                 <span className="material-symbols-outlined" aria-hidden>expand_more</span>
                                             </button>
 
@@ -2691,7 +2691,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     aria-haspopup="listbox"
                                                     aria-expanded={showResistanceMenu}
                                                 >
-                                                    Add resistance
+                                                    Select
                                                     <span className="material-symbols-outlined" aria-hidden>expand_more</span>
                                                 </button>
 
