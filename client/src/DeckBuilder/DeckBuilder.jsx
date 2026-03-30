@@ -1044,12 +1044,23 @@ export default function DeckBuilder() {
                     </p>
                   </div>
                 ))}
-                {zoomCard.supertype != 'Pokémon' || zoomCard.supertype === 'Pokémon' && zoomCard.rules?.length > 0 && (
+                {Array.isArray(zoomCard.rules) && zoomCard.rules.length > 0 && (
                   <div className="modal-rules">
                     <ul>
-                      {zoomCard.rules.map((text, i) => (
-                        <li key={i}>{text}</li>
-                      ))}
+                      {zoomCard.rules.map((text, i) => {
+                        const shrinkRuleText =
+                          zoomCard.supertype === 'Pokémon' &&
+                          /^\s*.+?\s+rule\s*:/i.test(String(text || ''));
+
+                        return (
+                          <li
+                            key={i}
+                            style={shrinkRuleText ? { fontSize: '0.8em', fontStyle: 'italic' } : undefined}
+                          >
+                            {text}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 )}
