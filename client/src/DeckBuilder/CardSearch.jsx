@@ -3024,7 +3024,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                     </div>
                     <div className="all-cards-container">
                         <div className='all-cards-displayed'>
-                            {displayResults.map(card => (
+                            {displayResults.map((card, idx) => (
                                 <a
                                     key={`${card.setAbbrev}-${card.number}`}
                                     href={`/card/${card.setAbbrev}/${card.number}`}
@@ -3046,8 +3046,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                     <img
                                         draggable={false}
                                         onDragStart={e => e.preventDefault()}
-                                        loading="lazy"
-                                        src={card.images.small} alt={card.name} className='database-card-in-list' />
+                                        loading={idx < 18 ? 'eager' : 'lazy'}
+                                        fetchPriority={idx < 12 ? 'high' : 'auto'}
+                                        src={card.images.small}
+                                        alt={card.name}
+                                        className='database-card-in-list'
+                                    />
                                     <button
                                         type="button"
                                         onClick={e => {
