@@ -73,8 +73,8 @@ const IMPORT_SET_ABBREV_ALIASES = {
   FRLG: 'RG',
   DPP: 'PR-DP',
   HSP: 'PR-HS',
-  BWP: 'PR-BW',
-  BW: 'BLW',
+  BWP: 'PR-BLW',
+  'PR-BW': 'PR-BLW',
   XYP: 'PR-XY',
   SMP: 'PR-SM',
   SP: 'PR-SW',
@@ -85,6 +85,55 @@ const normalizeImportedSetAbbrev = (setAbbrev) => {
   if (!setAbbrev) return setAbbrev;
   const cleaned = String(setAbbrev).trim().toUpperCase();
   return IMPORT_SET_ABBREV_ALIASES[cleaned] || cleaned;
+};
+
+const normalizeImportedCardNumber = (setAbbrev, number) => {
+  const cleanSet = String(setAbbrev || '').trim().toUpperCase();
+  const cleanNum = String(number || '').trim().toUpperCase();
+
+  if (!cleanNum) return cleanNum;
+
+  if (cleanSet === 'PR-DP') {
+    return cleanNum.startsWith('DP') ? cleanNum : `DP${cleanNum}`;
+  }
+
+  if (cleanSet === 'PR-HS') {
+    const n = cleanNum.replace(/^HGSS/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
+  }
+
+  if (cleanSet === 'PR-BLW') {
+    const n = cleanNum.replace(/^BW/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
+  }
+
+  if (cleanSet === 'PR-XY') {
+    const n = cleanNum.replace(/^XY/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed) : n;
+  }
+
+  if (cleanSet === 'PR-SM') {
+    const n = cleanNum.replace(/^SM/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
+  }
+
+  if (cleanSet === 'PR-SW') {
+    const n = cleanNum.replace(/^SWSH/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed).padStart(3, '0') : n;
+  }
+
+  if (cleanSet === 'PR-SV') {
+    const n = cleanNum.replace(/^SVP/i, '');
+    const parsed = parseInt(n, 10);
+    return Number.isFinite(parsed) ? String(parsed) : n;
+  }
+
+  return cleanNum;
 };
 
 function sortDeck(deck) {
@@ -493,7 +542,7 @@ export default function DeckBuilder() {
     e.target.value = '';
   };
 
-    function handleResetDeck() {
+  function handleResetDeck() {
     if (deck.length === 0) return;
 
     const ok = window.confirm(
@@ -644,9 +693,10 @@ export default function DeckBuilder() {
       for (const line of lines) {
         const parts = line.split(/\s+/);
         const count = parseInt(parts[0], 10);
-        const number = parts.pop();
+        const rawNumber = parts.pop();
         const rawSetAbbrev = parts.pop();
         const setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
+        const number = normalizeImportedCardNumber(setAbbrev, rawNumber);
         const name = parts.slice(1).join(' ');
 
         // const safeName = encodeURIComponent(name).replace(/\./g, '%2E');

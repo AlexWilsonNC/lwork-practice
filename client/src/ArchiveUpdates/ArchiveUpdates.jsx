@@ -72,6 +72,7 @@ import manectric from '../../public/assets/sprites/manectric.png'
 import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
 import trubbish from '../../public/assets/sprites/trubbish.png'
 import flareon from '../../public/assets/sprites/flareon.png'
+import klinklang from '../../public/assets/sprites/klinklang.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -120,6 +121,20 @@ const ArchiveUpdates = () => {
 
         {/* Article Content */}
         <div className='article-content archive-updates'>
+
+          {/* <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>April 2026</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2015_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={klinklang} alt="sprite" />
+              <img className="sprite second-sprite" src={bronzong} alt="sprite" />
+            </div>
+            <p>Alex Koch (Masters) - 87<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a> */}
 
           <hr className='title-hr' />
           <br />
