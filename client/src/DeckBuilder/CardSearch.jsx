@@ -947,7 +947,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         { label: '2019 Worlds', from: 'UPR', to: 'UNM' },
         { label: '2018 Worlds', from: 'BKT', to: 'CES' },
         { label: '2017 Worlds', from: 'PRC', to: 'BUS' },
-        // { label: '2016 Worlds', from: 'XY', to: 'STS' },
+        { label: '2016 Worlds', from: 'XY', to: 'STS' },
         // { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
         // { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
         // { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
@@ -1482,6 +1482,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         const filtersActive = anyFilterActive(filters);
 
         if (trimmed === '') {
+            if (filtersActive) {
+                return;
+            }
+
             if (suppressDefault) setResults([]);
             else setResults(defaultCards);
             return;
@@ -2467,6 +2471,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     skipNextQueryEffectRef.current = 2;
                                                     latestReqId.current += 1;
 
+                                                    setFilters(draftFilters);
                                                     setSuppressDefault(true);
                                                     setQuery('');
 
@@ -2511,7 +2516,6 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                     if (selectedLegalityPreset) {
                                                         arr = arr.filter(card => matchesSelectedLegalityPreset(card, selectedLegalityPreset));
                                                     }
-                                                    setFilters(draftFilters);
                                                     setResults(arr);
                                                     setShowAdvanced(false);
                                                 } catch (e) {
