@@ -63,7 +63,10 @@ const POKE_TYPE_OPTIONS = [
     { key: 'fairy', label: 'Fairy', img: typeFairy },
     { key: 'colorless', label: 'Colorless', img: typeColorless },
 ];
-
+const DEFENSIVE_TYPE_OPTIONS = [
+    ...POKE_TYPE_OPTIONS,
+    { key: 'none', label: 'None', img: null },
+];
 import pikachuImg from '../assets/icons/pikachu-solid.png';
 import trainerCap from '../assets/icons/ball.png';
 import pokeballImg from '../assets/icons/pokedex.png';
@@ -245,6 +248,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const [showMoreMechs, setShowMoreMechs] = useState(false);
     // const [showMoreStages, setShowMoreStages] = useState(false);
     const [showEnergyMenu, setShowEnergyMenu] = useState(false);
+    const [showWeaknessMenu, setShowWeaknessMenu] = useState(false);
+    const [showResistanceMenu, setShowResistanceMenu] = useState(false);
     // const [showMoreRarity, setShowMoreRarity] = useState(false);
     const setsInputFocusedRef = useRef(false);
     const [selectedQuickFormat, setSelectedQuickFormat] = useState('');
@@ -398,6 +403,58 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         }
     }
 
+    function getCardWeaknessTypes(card) {
+        const raw = Array.isArray(card.weaknesses) ? card.weaknesses : [];
+        return raw
+            .map(w => normalizePokeTypeKey(w?.type))
+            .filter(Boolean);
+    }
+
+    function getCardResistanceTypes(card) {
+        const raw = Array.isArray(card.resistances) ? card.resistances : [];
+        return raw
+            .map(r => normalizePokeTypeKey(r?.type))
+            .filter(Boolean);
+    }
+
+    function matchesSelectedWeakness(card, selected) {
+        const active = Object.keys(selected || {}).filter(k => selected[k]);
+        if (active.length === 0) return true;
+
+        if (getSupertype(card) !== 'pokemon') return false;
+
+        const cardWeaknesses = getCardWeaknessTypes(card);
+
+        if (selected.none) {
+            return cardWeaknesses.length === 0;
+        }
+
+        const activeSet = new Set(
+            active.filter(k => k !== 'none').map(normalizePokeTypeKey)
+        );
+
+        return cardWeaknesses.some(t => activeSet.has(t));
+    }
+
+    function matchesSelectedResistance(card, selected) {
+        const active = Object.keys(selected || {}).filter(k => selected[k]);
+        if (active.length === 0) return true;
+
+        if (getSupertype(card) !== 'pokemon') return false;
+
+        const cardResistances = getCardResistanceTypes(card);
+
+        if (selected.none) {
+            return cardResistances.length === 0;
+        }
+
+        const activeSet = new Set(
+            active.filter(k => k !== 'none').map(normalizePokeTypeKey)
+        );
+
+        return cardResistances.some(t => activeSet.has(t));
+    }
+
     function anyFilterActive(f) {
         const basic =
             Object.values(f.supertypes || {}).some(Boolean) ||
@@ -409,17 +466,19 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
             (f.hp && f.hp.value !== '' && f.hp.value !== null) ||
             Object.values(f.has || {}).some(Boolean) ||
             (f.artist && String(f.artist).trim() !== '') ||
+            Object.values(f.weakness || {}).some(Boolean) ||
+            Object.values(f.resistance || {}).some(Boolean) ||
             Object.values(f.rarity || {}).some(Boolean)
 
         const retreatActive = f.retreat && f.retreat.value !== '' && f.retreat.value !== null;
-
+        const regulationMarkActive = f.regulationMark && f.regulationMark.value !== '' && f.regulationMark.value !== null;
         const attackValActive = f.attackCost && f.attackCost.value !== '' && f.attackCost.value !== null;
         const attackEnergyActive = f.attackCost && f.attackCost.energies &&
             Object.values(f.attackCost.energies).some(Boolean);
 
         const formatActive = f.formatRange && f.formatRange.from && f.formatRange.to;
 
-        return basic || retreatActive || attackValActive || attackEnergyActive || formatActive || f.includePromos;
+        return basic || retreatActive || regulationMarkActive || attackValActive || attackEnergyActive || formatActive || f.includePromos;
     }
 
     function buildFiltersForRequest(f) {
@@ -433,7 +492,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
             hp: f.hp || { op: 'eq', value: '' },
             has: f.has || {},
             retreat: f.retreat || { op: 'eq', value: '' },
-            attackCost: f.attackCost || { op: 'eq', value: '', energies: {} }
+            regulationMark: f.regulationMark || { op: 'eq', value: '' },
+            attackCost: f.attackCost || { op: 'eq', value: '', energies: {} },
+            weakness: f.weakness || {},
+            resistance: f.resistance || {}
         };
         if (f.artist && String(f.artist).trim() !== '') {
             out.artist = String(f.artist).trim();
@@ -479,6 +541,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         if (!g.hp || g.hp.value === '' || g.hp.value === null) delete g.hp;
         if (!g.has || !Object.values(g.has).some(Boolean)) delete g.has;
         if (!g.retreat || g.retreat.value === '' || g.retreat.value === null) delete g.retreat;
+        if (!g.regulationMark || g.regulationMark.value === '' || g.regulationMark.value === null) delete g.regulationMark;
         const ac = g.attackCost;
         const acValOn = ac && ac.value !== '' && ac.value !== null;
         const acEOn = ac && ac.energies && Object.values(ac.energies).some(Boolean);
@@ -489,6 +552,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         if (!g.mechanics || !Object.values(g.mechanics).some(Boolean)) delete g.mechanics;
         if (!g.pokeTypes || !Object.values(g.pokeTypes).some(Boolean)) delete g.pokeTypes;
         if (!g.stage || !Object.values(g.stage).some(Boolean)) delete g.stage;
+        if (!g.weakness || !Object.values(g.weakness).some(Boolean)) delete g.weakness;
+        if (!g.resistance || !Object.values(g.resistance).some(Boolean)) delete g.resistance;
         return g;
     }
 
@@ -783,6 +848,26 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         return compareByOp(crc, v, retreat.op || 'eq');
     }
 
+    function matchesSelectedRegulationMark(card, regulationMark) {
+        if (!regulationMark || !regulationMark.value) return true;
+
+        const have = String(card.regulationMark || '').toUpperCase().trim();
+        const want = String(regulationMark.value || '').toUpperCase().trim();
+
+        if (!have || !want) return false;
+
+        const cmp = have.localeCompare(want);
+        switch (regulationMark.op || 'eq') {
+            case 'gt': return cmp > 0;
+            case 'ge': return cmp >= 0;
+            case 'lt': return cmp < 0;
+            case 'le': return cmp <= 0;
+            case 'eq':
+            default:
+                return cmp === 0;
+        }
+    }
+
     function typeToAbbr(s) {
         const t = String(s || '').toLowerCase();
         const map = {
@@ -942,24 +1027,24 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
     const WORLDS_FORMATS = [
         // { label: '2025 Worlds', from: 'SVI', to: 'BLK' },
         // { label: '2024 Worlds', from: 'BRS', to: 'SFA' },
-        // { label: '2023 Worlds', from: 'BST', to: 'PAL' },
+        { label: '2023 Worlds', from: 'BST', to: 'PAL' },
         { label: '2022 Worlds', from: 'SSH', to: 'PGO' },
         { label: '2019 Worlds', from: 'UPR', to: 'UNM' },
         { label: '2018 Worlds', from: 'BKT', to: 'CES' },
         { label: '2017 Worlds', from: 'PRC', to: 'BUS' },
         { label: '2016 Worlds', from: 'XY', to: 'STS' },
-        // { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
-        // { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
-        // { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
-        // { label: '2012 Worlds', from: 'HS', to: 'DEX' },
-        // { label: '2011 Worlds', from: 'HS', to: 'BLW' },
-        // { label: '2010 Worlds', from: 'DP', to: 'UL' },
-        // { label: '2009 Worlds', from: 'DP', to: 'RR' },
-        // { label: '2008 Worlds', from: 'HP', to: 'MD' },
-        // { label: '2007 Worlds', from: 'DX', to: 'DP' },
-        // { label: '2006 Worlds', from: 'HL', to: 'HP' },
-        // { label: '2005 Worlds', from: 'RS', to: 'EM' },
-        // { label: '2004 Worlds', from: 'EX', to: 'HL' },
+        { label: '2015 Worlds', from: 'BCR', to: 'ROS' },
+        { label: '2014 Worlds', from: 'NXD', to: 'FLF' },
+        { label: '2013 Worlds', from: 'BLW', to: 'PLF' },
+        { label: '2012 Worlds', from: 'HS', to: 'DEX' },
+        { label: '2011 Worlds', from: 'HS', to: 'BLW' },
+        { label: '2010 Worlds', from: 'DP', to: 'UL' },
+        { label: '2009 Worlds', from: 'DP', to: 'RR' },
+        { label: '2008 Worlds', from: 'HP', to: 'MD' },
+        { label: '2007 Worlds', from: 'DX', to: 'DP' },
+        { label: '2006 Worlds', from: 'HL', to: 'HP' },
+        { label: '2005 Worlds', from: 'RS', to: 'EM' },
+        { label: '2004 Worlds', from: 'EX', to: 'HL' },
     ];
 
     const POPULAR_FORMATS = [
@@ -1153,6 +1238,11 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     function normalizePromoAbbrev(abbr) {
         const s = String(abbr || '').toUpperCase();
+        if (s === 'PR-WOTC') return 'WOTC-P';
+        if (s === 'PR-EX') return 'NP';
+        if (s === 'PR-DP') return 'DP-P';
+        if (s === 'PR-HS') return 'HSP';
+        if (s === 'PR-BLW') return 'BWP';
         if (s === 'PR-XY') return 'XYP';
         if (s === 'PR-SM') return 'SMP';
         if (s === 'PR-SW') return 'SWSHP';
@@ -1203,7 +1293,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
             if (!matchesSelectedHP(card, filters.hp)) continue;
             if (!matchesSelectedHas(card, filters.has)) continue;
             if (!matchesSelectedRetreat(card, filters.retreat)) continue;
+            if (!matchesSelectedRegulationMark(card, filters.regulationMark)) continue;
             if (!matchesSelectedAttackCost(card, filters.attackCost)) continue;
+            if (!matchesSelectedWeakness(card, filters.weakness)) continue;
+            if (!matchesSelectedResistance(card, filters.resistance)) continue;
             if (!matchesSelectedRarity(card, filters.rarity)) continue;
             if (!matchesArtist(card, filters.artist)) continue;
             if (!matchesSelectedLegalityPreset(card, selectedLegalityPreset)) continue;
@@ -1246,7 +1339,10 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
         hp: { op: 'eq', value: null },
         has: {},
         retreat: { op: 'eq', value: '' },
+        regulationMark: { op: 'eq', value: '' },
         attackCost: { op: 'eq', value: '', energies: {} },
+        weakness: {},
+        resistance: {},
         artist: '',
         rarity: {},
         formatRange: { from: '', to: '' },
@@ -2055,6 +2151,48 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                         </div>
                                     );
                                 })()}
+                                <div className="filter-group">
+                                    <h3>Regulation:</h3>
+                                    <div className="poke-type-buttons">
+                                        <select
+                                            value={draftFilters.regulationMark?.op || 'eq'}
+                                            className='type-btn non-bold-typebtn hp-btn-dropdown regulation-select'
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    regulationMark: { ...(f.regulationMark || {}), op: e.target.value }
+                                                }))
+                                            }
+                                        >
+                                            {HP_OPERATORS.map(o => (
+                                                <option key={o.value} value={o.value}>{o.label}</option>
+                                            ))}
+                                        </select>
+                                        <input
+                                            type="text"
+                                            maxLength={2}
+                                            placeholder="Any letter"
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown regulation-select"
+                                            value={draftFilters.regulationMark?.value || ''}
+                                            onChange={(e) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    regulationMark: {
+                                                        ...(f.regulationMark || {}),
+                                                        value: e.target.value.toUpperCase()
+                                                    }
+                                                }))
+                                            }
+                                        />
+                                        <button
+                                            onClick={() => setDraftFilters(f => ({ ...f, regulationMark: { op: 'eq', value: '' } }))}
+                                            className='clear-x-btn hide-on-filter-mobile'
+                                        ><span class="material-symbols-outlined">
+                                                cancel
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>
                                 <div className="filter-group">
                                     <h3>Card Type:</h3>
@@ -2303,7 +2441,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                 </div>
                                 <div className="filter-group">
                                     <h3>Attack Cost:</h3>
-                                    <div className="poke-type-buttons" style={{ gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <div className="poke-type-buttons">
                                         <select
                                             value={draftFilters.attackCost?.op || 'eq'}
                                             className='type-btn non-bold-typebtn hp-btn-dropdown'
@@ -2313,7 +2451,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                         >
                                             {HP_OPERATORS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                                         </select>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} className="energy-picker">
+                                        <div style={{ display: 'flex', alignItems: 'center' }} className="energy-picker">
                                             <input
                                                 type="text"
                                                 inputMode="numeric"
@@ -2421,6 +2559,224 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                                 </span>
                                             </button>
                                         </div>
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Weakness:</h3>
+                                    <div className="poke-type-buttons">
+                                        <div style={{ display: 'flex', alignItems: 'center' }} className="energy-picker">
+                                            <div
+                                                style={{ position: 'relative' }}
+                                                tabIndex={-1}
+                                                onBlur={(e) => {
+                                                    if (!e.currentTarget.contains(e.relatedTarget)) setShowWeaknessMenu(false);
+                                                }}
+                                            >
+                                            <button
+                                                type="button"
+                                                className="type-btn non-bold-typebtn hp-btn-dropdown whyarentyousmall"
+                                                onClick={() => {
+                                                    setShowWeaknessMenu(v => !v);
+                                                    setShowResistanceMenu(false);
+                                                }}
+                                                aria-haspopup="listbox"
+                                                aria-expanded={showWeaknessMenu}
+                                            >
+                                                Add weakness
+                                                <span className="material-symbols-outlined" aria-hidden>expand_more</span>
+                                            </button>
+
+                                            {showWeaknessMenu && (
+                                                <div
+                                                    role="listbox"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        zIndex: 20,
+                                                        top: '100%',
+                                                        left: 0,
+                                                        marginTop: 4,
+                                                        background: 'var(--dropdown-bg, #fff)',
+                                                        border: '1px solid rgba(0,0,0,0.15)',
+                                                        borderRadius: 8,
+                                                        boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                                                        padding: 6,
+                                                        minWidth: 180,
+                                                        maxHeight: 240,
+                                                        overflowY: 'auto'
+                                                    }}
+                                                >
+                                                    {DEFENSIVE_TYPE_OPTIONS.map(({ key, label, img }) => (
+                                                        <button
+                                                            key={key}
+                                                            role="option"
+                                                            className="energy-menu-item"
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: 8,
+                                                                padding: '6px 8px',
+                                                                width: '100%'
+                                                            }}
+                                                            onMouseDown={(e) => e.preventDefault()}
+                                                            onClick={() => {
+                                                                setDraftFilters(f => ({
+                                                                    ...f,
+                                                                    weakness: key === 'none' ? { none: true } : { [key]: true }
+                                                                }));
+                                                                setShowWeaknessMenu(false);
+                                                            }}
+                                                            title={label}
+                                                        >
+                                                            {img ? (
+                                                                <img
+                                                                    src={img}
+                                                                    alt=""
+                                                                    width={20}
+                                                                    height={20}
+                                                                    style={{ display: 'inline-block', borderRadius: 2 }}
+                                                                />
+                                                            ) : (
+                                                                <span style={{ width: 20, textAlign: 'center' }}>—</span>
+                                                            )}
+                                                            <span>{label}</span>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            readOnly
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown energy-menutw"
+                                            value={
+                                                draftFilters.weakness?.none
+                                                    ? 'None'
+                                                    : Object.keys(draftFilters.weakness || {})
+                                                        .filter(k => draftFilters.weakness[k])
+                                                        .map(k => DEFENSIVE_TYPE_OPTIONS.find(o => o.key === k)?.label || k)
+                                                        .join(', ')
+                                            }
+                                            placeholder="No weakness selected"
+                                            style={{ minWidth: 180 }}
+                                        />
+
+                                        <button
+                                            onClick={() => setDraftFilters(f => ({ ...f, weakness: {} }))}
+                                            className='clear-x-btn hide-on-filter-mobile'
+                                        >
+                                            <span className="material-symbols-outlined">cancel</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="filter-group">
+                                    <h3>Resistance:</h3>
+                                    <div className="poke-type-buttons">
+                                        <div style={{ display: 'flex', alignItems: 'center' }} className="energy-picker">
+                                            <div
+                                                style={{ position: 'relative' }}
+                                                tabIndex={-1}
+                                                onBlur={(e) => {
+                                                    if (!e.currentTarget.contains(e.relatedTarget)) setShowResistanceMenu(false);
+                                                }}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    className="type-btn non-bold-typebtn hp-btn-dropdown whyarentyousmall"
+                                                    onClick={() => {
+                                                        setShowResistanceMenu(v => !v);
+                                                        setShowWeaknessMenu(false);
+                                                    }}
+                                                    aria-haspopup="listbox"
+                                                    aria-expanded={showResistanceMenu}
+                                                >
+                                                    Add resistance
+                                                    <span className="material-symbols-outlined" aria-hidden>expand_more</span>
+                                                </button>
+
+                                                {showResistanceMenu && (
+                                                    <div
+                                                        role="listbox"
+                                                        style={{
+                                                            position: 'absolute',
+                                                            zIndex: 20,
+                                                            top: '100%',
+                                                            left: 0,
+                                                            marginTop: 4,
+                                                            background: 'var(--dropdown-bg, #fff)',
+                                                            border: '1px solid rgba(0,0,0,0.15)',
+                                                            borderRadius: 8,
+                                                            boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                                                            padding: 6,
+                                                            minWidth: 180,
+                                                            maxHeight: 240,
+                                                            overflowY: 'auto'
+                                                        }}
+                                                    >
+                                                        {DEFENSIVE_TYPE_OPTIONS.map(({ key, label, img }) => (
+                                                            <button
+                                                                key={key}
+                                                                role="option"
+                                                                className="energy-menu-item"
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: 8,
+                                                                    padding: '6px 8px',
+                                                                    width: '100%'
+                                                                }}
+                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onClick={() => {
+                                                                    setDraftFilters(f => ({
+                                                                        ...f,
+                                                                        resistance: key === 'none' ? { none: true } : { [key]: true }
+                                                                    }));
+                                                                    setShowResistanceMenu(false);
+                                                                }}
+                                                                title={label}
+                                                            >
+                                                                {img ? (
+                                                                    <img
+                                                                        src={img}
+                                                                        alt=""
+                                                                        width={20}
+                                                                        height={20}
+                                                                        style={{ display: 'inline-block', borderRadius: 2 }}
+                                                                    />
+                                                                ) : (
+                                                                    <span style={{ width: 20, textAlign: 'center' }}>—</span>
+                                                                )}
+                                                                <span>{label}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            readOnly
+                                            className="type-btn non-bold-typebtn hp-btn-dropdown energy-menutw"
+                                            value={
+                                                draftFilters.resistance?.none
+                                                    ? 'None'
+                                                    : Object.keys(draftFilters.resistance || {})
+                                                        .filter(k => draftFilters.resistance[k])
+                                                        .map(k => DEFENSIVE_TYPE_OPTIONS.find(o => o.key === k)?.label || k)
+                                                        .join(', ')
+                                            }
+                                            placeholder="No resistance selected"
+                                            style={{ minWidth: 180 }}
+                                        />
+
+                                        <button
+                                            onClick={() => setDraftFilters(f => ({ ...f, resistance: {} }))}
+                                            className='clear-x-btn hide-on-filter-mobile'
+                                        >
+                                            <span className="material-symbols-outlined">cancel</span>
+                                        </button>
                                     </div>
                                 </div>
                                 <hr style={{ width: '100%', margin: '25px 0' }}></hr>

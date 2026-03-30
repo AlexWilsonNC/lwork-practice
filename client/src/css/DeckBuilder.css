@@ -938,6 +938,12 @@ body.deckbuilder-page .deck-builder {
   font-size: 16px;
   font-weight: 600;
 }
+.regulation-select {
+  height: 33.33px !important;
+  min-height: 1px !important;
+  width: 100px;
+  padding: 0 0 0 5px !important;
+}
 
 .options-row button:hover {
   cursor: pointer;
@@ -2190,6 +2196,9 @@ body.deckbuilder-page .deck-builder {
   font-size: 1rem;
   box-sizing: border-box;
 }
+/* .energy-pickr-input {
+  margin-left: -3px !important;
+} */
 
 .button {
   padding: 0.5rem 1rem;
@@ -2458,6 +2467,53 @@ body.deckbuilder-page .deck-builder {
   border: 2px solid transparent;
   background-clip: padding-box;
 }
+
+.bottom-advanced-filter-apply-btns {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    min-height: 100px;
+    box-sizing: border-box;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 12px 14px;
+    background: rgba(15, 24, 33, 0.75);
+    backdrop-filter: blur(6px);
+    border-top: 3px solid rgba(128, 128, 128, 0.5);
+    border-left: 3px solid rgba(128, 128, 128, 0.5);
+    border-right: 3px solid rgba(128, 128, 128, 0.5);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  .advanced-search-modal-light .bottom-advanced-filter-apply-btns {
+    background: rgba(240, 240, 240, 0.8);
+    border-top: 3px solid rgba(0, 0, 0, 0.15);
+    border-left: 3px solid rgba(0, 0, 0, 0.15);
+    border-right: 3px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .bottom-advanced-filter-apply-btns .flex-start {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bottom-advanced-filter-apply-btns .flex-end {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0 !important;
+  }
 
 @keyframes searchAllSpin {
   from {
@@ -3401,56 +3457,6 @@ body.deckbuilder-page .deck-builder {
   .card-type-btns-oly {
     margin-bottom: 0.5rem;
   }
-
-  /* .hide-on-medium-advanced-filter {
-    display: none;
-  } */
-  .bottom-advanced-filter-apply-btns {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    width: 100%;
-    min-height: 100px;
-    box-sizing: border-box;
-    z-index: 20;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-
-    padding: 12px 14px;
-    background: rgba(15, 24, 33, 0.75);
-    backdrop-filter: blur(6px);
-    border-top: 3px solid rgba(128, 128, 128, 0.5);
-    border-left: 3px solid rgba(128, 128, 128, 0.5);
-    border-right: 3px solid rgba(128, 128, 128, 0.5);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
-
-  .advanced-search-modal-light .bottom-advanced-filter-apply-btns {
-    background: rgba(240, 240, 240, 0.8);
-    border-top: 3px solid rgba(0, 0, 0, 0.15);
-    border-left: 3px solid rgba(0, 0, 0, 0.15);
-    border-right: 3px solid rgba(0, 0, 0, 0.15);
-  }
-
-  .bottom-advanced-filter-apply-btns .flex-start {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .bottom-advanced-filter-apply-btns .flex-end {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 0 !important;
-  }
 }
 
 @media screen and (max-width: 760px) {
@@ -3487,7 +3493,9 @@ body.deckbuilder-page .deck-builder {
   .advanced-search-modal h2 {
     font-size: 16px;
   }
-
+  .energy-menutw {
+    height: 14.669px !important;
+  }
   .filter-group h3 {
     font-size: 14px;
   }
