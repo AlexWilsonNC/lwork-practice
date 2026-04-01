@@ -485,7 +485,7 @@ const Homepage = () => {
                                 <img className='card-image' src={deckBuilder} />
                                 <div className='homepage-box-content'>
                                     <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
-                                    <p>Try the best deck builder on the internet, the perfect app for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
+                                    <p>Try our new deck builder! Our app is perfect for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
                                 </div>
                             </WrappedFeature>
                         </a>
