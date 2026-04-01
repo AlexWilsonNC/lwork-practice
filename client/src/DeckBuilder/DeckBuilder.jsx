@@ -89,51 +89,54 @@ const normalizeImportedSetAbbrev = (setAbbrev) => {
 
 const normalizeImportedCardNumber = (setAbbrev, number) => {
   const cleanSet = String(setAbbrev || '').trim().toUpperCase();
-  const cleanNum = String(number || '').trim().toUpperCase();
+  const rawNum = String(number || '').trim();
 
-  if (!cleanNum) return cleanNum;
+  if (!rawNum) return rawNum;
+
+  const upperNum = rawNum.toUpperCase();
 
   if (cleanSet === 'PR-DP') {
-    return cleanNum.startsWith('DP') ? cleanNum : `DP${cleanNum}`;
+    return upperNum.startsWith('DP') ? upperNum : `DP${upperNum}`;
   }
 
   if (cleanSet === 'PR-HS') {
-    const n = cleanNum.replace(/^HGSS/i, '');
+    const n = upperNum.replace(/^HGSS/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
   }
 
   if (cleanSet === 'PR-BLW') {
-    const n = cleanNum.replace(/^BW/i, '');
+    const n = upperNum.replace(/^BW/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
   }
 
   if (cleanSet === 'PR-XY') {
-    const n = cleanNum.replace(/^XY/i, '');
+    const n = upperNum.replace(/^XY/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed) : n;
   }
 
   if (cleanSet === 'PR-SM') {
-    const n = cleanNum.replace(/^SM/i, '');
+    const n = upperNum.replace(/^SM/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed).padStart(2, '0') : n;
   }
 
   if (cleanSet === 'PR-SW') {
-    const n = cleanNum.replace(/^SWSH/i, '');
+    const n = upperNum.replace(/^SWSH/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed).padStart(3, '0') : n;
   }
 
   if (cleanSet === 'PR-SV') {
-    const n = cleanNum.replace(/^SVP/i, '');
+    const n = upperNum.replace(/^SVP/i, '');
     const parsed = parseInt(n, 10);
     return Number.isFinite(parsed) ? String(parsed) : n;
   }
 
-  return cleanNum;
+  // Keep normal set suffix letters lowercase: 75A -> 75a
+  return rawNum.replace(/^(\d+)([A-Z])$/, (_, digits, suffix) => `${digits}${suffix.toLowerCase()}`);
 };
 
 function sortDeck(deck) {
@@ -333,6 +336,211 @@ export default function DeckBuilder() {
   const originalDeckId = params.get('deckId');
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
 
+  const WALKTHROUGH_SEEN_KEY = 'ptcglegends_deckbuilder_walkthrough_seen';
+  const searchPanelRef = useRef(null);
+  const deckAreaRef = useRef(null);
+  const actionsRowRef = useRef(null);
+  const myDecksBtnRef = useRef(null);
+  const deckOptionsBtnsRef = useRef(null);
+  const helpBtnRef = useRef(null);
+  const [showWalkthroughPrompt, setShowWalkthroughPrompt] = useState(false);
+  const [walkthroughOpen, setWalkthroughOpen] = useState(false);
+  const [walkthroughStep, setWalkthroughStep] = useState(0);
+  const [walkthroughRect, setWalkthroughRect] = useState(null);
+  const walkthroughOriginalDeckRef = useRef(null);
+  const walkthroughInjectedDemoRef = useRef(false);
+  const [walkthroughLoading, setWalkthroughLoading] = useState(false);
+
+  const WALKTHROUGH_DECK_TEXT =
+    `
+3 M Rayquaza-EX ROS 105
+2 Rayquaza-EX ROS 104
+1 Rayquaza-EX PR-XY 73
+4 Shaymin-EX ROS 106
+2 Hoopa-EX AOR 89
+1 Keldeo-EX BCR 142
+1 Jirachi-EX PLB 98
+1 Dragonite-EX EVO 106
+1 Exeggcute PLB 102
+1 Giratina PR-XY 184
+2 Hex Maniac AOR 75a
+2 Lysandre FLF 104
+1 Ghetsis PLF 115
+1 Colress PLS 135
+1 N NVI 101
+1 AZ PHF 117
+1 Karen PR-XY 177
+4 VS Seeker ROS 110
+4 Ultra Ball PLF 122
+4 Trainers' Mail AOR 100
+3 Mega Turbo ROS 86
+2 Battle Compressor Team Flare Gear PHF 92
+1 Computer Search BCR 137
+3 Rayquaza Spirit Link ROS 87
+2 Float Stone PLF 99
+4 Sky Field ROS 89
+4 Double Colorless Energy GRI 166
+3 Basic Water Energy CIN 124
+`;
+
+  const walkthroughSteps = [
+    {
+      ref: searchPanelRef,
+      title: 'Search for Cards',
+      body: 'Use this section to search for cards; either by name, card text, or flavor text. Click the blue "Advanced Search" button to access a ton of filters - from eras, popular formats, card types, legalities and more...'
+    },
+    {
+      ref: deckAreaRef,
+      title: 'Edit your Deck',
+      body: 'Cards you add appear here in the decklist. You can edit card counts, click on cards to view their info, and drag cards around to manually re-order them. (You can drag and drop images from your device too!)'
+    },
+    {
+      ref: actionsRowRef,
+      title: 'Decklist Options',
+      body: 'This row lets you sort your deck, delete it, upload custom images as cards, use the slider to adjust the zoom size of cards in your deck, remove card limits (allowing more than 4 copies per card or multiple Ace Specs), and more...'
+    },
+    {
+      ref: deckOptionsBtnsRef,
+      title: 'Import, Export, and Save',
+      body: 'Use these buttons to import a decklist from somewhere else, export decks in different ways, (including saving as an image and printing it for league). Lastly, you can save decks to your collection if you\'re logged in.'
+    },
+    {
+      ref: myDecksBtnRef,
+      title: 'Your Deck Collection',
+      body: (
+        <>
+          Click "My Decks" to open your deck collection. In your account page, you can organize your decks into folders, and even make them public for others to view your collection! (Perfect for content creators!){' '}
+          <a
+            href="https://www.ptcglegends.com/AlexWilson/deck-collection"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1290eb' }}
+          >
+            Check out this example
+          </a>
+        </>
+      )
+    },
+    {
+      ref: helpBtnRef,
+      title: 'Thank You!',
+      body: (
+        <>
+          If you love this app, please consider supporting us on Patreon. 
+          <br></br>
+          <br></br>
+          You can replay this walkthrough anytime, by clicking the blue info button in the bottom corner.{' '}
+          <br></br>
+          <br></br>
+          Tag us{' '}
+          <a
+            href="https://x.com/PTCG_Legends"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1290eb' }}
+          >
+            @PTCG_Legends
+          </a>
+          {' '}on twitter with your new decklists!
+        </>
+      )
+    }
+  ];
+
+  useEffect(() => {
+    const seen = localStorage.getItem(WALKTHROUGH_SEEN_KEY) === 'true';
+
+    // Adjust this if your app uses a different login marker
+    const looksLoggedIn =
+      !!localStorage.getItem('PTCGLegendsToken') ||
+      !!localStorage.getItem('PTCGLegendsUsername');
+
+    if (!seen && !looksLoggedIn) {
+      setShowWalkthroughPrompt(true);
+    }
+  }, []);
+
+  const updateWalkthroughRect = () => {
+    const step = walkthroughSteps[walkthroughStep];
+    const el = step?.ref?.current;
+    if (!el) {
+      setWalkthroughRect(null);
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+    setWalkthroughRect(rect);
+  };
+
+  const startWalkthrough = async () => {
+    setShowWalkthroughPrompt(false);
+    setWalkthroughLoading(true);
+
+    try {
+      const currentDeck = Array.isArray(deck) ? deck : [];
+      walkthroughOriginalDeckRef.current = currentDeck.map(card => ({ ...card }));
+      walkthroughInjectedDemoRef.current = true;
+
+      await importWalkthroughDeckFromText(WALKTHROUGH_DECK_TEXT, true);
+
+      await new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+      setWalkthroughStep(0);
+      setWalkthroughOpen(true);
+    } finally {
+      setWalkthroughLoading(false);
+    }
+  };
+
+  const closeWalkthrough = (markSeen = true) => {
+    const originalDeck = walkthroughOriginalDeckRef.current || [];
+    const hadOriginalCards = originalDeck.length > 0;
+
+    if (walkthroughInjectedDemoRef.current && hadOriginalCards) {
+      setDeck(originalDeck);
+    }
+
+    walkthroughOriginalDeckRef.current = null;
+    walkthroughInjectedDemoRef.current = false;
+
+    setWalkthroughOpen(false);
+    setWalkthroughStep(0);
+    setWalkthroughRect(null);
+
+    if (markSeen) {
+      localStorage.setItem(WALKTHROUGH_SEEN_KEY, 'true');
+    }
+  };
+
+  const nextWalkthroughStep = () => {
+    if (walkthroughStep >= walkthroughSteps.length - 1) {
+      closeWalkthrough(true);
+      return;
+    }
+    setWalkthroughStep(s => s + 1);
+  };
+
+  const prevWalkthroughStep = () => {
+    setWalkthroughStep(s => Math.max(0, s - 1));
+  };
+
+  useEffect(() => {
+    if (!walkthroughOpen) return;
+
+    updateWalkthroughRect();
+
+    const onResize = () => updateWalkthroughRect();
+    const onScroll = () => updateWalkthroughRect();
+
+    window.addEventListener('resize', onResize);
+    window.addEventListener('scroll', onScroll, true);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', onScroll, true);
+    };
+  }, [walkthroughOpen, walkthroughStep]);
+
   useEffect(() => {
     document.body.classList.add("deckbuilder-page");
     return () => document.body.classList.remove("deckbuilder-page");
@@ -424,6 +632,7 @@ export default function DeckBuilder() {
   }, []);
 
   const [zoomCard, setZoomCard] = useState(null);
+  const [isRotated, setIsRotated] = useState(false);
 
   useEffect(() => {
     const safeDeck = deck.map(card => {
@@ -437,6 +646,10 @@ export default function DeckBuilder() {
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(safeDeck));
   }, [deck]);
+
+  useEffect(() => {
+    setIsRotated(false);
+  }, [zoomCard]);
 
   const isBasicEnergy = c =>
     c?.supertype === 'Energy' && /^Basic\s/i.test(c?.name || '');
@@ -809,6 +1022,101 @@ export default function DeckBuilder() {
     }
   }
 
+  async function importWalkthroughDeckFromText(text, overwrite = true) {
+    const startingDeck = overwrite ? [] : [...deck];
+    const lines = text
+      .split(/\r?\n/)
+      .map(l => l.trim())
+      .filter(l => l && !l.endsWith(':'))
+      .filter(l => /^\d+\s/.test(l));
+
+    const merged = [...startingDeck];
+
+    for (const line of lines) {
+      const parts = line.split(/\s+/);
+      const count = parseInt(parts[0], 10);
+      const rawNumber = parts.pop();
+      const rawSetAbbrev = parts.pop();
+      const setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
+      const number = normalizeImportedCardNumber(setAbbrev, rawNumber);
+      const name = parts.slice(1).join(' ');
+
+      let match = null;
+
+      const directRes = await fetch(`/api/cards/${setAbbrev}/${number}`);
+      if (directRes.ok) {
+        match = await directRes.json();
+      }
+
+      if (!match) {
+        const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
+        const res = await fetch(`/api/cards/searchbyname/partial/${safeName}`);
+        if (!res.ok) continue;
+
+        const results = await res.json();
+        match = results.find(c => c.setAbbrev === setAbbrev && c.number === number);
+      }
+
+      if (!match) continue;
+
+      const idx = merged.findIndex(c => c.setAbbrev === setAbbrev && c.number === number);
+
+      if (!limitCounts || isBasicEnergy(match) || isUnlimitedByRules(match)) {
+        if (idx > -1) merged[idx].count += count;
+        else merged.push({ ...match, count });
+        continue;
+      }
+
+      if (isAceSpec(match)) {
+        const canAdd = Math.max(0, 1 - totalAceSpec(merged));
+        if (canAdd <= 0) continue;
+        if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+        else merged.push({ ...match, count: Math.min(count, 1) });
+        continue;
+      }
+
+      if (isRadiant(match)) {
+        const canAdd = Math.max(0, 1 - totalRadiant(merged));
+        if (canAdd <= 0) continue;
+        if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+        else merged.push({ ...match, count: Math.min(count, 1) });
+        continue;
+      }
+
+      if (isStar(match)) {
+        const canAdd = Math.max(0, 1 - totalStar(merged));
+        if (canAdd <= 0) continue;
+        if (idx > -1) merged[idx].count = Math.min(merged[idx].count + count, 1);
+        else merged.push({ ...match, count: Math.min(count, 1) });
+        continue;
+      }
+
+      if (isNameSingleton(match)) {
+        const canAddByName = Math.max(0, 1 - totalByExactLimitName(merged, match));
+        if (canAddByName <= 0) continue;
+        if (idx > -1) {
+          merged[idx].count = Math.min(merged[idx].count + count, 1);
+        } else {
+          merged.push({ ...match, count: Math.min(count, canAddByName) });
+        }
+        continue;
+      }
+
+      if (idx > -1) {
+        const totalOther = totalByLimitNameNonSingleton(merged, match, idx);
+        const maxForThis = Math.max(0, 4 - totalOther);
+        merged[idx].count = Math.min(merged[idx].count + count, maxForThis);
+      } else {
+        const remaining = Math.max(0, 4 - totalByLimitNameNonSingleton(merged, match));
+        if (remaining > 0) {
+          merged.push({ ...match, count: Math.min(count, remaining) });
+        }
+      }
+    }
+
+    setDeck(merged);
+  }
+
   const handleCardClick = card => setZoomCard(card);
 
   const totalCount = deck.reduce((sum, c) => sum + c.count, 0);
@@ -891,12 +1199,65 @@ export default function DeckBuilder() {
         {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
         {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
       </Helmet>
+      {showWalkthroughPrompt && (
+        <div className="walkthrough-overlay">
+          <div className="walkthrough-prompt">
+            <h3>Quick Deckbuilder Tour?</h3>
+            <p>Want a fast walkthrough of the main features before you start building?</p>
+            <div className="walkthrough-actions">
+              <button onClick={startWalkthrough}>Yes</button>
+              <button onClick={() => closeWalkthrough(true)}>No thanks</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {walkthroughOpen && walkthroughRect && (
+        <div className="walkthrough-overlay">
+          <div
+            className="walkthrough-highlight"
+            style={{
+              top: walkthroughRect.top - 6,
+              left: walkthroughRect.left - 6,
+              width: walkthroughRect.width + 12,
+              height: walkthroughRect.height + 12
+            }}
+          />
+
+          <div className="walkthrough-card">
+            <p className="walkthrough-step-count">
+              {walkthroughStep + 1} of {walkthroughSteps.length}
+            </p>
+            <h3>{walkthroughSteps[walkthroughStep].title}</h3>
+            <p>{walkthroughSteps[walkthroughStep].body}</p>
+
+            <div className="walkthrough-actions">
+              <button onClick={() => closeWalkthrough(true)}>Skip</button>
+              {walkthroughStep > 0 && (
+                <button onClick={prevWalkthroughStep}>Back</button>
+              )}
+              <button onClick={nextWalkthroughStep}>
+                {walkthroughStep === walkthroughSteps.length - 1 ? 'Finish' : 'Next'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {exportingImage && (
         <div className="image-export-overlay">
           <img src={blueUltraBallSpinner}
             alt="Loading"
             className="pokeball-spinner"
           />
+        </div>
+      )}
+      {walkthroughLoading && (
+        <div className="walkthrough-loading-overlay">
+          <img
+            src={blueUltraBallSpinner}
+            alt="Loading walkthrough deck"
+            className="pokeball-spinner"
+          />
+          <p className="walkthrough-loading-text">Loading walkthrough...</p>
         </div>
       )}
       {loadingHash && (
@@ -965,11 +1326,22 @@ export default function DeckBuilder() {
               >
                 ×
               </button>
-
+              {['BREAK', 'LEGEND'].some(st => zoomCard.subtypes?.includes(st)) && (
+                <button
+                  type="button"
+                  className="rotate-button"
+                  onClick={e => {
+                    e.stopPropagation();
+                    setIsRotated(prev => !prev);
+                  }}
+                >
+                  Rotate&nbsp;<span className="material-symbols-outlined">forward_media</span>
+                </button>
+              )}
               <img
                 src={zoomCard.images.large}
                 alt={zoomCard.name}
-                className="card-modal-image"
+                className={`card-modal-image${isRotated ? ' rotated' : ''}`}
               />
               <div className="modal-count-controls">
                 <button
@@ -1171,6 +1543,7 @@ export default function DeckBuilder() {
             });
           }}
           themeName={theme.themeName}
+          ref={searchPanelRef}
         />
         <div
           className={`active-deck-container${dragOver ? ' drag-over' : ''}`}
@@ -1215,9 +1588,11 @@ export default function DeckBuilder() {
             deckRef={deckRef}
             onExportStart={() => setExportingImage(true)}
             onExportEnd={() => setExportingImage(false)}
+            myDecksBtnRef={myDecksBtnRef}
+            deckOptionsBtnsRef={deckOptionsBtnsRef}
           />
           <div className='deck-stats'>
-            <div className='moveit-moveit'>
+            <div className='moveit-moveit' ref={actionsRowRef}>
               <p className='stat-count'>
                 Card Count:{' '}
                 <span
@@ -1355,7 +1730,7 @@ export default function DeckBuilder() {
                 </button>
               </div>
             </div>
-            <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again'>
+            <a href='https://www.patreon.com/PTCGLegends' target="_blank" className='support-again' ref={helpBtnRef}>
               <img src={patreonImg} />
               <p>Support Us</p>
             </a>
@@ -1394,7 +1769,12 @@ export default function DeckBuilder() {
               add
             </button>
           </div>
-          <div ref={deckRef} id="deck-to-export">
+          <div
+            ref={node => {
+              deckRef.current = node;
+              deckAreaRef.current = node;
+            }}
+            id="deck-to-export">
             <DeckList
               deck={deck}
               onUpdateCount={updateCount}
@@ -1416,7 +1796,16 @@ export default function DeckBuilder() {
             />
           </div>
         </div>
-        {/* <span class="material-symbols-outlined info-db-icon">info</span> */}
+        <button
+          type="button"
+          className="deckbuilder-help-btn"
+          onClick={startWalkthrough}
+          disabled={walkthroughLoading}
+          aria-label="Open deckbuilder walkthrough"
+          title="Deckbuilder walkthrough"
+        >
+          <span className="material-symbols-outlined">info</span>
+        </button>
       </div>
     </DeckBuilderComp>
   )

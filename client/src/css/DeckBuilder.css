@@ -1,8 +1,118 @@
+.deckbuilder-help-btn {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 5;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 999px;
+  background: #1290eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.deckbuilder-help-btn .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.walkthrough-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 9999;
+}
+
+.walkthrough-highlight {
+  position: fixed;
+  border: 4px solid #1290eb;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 10000;
+  padding-top: 5px;
+  padding-left: 10px;
+  margin-top: -5px;
+  margin-left: -10px;
+}
+
+.walkthrough-prompt,
+.walkthrough-card {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px));
+  background: #1b1b1b;
+  color: white;
+  border-radius: 12px;
+  /* border: 2px solid #1290eb; */
+  padding: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.walkthrough-card {
+  z-index: 10001;
+  top: auto;
+  bottom: 24px;
+  left: 24px;
+  transform: none;
+}
+
+.walkthrough-step-count {
+  opacity: 0.7;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.walkthrough-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.walkthrough-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.walkthrough-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+
+.walkthrough-loading-text {
+  margin-top: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.active-deck-container {
+  position: relative;
+}
+
 .pokeball-spinner {
   width: 64px;
   height: 64px;
   animation: pokeball-spin 1.2s linear infinite;
 }
+
 .card-search-results-spinner {
   width: 100%;
   min-height: 180px;
@@ -10,11 +120,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .card-search-results-spinner .spinner-icon {
   font-size: 2.5rem;
   color: white;
   animation: card-search-spin 1s linear infinite;
 }
+
 .info-db-icon {
   position: fixed;
   bottom: 15px;
@@ -173,6 +285,10 @@ body.deckbuilder-page .deck-builder {
   margin: 0 auto 1rem;
   display: block;
   border-radius: 20px;
+}
+
+.card-modal-image.rotated {
+  transform: rotate(90deg) !important;
 }
 
 .card-details {
@@ -949,6 +1065,7 @@ body.deckbuilder-page .deck-builder {
   font-size: 16px;
   font-weight: 600;
 }
+
 .regulation-select {
   height: 33.33px !important;
   min-height: 1px !important;
@@ -1179,10 +1296,12 @@ body.deckbuilder-page .deck-builder {
   justify-content: center;
   align-items: center;
 }
+
 #deck-upload-custom-image span {
   font-size: 1.25rem;
   color: white;
 }
+
 .limit-menu-btn:hover,
 #deck-upload-custom-image:hover {
   background-color: grey;
@@ -2207,6 +2326,7 @@ body.deckbuilder-page .deck-builder {
   font-size: 1rem;
   box-sizing: border-box;
 }
+
 /* .energy-pickr-input {
   margin-left: -3px !important;
 } */
@@ -2356,6 +2476,7 @@ body.deckbuilder-page .deck-builder {
   background: rgb(15, 24, 33);
   color: rgb(229, 229, 229);
 }
+
 .advanced-search-modal-dark select optgroup {
   background: rgb(15, 24, 33);
   color: rgb(229, 229, 229);
@@ -2395,9 +2516,11 @@ body.deckbuilder-page .deck-builder {
 .advanced-search-modal-light .type-btn::after {
   opacity: 0.5;
 }
+
 .advanced-search-modal .modal-close-x {
   background: rgba(128, 128, 128, 0.75);
 }
+
 .advanced-search-modal-light .modal-close-x:hover {
   background: #1290eb;
 }
@@ -2480,51 +2603,51 @@ body.deckbuilder-page .deck-builder {
 }
 
 .bottom-advanced-filter-apply-btns {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-    width: 100%;
-    min-height: 100px;
-    box-sizing: border-box;
-    z-index: 20;
+  width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
+  z-index: 20;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 
-    padding: 12px 14px;
-    background: rgba(15, 24, 33, 0.75);
-    backdrop-filter: blur(6px);
-    border-top: 3px solid rgba(128, 128, 128, 0.5);
-    border-left: 3px solid rgba(128, 128, 128, 0.5);
-    border-right: 3px solid rgba(128, 128, 128, 0.5);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
+  padding: 12px 14px;
+  background: rgba(15, 24, 33, 0.75);
+  backdrop-filter: blur(6px);
+  border-top: 3px solid rgba(128, 128, 128, 0.5);
+  border-left: 3px solid rgba(128, 128, 128, 0.5);
+  border-right: 3px solid rgba(128, 128, 128, 0.5);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
 
-  .advanced-search-modal-light .bottom-advanced-filter-apply-btns {
-    background: rgba(240, 240, 240, 0.8);
-    border-top: 3px solid rgba(0, 0, 0, 0.15);
-    border-left: 3px solid rgba(0, 0, 0, 0.15);
-    border-right: 3px solid rgba(0, 0, 0, 0.15);
-  }
+.advanced-search-modal-light .bottom-advanced-filter-apply-btns {
+  background: rgba(240, 240, 240, 0.8);
+  border-top: 3px solid rgba(0, 0, 0, 0.15);
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
+  border-right: 3px solid rgba(0, 0, 0, 0.15);
+}
 
-  .bottom-advanced-filter-apply-btns .flex-start {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.bottom-advanced-filter-apply-btns .flex-start {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .bottom-advanced-filter-apply-btns .flex-end {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 0 !important;
-  }
+.bottom-advanced-filter-apply-btns .flex-end {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0 !important;
+}
 
 @keyframes searchAllSpin {
   from {
@@ -2671,6 +2794,17 @@ body.deckbuilder-page .deck-builder {
 @media screen and (max-width: 1160px) {
   .searched-card-wrap:hover {
     transform: scale(1);
+  }
+
+  .deckbuilder-help-btn {
+    bottom: 75px;
+    right: 25px;
+  }
+
+  .walkthrough-prompt,
+  .walkthrough-card {
+    left: 10%;
+    top: 73%;
   }
 
   .event-searchbar {
@@ -2934,6 +3068,7 @@ body.deckbuilder-page .deck-builder {
     padding: 4.5px 6px;
     margin-left: 0.5rem;
   }
+
   #deck-upload-custom-image span {
     font-size: 18px;
   }
@@ -2993,7 +3128,9 @@ body.deckbuilder-page .deck-builder {
 
 @media screen and (max-width: 660px) {
   .support-again {
-    display: none;
+    position: fixed;
+    bottom: 59px;
+    left: 12.5px;
   }
 
   .active-deck-container::before {
@@ -3057,6 +3194,7 @@ body.deckbuilder-page .deck-builder {
     padding: 3.5px 5px;
     border-radius: 3px;
   }
+
   #deck-upload-custom-image span {
     font-size: 16px;
   }
@@ -3203,6 +3341,21 @@ body.deckbuilder-page .deck-builder {
   }
 }
 
+@media screen and (max-width: 550px) {
+
+  .walkthrough-prompt,
+  .walkthrough-card {
+    left: 0%;
+    top: 73%;
+  }
+
+  .deckbuilder-help-btn {
+    bottom: 55px;
+    right: 10px;
+    transform: scale(0.8);
+  }
+}
+
 @media screen and (max-width: 500px) {
   .search-cards-div {
     flex-direction: column;
@@ -3260,10 +3413,12 @@ body.deckbuilder-page .deck-builder {
   .hideon450 {
     display: none !important;
   }
+
   .through-sets-word {
     font-size: 13px;
     margin-left: 20px !important;
   }
+
   .showon450 {
     display: flex;
   }
@@ -3306,6 +3461,7 @@ body.deckbuilder-page .deck-builder {
   #deck-upload-custom-image {
     padding: 3px 4.5px;
   }
+
   #deck-upload-custom-image span {
     font-size: 14px;
   }
@@ -3504,9 +3660,11 @@ body.deckbuilder-page .deck-builder {
   .advanced-search-modal h2 {
     font-size: 16px;
   }
+
   .energy-menutw {
     height: 14.669px !important;
   }
+
   .filter-group h3 {
     font-size: 14px;
   }

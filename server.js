@@ -1251,13 +1251,14 @@ app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
           { name: rx },
           { text: rx },
           { rules: rx },
-          { flavorText: rx },
           { 'attacks.name': rx },
-          { 'attacks.text': rx },
-          { 'abilities.name': rx },
-          { 'abilities.text': rx },
-          { 'ability.name': rx },
-          { 'ability.text': rx }
+  { 'attacks.text': rx },
+  { 'abilities.name': rx },
+  { 'abilities.text': rx },
+  { 'abilities.type': rx },
+  { 'ability.name': rx },
+  { 'ability.text': rx },
+  { 'ability.type': rx }
         ]
       },
       {
@@ -1907,6 +1908,75 @@ app.post('/api/cards/filter-search', async (req, res) => {
   } catch (err) {
     console.error('filter-search error:', err);
     res.status(500).json({ error: 'filter search failed' });
+  }
+});
+
+app.get('/api/cards/searchbyflavor/partial/:q', async (req, res) => {
+  try {
+    const qRaw = (req.params.q || '').trim();
+    const setFilter = String(req.query.set || '').trim().toUpperCase();
+
+    if (!qRaw) return res.json([]);
+
+    const norm = qRaw
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+    const tokens = norm.match(/[a-z0-9]+/g) || [];
+    if (tokens.length === 0) return res.json([]);
+
+    const DIA = {
+      a: '[aàáâãäåāăą]',
+      c: '[cçćč]',
+      e: '[eèéêëēĕėęě]',
+      i: '[iìíîïĩīĭįı]',
+      n: '[nñńň]',
+      o: '[oòóôõöōŏőøơ]',
+      u: '[uùúûüũūŭůűųư]',
+      y: '[yýÿŷ]',
+      s: '[sśš]',
+      z: '[zżźž]',
+      l: '[lł]',
+      d: '[dď]',
+      r: '[rř]',
+      t: '[tť]',
+    };
+
+    const charClass = (ch) => {
+      const base = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      return DIA[base] || escapeRegex(ch.toLowerCase());
+    };
+
+    const toPattern = (q) => {
+      const tokens = (q || '').toLowerCase().match(/[a-z0-9]+/g) || [];
+      if (tokens.length === 0) return null;
+      const tokenPatterns = tokens.map(tok => tok.split('').map(charClass).join(''));
+      return new RegExp(tokenPatterns.join('[\\s\\S]*?'), 'i');
+    };
+
+    const rx = toPattern(qRaw);
+    if (!rx) return res.json([]);
+
+    const findQuery = { flavorText: rx };
+    if (setFilter) findQuery.setAbbrev = setFilter;
+
+    const cards = cardConnection.collection('card-database');
+
+    const results = await cards.find(findQuery, {
+      projection: {
+        _id: 0,
+        id: 1, name: 1, supertype: 1, subtypes: 1, setAbbrev: 1, number: 1, images: 1,
+        attacks: 1, abilities: 1, ability: 1, text: 1, rules: 1, flavorText: 1,
+        types: 1, hp: 1, weaknesses: 1, resistances: 1, retreatCost: 1,
+        convertedRetreatCost: 1, set: 1, rarity: 1, regulationMark: 1,
+        tcgplayer: 1, evolvesFrom: 1, evolvesTo: 1
+      }
+    }).limit(200).toArray();
+
+    res.json(results);
+  } catch (err) {
+    console.error('searchbyflavor/partial error:', err);
+    res.status(500).json({ error: 'flavor search failed' });
   }
 });
 

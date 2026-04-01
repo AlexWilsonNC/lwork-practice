@@ -396,7 +396,19 @@ async function prepareImagesForExport(node) {
   };
 }
 
-export default function ExportButtons({ deck, originalDeckId, onImportDeck, deckRef, onExportStart, onExportEnd }) {
+const ExportButtons = React.forwardRef(function ExportButtons(
+  {
+    deck,
+    originalDeckId,
+    onImportDeck,
+    deckRef,
+    onExportStart,
+    onExportEnd,
+    myDecksBtnRef,
+    deckOptionsBtnsRef
+  },
+  ref
+) {
   const { user } = useContext(AuthContext)
   const [importing, setImporting] = useState(false)
   const [showCopyMenu, setShowCopyMenu] = useState(false)
@@ -416,8 +428,6 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
   const [folders, setFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState('');
   const overwritePrefilledRef = useRef(false)
-
-
   const [originalMeta, setOriginalMeta] = useState(null);
   const prefilledOnceRef = useRef(false);
 
@@ -877,12 +887,12 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
         <div className='all-options-box'>
           <div className='options-left'>
             <div className='options-row row-options-1'>
-              <div className='my-decks-btn'>
+              <div className='my-decks-btn' ref={myDecksBtnRef}>
                 <button onClick={handleMyDecks}>
                   <p>My Decks</p>
                 </button>
               </div>
-              <div className='deck-options-btns-right'>
+              <div className='deck-options-btns-right' ref={deckOptionsBtnsRef}>
                 <button onClick={handleImport} disabled={importing}>
                   <p>Import <span className='hideon450'>Deck</span></p>
                 </button>
@@ -1062,4 +1072,8 @@ export default function ExportButtons({ deck, originalDeckId, onImportDeck, deck
       )}
     </>
   )
-}
+})
+
+ExportButtons.displayName = 'ExportButtons';
+
+export default ExportButtons;

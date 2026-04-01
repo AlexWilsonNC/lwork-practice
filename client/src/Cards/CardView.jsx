@@ -541,7 +541,7 @@ const CardView = () => {
                             onClick={handleImageClick}
                             style={{ cursor: viewportWidth >= 600 ? 'zoom-in' : 'auto' }}
                         />
-                        {cardInfo.subtypes?.includes('BREAK') && (
+                        {['BREAK', 'LEGEND'].some(st => cardInfo.subtypes?.includes(st)) && (
                             <button
                                 type="button"
                                 className="rotate-button"

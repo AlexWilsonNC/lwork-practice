@@ -231,7 +231,10 @@ const slugCss = (s) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, themeName }) {
+const CardSearch = React.forwardRef(function CardSearch(
+    { onAddCard, onCardClick, onRemoveFromDeck, themeName },
+    ref
+) {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
@@ -362,13 +365,18 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                 const name = String(card.name || '').toLowerCase();
                 const text = [
                     card.name,
-                    card.artist,
+                    card.text,
                     ...(Array.isArray(card.rules) ? card.rules : []),
-                    ...(Array.isArray(card.attacks) ? card.attacks.map(a => `${a.name || ''} ${a.text || ''}`) : []),
-                    ...(Array.isArray(card.abilities) ? card.abilities.map(a => `${a.name || ''} ${a.text || ''}`) : [])
+                    ...(Array.isArray(card.attacks) ? card.attacks.flatMap(a => [`${a?.name || ''}`, `${a?.text || ''}`]) : []),
+                    ...(Array.isArray(card.abilities) ? card.abilities.flatMap(a => [`${a?.name || ''}`, `${a?.text || ''}`, `${a?.type || ''}`]) : []),
+                    ...(card.ability ? [`${card.ability?.name || ''}`, `${card.ability?.text || ''}`, `${card.ability?.type || ''}`] : [])
                 ].join(' ').toLowerCase();
 
-                return searchMode === 'name' ? name.includes(q) : text.includes(q);
+                const flavor = String(card.flavorText || '').toLowerCase();
+
+                if (searchMode === 'name') return name.includes(q);
+                if (searchMode === 'flavor') return flavor.includes(q);
+                return text.includes(q);
             });
         }
 
@@ -815,6 +823,45 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
             case 'eq':
             default: return x === v;
         }
+    }
+
+    function normalizeSearchText(value) {
+        return String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    }
+
+    function cardMatchesTextSearch(card, rawQuery) {
+        const q = normalizeSearchText(rawQuery).trim();
+        if (!q) return true;
+
+        const haystack = [
+            card.name,
+            card.text,
+            ...(Array.isArray(card.rules) ? card.rules : []),
+            ...(Array.isArray(card.attacks)
+                ? card.attacks.flatMap(a => [a?.name, a?.text])
+                : []),
+            ...(Array.isArray(card.abilities)
+                ? card.abilities.flatMap(a => [a?.name, a?.text, a?.type])
+                : []),
+            ...(card.ability
+                ? [card.ability?.name, card.ability?.text, card.ability?.type]
+                : [])
+        ]
+            .map(normalizeSearchText)
+            .join(' ');
+
+        return haystack.includes(q);
+    }
+
+    function cardMatchesFlavorSearch(card, rawQuery) {
+        const q = normalizeSearchText(rawQuery).trim();
+        if (!q) return true;
+
+        const flavor = normalizeSearchText(card.flavorText || '');
+        return flavor.includes(q);
     }
 
     function parseAttackCostText(text = '') {
@@ -1632,17 +1679,22 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
                     const routes = (() => {
                         if (!primeMode) {
-                            return searchMode === 'name'
-                                ? [
-                                    ...variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`),
-                                    ...variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`)
-                                ]
-                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+                            if (searchMode === 'name') {
+                                return variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`);
+                            }
+
+                            if (searchMode === 'flavor') {
+                                return variants.map(v => `/api/cards/searchbyflavor/partial/${encodeURIComponent(v)}`);
+                            }
+
+                            return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
                         }
 
                         const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
                         if (!primeSetCodes.length) {
-                            return variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
+                            return searchMode === 'flavor'
+                                ? variants.map(v => `/api/cards/searchbyflavor/partial/${encodeURIComponent(v)}`)
+                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
                         }
                         return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
                     })();
@@ -1668,6 +1720,12 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                 }
 
                 arr = mergePromoCardsIntoResults(arr, formatPromoCards, rawQuery, searchMode);
+
+                if (searchMode === 'text' && !primeMode) {
+                    arr = arr.filter(c => cardMatchesTextSearch(c, rawQuery));
+                } else if (searchMode === 'flavor' && !primeMode) {
+                    arr = arr.filter(c => cardMatchesFlavorSearch(c, rawQuery));
+                }
 
                 if (primeMode) {
                     const getSubtypes = c => {
@@ -1827,7 +1885,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
 
     return (
         <>
-            <div className={`card-search-container ${isSearchVisible ? 'visible' : ''}`}>
+            <div ref={ref} className={`card-search-container ${isSearchVisible ? 'visible' : ''}`}>
                 <div
                     className="card-search-content"
                     onDragOver={handleDragOver}
@@ -2979,6 +3037,7 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
                                 >
                                     <option value="name">Card name</option>
                                     <option value="text">Card text</option>
+                                    <option value="flavor">Flavor text</option>
                                 </select>
                                 <input
                                     type="text"
@@ -3093,4 +3152,8 @@ export default function CardSearch({ onAddCard, onCardClick, onRemoveFromDeck, t
             </div>
         </>
     )
-}
+})
+
+CardSearch.displayName = 'CardSearch';
+
+export default CardSearch;
