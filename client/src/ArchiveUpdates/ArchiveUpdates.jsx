@@ -113,7 +113,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Mar 29, 2026</p>
+          <p>Last Updated: Apr 1, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -122,7 +122,7 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
-          {/* <hr className='title-hr' />
+          <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>April 2026</h3>
           <br />
@@ -133,7 +133,7 @@ const ArchiveUpdates = () => {
               <img className="sprite" src={joltik} alt="sprite" />
               <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
-            <p>Alex Dao (Masters) - 62<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Alex Dao (Masters) - 62<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <a href='/tournaments/2015_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
@@ -142,7 +142,7 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={bronzong} alt="sprite" />
             </div>
             <p>Alex Koch (Masters) - 87<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
-          </a> */}
+          </a>
 
           <hr className='title-hr' />
           <br />
