@@ -425,7 +425,16 @@ export default function DeckBuilder() {
       title: 'Thank You!',
       body: (
         <>
-          If you love this app, please consider supporting us on Patreon.
+          If you love this app, please consider supporting us on
+          {' '}
+          <a
+            href="https://www.patreon.com/PTCGLegends"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1290eb' }}
+          >
+            Patreon
+          </a>.
           <br></br>
           <br></br>
           You can replay this walkthrough anytime, by clicking the blue info button in the bottom corner.{' '}
@@ -440,7 +449,7 @@ export default function DeckBuilder() {
           >
             @PTCG_Legends
           </a>
-          {' '}on twitter with your new decklists!
+          {' '}on twitter with your new decklists! Happy building!
         </>
       )
     }
