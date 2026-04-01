@@ -1799,6 +1799,40 @@ const EventPage = () => {
         return null;
     }
 
+    const divisionLabelMap = {
+        masters: 'Masters',
+        seniors: 'Seniors',
+        juniors: 'Juniors',
+        professors: 'Professors',
+        olderSeniors: 'Older Seniors',
+        youngSeniors: 'Young Seniors',
+        all: 'All Divisions'
+    };
+
+    const divisionLabel = divisionLabelMap[division] || 'Masters';
+
+    const totalResultsCount =
+        (eventData?.masters?.length || 0) +
+        (eventData?.seniors?.length || 0) +
+        (eventData?.juniors?.length || 0) +
+        (eventData?.professors?.length || 0) +
+        (eventData?.olderSeniors?.length || 0) +
+        (eventData?.youngSeniors?.length || 0) +
+        (eventData?.all?.length || 0);
+
+    const canonicalUrl = `https://www.ptcglegends.com/tournaments/${eventId}`;
+    const pageTitle = eventData
+        ? `${eventData.name} ${divisionLabel} Results & Decklists | PTCG Legends`
+        : `Tournament Results & Decklists | PTCG Legends`;
+
+    const pageDescription = eventData
+        ? `${eventData.name} ${divisionLabel} results, standings, decklists, and tournament data on PTCG Legends. View placements, archetypes, and player decks from ${eventData.date}.${totalResultsCount ? ` Featuring ${totalResultsCount}+ tournament results across divisions.` : ''}`
+        : `Pokémon TCG tournament results, standings, and decklists on PTCG Legends.`;
+
+    const socialImage =
+        eventData?.thumbnail ||
+        'https://www.ptcglegends.com/images/tournaments-default-preview.png';
+
     const isMastersEmpty = mastersResults.length === 0;
     const otherDivisionsHaveResults =
         seniorsResults.length > 0 ||
@@ -2040,30 +2074,46 @@ const EventPage = () => {
     return (
         <EventPageContent className='center' theme={theme}>
             <Helmet>
-                <title>{eventData.name}</title>
+                <title>{pageTitle}</title>
+
+                <meta name="description" content={pageDescription} />
+                <meta name="author" content="PTCG Legends" />
                 <meta
-                    name='description'
-                    content={`Results, decklists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
+                    name="keywords"
+                    content={`${eventData?.name || 'Pokemon TCG tournament'}, Pokémon TCG results, Pokemon tournament results, ${divisionLabel} results, Pokémon decklists, PTCG Legends`}
                 />
-                <meta property='og:title' content={eventData.name} />
-                <meta
-                    property='og:description'
-                    content={`Results, decklists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
-                />
-                <meta property='og:image' content={eventData.thumbnail} />
-                <meta
-                    property='og:url'
-                    content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`}
-                />
-                <meta property='og:type' content='website' />
-                <meta name='author' content='PTCG Legends' />
-                <meta name='twitter:card' content='summary_large_image' />
-                <meta name='twitter:title' content={eventData.name} />
-                <meta
-                    name='twitter:description'
-                    content={`Results, lists and statistics from the Pokémon TCG ${eventData.name} held on ${eventData.date}.`}
-                />
-                <meta name='twitter:image' content={eventData.thumbnail} />
+
+                <link rel="canonical" href={canonicalUrl} />
+
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDescription} />
+                <meta property="og:image" content={socialImage} />
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="PTCG Legends" />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={pageTitle} />
+                <meta name="twitter:description" content={pageDescription} />
+                <meta name="twitter:image" content={socialImage} />
+
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'SportsEvent',
+                        name: eventData?.name || 'Pokémon TCG Tournament',
+                        startDate: eventData?.date || undefined,
+                        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+                        eventStatus: 'https://schema.org/EventCompleted',
+                        url: canonicalUrl,
+                        image: socialImage,
+                        description: pageDescription,
+                        organizer: {
+                            '@type': 'Organization',
+                            name: 'PTCG Legends'
+                        }
+                    })}
+                </script>
             </Helmet>
             <div className='regional-container'>
                 {division !== 'all' && (

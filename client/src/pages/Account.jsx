@@ -273,9 +273,11 @@ export default function Account() {
     const [lockedFolders, setLockedFolders] = useState(new Set());
     const [sortMenuOpenId, setSortMenuOpenId] = useState(null);
     const [sortMode, setSortMode] = useState(() => {
-        const saved = localStorage.getItem('sortMode')
-        return saved !== null ? parseInt(saved, 10) : 0
-    })
+        if (username) return 3; // public collection pages default to Folder Order
+
+        const saved = localStorage.getItem('sortMode');
+        return saved !== null ? parseInt(saved, 10) : 0;
+    });
     const [viewMode, setViewMode] = useState(
         () => localStorage.getItem('viewMode') || 'grid'
     );
@@ -1104,7 +1106,7 @@ export default function Account() {
                             </a>
                         </p>
                         <br></br>
-                        <p className='small-txt-info-act'>(All of your decks are private by default, to make them publicly viewable on the above page - open "Folder Privacy" and select each folder to make public)</p>
+                        <p className='small-txt-info-act'>(All decks are private by default, to make them publicly viewable on the above page - open "Folder Privacy" and select each folder with decks you want public.)</p>
                         <br></br>
                         <p style={{ color: 'grey' }}>
                             Please keep in mind that all profile-visible text - including your username, deck names, and deck descriptions - must adhere to our community standards. Any use of profanity, slurs, hate speech, or other offensive language is strictly prohibited. Users who violate these rules risk having their content removed and may face account suspension or deletion. Thank you for helping us maintain a respectful and welcoming environment for everyone.
@@ -1213,7 +1215,7 @@ export default function Account() {
                                             }}
                                         >
                                             <span className="material-symbols-outlined">swap_horiz</span>
-                                            <p>Organize Folders</p>
+                                            <p>Sort Folders</p>
                                         </button>
                                         <button
                                             className="folder-options-icon"

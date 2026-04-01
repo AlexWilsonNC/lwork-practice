@@ -128,6 +128,14 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Alex Dao (Masters) - 62<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
           <a href='/tournaments/2015_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={klinklang} alt="sprite" />

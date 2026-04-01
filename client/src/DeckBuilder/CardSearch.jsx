@@ -1091,14 +1091,23 @@ const CardSearch = React.forwardRef(function CardSearch(
         { label: '2007 Worlds', from: 'DX', to: 'DP' },
         { label: '2006 Worlds', from: 'HL', to: 'HP' },
         { label: '2005 Worlds', from: 'RS', to: 'EM' },
-        { label: '2004 Worlds', from: 'EX', to: 'HL' },
+        { label: '2004 Worlds', from: 'EX', to: 'HL' }
     ];
 
     const POPULAR_FORMATS = [
         { label: '2017 NAIC', from: 'PRC', to: 'GRI' },
         { label: 'SUM-LOT', from: 'SUM', to: 'LOT' },
+        { label: 'MD-CoL', from: 'MD', to: 'CL' },
         { label: 'RS-PK', from: 'RS', to: 'PK' },
+        { label: 'Prop 15/3', from: 'BS', to: 'G2' }
     ];
+
+    const POPULAR_FORMAT_MESSAGE_KEYS = new Set([
+        'PRC|GRI', // 2017 NAIC
+        'SUM|LOT', // SUM-LOT
+        'MD|CL',   // MD-CoL
+        'RS|PK'    // RS-PK
+    ]);
 
     const POPULAR_FORMAT_KEYS = new Set(
         POPULAR_FORMATS.map(({ from, to }) => `${from}|${to}`)
@@ -1114,7 +1123,7 @@ const CardSearch = React.forwardRef(function CardSearch(
         { label: 'SM Black Star Promos', mainFrom: 'SUM', mainTo: 'CEC', promoKey: 'SMP' },
         { label: 'SWSH Black Star Promos', mainFrom: 'SSH', mainTo: 'CRZ', promoKey: 'SWSHP' },
         { label: 'SV Black Star Promos', mainFrom: 'SVI', mainTo: 'BLK', promoKey: 'SVP' },
-        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'POR', promoKey: 'MEP' },
+        { label: 'ME Black Star Promos', mainFrom: 'MEG', mainTo: 'POR', promoKey: 'MEP' }
     ];
 
     const PROMO_SET_KEYS = new Set(PROMO_RULES.map(p => p.promoKey));
@@ -1139,7 +1148,8 @@ const CardSearch = React.forwardRef(function CardSearch(
         'DX|DP': '2007_worlds',
         'HL|HP': '2006_worlds',
         'RS|EM': '2005_worlds',
-        'EX|HL': '2004_worlds'
+        'EX|HL': '2004_worlds',
+        'BS|G2': 'prop_15_3'
     };
 
     const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
@@ -2138,13 +2148,14 @@ const CardSearch = React.forwardRef(function CardSearch(
                                 </div>
                                 {(() => {
                                     const ov = getActiveOverride(selectedQuickFormat);
-                                    const isOtherPopularFormat = POPULAR_FORMAT_KEYS.has(selectedQuickFormat);
+                                    const showPopularFormatPromoMessage =
+                                        POPULAR_FORMAT_MESSAGE_KEYS.has(selectedQuickFormat);
 
-                                    if (!ov && !isOtherPopularFormat) return null;
+                                    if (!ov && !showPopularFormatPromoMessage) return null;
 
                                     const { pairs } = ov ? getOverrideBannedSets(ov) : { pairs: [] };
                                     const legacyNames = Array.from(parseListToSet(ov?.bannedNames || ''));
-                                    if (!pairs.length && !legacyNames.length && !isOtherPopularFormat) return null;
+                                    if (!pairs.length && !legacyNames.length && !showPopularFormatPromoMessage) return null;
                                     const norm = s => (s ?? '').trim().toLowerCase();
 
                                     const uniquePairs = [];
@@ -2216,7 +2227,7 @@ const CardSearch = React.forwardRef(function CardSearch(
                                                         </>
                                                     )}
 
-                                                    {isOtherPopularFormat && (
+                                                    {showPopularFormatPromoMessage && (
                                                         <>
                                                             <span
                                                                 className="material-symbols-outlined"

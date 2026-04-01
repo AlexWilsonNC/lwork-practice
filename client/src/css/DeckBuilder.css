@@ -48,6 +48,7 @@
   transform: translate(-50%, -50%);
   width: min(420px, calc(100vw - 32px));
   background: #1b1b1b;
+  border: 2px solid #1290eb;
   color: white;
   border-radius: 12px;
   padding: 18px;

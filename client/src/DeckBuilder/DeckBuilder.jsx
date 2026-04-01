@@ -449,7 +449,6 @@ export default function DeckBuilder() {
   useEffect(() => {
     const seen = localStorage.getItem(WALKTHROUGH_SEEN_KEY) === 'true';
 
-    // Adjust this if your app uses a different login marker
     const looksLoggedIn =
       !!localStorage.getItem('PTCGLegendsToken') ||
       !!localStorage.getItem('PTCGLegendsUsername');
@@ -1184,18 +1183,46 @@ export default function DeckBuilder() {
   return (
     <DeckBuilderComp className='center' theme={theme}>
       <Helmet>
-        <title>Deck Builder</title>
-        {/* <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-        {/* <meta property="og:title" content={eventData.name} /> */}
-        {/* <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-        {/* <meta property="og:image" content={eventData.thumbnail} /> */}
-        {/* <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} /> */}
-        {/* <meta property="og:type" content="website" /> */}
-        {/* <meta name="author" content="PTCG Legends" /> */}
-        {/* <meta name="twitter:card" content="summary_large_image" /> */}
-        {/* <meta name="twitter:title" content={eventData.name} /> */}
-        {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
-        {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
+        <title>Pokémon TCG Deck Builder | PTCG Legends</title>
+        <meta
+          name="description"
+          content="Build Pokémon TCG decks online with the PTCG Legends Deck Builder. Search cards, filter by format, import and export decklists, test ideas, and save decks to your collection."
+        />
+        <meta
+          name="keywords"
+          content="Pokemon TCG deck builder, PTCG deck builder, Pokémon card search, build Pokemon decks, decklist builder, Pokemon deck maker, PTCG Legends"
+        />
+        <link
+          rel="canonical"
+          href="https://www.ptcglegends.com/deckbuilder"
+        />
+        <meta property="og:title" content="Pokémon TCG Deck Builder | PTCG Legends" />
+        <meta
+          property="og:description"
+          content="Build Pokémon TCG decks online with advanced card search, format filters, deck importing, exporting, and collection tools."
+        />
+        <meta
+          property="og:url"
+          content="https://www.ptcglegends.com/deckbuilder"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://www.ptcglegends.com/images/deckbuilder-preview.png"
+        />
+        <meta property="og:site_name" content="PTCG Legends" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Pokémon TCG Deck Builder | PTCG Legends" />
+        <meta
+          name="twitter:description"
+          content="Build Pokémon TCG decks online with advanced card search, format filters, deck importing, exporting, and collection tools."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.ptcglegends.com/images/deckbuilder-preview.png"
+        />
+        <meta name="author" content="PTCG Legends" />
       </Helmet>
       {walkthroughOpen && walkthroughRect && (
         <div className="walkthrough-overlay">

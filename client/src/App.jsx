@@ -23,11 +23,11 @@ import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
 // import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
-import DeckBuilder from './DeckBuilder/DeckBuilder';
+// import DeckBuilder from './DeckBuilder/DeckBuilder';
 import PrintDecklist from './DeckBuilder/PrintDecklist'
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
-import Login   from './pages/Login';
-import Account from './pages/Account';
+// import Login   from './pages/Login';
+// import Account from './pages/Account';
 
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
@@ -56,15 +56,15 @@ function App() {
         { !noNavBarOn.includes(pathname) && <Navbar/> }
         <main className='mainwrapedcontainer'>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
+            {/* <Route path="/login" element={<Login />} /> */}
+            {/* <Route
               path="/account"
               element={
                 <PrivateRoute>
                   <Account/>
                 </PrivateRoute>
               }
-            />
+            /> */}
             <Route path="/" element={<HomePage />} />
             <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
             <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />
@@ -72,7 +72,7 @@ function App() {
             <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
-            <Route path="/:username/deck-collection" element={<Account />} />
+            {/* <Route path="/:username/deck-collection" element={<Account />} /> */}
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
             <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />
@@ -86,7 +86,7 @@ function App() {
             <Route path="/articles/all" element={<AllArticlesPage />} />
             <Route path="/articles/:articleId" element={<ArticleComponent />} />
             <Route path="/about" element={<About />} />
-            <Route path="/deckbuilder" element={<DeckBuilder />} />
+            {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
             <Route path="*" element={<NotFound />} />
