@@ -6,6 +6,7 @@ import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
 import emailIcon from '../assets/social-media-icons/email-icon.png';
 import totodileSprite from '../assets/footer/ho-oh.png';
 import feraligatrSprite from '../assets/footer/lugia.png';
+import tcgPlayerLogo from '../assets/social-media-icons/tcgplayer.png';
 
 function Footer() {
     return (
@@ -72,6 +73,10 @@ function Footer() {
                     <p>This website is simply a place for Pokémon TCG fans to look at events and results from the greatest game in history!</p>
                 </div>
             </div>
+            <a href='https://partner.tcgplayer.com/PTCG_Legends' target='_blank' className='tcgplayer-affiliate-advert'>
+                <img src={tcgPlayerLogo}></img>
+                <p>You can support us by clicking this Affiliate Link to buy cards on TCGplayer!</p>
+            </a>
             <div className='bottom-footer'>
                 <img className='invert-parallel' src={totodileSprite}></img>
                 <p>PTCG Legends&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Web Design: Alex Wilson&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Find me here: <a href='https://twitter.com/alexwilsonTCG' target='_blank' rel="noopener noreferrer">@alexwilsonTCG</a></p>

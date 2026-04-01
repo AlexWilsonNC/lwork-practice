@@ -132,6 +132,23 @@
 .invisible {
     opacity: 0 !important;
 }
+.tcgplayer-affiliate-advert {
+    width: 30%;
+    height: 50px;
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    color: white;
+    border-radius: 15px;
+}
+.tcgplayer-affiliate-advert img {
+    margin-right: 15px;
+}
+.tcgplayer-affiliate-advert:hover {
+    background-color: rgba(230, 230, 230, 0.272);
+}
 .bottom-footer {
     width: 100%;
     height: 75px;
@@ -158,6 +175,11 @@
 .invert-parallel {
     transform: scaleX(-1);
 }
+@media screen and (max-width: 1338px) {
+    .tcgplayer-affiliate-advert {
+        width: 37.5%;
+    }
+}
 @media screen and (max-width: 1300px) {
     .useful-row2 a {
         margin-left: -20px;
@@ -177,6 +199,11 @@
         padding: 25px 0;
         width: 100%;
         margin-left: 100px;
+    }
+    .tcgplayer-affiliate-advert {
+        width: 90%;
+        padding-left: 50px;
+        justify-content: flex-start;
     }
     .footer-content div {
         margin-bottom: 5px;
@@ -262,5 +289,14 @@
     }
     .socials-pushed-down {
         padding-top: 0px;
+    }
+    .tcgplayer-affiliate-advert {
+        padding-left: 30px;
+        padding-top: 0;
+        font-size: 12px;
+        margin-top: -15px;
+    }
+    .tcgplayer-affiliate-advert img {
+        width: 75px;
     }
 }
