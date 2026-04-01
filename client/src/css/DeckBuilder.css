@@ -41,7 +41,6 @@
   margin-left: -10px;
 }
 
-.walkthrough-prompt,
 .walkthrough-card {
   position: fixed;
   left: 50%;
@@ -51,12 +50,8 @@
   background: #1b1b1b;
   color: white;
   border-radius: 12px;
-  /* border: 2px solid #1290eb; */
   padding: 18px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-}
-
-.walkthrough-card {
   z-index: 10001;
   top: auto;
   bottom: 24px;
@@ -2801,10 +2796,15 @@ body.deckbuilder-page .deck-builder {
     right: 25px;
   }
 
-  .walkthrough-prompt,
   .walkthrough-card {
-    left: 10%;
-    top: 73%;
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 78px);
+    transform: translateX(-50%);
+    width: min(420px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+    max-height: min(50vh, 320px);
+    overflow-y: auto;
   }
 
   .event-searchbar {
@@ -3129,8 +3129,10 @@ body.deckbuilder-page .deck-builder {
 @media screen and (max-width: 660px) {
   .support-again {
     position: fixed;
-    bottom: 59px;
-    left: 12.5px;
+    bottom: -50px;
+    right: 0px;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .active-deck-container::before {
@@ -3343,10 +3345,9 @@ body.deckbuilder-page .deck-builder {
 
 @media screen and (max-width: 550px) {
 
-  .walkthrough-prompt,
   .walkthrough-card {
-    left: 0%;
-    top: 73%;
+    /* left: 0%; */
+    /* top: 73%; */
   }
 
   .deckbuilder-help-btn {

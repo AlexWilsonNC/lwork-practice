@@ -343,7 +343,6 @@ export default function DeckBuilder() {
   const myDecksBtnRef = useRef(null);
   const deckOptionsBtnsRef = useRef(null);
   const helpBtnRef = useRef(null);
-  const [showWalkthroughPrompt, setShowWalkthroughPrompt] = useState(false);
   const [walkthroughOpen, setWalkthroughOpen] = useState(false);
   const [walkthroughStep, setWalkthroughStep] = useState(0);
   const [walkthroughRect, setWalkthroughRect] = useState(null);
@@ -426,7 +425,7 @@ export default function DeckBuilder() {
       title: 'Thank You!',
       body: (
         <>
-          If you love this app, please consider supporting us on Patreon. 
+          If you love this app, please consider supporting us on Patreon.
           <br></br>
           <br></br>
           You can replay this walkthrough anytime, by clicking the blue info button in the bottom corner.{' '}
@@ -456,7 +455,7 @@ export default function DeckBuilder() {
       !!localStorage.getItem('PTCGLegendsUsername');
 
     if (!seen && !looksLoggedIn) {
-      setShowWalkthroughPrompt(true);
+      startWalkthrough();
     }
   }, []);
 
@@ -473,7 +472,6 @@ export default function DeckBuilder() {
   };
 
   const startWalkthrough = async () => {
-    setShowWalkthroughPrompt(false);
     setWalkthroughLoading(true);
 
     try {
@@ -1199,18 +1197,6 @@ export default function DeckBuilder() {
         {/* <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} /> */}
         {/* <meta name="twitter:image" content={eventData.thumbnail} /> */}
       </Helmet>
-      {showWalkthroughPrompt && (
-        <div className="walkthrough-overlay">
-          <div className="walkthrough-prompt">
-            <h3>Quick Deckbuilder Tour?</h3>
-            <p>Want a fast walkthrough of the main features before you start building?</p>
-            <div className="walkthrough-actions">
-              <button onClick={startWalkthrough}>Yes</button>
-              <button onClick={() => closeWalkthrough(true)}>No thanks</button>
-            </div>
-          </div>
-        </div>
-      )}
       {walkthroughOpen && walkthroughRect && (
         <div className="walkthrough-overlay">
           <div

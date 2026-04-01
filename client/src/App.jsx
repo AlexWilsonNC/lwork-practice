@@ -56,7 +56,7 @@ function App() {
         { !noNavBarOn.includes(pathname) && <Navbar/> }
         <main className='mainwrapedcontainer'>
           <Routes>
-            {/* <Route path="/login" element={<Login />} /> */}
+            <Route path="/login" element={<Login />} />
             <Route
               path="/account"
               element={
@@ -72,7 +72,7 @@ function App() {
             <Route path="/tournaments/:eventId/:division?" element={<EventPage />} />
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
-            {/* <Route path="/:username/deck-collection" element={<Account />} /> */}
+            <Route path="/:username/deck-collection" element={<Account />} />
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
             <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />
@@ -86,7 +86,7 @@ function App() {
             <Route path="/articles/all" element={<AllArticlesPage />} />
             <Route path="/articles/:articleId" element={<ArticleComponent />} />
             <Route path="/about" element={<About />} />
-            {/* <Route path="/deckbuilder" element={<DeckBuilder />} /> */}
+            <Route path="/deckbuilder" element={<DeckBuilder />} />
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
             <Route path="*" element={<NotFound />} />
