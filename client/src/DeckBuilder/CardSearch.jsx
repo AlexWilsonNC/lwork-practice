@@ -1690,7 +1690,10 @@ const CardSearch = React.forwardRef(function CardSearch(
                     const routes = (() => {
                         if (!primeMode) {
                             if (searchMode === 'name') {
-                                return variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`);
+                                return [
+                                    ...variants.map(v => `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`),
+                                    ...variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`)
+                                ];
                             }
 
                             if (searchMode === 'flavor') {

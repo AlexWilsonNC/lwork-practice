@@ -233,13 +233,13 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         <span className="tooltip-text">Copy to Clipboard</span>
       </div>
 
-      <div className="open-in-deckbuilder-btn not-ready" onClick={openInDeckbuilder}>
+      <div className="open-in-deckbuilder-btn" onClick={openInDeckbuilder}>
         <span className="material-symbols-outlined">construction</span>
         <span className="tooltip-text">Open in Deckbuilder</span>
       </div>
 
       <div
-        className="save-to-collection-btn not-ready"
+        className="save-to-collection-btn"
         onClick={handleSaveClick}
         title={isAlreadySaved ? 'Already saved in your collection' : 'Save to Collection'}
       >

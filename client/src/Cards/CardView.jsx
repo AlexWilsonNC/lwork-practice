@@ -575,6 +575,22 @@ const CardView = () => {
                                 </p>
                             </div>
                         )}
+                        <Link
+                            to={`/deckbuilder#deck=${encodeURIComponent(
+                                JSON.stringify([
+                                    {
+                                        set: cardInfo.setAbbrev,
+                                        number: cardInfo.number,
+                                        count: 1
+                                    }
+                                ])
+                            )}`}
+                            className="open-in-deckbuilder-btn cardview-db-open-btn-only"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Open Card in Deck Builder
+                        </Link>
                     </div>
                     <div className='card-info'>
                         <p className="card-name-view">

@@ -10,7 +10,7 @@ import archiveUpdateImg from '../assets/archive-updates/apr-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
 import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
 import latestSet from '../assets/homepage/latest-expansion.webp';
-import deckBuilder from '../assets/homepage/deckbuilder.png';
+import deckBuilder from '../../public/images/deckbuilder-preview.png';
 
 import article1 from '../Articles/whenModernBecomesRetro';
 import article2 from '../Articles/forgottenFormat';
@@ -259,13 +259,12 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                            <div className='overlay' style={{textAlign: 'center'}}>Coming April 1st!</div>
-                            <a href='' className='not-ready'>
+                            <a href='/deckbuilder'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={deckBuilder} />
                                     <div className='homepage-box-content'>
                                         <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
-                                        <p>Try our new deck builder! From Base Set to Scarlet & Violet, our app has every card ever printed for your modern & retro deck building needs! Customize decks from our archive and share 'em with your friends!</p>
+                                        <p>Try the best deck builder on the internet, the perfect app for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
                                     </div>
                                 </WrappedFeature>
                             </a>
@@ -481,13 +480,12 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall footerupon-mobile'>
                         <FeaturedHeaders className='featured-headers'>Deck Builder</FeaturedHeaders>
-                        <div className='overlay' style={{textAlign: 'center'}}>Coming April 1st!</div>
-                        <a href='' className='not-ready'>
+                        <a href='/deckbuilder'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={deckBuilder} />
                                 <div className='homepage-box-content'>
                                     <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
-                                    <p>Try our new deck builder! From Base Set to Scarlet & Violet, our app has every card ever printed for your modern & retro deck building needs! Customize decks from our archive and share 'em with your friends!</p>
+                                    <p>Try the best deck builder on the internet, the perfect app for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
                                 </div>
                             </WrappedFeature>
                         </a>

@@ -118,7 +118,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
           <div className='login-slash-account-btn'>
             {user
               ? <li><Link to="/account" onClick={() => setOpen(false)}>Account</Link></li>
-              : <li className='not-ready'><Link to="/login" onClick={() => setOpen(false)}>Login</Link></li>
+              : <li><Link to="/login" onClick={() => setOpen(false)}>Login</Link></li>
             }
           </div>
           <ToggleButton className="toggle-darkmode" onClick={toggleTheme}>
@@ -133,8 +133,8 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <div className='burger-resources'>
           <ul className='burgered-links-more'>
             <li><a href='/archive-updates'>Archive Updates</a></li>
-            <li className='not-ready'><a href=''>Articles</a></li>
-            <li className='not-ready'><a href=''>Deck Builder</a></li>
+            {/* <li className='not-ready'><a href=''>Articles</a></li> */}
+            <li><a href='/deckbuilder'>Deck Builder</a></li>
             {/* Trigger interstitial for the "Decks by Era" link */}
             <li>
               <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')}>
@@ -142,7 +142,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
               </a>
             </li>
             <li><a href='/rules-by-era'>Rules by Era</a></li>
-            <li className='not-ready'><a>Worlds Booklets</a></li>
+            {/* <li className='not-ready'><a>Worlds Booklets</a></li> */}
           </ul>
         </div>
         <div className='burdered-socials'>

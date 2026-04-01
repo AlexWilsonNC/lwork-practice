@@ -9,6 +9,23 @@
     border-radius: 10px;
     margin-top: 25px;
 }
+.cardview-db-open-btn-only {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  padding: 7px 12px;
+  border-radius: 4px;
+  border: none;
+  background: #1290eb;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  margin-right: 0;
+}
+.open-in-deckbuilder-btn:hover {
+  opacity: 0.9;
+}
 .column-align {
     display: flex;
     flex-direction: column;
@@ -676,6 +693,11 @@ tr.event-separator:hover td {
         height: auto;
         border-radius: 27px !important;
         box-shadow: 0 0 12px black;
+    }
+    .cardview-db-open-btn-only {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: 12px;
     }
     .the-card-img.rotated {
         max-width: 65%;
