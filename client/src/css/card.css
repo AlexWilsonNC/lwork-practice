@@ -948,6 +948,8 @@ tr.event-separator:hover td {
     }
     .card-view-tcgp-db-btn-row-mobile-only a {
         margin: 10px 10px;
+        background-image: linear-gradient(to bottom right, #1290eb, #1290eb);
+        font-weight: 600;
     }
     .showmoreversions {
         font-size: 8px;
