@@ -6,6 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
 import '../css/card.css';
 import { isGLCLegal, isExpandedLegal, isStandardLegal, isBannedInGLC } from '../Tools/CardLegality';
+import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
 
 const CardViewTheme = styled.div`
     background: ${({ theme }) => theme.body};
@@ -496,6 +497,32 @@ const CardView = () => {
     // 3) pick how many clusters to show
     const displayedClusters = eventClusters
 
+    const TCGPLAYER_AFFILIATE_BASE = 'https://partner.tcgplayer.com/PTCG_Legends';
+
+    function buildTcgplayerCardSearchUrl(card) {
+        const query = [
+            card?.name,
+            card?.set?.name || card?.setName,
+            card?.number
+        ]
+            .filter(Boolean)
+            .join(' ')
+            .trim();
+
+        const landingUrl = new URL('https://www.tcgplayer.com/search/all/product');
+        landingUrl.searchParams.set('q', query);
+        landingUrl.searchParams.set('view', 'grid');
+
+        const affiliateBase = TCGPLAYER_AFFILIATE_BASE.startsWith('http')
+            ? TCGPLAYER_AFFILIATE_BASE
+            : `https://${TCGPLAYER_AFFILIATE_BASE}`;
+
+        const affiliateUrl = new URL(affiliateBase);
+        affiliateUrl.searchParams.set('u', landingUrl.toString());
+
+        return affiliateUrl.toString();
+    }
+
     return (
         <CardViewTheme className='center column-align justcardviewonly' theme={theme}>
             <Helmet>
@@ -575,22 +602,37 @@ const CardView = () => {
                                 </p>
                             </div>
                         )}
-                        <Link
-                            to={`/deckbuilder#deck=${encodeURIComponent(
-                                JSON.stringify([
-                                    {
-                                        set: cardInfo.setAbbrev,
-                                        number: cardInfo.number,
-                                        count: 1
-                                    }
-                                ])
-                            )}`}
-                            className="open-in-deckbuilder-btn cardview-db-open-btn-only"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Open Card in Deck Builder
-                        </Link>
+                        <div className='card-view-tcgp-db-btn-row'>
+                            <Link
+                                to={`/deckbuilder#deck=${encodeURIComponent(
+                                    JSON.stringify([
+                                        {
+                                            set: cardInfo.setAbbrev,
+                                            number: cardInfo.number,
+                                            count: 1
+                                        }
+                                    ])
+                                )}`}
+                                className="open-in-deckbuilder-btn cardview-db-open-btn-only"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Deck Builder
+                            </Link>
+                            <a
+                                href={buildTcgplayerCardSearchUrl(cardInfo)}
+                                target="_blank"
+                                rel="noopener noreferrer sponsored"
+                                className="cardvi-only-tcp"
+                            >
+                                <img
+                                    src={tcgplayerIcon}
+                                    alt="TCGplayer"
+                                    className="cardvi-only-tcp-icon"
+                                />
+                                &nbsp;Buy on TCGplayer
+                            </a>
+                        </div>
                     </div>
                     <div className='card-info'>
                         <p className="card-name-view">
@@ -861,6 +903,37 @@ const CardView = () => {
                                 )}
                             </>
                         )}
+                    </div>
+                    <div className='card-view-tcgp-db-btn-row-mobile-only'>
+                        <Link
+                            to={`/deckbuilder#deck=${encodeURIComponent(
+                                JSON.stringify([
+                                    {
+                                        set: cardInfo.setAbbrev,
+                                        number: cardInfo.number,
+                                        count: 1
+                                    }
+                                ])
+                            )}`}
+                            className="open-in-deckbuilder-btn cardview-db-open-btn-only"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Open in Deck Builder
+                        </Link>
+                        <a
+                            href={buildTcgplayerCardSearchUrl(cardInfo)}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="cardvi-only-tcp"
+                        >
+                            <img
+                                src={tcgplayerIcon}
+                                alt="TCGplayer"
+                                className="cardvi-only-tcp-icon"
+                            />
+                            &nbsp;Buy on TCGplayer
+                        </a>
                     </div>
                 </div>
             </div>

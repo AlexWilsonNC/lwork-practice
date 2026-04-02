@@ -1537,18 +1537,18 @@ export default function DeckBuilder() {
                 </div>
               </div>
               <div className='bottom-db-modal-bts'>
-                  <a
-                    href={buildTcgplayerCardSearchUrl(zoomCard)}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    className="tcgplayer-btn">
-                    <img
-                      src={tcgplayerIcon}
-                      alt="TCGplayer"
-                      className="tcgplayer-btn__icon"
-                    />
-                    &nbsp;TCGplayer
-                  </a>
+                <a
+                  href={buildTcgplayerCardSearchUrl(zoomCard)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="tcgplayer-btn">
+                  <img
+                    src={tcgplayerIcon}
+                    alt="TCGplayer"
+                    className="tcgplayer-btn__icon"
+                  />
+                  &nbsp;TCGplayer
+                </a>
                 <Link to={`/card/${zoomCard.setAbbrev}/${zoomCard.number}`}
                   target="_blank"
                   rel="noopener noreferrer"
