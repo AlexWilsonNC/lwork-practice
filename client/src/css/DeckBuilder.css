@@ -392,7 +392,8 @@ body.deckbuilder-page .deck-builder {
   margin-top: 25px;
 }
 
-.bottom-db-modal-bts button {
+.bottom-db-modal-bts button,
+.bottom-db-modal-bts a {
   font-size: 16px;
   border: none;
   height: 40px;
@@ -403,7 +404,8 @@ body.deckbuilder-page .deck-builder {
   font-weight: 600;
 }
 
-.bottom-db-modal-bts button:hover {
+.bottom-db-modal-bts button:hover,
+.bottom-db-modal-bts a:hover {
   cursor: pointer;
   background-image: linear-gradient(to bottom right, rgb(18, 221, 221), #43b1ff, #43b1ff);
 }
@@ -3259,7 +3261,8 @@ body.deckbuilder-page .deck-builder {
     margin-top: 15px;
   }
 
-  .bottom-db-modal-bts button {
+  .bottom-db-modal-bts button,
+  .bottom-db-modal-bts a {
     font-size: 12px;
     height: 30px;
     width: 150px;

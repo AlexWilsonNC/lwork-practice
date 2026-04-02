@@ -1130,7 +1130,6 @@ export default function DeckBuilder() {
   const handleSort = () => {
     setDeck(current => sortDeck(current));
   };
-  const tcgUrl = zoomCard?.tcgplayer?.url
 
   useEffect(() => {
     let abort = false;
@@ -1188,6 +1187,32 @@ export default function DeckBuilder() {
   useEffect(() => {
     localStorage.setItem('decklistZoomScale', zoomScale);
   }, [zoomScale]);
+
+  const TCGPLAYER_AFFILIATE_BASE = 'https://partner.tcgplayer.com/PTCG_Legends';
+
+  function buildTcgplayerCardSearchUrl(card) {
+    const query = [
+      card?.name,
+      card?.set?.name || card?.setName,
+      card?.number
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+
+    const landingUrl = new URL('https://www.tcgplayer.com/search/all/product');
+    landingUrl.searchParams.set('q', query);
+    landingUrl.searchParams.set('view', 'grid');
+
+    const affiliateBase = TCGPLAYER_AFFILIATE_BASE.startsWith('http')
+      ? TCGPLAYER_AFFILIATE_BASE
+      : `https://${TCGPLAYER_AFFILIATE_BASE}`;
+
+    const affiliateUrl = new URL(affiliateBase);
+    affiliateUrl.searchParams.set('u', landingUrl.toString());
+
+    return affiliateUrl.toString();
+  }
 
   return (
     <DeckBuilderComp className='center' theme={theme}>
@@ -1512,32 +1537,18 @@ export default function DeckBuilder() {
                 </div>
               </div>
               <div className='bottom-db-modal-bts'>
-                {tcgUrl ? (
                   <a
-                    href={tcgUrl}
+                    href={buildTcgplayerCardSearchUrl(zoomCard)}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="tcgplayer-link deckbuildernot-ready"
-                  >
-                    <button className="tcgplayer-btn">
-                      <img
-                        src={tcgplayerIcon}
-                        alt="TCGplayer"
-                        className="tcgplayer-btn__icon"
-                      />
-                      &nbsp;TCGplayer
-                    </button>
-                  </a>
-                ) : (
-                  <button className="tcgplayer-btn deckbuildernot-ready" disabled>
+                    rel="noopener noreferrer sponsored"
+                    className="tcgplayer-btn">
                     <img
                       src={tcgplayerIcon}
                       alt="TCGplayer"
                       className="tcgplayer-btn__icon"
                     />
                     &nbsp;TCGplayer
-                  </button>
-                )}
+                  </a>
                 <Link to={`/card/${zoomCard.setAbbrev}/${zoomCard.number}`}
                   target="_blank"
                   rel="noopener noreferrer"

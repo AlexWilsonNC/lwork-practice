@@ -51,7 +51,7 @@ function Footer() {
                     <div className='footer-socials'>
                         <a href='https://twitter.com/PTCG_Legends' target='_blank' rel="noopener noreferrer">
                             <img src={twitterIcon} alt="social-icon" />
-                            <p>Follow on X / Twitter</p>
+                            <p>Follow us on X / Twitter</p>
                         </a>
                         <a href='https://discord.com/invite/P8vKM8REr4' target='_blank' rel="noopener noreferrer">
                             <img src={discordIcon} alt="social-icon" />
