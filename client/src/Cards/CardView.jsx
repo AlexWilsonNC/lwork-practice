@@ -577,7 +577,7 @@ const CardView = () => {
                                     setIsRotated(prev => !prev);
                                 }}
                             >
-                                Rotate&nbsp;<span class="material-symbols-outlined">forward_media</span>
+                                Rotate&nbsp;<span className="material-symbols-outlined">forward_media</span>
                             </button>
                         )}
                         {cardInfo.set && (
