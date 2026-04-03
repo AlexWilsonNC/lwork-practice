@@ -235,7 +235,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
 
       <div className="open-in-deckbuilder-btn" onClick={openInDeckbuilder}>
         <span className="material-symbols-outlined">construction</span>
-        <span className="tooltip-text">Open in Deckbuilder</span>
+        <span className="tooltip-text">Open in Deck&nbsp;Builder</span>
       </div>
 
       <div

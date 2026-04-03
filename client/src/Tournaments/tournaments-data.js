@@ -1095,6 +1095,23 @@ const tournamentList = [
         "location": "Columbus, Ohio",
     },
     {
+        "id": "2016_NATS_AUSTRALIA",
+        "name": "Australia Nationals 2016",
+        "eventType": "nationals",
+        "eventLogo": nationals,
+        "date": "Jul 2, 2016",
+        "flag": australia,
+        "location": "Australia",
+    },
+    {
+        "id": "2016_NATS_AUSTRIA",
+        "name": "Austria Nationals 2016",
+        "eventType": "nationals",
+        "eventLogo": nationals,
+        "date": "Jul 26, 2016",
+        "flag": austria,
+    },
+    {
         "id": "2015_NATS_US",
         "name": "US Nationals 2015",
         "eventType": "nationals",

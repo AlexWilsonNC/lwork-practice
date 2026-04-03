@@ -562,6 +562,13 @@ const customLabelsConfig = {
         'alakazam-mega-espeon': 'Mega Alakazam',
     },
     '2016': {
+        'wailord-aegislash': 'Wall Stall',
+        'rayquaza-mega-jolteon': 'Mega Rayquaza',
+        'blank-serperior': 'Serperior',
+        'manectric-mega-jolteon': 'Mega Manectric',
+        'seismitoad-greninja': 'Seismitoad Greninja',
+        'zoroark-vespiquen': 'Vespiquen Zoroark',
+        'jolteon-garbodor': 'Jolteon Garbodor',
         'joltik-pumpkaboo': 'Night March',
         'blank-greninja': 'Greninja',
         'bronzong-aegislash': 'Metal Box',
