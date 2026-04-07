@@ -670,7 +670,12 @@ export default function Account() {
                     Authorization: `Bearer ${token}`
                 }
             })
-                .then(res => {
+                .then(async res => {
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login', { replace: true });
+                        throw new Error('Unauthorized');
+                    }
                     if (!res.ok) throw new Error('Failed to load decks, please relogin.');
                     return res.json();
                 })

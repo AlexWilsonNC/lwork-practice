@@ -2286,6 +2286,60 @@ app.get('/api/export-image-proxy', async (req, res) => {
   }
 });
 
+app.post('/api/user/decks/check-saved', requireAuth, async (req, res) => {
+  const { signature: targetSig } = req.body;
+
+  if (!targetSig) {
+    return res.status(400).json({ error: 'Signature is required' });
+  }
+
+  const flatten = raw => Array.isArray(raw)
+    ? raw
+    : [...(raw?.pokemon || []), ...(raw?.trainer || []), ...(raw?.energy || [])];
+
+  const norm = (s = '') =>
+    String(s)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[-–—·•'’._/]/g, '')
+      .replace(/\s+/g, '');
+
+  const mechSuffix = (name = '') => {
+    const m = String(name || '').match(/\b(ex|gx|vmax|vstar|lv\.?x)\b/i);
+    return m ? m[1].toLowerCase().replace(/\./g, '') : '';
+  };
+
+  const canonicalKey = (c) => {
+    const supertype = (c.supertype || '').toLowerCase();
+    const name = c.name || '';
+    if (supertype === 'trainer' || supertype === 'energy') {
+      return `${supertype}:${norm(name)}`;
+    }
+    return `pokemon:${norm(name)}:${mechSuffix(name)}`;
+  };
+
+  const signature = (cards = []) => {
+    const parts = cards.map(c => `${canonicalKey(c)}#${Number(c.count || 0)}`);
+    parts.sort();
+    return parts.join('|');
+  };
+
+  try {
+    const user = await User.findById(req.userId).select('decks');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const match = user.decks.find(d => signature(flatten(d.decklist)) === targetSig);
+
+    return res.json({
+      isAlreadySaved: !!match,
+      deckId: match ? String(match._id) : ''
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not check saved deck status' });
+  }
+});
+
 app.get('/api/formats/:format/promos', async (req, res) => {
   try {
     const cards = await getPromoCardsForFormat(req.params.format);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -16,6 +16,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
   const [isAlreadySaved, setIsAlreadySaved] = useState(false);
   const [existingDeckId, setExistingDeckId] = useState('');
   const [saving, setSaving] = useState(false);
+  const lastCheckedSigRef = useRef('');
 
   const cleanCardName = (name) => name.replace(' - ACESPEC', '');
 
@@ -27,7 +28,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     return small ? { small, large } : undefined;
   };
 
-  const flatDeck = [
+  const flatDeck = useMemo(() => ([
     ...(decklist?.pokemon ?? []).map(c => {
       const images = imgFor(c.set, c.number);
       const k = `${c.set}-${c.number}`;
@@ -67,7 +68,7 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         ...(images ? { images, imageUrl: images.small } : {})
       };
     }),
-  ];
+  ]), [decklist, cardMap]);
 
   const flatten = raw => Array.isArray(raw)
     ? raw
@@ -99,6 +100,8 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     parts.sort();
     return parts.join('|');
   };
+
+  const targetSig = useMemo(() => signature(flatDeck), [flatDeck]);
 
   const copyToClipboard = () => {
     if (!decklist) return;
@@ -138,7 +141,11 @@ const DecklistOptions = ({ decklist, cardMap }) => {
 
   useEffect(() => {
     if (!showSaveModal || !user) return;
+
     const token = localStorage.getItem('PTCGLegendsToken');
+    if (!token) return;
+
+    let cancelled = false;
 
     fetch('/api/user/folders', {
       headers: {
@@ -146,13 +153,21 @@ const DecklistOptions = ({ decklist, cardMap }) => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) return null;
+        if (!res.ok) throw new Error('Failed to load folders');
+        return res.json();
+      })
       .then(data => {
-        const list = data.folders || data;
-        list.sort((a, b) => a.order - b.order);
+        if (!data || cancelled) return;
+        const list = (data.folders || data || []).slice().sort((a, b) => a.order - b.order);
         setFolders(list);
       })
       .catch(console.error);
+
+    return () => {
+      cancelled = true;
+    };
   }, [showSaveModal, user]);
 
   const handleModalSave = async () => {
@@ -191,7 +206,9 @@ const DecklistOptions = ({ decklist, cardMap }) => {
           body: JSON.stringify({ folderId: selectedFolderId }),
         }).catch(console.error);
       }
-
+      setIsAlreadySaved(true);
+      setExistingDeckId(deck._id || '');
+      lastCheckedSigRef.current = targetSig;
       window.location.href = '/account';
     } catch (e) {
       console.error(e);
@@ -200,31 +217,84 @@ const DecklistOptions = ({ decklist, cardMap }) => {
     }
   };
 
-  useEffect(() => {
-    if (!user) return;
-    const token = localStorage.getItem('PTCGLegendsToken');
-    const targetSig = signature(flatDeck);
+useEffect(() => {
+  if (!user) {
+    setIsAlreadySaved(false);
+    setExistingDeckId('');
+    lastCheckedSigRef.current = '';
+    return;
+  }
 
-    (async () => {
-      try {
-        const res = await fetch('/api/user/decks', {
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-        });
-        if (!res.ok) return;
+  const token = localStorage.getItem('PTCGLegendsToken');
+  if (!token || !targetSig) return;
 
-        const decks = await res.json();
-        const match = decks.find(d => {
-          const sig = signature(flatten(d.decklist));
-          return sig === targetSig;
-        });
+  if (lastCheckedSigRef.current === targetSig) return;
 
-        setIsAlreadySaved(!!match);
-        setExistingDeckId(match?._id || '');
-      } catch (e) {
+  let cancelled = false;
+
+  (async () => {
+    try {
+      const res = await fetch('/api/user/decks/check-saved', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ signature: targetSig })
+      });
+
+      if (res.status === 401) {
+        if (!cancelled) {
+          setIsAlreadySaved(false);
+          setExistingDeckId('');
+        }
+        return;
+      }
+
+      if (res.ok) {
+        const data = await res.json();
+        if (cancelled) return;
+
+        if (data.isAlreadySaved) {
+          setIsAlreadySaved(true);
+          setExistingDeckId(data.deckId || '');
+          lastCheckedSigRef.current = targetSig;
+          return;
+        }
+      }
+
+      // Fallback to the old client-side compare logic that you know works
+      const fallbackRes = await fetch('/api/user/decks', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!fallbackRes.ok) return;
+
+      const decks = await fallbackRes.json();
+      if (cancelled) return;
+
+      const match = decks.find(d => {
+        const sig = signature(flatten(d.decklist));
+        return sig === targetSig;
+      });
+
+      setIsAlreadySaved(!!match);
+      setExistingDeckId(match?._id || '');
+      lastCheckedSigRef.current = targetSig;
+    } catch (e) {
+      if (!cancelled) {
         console.error(e);
       }
-    })();
-  }, [user, decklist]);
+    }
+  })();
+
+  return () => {
+    cancelled = true;
+  };
+}, [user, targetSig]);
 
   return (
     <div className="deck-top-right-options">
