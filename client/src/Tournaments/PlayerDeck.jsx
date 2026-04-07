@@ -51,7 +51,7 @@ const PlayerDeckCenter = styled.div`
 `;
 
 const orderedSets = [
-    "POR", "ASC", "PFL", "MEG", "MEE", "MEP", "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
+    "POR", "ASC", "PFL", "MEG", "MEE", "MEP", "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVI", "SVE", "PR-SV",
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
     "CEC", "HIF", "UNM", "UNB", "DET", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
@@ -345,6 +345,15 @@ const formatToCollections = (format, eventId) => {
 const PlayerDeck = () => {
     const { theme } = useTheme();
     const { eventId, division, playerId } = useParams();
+    const validDivisions = new Set([
+        'masters',
+        'seniors',
+        'juniors',
+        'professors',
+        'olderSeniors',
+        'youngSeniors',
+        'all'
+    ]);
     const [playerData, setPlayerData] = useState(null);
     const [eventData, setEventData] = useState(null);
     const [placement, setPlacement] = useState(null);
@@ -354,10 +363,14 @@ const PlayerDeck = () => {
     const [loadingImages, setLoadingImages] = useState(true);
     const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
     const [totalCardCount, setTotalCardCount] = useState(0);
+    const [pageError, setPageError] = useState('');
+    const [loadingPage, setLoadingPage] = useState(true);
 
     const isFeatured = isFeaturedEvent(eventId);
 
     useEffect(() => {
+        let cancelled = false;
+
         const fetchCardData = async (format) => {
             try {
                 const collections = formatToCollections(format, eventId);
@@ -365,110 +378,177 @@ const PlayerDeck = () => {
                 const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
 
                 const response = await fetch(url);
-
-                if (response.ok) {
-                    const cards = await response.json();
-                    const newCardData = {};
-                    const cardMap = {};
-                    const cardNameMap = {};
-
-                    cards.forEach(card => {
-                        const key = `${card.setAbbrev}-${card.number}`;
-                        cardMap[key] = card;
-
-                        const nameKey = normalizeString(card.name);
-                        if (!cardNameMap[nameKey]) {
-                            cardNameMap[nameKey] = [];
-                        }
-                        cardNameMap[nameKey].push(card);
-                    });
-                    newCardData.cardMap = cardMap;
-                    newCardData.cardNameMap = cardNameMap;
-                    setCardData(newCardData);
-                } else {
+                if (!response.ok) {
                     console.error('Failed to fetch card data, status:', response.status);
+                    return;
                 }
+
+                const cards = await response.json();
+                if (cancelled) return;
+
+                const newCardData = {};
+                const cardMap = {};
+                const cardNameMap = {};
+
+                cards.forEach(card => {
+                    const key = `${card.setAbbrev}-${card.number}`;
+                    cardMap[key] = card;
+
+                    const nameKey = normalizeString(card.name);
+                    if (!cardNameMap[nameKey]) {
+                        cardNameMap[nameKey] = [];
+                    }
+                    cardNameMap[nameKey].push(card);
+                });
+
+                newCardData.cardMap = cardMap;
+                newCardData.cardNameMap = cardNameMap;
+                setCardData(newCardData);
             } catch (error) {
-                console.error('Error fetching card data:', error);
+                if (!cancelled) {
+                    console.error('Error fetching card data:', error);
+                }
             }
         };
 
         const fetchPlayerData = async () => {
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
-            if (response.ok) {
-                const eventData = await response.json();
-                setEventData(eventData);
-                const divisionData = eventData[division];
+            try {
+                setLoadingPage(true);
+                setPageError('');
+                setPlayerData(null);
+                setEventData(null);
+                setCardData(null);
+                setPlacement(null);
 
-                if (divisionData) {
-                    const decodedPlayerId = decodeURIComponent(playerId);
-                    const [rawName, rawFlag] = decodedPlayerId.split(/-(?=[^-]+$)/);
-                    const playerName = rawName;
-                    const playerFlag = rawFlag === 'undefined' ? undefined : rawFlag;
-                    const normalizedPlayerName = normalizeString(playerName);
-
-                    let player = divisionData.find(p =>
-                        normalizeString(p.name) === normalizedPlayerName
-                        && (playerFlag
-                            ? p.flag === playerFlag        // exact match when a real flag was provided
-                            : (p.flag === undefined || p.flag === null)  // match missing flags
-                        )
-                    );
-
-                    // 2) If not there, pull in the Day-1 static JSON and search that:
-                    if (!player) {
-                        try {
-                            const eliminated = await fetchEliminatedJson(eventId, division);
-                            player = eliminated.find(p =>
-                                normalizeString(p.name) === normalizedPlayerName &&
-                                p.flag === playerFlag
-                            );
-                            // optionally capture their “placing” if it’s in the JSON
-                            if (player && typeof player.placing === 'number') {
-                                setPlacement(player.placing);
-                            }
-                        } catch (e) {
-                            console.error('Error loading Day-1 JSON:', e);
-                        }
+                if (!eventId || !playerId || !validDivisions.has(division)) {
+                    if (!cancelled) {
+                        setPageError('not_found');
+                        setLoadingPage(false);
                     }
-
-                    // 3) If we *still* don’t have them, bail out:
-                    if (!player) {
-                        console.error('Player not found in any source:', decodedPlayerId);
-                        return;
-                    }
-
-                    // 4) Finally set state & kick off card fetch:
-                    setPlayerData(player);
-                    setPlayerData(player);
-
-                    // Determine placement: use explicit if available, otherwise fallback to index+1
-                    let pl = null;
-                    if (typeof player.placing === 'number' && player.placing > 0) {
-                        pl = player.placing;
-                    } else {
-                        const idx = divisionData.findIndex(p =>
-                            normalizeString(p.name) === normalizeString(player.name)
-                            && p.flag === player.flag
-                        );
-                        pl = idx >= 0 ? idx + 1 : null;
-                    }
-                    setPlacement(pl);
-
-                    const fmt = division === 'professors'
-                        ? eventData.formatProfessors
-                        : eventData.format;
-                    fetchCardData(fmt);
-
-                } else {
-                    console.error('Division not found in event data');
+                    return;
                 }
-            } else {
-                console.error('Failed to fetch player data');
+
+                const decodedPlayerId = decodeURIComponent(playerId || '');
+                const split = decodedPlayerId.split(/-(?=[^-]+$)/);
+
+                if (split.length < 2) {
+                    if (!cancelled) {
+                        setPageError('not_found');
+                        setLoadingPage(false);
+                    }
+                    return;
+                }
+
+                const [rawName, rawFlag] = split;
+                const playerName = rawName?.trim();
+                const playerFlag = rawFlag === 'undefined' ? undefined : rawFlag;
+                const normalizedPlayerName = normalizeString(playerName);
+
+                if (!playerName || !normalizedPlayerName) {
+                    if (!cancelled) {
+                        setPageError('not_found');
+                        setLoadingPage(false);
+                    }
+                    return;
+                }
+
+                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                if (!response.ok) {
+                    if (!cancelled) {
+                        setPageError('event_not_found');
+                        setLoadingPage(false);
+                    }
+                    return;
+                }
+
+                const fetchedEventData = await response.json();
+                if (cancelled) return;
+
+                setEventData(fetchedEventData);
+
+                const divisionData = fetchedEventData?.[division];
+                if (!Array.isArray(divisionData)) {
+                    if (!cancelled) {
+                        setPageError('division_not_found');
+                        setLoadingPage(false);
+                    }
+                    return;
+                }
+
+                let player = divisionData.find(p =>
+                    normalizeString(p.name) === normalizedPlayerName &&
+                    (playerFlag
+                        ? p.flag === playerFlag
+                        : (p.flag === undefined || p.flag === null))
+                );
+
+                if (!player && ['masters', 'seniors', 'juniors', 'professors', 'olderSeniors', 'youngSeniors'].includes(division)) {
+                    try {
+                        const eliminated = await fetchEliminatedJson(eventId, division);
+                        if (cancelled) return;
+
+                        player = eliminated.find(p =>
+                            normalizeString(p.name) === normalizedPlayerName &&
+                            p.flag === playerFlag
+                        );
+
+                        if (player && typeof player.placing === 'number') {
+                            setPlacement(player.placing);
+                        }
+                    } catch (e) {
+                        console.warn('Error loading Day-1 JSON:', e);
+                    }
+                }
+
+                if (!player) {
+                    if (!cancelled) {
+                        setPageError('player_not_found');
+                        setLoadingPage(false);
+                    }
+                    return;
+                }
+
+                if (cancelled) return;
+
+                setPlayerData(player);
+
+                let pl = null;
+                if (typeof player.placing === 'number' && player.placing > 0) {
+                    pl = player.placing;
+                } else {
+                    const idx = divisionData.findIndex(p =>
+                        normalizeString(p.name) === normalizeString(player.name) &&
+                        p.flag === player.flag
+                    );
+                    pl = idx >= 0 ? idx + 1 : null;
+                }
+                setPlacement(pl);
+
+                const fmt = division === 'professors'
+                    ? fetchedEventData.formatProfessors
+                    : fetchedEventData.format;
+
+                if (fmt) {
+                    await fetchCardData(fmt);
+                }
+
+                if (!cancelled) {
+                    setLoadingPage(false);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    console.error('Error fetching player page:', error);
+                    setPageError('not_found');
+                    setLoadingPage(false);
+                }
             }
         };
 
         fetchPlayerData();
+
+        return () => {
+            cancelled = true;
+        };
     }, [eventId, division, playerId]);
 
     const fetchEliminatedJson = async (eventId, division) => {
@@ -484,7 +564,7 @@ const PlayerDeck = () => {
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
 
     useEffect(() => {
-        if (!eventId || !division) return;
+        if (!eventId || !division || !playerData) return;
         (async () => {
             try {
                 const data = await fetchEliminatedJson(eventId, division);
@@ -493,7 +573,7 @@ const PlayerDeck = () => {
                 console.warn('No eliminated JSON for opponents:', e);
             }
         })();
-    }, [eventId, division]);
+    }, [eventId, division, playerData]);
 
     const parseOpponent = (val = '') => {
         const m = val.match(/\[([A-Z]{2})\]\s*$/);
@@ -501,13 +581,6 @@ const PlayerDeck = () => {
         const name = val.replace(/\s*\[[A-Z]{2}\]\s*$/, '').trim();
         return { code, name };
     };
-
-    // const getCountryNameSafe = (code) => {
-    //     if (typeof countryNames !== 'undefined' && countryNames) {
-    //         return countryNames[code] || 'Unknown';
-    //     }
-    //     return code || 'Unknown';
-    // };
 
     const flagSrc = (code) => flags[code] || flags.unknown;
 
@@ -521,14 +594,11 @@ const PlayerDeck = () => {
         const first = normalizeSpriteKey(firstIn);
         const second = normalizeSpriteKey(secondIn);
 
-        // both present → keep order
         if (first && second) return { first, second };
 
-        // exactly one present → put it in SECOND slot, and use "blank" for first
         const only = first || second;
         if (only) return { first: 'blank', second: only };
 
-        // nothing → no sprites
         return null;
     };
 
@@ -594,8 +664,49 @@ const PlayerDeck = () => {
         navigate(`/card/${card.set}/${card.number}`);
     };
 
-    if (!playerData) {
-        return null;
+    if (loadingPage) {
+        return (
+            <PlayerDeckCenter className='center' theme={theme}>
+                <div className="spinner"></div>
+            </PlayerDeckCenter>
+        );
+    }
+
+    if (pageError) {
+        return (
+            <PlayerDeckCenter className='center' theme={theme}>
+                <Helmet>
+                    <title>Decklist Not Found</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                </Helmet>
+                <div className='playerlistnewcolumn'>
+                    <div className="player-deck">
+                        <div className='player-deck-top'>
+                            <div>
+                                <h2>Decklist Not Found</h2>
+                                <hr className='playerdeck-hr' />
+                                <p>This tournament result deck page does not exist.</p>
+                                {eventId && (
+                                    <p>
+                                        <Link className='blue-link bold' to={`/tournaments/${eventId}`}>
+                                            Back to event
+                                        </Link>
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </PlayerDeckCenter>
+        );
+    }
+
+    if (!playerData || !eventData) {
+        return (
+            <PlayerDeckCenter className='center' theme={theme}>
+                <div className="spinner"></div>
+            </PlayerDeckCenter>
+        );
     }
 
     const cleanedDecklist = {
@@ -756,98 +867,98 @@ const PlayerDeck = () => {
                         </div>
                     )}
                     {playerData?.rounds && (
-                    <div className='opponents-playerdeck-list'>
-                        <h3>Matchups</h3>
-                        <table className="matchup-table" style={{ width: '100%' }}>
-                            <thead>
-                                <tr>
-                                    <th style={{ textAlign: 'center' }}>Rd</th>
-                                    <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
-                                    <th>&nbsp;&nbsp;&nbsp;Opponent</th>
-                                    <th style={{ textAlign: 'start',paddingLeft:'47.5px' }}>Deck</th>
-                                    <th style={{ textAlign: 'center' }}>List</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Object.entries(playerData.rounds).reverse().map(([rnd, info]) => {
-                                    const { code, name } = parseOpponent(info.name);
+                        <div className='opponents-playerdeck-list'>
+                            <h3>Matchups</h3>
+                            <table className="matchup-table" style={{ width: '100%' }}>
+                                <thead>
+                                    <tr>
+                                        <th style={{ textAlign: 'center' }}>Rd</th>
+                                        <th style={{ textAlign: 'center', opacity: 0 }}>Res</th>
+                                        <th>&nbsp;&nbsp;&nbsp;Opponent</th>
+                                        <th style={{ textAlign: 'start', paddingLeft: '47.5px' }}>Deck</th>
+                                        <th style={{ textAlign: 'center' }}>List</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(playerData.rounds).reverse().map(([rnd, info]) => {
+                                        const { code, name } = parseOpponent(info.name);
 
-                                    const results = Array.isArray(eventData?.[division]) ? eventData[division] : [];
-                                    const allPlayers = [...results, ...eliminatedRecords];
-                                    const opponent = allPlayers.find(
-                                        p => normalizeName(p?.name || '') === normalizeName(name) && p?.flag === code
-                                    );
+                                        const results = Array.isArray(eventData?.[division]) ? eventData[division] : [];
+                                        const allPlayers = [...results, ...eliminatedRecords];
+                                        const opponent = allPlayers.find(
+                                            p => normalizeName(p?.name || '') === normalizeName(name) && p?.flag === code
+                                        );
 
-                                    let sprites = null;
-                                    if (opponent?.sprite1 || opponent?.sprite2) {
-                                        sprites = makeDisplayPair(opponent.sprite1, opponent.sprite2);
-                                    } else if (opponent?.decklist) {
-                                        const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
-                                        sprites = makeDisplayPair(firstSprite, secondSprite);
-                                    }
+                                        let sprites = null;
+                                        if (opponent?.sprite1 || opponent?.sprite2) {
+                                            sprites = makeDisplayPair(opponent.sprite1, opponent.sprite2);
+                                        } else if (opponent?.decklist) {
+                                            const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
+                                            sprites = makeDisplayPair(firstSprite, secondSprite);
+                                        }
 
-                                    const bgColor =
-                                        info.result === 'W' ? 'rgba(144,238,144,0.6)' :
-                                            info.result === 'L' ? 'rgba(255,182,193,0.6)' :
-                                                info.result === 'T' ? 'rgba(255,255,102,0.6)' : 'transparent';
-                                    const textColor =
-                                        info.result === 'W' ? 'rgb(1, 63, 1)' :
-                                            info.result === 'L' ? 'darkred' :
-                                                info.result === 'T' ? 'rgb(78, 78, 7)' : 'inherit';
+                                        const bgColor =
+                                            info.result === 'W' ? 'rgba(144,238,144,0.6)' :
+                                                info.result === 'L' ? 'rgba(255,182,193,0.6)' :
+                                                    info.result === 'T' ? 'rgba(255,255,102,0.6)' : 'transparent';
+                                        const textColor =
+                                            info.result === 'W' ? 'rgb(1, 63, 1)' :
+                                                info.result === 'L' ? 'darkred' :
+                                                    info.result === 'T' ? 'rgb(78, 78, 7)' : 'inherit';
 
-                                    const isBye = name === 'BYE';
+                                        const isBye = name === 'BYE';
 
-                                    return (
-                                        <tr key={rnd}>
-                                            <td style={{ textAlign: 'center' }}>{rnd}</td>
-                                            <td className="player-result-wlt"
-                                                style={{ backgroundColor: bgColor, textAlign: 'center', color: textColor }}>
-                                                {info.result}
-                                            </td>
+                                        return (
+                                            <tr key={rnd}>
+                                                <td style={{ textAlign: 'center' }}>{rnd}</td>
+                                                <td className="player-result-wlt"
+                                                    style={{ backgroundColor: bgColor, textAlign: 'center', color: textColor }}>
+                                                    {info.result}
+                                                </td>
 
-                                            <td className="name-n-flag-recmodal name-n-flag-recmodal-decklistpage" style={{ marginLeft: 3 }}>
-                                                <div className="flag-container" style={{ opacity: isBye ? 0 : 1 }}>
-                                                    <img className="flag-size" src={flagSrc(code)} alt={code} />
-                                                </div>
+                                                <td className="name-n-flag-recmodal name-n-flag-recmodal-decklistpage" style={{ marginLeft: 3 }}>
+                                                    <div className="flag-container" style={{ opacity: isBye ? 0 : 1 }}>
+                                                        <img className="flag-size" src={flagSrc(code)} alt={code} />
+                                                    </div>
 
-                                                <span className="link-to-playerrecords">
-                                                    {isBye ? 'BYE' : formatName(name)}
-                                                </span>
-                                            </td>
+                                                    <span className="link-to-playerrecords">
+                                                        {isBye ? 'BYE' : formatName(name)}
+                                                    </span>
+                                                </td>
 
-                                            <td className='opponent-sprites-cell sing-cells-sprites'>
-                                                {sprites ? (
-                                                    <DisplayPokemonSprites
-                                                        decklist={opponent?.decklist}
-                                                        sprite1={sprites.first}
-                                                        sprite2={sprites.second}
-                                                    />
-                                                ) : (
-                                                    <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : ''}</em>
-                                                )}
-                                            </td>
+                                                <td className='opponent-sprites-cell sing-cells-sprites'>
+                                                    {sprites ? (
+                                                        <DisplayPokemonSprites
+                                                            decklist={opponent?.decklist}
+                                                            sprite1={sprites.first}
+                                                            sprite2={sprites.second}
+                                                        />
+                                                    ) : (
+                                                        <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : ''}</em>
+                                                    )}
+                                                </td>
 
-                                            <td className="player-decklink-cell" style={{ textAlign: 'center' }}>
-                                                {opponent?.decklist ? (
-                                                    <Link
-                                                        to={`/tournaments/${eventId}/${division}/${encodeURIComponent(opponent?.name || name)}-${opponent?.flag || code}`}
-                                                        title="Decklist"
-                                                    >
-                                                        <span className="material-symbols-outlined">
-                                                            format_list_bulleted
-                                                        </span>
-                                                    </Link>
-                                                ) : (
-                                                    <span style={{ opacity: 0.4 }}>—</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                                                <td className="player-decklink-cell" style={{ textAlign: 'center' }}>
+                                                    {opponent?.decklist ? (
+                                                        <Link
+                                                            to={`/tournaments/${eventId}/${division}/${encodeURIComponent(opponent?.name || name)}-${opponent?.flag || code}`}
+                                                            title="Decklist"
+                                                        >
+                                                            <span className="material-symbols-outlined">
+                                                                format_list_bulleted
+                                                            </span>
+                                                        </Link>
+                                                    ) : (
+                                                        <span style={{ opacity: 0.4 }}>—</span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </PlayerDeckCenter>
