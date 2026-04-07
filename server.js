@@ -20,6 +20,26 @@ app.use(express.json());
 
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const CANONICAL_HOST = 'www.ptcglegends.com';
+const HEROKU_HOSTS = new Set([
+  'ptcg-legends-6abc11783376.herokuapp.com',
+  'ptcglegends.herokuapp.com',
+]);
+
+app.use((req, res, next) => {
+  const host = (req.headers.host || '').toLowerCase();
+
+  if (HEROKU_HOSTS.has(host)) {
+    return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+  }
+
+  if (host === 'ptcglegends.com') {
+    return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+  }
+
+  next();
+});
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {

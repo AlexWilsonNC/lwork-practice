@@ -238,19 +238,29 @@ const formatToCollections = (format) => {
   const endIndex = orderedSets.indexOf(endSet);
 
   if (startIndex === -1 || endIndex === -1) {
-      throw new Error('Invalid format range');
+    throw new Error('Invalid format range');
   }
 
-  const [actualStart, actualEnd] = startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
-  const collections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+  const [actualStart, actualEnd] =
+    startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
+
+  const baseCollections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+
+  const extras = [];
 
   Object.keys(promoSets).forEach((set) => {
-      if (collections.includes(set) && !collections.includes(promoSets[set])) {
-          collections.push(promoSets[set]);
-      }
+    if (!baseCollections.includes(set)) return;
+
+    const promoValue = promoSets[set];
+
+    if (Array.isArray(promoValue)) {
+      extras.push(...promoValue);
+    } else {
+      extras.push(promoValue);
+    }
   });
-  
-  return collections;
+
+  return [...new Set([...baseCollections, ...extras])];
 };
 
 const normalizeAttacks = (attacks) => {

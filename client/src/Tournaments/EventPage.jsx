@@ -363,22 +363,34 @@ const formatToCollections = (format, eventId) => {
         throw new Error('Invalid format range');
     }
 
-    const [actualStart, actualEnd] = startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
-    const collections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+    const [actualStart, actualEnd] =
+        startIndex < endIndex ? [startIndex, endIndex] : [endIndex, startIndex];
+
+    const baseCollections = orderedSets.slice(actualStart, actualEnd + 1).reverse();
+    const extras = [];
 
     Object.keys(promoSets).forEach((set) => {
-        if (collections.includes(set) && !collections.includes(promoSets[set])) {
-            collections.push(promoSets[set]);
+        if (!baseCollections.includes(set)) return;
+
+        const promoValue = promoSets[set];
+        if (Array.isArray(promoValue)) {
+            extras.push(...promoValue);
+        } else {
+            extras.push(promoValue);
         }
     });
 
     // cards not in format , but allowed for display without messing up the event's format
     // in PlayerDeck.jsx too!
-    if (eventId === '2026_SANTIAGO' || '2026_SYDNEY' || '2026_EUIC' || '2026_SEATTLE' && !collections.includes('ASC')) {
-        collections.unshift('ASC');
+    if (
+        ['2026_SANTIAGO', '2026_SYDNEY', '2026_EUIC', '2026_SEATTLE'].includes(eventId) &&
+        !baseCollections.includes('ASC') &&
+        !extras.includes('ASC')
+    ) {
+        extras.unshift('ASC');
     }
 
-    return collections;
+    return [...new Set([...baseCollections, ...extras])];
 };
 
 const EventPageContent = styled.div`
