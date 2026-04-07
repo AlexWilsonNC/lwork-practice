@@ -1559,10 +1559,9 @@ const tournamentList = [
         "name": "Orlando Regionals",
         "eventType": "regionals",
         "eventLogo": regional25,
-        "date": "Apr 3, 2026",
+        "date": "Apr 4, 2026",
         "flag": usa,
-        "location": "Orlando, Florida",
-        "results": false
+        "location": "Orlando, Florida"
     },
     {
         "id": "2026_LOS_ANGELES",
@@ -1628,8 +1627,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Apr 4, 2026",
         "flag": mexico,
-        "location": "Querétaro, Mexico",
-        "results": false
+        "location": "Querétaro, Mexico"
     },
     {
         "id": "2026_UTRECHT",
