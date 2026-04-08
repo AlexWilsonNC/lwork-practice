@@ -562,6 +562,8 @@ const customLabelsConfig = {
         'alakazam-mega-espeon': 'Mega Alakazam',
     },
     '2016': {
+        'vespiquen-raichu': 'Vespiquen Raichu',
+        'manectric-mega-seismitoad': 'Mega Manectric',
         'wailord-aegislash': 'Wall Stall',
         'rayquaza-mega-jolteon': 'Mega Rayquaza',
         'blank-serperior': 'Serperior',
@@ -602,6 +604,8 @@ const customLabelsConfig = {
         'houndoom-bunnelby': 'Houndoom Mill',
     },
     '2015': {
+        'raichu-leafeon': 'Raichu',
+        'seismitoad-shaymin-sky': 'Seismitoad Shaymin',        
         'manectric-mega-trubbish': 'Mega Manectric',
         'manectric-mega-reshiram': 'Mega Manectric',
         'raichu-bronzong': 'Raichu Box',
@@ -768,6 +772,7 @@ const customLabelsConfig = {
         'blank-gengar': 'Gengar',
         'gengar-nidoqueen': 'QueenGar',
         'blank-palkia': 'Palkia Lock',
+        'flygon-abomasnow': 'Flygon Abomasnow',
         'flygon-machamp': 'Flygon Machamp',
         'flygon-weavile': 'Flygon Weavile',
         'honchkrow-toxicroak': 'SP Box',

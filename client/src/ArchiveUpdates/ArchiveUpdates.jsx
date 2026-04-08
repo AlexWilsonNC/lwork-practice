@@ -54,6 +54,7 @@ import donphan from '../../public/assets/sprites/donphan.png'
 import muk from '../../public/assets/sprites/muk.png'
 import wobbuffet from '../../public/assets/sprites/wobbuffet.png'
 import serperior from '../../public/assets/sprites/serperior.png'
+import abomasnow from '../../public/assets/sprites/abomasnow.png'
 import aggron from '../../public/assets/sprites/aggron.png'
 import pumpkaboo from '../../public/assets/sprites/pumpkaboo.png'
 import joltik from '../../public/assets/sprites/joltik.png'
@@ -63,6 +64,7 @@ import raichu from '../../public/assets/sprites/raichu.png'
 import gengar from '../../public/assets/sprites/gengar.png'
 import trevenant from '../../public/assets/sprites/trevenant.png'
 import reshiram from '../../public/assets/sprites/reshiram.png'
+import volcanion from '../../public/assets/sprites/volcanion.png'
 import megamanectric from '../../public/assets/sprites/manectric-mega.png'
 import keldeo from '../../public/assets/sprites/keldeo-resolute.png'
 import crobat from '../../public/assets/sprites/crobat.png'
@@ -113,7 +115,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Apr 1, 2026</p>
+          <p>Last Updated: Apr 8, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -122,11 +124,23 @@ const ArchiveUpdates = () => {
         {/* Article Content */}
         <div className='article-content archive-updates'>
 
+          {/* <hr className='archive-updates-mini-hr'></hr> */}
+
           <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>April 2026</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/tournaments/2017_EUIC' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={volcanion} alt="sprite" />
+            </div>
+            <p>Nicolas Galaz (Masters) - 33<sup>rd</sup> Place <span>2017 EUIC</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
 
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -142,6 +156,16 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={bronzong} alt="sprite" />
             </div>
             <p>Alex Koch (Masters) - 87<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <a href='/tournaments/2009_WORLDS' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={flygon} alt="sprite" />
+              <img className="sprite second-sprite" src={abomasnow} alt="sprite" />
+            </div>
+            <p>Anna Schipper (Masters) - 25<sup>th</sup> Place <span>2009 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <hr className='title-hr' />
