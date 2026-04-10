@@ -72,6 +72,7 @@ export const bannedInGLC = [
   { name: 'Double Colorless Energy', set: 'BS', number: '96' },
   { name: 'Twin Energy', set: 'RCL', number: '174' },
   { name: 'Twin Energy', set: 'RCL', number: '209' },
+  { name: 'Dimension Valley', set: 'PHF', number: '93' },
 ];
 
 const ccNumber = (card) => {
@@ -132,7 +133,7 @@ export function isGLCLegal(card) {
 }
 
 // NOTE: pass in a cardMap (like your cardData.cardMap) *if* you want reprint logic for Trainers/Energies.
-export function isStandardLegal(card, { regulationMarks = ['G','H','I','J','K','L','M'], cardMap } = {}) {
+export function isStandardLegal(card, { regulationMarks = ['H','I','J','K','L','M'], cardMap } = {}) {
   if (card.regulationMark && regulationMarks.includes(card.regulationMark)) return true;
 
   // Reprint rule for Trainers/Energies: any reprint with a legal reg mark counts
