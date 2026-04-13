@@ -40,6 +40,7 @@ import gallade from '../../public/assets/sprites/gallade.png'
 import gliscor from '../../public/assets/sprites/gliscor.png'
 import spiritomb from '../../public/assets/sprites/spiritomb.png'
 import tyrantiar from '../../public/assets/sprites/tyranitar.png'
+import celebi from '../../public/assets/sprites/celebi.png'
 import shiftry from '../../public/assets/sprites/shiftry.png'
 import glaceon from '../../public/assets/sprites/glaceon.png'
 import blaziken from '../../public/assets/sprites/blaziken.png'
@@ -115,7 +116,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Apr 8, 2026</p>
+          <p>Last Updated: Apr 13, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -156,6 +157,16 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={bronzong} alt="sprite" />
             </div>
             <p>Alex Koch (Masters) - 87<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          
+          <a href='/tournaments/2012_WORLDS/masters/Xavier%20Chua-SG' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={celebi} alt="sprite" />
+              <img className="sprite second-sprite" src={mewtwo} alt="sprite" />
+            </div>
+            <p>Xavier Chua (Masters) - 10<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>
