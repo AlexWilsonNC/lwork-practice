@@ -2149,6 +2149,34 @@ const CardSearch = React.forwardRef(function CardSearch(
                                         </button>
                                     </div>
                                 </div>
+                                {draftFilters.formatRange?.from && draftFilters.formatRange?.to && !selectedQuickFormat && (
+                                    <div className="filter-group custom-format-note">
+                                        <h3></h3>
+                                        <div
+                                            className="banned-cards-note"
+                                            role="note"
+                                            style={{
+                                                padding: '8px 10px',
+                                                borderRadius: 6,
+                                                border: '1px solid rgba(255,255,255,0.15)',
+                                                background: 'rgba(255,255,255,0.06)',
+                                                fontSize: 12,
+                                                lineHeight: 1.4,
+                                                maxWidth: 680
+                                            }}
+                                        >
+                                            <span
+                                                className="material-symbols-outlined"
+                                                style={{ verticalAlign: '-2px', marginRight: 6 }}
+                                            >
+                                                info
+                                            </span>
+                                            <p style={{ margin: 0, opacity: 0.85, fontStyle: 'italic' }}>
+                                                Promos currently are not applied when selecting a custom range.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
                                 {(() => {
                                     const ov = getActiveOverride(selectedQuickFormat);
                                     const showPopularFormatPromoMessage =
@@ -2239,7 +2267,7 @@ const CardSearch = React.forwardRef(function CardSearch(
                                                                 info
                                                             </span>
                                                             <p style={{ marginTop: (pairs.length > 0 || legacyNames.length > 0) ? 8 : undefined, opacity: 0.85, fontStyle: 'italic' }}>
-                                                                We are working on promo legality for this format, for now promos will not be displayed in the results.
+                                                                We are working on promo legality for this format, for now, promos will not be displayed in this filter.
                                                             </p>
                                                         </>
                                                     )}

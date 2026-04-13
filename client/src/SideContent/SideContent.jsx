@@ -63,12 +63,12 @@ const SidebarComponent = () => {
       <div className='side-section'>
         <h4>Helpful Resources:</h4>
         <ul>
+          <li><Link to='/deckbuilder'>Deck Builder</Link></li>
           <li><Link to='/tournaments/completed'>Completed Events</Link></li>
           <li><Link to='/tournaments/upcoming'>Upcoming Events</Link></li>
+          <li><Link to='/rules-by-era'>Rules by Era</Link></li>
           {/* Trigger interstitial for the "Decks by Era" link */}
           <li><a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')}>Decks by Era</a></li>
-          <li><Link to='/rules-by-era'>Rules by Era</Link></li>
-          <li><Link to='/deckbuilder'>Deck Builder</Link></li>
           {/* <li><Link to='' className='not-ready'>World's Booklets</Link></li> */}
           <li><a href='https://www.seagrovetcg.com/event-finder' target='_blank' rel='noopener noreferrer'>Local Event Finder</a></li>
         </ul>
@@ -77,12 +77,11 @@ const SidebarComponent = () => {
       <div className='side-section'>
         <h4>Popular Pages:</h4>
         <ol>
+          <li><Link to='/deckbuilder'>Deck Builder</Link></li>
           <li><Link to='/tournaments/2010_WORLDS'>2015 World Championships</Link></li>
           <li><Link to='/player/jason-klaczynski-US'>Jason Klaczynski's Player Page</Link></li>
-          <li><Link to='/player/tord-reklev-NO'>Tord Reklev's Player Page</Link></li>
-          <li><Link to='/tournaments/2025_WORLDS'>2025 World Championships</Link></li>
           <li><Link to='/tournaments/2002_WORLDS'>2002 World Championships</Link></li>
-
+          <li><Link to='/player/tord-reklev-NO'>Tord Reklev's Player Page</Link></li>
         </ol>
       </div>
 

@@ -3600,7 +3600,9 @@ body.deckbuilder-page .deck-builder {
     height: auto;
     margin-bottom: -5px;
   }
-
+  .custom-format-note {
+    margin-top: -50px;
+  }
   .era-btn {
     padding: 0 7px;
     margin: 0 5px 10px 5px;
