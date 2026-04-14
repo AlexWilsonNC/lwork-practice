@@ -1640,6 +1640,22 @@ const CardSearch = React.forwardRef(function CardSearch(
     }
 
     const [showAdvanced, setShowAdvanced] = useState(false);
+    
+    useEffect(() => {
+        if (!showAdvanced) return;
+
+        const artworkUrls = Object.values(SET_ARTWORKS).filter(Boolean);
+        const logoUrls = SET_OPTIONS_SORTED_NO_PROMOS.map(s => s.img).filter(Boolean);
+
+        const allUrls = [...new Set([...artworkUrls, ...logoUrls])];
+        const preloaded = [];
+
+        allUrls.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+            preloaded.push(img);
+        });
+    }, [showAdvanced, SET_OPTIONS_SORTED_NO_PROMOS]);
 
     const emptyFilters = React.useMemo(() => ({
         supertypes: {},
