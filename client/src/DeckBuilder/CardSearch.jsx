@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-// GREAT SPOT!
 import setOrder from '../Tournaments/setorder'
 import { availableSets as cardsPageSets } from '../Cards/CardsPage';
 import './setsInAdvancedDropdown.css'
@@ -222,6 +221,40 @@ const MECH_BG = {
     'shining': mechShining,
 };
 
+import porArt from '../assets/homepage/latest-expansion.webp';
+import mewArt from '../assets/sets-filter-backgrounds/sv/151.webp';
+import obfArt from '../assets/sets-filter-backgrounds/sv/obsidian-flames.png';
+import pafArt from '../assets/sets-filter-backgrounds/sv/paf.png';
+import parArt from '../assets/sets-filter-backgrounds/sv/paradox-rift.jpg';
+import sviArt from '../assets/sets-filter-backgrounds/sv/scarlet-violet.png';
+import palArt from '../assets/sets-filter-backgrounds/sv/sv2.jpg';
+import tefArt from '../assets/sets-filter-backgrounds/sv/sv5.jpg';
+import twmArt from '../assets/sets-filter-backgrounds/sv/sv6.png';
+import asrArt from '../assets/sets-filter-backgrounds/sw/astral-radiance.jpg';
+import bstArt from '../assets/sets-filter-backgrounds/sw/battle-styles.jpg';
+import brsArt from '../assets/sets-filter-backgrounds/sw/brilliant-stars.jpg';
+import celArt from '../assets/sets-filter-backgrounds/sw/celebrations.png';
+import creArt from '../assets/sets-filter-backgrounds/sw/chilling-reign.jpg';
+import cpaArt from '../assets/sets-filter-backgrounds/sw/champions-path.jpg';
+
+const SET_ARTWORKS = {
+    POR: porArt,
+    MEW: mewArt,
+    OBF: obfArt,
+    PAF: pafArt,
+    PAR: parArt,
+    PAL: palArt,
+    SVI: sviArt,
+    TEF: tefArt,
+    TWM: twmArt,
+    ASR: asrArt,
+    BST: bstArt,
+    BRS: brsArt,
+    CPA: cpaArt,
+    CEL: celArt,
+    CRE: creArt,
+};
+
 const slugCss = (s) =>
     String(s || '')
         .normalize('NFKD')
@@ -231,6 +264,99 @@ const slugCss = (s) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
+function SetTilePicker({ title, value, onChange, options, columns = 5 }) {
+    const [open, setOpen] = React.useState(false);
+
+    const selectedOption = options.find(opt => opt.key === value) || null;
+
+    return (
+        <div className="set-tile-picker">
+            <h4 className="set-tile-picker-title">{title}</h4>
+
+            <button
+                type="button"
+                className={`set-tile-trigger ${open ? 'open' : ''}`}
+                onClick={() => setOpen(o => !o)}
+            >
+                {selectedOption ? (
+                    <>
+                        <div
+                            className="set-tile-trigger-art"
+                            style={
+                                SET_ARTWORKS[selectedOption.key]
+                                    ? { backgroundImage: `url(${SET_ARTWORKS[selectedOption.key]})` }
+                                    : undefined
+                            }
+                        />
+                        <div className="set-tile-trigger-meta">
+                            {selectedOption.img ? (
+                                <img
+                                    src={selectedOption.img}
+                                    alt={`${selectedOption.name} logo`}
+                                    className="set-tile-trigger-logo"
+                                />
+                            ) : (
+                                <span className="set-tile-fallback">{selectedOption.key}</span>
+                            )}
+                            <div className="set-tile-trigger-code">
+                                {selectedOption.name} ({selectedOption.key})
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <span className="set-tile-placeholder">Select a set...</span>
+                )}
+
+                <span className="material-symbols-outlined set-tile-trigger-chevron">
+                    {open ? 'expand_less' : 'expand_more'}
+                </span>
+            </button>
+
+            {open && (
+                <div
+                    className="set-tile-grid"
+                    style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+                >
+                    {options.map(({ key, name, img }) => {
+                        const bg = SET_ARTWORKS[key] || '';
+                        const selected = value === key;
+
+                        return (
+                            <button
+                                key={key}
+                                type="button"
+                                className={`set-tile-btn ${selected ? 'selected' : ''}`}
+                                onClick={() => {
+                                    onChange(key);
+                                    setOpen(false);
+                                }}
+                                title={`${name} (${key})`}
+                            >
+                                <div
+                                    className="set-tile-art"
+                                    style={bg ? { backgroundImage: `url(${bg})` } : undefined}
+                                />
+                                <div className="set-tile-logo-wrap">
+                                    {img ? (
+                                        <img
+                                            src={img}
+                                            alt={`${name} logo`}
+                                            className="set-tile-logo"
+                                        />
+                                    ) : (
+                                        <span className="set-tile-fallback">{key}</span>
+                                    )}
+                                </div>
+                                <div className="set-tile-code">{name} &nbsp;({key})</div>
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+}
+
 const CardSearch = React.forwardRef(function CardSearch(
     { onAddCard, onCardClick, onRemoveFromDeck, themeName },
     ref
@@ -238,7 +364,7 @@ const CardSearch = React.forwardRef(function CardSearch(
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [defaultCards, setDefault] = useState([])
-    const [suppressDefault, setSuppressDefault] = useState(true) // PT2 - Auto load most recent set - value=false
+    const [suppressDefault, setSuppressDefault] = useState(true)
     // const [showSets, setShowSets] = useState(false)
     const [isSearchVisible, setIsSearchVisible] = useState(() => window.innerWidth > 1160);
     const widthRef = useRef(window.innerWidth);
@@ -661,8 +787,6 @@ const CardSearch = React.forwardRef(function CardSearch(
                 case 'tera':
                     if (st === 'pokemon' && hasSub('tera')) return true;
                     break;
-
-                // --- “Show more” mechanics:
                 case 'fusion strike':
                     if (hasSub('fusion strike') || rulesText.includes('fusion strike')) return true;
                     break;
@@ -1152,12 +1276,21 @@ const CardSearch = React.forwardRef(function CardSearch(
         'BS|G2': 'prop_15_3'
     };
 
-    const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
-        const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
-        return SET_OPTIONS
-            .filter(o => !PROMO_SET_KEYS.has(o.key))
-            .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
-    }, [SET_OPTIONS, setIndexMap]);
+   const HIDDEN_CUSTOM_FORMAT_SETS = new Set([
+    'MEE',
+    'SVE',
+    'PR-SV',
+    'PR-SW',
+    'PR-SM',
+]);
+
+const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
+    const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
+    return SET_OPTIONS
+        .filter(o => !PROMO_SET_KEYS.has(o.key))
+        .filter(o => !HIDDEN_CUSTOM_FORMAT_SETS.has(o.key))
+        .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
+}, [SET_OPTIONS, setIndexMap]);
 
     const isAbbrevInRange = (abbr, fromKey, toKey) => {
         const ai = setIndexMap[abbr];
@@ -1597,29 +1730,6 @@ const CardSearch = React.forwardRef(function CardSearch(
         return Array.from(variants);
     }
 
-    // LOAD MOST RECENT SET IN CARD SEARCH ON LOAD - SEARCH FOR PT2 TO ADD BACK
-    // useEffect(() => {
-    //     const newestSet = setOrder[0]
-    //     fetch(`/api/cards/${encodeURIComponent(newestSet)}`)
-    //         .then(res => {
-    //             if (!res.ok) throw new Error(`Network ${res.status}`)
-    //             return res.json()
-    //         })
-    //         .then(data => {
-    //             const arr = Array.isArray(data) ? data : []
-    //             arr.sort((a, b) => {
-    //                 const nA = parseInt(a.number, 10) || 0
-    //                 const nB = parseInt(b.number, 10) || 0
-    //                 return nA - nB
-    //             })
-    //             setDefault(arr)
-    //             setResults(arr)
-    //         })
-    //         .catch(err => {
-    //             console.error('Failed to load default set:', err)
-    //         })
-    // }, [])
-
     useEffect(() => {
         const imgs = [
             ...ERA_OPTIONS.map(o => o.src),
@@ -2044,19 +2154,6 @@ const CardSearch = React.forwardRef(function CardSearch(
                                             >
                                                 GLC
                                             </button>
-
-                                            {/* {selectedLegalityPreset && (
-                                                <button
-                                                    type="button"
-                                                    className="clear-x-btn hide-on-filter-mobile"
-                                                    style={{ '--typeIcon': 'none' }}
-                                                    onClick={() => setSelectedLegalityPreset('')}
-                                                >
-                                                    <span class="material-symbols-outlined">
-                                                cancel
-                                            </span>
-                                                </button>
-                                            )} */}
                                         </div>
                                     </div>
                                 </div>
@@ -2094,58 +2191,51 @@ const CardSearch = React.forwardRef(function CardSearch(
                                             ))}
                                         </optgroup>
                                     </select>
-                                    {/* <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={!!draftFilters.includePromos}
-                                            onChange={(e) => setDraftFilters(f => ({ ...f, includePromos: e.target.checked }))}
-                                        />
-                                        <span>Include promos? <span style={{ opacity: 0.7 }}>
-                                            Some legalities may be inaccurate; preselected formats are more accurate.
-                                        </span></span>
-                                    </label> */}
                                 </div>
                                 <div className="filter-group">
                                     <h3><span className='display-on-filter-mobile'>Custom Format</span></h3>
-                                    <div className='sets-filter-div'>
-                                        <select
-                                            className={`type-btn non-bold-typebtn hp-btn-dropdown select-first-set-drop ${draftFilters.formatRange?.from ? '' : 'is-placeholder'}`}
+                                    <div className="custom-format-tile-layout">
+                                        <SetTilePicker
+                                            title="First set"
                                             value={draftFilters.formatRange?.from || ''}
-                                            onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), from: e.target.value } }))}
-                                            style={{ minWidth: 220, color: draftFilters.formatRange?.from ? 'inherit' : 'rgba(255,255,255,0.55)' }}
-                                        >
-                                            <option value="" disabled>Select first set…</option>
-                                            {SET_OPTIONS_SORTED_NO_PROMOS.map(({ key, name }) => (
-                                                <option key={key} value={key}>{name} ({key})</option>
-                                            ))}
-                                        </select>
+                                            options={SET_OPTIONS_SORTED_NO_PROMOS}
+                                            onChange={(key) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    formatRange: { ...(f.formatRange || {}), from: key }
+                                                }))
+                                            }
+                                            columns={5}
+                                        />
 
-                                        <label class='through-sets-word' style={{ opacity: 0.85 }}>through</label>
+                                        <div className="custom-format-through-label">through</div>
 
-                                        <select
-                                            className={`type-btn non-bold-typebtn hp-btn-dropdown select-second-set-drop ${draftFilters.formatRange?.to ? '' : 'is-placeholder'}`}
+                                        <SetTilePicker
+                                            title="Second set"
                                             value={draftFilters.formatRange?.to || ''}
-                                            onChange={(e) => setDraftFilters(f => ({ ...f, formatRange: { ...(f.formatRange || {}), to: e.target.value } }))}
-                                            style={{ minWidth: 220, color: draftFilters.formatRange?.to ? 'inherit' : 'rgba(255,255,255,0.55)' }}
-                                        >
-                                            <option value="" disabled>Select second set…</option>
-                                            {SET_OPTIONS_SORTED_NO_PROMOS.map(({ key, name }) => (
-                                                <option key={key} value={key}>{name} ({key})</option>
-                                            ))}
-                                        </select>
+                                            options={SET_OPTIONS_SORTED_NO_PROMOS}
+                                            onChange={(key) =>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    formatRange: { ...(f.formatRange || {}), to: key }
+                                                }))
+                                            }
+                                            columns={5}
+                                        />
 
                                         <button
                                             type="button"
-                                            className="clear-x-btn hide-on-filter-mobile hide-on-filter-mobile"
+                                            className="clear-x-btn hide-on-filter-mobile"
                                             onClick={() => {
                                                 setSelectedQuickFormat('');
                                                 setSelectedLegalityPreset('');
-                                                setDraftFilters(f => ({ ...f, formatRange: { from: '', to: '' } }))
-                                            }
-                                            }
-                                        ><span class="material-symbols-outlined">
-                                                cancel
-                                            </span>
+                                                setDraftFilters(f => ({
+                                                    ...f,
+                                                    formatRange: { from: '', to: '' }
+                                                }));
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined">cancel</span>
                                         </button>
                                     </div>
                                 </div>

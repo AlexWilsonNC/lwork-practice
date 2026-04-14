@@ -317,6 +317,7 @@ const DeckBuilderComp = styled.div`
     .card-modal-content {
       background-image: ${({ theme }) => theme.cardModalContentZoomCard};
     }
+    .set-tile-code {color: ${({ theme }) => theme.text};}
 `;
 
 export default function DeckBuilder() {
