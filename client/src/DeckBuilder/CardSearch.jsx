@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import setOrder from '../Tournaments/setorder'
 import { availableSets as cardsPageSets } from '../Cards/CardsPage';
-import './setsInAdvancedDropdown.css'
+import '../css/setsInAdvancedDropdown.css'
 import { isGLCLegal, isExpandedLegal, isStandardLegal } from '../Tools/CardLegality';
+import { SET_ARTWORKS, CUSTOM_FORMAT_SET_SECTIONS } from './advancedSets';
 
 import bw1 from '../assets/sets/black-white/bw1-bw.png'
 import dp1 from '../assets/sets/diamond-pearl/dp1-diamond-pearl.png'
@@ -221,40 +222,6 @@ const MECH_BG = {
     'shining': mechShining,
 };
 
-import porArt from '../assets/homepage/latest-expansion.webp';
-import mewArt from '../assets/sets-filter-backgrounds/sv/151.webp';
-import obfArt from '../assets/sets-filter-backgrounds/sv/obsidian-flames.png';
-import pafArt from '../assets/sets-filter-backgrounds/sv/paf.png';
-import parArt from '../assets/sets-filter-backgrounds/sv/paradox-rift.jpg';
-import sviArt from '../assets/sets-filter-backgrounds/sv/scarlet-violet.png';
-import palArt from '../assets/sets-filter-backgrounds/sv/sv2.jpg';
-import tefArt from '../assets/sets-filter-backgrounds/sv/sv5.jpg';
-import twmArt from '../assets/sets-filter-backgrounds/sv/sv6.png';
-import asrArt from '../assets/sets-filter-backgrounds/sw/astral-radiance.jpg';
-import bstArt from '../assets/sets-filter-backgrounds/sw/battle-styles.jpg';
-import brsArt from '../assets/sets-filter-backgrounds/sw/brilliant-stars.jpg';
-import celArt from '../assets/sets-filter-backgrounds/sw/celebrations.png';
-import creArt from '../assets/sets-filter-backgrounds/sw/chilling-reign.jpg';
-import cpaArt from '../assets/sets-filter-backgrounds/sw/champions-path.jpg';
-
-const SET_ARTWORKS = {
-    POR: porArt,
-    MEW: mewArt,
-    OBF: obfArt,
-    PAF: pafArt,
-    PAR: parArt,
-    PAL: palArt,
-    SVI: sviArt,
-    TEF: tefArt,
-    TWM: twmArt,
-    ASR: asrArt,
-    BST: bstArt,
-    BRS: brsArt,
-    CPA: cpaArt,
-    CEL: celArt,
-    CRE: creArt,
-};
-
 const slugCss = (s) =>
     String(s || '')
         .normalize('NFKD')
@@ -264,10 +231,14 @@ const slugCss = (s) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-function SetTilePicker({ title, value, onChange, options, columns = 5 }) {
-    const [open, setOpen] = React.useState(false);
-
+function SetTilePicker({ title, value, onChange, options, columns = 5, pickerId, openSetPicker, setOpenSetPicker }) {
+    const open = openSetPicker === pickerId;
     const selectedOption = options.find(opt => opt.key === value) || null;
+
+    const optionMap = React.useMemo(
+        () => Object.fromEntries(options.map(opt => [opt.key, opt])),
+        [options]
+    );
 
     return (
         <div className="set-tile-picker">
@@ -276,18 +247,18 @@ function SetTilePicker({ title, value, onChange, options, columns = 5 }) {
             <button
                 type="button"
                 className={`set-tile-trigger ${open ? 'open' : ''}`}
-                onClick={() => setOpen(o => !o)}
+                onClick={() => setOpenSetPicker(open ? null : pickerId)}
             >
                 {selectedOption ? (
                     <>
-                        <div
+                        {/* <div
                             className="set-tile-trigger-art"
                             style={
                                 SET_ARTWORKS[selectedOption.key]
                                     ? { backgroundImage: `url(${SET_ARTWORKS[selectedOption.key]})` }
                                     : undefined
                             }
-                        />
+                        /> */}
                         <div className="set-tile-trigger-meta">
                             {selectedOption.img ? (
                                 <img
@@ -315,40 +286,167 @@ function SetTilePicker({ title, value, onChange, options, columns = 5 }) {
             {open && (
                 <div
                     className="set-tile-grid"
-                    style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+                    style={{ gridTemplateColumns: `repeat(${window.innerWidth <= 650 ? 3 : window.innerWidth <= 1000 ? 4 : 5}, minmax(0, 1fr))` }}
                 >
-                    {options.map(({ key, name, img }) => {
-                        const bg = SET_ARTWORKS[key] || '';
-                        const selected = value === key;
+                    <button
+                        type="button"
+                        className="set-tile-grid-close"
+                        onClick={() => setOpenSetPicker(null)}
+                        aria-label="Close set picker"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                    {CUSTOM_FORMAT_SET_SECTIONS.map(section => {
+                        const sectionOptions = section.keys
+                            .map(key => optionMap[key])
+                            .filter(Boolean);
+
+                        if (!sectionOptions.length) return null;
 
                         return (
-                            <button
-                                key={key}
-                                type="button"
-                                className={`set-tile-btn ${selected ? 'selected' : ''}`}
-                                onClick={() => {
-                                    onChange(key);
-                                    setOpen(false);
-                                }}
-                                title={`${name} (${key})`}
-                            >
-                                <div
-                                    className="set-tile-art"
-                                    style={bg ? { backgroundImage: `url(${bg})` } : undefined}
-                                />
-                                <div className="set-tile-logo-wrap">
-                                    {img ? (
-                                        <img
-                                            src={img}
-                                            alt={`${name} logo`}
-                                            className="set-tile-logo"
-                                        />
-                                    ) : (
-                                        <span className="set-tile-fallback">{key}</span>
-                                    )}
-                                </div>
-                                <div className="set-tile-code">{name} &nbsp;({key})</div>
-                            </button>
+                            <React.Fragment key={section.title}>
+                                <div className="set-tile-era-header">{section.title}</div>
+
+                                {sectionOptions.map(({ key, name, img }) => {
+                                    const bg = SET_ARTWORKS[key] || '';
+                                    const selected = value === key;
+
+                                    return (
+                                        <button
+                                            key={key}
+                                            type="button"
+                                            className={`set-tile-btn ${selected ? 'selected' : ''}`}
+                                            onClick={() => {
+                                                onChange(value === key ? '' : key);
+                                                setOpenSetPicker(null);
+                                            }}
+                                            title={`${name} (${key})`}
+                                        >
+                                            <div
+                                                className="set-tile-art"
+                                                style={bg ? { backgroundImage: `url(${bg})` } : undefined}
+                                            />
+                                            <div className="set-tile-logo-wrap">
+                                                {img ? (
+                                                    <img
+                                                        src={img}
+                                                        alt={`${name} logo`}
+                                                        className="set-tile-logo"
+                                                    />
+                                                ) : (
+                                                    <span className="set-tile-fallback">{key}</span>
+                                                )}
+                                            </div>
+                                            <div className="set-tile-code">{name} ({key})</div>
+                                        </button>
+                                    );
+                                })}
+                            </React.Fragment>
+                        );
+                    })}                </div>
+            )}
+        </div>
+    );
+}
+
+function SetMultiTilePicker({
+    title,
+    selectedSets,
+    onToggle,
+    options,
+    pickerId,
+    openSetPicker,
+    setOpenSetPicker
+}) {
+    const open = openSetPicker === pickerId;
+
+    const optionMap = React.useMemo(
+        () => Object.fromEntries(options.map(opt => [opt.key, opt])),
+        [options]
+    );
+
+    const selectedCount = Object.values(selectedSets || {}).filter(Boolean).length;
+
+    return (
+        <div className="set-tile-picker">
+            <h4 className="set-tile-picker-title">{title}</h4>
+
+            <button
+                type="button"
+                className={`set-tile-trigger ${open ? 'open' : ''}`}
+                onClick={() => setOpenSetPicker(open ? null : pickerId)}
+            >
+                <div className="set-tile-trigger-meta">
+                    <div className="set-tile-trigger-code">
+                        {selectedCount > 0
+                            ? `${selectedCount} set${selectedCount === 1 ? '' : 's'} selected`
+                            : 'Select sets...'}
+                    </div>
+                </div>
+
+                <span className="material-symbols-outlined set-tile-trigger-chevron">
+                    {open ? 'expand_less' : 'expand_more'}
+                </span>
+            </button>
+
+            {open && (
+                <div
+                    className="set-tile-grid"
+                    style={{
+                        gridTemplateColumns: `repeat(${window.innerWidth <= 650 ? 3 : window.innerWidth <= 1000 ? 4 : 5}, minmax(0, 1fr))`
+                    }}
+                >
+                    <button
+                        type="button"
+                        className="set-tile-grid-close"
+                        onClick={() => setOpenSetPicker(null)}
+                        aria-label="Close set picker"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                    {CUSTOM_FORMAT_SET_SECTIONS.map(section => {
+                        const sectionOptions = section.keys
+                            .map(key => optionMap[key])
+                            .filter(Boolean);
+
+                        if (!sectionOptions.length) return null;
+
+                        return (
+                            <React.Fragment key={section.title}>
+                                <div className="set-tile-era-header">{section.title}</div>
+
+                                {sectionOptions.map(({ key, name, img }) => {
+                                    const bg = SET_ARTWORKS[key] || '';
+                                    const selected = !!selectedSets[key];
+
+                                    return (
+                                        <button
+                                            key={key}
+                                            type="button"
+                                            className={`set-tile-btn ${selected ? 'selected' : ''}`}
+                                            onClick={() => onToggle(key)}
+                                            title={`${name} (${key})`}
+                                        >
+                                            <div
+                                                className="set-tile-art"
+                                                style={bg ? { backgroundImage: `url(${bg})` } : undefined}
+                                            />
+                                            <div className="set-tile-logo-wrap">
+                                                {img ? (
+                                                    <img
+                                                        src={img}
+                                                        alt={`${name} logo`}
+                                                        className="set-tile-logo"
+                                                    />
+                                                ) : (
+                                                    <span className="set-tile-fallback">{key}</span>
+                                                )}
+                                            </div>
+                                            <div className="set-tile-code">{name} ({key})</div>
+                                        </button>
+                                    );
+                                })}
+                            </React.Fragment>
                         );
                     })}
                 </div>
@@ -385,6 +483,7 @@ const CardSearch = React.forwardRef(function CardSearch(
     const [selectedLegalityPreset, setSelectedLegalityPreset] = useState('');
     const [isSearchingAll, setIsSearchingAll] = useState(false);
     const [formatPromoCards, setFormatPromoCards] = useState([]);
+    const [openSetPicker, setOpenSetPicker] = React.useState(null);
 
     const ERA_OPTIONS = [
         { key: 'ME1', name: 'Mega Evolution', src: me1 },
@@ -1276,21 +1375,41 @@ const CardSearch = React.forwardRef(function CardSearch(
         'BS|G2': 'prop_15_3'
     };
 
-   const HIDDEN_CUSTOM_FORMAT_SETS = new Set([
-    'MEE',
-    'SVE',
-    'PR-SV',
-    'PR-SW',
-    'PR-SM',
-]);
+    const HIDDEN_CUSTOM_FORMAT_SETS = new Set([
+        'MEE',
+        'SVE',
+        'PR-SV',
+        'PR-SW',
+        'PR-SM',
+        'PR-XY',
+        'PR-BLW',
+        'PR-HS',
+        'PR-DP',
+        'PR-EX',
+        'PR-BS',
+        'KSS',
+        'RM',
+        'TK2',
+        'TK1',
+        'SI',
+        'P9',
+        'P8',
+        'P7',
+        'P6',
+        'P5',
+        'P4',
+        'P3',
+        'P2',
+        'P1',
+    ]);
 
-const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
-    const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
-    return SET_OPTIONS
-        .filter(o => !PROMO_SET_KEYS.has(o.key))
-        .filter(o => !HIDDEN_CUSTOM_FORMAT_SETS.has(o.key))
-        .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
-}, [SET_OPTIONS, setIndexMap]);
+    const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
+        const safeIdx = k => (setIndexMap[k] ?? Number.MAX_SAFE_INTEGER);
+        return SET_OPTIONS
+            .filter(o => !PROMO_SET_KEYS.has(o.key))
+            .filter(o => !HIDDEN_CUSTOM_FORMAT_SETS.has(o.key))
+            .sort((a, b) => safeIdx(a.key) - safeIdx(b.key));
+    }, [SET_OPTIONS, setIndexMap]);
 
     const isAbbrevInRange = (abbr, fromKey, toKey) => {
         const ai = setIndexMap[abbr];
@@ -2067,64 +2186,48 @@ const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
                                 <div className="filter-group">
                                     <h3>Sets:</h3>
                                     <div className='sets-filter-div'>
-                                        <select
-                                            className='type-btn non-bold-typebtn hp-btn-dropdown sets-margin-small-mobile'
-                                            aria-label="Add a set"
-                                            onChange={(e) => {
-                                                const key = e.target.value;
-                                                if (!key) return;
-                                                const current = setsInput.split(',').map(s => s.trim()).filter(Boolean);
-                                                if (!current.some(t => t.toLowerCase() === key.toLowerCase())) {
-                                                    const next = current.concat([key]).join(', ');
-                                                    setSetsInput(next);
-                                                    applySetsFromInput(next);
-                                                }
-                                                e.target.value = '';
-                                            }}
-                                            style={{ padding: '8px', minWidth: 220 }}
-                                            defaultValue=""
-                                        >
-                                            <option value="" disabled>Select a set…</option>
-                                            {SET_OPTIONS.map(({ key, name }) => (
-                                                <option key={key} value={key}>
-                                                    {name} ({key})
-                                                </option>
-                                            ))}
-                                        </select>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Type set codes or names, comma-separated (e.g., PAF, OBF)"
-                                            className='type-btn non-bold-typebtn sets-input-mobile-advanced'
-                                            value={setsInput}
-                                            onFocus={() => { setsInputFocusedRef.current = true; }}
-                                            onBlur={(e) => {
-                                                setsInputFocusedRef.current = false;
-                                                applySetsFromInput(e.target.value);
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    e.preventDefault();
-                                                    applySetsFromInput(setsInput);
-                                                }
-                                            }}
-                                            onChange={(e) => {
-                                                setSetsInput(e.target.value);
-                                            }}
-                                            style={{ flex: 1, minWidth: 280, padding: '8px' }}
+                                        <SetMultiTilePicker
+                                            selectedSets={draftFilters.sets}
+                                            onToggle={toggleSet}
+                                            options={SET_OPTIONS_SORTED_NO_PROMOS}
+                                            pickerId="sets"
+                                            openSetPicker={openSetPicker}
+                                            setOpenSetPicker={setOpenSetPicker}
                                         />
-
-                                        <button
-                                            type="button"
-                                            className="clear-x-btn hide-on-filter-mobile hide-on-filter-mobile"
-                                            onClick={() => {
-                                                setSetsInput('');
-                                                applySetsFromInput('');
-                                            }}
-                                        ><span class="material-symbols-outlined">
-                                                cancel
-                                            </span>
-                                        </button>
+                                        <div className='typed-sets-input'>
+                                            <input
+                                                type="text"
+                                                placeholder="Type set codes or names, comma-separated (e.g., PAF, OBF)"
+                                                className='type-btn non-bold-typebtn sets-input-mobile-advanced'
+                                                value={setsInput}
+                                                onFocus={() => { setsInputFocusedRef.current = true; }}
+                                                onBlur={(e) => {
+                                                    setsInputFocusedRef.current = false;
+                                                    applySetsFromInput(e.target.value);
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        applySetsFromInput(setsInput);
+                                                    }
+                                                }}
+                                                onChange={(e) => {
+                                                    setSetsInput(e.target.value);
+                                                }}
+                                                style={{ flex: 1, minWidth: 280, padding: '8px' }}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="clear-x-btn hide-on-filter-mobile hide-on-filter-mobile"
+                                                onClick={() => {
+                                                    setSetsInput('');
+                                                    applySetsFromInput('');
+                                                }}
+                                            ><span class="material-symbols-outlined">
+                                                    cancel
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="filter-group">
@@ -2192,13 +2295,22 @@ const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
                                         </optgroup>
                                     </select>
                                 </div>
+                                {openSetPicker && (
+                                    <div
+                                        className="set-tile-overlay"
+                                        onClick={() => setOpenSetPicker(null)}
+                                    />
+                                )}
                                 <div className="filter-group">
-                                    <h3><span className='display-on-filter-mobile'>Custom Format</span></h3>
+                                    <h3><span>Custom Format</span></h3>
                                     <div className="custom-format-tile-layout">
                                         <SetTilePicker
-                                            title="First set"
                                             value={draftFilters.formatRange?.from || ''}
                                             options={SET_OPTIONS_SORTED_NO_PROMOS}
+                                            pickerId="from"
+                                            openSetPicker={openSetPicker}
+                                            setOpenSetPicker={setOpenSetPicker}
+
                                             onChange={(key) =>
                                                 setDraftFilters(f => ({
                                                     ...f,
@@ -2211,9 +2323,12 @@ const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
                                         <div className="custom-format-through-label">through</div>
 
                                         <SetTilePicker
-                                            title="Second set"
                                             value={draftFilters.formatRange?.to || ''}
                                             options={SET_OPTIONS_SORTED_NO_PROMOS}
+                                            pickerId="to"
+                                            openSetPicker={openSetPicker}
+                                            setOpenSetPicker={setOpenSetPicker}
+
                                             onChange={(key) =>
                                                 setDraftFilters(f => ({
                                                     ...f,
@@ -2262,7 +2377,7 @@ const SET_OPTIONS_SORTED_NO_PROMOS = React.useMemo(() => {
                                                 info
                                             </span>
                                             <p style={{ margin: 0, opacity: 0.85, fontStyle: 'italic' }}>
-                                                Promos currently are not applied when selecting a custom range.
+                                                Promos may be inaccurate when selecting a custom format range.
                                             </p>
                                         </div>
                                     </div>

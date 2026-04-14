@@ -9,7 +9,7 @@ import SidebarComponent from '../SideContent/SideContent';
 import archiveUpdateImg from '../assets/archive-updates/apr-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
 import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
-import latestSet from '../assets/homepage/latest-expansion.webp';
+import latestSet from '../assets/sets-filter-backgrounds/me/por.jpg';
 import deckBuilder from '../../public/images/deckbuilder-preview.png';
 
 import article1 from '../Articles/whenModernBecomesRetro';

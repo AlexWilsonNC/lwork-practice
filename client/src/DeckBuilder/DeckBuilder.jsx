@@ -4,7 +4,7 @@ import CardSearch from './CardSearch'
 import DeckList from './DeckList'
 import ExportButtons from './ExportButtons'
 import '../css/DeckBuilder.css'
-import './setsInAdvancedDropdown.css'
+import '../css/setsInAdvancedDropdown.css'
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
@@ -303,9 +303,7 @@ const MAX_ZOOM = 2;
 const ZOOM_STEP = 0.1;
 
 const DeckBuilderComp = styled.div`
-    .card-search-container {
-      background-image: ${({ theme }) => theme.cardSearchBg}
-    }
+    .card-search-container {background-image: ${({ theme }) => theme.cardSearchBg}}
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -314,10 +312,20 @@ const DeckBuilderComp = styled.div`
       background-image: ${({ theme }) => theme.supportPatreonBtn};
       border: ${({ theme }) => theme.supportPatreonBg};
     }
-    .card-modal-content {
-      background-image: ${({ theme }) => theme.cardModalContentZoomCard};
+    .card-modal-content {background-image: ${({ theme }) => theme.cardModalContentZoomCard};}
+    .set-tile-code, .set-tile-trigger {color: ${({ theme }) => theme.text};}
+    .set-tile-grid {background: ${({ theme }) => theme.setTileGridBg};}
+    .set-tile-btn {
+      background: ${({ theme }) => theme.setTileBtnBg};
+      border: ${({ theme }) => theme.setTileBtnBorder};
     }
-    .set-tile-code {color: ${({ theme }) => theme.text};}
+    .set-tile-btn:hover {background: ${({ theme }) => theme.setTileBtnBgHover};}
+    .set-tile-era-header {border-top: ${({ theme }) => theme.setTileBtnHr};}
+    .set-tile-era-header:first-child {
+      margin-top: 0;
+      border-top: none;
+      padding-top: 0;
+    }
 `;
 
 export default function DeckBuilder() {

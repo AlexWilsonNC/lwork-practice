@@ -1,0 +1,230 @@
+.set-tile-grid-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 3px;
+  background: rgb(125, 125, 125);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.set-tile-grid-close:hover {
+  background: #1290eb;
+}
+
+.set-tile-grid-close .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.set-tile-era-header {
+  grid-column: 1 / -1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.85;
+  padding: 6px 2px 2px;
+  margin-top: 4px;
+}
+
+.set-tile-trigger {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 1px solid grey;
+}
+
+.set-tile-trigger:hover {
+  background: rgba(255,255,255,0.09);
+}
+
+/* .set-tile-trigger-art {
+  display: none;
+} */
+
+.set-tile-trigger-meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+  gap: 5px;
+}
+
+.set-tile-trigger-logo {
+  max-width: 100px;
+  max-height: 34px;
+  object-fit: contain;
+}
+
+.set-tile-logo {
+  max-width: 100px;
+  max-height: 40px;
+  object-fit: contain;
+}
+
+.set-tile-trigger-code {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.set-tile-placeholder {
+  opacity: 0.7;
+}
+
+.set-tile-trigger-chevron {
+  margin-left: auto;
+  opacity: 0.75;
+}
+
+.custom-format-tile-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  width: 100%;
+  /* z-index: 45; */
+  margin-left: 5px;
+  margin-top: -8px;
+}
+
+.custom-format-through-label {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  text-transform: lowercase;
+}
+
+.set-tile-picker {
+  width: 100%;
+  position: static;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.set-tile-grid {
+  display: grid;
+  gap: 10px;
+
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  z-index: 50;
+
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 10px;
+  padding: 44px 12px 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.set-tile-picker-title {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.set-tile-btn {
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: 0.15s ease;
+}
+
+.set-tile-btn:hover {
+  border-color: rgba(255,255,255,0.3);
+}
+
+.set-tile-btn.selected {
+  box-shadow: 0 0 0 1px #43b1ff inset;
+  background: #1290eb !important;
+}
+
+.set-tile-art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.set-tile-logo-wrap {
+  height: 42px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-tile-fallback {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.set-tile-code {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+.set-tile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 40;
+}
+
+@media screen and (max-width: 1000px) {
+  .set-tile-logo {
+    max-width: 90px;
+    max-height: 30px;
+  }
+  .set-tile-code {
+    font-size: 0.7rem;
+    opacity: 0.8;
+  }
+}
+@media screen and (max-width: 760px) {
+  .custom-format-tile-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    width: 100%;
+  }
+}
+@media screen and (max-width: 650px) {
+  .set-tile-logo {
+    max-width: 80px;
+    max-height: 25px;
+    margin-top: -15px;
+  }
+  .set-tile-code {
+    font-size: 0.6rem;
+    margin-top: -10px;
+  }
+  .set-tile-era-header {
+    font-size: 0.85rem;
+  }
+}

@@ -104,6 +104,11 @@ export const lightTheme = {
   profilesettingsbg: 'rgba(235, 235, 235, 0.557)',
   dropdownsbg: '#fff',
   cardModalContentZoomCard: 'linear-gradient(to bottom right, rgb(172, 175, 181), rgb(239, 244, 245))',
+  setTileGridBg: 'rgb(225, 225, 225)',
+  setTileBtnBg: 'rgba(0,0,0,0.075)',
+  setTileBtnBorder: '1px solid rgba(0,0,0,0.1)',
+  setTileBtnBgHover: 'rgba(0,0,0,0.2)',
+  setTileBtnHr: '2px solid rgba(0,0,0,0.12)',
 
 };
 
@@ -203,5 +208,10 @@ export const darkTheme = {
   profilesettingsbg: 'rgba(21, 21, 21, 0.25)',
   dropdownsbg: 'rgba(0, 0, 0, 0.42)',
   cardModalContentZoomCard: 'linear-gradient(to bottom right, rgb(47, 49, 54), rgb(21, 25, 35))',
-  
+  setTileGridBg: '#1b1b1b',
+  setTileBtnBg: 'rgba(255,255,255,0.05)',
+  setTileBtnBorder: '1px solid rgba(255,255,255,0.16)',
+  setTileBtnBgHover: 'rgba(255, 255, 255, 0.2)',
+  setTileBtnHr: '2px solid rgba(255,255,255,0.12)',
+
 };
