@@ -1063,6 +1063,86 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
     const isShortExactNameQuery =
       upperRaw === 'N' || upperRaw === 'AZ';
 
+    const projection = {
+      _id: 0,
+      id: 1,
+      name: 1,
+      supertype: 1,
+      subtypes: 1,
+      evolvesFrom: 1,
+      evolvesTo: 1,
+      setAbbrev: 1,
+      number: 1,
+      images: 1,
+      attacks: 1,
+      abilities: 1,
+      ability: 1,
+      text: 1,
+      rules: 1,
+      flavorText: 1,
+      types: 1,
+      hp: 1,
+      weaknesses: 1,
+      resistances: 1,
+      retreatCost: 1,
+      convertedRetreatCost: 1,
+      regulationMark: 1,
+      set: 1,
+      rarity: 1,
+      tcgplayer: 1,
+      ancientTrait: 1,
+      ancienttrait: 1,
+      artist: 1,
+      heldItem: 1,
+      helditem: 1
+    };
+
+    const normalizeForCompare = (value = '') =>
+      String(value)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+
+    const DIA = {
+      a: '[aàáâãäåāăą]',
+      c: '[cçćč]',
+      e: '[eèéêëēĕėęě]',
+      i: '[iìíîïĩīĭįı]',
+      n: '[nñńň]',
+      o: '[oòóôõöōŏőøơ]',
+      u: '[uùúûüũūŭůűųư]',
+      y: '[yýÿŷ]',
+      s: '[sśš]',
+      z: '[zżźž]',
+      l: '[lł]',
+      d: '[dď]',
+      r: '[rř]',
+      t: '[tť]',
+    };
+
+    const charClass = (ch) => {
+      const base = ch
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+      return DIA[base] || escapeRegex(ch.toLowerCase());
+    };
+
+    const buildLooseNameRegex = (q) => {
+      const cleaned = String(q || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+
+      if (!cleaned) return null;
+
+      return new RegExp(
+        cleaned.split('').map(charClass).join(''),
+        'i'
+      );
+    };
+
     let results = [];
 
     if (isShortExactNameQuery) {
@@ -1073,44 +1153,10 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
             $options: 'i'
           }
         },
-        {
-          projection: {
-            _id: 0,
-            id: 1,
-            name: 1,
-            supertype: 1,
-            subtypes: 1,
-            evolvesFrom: 1,
-            evolvesTo: 1,
-            setAbbrev: 1,
-            number: 1,
-            images: 1,
-            attacks: 1,
-            abilities: 1,
-            ability: 1,
-            text: 1,
-            rules: 1,
-            flavorText: 1,
-            types: 1,
-            hp: 1,
-            weaknesses: 1,
-            resistances: 1,
-            retreatCost: 1,
-            convertedRetreatCost: 1,
-            regulationMark: 1,
-            set: 1,
-            rarity: 1,
-            tcgplayer: 1,
-            ancientTrait: 1,
-            ancienttrait: 1,
-            artist: 1,
-            heldItem: 1,
-            helditem: 1
-          }
-        }
+        { projection }
       ).limit(200).toArray();
     } else {
-      results = await cards.aggregate([
+      const atlasResults = await cards.aggregate([
         {
           $search: {
             index: 'default',
@@ -1140,55 +1186,62 @@ app.get('/api/cards/searchbyname/partial/:name', async (req, res) => {
         },
         {
           $project: {
-            _id: 0,
-            id: 1,
-            name: 1,
-            supertype: 1,
-            subtypes: 1,
-            evolvesFrom: 1,
-            evolvesTo: 1,
-            setAbbrev: 1,
-            number: 1,
-            images: 1,
-            attacks: 1,
-            abilities: 1,
-            ability: 1,
-            text: 1,
-            rules: 1,
-            flavorText: 1,
-            types: 1,
-            hp: 1,
-            weaknesses: 1,
-            resistances: 1,
-            retreatCost: 1,
-            convertedRetreatCost: 1,
-            regulationMark: 1,
-            set: 1,
-            rarity: 1,
-            tcgplayer: 1,
-            ancientTrait: 1,
-            ancienttrait: 1,
-            artist: 1,
-            heldItem: 1,
-            helditem: 1,
+            ...projection,
             score: { $meta: 'searchScore' }
           }
         },
         { $limit: 200 }
       ]).toArray();
+
+      const looseNameRegex = buildLooseNameRegex(normalizedRaw);
+
+      const fallbackResults = looseNameRegex
+        ? await cards.find(
+          { name: looseNameRegex },
+          { projection }
+        ).limit(200).toArray()
+        : [];
+
+      const byKey = new Map();
+
+      for (const card of atlasResults) {
+        byKey.set(`${card.setAbbrev}|${card.number}`, card);
+      }
+
+      for (const card of fallbackResults) {
+        const key = `${card.setAbbrev}|${card.number}`;
+        if (!byKey.has(key)) {
+          byKey.set(key, card);
+        }
+      }
+
+      results = Array.from(byKey.values());
     }
 
+    const qNorm = normalizeForCompare(normalizedRaw);
+
     results.sort((a, b) => {
+      const aName = normalizeForCompare(a.name);
+      const bName = normalizeForCompare(b.name);
+
+      const aStarts = aName.startsWith(qNorm);
+      const bStarts = bName.startsWith(qNorm);
+      if (aStarts !== bStarts) return aStarts ? -1 : 1;
+
+      const aIdx = aName.indexOf(qNorm);
+      const bIdx = bName.indexOf(qNorm);
+      if (aIdx !== bIdx) return aIdx - bIdx;
+
       const scoreDiff = (b.score || 0) - (a.score || 0);
       if (scoreDiff !== 0) return scoreDiff;
 
-      const nameA = String(a.name || '').localeCompare(String(b.name || ''));
-      if (nameA !== 0) return nameA;
+      const nameDiff = aName.localeCompare(bName);
+      if (nameDiff !== 0) return nameDiff;
 
       return (parseInt(a.number, 10) || 0) - (parseInt(b.number, 10) || 0);
     });
 
-    res.json(results);
+    res.json(results.slice(0, 200));
   } catch (err) {
     console.error('Error searching cards with Atlas Search:', err);
     res.status(500).json({ error: 'Server error occurred' });

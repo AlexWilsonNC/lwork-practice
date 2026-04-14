@@ -693,7 +693,17 @@ export default function DeckBuilder() {
     arr.reduce((sum, c) => sum + (isStar(c) ? (Number(c.count) || 0) : 0), 0);
 
   const hasDiamondInName = c => /[♢◇]/.test(c?.name || '');
-  const hasShiningInName = c => /\bShining\b/i.test(c?.name || '');
+  const hasShiningInName = (c) => {
+    const rules = Array.isArray(c?.rules)
+      ? c.rules
+      : typeof c?.rules === 'string'
+        ? [c.rules]
+        : [];
+
+    return rules.some(rule =>
+      /you can't have more than 1 .* in your deck/i.test(String(rule))
+    );
+  };
   const isNameSingleton = c => hasDiamondInName(c) || hasShiningInName(c);
 
   const totalByExactName = (arr, name, excludeIdx = -1) =>
