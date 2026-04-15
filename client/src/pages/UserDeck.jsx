@@ -141,7 +141,7 @@ export default function UserDeck() {
 
                 {totalCount !== 60 && (
                     <div className="warning-message">
-                        Warning: Deck contains {totalCount} cards.
+                        <span class="material-symbols-outlined">warning</span> Deck contains {totalCardCount} cards
                     </div>
                 )}
 

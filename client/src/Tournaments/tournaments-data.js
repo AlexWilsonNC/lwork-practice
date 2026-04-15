@@ -1215,6 +1215,22 @@ const tournamentList = [
     // "date": "May 14, 2016",
     // "flag": belgium,
     // },
+    // {
+    // "id": "2015_NATS_CANADA",
+    // "name": "2015 Canada Nationals",
+    // "eventType": "nationals",
+    // "eventLogo": nationals,
+    // "date": "Jun 27, 2015",
+    // "flag": canada,
+    // },
+    // {
+    // "id": "2015_NATS_ITALY",
+    // "name": "2015 Italy Nationals",
+    // "eventType": "nationals",
+    // "eventLogo": nationals,
+    // "date": "Jun 13, 2015",
+    // "flag": italy,
+    // },
     {
         "id": "2015_NATS_US",
         "name": "US Nationals 2015",

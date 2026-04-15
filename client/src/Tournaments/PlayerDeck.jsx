@@ -789,9 +789,17 @@ const PlayerDeck = () => {
                             </div>
                         </div>
                     </div>
-                    {totalCardCount !== 60 && (
+                    {(totalCardCount !== 60 || playerData?.note) && (
                         <div className="warning-message">
-                            Warning: Deck contains {totalCardCount} cards.
+                            <span className="material-symbols-outlined">warning</span>
+                            <div>
+                                {totalCardCount !== 60 && (
+                                    <div>Deck contains {totalCardCount} cards.</div>
+                                )}
+                                {playerData?.note && (
+                                    <div dangerouslySetInnerHTML={{ __html: playerData.note }} />
+                                )}
+                            </div>
                         </div>
                     )}
                     {!playerData ? (

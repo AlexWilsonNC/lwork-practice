@@ -24,6 +24,19 @@
     align-items: end;
     position: relative;
 }
+.warning-message {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.warning-message span {
+    font-size: 18px;
+    margin-right: 7.5px;
+}
+.warning-message a {
+    color: #1290eb;
+}
 .dq-label {
     font-family: sans-serif;
     opacity: 0.75;
@@ -452,6 +465,14 @@
         width: 95%;
         margin-top: 5px;
     }
+    .warning-message {
+        margin-bottom: 7.5px;
+        font-size: 14px;
+    }
+    .warning-message span {
+        font-size: 15px;
+        margin-right: 7.5px;
+    }
     .player-deck-top h2 {
         font-size: 18px;
         margin-bottom: 4px;
@@ -605,6 +626,13 @@
     .deck-cards {
         grid-template-columns: repeat(6, 1fr);
         padding: 10px;
+    }
+    .warning-message {
+        font-size: 12px;
+    }
+    .warning-message span {
+        font-size: 13px;
+        margin-right: 5px;
     }
     .copy-decklist-btn span,
     .open-in-deckbuilder-btn span,
