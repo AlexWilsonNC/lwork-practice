@@ -1640,7 +1640,7 @@ const CardSearch = React.forwardRef(function CardSearch(
     }
 
     const [showAdvanced, setShowAdvanced] = useState(false);
-    
+
     useEffect(() => {
         if (!showAdvanced) return;
 
@@ -2393,7 +2393,7 @@ const CardSearch = React.forwardRef(function CardSearch(
                                                 info
                                             </span>
                                             <p style={{ margin: 0, opacity: 0.85, fontStyle: 'italic' }}>
-                                                Promos may be inaccurate when selecting a custom format range.
+                                                Promos may be inaccurate when selecting a custom format range for now.
                                             </p>
                                         </div>
                                     </div>
