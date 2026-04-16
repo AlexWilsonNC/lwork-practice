@@ -263,8 +263,8 @@ const Homepage = () => {
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={deckBuilder} />
                                     <div className='homepage-box-content'>
-                                        <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
-                                        <p>Try our new deck builder! Our app is perfect for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
+                                        <h3>Our New <span className='new-color'>Deck Builder</span>!</h3>
+                                        <p>Try our new deck builder! It's perfect for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
                                     </div>
                                 </WrappedFeature>
                             </a>
@@ -484,8 +484,8 @@ const Homepage = () => {
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={deckBuilder} />
                                 <div className='homepage-box-content'>
-                                    <h3>Our <span className='new-color'>NEW</span> Deck Builder!</h3>
-                                    <p>Try our new deck builder! Our app is perfect for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
+                                    <h3>Our New <span className='new-color'>Deck Builder</span>!</h3>
+                                    <p>Try our new deck builder! It's perfect for your modern & retro deck building needs! Create new decks, customize decks from our archive, create collections and share them with your friends!</p>
                                 </div>
                             </WrappedFeature>
                         </a>

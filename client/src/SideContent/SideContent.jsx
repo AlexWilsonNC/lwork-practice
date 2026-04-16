@@ -99,7 +99,7 @@ const SidebarComponent = () => {
           <img className='side-icon' src={patreonImg} alt='Help us Archive' />
           <h4>A Special Thank You!</h4>
         </div>
-        <p style={{marginBottom: '5px'}}>To the below Legends that support us on <span className='blue'>Patreon</span>!</p>
+        <p style={{marginBottom: '5px'}}>To the below Legends that support us on <span style={{color:'#1290eb'}}>Patreon</span>!</p>
         <ul className='patreonLegendsUl'>
           <li>Jesse Benedict</li>
           <li>CachoOfSinnoh</li>
