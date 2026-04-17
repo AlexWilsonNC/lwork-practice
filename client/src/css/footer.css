@@ -141,13 +141,23 @@
     align-items: flex-end;
     justify-content: center;
     color: white;
-    border-radius: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+    color: inherit;
+    background-image: linear-gradient(rgb(0, 47, 89), rgb(0, 47, 89));
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 100% 0%;
+    transition: background-size 0.3s ease, color 0.3s ease;
+
 }
 .tcgplayer-affiliate-advert img {
     margin-right: 15px;
 }
 .tcgplayer-affiliate-advert:hover {
-    background-color: rgba(230, 230, 230, 0.272);
+    background-size: 100% 100%;
+    color: #1290eb;
 }
 .bottom-footer {
     width: 100%;
