@@ -65,6 +65,7 @@
     height: 24px;
     animation: spin 1s linear infinite;
     margin: auto;
+    margin-top: 25px;
 }
 .color-blue {
     color: #1290eb;
