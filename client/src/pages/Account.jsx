@@ -44,24 +44,6 @@ const AccountSection = styled.div`
     .folder-label-list-version {
         background-color: ${({ theme }) => theme.listVersionedFolderLabel};
     }
-    .deck-box {
-        background-image: ${({ theme }) => theme.deckModalAccountList};
-        border: 3px solid rgba(94, 94, 94, 0.5);
-        border-radius: 5px;
-        margin-top: 5px;
-    }
-    .card-modal-content-account {
-        color: ${({ theme }) => theme.text};
-        background-image: ${({ theme }) => theme.decklistModalAccountPopupView};
-    }
-    .modal-close-account {
-        color: ${({ theme }) => theme.modalCloseAccountList};
-        text-shadow: none;
-    }
-    .deck-modal-actions button {
-        background: ${({ theme }) => theme.decklistOpenedBtnBg};
-        color: #f5f5f5;
-    }
     .profile-settings-display-edit {
         background-color: ${({ theme }) => theme.profilesettingsbg};
     }
@@ -245,7 +227,6 @@ export default function Account() {
     const [decks, setDecks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
-    const [selectedDeck, setSelectedDeck] = useState(null);
 
     const [favorites, setFavorites] = useState(new Set());
     const [showFavorites, setShowFavorites] = useState(false);
@@ -1000,7 +981,6 @@ export default function Account() {
             return out;
         });
     };
-    const selectedFolder = folders.find(f => f._id === selectedDeck?.folderId);
 
     const folderActionLabel = d => (d?.folderId ? 'Change Folder' : 'Add to Folder');
 
@@ -1948,147 +1928,6 @@ export default function Account() {
                                             >
                                                 Save
                                             </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            {selectedDeck && (
-                                <div className="card-modal-overlay-account" onClick={closeModal}>
-                                    <div className="card-modal-content-account" onClick={e => e.stopPropagation()}>
-                                        <button className="modal-close-account" onClick={closeModal}>×</button>
-                                        <h3 style={{ margin: 0 }}>{selectedDeck.name}</h3>
-                                        <p>{selectedFolder?.name ?? ''}</p>
-                                        <p>{selectedDeck.description || '\u00A0'}</p>
-
-                                        <div className="deck-modal-actions">
-                                            <div>
-                                                <span
-                                                    className={`favorite-heart hide-on515 material-symbols-outlined nodisplay ${favorites.has(selectedDeck._id) ? 'active' : ''
-                                                        }`}
-                                                    onClick={() => toggleFavorite(selectedDeck._id)}
-                                                >
-                                                    {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
-                                                </span>
-                                            </div>
-                                            {isPublicView ? (
-                                                <div className="public-actions">
-                                                    <button
-                                                        onClick={() => {
-                                                            const raw = selectedDeck.decklist;
-                                                            const cards = Array.isArray(raw)
-                                                                ? raw
-                                                                : [
-                                                                    ...(raw.pokemon || []),
-                                                                    ...(raw.trainer || []),
-                                                                    ...(raw.energy || []),
-                                                                ];
-                                                            const text = cards
-                                                                .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
-                                                                .join('\n');
-                                                            navigator.clipboard.writeText(text);
-                                                        }}
-                                                        className="public-action-btn"
-                                                    >
-                                                        Copy as Text
-                                                    </button>
-                                                    <button onClick={() => openPrintDecklist(selectedDeck)}>
-                                                        Print List
-                                                    </button>
-                                                    <button
-                                                        onClick={() => goToDeckbuilder(selectedDeck, true)}
-                                                        className="public-action-btn"
-                                                    >
-                                                        Edit in Deckbuilder
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    {!isSmallViewport ? (
-                                                        <>
-                                                            <button
-                                                                onClick={() => {
-                                                                    const raw = selectedDeck.decklist;
-                                                                    const cards = Array.isArray(raw)
-                                                                        ? raw
-                                                                        : [
-                                                                            ...(raw.pokemon || []),
-                                                                            ...(raw.trainer || []),
-                                                                            ...(raw.energy || []),
-                                                                        ];
-                                                                    const text = cards
-                                                                        .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
-                                                                        .join('\n');
-                                                                    navigator.clipboard.writeText(text);
-                                                                }}
-                                                                className="public-action-btn"
-                                                            >
-                                                                Copy as Text
-                                                            </button>
-                                                            <button onClick={() => openPrintDecklist(selectedDeck)}>
-                                                                Print List
-                                                            </button>
-                                                            <button onClick={() => goToDeckbuilder(selectedDeck)}>
-                                                                Edit in Deckbuilder
-                                                            </button>
-                                                            <button
-                                                                className="danger"
-                                                                onClick={() => handleDelete(selectedDeck)}
-                                                            >
-                                                                Delete
-                                                            </button>
-                                                        </>
-                                                    ) : (
-                                                        <div className='move-small-deck-options-up515'>
-                                                            <span
-                                                                className={`favorite-heart material-symbols-outlined ${favorites.has(selectedDeck._id) ? 'active' : ''
-                                                                    }`}
-                                                                onClick={() => toggleFavorite(selectedDeck._id)}
-                                                            >
-                                                                {favorites.has(selectedDeck._id) ? 'favorite' : 'favorite_border'}
-                                                            </span>
-                                                            <span
-                                                                className="material-symbols-outlined menu-icon"
-                                                                onClick={e => { e.stopPropagation(); setMobileActionsOpen(v => !v); }}
-                                                            >more_vert</span>
-                                                            {mobileActionsOpen && (
-                                                                <div
-                                                                    className="deck-collection-modal-overlay-again"
-                                                                    onClick={() => setMobileActionsOpen(false)}
-                                                                >
-                                                                    <div
-                                                                        className="deck-collection-modal-box mobile-modal-box"
-                                                                        onClick={e => e.stopPropagation()}
-                                                                    >
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                const raw = selectedDeck.decklist;
-                                                                                const cards = Array.isArray(raw)
-                                                                                    ? raw
-                                                                                    : [
-                                                                                        ...(raw.pokemon || []),
-                                                                                        ...(raw.trainer || []),
-                                                                                        ...(raw.energy || []),
-                                                                                    ];
-                                                                                const text = cards
-                                                                                    .map(c => `${c.count} ${c.name} ${c.setAbbrev || c.set} ${c.number}`)
-                                                                                    .join('\n');
-                                                                                navigator.clipboard.writeText(text);
-                                                                            }}
-                                                                            className="small-deck-modal-options-brn-list"
-                                                                        >
-                                                                            Copy as Text
-                                                                        </button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => openPrintDecklist(selectedDeck)}>
-                                                                            Print List
-                                                                        </button>
-                                                                        <button className='small-deck-modal-options-brn-list' onClick={() => goToDeckbuilder(selectedDeck)}>Edit in Deckbuilder</button>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
