@@ -494,6 +494,26 @@ export default function Account() {
         window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
     };
 
+    const [sharedId, setSharedId] = useState(null);
+
+    const shareDeckLink = async (deck) => {
+        const owner = isPublicView ? username : user?.username;
+        if (!owner || !deck?._id) return;
+
+        const deckId = getDeckId(deck);
+        const slug = slugifyDeckName(deck.name);
+
+        const url = `${window.location.origin}/${owner}/deck-collection/${deckId}/${slug}`;
+
+        try {
+            await navigator.clipboard.writeText(url);
+            setSharedId(deckId);
+            setTimeout(() => setSharedId(null), 2000);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const goToDeckbuilder = (deckObj) => {
         const raw = deckObj.decklist;
         const cards = Array.isArray(raw)
@@ -1240,7 +1260,7 @@ export default function Account() {
                         ) : (
                             <p className='you-havent'>
                                 You don't have any decks in your collection yet,&nbsp;
-                                <a href='/deckbuilder' style={{ color: '#1290eb' }}>open the deckbuilder</a> and start your journey!
+                                <a href='/deckbuilder' style={{ color: '#1290eb' }}>open the deck builder</a> and start your journey!
                                 <br></br>
                                 <br></br>
                                 <span style={{ opacity: 0.5 }}>(You can also save decks to your collection by selecting the heart icon from any tournament result)</span>
@@ -1624,6 +1644,14 @@ export default function Account() {
                                                                             <div className="deckcollection-menu-dropdown">
                                                                                 <button onClick={e => {
                                                                                     e.stopPropagation();
+                                                                                    shareDeckLink(d);
+                                                                                }}>
+                                                                                    {sharedId === getDeckId(d)
+                                                                                        ? <span className="material-symbols-outlined succesfully-shared-btn">check</span>
+                                                                                        : 'Share'}
+                                                                                </button>
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
                                                                                     setModalDeck(d);
                                                                                     setNewValue(d.name);
                                                                                     setShowRenameModal(true);
@@ -1648,7 +1676,7 @@ export default function Account() {
                                                                                     Edit Mascots
                                                                                 </button>
                                                                                 <button onClick={() => goToDeckbuilder(d)}>
-                                                                                    Edit in Deckbuilder
+                                                                                    Edit in Deck Builder
                                                                                 </button>
                                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
                                                                                     Duplicate
@@ -1745,7 +1773,7 @@ export default function Account() {
                                                                 }}>
                                                                     Edit Mascots
                                                                 </button>
-                                                                <button onClick={() => goToDeckbuilder(d)}>Edit in Deckbuilder</button>
+                                                                <button onClick={() => goToDeckbuilder(d)}>Edit in Deck Builder</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
                                                                 <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>{folderActionLabel(d)}</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>

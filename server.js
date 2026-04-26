@@ -510,6 +510,49 @@ app.post('/api/user/decks/:deckId/duplicate', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not duplicate deck' });
   }
 });
+app.get('/api/users/:username/decks/:deckId', async (req, res) => {
+  try {
+    const { username, deckId } = req.params;
+
+    const user = await User.findOne({
+      username: new RegExp(`^${escapeRegex(username)}$`, 'i')
+    }).select('username decks folders');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const deck = user.decks.id(deckId);
+
+    if (!deck) {
+      return res.status(404).json({ error: 'Deck not found' });
+    }
+
+    const out = deck.toObject ? deck.toObject() : deck;
+
+    const folder = out.folderId
+      ? user.folders.id(out.folderId)
+      : null;
+
+    res.json({
+      deck: {
+        ...out,
+        folderId: out.folderId ? String(out.folderId) : ''
+      },
+      folder: folder
+        ? {
+            _id: String(folder._id),
+            name: folder.name,
+            color: folder.color
+          }
+        : null,
+      username: user.username
+    });
+  } catch (err) {
+    console.error('Shared deck lookup failed:', err);
+    res.status(500).json({ error: 'Could not load shared deck' });
+  }
+});
 app.delete('/api/user/decks/:deckId', requireAuth, async (req, res) => {
   const { deckId } = req.params;
   try {

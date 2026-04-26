@@ -139,7 +139,10 @@
   .profile-settings-display-edit {
     width: 90%;
   }
-
+  .user-deck-description-container strong,
+  .user-deck-description-container p {
+    font-size: 14px;
+  }
   .color-circle {
     width: 12px !important;
     height: 12px !important;
@@ -272,7 +275,7 @@
     text-shadow: 0 1px 2px rgba(0,0,0,.6);
     pointer-events: none;
     z-index: 3;
-    border: 1px solid white;
+    border: 1.5px solid white;
 }
 .cropped-mascot-card {
   position: absolute;
@@ -558,6 +561,9 @@
   background: #2f3136;
   border: 1px solid grey;
   z-index: 100;
+}
+.deckcollection-menu-dropdown .succesfully-shared-btn {
+  font-size: 14px;
 }
 
 .deckcollection-menu-dropdown button,
@@ -1264,7 +1270,6 @@
 .show-on-mobile550 {
   display: none;
 }
-
 .user-deck-description-container {
   width: 100%;
   display: flex;
@@ -1277,7 +1282,8 @@
   display: flex;
   flex-direction: row;
 }
-.user-deck-options button {
+.user-deck-options button, 
+.user-deck-options .deckview-switcher {
   margin-right: 0px;
   margin-left: 10px;
 }
@@ -1286,7 +1292,7 @@
 }
 .owner-deck-actions {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
     display: flex;
     gap: 10px;
@@ -1374,6 +1380,10 @@
   }
   .folder-counts-toggle {
     gap: 3.5px;
+}
+.user-deck-options button, 
+.user-deck-options .deckview-switcher {
+  margin-left: 7px !important;
 }
 .folder-counts-toggle .switch-track {
   width: 26.5px;
@@ -1568,10 +1578,13 @@
     left: 4px;
     font-size: 18px;
 }
-.user-deck-options button {
+.owner-deck-actions button {
   font-size: 12px;
   border: 1.5px solid grey;
     border-radius: 2px;
+}
+.owner-deck-actions {
+  gap: 5px;
 }
 .decklist-modal-button-deckprofile {
   font-size: 14px;
@@ -1586,7 +1599,6 @@
   .account-decks .card-modal-content-account {
     transform: scale(1.2);
   }
-
   .account-decks .deckbuilt-card-container {
     width: 40px !important;
   }
@@ -1634,7 +1646,7 @@
   .modal-close {
     font-size: 30px;
   }
-  .user-deck-options button {
+  .owner-deck-actions button {
   font-size: 10px;
   margin-left: 5px;
 }
@@ -1650,19 +1662,23 @@
   .color-picker {
     gap: 5px;
   }
-
   .color-swatch {
     width: 20px;
     height: 20px;
-  }
-  .hide-on-600 {
-    display: none;
   }
 }
 
 @media (max-width: 550px) {
   .hide-on-mobile550 {
     display: none;
+  }
+.user-deck-options button, 
+.user-deck-options .deckview-switcher {
+  margin-left: 5px !important;
+}
+.user-deck-description-container strong,
+  .user-deck-description-container p {
+    font-size: 12px;
   }
   .show-on-mobile550 {
     display: flex;
@@ -1673,10 +1689,10 @@
     margin-top: -10px;
   }
   .adddeck-to-fold-brtn {
-    background: none;          /* clears image + color */
-    background-image: none;    /* extra-safe for gradients */
+    background: none;
+    background-image: none;
     background-color: transparent;
-    color: inherit;            /* optional: use surrounding text color */
+    color: inherit;
     padding: 20px 0;
     color: #1290eb;
     border: none;
@@ -1689,7 +1705,7 @@
   .folder-options-icon {
     font-size: 9px;
   }
-  .user-deck-options button {
+  .owner-deck-actions button {
     font-size: 8px;
     border: 1px solid grey;
   }

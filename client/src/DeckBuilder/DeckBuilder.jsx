@@ -1323,7 +1323,7 @@ export default function DeckBuilder() {
             alt="Loading walkthrough deck"
             className="pokeball-spinner"
           />
-          <p className="walkthrough-loading-text">Loading walkthrough...</p>
+          <p className="walkthrough-loading-text">Loading Walkthrough...</p>
         </div>
       )}
       {loadingHash && (
@@ -1853,8 +1853,8 @@ export default function DeckBuilder() {
           className="deckbuilder-help-btn"
           onClick={startWalkthrough}
           disabled={walkthroughLoading}
-          aria-label="Open deckbuilder walkthrough"
-          title="Deckbuilder walkthrough"
+          aria-label="Open deck builder walkthrough"
+          title="Deck Builder walkthrough"
         >
           <span className="material-symbols-outlined">info</span>
         </button>

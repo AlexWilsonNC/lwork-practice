@@ -8,13 +8,12 @@ import '../css/decklist.css';
 
 const CollectionDeckCenter = styled.div`
     background: ${({ theme }) => theme.body};
-    min-height: 100vh;
-
+    min-height: ${({ hasError }) => (hasError ? '100vh' : 'auto')};
     .player-deck {
         background: ${({ theme }) => theme.deckBg};
         color: ${({ theme }) => theme.text};
     }
-
+    .tooltip-text {border:2px solid black;}
     .deck-cards,
     .deck-box {
         background-image: ${({ theme }) => theme.deckModalAccountList};
@@ -24,15 +23,15 @@ const CollectionDeckCenter = styled.div`
         background: ${({ theme }) => theme.body};
         color: ${({ theme }) => theme.text};
     }
+    .list-item {
+        background: ${({ theme }) => theme.listCardBg};
+        color: ${({ theme }) => theme.listCardText};
+    }
+    .deckview-switcher div {
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.text};
+    }
 `;
-
-const slugifyDeckName = name =>
-    String(name || '')
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
 
 const getDeckId = deck =>
     deck?._id?.$oid || deck?._id || deck?.id;
@@ -50,8 +49,28 @@ const flattenDecklist = raw => {
     ];
 };
 
+const groupDecklist = raw => {
+    if (!raw) {
+        return { pokemon: [], trainer: [], energy: [] };
+    }
+
+    if (!Array.isArray(raw)) {
+        return {
+            pokemon: raw.pokemon || [],
+            trainer: raw.trainer || [],
+            energy: raw.energy || [],
+        };
+    }
+
+    return {
+        pokemon: raw.filter(c => c.supertype === 'Pokémon' || c.supertype === 'Pokemon'),
+        trainer: raw.filter(c => c.supertype === 'Trainer'),
+        energy: raw.filter(c => c.supertype === 'Energy'),
+    };
+};
+
 export default function CollectionDeckPage() {
-    const { username, deckId, deckSlug } = useParams();
+    const { username, deckId } = useParams();
     const navigate = useNavigate();
 
     const { user } = useContext(AuthContext);
@@ -71,6 +90,8 @@ export default function CollectionDeckPage() {
     const [pageError, setPageError] = useState('');
     const [editingDescription, setEditingDescription] = useState(false);
     const [newDescription, setNewDescription] = useState('');
+    const [copied, setCopied] = useState(false);
+    const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
 
     useEffect(() => {
         let cancelled = false;
@@ -89,7 +110,7 @@ export default function CollectionDeckPage() {
                             Authorization: `Bearer ${token}`
                         }
                     })
-                    : await fetch(`/api/public/${username}/deck-collection`);
+                    : await fetch(`/api/users/${username}/decks/${deckId}`);
 
                 if (!res.ok) {
                     throw new Error('Deck collection not found.');
@@ -99,7 +120,9 @@ export default function CollectionDeckPage() {
 
                 const publicDecks = isViewingOwnDeck
                     ? data
-                    : data.decks || [];
+                    : data.deck
+                        ? [data.deck]
+                        : [];
 
                 let publicFolders = [];
 
@@ -116,7 +139,7 @@ export default function CollectionDeckPage() {
                         publicFolders = folderData.folders || folderData || [];
                     }
                 } else {
-                    publicFolders = data.folders || [];
+                    publicFolders = data.folder ? [data.folder] : [];
                 }
 
                 const found = publicDecks.find(d => String(getDeckId(d)) === String(deckId));
@@ -144,9 +167,10 @@ export default function CollectionDeckPage() {
         return () => {
             cancelled = true;
         };
-    }, [username, deckId, deckSlug, isViewingOwnDeck]);
+    }, [username, deckId, isViewingOwnDeck]);
 
     const cards = useMemo(() => flattenDecklist(deck?.decklist), [deck]);
+    const groupedDecklist = useMemo(() => groupDecklist(deck?.decklist), [deck]);
 
     const folderName = useMemo(() => {
         if (!deck?.folderId) return '';
@@ -154,6 +178,19 @@ export default function CollectionDeckPage() {
             String(getIdValue(f._id)) === String(getIdValue(deck.folderId))
         )?.name || '';
     }, [deck, folders]);
+
+    const copyShareLink = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+
+            setTimeout(() => {
+                setCopied(false);
+            }, 2000);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const copyAsText = () => {
         const text = cards
@@ -163,19 +200,19 @@ export default function CollectionDeckPage() {
         navigator.clipboard.writeText(text);
     };
 
-    const openPrintDecklist = () => {
-        const minimal = cards.map(c => ({
-            supertype: c.supertype,
-            set: c.setAbbrev || c.set,
-            name: c.name,
-            number: c.number,
-            count: c.count,
-            regMark: c.regulationMark || ''
-        }));
+    // const openPrintDecklist = () => {
+    //     const minimal = cards.map(c => ({
+    //         supertype: c.supertype,
+    //         set: c.setAbbrev || c.set,
+    //         name: c.name,
+    //         number: c.number,
+    //         count: c.count,
+    //         regMark: c.regulationMark || ''
+    //     }));
 
-        const payload = encodeURIComponent(JSON.stringify(minimal));
-        window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
-    };
+    //     const payload = encodeURIComponent(JSON.stringify(minimal));
+    //     window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
+    // };
 
     const goToDeckbuilder = () => {
         const minimal = cards.map(c => {
@@ -209,6 +246,15 @@ export default function CollectionDeckPage() {
 
         const fragment = encodeURIComponent(JSON.stringify(minimal));
         navigate(`/deckbuilder#deck=${fragment}`);
+    };
+
+    const switchToGridView = () => {
+        setViewMode('grid');
+        localStorage.setItem('viewMode', 'grid');
+    };
+    const switchToListView = () => {
+        setViewMode('list');
+        localStorage.setItem('viewMode', 'list');
     };
 
     const handleSaveDescription = async () => {
@@ -267,7 +313,7 @@ export default function CollectionDeckPage() {
 
     if (pageError || !deck) {
         return (
-            <CollectionDeckCenter className="center">
+            <CollectionDeckCenter className="center" hasError={!!pageError || !deck}>
                 <Helmet>
                     <title>Deck Not Found</title>
                     <meta name="robots" content="noindex, nofollow" />
@@ -279,7 +325,7 @@ export default function CollectionDeckPage() {
                             <div>
                                 <h2>Deck Not Found</h2>
                                 <hr className="playerdeck-hr" />
-                                <p>This deck either does not exist or is not public.</p>
+                                <p>This deck either does not exist or the link is invalid.</p>
                                 <p>
                                     <Link className="blue-link bold" to={collectionLink}>
                                         Back to {username}'s deck collection
@@ -315,61 +361,151 @@ export default function CollectionDeckPage() {
                                 <Link className="blue-link bold" to={collectionLink}>
                                     {username}
                                 </Link>
+                                <Link to={collectionLink} className='link-to-playerprofile-btn'>
+                                    <button className="decklist-modal-button-deckprofile">
+                                        {username}'s Collection
+                                    </button>
+                                </Link>
                             </p>
-
-                            {folderName && (
-                                <p>
-                                    <span className="bold hide-on-600">Folder:</span> {folderName}
-                                </p>
-                            )}
+                            <p>Folder: {folderName || 'Unassigned'}</p>
                         </div>
 
                         <div className="deck-top-right-options">
-                            <Link to={collectionLink} className='link-to-playerprofile-btn'>
-                                <button className="decklist-modal-button-deckprofile">
-                                    {username}'s Collection
-                                </button>
-                            </Link>
                             <div className='user-deck-options'>
+                                <button className="copy-decklist-btn" onClick={copyShareLink}>
+                                    {copied ? (
+                                        <span className="material-symbols-outlined">check</span>
+                                    ) : (
+                                        <>
+                                            <span className="material-symbols-outlined">ios_share</span>
+                                            <span className="tooltip-text">Share URL</span>
+                                        </>
+                                    )}
+                                </button>
                                 <button className="copy-decklist-btn" onClick={copyAsText}>
-                                    Copy as Text
+                                    <span className="material-symbols-outlined">content_copy</span>
+                                    <span className="tooltip-text">Copy to Clipboard</span>
                                 </button>
-
-                                <button className="copy-decklist-btn" onClick={openPrintDecklist}>
-                                    Print List
-                                </button>
-
+                                {/* <button className="copy-decklist-btn" onClick={openPrintDecklist}>
+                                    <span className="material-symbols-outlined">print</span>
+                                    <span className="tooltip-text">Print Decklist</span>
+                                </button> */}
                                 <button className="open-in-deckbuilder-btn" onClick={goToDeckbuilder}>
-                                    Open in Deckbuilder
+                                    <span className="material-symbols-outlined">construction</span>
+                                    <span className="tooltip-text">Open in Deck&nbsp;Builder</span>
                                 </button>
+                                <div className='deckview-switcher'>
+                                    <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
+                                        <span className="material-symbols-outlined">reorder</span>
+                                    </div>
+                                    <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
+                                        <span className="material-symbols-outlined">grid_view</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="deck-cards">
-                        {cards.map((card, index) => {
-                            const setCode = card.setAbbrev || card.set;
-                            const imgSrc = card?.images?.small || card?.imageUrl;
+                    {viewMode === 'grid' ? (
+                        <div className="deck-cards">
+                            {cards.map((card, index) => {
+                                const setCode = card.setAbbrev || card.set;
+                                const imgSrc = card?.images?.small || card?.imageUrl;
 
-                            return (
-                                <div
-                                    key={`${setCode}-${card.number}-${index}`}
-                                    className="card-container"
-                                    onClick={() => {
-                                        if (card.isUploadedImageCard || setCode === 'UPL') {
-                                            alert('This is a custom uploaded image, not found in the database.');
-                                            return;
-                                        }
+                                return (
+                                    <div
+                                        key={`${setCode}-${card.number}-${index}`}
+                                        className="card-container"
+                                        onClick={() => {
+                                            if (card.isUploadedImageCard || setCode === 'UPL') {
+                                                alert('This is a custom uploaded image, not found in the database.');
+                                                return;
+                                            }
 
-                                        window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
-                                    }}
-                                >
-                                    <img src={imgSrc} alt={card.name} />
-                                    <div className="card-count">{card.count}</div>
+                                            window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
+                                        }}
+                                    >
+                                        <img src={imgSrc} alt={card.name} />
+                                        <div className="card-count">{card.count}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="deck-list">
+                            <div className="column-section">
+                                <div className="list-category">
+                                    <h3>Pokémon ({groupedDecklist.pokemon?.reduce((sum, c) => sum + Number(c.count), 0) || 0})</h3>
                                 </div>
-                            );
-                        })}
-                    </div>
+                                <div className="list-of-cards">
+                                    {(groupedDecklist.pokemon || []).map((card, index) => {
+                                        const setCode = card.setAbbrev || card.set;
+                                        const imgSrc = card?.images?.small || card?.imageUrl;
+
+                                        return (
+                                            <div
+                                                key={`${setCode}-${card.number}-${index}`}
+                                                className="list-item"
+                                                onClick={() => window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer')}
+                                            >
+                                                <p className="list-card-count">{card.count}</p>
+                                                <p className="bold-name">{card.name}</p>
+                                                <img className="pokemon-list-img" src={imgSrc} alt={card.name} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="column-section">
+                                <div className="list-category">
+                                    <h3>Trainer ({groupedDecklist.trainer?.reduce((sum, c) => sum + Number(c.count), 0) || 0})</h3>
+                                </div>
+                                <div className="list-of-cards">
+                                    {(groupedDecklist.trainer || []).map((card, index) => {
+                                        const setCode = card.setAbbrev || card.set;
+                                        const imgSrc = card?.images?.small || card?.imageUrl;
+
+                                        return (
+                                            <div
+                                                key={`${setCode}-${card.number}-${index}`}
+                                                className="list-item"
+                                                onClick={() => window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer')}
+                                            >
+                                                <p className="list-card-count">{card.count}</p>
+                                                <p className="bold-name">{card.name}</p>
+                                                <img className="trainer-list-img" src={imgSrc} alt={card.name} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="column-section">
+                                <div className="list-category">
+                                    <h3>Energy ({groupedDecklist.energy?.reduce((sum, c) => sum + Number(c.count), 0) || 0})</h3>
+                                </div>
+                                <div className="list-of-cards">
+                                    {(groupedDecklist.energy || []).map((card, index) => {
+                                        const setCode = card.setAbbrev || card.set;
+                                        const imgSrc = card?.images?.small || card?.imageUrl;
+
+                                        return (
+                                            <div
+                                                key={`${setCode}-${card.number}-${index}`}
+                                                className="list-item"
+                                                onClick={() => window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer')}
+                                            >
+                                                <p className="list-card-count">{card.count}</p>
+                                                <p className="bold-name">{card.name}</p>
+                                                <img className="energy-list-img" src={imgSrc} alt={card.name} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <div className='user-deck-description-container'>
                         <strong>Description:</strong>
 
