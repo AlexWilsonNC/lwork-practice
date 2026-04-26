@@ -1265,6 +1265,57 @@
   display: none;
 }
 
+.user-deck-description-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 15px;
+  gap: 10px;
+}
+.user-deck-options {
+  display: flex;
+  flex-direction: row;
+}
+.user-deck-options button {
+  margin-right: 0px;
+  margin-left: 10px;
+}
+.user-deck-description-container {
+    position: relative;
+}
+.owner-deck-actions {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+}
+.delete-deck-btn {
+    background: #c0392b !important;
+    border-color: #c0392b !important;
+    margin-left: 0px !important;
+    color: white !important;
+}
+.delete-deck-btn:hover {
+    background: #ff1900 !important;
+    border-color: #ff1900 !important;
+}
+.desc-edit-actions button {
+  margin-right: 5px;
+  padding: 3px;
+  border-radius: 2px;
+  border: none;
+  width: 60px;
+}
+.desc-edit-actions button:hover {
+  cursor: pointer;
+}
+.desc-edit-actions-save {
+  background-color: #1290eb;
+  color: white;
+}
+
 @media (max-width: 1100px) {
   .account-decks .card-modal-content-account {
     transform: scale(1.2);
@@ -1517,6 +1568,18 @@
     left: 4px;
     font-size: 18px;
 }
+.user-deck-options button {
+  font-size: 12px;
+  border: 1.5px solid grey;
+    border-radius: 2px;
+}
+.decklist-modal-button-deckprofile {
+  font-size: 14px;
+}
+.desc-edit-actions button {
+  font-size: 12px;
+  width: 52.5px;
+}
 }
 
 @media (max-width: 700px) {
@@ -1571,6 +1634,16 @@
   .modal-close {
     font-size: 30px;
   }
+  .user-deck-options button {
+  font-size: 10px;
+  margin-left: 5px;
+}
+.decklist-modal-button-deckprofile {
+  font-size: 12px;
+}
+.edt-dklist-btn-dck {
+  margin-right: -2.5px !important;
+}
 }
 
 @media (max-width: 600px) {
@@ -1581,6 +1654,9 @@
   .color-swatch {
     width: 20px;
     height: 20px;
+  }
+  .hide-on-600 {
+    display: none;
   }
 }
 
@@ -1613,6 +1689,17 @@
   .folder-options-icon {
     font-size: 9px;
   }
+  .user-deck-options button {
+    font-size: 8px;
+    border: 1px solid grey;
+  }
+  .decklist-modal-button-deckprofile {
+    font-size: 10px;
+  }
+  .desc-edit-actions button {
+  font-size: 10px;
+  width: 45px;
+}
 }
 
 @media (max-width: 515px) {

@@ -774,18 +774,24 @@ const ExportButtons = React.forwardRef(function ExportButtons(
   };
 
   const handleSaveClick = () => {
-    const hasPrefill = !!(originalMeta && (originalMeta.name || originalMeta.mascotCard || originalMeta.description));
-    setOverwriteMode(hasPrefill);
-
-    if (!hasPrefill) {
-      setOverwriteDeckName('');
-      setOverwriteMascot('');
-      setOverwriteSecondary('');
-      setOverwriteDescription('');
-    }
-    overwritePrefilledRef.current = false;
+  if (!user) {
     setShowSaveModal(true);
+    return;
   }
+
+  const hasPrefill = !!(originalMeta && (originalMeta.name || originalMeta.mascotCard || originalMeta.description));
+  setOverwriteMode(hasPrefill);
+
+  if (!hasPrefill) {
+    setOverwriteDeckName('');
+    setOverwriteMascot('');
+    setOverwriteSecondary('');
+    setOverwriteDescription('');
+  }
+
+  overwritePrefilledRef.current = false;
+  setShowSaveModal(true);
+};
 
   const handleModalSave = async () => {
     const name = overwriteMode ? overwriteDeckName : deckName;

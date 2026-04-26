@@ -813,6 +813,44 @@ const EventPage = () => {
         day2Results = resultsWithPlacement;
     }
 
+    const EVENT_PAGE_STATE_KEY = `PTCGLegendsEventPageState_${eventId}`;
+
+    const saveEventPageState = () => {
+        sessionStorage.setItem(
+            EVENT_PAGE_STATE_KEY,
+            JSON.stringify({
+                scrollY: window.scrollY,
+                division,
+                activeTab,
+                viewTab,
+                dataDay,
+                showAllDecks,
+                showAllPlayers,
+                showAllRecs,
+                matchupDay,
+                matchupView,
+                statView,
+                selectedArchetype,
+                savedAt: Date.now()
+            })
+        );
+    };
+
+    const handleEventResultsClickCapture = (e) => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const url = new URL(link.href, window.location.origin);
+
+        const isTournamentDecklistLink =
+            url.pathname.startsWith(`/tournaments/${eventId}/`) &&
+            url.pathname.split('/').filter(Boolean).length >= 4;
+
+        if (isTournamentDecklistLink) {
+            saveEventPageState();
+        }
+    };
+
     const normalizeString = (str) => {
         return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
     };
@@ -1807,6 +1845,45 @@ const EventPage = () => {
         }
     }, [isModernEvent, eliminatedDecks.length]);
 
+    useEffect(() => {
+        if (!eventData) return;
+
+        const raw = sessionStorage.getItem(EVENT_PAGE_STATE_KEY);
+        if (!raw) return;
+
+        try {
+            const state = JSON.parse(raw);
+
+            const isExpired = Date.now() - Number(state.savedAt || 0) > 2 * 60 * 1000;
+
+            if (isExpired) {
+                sessionStorage.removeItem(EVENT_PAGE_STATE_KEY);
+                return;
+            }
+
+            if (state.division) setDivision(state.division);
+            if (state.activeTab) setActiveTab(state.activeTab);
+            if (state.viewTab) setViewTab(state.viewTab);
+            if (state.dataDay) setDataDay(state.dataDay);
+            if (typeof state.showAllDecks === 'boolean') setShowAllDecks(state.showAllDecks);
+            if (typeof state.showAllPlayers === 'boolean') setShowAllPlayers(state.showAllPlayers);
+            if (typeof state.showAllRecs === 'boolean') setShowAllRecs(state.showAllRecs);
+            if (state.matchupDay) setMatchupDay(state.matchupDay);
+            if (state.matchupView) setMatchupView(state.matchupView);
+            if (state.statView) setStatView(state.statView);
+            if (state.selectedArchetype) setSelectedArchetype(state.selectedArchetype);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, Number(state.scrollY) || 0);
+                    sessionStorage.removeItem(EVENT_PAGE_STATE_KEY);
+                });
+            });
+        } catch {
+            sessionStorage.removeItem(EVENT_PAGE_STATE_KEY);
+        }
+    }, [eventData, EVENT_PAGE_STATE_KEY]);
+
     if (!eventData) {
         return null;
     }
@@ -2335,7 +2412,7 @@ const EventPage = () => {
                 <div className='contain-event'>
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
-                            <div className='event-results'>
+                            <div className='event-results' onClickCapture={handleEventResultsClickCapture}>
                                 {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
                                     <div className="decks-records-btns">
                                         <button
@@ -2894,6 +2971,7 @@ const EventPage = () => {
                                                     to={`/tournaments/${eventId}/${division}/${encodeURIComponent(modalPlayer.name)}-${modalPlayer.flag}`}
                                                     className="decklist-link-icon"
                                                     title="View full decklist"
+                                                    onClick={saveEventPageState}
                                                 >
                                                     <button className="decklist-modal-button">Decklist</button>
                                                 </Link>
@@ -2986,6 +3064,7 @@ const EventPage = () => {
                                                                 <Link
                                                                     to={`/tournaments/${eventId}/${division}/${encodeURIComponent(name)}-${code}`}
                                                                     title="View opponent’s decklist"
+                                                                    onClick={saveEventPageState}
                                                                 >
                                                                     <span className="material-symbols-outlined">
                                                                         format_list_bulleted

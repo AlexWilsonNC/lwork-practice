@@ -21,6 +21,7 @@ import ArticleComponent from './ArticleComponents/ArticleComponent';
 import About from './About/About';
 import DeckCalculator from './Tools/DeckCalculator';
 import Footer from './Footer/Footer';
+import CollectionDeckPage from './pages/CollectionDeckPage';
 // import BackToTopButton from './Tools/BackToTopButton';
 import NotFound from './Catch/NotFound';
 import DeckBuilder from './DeckBuilder/DeckBuilder';
@@ -73,6 +74,7 @@ function App() {
             <Route path="/live" element={<LiveStandings />} />
             <Route path="/tournaments/:eventId/:division/:playerId" element={<PlayerDeck />} />
             <Route path="/:username/deck-collection" element={<Account />} />
+            <Route path="/:username/deck-collection/:deckId/:deckSlug" element={<CollectionDeckPage />} />
             <Route path="/decks" element={<DecksPage />} />
             {/* <Route path="/decks-by-era" element={<FeaturedDecks />} /> */}
             <Route path="/sgdf35h4dfg" element={<FeaturedDecks />} />

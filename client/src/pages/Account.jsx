@@ -4,7 +4,6 @@ import { AuthContext } from '../contexts/AuthContext';
 import '../css/Account.css'
 import styled from 'styled-components';
 import Spinner from '../contexts/Spinner';
-import DeckList from '../DeckBuilder/DeckList';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
@@ -748,8 +747,44 @@ export default function Account() {
         }
     }, [token, isPublicView, username]);
 
-    const openModal = deck => setSelectedDeck(deck);
-    const closeModal = () => setSelectedDeck(null);
+    const slugifyDeckName = name =>
+        String(name || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
+    const getDeckId = deck =>
+        deck?._id?.$oid || deck?._id || deck?.id;
+
+    const openDeckPage = deck => {
+        const owner = isPublicView ? username : user?.username;
+        if (!owner || !deck?._id || !deck?.name) return;
+
+        saveCollectionState();
+
+        const deckId = getDeckId(deck);
+        navigate(`/${owner}/deck-collection/${deckId}/${slugifyDeckName(deck.name)}`);
+    };
+
+    const ACCOUNT_COLLECTION_STATE_KEY = 'PTCGLegendsAccountCollectionState';
+
+    const saveCollectionState = () => {
+        if (isPublicView) return;
+
+        sessionStorage.setItem(
+            ACCOUNT_COLLECTION_STATE_KEY,
+            JSON.stringify({
+                activeFolder,
+                scrollY: window.scrollY,
+                showFavorites,
+                sortMode,
+                viewMode,
+                savedAt: Date.now()
+            })
+        );
+    };
 
     const filteredDecks = (showFavorites ? decks.filter(d => d.favorite) : decks)
         .filter(d => activeFolder ? String(d.folderId) === activeFolder : true);
@@ -782,6 +817,47 @@ export default function Account() {
                 return arr;
         }
     }, [filteredDecks, sortMode, foldersOrder]);
+
+    useEffect(() => {
+        if (loading || isPublicView) return;
+
+        const raw = sessionStorage.getItem(ACCOUNT_COLLECTION_STATE_KEY);
+        if (!raw) return;
+
+        try {
+            const state = JSON.parse(raw);
+
+            const isExpired = Date.now() - Number(state.savedAt || 0) > 2 * 60 * 1000;
+
+            if (isExpired) {
+                sessionStorage.removeItem(ACCOUNT_COLLECTION_STATE_KEY);
+                return;
+            }
+
+            setActiveFolder(state.activeFolder || null);
+
+            if (typeof state.showFavorites === 'boolean') {
+                setShowFavorites(state.showFavorites);
+            }
+
+            if (typeof state.sortMode === 'number') {
+                setSortMode(state.sortMode);
+            }
+
+            if (state.viewMode) {
+                setViewMode(state.viewMode);
+            }
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, Number(state.scrollY) || 0);
+                    sessionStorage.removeItem(ACCOUNT_COLLECTION_STATE_KEY);
+                });
+            });
+        } catch {
+            sessionStorage.removeItem(ACCOUNT_COLLECTION_STATE_KEY);
+        }
+    }, [loading, isPublicView]);
 
     useEffect(() => {
         localStorage.setItem('sortMode', sortMode)
@@ -1462,7 +1538,7 @@ export default function Account() {
                                                     <div
                                                         key={i}
                                                         className="deck-card"
-                                                        onClick={() => openModal(d)}
+                                                        onClick={() => openDeckPage(d)}
                                                     >
                                                         <div className='test-the-img-hover'>
                                                             <div className="deck-card-img">
@@ -1628,7 +1704,7 @@ export default function Account() {
                                             <div
                                                 key={id}
                                                 className="deck-list-item"
-                                                onClick={() => openModal(d)}
+                                                onClick={() => openDeckPage(d)}
                                                 style={{ position: 'relative' }}
                                             >
                                                 <div className='list-thumb-container'>
@@ -2014,34 +2090,6 @@ export default function Account() {
                                                 </div>
                                             )}
                                         </div>
-
-                                        <DeckList
-                                            deck={
-                                                (() => {
-                                                    const raw = selectedDeck.decklist;
-                                                    return Array.isArray(raw)
-                                                        ? raw
-                                                        : [
-                                                            ...(raw.pokemon || []),
-                                                            ...(raw.trainer || []),
-                                                            ...(raw.energy || []),
-                                                        ];
-                                                })()
-                                            }
-                                            loading={false}
-                                            onUpdateCount={() => { }}
-                                            onCardClick={(card) => {
-                                                const setCode = card.setAbbrev || card.set;
-
-                                                if (card.isUploadedImageCard || setCode === 'UPL') {
-                                                    alert('This is a custom uploaded image, not found in the database.');
-                                                    return;
-                                                }
-
-                                                window.open(`/card/${setCode}/${card.number}`, '_blank', 'noopener,noreferrer');
-                                            }}
-                                            viewMode="image"
-                                        />
                                     </div>
                                 </div>
                             )}
