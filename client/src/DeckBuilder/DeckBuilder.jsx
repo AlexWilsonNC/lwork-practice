@@ -464,17 +464,18 @@ export default function DeckBuilder() {
     }
   ];
 
-  useEffect(() => {
-    const seen = localStorage.getItem(WALKTHROUGH_SEEN_KEY) === 'true';
+  // load walkthrough on pageload for new users
+  // useEffect(() => {
+  //   const seen = localStorage.getItem(WALKTHROUGH_SEEN_KEY) === 'true';
 
-    const looksLoggedIn =
-      !!localStorage.getItem('PTCGLegendsToken') ||
-      !!localStorage.getItem('PTCGLegendsUsername');
+  //   const looksLoggedIn =
+  //     !!localStorage.getItem('PTCGLegendsToken') ||
+  //     !!localStorage.getItem('PTCGLegendsUsername');
 
-    if (!seen && !looksLoggedIn) {
-      startWalkthrough();
-    }
-  }, []);
+  //   if (!seen && !looksLoggedIn) {
+  //     startWalkthrough();
+  //   }
+  // }, []);
 
   const updateWalkthroughRect = () => {
     const step = walkthroughSteps[walkthroughStep];
