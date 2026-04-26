@@ -425,6 +425,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Reshiram')) {
         secondSprite  = getPokemonSpriteURL('zoroark');
     }                        
+    else if (hasPokemon('N\'s Zoroark ex') && hasPokemon('N\'s Zekrom')) {
+        secondSprite  = getPokemonSpriteURL('zoroark');
+    }                        
     else if (hasPokemon('Cynthia\'s Garchomp ex')) {
         secondSprite  = getPokemonSpriteURL('garchomp');
     }           

@@ -29,7 +29,27 @@
   padding: 25px 25px 50px 25px;
   position: relative;
 }
+.account-error-card {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 28px;
+    border-radius: 8px;
+    text-align: center;
+}
 
+.account-error-card h2 {
+    margin-bottom: 10px;
+}
+
+.account-error-card button {
+    margin-top: 18px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    background: #1290eb;
+    color: white;
+    cursor: pointer;
+}
 .profile-settings {
   font-size: 16px;
 }

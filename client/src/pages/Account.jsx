@@ -1074,10 +1074,23 @@ export default function Account() {
     }, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
-    if (error) {
-        if (!isPublicView && /relogin/i.test(error)) return null;
-        return <p className="error">{error}</p>;
-    }
+   if (error) {
+    if (!isPublicView && /relogin/i.test(error)) return null;
+
+    return (
+        <AccountSection className="account-page">
+            <div className="account-error-card">
+                <h2>Deck Collection Not Found</h2>
+                <p>
+                    This user either does not exist or does not have a public deck collection.
+                </p>
+                <button onClick={() => navigate('/')}>
+                    Go Home
+                </button>
+            </div>
+        </AccountSection>
+    );
+}
 
     return (
         <AccountSection className="account-page">
