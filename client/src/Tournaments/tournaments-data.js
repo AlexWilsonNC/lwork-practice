@@ -1786,8 +1786,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Apr 25, 2026",
         "flag": czechia,
-        "location": "Prague, Czech Republic",
-        "results": false
+        "location": "Prague, Czech Republic"
     },
     {
         "id": "2026_TORONTO",

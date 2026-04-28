@@ -1536,6 +1536,16 @@ const EventPage = () => {
             'hitmonchan'
         ];
     }
+    if (deckTypeCount['Mega Starmie']) {
+        deckTypeCount['Mega Starmie'].sprites = [
+            'starmie-mega'
+        ];
+    }
+    if (deckTypeCount['Hydrapple']) {
+        deckTypeCount['Hydrapple'].sprites = [
+            'hydrapple'
+        ];
+    }
 
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
