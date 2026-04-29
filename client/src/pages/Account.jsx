@@ -1074,23 +1074,23 @@ export default function Account() {
     }, [mobileActionsOpen]);
 
     if (loading) return <Spinner />;
-   if (error) {
-    if (!isPublicView && /relogin/i.test(error)) return null;
+    if (error) {
+        if (!isPublicView && /relogin/i.test(error)) return null;
 
-    return (
-        <AccountSection className="account-page">
-            <div className="account-error-card">
-                <h2>Deck Collection Not Found</h2>
-                <p>
-                    This user either does not exist or does not have a public deck collection.
-                </p>
-                <button onClick={() => navigate('/')}>
-                    Go Home
-                </button>
-            </div>
-        </AccountSection>
-    );
-}
+        return (
+            <AccountSection className="account-page">
+                <div className="account-error-card">
+                    <h2>Deck Collection Not Found</h2>
+                    <p>
+                        This user either does not exist or does not have a public deck collection.
+                    </p>
+                    <button onClick={() => navigate('/')}>
+                        Go Home
+                    </button>
+                </div>
+            </AccountSection>
+        );
+    }
 
     return (
         <AccountSection className="account-page">
@@ -1688,7 +1688,10 @@ export default function Account() {
                                                                                 }}>
                                                                                     Edit Mascots
                                                                                 </button>
-                                                                                <button onClick={() => goToDeckbuilder(d)}>
+                                                                                <button onClick={e => {
+                                                                                    e.stopPropagation();
+                                                                                    goToDeckbuilder(d);
+                                                                                }}>
                                                                                     Edit in Deck Builder
                                                                                 </button>
                                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>
@@ -1786,7 +1789,12 @@ export default function Account() {
                                                                 }}>
                                                                     Edit Mascots
                                                                 </button>
-                                                                <button onClick={() => goToDeckbuilder(d)}>Edit in Deck Builder</button>
+                                                                <button onClick={e => {
+                                                                    e.stopPropagation();
+                                                                    goToDeckbuilder(d);
+                                                                }}>
+                                                                    Edit in Deck Builder
+                                                                </button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDuplicate(d); }}>Duplicate</button>
                                                                 <button onClick={e => { e.stopPropagation(); setMoveModalDeck(d); setSelectedFolderId(d.folderId || ''); setShowMoveModal(true); }}>{folderActionLabel(d)}</button>
                                                                 <button onClick={e => { e.stopPropagation(); handleDelete(d); }}>Delete</button>

@@ -13,7 +13,6 @@ const CollectionDeckCenter = styled.div`
         background: ${({ theme }) => theme.deckBg};
         color: ${({ theme }) => theme.text};
     }
-    .tooltip-text {border:2px solid black;}
     .deck-cards,
     .deck-box {
         background-image: ${({ theme }) => theme.deckModalAccountList};
@@ -245,7 +244,22 @@ export default function CollectionDeckPage() {
         });
 
         const fragment = encodeURIComponent(JSON.stringify(minimal));
-        navigate(`/deckbuilder#deck=${fragment}`);
+        const currentDeckId = getDeckId(deck);
+
+        if (isViewingOwnDeck) {
+            localStorage.setItem('PTCGLegendsOriginalDeckMeta', JSON.stringify({
+                id: currentDeckId,
+                name: deck.name || '',
+                mascotCard: deck.mascotCard || '',
+                secondaryMascotCard: deck.secondaryMascotCard || '',
+                description: deck.description || ''
+            }));
+
+            navigate(`/deckbuilder?deckId=${currentDeckId}#deck=${fragment}`);
+        } else {
+            localStorage.removeItem('PTCGLegendsOriginalDeckMeta');
+            navigate(`/deckbuilder#deck=${fragment}`);
+        }
     };
 
     const switchToGridView = () => {
@@ -361,11 +375,11 @@ export default function CollectionDeckPage() {
                                 <Link className="blue-link bold" to={collectionLink}>
                                     {username}
                                 </Link>
-                                <Link to={collectionLink} className='link-to-playerprofile-btn'>
+                                {/* <Link to={collectionLink} className='link-to-playerprofile-btn'>
                                     <button className="decklist-modal-button-deckprofile">
                                         {username}'s Collection
                                     </button>
-                                </Link>
+                                </Link> */}
                             </p>
                             <p>Folder: {folderName || 'Unassigned'}</p>
                         </div>
