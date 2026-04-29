@@ -202,6 +202,9 @@
   .profile-settings-display-edit {
     width: 80%;
   }
+  .deck-description-input {
+    width: 97% !important;
+  }
 }
 
 .account-tabs button {
@@ -1327,12 +1330,26 @@
     background: #ff1900 !important;
     border-color: #ff1900 !important;
 }
+.deck-description-input {
+  width: 98.5%;
+  min-height: 80px;
+  resize: vertical;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
 .desc-edit-actions button {
   margin-right: 5px;
   padding: 3px;
   border-radius: 2px;
   border: none;
   width: 60px;
+}
+.desc-edit-actions button:nth-child(1) {
+  border: 1px solid black;
+}
+.desc-edit-actions button:nth-child(2) {
+  border: 1px solid transparent;
 }
 .desc-edit-actions button:hover {
   cursor: pointer;
@@ -1741,6 +1758,10 @@
 @media (max-width: 515px) {
   .hide-on515 {
     display: none;
+  }
+
+  .deck-description-input {
+    width: 95% !important;
   }
 
   .modal-close-account {

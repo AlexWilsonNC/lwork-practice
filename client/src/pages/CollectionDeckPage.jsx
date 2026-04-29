@@ -535,7 +535,9 @@ export default function CollectionDeckPage() {
                             <>
                                 <textarea
                                     value={newDescription}
-                                    onChange={e => setNewDescription(e.target.value)}
+                                    onChange={(e) => setNewDescription(e.target.value)}
+                                    className="deck-description-input"
+                                    rows={4}
                                 />
                                 <div className="desc-edit-actions">
                                     <button onClick={() => setEditingDescription(false)}>Cancel</button>

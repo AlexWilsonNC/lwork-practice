@@ -55,18 +55,14 @@ const orderedSets = [
     "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
-    "CEC", "HIF", "UNM", "UNB", "DET", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
-    "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
-    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCR", "PRC", "PHF", "FFI",
-    "FLF", "KSS", "XY", "PR-XY",
+    "CEC", "HIF", "UNM", "UNB", "DET", "TEU", "LOT", "DRM", "CES", "FLI", "UPR", "CIN", "SLG", "BUS", "GRI", "SUM", "PR-SM",
+    "EVO", "STS", "FCO", "GEN", "BKP", "BKT", "AOR", "ROS", "DCR", "PRC", "PHF", "FFI", "FLF", "KSS", "XY", "PR-XY",
     "LTR", "PLB", "PLF", "PLS", "BCR", "DRV", "DRX", "DEX", "NXD", "NVI", "EPO", "BLW", "PR-BLW",
     "CL", "TM", "UD", "UL", "HS", "RM", "PR-HS",
-    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6",
-    "MT", "DP", "PR-DP",
+    "AR", "SV", "RR", "P9", "PL", "SF", "P8", "LA", "MD", "P7", "GE", "SW", "P6", "MT", "DP", "PR-DP",
     "P5", "PK", "DF", "CG", "P4", "HP", "P3", "TK2", "LM", "DS", "P2", "UF", "EM", "DX",
     "TRR", "P1", "RG", "HL", "TK1", "MA", "DR", "SS", "RS", "PR-EX",
-    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2",
-    "FO", "JU", "BS", "PR-BS",
+    "SK", "AQ", "EX", "LC", "N4", "N3", "SI", "N2", "N1", "G2", "G1", "TR", "B2", "FO", "JU", "BS", "PR-BS",
 ];
 
 const promoSets = {
