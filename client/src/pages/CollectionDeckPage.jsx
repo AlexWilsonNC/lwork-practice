@@ -91,6 +91,7 @@ export default function CollectionDeckPage() {
     const [newDescription, setNewDescription] = useState('');
     const [copied, setCopied] = useState(false);
     const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
+    const [showDeckActions, setShowDeckActions] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -415,6 +416,23 @@ export default function CollectionDeckPage() {
                                     <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
                                         <span className="material-symbols-outlined">grid_view</span>
                                     </div>
+                                </div>
+                                <div className="deck-actions-wrapper">
+                                    <div
+                                        className="deck-actions-btn"
+                                        onClick={() => setShowDeckActions(prev => !prev)}
+                                    >
+                                        <span className="material-symbols-outlined">settings</span>
+                                    </div>
+
+                                    {showDeckActions && (
+                                        <div className="deck-actions-dropdown">
+                                            <button onClick={handleEditName}>Edit Name</button>
+                                            <button onClick={handleEditMascots}>Edit Mascots</button>
+                                            <button onClick={handleChangeFolder}>Change Folder</button>
+                                            <button onClick={handleDuplicateDeck}>Duplicate</button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
