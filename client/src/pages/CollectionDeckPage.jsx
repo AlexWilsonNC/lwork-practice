@@ -417,7 +417,7 @@ export default function CollectionDeckPage() {
                                         <span className="material-symbols-outlined">grid_view</span>
                                     </div>
                                 </div>
-                                <div className="deck-actions-wrapper">
+                                {/* <div className="deck-actions-wrapper">
                                     <div
                                         className="deck-actions-btn"
                                         onClick={() => setShowDeckActions(prev => !prev)}
@@ -433,7 +433,7 @@ export default function CollectionDeckPage() {
                                             <button onClick={handleDuplicateDeck}>Duplicate</button>
                                         </div>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
