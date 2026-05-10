@@ -667,11 +667,11 @@
     .open-in-deckbuilder-btn {
         margin-right: 5px;
     }
-     .deck-actions-btn {
+    .deck-actions-btn {
         margin-left: 5px;
     }
     .deck-actions-btn span {
-        font-size: 18px;
+        font-size: 16px;
     }
     .player-deck-top div p {
         margin-top: 0px;

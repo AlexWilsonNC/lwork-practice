@@ -1362,11 +1362,6 @@
 .deck-actions-wrapper {
     position: relative;
 }
-.deck-actions-btn {
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 4px;
-}
 .dropdown-divider {
     height: 1px;
     background: #333;
