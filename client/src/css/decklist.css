@@ -168,7 +168,8 @@
 }
 .copy-decklist-btn,
 .open-in-deckbuilder-btn,
-.save-to-collection-btn {
+.save-to-collection-btn,
+.deck-actions-btn {
     border-radius: 5px;
     border: 2px solid grey;
     padding: 5px;
@@ -177,6 +178,11 @@
     align-items: center;
     margin-right: 10px;
     position: relative;
+}
+.deck-actions-btn {
+    margin-left: 10px;
+    margin-right: 0px;
+    background-color: #27292c;
 }
 .classhiddendot {
     position: fixed;
@@ -187,12 +193,13 @@
 }
 .copy-decklist-btn:hover,
 .open-in-deckbuilder-btn:hover,
+.deck-actions-btn:hover,
 .save-to-collection-btn:hover {
-    cursor: pointer;
-    background-color: grey !important;
+    background-color: rgba(128, 128, 128, 0.5) !important;
     color: white !important;
 }
 .copy-decklist-btn .tooltip-text,
+.deck-actions-btn .tooltip-text,
 .open-in-deckbuilder-btn .tooltip-text,
 .save-to-collection-btn .tooltip-text {
     visibility: hidden;
@@ -219,8 +226,15 @@
 .save-to-collection-btn .tooltip-text {
     margin-left: -36px;
 }
+.deck-actions-btn .tooltip-text {
+    margin-left: -22px;
+}
+.share-url-deck-btn .tooltip-text {
+    margin-left: -23px;
+}
 .copy-decklist-btn .tooltip-text::after,
 .open-in-deckbuilder-btn .tooltip-text::after,
+.deck-actions-btn .tooltip-text::after,
 .save-to-collection-btn .tooltip-text::after {
     content: "";
     position: absolute;
@@ -233,6 +247,7 @@
 }
 .copy-decklist-btn:hover .tooltip-text,
 .open-in-deckbuilder-btn:hover .tooltip-text,
+.deck-actions-btn:hover .tooltip-text,
 .save-to-collection-btn:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
@@ -493,6 +508,12 @@
     .save-to-collection-btn {
         margin-right: 7px;
     }
+    .deck-actions-btn {
+        margin-left: 7px;
+    }
+    .deck-actions-btn span {
+        font-size: 20px;
+    }
     .deck-cards {
         grid-template-columns: repeat(10, 1fr);
         gap: 0px;
@@ -645,6 +666,12 @@
     .save-to-collection-btn,
     .open-in-deckbuilder-btn {
         margin-right: 5px;
+    }
+     .deck-actions-btn {
+        margin-left: 5px;
+    }
+    .deck-actions-btn span {
+        font-size: 18px;
     }
     .player-deck-top div p {
         margin-top: 0px;

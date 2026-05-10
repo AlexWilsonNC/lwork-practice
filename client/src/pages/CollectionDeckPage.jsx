@@ -68,6 +68,124 @@ const groupDecklist = raw => {
     };
 };
 
+function ArtCrop({ src, alt = '' }) {
+    return (
+        <div style={{ position: 'relative', width: 50, height: 30, overflow: 'hidden', borderRadius: 2 }}>
+            <img
+                src={src}
+                alt={alt}
+                className="secondary-mascot-img"
+                style={{
+                    position: 'absolute',
+                    top: '-40%',
+                    left: '-10%',
+                    width: '120%',
+                    height: 'auto',
+                    transform: 'scale(1)',
+                    transformOrigin: 'top left'
+                }}
+            />
+        </div>
+    );
+}
+
+function MascotPicker({ value, onChange, decklist, allowNone = false, noneLabel = 'None' }) {
+    const [open, setOpen] = React.useState(false);
+    const ref = React.useRef(null);
+
+    const options = (decklist || [])
+        .filter(c => !(c?.isUploadedImageCard || (c?.setAbbrev || c?.set) === 'UPL'))
+        .map(c => ({
+            key: `${c.setAbbrev || c.set}-${c.number}`,
+            name: c.name,
+            img: c?.images?.small || c?.imageUrl || ''
+        }));
+
+    const selected = options.find(o => o.key === value);
+
+    React.useEffect(() => {
+        const onDocClick = e => {
+            if (!ref.current || ref.current.contains(e.target)) return;
+            setOpen(false);
+        };
+        document.addEventListener('mousedown', onDocClick);
+        return () => document.removeEventListener('mousedown', onDocClick);
+    }, []);
+
+    return (
+        <div ref={ref} style={{ position: 'relative' }}>
+            <button
+                type="button"
+                onClick={() => setOpen(o => !o)}
+                className="mascot-select-trigger"
+                style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}
+            >
+                {selected?.img ? <ArtCrop src={selected.img} /> : <span style={{ width: 24, height: 34 }} />}
+                <span style={{ flex: 1, textAlign: 'left' }}>{selected ? selected.name : (value || 'Select a card')}</span>
+                <span className="material-symbols-outlined">expand_more</span>
+            </button>
+
+            {open && (
+                <div className="mascot-select-menu"
+                    style={{
+                        position: 'absolute',
+                        zIndex: 1000,
+                        top: '100%',
+                        left: 0,
+                        right: 0,
+                        maxHeight: 260,
+                        overflowY: 'auto',
+                        borderRadius: 6,
+                        border: '1px solid rgba(0,0,0,0.12)',
+                        background: 'var(--card, #1f1f22)',
+                        marginTop: 6,
+                        boxShadow: '0 6px 16px rgba(0,0,0,0.2)'
+                    }}>
+                    {allowNone && (
+                        <div
+                            role="option"
+                            tabIndex={0}
+                            className="mascot-select-item"
+                            onMouseDown={e => {
+                                e.preventDefault();
+                                setOpen(false);
+                                onChange('');
+                            }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer' }}
+                        >
+                            <span style={{ width: 24, height: 34 }} />
+                            <span>{noneLabel}</span>
+                        </div>
+                    )}
+
+                    {options.map(opt => (
+                        <div
+                            key={opt.key}
+                            className="mascot-select-item"
+                            onMouseDown={e => {
+                                e.preventDefault();
+                                setOpen(false);
+                                onChange(opt.key);
+                            }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                                padding: '8px 10px',
+                                cursor: 'pointer',
+                                background: opt.key === value ? 'rgba(255,255,255,0.06)' : 'transparent'
+                            }}
+                        >
+                            {opt.img ? <ArtCrop src={opt.img} /> : <span style={{ width: 24, height: 34 }} />}
+                            <span>{opt.name}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function CollectionDeckPage() {
     const { username, deckId } = useParams();
     const navigate = useNavigate();
@@ -92,6 +210,13 @@ export default function CollectionDeckPage() {
     const [copied, setCopied] = useState(false);
     const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
     const [showDeckActions, setShowDeckActions] = useState(false);
+    const [showRenameModal, setShowRenameModal] = useState(false);
+    const [newName, setNewName] = useState('');
+    const [showMoveModal, setShowMoveModal] = useState(false);
+    const [selectedFolderId, setSelectedFolderId] = useState('');
+    const [showMascotModal, setShowMascotModal] = useState(false);
+    const [primaryMascot, setPrimaryMascot] = useState('');
+    const [secondaryMascot, setSecondaryMascot] = useState('');
 
     useEffect(() => {
         let cancelled = false;
@@ -213,6 +338,136 @@ export default function CollectionDeckPage() {
     //     const payload = encodeURIComponent(JSON.stringify(minimal));
     //     window.open(`/print?deck=${payload}`, '_blank', 'noopener,noreferrer');
     // };
+
+    const handleEditName = () => {
+        setNewName(deck.name || '');
+        setShowRenameModal(true);
+        setShowDeckActions(false);
+    };
+
+    const handleChangeFolder = () => {
+        setSelectedFolderId(deck.folderId || '');
+        setShowMoveModal(true);
+        setShowDeckActions(false);
+    };
+
+    const handleEditMascots = () => {
+        setPrimaryMascot(deck.mascotCard || '');
+        setSecondaryMascot(deck.secondaryMascotCard || '');
+        setShowMascotModal(true);
+        setShowDeckActions(false);
+    };
+
+    const handleDuplicateDeck = async () => {
+        const token = localStorage.getItem('PTCGLegendsToken');
+
+        try {
+            const res = await fetch(`/api/user/decks/${getDeckId(deck)}/duplicate`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!res.ok) throw new Error('Duplicate failed');
+
+            const { deck: newDeck } = await res.json();
+
+            navigate(`/${username}/deck-collection/${getDeckId(newDeck)}/${newDeck.name}`);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to duplicate deck');
+        }
+    };
+
+    const saveDeckName = async () => {
+        const token = localStorage.getItem('PTCGLegendsToken');
+
+        try {
+            const res = await fetch(`/api/user/decks/${getDeckId(deck)}/rename`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: newName.trim() })
+            });
+
+            if (!res.ok) throw new Error('Rename failed');
+
+            const updated = await res.json();
+            const updatedDeck = updated.deck || updated;
+
+            setDeck(d => ({
+                ...d,
+                name: updatedDeck.name || newName.trim()
+            }));
+
+            setShowRenameModal(false);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to rename deck');
+        }
+    };
+
+    const saveDeckFolder = async () => {
+        const token = localStorage.getItem('PTCGLegendsToken');
+
+        try {
+            const res = await fetch(`/api/user/decks/${getDeckId(deck)}/move`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ folderId: selectedFolderId || null })
+            });
+
+            if (!res.ok) throw new Error('Move failed');
+
+            const updated = await res.json();
+            const updatedDeck = updated.deck || updated;
+
+            setDeck(d => ({
+                ...d,
+                folderId: updatedDeck.folderId || selectedFolderId || ''
+            }));
+
+            setShowMoveModal(false);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to move deck');
+        }
+    };
+
+    const saveMascots = async () => {
+        const token = localStorage.getItem('PTCGLegendsToken');
+
+        try {
+            const res = await fetch(`/api/user/decks/${getDeckId(deck)}/mascots`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    mascotCard: primaryMascot,
+                    secondaryMascotCard: secondaryMascot || null
+                })
+            });
+
+            if (!res.ok) throw new Error('Failed to update mascots');
+
+            setDeck(d => ({
+                ...d,
+                mascotCard: primaryMascot,
+                secondaryMascotCard: secondaryMascot || null
+            }));
+
+            setShowMascotModal(false);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update mascots');
+        }
+    };
 
     const goToDeckbuilder = () => {
         const minimal = cards.map(c => {
@@ -387,7 +642,7 @@ export default function CollectionDeckPage() {
 
                         <div className="deck-top-right-options">
                             <div className='user-deck-options'>
-                                <button className="copy-decklist-btn" onClick={copyShareLink}>
+                                <button className="copy-decklist-btn share-url-deck-btn" onClick={copyShareLink}>
                                     {copied ? (
                                         <span className="material-symbols-outlined">check</span>
                                     ) : (
@@ -409,31 +664,36 @@ export default function CollectionDeckPage() {
                                     <span className="material-symbols-outlined">construction</span>
                                     <span className="tooltip-text">Open in Deck&nbsp;Builder</span>
                                 </button>
-                                <div className='deckview-switcher'>
+                                {/* <div className='deckview-switcher'>
                                     <div className={`list-form ${viewMode === 'list' ? 'active-grid-option' : ''}`} onClick={switchToListView}>
                                         <span className="material-symbols-outlined">reorder</span>
                                     </div>
                                     <div className={`playmat-form ${viewMode === 'grid' ? 'active-grid-option' : ''}`} onClick={switchToGridView}>
                                         <span className="material-symbols-outlined">grid_view</span>
                                     </div>
-                                </div>
-                                {/* <div className="deck-actions-wrapper">
-                                    <div
-                                        className="deck-actions-btn"
-                                        onClick={() => setShowDeckActions(prev => !prev)}
-                                    >
-                                        <span className="material-symbols-outlined">settings</span>
-                                    </div>
-
-                                    {showDeckActions && (
-                                        <div className="deck-actions-dropdown">
-                                            <button onClick={handleEditName}>Edit Name</button>
-                                            <button onClick={handleEditMascots}>Edit Mascots</button>
-                                            <button onClick={handleChangeFolder}>Change Folder</button>
-                                            <button onClick={handleDuplicateDeck}>Duplicate</button>
-                                        </div>
-                                    )}
                                 </div> */}
+                                {isViewingOwnDeck && (
+                                    <div className="deck-actions-wrapper">
+                                        <div
+                                            className="deck-actions-btn"
+                                            onClick={() => setShowDeckActions(prev => !prev)}
+                                        >
+                                            <span className="material-symbols-outlined">settings</span>
+                                            <span className="tooltip-text">Edit Deck</span>
+                                        </div>
+
+                                        {showDeckActions && (
+                                            <div className="deck-edit-settings-actions-dropdown">
+                                                <button onClick={handleEditName}>Edit Name</button>
+                                                <button onClick={handleEditMascots}>Edit Mascots</button>
+                                                <button onClick={handleChangeFolder}>Change Folder</button>
+                                                <button onClick={handleDuplicateDeck}>Duplicate</button>
+                                                <div className="dropdown-divider"></div>
+                                                <button className="danger" onClick={handleDeleteDeck}>Delete Deck</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -587,6 +847,94 @@ export default function CollectionDeckPage() {
                     </div>
                 </div>
             </div>
+            {showRenameModal && (
+                <div className="deck-collection-modal-overlay">
+                    <div className="deck-collection-modal-box">
+                        <h4>Edit Deck Name</h4>
+                        <input
+                            value={newName}
+                            onChange={e => setNewName(e.target.value)}
+                            autoFocus
+                        />
+                        <div className="buttons-row-modal">
+                            <button className="cancel-button" onClick={() => setShowRenameModal(false)}>
+                                Cancel
+                            </button>
+                            <button className="save-button" onClick={saveDeckName} disabled={!newName.trim()}>
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showMoveModal && (
+                <div className="deck-collection-modal-overlay">
+                    <div className="deck-collection-modal-box">
+                        <h4>Change Folder</h4>
+
+                        <select
+                            value={selectedFolderId}
+                            onChange={e => setSelectedFolderId(e.target.value)}
+                        >
+                            <option value="">Unassigned</option>
+                            {folders.map(folder => (
+                                <option key={folder._id} value={folder._id}>
+                                    {folder.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <div className="buttons-row-modal">
+                            <button className="cancel-button" onClick={() => setShowMoveModal(false)}>
+                                Cancel
+                            </button>
+                            <button className="save-button" onClick={saveDeckFolder}>
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showMascotModal && (
+                <div className="deck-collection-modal-overlay">
+                    <div className="deck-collection-modal-box" onClick={e => e.stopPropagation()}>
+                        <h4>Edit Mascots</h4>
+
+                        <label>
+                            Primary Mascot*<br />
+                            <MascotPicker
+                                value={primaryMascot}
+                                onChange={setPrimaryMascot}
+                                decklist={cards}
+                            />
+                        </label>
+
+                        <label>
+                            Secondary Mascot<br />
+                            <MascotPicker
+                                value={secondaryMascot}
+                                onChange={setSecondaryMascot}
+                                decklist={cards}
+                                allowNone
+                                noneLabel="None"
+                            />
+                        </label>
+
+                        <div className="buttons-row-modal">
+                            <button className="cancel-button" onClick={() => setShowMascotModal(false)}>
+                                Cancel
+                            </button>
+                            <button
+                                className="save-button"
+                                onClick={saveMascots}
+                                disabled={!primaryMascot}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </CollectionDeckCenter>
     );
 }

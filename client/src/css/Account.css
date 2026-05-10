@@ -831,7 +831,6 @@
   border: 1px solid grey;
   z-index: 100;
 }
-
 .card-modal-overlay-account {
   position: fixed;
   top: 0;
@@ -1363,14 +1362,17 @@
 .deck-actions-wrapper {
     position: relative;
 }
-
 .deck-actions-btn {
     cursor: pointer;
     padding: 6px;
     border-radius: 4px;
 }
-
-.deck-actions-dropdown {
+.dropdown-divider {
+    height: 1px;
+    background: #333;
+    margin: 6px 0;
+}
+.deck-edit-settings-actions-dropdown {
     position: absolute;
     right: 0;
     top: 40px;
@@ -1379,20 +1381,22 @@
     padding: 6px 0;
     min-width: 160px;
     z-index: 100;
+    border: 1px solid grey;
 }
-
-.deck-actions-dropdown button {
-    width: 100%;
+.deck-edit-settings-actions-dropdown button {
+    width: 88%;
     padding: 8px 12px;
     text-align: left;
-    background: none;
+    background: transparent !important;
     border: none;
     color: white;
     cursor: pointer;
 }
-
-.deck-actions-dropdown button:hover {
-    background: #2a2a2a;
+.deck-edit-settings-actions-dropdown button:hover {
+    background: #3b3b3b !important;
+}
+.deck-edit-settings-actions-dropdown .danger:hover {
+  background: #c0392b !important;
 }
 
 @media (max-width: 1100px) {
