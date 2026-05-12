@@ -911,11 +911,12 @@ const EventPage = () => {
     useEffect(() => {
         if (!eventData || !isModernEvent) return;
         if (didFetchCounts.current[division]) return;
+        const [year, ...slugParts] = eventId.split('_');
+        const slug = slugParts.join('-').toLowerCase();
+        const elUrl = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug}.json`;
 
         (async () => {
             try {
-                const [year, slug] = eventId.split('_');
-                const elUrl = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
                 const elRes = await fetch(elUrl);
                 if (!elRes.ok) throw new Error(`HTTP ${elRes.status}`);
 
@@ -1009,7 +1010,8 @@ const EventPage = () => {
             setLoadingEliminatedDecks(true);
         }
 
-        const [year, slug] = eventId.split('_');
+        const [year, ...slugParts] = eventId.split('_');
+        const slug = slugParts.join('-').toLowerCase();
         const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
 
         try {
