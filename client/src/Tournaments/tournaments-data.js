@@ -1690,8 +1690,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 8, 2026",
         "flag": usa,
-        "location": "Los Angeles, California",
-        "results": false
+        "location": "Los Angeles, California"
     },
     {
         "id": "2026_MELBOURNE",

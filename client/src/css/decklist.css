@@ -742,6 +742,9 @@
     .save-to-collection-btn {
         margin-right: 5px;
     }
+     .deck-actions-btn span {
+        font-size: 14px;
+    }
 }
 @media screen and (max-width: 375px){
     .list-item {

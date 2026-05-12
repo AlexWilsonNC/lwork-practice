@@ -555,9 +555,15 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('greninja');
     }                        
     else if (hasPokemon('Dragapult ex') && hasPokemon('Dudunsparce')) {
-        firstSprite  = getPokemonSpriteURL('dragapult');
-        secondSprite  = getPokemonSpriteURL('dudunsparce');
-    }                        
+        const dudunsparceCount = getPokemonCount('Dudunsparce');
+        if (dudunsparceCount > 1) {
+            firstSprite  = getPokemonSpriteURL('dragapult');
+            secondSprite  = getPokemonSpriteURL('dudunsparce');
+        }
+        else if (dudunsparceCount < 2) {
+            secondSprite  = getPokemonSpriteURL('dragapult');
+        }
+    }            
     else if (hasPokemon('Mega Starmie ex') && hasPokemon('Dusknoir')) {
         firstSprite  = getPokemonSpriteURL('starmie-mega');
         secondSprite  = getPokemonSpriteURL('dusknoir');
