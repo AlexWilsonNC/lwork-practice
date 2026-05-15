@@ -51,7 +51,7 @@ const PlayerDeckCenter = styled.div`
 `;
 
 const orderedSets = [
-    "POR", "ASC", "PFL", "MEE", "MEG", "MEE", "MEP", 
+    "POR", "ASC", "PFL", "MEE", "MEG", "MEE", "MEP",
     "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
@@ -549,12 +549,17 @@ const PlayerDeck = () => {
     }, [eventId, division, playerId]);
 
     const fetchEliminatedJson = async (eventId, division) => {
-        const [year, slug] = eventId.split('_');
-        const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+        const [year, ...slugParts] = eventId.split('_');
+        const slug = slugParts.join('-').toLowerCase();
+
+        const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug}.json`;
+
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Eliminated JSON ${res.status}`);
+
         const data = await res.json();
         const key = `${division}`;
+
         return Array.isArray(data[key]) ? data[key] : [];
     };
 
