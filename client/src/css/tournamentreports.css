@@ -1,0 +1,163 @@
+.report-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.report-card {
+  width: min(1050px, 100%);
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.report-card h1 {
+  margin-bottom: 10px;
+}
+
+.report-card h2 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.report-grid label,
+.round-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.report-grid input,
+.report-grid select,
+.sprite-row input,
+.round-card textarea {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #777;
+}
+
+.sprite-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sprite-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 14px;
+  font-weight: bold;
+}
+
+.sprite-preview.large {
+  transform-origin: left center;
+}
+
+.round-card {
+  border: 1px solid rgba(128,128,128,0.35);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.round-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.round-card textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.primary-report-btn,
+.secondary-report-btn,
+.primary-report-link {
+  border: none;
+  background: #1290eb;
+  color: white;
+  padding: 9px 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.secondary-report-btn {
+  background: #555;
+  margin-right: 10px;
+}
+
+.report-title-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.report-section {
+  margin-top: 20px;
+}
+
+.report-round-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-round-table th,
+.report-round-table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(128,128,128,0.3);
+  text-align: left;
+}
+
+.table-sprite-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-pill {
+  font-weight: bold;
+}
+
+.result-W {
+  color: #22aa55;
+}
+
+.result-L {
+  color: #cc4444;
+}
+
+.result-T,
+.result-ID {
+  color: #c59b00;
+}
+
+@media (max-width: 700px) {
+  .report-grid,
+  .sprite-row {
+    grid-template-columns: 1fr;
+  }
+
+  .report-title-row {
+    flex-direction: column;
+  }
+
+  .report-round-table {
+    font-size: 12px;
+  }
+}

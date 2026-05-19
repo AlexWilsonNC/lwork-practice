@@ -29,6 +29,8 @@ import PrintDecklist from './DeckBuilder/PrintDecklist'
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import Login   from './pages/Login';
 import Account from './pages/Account';
+import TournamentReportForm from './pages/TournamentReportForm';
+import TournamentReportPage from './pages/TournamentReportPage';
 
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
@@ -89,6 +91,8 @@ function App() {
             <Route path="/articles/:articleId" element={<ArticleComponent />} />
             <Route path="/about" element={<About />} />
             <Route path="/deckbuilder" element={<DeckBuilder />} />
+            <Route path="/tournament-reports/new" element={<TournamentReportForm />} />
+            <Route path="/tournament-reports/:reportId" element={<TournamentReportPage />} />
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
             <Route path="*" element={<NotFound />} />
