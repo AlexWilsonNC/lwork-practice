@@ -1755,8 +1755,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 16, 2026",
         "flag": netherlands,
-        "location": "Utrecht, Netherlands",
-        "results": false
+        "location": "Utrecht, Netherlands"
     },
     {
         "id": "2026_LIMA",
@@ -1840,8 +1839,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 16, 2026",
         "flag": brazil,
-        "location": "Campinas, Brazil",
-        "results": false
+        "location": "Campinas, Brazil"
     },
 ];
 
