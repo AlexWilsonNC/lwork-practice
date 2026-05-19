@@ -572,6 +572,23 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('lopunny-mega');
         secondSprite  = getPokemonSpriteURL('dudunsparce');
     }                                          
+    else if (hasPokemon('Yanmega ex') && hasPokemon('Dudunsparce')) {
+        firstSprite  = getPokemonSpriteURL('yanmega');
+        secondSprite  = getPokemonSpriteURL('dudunsparce');
+    }       
+    else if (hasPokemon('Steven\'s Metagross ex') && hasPokemon('Genesect ex')) {
+        const metagrossCount = getPokemonCount('Steven\'s Metagross ex');
+        if (metagrossCount >= 2) {
+            secondSprite  = getPokemonSpriteURL('metagross');
+        }
+    }                                      
+    else if (hasPokemon('Mega Dragonite ex') && hasPokemon('Eelektrik')) {
+        const megadragoniteCount = getPokemonCount('Mega Dragonite ex');
+        if (megadragoniteCount >= 2) {
+            firstSprite  = getPokemonSpriteURL('dragonite-mega');
+            secondSprite  = getPokemonSpriteURL('eelektrik');
+        }
+    }                                      
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
