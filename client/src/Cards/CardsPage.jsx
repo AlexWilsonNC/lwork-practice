@@ -140,7 +140,7 @@ const formatDate = (dateString) => {
   export const availableSets = [
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { separator: true, text: "Mega Evolution" },
-    // { name: "Chaos Rising", abbrev: "CRI", releaseDate: "May 22, 2026", total: "120+", notavailable: true },
+    { name: "Chaos Rising", abbrev: "CRI", releaseDate: "May 22, 2026", total: "88" },
     { name: "Perfect Order", abbrev: "POR", releaseDate: "Mar 27, 2026", total: "88" },
     { name: "Ascended Heroes *", abbrev: "ASC", releaseDate: "Jan 30, 2026", total: "290" },
     { name: "Phantasmal Flames", abbrev: "PFL", releaseDate: "Nov 14, 2025", total: "130" },

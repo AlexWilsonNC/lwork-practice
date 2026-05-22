@@ -202,7 +202,7 @@ const logos = {
 };
 
 const orderedSets = [
-    "POR", "ASC", "PFL", "MEG", "MEE", "MEP", "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "PR-SV",
+    "CRI", "POR", "ASC", "PFL", "MEG", "MEE", "MEP", "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "PR-SV",
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
     "CEC", "HIF", "UNM", "UNB", "DET", "TEU", "LOT", "DRM", "CES", "FLI", "UPR",
@@ -220,6 +220,7 @@ const orderedSets = [
 ];
 
 const promoSets = {
+    "CRI": ["PR-SV", "MEP"],
     "POR": ["PR-SV", "MEP"],
     "ASC": ["PR-SV", "MEP"],
     "PFL": ["PR-SV", "MEP"],

@@ -207,6 +207,147 @@ function requireAuth(req, res, next) {
   }
 }
 
+const tournamentReportSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  username: { type: String, required: true },
+
+  eventName: { type: String, required: true },
+  eventType: { type: String, required: true },
+  format: { type: String, required: true },
+  placement: { type: Number, default: null },
+
+  playerDeck: {
+    sprite1: { type: String, required: true },
+    sprite2: { type: String, default: '' },
+    label: { type: String, default: '' }
+  },
+
+  rounds: [{
+    round: Number,
+    opponentName: String,
+    opponentDeck: {
+      sprite1: String,
+      sprite2: String,
+      label: String
+    },
+    result: String, // W, L, T, ID, BYE, NO_SHOW
+    wentFirst: String, // first, second, unknown
+    notes: String
+  }],
+
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const TournamentReport = authConnection.model(
+  'TournamentReport',
+  tournamentReportSchema,
+  'tournamentReports'
+);
+
+app.post('/api/user/tournament-reports', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('username');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const {
+      eventName,
+      eventType,
+      format,
+      placement,
+      playerDeck,
+      rounds = []
+    } = req.body;
+
+    if (!eventName || !eventType || !format || !playerDeck?.sprite1) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const report = await TournamentReport.create({
+      userId: req.userId,
+      username: user.username,
+      eventName,
+      eventType,
+      format,
+      placement: placement || null,
+      playerDeck,
+      rounds,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    res.json({ success: true, report });
+  } catch (err) {
+    console.error('Create tournament report failed:', err);
+    res.status(500).json({ error: 'Could not create tournament report' });
+  }
+});
+
+app.get('/api/user/tournament-reports', requireAuth, async (req, res) => {
+  try {
+    const reports = await TournamentReport
+      .find({ userId: req.userId })
+      .sort({ createdAt: -1 });
+
+    res.json(reports);
+  } catch (err) {
+    console.error('Load tournament reports failed:', err);
+    res.status(500).json({ error: 'Could not load tournament reports' });
+  }
+});
+
+app.get('/api/user/tournament-reports/:id', requireAuth, async (req, res) => {
+  try {
+    const report = await TournamentReport.findOne({
+      _id: req.params.id,
+      userId: req.userId
+    });
+
+    if (!report) return res.status(404).json({ error: 'Report not found' });
+
+    res.json(report);
+  } catch (err) {
+    console.error('Load tournament report failed:', err);
+    res.status(500).json({ error: 'Could not load tournament report' });
+  }
+});
+
+app.patch('/api/user/tournament-reports/:id', requireAuth, async (req, res) => {
+  try {
+    const report = await TournamentReport.findOneAndUpdate(
+      { _id: req.params.id, userId: req.userId },
+      {
+        ...req.body,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!report) return res.status(404).json({ error: 'Report not found' });
+
+    res.json({ success: true, report });
+  } catch (err) {
+    console.error('Update tournament report failed:', err);
+    res.status(500).json({ error: 'Could not update tournament report' });
+  }
+});
+
+app.delete('/api/user/tournament-reports/:id', requireAuth, async (req, res) => {
+  try {
+    const deleted = await TournamentReport.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.userId
+    });
+
+    if (!deleted) return res.status(404).json({ error: 'Report not found' });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Delete tournament report failed:', err);
+    res.status(500).json({ error: 'Could not delete tournament report' });
+  }
+});
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -1447,6 +1588,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
     } else {
       const ERA_TO_SET_CODES = {
         SV1: [
+          "CRI",
           "POR",
           "ASC",
           "PFL",

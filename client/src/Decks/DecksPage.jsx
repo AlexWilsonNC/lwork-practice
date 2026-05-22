@@ -8,7 +8,8 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
-  // "SVI-POR",
+  "TEF-CRI",
+  "TEF-POR",
   "SVI-ASC",
   "SVI-PFL",
   "SVI-MEG",
@@ -344,6 +345,8 @@ const Decks = () => {
                 <option value="">All Formats</option>
 
                 <optgroup label="2026">
+                  <option value="TEF-CRI">TEF-CRI</option>
+                  <option value="TEF-POR">TEF-POR</option>
                   <option value="SVI-ASC">SVI-ASC</option>
                 </optgroup>
 

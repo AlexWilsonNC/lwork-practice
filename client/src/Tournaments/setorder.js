@@ -1,5 +1,6 @@
 const orderedSets = [
 // me
+    "CRI",
     "POR",
     "ASC",
     "PFL",

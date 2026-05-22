@@ -1268,7 +1268,7 @@ const CardSearch = React.forwardRef(function CardSearch(
     }
 
     const ERA_PATTERNS = {
-        ME1: /^(?:MEP|MEE|MEG|PFL|ASC|POR)$/i,
+        ME1: /^(?:MEP|MEE|MEG|PFL|ASC|POR|CRI)$/i,
 
         SV1: /^(?:SV|SVI|PAL|OBF|MEW|PAR|PAF|TEF|TWM|SFA|SCR|SSP|PRE|JTG|DRI|WHT|BLK)$/i,
 

@@ -9,7 +9,7 @@ import SidebarComponent from '../SideContent/SideContent';
 import archiveUpdateImg from '../assets/archive-updates/apr-archive.jpg';
 import legendsLogoProfile from '../assets/profile-pics/logo-darkmode.png';
 import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
-import latestSet from '../assets/sets-filter-backgrounds/me/por.jpg';
+import latestSet from '../assets/sets-filter-backgrounds/me/cri.jpg';
 import deckBuilder from '../../public/images/deckbuilder-preview.png';
 
 import article1 from '../Articles/whenModernBecomesRetro';
@@ -246,11 +246,11 @@ const Homepage = () => {
                         </div>
                         <div className='homepage-box'>
                             <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
-                            <a href='./cards/POR'>
+                            <a href='./cards/CRI'>
                                 <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                     <img className='card-image' src={latestSet} />
                                     <div className='homepage-box-content'>
-                                        <h3>View the lastest TCG expansion: <span className='new-color'>Perfect Order</span>!</h3>
+                                        <h3>View the lastest TCG expansion: <span className='new-color'>Chaos Rising</span>!</h3>
                                         <p>View every Pokémon card from every expansion ever, in our database
                                             here! From Base Set through this latest release, we have them all!</p>
                                     </div>
@@ -467,11 +467,11 @@ const Homepage = () => {
                     </div>
                     <div className='homepage-box lessmarginbottomsmall'>
                         <FeaturedHeaders className='featured-headers'>Card Database</FeaturedHeaders>
-                        <a href='/cards/POR'>
+                        <a href='/cards/CRI'>
                             <WrappedFeature className='wrapped-feature smaller-homepage-card'>
                                 <img className='card-image' src={latestSet} />
                                 <div className='homepage-box-content'>
-                                    <h3>View the lastest TCG expansion: <span className='new-color'>Perfect Order</span>!</h3>
+                                    <h3>View the lastest TCG expansion: <span className='new-color'>Chaos Rising</span>!</h3>
                                     <p>View every Pokémon card from every expansion ever, in our database
                                         here! From Base Set through this latest release, we have them all!</p>
                                 </div>
