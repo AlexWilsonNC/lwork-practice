@@ -178,38 +178,53 @@ const Decks = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
-  const [sortType, setSortType] = useState('format');
+  const [sortType, setSortType] = useState('era');
   const [selectedFormat, setSelectedFormat] = useState('');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-    // State for managing the interstitial modal
-    const [showModal, setShowModal] = useState(false);
-    const [externalUrl, setExternalUrl] = useState('');
-  
-    // Handle link click for external links
-    const handleLinkClick = (e, url) => {
-      e.preventDefault();
-      setExternalUrl(url); // Store the URL to navigate to after confirmation
-      setShowModal(true);   // Show the interstitial modal
-    };
-  
-    const handleConfirm = () => {
-      setShowModal(false);
-      window.location.href = externalUrl; // Redirect to the external site
-    };
-  
-    const handleClose = () => {
-      setShowModal(false); // Close the modal without redirecting
-    };  
+  // State for managing the interstitial modal
+  const [showModal, setShowModal] = useState(false);
+  const [externalUrl, setExternalUrl] = useState('');
+
+  // Handle link click for external links
+  const handleLinkClick = (e, url) => {
+    e.preventDefault();
+    setExternalUrl(url); // Store the URL to navigate to after confirmation
+    setShowModal(true);   // Show the interstitial modal
+  };
+
+  const handleConfirm = () => {
+    setShowModal(false);
+    window.location.href = externalUrl; // Redirect to the external site
+  };
+
+  const handleClose = () => {
+    setShowModal(false); // Close the modal without redirecting
+  };
 
   useEffect(() => {
     const formatParam = searchParams.get('format') || '';
     setSelectedFormat(formatParam);
 
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    // Prevent fetch on completely empty state
+    if (!selectedFormat && !searchTerm.trim()) {
+      setDecks([]);
+      return;
+    }
+
     const fetchDecks = async () => {
       try {
-        const response = await fetch('https://ptcg-legends-6abc11783376.herokuapp.com/api/decks');
+        setLoading(true);
+
+        const response = await fetch(
+          `https://ptcg-legends-6abc11783376.herokuapp.com/api/decks?format=${selectedFormat}&search=${encodeURIComponent(searchTerm)}`
+        );
+
         const data = await response.json();
         setDecks(data);
       } catch (error) {
@@ -220,7 +235,7 @@ const Decks = () => {
     };
 
     fetchDecks();
-  }, []);
+  }, [selectedFormat, searchTerm]);
 
   const handleFormatChange = (event) => {
     const newFormat = event.target.value;
@@ -247,7 +262,7 @@ const Decks = () => {
   const filteredDecks = decks.filter(deck =>
     deck.label.toLowerCase().includes(searchTerm.toLowerCase()) && deck.label !== '-'
   );
-  
+
   const extractFormats = (results) => {
     if (!results || results.length === 0) return [];
     return results.map(result => result.eventFormat || 'Unknown');
@@ -258,12 +273,12 @@ const Decks = () => {
     const firstDeck = deck.decks[0];
 
     if (firstDeck && firstDeck.eventDate) {
-        const year = firstDeck.eventDate.split(', ')[1]; // Extract the year part
-        return year || 'Unknown';
+      const year = firstDeck.eventDate.split(', ')[1]; // Extract the year part
+      return year || 'Unknown';
     }
 
     return 'Unknown';
-};
+  };
 
   const sortedFormatOrder = sortOrder === 'asc' ? [...formatOrder].reverse() : formatOrder;
 
@@ -283,7 +298,7 @@ const Decks = () => {
     });
     return acc;
   }, {});
-  
+
   const resetFilters = () => {
     setSortType('format');
     setSortOrder('desc');
@@ -293,55 +308,55 @@ const Decks = () => {
 
   return (
     <DeckListContainer theme={theme} className='center-me'>
-       <Helmet>
-          <title>Decks</title>
-          <meta
-              name='description'
-              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
-          />
-          <meta property='og:title' Decks />
-          <meta
-              property='og:description'
-              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
-          />
-          {/* <meta property='og:image' content={eventData.thumbnail} /> */}
-          <meta
-              property='og:url'
-              content={`https://www.ptcglegends.com/decks`}
-          />
-          <meta property='og:type' content='website' />
-          <meta name='author' content='PTCG Legends' />
-          <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:title' Decks />
-          <meta
-              name='twitter:description'
-              content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
-          />
-          {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
+      <Helmet>
+        <title>Decks</title>
+        <meta
+          name='description'
+          content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+        />
+        <meta property='og:title' Decks />
+        <meta
+          property='og:description'
+          content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+        />
+        {/* <meta property='og:image' content={eventData.thumbnail} /> */}
+        <meta
+          property='og:url'
+          content={`https://www.ptcglegends.com/decks`}
+        />
+        <meta property='og:type' content='website' />
+        <meta name='author' content='PTCG Legends' />
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' Decks />
+        <meta
+          name='twitter:description'
+          content={`Deck archetypes from all events documented on PTCG Legends across all eras.`}
+        />
+        {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
       </Helmet>
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
+            <a onClick={setSortByFormat} className='completed-btn not-ready'>Event Results</a>
             {/* <a onClick={navigateToFeaturedDecks} href='www.google.com' className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a> */}
-            <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className='completed-btn marginleftless'>Decks by Era</a>
+            <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className={`completed-btn marginleftless ${sortType === 'era' ? 'active-evt-btn' : ''}`}>Decks by Era</a>
           </div>
           <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
-            <input 
-              type="text" 
-              className='searcheventsfield' 
-              placeholder="Search decks..." 
-              value={searchTerm} 
-              onChange={e => setSearchTerm(e.target.value)} 
+            <input
+              type="text"
+              className='searcheventsfield'
+              placeholder="Search decks..."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
         <div className='filter-container'>
           <div className='filters-top'>
-              <div className='indiv-filter'>
-                <p className='sort-events'>Format:</p>
-                <select value={selectedFormat} onChange={handleFormatChange}>
+            <div className='indiv-filter'>
+              <p className='sort-events'>Format:</p>
+              <select value={selectedFormat} onChange={handleFormatChange}>
                 <option value="">All Formats</option>
 
                 <optgroup label="2026">
@@ -371,18 +386,18 @@ const Decks = () => {
                   <option value="BST-SVI">BST-SVI</option>
                   <option value="SSH-CRZ">SSH-CRZ</option>
                 </optgroup>
-                
+
                 <optgroup label="2022">
                   <option value="SSH-SIT">SSH-SIT</option>
                   <option value="SSH-PGO">SSH-PGO</option>
                   <option value="SSH-ASR">SSH-ASR</option>
                   <option value="SSH-BRS">SSH-BRS</option>
                 </optgroup>
-                
+
                 <optgroup label="2020">
                   <option value="UPR-SSH">UPR-SSH</option>
                 </optgroup>
-                
+
                 <optgroup label="2019">
                   <option value="UPR-CEC">UPR-CEC</option>
                   <option value="UPR-UNM">UPR-UNM</option>
@@ -479,18 +494,18 @@ const Decks = () => {
                   <option value="BS-FO">BS-FO</option>
                 </optgroup>
 
-                </select>
-              </div>
-              <div className='indiv-filter'>
-                <p className='sort-events'>Order:</p>
-                <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
-                  <option value="asc">Oldest - Newest</option>
-                  <option value="desc">Newest - Oldest</option>
-                </select>
-              </div>
-              <button onClick={resetFilters} className="reset-btn">Reset</button>
+              </select>
             </div>
+            <div className='indiv-filter'>
+              <p className='sort-events'>Order:</p>
+              <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+                <option value="asc">Oldest - Newest</option>
+                <option value="desc">Newest - Oldest</option>
+              </select>
+            </div>
+            <button onClick={resetFilters} className="reset-btn">Reset</button>
           </div>
+        </div>
         {loading ? (
           <div className="spinner"></div>
         ) : (
@@ -506,84 +521,84 @@ const Decks = () => {
               </tr>
             </thead>
             <tbody>
-            {sortedFormatOrder.map((format) => (
-              (selectedFormat === '' || selectedFormat === format) && decksByFormat[format]?.length > 0 && (
-                <React.Fragment key={format}>
-                <FormatSeparator>
-                  <td colSpan="6" className='paddingfive'>
-                    {(format === "NXD-FLF" && "2014") ||
-                    (format === "DP-UL" && "2010") ||
-                    (format === "HL-HP" && "2006") ||
-                    (format === "HL-HP" && "2006") ||
-                    (format === "BS-FO" && "1999") ||
-                    (decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown')
-                    }&nbsp; -&nbsp; {format}
-                  </td>
-                </FormatSeparator>
-                  {decksByFormat[format]
-                    .map((deck) => {
-                      const decksInCurrentFormat = deck.decks.filter(d => d.eventFormat === format);
-                      return {
-                        ...deck,
-                        deckCount: decksInCurrentFormat.length,
-                      };
-                    })
-                    .sort((a, b) => b.deckCount - a.deckCount)
-                    .map((deck, index) => {
-                      const { deckCount } = deck;
-                      const firstResult = deck.decks[0];
-                      const overriddenSprites = archetypeSpriteOverrides[deck.label];
-                      const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : firstResult.sprite1;
-                      const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : firstResult.sprite2;
-                      const totalDecksInFormat = totalDecksPerFormat[format];
-                      const percentage = ((deckCount / totalDecksInFormat) * 100).toFixed(2);
+              {sortedFormatOrder.map((format) => (
+                (selectedFormat === '' || selectedFormat === format) && decksByFormat[format]?.length > 0 && (
+                  <React.Fragment key={format}>
+                    <FormatSeparator>
+                      <td colSpan="6" className='paddingfive'>
+                        {(format === "NXD-FLF" && "2014") ||
+                          (format === "DP-UL" && "2010") ||
+                          (format === "HL-HP" && "2006") ||
+                          (format === "HL-HP" && "2006") ||
+                          (format === "BS-FO" && "1999") ||
+                          (decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown')
+                        }&nbsp; -&nbsp; {format}
+                      </td>
+                    </FormatSeparator>
+                    {decksByFormat[format]
+                      .map((deck) => {
+                        const decksInCurrentFormat = deck.decks.filter(d => d.eventFormat === format);
+                        return {
+                          ...deck,
+                          deckCount: decksInCurrentFormat.length,
+                        };
+                      })
+                      .sort((a, b) => b.deckCount - a.deckCount)
+                      .map((deck, index) => {
+                        const { deckCount } = deck;
+                        const firstResult = deck.decks[0];
+                        const overriddenSprites = archetypeSpriteOverrides[deck.label];
+                        const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : firstResult.sprite1;
+                        const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : firstResult.sprite2;
+                        const totalDecksInFormat = totalDecksPerFormat[format];
+                        const percentage = ((deckCount / totalDecksInFormat) * 100).toFixed(2);
 
-                      return (
-                        <tr key={deck._id} className='deck-table'>
-                          <td>{index + 1}</td>
-                          <td>
-                            {sprite1 && sprite1 !== 'blank' ? (
-                              <img 
-                                src={`/assets/sprites/${sprite1}.png`} 
-                                alt={`${deck.label} sprite`} 
-                                style={{width: '55px' }}
-                              />
-                            ) : sprite2 ? (
-                              <img 
-                                src={`/assets/sprites/${sprite2}.png`} 
-                                alt={`${deck.label} sprite`} 
-                                style={{width: '55px' }}
-                              />
-                            ) : (
-                              <img 
-                                src={`/assets/sprites/blank.png`} 
-                                alt={`${deck.label} sprite`} 
-                                style={{width: '55px' }}
-                              />
-                            )}
-                          </td>
-                          <td>
-                            {sprite2 && sprite1 !== 'blank' && (
-                              <img className='movesecondspritedecks' 
-                                src={`/assets/sprites/${sprite2}.png`} 
-                                alt={`${deck.label} sprite`} 
-                                style={{width: '55px' }}
-                              />
-                            )}
-                          </td>
-                          <td>
-                            <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${format}`}>
-                              {deck.label}
-                            </Link>
-                          </td>
-                          <td>{percentage}%</td>
-                          <td className='hideforfifty'>{deckCount}</td>
-                        </tr>
-                      );
-                    })}
-                </React.Fragment>
-              )
-            ))}
+                        return (
+                          <tr key={deck._id} className='deck-table'>
+                            <td>{index + 1}</td>
+                            <td>
+                              {sprite1 && sprite1 !== 'blank' ? (
+                                <img
+                                  src={`/assets/sprites/${sprite1}.png`}
+                                  alt={`${deck.label} sprite`}
+                                  style={{ width: '55px' }}
+                                />
+                              ) : sprite2 ? (
+                                <img
+                                  src={`/assets/sprites/${sprite2}.png`}
+                                  alt={`${deck.label} sprite`}
+                                  style={{ width: '55px' }}
+                                />
+                              ) : (
+                                <img
+                                  src={`/assets/sprites/blank.png`}
+                                  alt={`${deck.label} sprite`}
+                                  style={{ width: '55px' }}
+                                />
+                              )}
+                            </td>
+                            <td>
+                              {sprite2 && sprite1 !== 'blank' && (
+                                <img className='movesecondspritedecks'
+                                  src={`/assets/sprites/${sprite2}.png`}
+                                  alt={`${deck.label} sprite`}
+                                  style={{ width: '55px' }}
+                                />
+                              )}
+                            </td>
+                            <td>
+                              <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${format}`}>
+                                {deck.label}
+                              </Link>
+                            </td>
+                            <td>{percentage}%</td>
+                            <td className='hideforfifty'>{deckCount}</td>
+                          </tr>
+                        );
+                      })}
+                  </React.Fragment>
+                )
+              ))}
             </tbody>
           </table>
         )}
