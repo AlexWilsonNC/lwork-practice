@@ -338,10 +338,11 @@ const Decks = () => {
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
             <a onClick={setSortByFormat} className='completed-btn not-ready'>Event Results</a>
+                        {/* <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a> */}
             {/* <a onClick={navigateToFeaturedDecks} href='www.google.com' className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a> */}
-            <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className={`completed-btn marginleftless ${sortType === 'era' ? 'active-evt-btn' : ''}`}>Decks by Era</a>
+            <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className="completed-btn marginleftless">Decks by Era</a>
           </div>
-          <div className='search-input'>
+          <div className='search-input not-ready'>
             <span className="material-symbols-outlined">search</span>
             <input
               type="text"
@@ -352,7 +353,7 @@ const Decks = () => {
             />
           </div>
         </div>
-        <div className='filter-container'>
+        <div className='filter-container not-ready'>
           <div className='filters-top'>
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
@@ -509,7 +510,7 @@ const Decks = () => {
         {loading ? (
           <div className="spinner"></div>
         ) : (
-          <table className='results-table deck-table'>
+          <table className='results-table deck-table not-ready'>
             <thead>
               <tr>
                 <th>Rank</th>
@@ -602,6 +603,7 @@ const Decks = () => {
             </tbody>
           </table>
         )}
+        <p className='center' style={{textAlign:'center'}}>Deck search features are temporarily disabled for maintenance. Sorry for the inconvenience.<br></br><br></br>(Feel free to select "Decks by Era" above however.)</p>
       </div>
       {/* Modal for external link confirmation */}
       <Modal
