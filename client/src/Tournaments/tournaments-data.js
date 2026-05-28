@@ -1699,8 +1699,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 23, 2026",
         "flag": australia,
-        "location": "Melbourne, Australia",
-        "results": false
+        "location": "Melbourne, Australia"
     },
     {
         "id": "2026_INDIANAPOLIS",
