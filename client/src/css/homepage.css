@@ -57,7 +57,7 @@
     gap: 25px;
 }
 .tba-text {
-    border: 1px solid grey;
+    /* border: 1px solid grey; */
     background-color: #1a1a1a;
     color: #fff;
     border-radius: 4px;

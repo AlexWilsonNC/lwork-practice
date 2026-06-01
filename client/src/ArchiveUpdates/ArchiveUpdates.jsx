@@ -133,6 +133,14 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
+          <a href='/tournaments/2013_NATS_US/masters/ray%20Cipoletti-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blastoise} alt="sprite" />
+              <img className="sprite second-sprite" src={keldeo} alt="sprite" />
+            </div>
+            <p>Ray Cipoletti (Masters) - 30<sup>th</sup> Place <span>2013 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <hr className='archive-updates-mini-hr'></hr>
           <a href='/tournaments/2012_WORLDS/masters/Sami%20Sekkoum-UK' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
