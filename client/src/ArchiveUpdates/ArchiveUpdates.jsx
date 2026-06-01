@@ -116,7 +116,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Apr 13, 2026</p>
+          <p>Last Updated: June 1, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -126,6 +126,28 @@ const ArchiveUpdates = () => {
         <div className='article-content archive-updates'>
 
           {/* <hr className='archive-updates-mini-hr'></hr> */}
+
+          <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>June 2026</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <a href='/tournaments/2012_WORLDS/masters/Sami%20Sekkoum-UK' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={darkrai} alt="sprite" />
+            </div>
+            <p>Sami Sekkoum (Masters) - 5<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <a href='/tournaments/2012_WORLDS/masters/Jason%20Klaczynski-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={darkrai} alt="sprite" />
+            </div>
+            <p>Jason Klaczynski (Masters) - 20<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
 
           <hr className='title-hr' />
           <br />

@@ -203,11 +203,11 @@ const Homepage = () => {
                                     <img className='card-image' src={archiveUpdateImg} />
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3>More <span className='new-color'>Retro</span> Results Discovered!</h3>
-                                        <p>New long-lost decklists from the 2015 World Championships, 2010 World Championships, and some 2004 Stadium Challenges are here, on PTCG Legends only!</p>
+                                        <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
+                                        <p>New long-lost decklists from the 2012 and 2015 World Championships were recently discovered recently, only on PTCG Legends!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Mar 29, 2026</p>
+                                        <p>Jun 1, 2026</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -455,11 +455,11 @@ const Homepage = () => {
                                 <img className='card-image' src={archiveUpdateImg} />
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3>More <span className='new-color'>Retro</span> Results Discovered!</h3>
-                                    <p>New long-lost decklists from the 2015 World Championships, 2010 World Championships, and some 2004 Stadium Challenges are here, on PTCG Legends only!</p>
+                                    <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
+                                    <p>New long-lost decklists from the 2012 and 2015 World Championships were recently discovered recently, only on PTCG Legends!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Mar 29, 2026</p>
+                                    <p>Jun 1, 2026</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>
