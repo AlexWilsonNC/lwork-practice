@@ -402,7 +402,7 @@
 .regional-info-bg-logo {
     height: 130px;
     width:auto;
-    z-index: -1;
+    z-index: 1;
 }
 /**/
 .contain-event {
