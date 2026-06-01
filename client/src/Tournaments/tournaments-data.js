@@ -1708,8 +1708,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "May 29, 2026",
         "flag": usa,
-        "location": "Indianapolis, Indiana",
-        "results": false
+        "location": "Indianapolis, Indiana"
     },
     {
         "id": "2026_SANTIAGO",
