@@ -182,7 +182,9 @@
 .deck-actions-btn {
     margin-left: 10px;
     margin-right: 0px;
-    background-color: #27292c;
+}
+.deck-edit-settings-actions-dropdown button {
+    color: white !important;
 }
 .classhiddendot {
     position: fixed;
@@ -197,6 +199,7 @@
 .save-to-collection-btn:hover {
     background-color: rgba(128, 128, 128, 0.5) !important;
     color: white !important;
+    cursor: pointer;
 }
 .copy-decklist-btn .tooltip-text,
 .deck-actions-btn .tooltip-text,
