@@ -36,14 +36,19 @@
     flex-direction: row;
     align-items: center;
 }
+.patreonBottom h4,
+.patreonBottom li {
+    font-size: 14px;
+}
 .patreonBottom p {
     margin: 7.5px 0;
+    font-size: 14px;
 }
 #belowLegends {
     font-style: italic;
 }
 .patreonBottom img {
-    height: 20px;width:20px;
+    height: 18px;width:18px;
     margin-right: 10px;
 }
 .patreonLegendsUl {
@@ -840,6 +845,16 @@
         height: 80%;
         top: 25px;
         font-size: 26px;
+    }
+    .patreonBottom h4,
+    .patreonBottom li {
+        font-size: 12px;
+    }
+    .patreonBottom p {
+        font-size: 12px;
+    }
+    .patreonBottom img {
+        height: 16px;width:16px;
     }
 }
 @media screen and (max-width: 390px) {
