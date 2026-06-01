@@ -18,7 +18,8 @@ const CollectionDeckCenter = styled.div`
         background-image: ${({ theme }) => theme.deckModalAccountList};
         border: ${({ theme }) => theme.deckBorder};
     }
-    .user-deck-options button {
+    .user-deck-options button,
+    .deck-actions-btn {
         background: ${({ theme }) => theme.body};
         color: ${({ theme }) => theme.text};
     }

@@ -1483,7 +1483,8 @@ object-assign
         background-image: ${({theme:e})=>e.deckModalAccountList};
         border: ${({theme:e})=>e.deckBorder};
     }
-    .user-deck-options button {
+    .user-deck-options button,
+    .deck-actions-btn {
         background: ${({theme:e})=>e.body};
         color: ${({theme:e})=>e.text};
     }
