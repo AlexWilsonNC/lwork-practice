@@ -44,8 +44,8 @@ const UpcomingEventsHome = styled.ul`
         color: ${({ theme }) => theme.hoverText};
       }
     }
-
   }
+    .tba-text{background-color: ${({ theme }) => theme.awaitingMoreEvents};}
 `;
 const HomepageMainContent = styled.div`
   background: ${({ theme }) => theme.homepageMainContentBg};

@@ -15,7 +15,7 @@ const Nav = styled.nav`
     a {color: ${({ theme }) => theme.text};}
 `;
 
-const isJune = new Date().getMonth() === 5; // june = month 5 in an array
+const isJune = new Date().getMonth() === 5; // june (pride month) = month 5 in an array
 
 const Navbar = () => {
   return (

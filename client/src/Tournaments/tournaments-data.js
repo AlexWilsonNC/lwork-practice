@@ -1763,8 +1763,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "May 23, 2026",
         "flag": peru,
-        "location": "Lima, Peru",
-        "results": false
+        "location": "Lima, Peru"
     },
     {
         "id": "2026_NAIC",

@@ -109,7 +109,7 @@ export const lightTheme = {
   setTileBtnBorder: '1px solid rgba(0,0,0,0.1)',
   setTileBtnBgHover: 'rgba(0,0,0,0.2)',
   setTileBtnHr: '2px solid rgba(0,0,0,0.12)',
-
+  awaitingMoreEvents: 'rgba(129, 129, 129, 0.79)',
 };
 
 const decklistSvgDark = `
