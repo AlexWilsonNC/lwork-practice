@@ -1799,8 +1799,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Jun 6, 2026",
         "flag": italy,
-        "location": "Turin, Italy",
-        "results": false
+        "location": "Turin, Italy"
     },
     {
         "id": "2026_BRISBANE",

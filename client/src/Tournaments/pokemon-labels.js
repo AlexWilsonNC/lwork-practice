@@ -1,7 +1,9 @@
 const customLabelsConfig = {
     '2026': {
+        'diancie-mega-dusknoir': "Mega Diancie Dusknoir",
         'blank-trevenant': "Hop's Trevenant",
-        'blank-metagross': "Steven's Metagross",
+        'blank-metagross': "Metagross",
+        'metagross-genesect': "Steven's Metagross",
         'yanmega-dudunsparce': "Yanmega Dudunsparce",
         'lopunny-mega-dudunsparce': "Mega Lopunny Dudunsparce",
         'starmie-mega-dusknoir': "Mega Starmie",

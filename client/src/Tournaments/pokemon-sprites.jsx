@@ -47,6 +47,13 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('gholdengo');
         secondSprite  = getPokemonSpriteURL('dragapult');
     }
+    else if (hasPokemon('Mega Diancie ex') && hasPokemon('Dusknoir')) {
+        const megadiancieCount = getPokemonCount('Mega Diancie ex');
+        if (megadiancieCount >= 2) {
+            firstSprite  = getPokemonSpriteURL('diancie-mega');
+            secondSprite  = getPokemonSpriteURL('dusknoir');
+        }
+    }  
     else if (hasPokemon('Charizard ex') && hasPokemon('Noctowl') && !hasPokemon('Dragapult ex')) {
         firstSprite  = getPokemonSpriteURL('charizard');
         secondSprite  = getPokemonSpriteURL('noctowl');
@@ -414,7 +421,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('flareon');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }      
-    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl')) {
+    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && !hasPokemon('Dragapult ex')) {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }
@@ -564,6 +571,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             secondSprite  = getPokemonSpriteURL('dragapult');
         }
     }            
+    else if (hasPokemon('Greninja ex') && hasPokemon('Mega Starmie ex') && hasPokemon('Dusknoir')) {
+        secondSprite  = getPokemonSpriteURL('greninja');
+    }                        
     else if (hasPokemon('Mega Starmie ex') && hasPokemon('Dusknoir')) {
         firstSprite  = getPokemonSpriteURL('starmie-mega');
         secondSprite  = getPokemonSpriteURL('dusknoir');
@@ -576,10 +586,17 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('yanmega');
         secondSprite  = getPokemonSpriteURL('dudunsparce');
     }       
+    else if (hasPokemon('Beedrill ex') && hasPokemon('Dudunsparce')) {
+        secondSprite  = getPokemonSpriteURL('beedrill');
+    }       
+    else if (hasPokemon('Metagross') && hasPokemon('Genesect ex')) {
+        secondSprite  = getPokemonSpriteURL('metagross');
+    }       
     else if (hasPokemon('Steven\'s Metagross ex') && hasPokemon('Genesect ex')) {
         const metagrossCount = getPokemonCount('Steven\'s Metagross ex');
         if (metagrossCount >= 2) {
-            secondSprite  = getPokemonSpriteURL('metagross');
+            firstSprite  = getPokemonSpriteURL('metagross');
+            secondSprite  = getPokemonSpriteURL('genesect');
         }
     }                                      
     else if (hasPokemon('Mega Dragonite ex') && hasPokemon('Eelektrik')) {
@@ -588,7 +605,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             firstSprite  = getPokemonSpriteURL('dragonite-mega');
             secondSprite  = getPokemonSpriteURL('eelektrik');
         }
-    }                                      
+    }                                                                          
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
