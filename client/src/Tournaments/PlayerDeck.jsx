@@ -363,6 +363,7 @@ const PlayerDeck = () => {
     const [totalCardCount, setTotalCardCount] = useState(0);
     const [pageError, setPageError] = useState('');
     const [loadingPage, setLoadingPage] = useState(true);
+    const [isEliminatedPlayer, setIsEliminatedPlayer] = useState(false);
 
     const isFeatured = isFeaturedEvent(eventId);
 
@@ -417,6 +418,7 @@ const PlayerDeck = () => {
                 setEventData(null);
                 setCardData(null);
                 setPlacement(null);
+                setIsEliminatedPlayer(false);
 
                 if (!eventId || !playerId || !validDivisions.has(division)) {
                     if (!cancelled) {
@@ -489,6 +491,10 @@ const PlayerDeck = () => {
                             normalizeString(p.name) === normalizedPlayerName &&
                             p.flag === playerFlag
                         );
+
+                        if (player) {
+                            setIsEliminatedPlayer(true);
+                        }
 
                         if (player && typeof player.placing === 'number') {
                             setPlacement(player.placing);
@@ -721,18 +727,60 @@ const PlayerDeck = () => {
     return (
         <PlayerDeckCenter className='center' theme={theme}>
             <Helmet>
-                <title>{isFeatured ? `${formatName(playerData.name)}'s Featured Deck` : `${formatName(playerData.name)}'s Decklist`}</title>
-                <meta name="description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
+                <title>
+                    {isFeatured
+                        ? `${formatName(playerData.name)}'s Featured Deck`
+                        : `${formatName(playerData.name)}'s Decklist`}
+                </title>
+
+                <meta
+                    name="description"
+                    content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`}
+                />
+
+                <meta
+                    name="robots"
+                    content={
+                        isEliminatedPlayer
+                            ? "noindex,follow,noimageindex,max-image-preview:none"
+                            : "index,follow,noimageindex,max-image-preview:none"
+                    }
+                />
+
+                <link
+                    rel="canonical"
+                    href={`https://www.ptcglegends.com/tournaments/${eventId}/${division}/${playerId}`}
+                />
+
                 <meta property="og:title" content={eventData.name} />
-                <meta property="og:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-                <meta property="og:image" content={eventData.thumbnail} />
-                <meta property="og:url" content={`https://www.ptcglegends.com/tournaments/${eventData.eventId}`} />
+                <meta
+                    property="og:description"
+                    content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`}
+                />
+
+                <meta
+                    property="og:image"
+                    content={eventData.thumbnail}
+                />
+
+                <meta
+                    property="og:url"
+                    content={`https://www.ptcglegends.com/tournaments/${eventId}/${division}/${playerId}`}
+                />
+
                 <meta property="og:type" content="website" />
                 <meta name="author" content="PTCG Legends" />
-                <meta name="twitter:card" content="summary_large_image" />
+
+                <meta name="twitter:card" content="summary" />
                 <meta name="twitter:title" content={eventData.name} />
-                <meta name="twitter:description" content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`} />
-                <meta name="twitter:image" content={eventData.thumbnail} />
+                <meta
+                    name="twitter:description"
+                    content={`${formatName(playerData.name)}'s decklist from ${eventData.name} - ${eventData.date}.`}
+                />
+                <meta
+                    name="twitter:image"
+                    content={eventData.thumbnail}
+                />
             </Helmet>
             <div className='playerlistnewcolumn'>
                 <div className="player-deck">
