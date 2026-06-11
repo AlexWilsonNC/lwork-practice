@@ -555,14 +555,14 @@ const Decks = () => {
 
               </select>
             </div>
-            <div className='indiv-filter'>
+            {/* <div className='indiv-filter'>
               <p className='sort-events'>Order:</p>
               <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
                 <option value="asc">Oldest - Newest</option>
                 <option value="desc">Newest - Oldest</option>
               </select>
-            </div>
-            <button onClick={resetFilters} className="reset-btn">Reset</button>
+            </div> */}
+            {/* <button onClick={resetFilters} className="reset-btn">Reset</button> */}
           </div>
         </div>
         {loading ? (
