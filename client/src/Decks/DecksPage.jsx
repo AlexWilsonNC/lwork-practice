@@ -104,10 +104,6 @@ const DeckListContainer = styled.div`
   .paddingfive {
     height: 27px !important;
   }
-  .upcoming-btn {
-    opacity: 0.3;
-    pointer-events: none;
-  }
   .marginleftless {
     margin-left: 0px;
   }
@@ -178,14 +174,16 @@ const Decks = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
-  const [sortType, setSortType] = useState('era');
-  const [selectedFormat, setSelectedFormat] = useState('');
+  const [sortType, setSortType] = useState('format');
+  const DEFAULT_FORMAT = formatOrder[0];
+  const [selectedFormat, setSelectedFormat] = useState(DEFAULT_FORMAT);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State for managing the interstitial modal
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   // Handle link click for external links
   const handleLinkClick = (e, url) => {
@@ -204,38 +202,64 @@ const Decks = () => {
   };
 
   useEffect(() => {
-    const formatParam = searchParams.get('format') || '';
+    const formatParam = searchParams.get('format') || DEFAULT_FORMAT;
     setSelectedFormat(formatParam);
 
-    setLoading(false);
+    if (!searchParams.get('format')) {
+      setSearchParams({ format: DEFAULT_FORMAT }, { replace: true });
+    }
   }, []);
 
   useEffect(() => {
-    // Prevent fetch on completely empty state
-    if (!selectedFormat && !searchTerm.trim()) {
-      setDecks([]);
-      return;
-    }
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (!selectedFormat) return;
+
+    const controller = new AbortController();
 
     const fetchDecks = async () => {
       try {
         setLoading(true);
 
+        const params = new URLSearchParams({
+          format: selectedFormat,
+        });
+
+        if (debouncedSearchTerm) {
+          params.set('search', debouncedSearchTerm);
+        }
+
         const response = await fetch(
-          `https://ptcg-legends-6abc11783376.herokuapp.com/api/decks?format=${selectedFormat}&search=${encodeURIComponent(searchTerm)}`
+          `/api/decks/summary?${params.toString()}`,
+          { signal: controller.signal }
         );
 
+        if (!response.ok) {
+          throw new Error(`Deck fetch failed: ${response.status}`);
+        }
+
         const data = await response.json();
-        setDecks(data);
+        setDecks(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('Error fetching decks:', error);
+        if (error.name !== 'AbortError') {
+          console.error('Error fetching decks:', error);
+          setDecks([]);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchDecks();
-  }, [selectedFormat, searchTerm]);
+
+    return () => controller.abort();
+  }, [selectedFormat, debouncedSearchTerm]);
 
   const handleFormatChange = (event) => {
     const newFormat = event.target.value;
@@ -263,47 +287,29 @@ const Decks = () => {
     deck.label.toLowerCase().includes(searchTerm.toLowerCase()) && deck.label !== '-'
   );
 
-  const extractFormats = (results) => {
-    if (!results || results.length === 0) return [];
-    return results.map(result => result.eventFormat || 'Unknown');
-  };
-
   const extractYear = (deck) => {
-    // Get the first deck object in the array to extract the year
-    const firstDeck = deck.decks[0];
-
-    if (firstDeck && firstDeck.eventDate) {
-      const year = firstDeck.eventDate.split(', ')[1]; // Extract the year part
-      return year || 'Unknown';
+    if (deck.eventDate) {
+      return deck.eventDate.split(', ')[1] || 'Unknown';
     }
 
     return 'Unknown';
   };
 
-  const sortedFormatOrder = sortOrder === 'asc' ? [...formatOrder].reverse() : formatOrder;
+  const sortedDecks = [...filteredDecks].sort((a, b) => {
+    return Number(b.deckCount || 0) - Number(a.deckCount || 0);
+  });
 
-  // Calculate the total decks for each format before filtering
-  const totalDecksPerFormat = sortedFormatOrder.reduce((acc, format) => {
-    acc[format] = decks.reduce((total, deck) => {
-      const deckFormats = extractFormats(deck.decks);
-      return deckFormats.includes(format) ? total + deck.decks.filter(d => d.eventFormat === format).length : total;
-    }, 0);
-    return acc;
-  }, {});
-
-  const decksByFormat = sortedFormatOrder.reduce((acc, format) => {
-    acc[format] = filteredDecks.filter(deck => {
-      const deckFormats = extractFormats(deck.decks);
-      return deckFormats.includes(format);
-    });
-    return acc;
-  }, {});
+  const totalDecksInSelectedFormat = sortedDecks.reduce(
+    (sum, deck) => sum + Number(deck.deckCount || 0),
+    0
+  );
 
   const resetFilters = () => {
     setSortType('format');
     setSortOrder('desc');
-    setSelectedFormat('');
+    setSelectedFormat(DEFAULT_FORMAT);
     setSearchTerm('');
+    setSearchParams({ format: DEFAULT_FORMAT }, { replace: true });
   };
 
   return (
@@ -337,12 +343,11 @@ const Decks = () => {
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
           <div className='bts-in'>
-            <a onClick={setSortByFormat} className='completed-btn not-ready'>Event Results</a>
-                        {/* <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a> */}
+            <a onClick={setSortByFormat} className={`completed-btn ${sortType === 'format' ? 'active-evt-btn' : ''}`}>Event Results</a>
             {/* <a onClick={navigateToFeaturedDecks} href='www.google.com' className={`upcoming-btn ${sortType === 'format' ? 'inactive-evt-btn' : ''}`}>Decks by Era</a> */}
             <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')} className="completed-btn marginleftless">Decks by Era</a>
           </div>
-          <div className='search-input not-ready'>
+          <div className='search-input'>
             <span className="material-symbols-outlined">search</span>
             <input
               type="text"
@@ -353,12 +358,12 @@ const Decks = () => {
             />
           </div>
         </div>
-        <div className='filter-container not-ready'>
+        <div className='filter-container'>
           <div className='filters-top'>
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
               <select value={selectedFormat} onChange={handleFormatChange}>
-                <option value="">All Formats</option>
+                <option value={DEFAULT_FORMAT}>Most Recent Format</option>
 
                 <optgroup label="2026">
                   <option value="TEF-CRI">TEF-CRI</option>
@@ -510,7 +515,7 @@ const Decks = () => {
         {loading ? (
           <div className="spinner"></div>
         ) : (
-          <table className='results-table deck-table not-ready'>
+          <table className='results-table deck-table'>
             <thead>
               <tr>
                 <th>Rank</th>
@@ -522,88 +527,79 @@ const Decks = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedFormatOrder.map((format) => (
-                (selectedFormat === '' || selectedFormat === format) && decksByFormat[format]?.length > 0 && (
-                  <React.Fragment key={format}>
-                    <FormatSeparator>
-                      <td colSpan="6" className='paddingfive'>
-                        {(format === "NXD-FLF" && "2014") ||
-                          (format === "DP-UL" && "2010") ||
-                          (format === "HL-HP" && "2006") ||
-                          (format === "HL-HP" && "2006") ||
-                          (format === "BS-FO" && "1999") ||
-                          (decksByFormat[format][0] ? extractYear(decksByFormat[format][0]) : 'Unknown')
-                        }&nbsp; -&nbsp; {format}
-                      </td>
-                    </FormatSeparator>
-                    {decksByFormat[format]
-                      .map((deck) => {
-                        const decksInCurrentFormat = deck.decks.filter(d => d.eventFormat === format);
-                        return {
-                          ...deck,
-                          deckCount: decksInCurrentFormat.length,
-                        };
-                      })
-                      .sort((a, b) => b.deckCount - a.deckCount)
-                      .map((deck, index) => {
-                        const { deckCount } = deck;
-                        const firstResult = deck.decks[0];
-                        const overriddenSprites = archetypeSpriteOverrides[deck.label];
-                        const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : firstResult.sprite1;
-                        const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : firstResult.sprite2;
-                        const totalDecksInFormat = totalDecksPerFormat[format];
-                        const percentage = ((deckCount / totalDecksInFormat) * 100).toFixed(2);
+              {sortedDecks.length > 0 && (
+                <>
+                  <FormatSeparator>
+                    <td colSpan="6" className='paddingfive'>
+                      {extractYear(sortedDecks[0])}&nbsp; -&nbsp; {selectedFormat}
+                    </td>
+                  </FormatSeparator>
 
-                        return (
-                          <tr key={deck._id} className='deck-table'>
-                            <td>{index + 1}</td>
-                            <td>
-                              {sprite1 && sprite1 !== 'blank' ? (
-                                <img
-                                  src={`/assets/sprites/${sprite1}.png`}
-                                  alt={`${deck.label} sprite`}
-                                  style={{ width: '55px' }}
-                                />
-                              ) : sprite2 ? (
-                                <img
-                                  src={`/assets/sprites/${sprite2}.png`}
-                                  alt={`${deck.label} sprite`}
-                                  style={{ width: '55px' }}
-                                />
-                              ) : (
-                                <img
-                                  src={`/assets/sprites/blank.png`}
-                                  alt={`${deck.label} sprite`}
-                                  style={{ width: '55px' }}
-                                />
-                              )}
-                            </td>
-                            <td>
-                              {sprite2 && sprite1 !== 'blank' && (
-                                <img className='movesecondspritedecks'
-                                  src={`/assets/sprites/${sprite2}.png`}
-                                  alt={`${deck.label} sprite`}
-                                  style={{ width: '55px' }}
-                                />
-                              )}
-                            </td>
-                            <td>
-                              <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${format}`}>
-                                {deck.label}
-                              </Link>
-                            </td>
-                            <td>{percentage}%</td>
-                            <td className='hideforfifty'>{deckCount}</td>
-                          </tr>
-                        );
-                      })}
-                  </React.Fragment>
-                )
-              ))}
+                  {sortedDecks.map((deck, index) => {
+                    const deckCount = Number(deck.deckCount || 0);
+
+                    const overriddenSprites = archetypeSpriteOverrides[deck.label];
+                    const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : deck.sprite1;
+                    const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : deck.sprite2;
+
+                    const percentage = totalDecksInSelectedFormat > 0
+                      ? ((deckCount / totalDecksInSelectedFormat) * 100).toFixed(2)
+                      : '0.00';
+
+                    return (
+                      <tr key={`${deck.label}-${selectedFormat}`} className='deck-table'>
+                        <td>{index + 1}</td>
+
+                        <td>
+                          {sprite1 && sprite1 !== 'blank' ? (
+                            <img
+                              src={`/assets/sprites/${sprite1}.png`}
+                              alt={`${deck.label} sprite`}
+                              style={{ width: '55px' }}
+                            />
+                          ) : sprite2 ? (
+                            <img
+                              src={`/assets/sprites/${sprite2}.png`}
+                              alt={`${deck.label} sprite`}
+                              style={{ width: '55px' }}
+                            />
+                          ) : (
+                            <img
+                              src={`/assets/sprites/blank.png`}
+                              alt={`${deck.label} sprite`}
+                              style={{ width: '55px' }}
+                            />
+                          )}
+                        </td>
+
+                        <td>
+                          {sprite2 && sprite1 !== 'blank' && (
+                            <img
+                              className='movesecondspritedecks'
+                              src={`/assets/sprites/${sprite2}.png`}
+                              alt={`${deck.label} sprite`}
+                              style={{ width: '55px' }}
+                            />
+                          )}
+                        </td>
+
+                        <td>
+                          <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${selectedFormat}`}>
+                            {deck.label}
+                          </Link>
+                        </td>
+
+                        <td>{percentage}%</td>
+                        <td className='hideforfifty'>{deckCount}</td>
+                      </tr>
+                    );
+                  })}
+                </>
+              )}
             </tbody>
           </table>
         )}
-        <p className='center' style={{textAlign:'center'}}>Deck search features are temporarily disabled for maintenance. Sorry for the inconvenience.<br></br><br></br>(Feel free to select "Decks by Era" above however.)</p>
+        {/* <p className='center' style={{ textAlign: 'center' }}>Deck search features are temporarily disabled for maintenance. Sorry for the inconvenience.<br></br><br></br>(Feel free to select "Decks by Era" above however.)</p> */}
       </div>
       {/* Modal for external link confirmation */}
       <Modal

@@ -13,7 +13,7 @@ import garbodor from '../../public/assets/sprites/garbodor.png'
 import jumpluff from '../../public/assets/sprites/jumpluff.png'
 import rhyperior from '../../public/assets/sprites/rhyperior.png'
 import regigigas from '../../public/assets/sprites/regigigas.png'
-import tyranitar from '../../public/assets/sprites/tyranitar.png'
+import ampharos from '../../public/assets/sprites/ampharos.png'
 import machamp from '../../public/assets/sprites/machamp.png'
 import empoleon from '../../public/assets/sprites/empoleon.png'
 import bronzong from '../../public/assets/sprites/bronzong.png'
@@ -39,7 +39,7 @@ import sableye from '../../public/assets/sprites/sableye.png'
 import gallade from '../../public/assets/sprites/gallade.png'
 import gliscor from '../../public/assets/sprites/gliscor.png'
 import spiritomb from '../../public/assets/sprites/spiritomb.png'
-import tyrantiar from '../../public/assets/sprites/tyranitar.png'
+import tyranitar from '../../public/assets/sprites/tyranitar.png'
 import celebi from '../../public/assets/sprites/celebi.png'
 import shiftry from '../../public/assets/sprites/shiftry.png'
 import glaceon from '../../public/assets/sprites/glaceon.png'
@@ -76,6 +76,11 @@ import groudonprimal from '../../public/assets/sprites/groudon-primal.png'
 import trubbish from '../../public/assets/sprites/trubbish.png'
 import flareon from '../../public/assets/sprites/flareon.png'
 import klinklang from '../../public/assets/sprites/klinklang.png'
+import medicham from '../../public/assets/sprites/medicham.png'
+import hariyama from '../../public/assets/sprites/hariyama.png'
+import dragonite from '../../public/assets/sprites/dragonite.png'
+import electrode from '../../public/assets/sprites/electrode.png'
+import hypno from '../../public/assets/sprites/hypno.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -116,7 +121,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 1, 2026</p>
+          <p>Last Updated: June 11, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -155,6 +160,86 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={darkrai} alt="sprite" />
             </div>
             <p>Jason Klaczynski (Masters) - 20<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={medicham} alt="sprite" />
+            </div>
+            <p>Matt Gillespie (Masters) - 18<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={hariyama} alt="sprite" />
+            </div>
+            <p>John Wetz (Masters) - 28<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={dragonite} alt="sprite" />
+              <img className="sprite second-sprite" src={electrode} alt="sprite" />
+            </div>
+            <p>Kath Schell (Masters) - 30<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={blaziken} alt="sprite" />
+            </div>
+            <p>Chris Schell (Masters) - 32<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={medicham} alt="sprite" />
+              <img className="sprite second-sprite" src={hariyama} alt="sprite" />
+            </div>
+            <p>Stuart Benson (Seniors) - 1<sup>st</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyranitar} alt="sprite" />
+              <img className="sprite second-sprite" src={ampharos} alt="sprite" />
+            </div>
+            <p>Tyler Ninomura (Seniors) - 2<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyranitar} alt="sprite" />
+              <img className="sprite second-sprite" src={ampharos} alt="sprite" />
+            </div>
+            <p>Jeffrey Vernola (Seniors) - 4<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyranitar} alt="sprite" />
+              <img className="sprite second-sprite" src={ampharos} alt="sprite" />
+            </div>
+            <p>Michael Stephens (Seniors) - 6<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={medicham} alt="sprite" />
+            </div>
+            <p>Curran Hill (Juniors) - 1<sup>st</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={tyranitar} alt="sprite" />
+              <img className="sprite second-sprite" src={ampharos} alt="sprite" />
+            </div>
+            <p>James Ballard (Juniors) - 2<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lanturn} alt="sprite" />
+              <img className="sprite second-sprite" src={hypno} alt="sprite" />
+            </div>
+            <p>Andrew Krekeler (Juniors) - 3<sup>rd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
 
           <hr className='title-hr' />
@@ -705,7 +790,7 @@ const ArchiveUpdates = () => {
           </a>
           <a href='/tournaments/2010_NATS_US/masters/Stephen%20Silvestro-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={tyrantiar} alt="sprite" />
+              <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={machamp} alt="sprite" />
             </div>
             <p>Stephen Silvestro (Masters) - 88<sup>th</sup> Place <span>2010 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>

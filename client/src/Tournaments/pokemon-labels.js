@@ -901,6 +901,9 @@ const customLabelsConfig = {
         'eevee-pidgeot': 'Eeveelutions',
     },
     '2005': {
+        'lanturn-hypno': 'Four Corners',
+        'medicham-hariyama': 'Medicham',
+        'blank-hariyama': 'Hariyama ex',
         'ludicolo-magcargo': 'LudiCargo',
         'zapdos-rayquaza': 'ZRE',
         'blank-medicham': 'Medicham',

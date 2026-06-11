@@ -1204,6 +1204,11 @@ const deckSchema = new mongoose.Schema({
   }]
 });
 
+deckSchema.index({
+  'decks.format': 1,
+  label: 1
+});
+
 const Event = eventConnection.model('Event', eventSchema);
 const Player = playersConnection.model('Player', playerSchema);
 const Deck = decksConnection.model('Deck', deckSchema);
@@ -2413,11 +2418,69 @@ app.get('/api/players/:id', async (req, res) => {
 });
 
 app.get('/api/decks', async (req, res) => {
+  return res.status(400).json({
+    error: 'Use /api/decks/summary?format=FORMAT instead.'
+  });
+});
+
+app.get('/api/decks/summary', async (req, res) => {
   try {
-    const decks = await Deck.find({});
+    const { format, search = '' } = req.query;
+
+    if (!format) {
+      return res.status(400).json({ error: 'format is required' });
+    }
+
+    const searchRegex = search.trim()
+      ? new RegExp(escapeRegex(search.trim()), 'i')
+      : null;
+
+    const decks = await Deck.aggregate([
+      {
+        $match: {
+          label: { $ne: '-' },
+          ...(searchRegex ? { label: searchRegex } : {}),
+          $or: [
+            { 'decks.format': format },
+            { 'decks.eventFormat': format }
+          ]
+        }
+      },
+      {
+        $project: {
+          label: 1,
+          decks: {
+            $filter: {
+              input: '$decks',
+              as: 'd',
+              cond: {
+                $or: [
+                  { $eq: ['$$d.format', format] },
+                  { $eq: ['$$d.eventFormat', format] }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          label: 1,
+          deckCount: { $size: '$decks' },
+          sprite1: { $arrayElemAt: ['$decks.sprite1', 0] },
+          sprite2: { $arrayElemAt: ['$decks.sprite2', 0] },
+          eventDate: { $arrayElemAt: ['$decks.eventDate', 0] },
+          format: format
+        }
+      },
+      { $sort: { deckCount: -1, label: 1 } },
+      { $limit: 150 }
+    ]);
+
     res.json(decks);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('/api/decks/summary error:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 

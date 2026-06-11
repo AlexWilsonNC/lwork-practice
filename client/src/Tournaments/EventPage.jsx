@@ -2407,16 +2407,11 @@ const EventPage = () => {
                         className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
                         onClick={() => {
                             // only open Statistics when allowed…
-                            if (resultsAvailable && !(eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors'))) {
+                            if (resultsAvailable) {
                                 setActiveTab('Statistics');
                                 setStatView('meta');      // ← reset to the “Meta” sub‐tab
                             }
                         }}
-                        style={
-                            eventId === '2005_NATS_US' && (division === 'seniors' || division === 'juniors')
-                                ? { opacity: 0.1, pointerEvents: 'none' }
-                                : statisticsTabStyle
-                        }
                     >
                         Statistics
                     </a>
