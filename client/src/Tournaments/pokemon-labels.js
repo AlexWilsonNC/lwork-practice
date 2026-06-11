@@ -616,6 +616,13 @@ const customLabelsConfig = {
         'houndoom-bunnelby': 'Houndoom Mill',
     },
     '2015': {
+        'donphan-groudon-primal': 'Donphan',
+        'exeggutor-garbodor': 'Exeggutor',
+        'seismitoad-slurpuff': 'Seismitoad Slurpuff',
+        'virizion-genesect': 'VirGen',
+        'blank-yveltal': 'Yveltal',
+        'yveltal-seismitoad': 'Yveltal',
+        'yveltal-crobat': 'Yveltal Bats',
         'raichu-leafeon': 'Raichu',
         'seismitoad-shaymin-sky': 'Seismitoad Shaymin',        
         'manectric-mega-trubbish': 'Mega Manectric',
@@ -745,6 +752,9 @@ const customLabelsConfig = {
         'ursaring-vileplume': 'Bear Hug',
     },
     '2010': {
+        'luxray-roserade': 'SP Box',
+        'gliscor-spiritomb': 'Gliscor',
+        'tyranitar-machamp': 'Tyranitar Machamp',
         'luxray-garchomp': 'LuxChomp',
         'luxray-roserade': 'SP Box',
         'gardevoir-gallade': 'Gardevoir Gallade',

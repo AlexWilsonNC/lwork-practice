@@ -283,9 +283,62 @@ const Decks = () => {
       .replace(/^-|-$/g, ''); // Replace spaces/special chars with hyphens
   };
 
-  const filteredDecks = decks.filter(deck =>
-    deck.label.toLowerCase().includes(searchTerm.toLowerCase()) && deck.label !== '-'
-  );
+  const cleanSpriteName = (sprite = '') => {
+    return String(sprite || '')
+      .replace('/assets/sprites/', '')
+      .replace('assets/sprites/', '')
+      .replace('sprites/', '')
+      .replace('.png', '')
+      .trim();
+  };
+
+  const cleanDeckLabel = (label = '') => {
+    if (label === 'seismitoad-sprites/garbodor') {
+      return 'Seismitoad Garbodor';
+    } if (label === 'joltik-sprites/pumpkaboo') {
+      return 'Night March';
+    }
+
+    return label;
+  };
+
+  const combinedDecks = Object.values(
+  decks.reduce((acc, deck) => {
+    const cleanedLabel = cleanDeckLabel(deck.label);
+
+    if (!cleanedLabel || cleanedLabel === '-') return acc;
+
+    if (!cleanedLabel.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return acc;
+    }
+
+    if (!acc[cleanedLabel]) {
+      acc[cleanedLabel] = {
+        ...deck,
+        label: cleanedLabel,
+        deckCount: Number(deck.deckCount || 0),
+        sprite1: cleanSpriteName(deck.sprite1),
+        sprite2: cleanSpriteName(deck.sprite2),
+      };
+    } else {
+      acc[cleanedLabel].deckCount += Number(deck.deckCount || 0);
+
+      if (!acc[cleanedLabel].sprite1 && deck.sprite1) {
+        acc[cleanedLabel].sprite1 = cleanSpriteName(deck.sprite1);
+      }
+
+      if (!acc[cleanedLabel].sprite2 && deck.sprite2) {
+        acc[cleanedLabel].sprite2 = cleanSpriteName(deck.sprite2);
+      }
+
+      if (!acc[cleanedLabel].eventDate && deck.eventDate) {
+        acc[cleanedLabel].eventDate = deck.eventDate;
+      }
+    }
+
+    return acc;
+  }, {})
+);
 
   const extractYear = (deck) => {
     if (deck.eventDate) {
@@ -295,7 +348,7 @@ const Decks = () => {
     return 'Unknown';
   };
 
-  const sortedDecks = [...filteredDecks].sort((a, b) => {
+  const sortedDecks = [...combinedDecks].sort((a, b) => {
     return Number(b.deckCount || 0) - Number(a.deckCount || 0);
   });
 
@@ -377,7 +430,7 @@ const Decks = () => {
                   <option value="SVI-BLK">SVI-BLK</option>
                   <option value="SVI-DRI">SVI-DRI</option>
                   <option value="SVI-JTG">SVI-JTG</option>
-                  <option value="BRS-SCR">BRS-SCR</option>
+                  {/* <option value="BRS-SCR">BRS-SCR</option> */}
                 </optgroup>
 
                 <optgroup label="2024">
@@ -539,34 +592,33 @@ const Decks = () => {
                     const deckCount = Number(deck.deckCount || 0);
 
                     const overriddenSprites = archetypeSpriteOverrides[deck.label];
-                    const sprite1 = overriddenSprites ? overriddenSprites.sprite1 : deck.sprite1;
-                    const sprite2 = overriddenSprites ? overriddenSprites.sprite2 : deck.sprite2;
-
+                    const sprite1 = cleanSpriteName(overriddenSprites ? overriddenSprites.sprite1 : deck.sprite1);
+                    const sprite2 = cleanSpriteName(overriddenSprites ? overriddenSprites.sprite2 : deck.sprite2);
                     const percentage = totalDecksInSelectedFormat > 0
                       ? ((deckCount / totalDecksInSelectedFormat) * 100).toFixed(2)
                       : '0.00';
 
                     return (
-                      <tr key={`${deck.label}-${selectedFormat}`} className='deck-table'>
+                      <tr key={`${cleanDeckLabel(deck.label)}-${selectedFormat}`} className='deck-table'>
                         <td>{index + 1}</td>
 
                         <td>
                           {sprite1 && sprite1 !== 'blank' ? (
                             <img
                               src={`/assets/sprites/${sprite1}.png`}
-                              alt={`${deck.label} sprite`}
+                              alt={`${cleanDeckLabel(deck.label)} sprite`}
                               style={{ width: '55px' }}
                             />
                           ) : sprite2 ? (
                             <img
                               src={`/assets/sprites/${sprite2}.png`}
-                              alt={`${deck.label} sprite`}
+                              alt={`${cleanDeckLabel(deck.label)} sprite`}
                               style={{ width: '55px' }}
                             />
                           ) : (
                             <img
                               src={`/assets/sprites/blank.png`}
-                              alt={`${deck.label} sprite`}
+                              alt={`${cleanDeckLabel(deck.label)} sprite`}
                               style={{ width: '55px' }}
                             />
                           )}
@@ -577,15 +629,15 @@ const Decks = () => {
                             <img
                               className='movesecondspritedecks'
                               src={`/assets/sprites/${sprite2}.png`}
-                              alt={`${deck.label} sprite`}
+                              alt={`${cleanDeckLabel(deck.label)} sprite`}
                               style={{ width: '55px' }}
                             />
                           )}
                         </td>
 
                         <td>
-                          <Link to={`/deck/${encodeURIComponent(deck.label)}?format=${selectedFormat}`}>
-                            {deck.label}
+                          <Link to={`/deck/${encodeURIComponent(cleanDeckLabel(deck.label))}?format=${selectedFormat}`}>
+                            {cleanDeckLabel(deck.label)}
                           </Link>
                         </td>
 
