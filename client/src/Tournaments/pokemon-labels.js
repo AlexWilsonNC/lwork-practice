@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'dragonite-mega-eelektrik': "Mega Dragonite Eels",
         'diancie-mega-dusknoir': "Mega Diancie Dusknoir",
         'blank-trevenant': "Hop's Trevenant",
         'blank-metagross': "Metagross",
@@ -215,8 +216,16 @@ const customLabelsConfig = {
         'magmortar-volcanion': 'Magmortar Volcanion',
         'zacian-crowned-snorlax': 'Hop\'s Zacian',
         'blank-substitute': 'Other',
+        'blank-conkeldurr': 'Conkeldurr',
+        'blank-slaking': 'Slaking',
+        'blank-crustle': 'Crustle',
+        'mewtwo-spidops': 'Team Rocket\'s',
     },
     '2024': {
+        'blank-substitute': 'Other',
+        'blank-snorlax': 'Snorlax Stall',
+        'blank-feraligatr': 'Feraligatr',
+        'blank-gholdengo': 'Gholdengo',
         'blank-gardevoir': 'Gardevoir ex',
         'chien-pao-baxcalibur': 'Chien-Pao Baxcalibur',
         'comfey-sableye': 'Lost Box',
@@ -272,6 +281,8 @@ const customLabelsConfig = {
         'murkrow-flamigo': 'United Wings',
     },
     '2023': {
+        'blank-substitute': 'Other',
+        'blank-snorlax': 'Snorlax Stall',
         'comfey-charizard-shiny': 'Radiant Charizard LZB',
         'comfey-sableye': 'Lost Box',
         'mew-vmax-genesect': 'Mew VMAX',
@@ -464,6 +475,7 @@ const customLabelsConfig = {
         'malamar-marshadow': 'Malamar',
     },
     '2018': {
+        'zoroark-magnezone': 'Zoroark Magnezone',
         'zoroark-garbodor': 'Zoroark Garbodor',
         'blank-rayquaza': 'Rayquaza GX',
         'buzzwole-garbodor': 'Buzzwole Garbodor',
@@ -574,6 +586,8 @@ const customLabelsConfig = {
         'alakazam-mega-espeon': 'Mega Alakazam',
     },
     '2016': {
+        'blank-exeggutor': 'Exeggutor',
+        'vespiquen-yveltal': 'Vespiquen Yveltal',
         'vespiquen-raichu': 'Vespiquen Raichu',
         'manectric-mega-seismitoad': 'Mega Manectric',
         'wailord-aegislash': 'Wall Stall',
@@ -840,7 +854,18 @@ const customLabelsConfig = {
         'blank-eevee-no-heart': 'Eeveelutions',
     },
     '2007': {
+        'tyranitar-altaria': 'Tyranitar',
+        'typhlosion-weezing': 'Typhlosion Weezing',
+        'stantler-exploud': 'Stantler Exploud',
+        'shiftry-eevee': 'Shiftry',
+        'scizor-blastoise': 'Scizor Blastoise',
+        'metagross-steelix': 'Metagross Steelix',
+        'ledian-gardevoir': 'Ledian Gardevoir',
+        'exeggutor-ledian': 'Exeggutor Ledian',
+        'rayquaza-mew': 'Destiny',
+        'lucario-eevee': 'Lucario',
         'absol-eevee-no-heart': 'Absolutions',
+        'absol-eevee': 'Absolutions',
         'flygon-exeggutor': 'R-Gon',
         'blank-empoleon': 'Empoleon',
         'banette-vaporeon': 'Banette Eeveelutions',
@@ -877,6 +902,7 @@ const customLabelsConfig = {
         'empoleon-eevee-no-heart': 'Empoleon',
     },
     '2006': {
+        'blank-banette': 'Banette',
         'lugia-blastoise': 'LBS',
         'metagross-dragonite': 'Metanite',
         'tyranitar-electrode': 'BombTar',
@@ -1048,6 +1074,7 @@ const customLabelsConfig = {
         'gengar-golduck': 'Gengar Golduck',
     },
     '2001': {
+        'blank-typhlosion': 'Typhlosion',
         'blank-feraligatr': 'Riptide Feraligatr',
         'crobat-murkrow': 'Crobat',
         'feraligatr-qwilfish': 'Riptide Feraligatr',
