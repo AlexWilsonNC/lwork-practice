@@ -441,7 +441,7 @@ const PlayerProfile = () => {
                                     </Link>
                                 </td>
                                 <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>{getDivisionAbbreviation(result.division)}</span></td>
-                                <td className='player-deck-icons center-content'>
+                                <td className='player-deck-icons center-content player-profile-sprites'>
                                     {(() => {
                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
                                         const sprite2 = result.sprite2 === 'hyphen' ? '' : result.sprite2;

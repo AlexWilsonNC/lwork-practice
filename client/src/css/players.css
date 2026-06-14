@@ -18,6 +18,11 @@
 .divisionplacementopaque {
     opacity: 0.5;
 }
+.player-profile-sprites {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
 .results-table th:nth-child(1),
 .results-table th:nth-child(4),
 .results-table th:nth-child(2) {
@@ -35,10 +40,6 @@
 }
 .player-results-container .sprite:nth-child(1) {
     margin-left: 55px;
-}
-.results-table .second-sprite {
-    margin-left: -28px;
-    margin-right: -10px;
 }
 .player-results-container .results-table th:nth-child(3) {
     padding-right: 15px;
@@ -125,10 +126,10 @@
 .results-table th:nth-child(3) {
     width: 10%;
 }
-.results-table td:nth-child(4),
+/* .results-table td:nth-child(4),
 .results-table th:nth-child(4) {
     width: 32%;
-}
+} */
 .small-text-info {
     font-size: 12px;
 }
@@ -273,10 +274,6 @@
     .results-table td:nth-child(3),
     .results-table th:nth-child(3) {
         width: 10%;
-    }
-    .results-table td:nth-child(4),
-    .results-table th:nth-child(4) {
-        width: 32%;
     }
     .player-results-container .sprite:nth-child(1) {
         margin-left: 0px;
