@@ -278,10 +278,6 @@
     .player-results-container .sprite:nth-child(1) {
         margin-left: 0px;
     }
-    .results-table .second-sprite {
-        margin-left: -24px;
-        margin-right: -10px;
-    }
 }
 @media screen and (max-width: 530px) {
     .player-results-container th {
