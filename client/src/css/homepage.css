@@ -57,8 +57,7 @@
     gap: 25px;
 }
 .tba-text {
-    /* border: 1px solid grey; */
-    background-color: #1a1a1a;
+    background-color: rgb(29, 30, 31);
     color: #fff;
     border-radius: 4px;
     margin-top: 25px;
@@ -67,6 +66,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    height: 100% !important;
     font-size: 14px;
 }
 .new-homepage {

@@ -1,3 +1,7 @@
+.indiv-filter select {
+    width: auto;
+    padding-right: 15px;
+}
 .deck-table {
     height: 55px;
     margin-bottom: 5px;
