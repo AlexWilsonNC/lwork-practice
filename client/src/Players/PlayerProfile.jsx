@@ -180,7 +180,7 @@ const parseDate = (dateString) => {
 const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
-    
+
     // Define the special case with capital "De"
     const specialCases = {
         'de haes damien': 'De Haes Damien',
@@ -281,19 +281,19 @@ const PlayerProfile = () => {
     }, [id]);
 
     if (error) {
-      return (
-        <PlayerProfileContainer theme={theme} className="center-error">
-          <h2>No Player Profile Found</h2>
-          <br></br>
-          <br></br>
-          <p className='unknown-player-txt-wdth'>
-            Either <strong>{formattedName} ({playerFlag})</strong> has no Day 2 results in our database, or there's an error with the "player-flag" data in the URL, if you believe this to be an error, please contact us at <a href='mailto:ptcglegends@gmail.com' style={{ color: '#1290eb' }}>ptcglegends@gmail.com</a>.
-            <br></br><br></br>
-            <br></br><br></br>
-            <span className='small-text-info'>(NOTE: Even though we've begun to have Day 1 results & decklists available for 2025 events, those players are not integrated into our database if they've not yet had a seperate Day 2 performance, as that would be waaay too much data...)</span>
-          </p>
-        </PlayerProfileContainer>
-      );
+        return (
+            <PlayerProfileContainer theme={theme} className="center-error">
+                <h2>No Player Profile Found</h2>
+                <br></br>
+                <br></br>
+                <p className='unknown-player-txt-wdth'>
+                    Either <strong>{formattedName} ({playerFlag})</strong> has no Day 2 results in our database, or there's an error with the "player-flag" data in the URL, if you believe this to be an error, please contact us at <a href='mailto:ptcglegends@gmail.com' style={{ color: '#1290eb' }}>ptcglegends@gmail.com</a>.
+                    <br></br><br></br>
+                    <br></br><br></br>
+                    <span className='small-text-info'>(NOTE: Even though we've begun to have Day 1 results & decklists available for 2025 events, those players are not integrated into our database if they've not yet had a seperate Day 2 performance, as that would be waaay too much data...)</span>
+                </p>
+            </PlayerProfileContainer>
+        );
     }
 
     if (!player) {
@@ -340,31 +340,31 @@ const PlayerProfile = () => {
 
     const isSpecialEvent = (name, flag, eventId) => {
         const specialCases = [
-          { name: 'igor costa', flag: 'US', events: ['2012_WORLDS', '2014_WORLDS', '2015_WORLDS'], newFlag: 'PT' },
-          { name: 'james cox', flag: 'NL', events: ['2019_WORLDS', '2020_LAIC', '2022_WORLDS'], newFlag: 'AU' },
+            { name: 'igor costa', flag: 'US', events: ['2012_WORLDS', '2014_WORLDS', '2015_WORLDS'], newFlag: 'PT' },
+            { name: 'james cox', flag: 'NL', events: ['2019_WORLDS', '2020_LAIC', '2022_WORLDS'], newFlag: 'AU' },
         ];
-    
+
         for (const specialCase of specialCases) {
-          if (name.toLowerCase() === specialCase.name && flag === specialCase.flag && specialCase.events.includes(eventId)) {
-            return specialCase.newFlag;
-          }
+            if (name.toLowerCase() === specialCase.name && flag === specialCase.flag && specialCase.events.includes(eventId)) {
+                return specialCase.newFlag;
+            }
         }
-    
+
         return flag; // Return the original flag if no special case matches
-      };  
+    };
 
     return (
         <PlayerProfileContainer theme={theme} className='center-me'>
             <Helmet>
                 <title>{formatName(player.name)}</title>
                 <meta
-                name='description'
-                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                    name='description'
+                    content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
                 />
                 <meta property='og:title' content="Player Profile" />
                 <meta
                     property='og:description'
-                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                    content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
                 />
                 {/* <meta property='og:image' content={eventData.thumbnail} /> */}
                 {/* <meta
@@ -377,7 +377,7 @@ const PlayerProfile = () => {
                 <meta name='twitter:title' content="Player Profile" />
                 <meta
                     name='twitter:description'
-                content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
+                    content={`All of ${formatName(player.name)}'s documented major results on PTCG Legends.`}
                 />
                 {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
             </Helmet>
@@ -385,10 +385,10 @@ const PlayerProfile = () => {
                 <div className='completed-n-upcoming'>
                     <div className='bts-in'>
                         <div className="flag-container">
-                            <img 
-                                className='flag-size' 
-                                src={flags[player.flag]} 
-                                alt="flag" 
+                            <img
+                                className='flag-size'
+                                src={flags[player.flag]}
+                                alt="flag"
                             />
                             <div className="flag-tooltip">
                                 {getCountryName(player.flag)}
@@ -442,7 +442,30 @@ const PlayerProfile = () => {
                                 </td>
                                 <td>{getPlacementSuffix(result.placement)} <span className='divisionplacementopaque'>{getDivisionAbbreviation(result.division)}</span></td>
                                 <td className='player-deck-icons center-content'>
-                                    <DisplayPokemonSprites decklist={result.decklist} sprite1={result.sprite1} sprite2={result.sprite2} />
+                                    {(() => {
+                                        const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
+                                        const sprite2 = result.sprite2 === 'hyphen' ? '' : result.sprite2;
+
+                                        return (
+                                            <>
+                                                {sprite1 && (
+                                                    <img
+                                                        className="sprite"
+                                                        src={`/assets/sprites/${sprite1}.png`}
+                                                        alt="sprite"
+                                                    />
+                                                )}
+
+                                                {sprite2 && sprite2 !== sprite1 && (
+                                                    <img
+                                                        className={sprite1 ? 'sprite second-sprite' : 'sprite'}
+                                                        src={`/assets/sprites/${sprite2}.png`}
+                                                        alt="sprite"
+                                                    />
+                                                )}
+                                            </>
+                                        );
+                                    })()}
                                     <Link
                                         to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(player.name)}-${isSpecialEvent(player.name, player.flag, result.eventId)}`}
                                         className={result.hasDecklist ? '' : 'no-decklist'}
