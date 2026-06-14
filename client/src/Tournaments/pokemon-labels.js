@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'clefairy-kangaskhan-mega': "Clefairy Box",
         'dragonite-mega-eelektrik': "Mega Dragonite Eels",
         'diancie-mega-dusknoir': "Mega Diancie Dusknoir",
         'blank-trevenant': "Hop's Trevenant",
