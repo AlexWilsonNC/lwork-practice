@@ -323,10 +323,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('ogerpon');
     }
-    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex') && hasPokemon('Mega Kangaskhan ex') && hasPokemon('Meowth ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Koraidon ex') && !hasPokemon('Noctowl')) {
-        firstSprite  = getPokemonSpriteURL('clefairy');
-        secondSprite  = getPokemonSpriteURL('kangaskhan-mega');
-    }
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
@@ -334,6 +330,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Pikachu ex') && hasPokemon('Koraidon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
+    }
+    else if (hasPokemon('Lillie\'s Clefairy ex') && hasPokemon('Mega Kangaskhan ex') && hasPokemon('Meowth ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Koraidon ex') && !hasPokemon('Noctowl')) {
+        firstSprite  = getPokemonSpriteURL('clefairy');
+        secondSprite  = getPokemonSpriteURL('kangaskhan-mega');
     }
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Mega Kangaskhan ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
@@ -425,7 +425,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('flareon');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }      
-    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && !hasPokemon('Dragapult ex')) {
+    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && hasTrainer('Noctowl') && !hasPokemon('Dragapult ex')) {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }
