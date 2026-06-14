@@ -1771,8 +1771,7 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Jun 12, 2026",
         "flag": usa,
-        "location": "New Orleans, Louisiana",
-        "results": false
+        "location": "New Orleans, Louisiana"
     },
     {
         "id": "2026_PRAGUE",

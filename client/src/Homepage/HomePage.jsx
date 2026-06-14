@@ -64,8 +64,19 @@ const Homepage = () => {
         return new Date(article.date) > new Date(latest.date) ? article : latest;
     }, articles[0]);
 
+    const isMajorEvent = (event) =>
+        /(NAIC|LAIC|EUIC|Worlds|World Championships)/i.test(event?.name || '');
+
+    const isPastDayOneMajor = (event) => {
+        const start = new Date(event.date);
+        const dayTwo = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+        return isMajorEvent(event) && new Date() >= dayTwo;
+    };
+
     const upcomingEvents = sortedEvents
         .filter(event => {
+            if (isPastDayOneMajor(event)) return false;
+
             const cutoff = new Date(event.date);
             cutoff.setDate(cutoff.getDate() + 2);
             return cutoff >= new Date();
@@ -77,9 +88,12 @@ const Homepage = () => {
 
     const latestCompletedEvent = [...sortedEvents]
         .filter(event => {
+            if (!event.id) return false;
+            if (isPastDayOneMajor(event)) return true;
+
             const cutoff = new Date(event.date);
             cutoff.setDate(cutoff.getDate() + 2);
-            return cutoff < now && event.id;
+            return cutoff < now;
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
 
@@ -112,7 +126,20 @@ const Homepage = () => {
     const latestCompletedEventDisplayName = latestCompletedEventName
         .replace(/^202\d\s+/, '');
 
-    const isResultsReady = latestCompletedEvent.results !== false;
+    const isInternationalOrWorlds =
+        /(NAIC|LAIC|EUIC|OCIC|Worlds|World Championships)/i.test(
+            latestCompletedEventName
+        );
+
+    const eventStartDate = latestCompletedEvent?.date
+        ? new Date(latestCompletedEvent.date)
+        : null;
+
+    const oneDayAfterStart = eventStartDate
+        ? new Date(eventStartDate.getTime() + (24 * 60 * 60 * 1000))
+        : null;
+
+    const isResultsReady = latestCompletedEvent?.results !== false;
 
     return (
         <Container theme={theme}>
