@@ -425,7 +425,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('flareon');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }      
-    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && hasTrainer('Noctowl') && !hasPokemon('Dragapult ex')) {
+    else if (hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && hasPokemon('Noctowl') && !hasPokemon('Dragapult ex')) {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('noctowl');
     }

@@ -303,42 +303,48 @@ const Decks = () => {
   };
 
   const combinedDecks = Object.values(
-  decks.reduce((acc, deck) => {
-    const cleanedLabel = cleanDeckLabel(deck.label);
+    decks.reduce((acc, deck) => {
+      const cleanedLabel = cleanDeckLabel(deck.label);
 
-    if (!cleanedLabel || cleanedLabel === '-') return acc;
+      if (!cleanedLabel || cleanedLabel === '-') return acc;
 
-    if (!cleanedLabel.toLowerCase().includes(searchTerm.toLowerCase())) {
+      if (!cleanedLabel.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return acc;
+      }
+
+      if (!acc[cleanedLabel]) {
+        const cleanedSprite1 = cleanSpriteName(deck.sprite1);
+        const cleanedSprite2 = cleanSpriteName(deck.sprite2);
+        acc[cleanedLabel] = {
+          ...deck,
+          label: cleanedLabel,
+          deckCount: Number(deck.deckCount || 0),
+          sprite1: cleanedSprite1,
+          sprite2: cleanedSprite1 === cleanedSprite2 ? '' : cleanedSprite2,
+        };
+      } else {
+        acc[cleanedLabel].deckCount += Number(deck.deckCount || 0);
+
+        if (!acc[cleanedLabel].sprite1 && deck.sprite1) {
+          acc[cleanedLabel].sprite1 = cleanSpriteName(deck.sprite1);
+        }
+
+        if (!acc[cleanedLabel].sprite2 && deck.sprite2) {
+          const cleanedSprite2 = cleanSpriteName(deck.sprite2);
+
+          if (cleanedSprite2 !== acc[cleanedLabel].sprite1) {
+            acc[cleanedLabel].sprite2 = cleanedSprite2;
+          }
+        }
+
+        if (!acc[cleanedLabel].eventDate && deck.eventDate) {
+          acc[cleanedLabel].eventDate = deck.eventDate;
+        }
+      }
+
       return acc;
-    }
-
-    if (!acc[cleanedLabel]) {
-      acc[cleanedLabel] = {
-        ...deck,
-        label: cleanedLabel,
-        deckCount: Number(deck.deckCount || 0),
-        sprite1: cleanSpriteName(deck.sprite1),
-        sprite2: cleanSpriteName(deck.sprite2),
-      };
-    } else {
-      acc[cleanedLabel].deckCount += Number(deck.deckCount || 0);
-
-      if (!acc[cleanedLabel].sprite1 && deck.sprite1) {
-        acc[cleanedLabel].sprite1 = cleanSpriteName(deck.sprite1);
-      }
-
-      if (!acc[cleanedLabel].sprite2 && deck.sprite2) {
-        acc[cleanedLabel].sprite2 = cleanSpriteName(deck.sprite2);
-      }
-
-      if (!acc[cleanedLabel].eventDate && deck.eventDate) {
-        acc[cleanedLabel].eventDate = deck.eventDate;
-      }
-    }
-
-    return acc;
-  }, {})
-);
+    }, {})
+  );
 
   const extractYear = (deck) => {
     if (deck.eventDate) {
@@ -625,7 +631,7 @@ const Decks = () => {
                         </td>
 
                         <td>
-                          {sprite2 && sprite1 !== 'blank' && (
+                          {sprite2 && sprite1 && sprite1 !== 'blank' && sprite1 !== sprite2 && (
                             <img
                               className='movesecondspritedecks'
                               src={`/assets/sprites/${sprite2}.png`}
