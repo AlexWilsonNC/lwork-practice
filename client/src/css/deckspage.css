@@ -13,6 +13,12 @@
 .paddingfive {
     padding-left: 15px !important;
 }
+.deck-profile-sprites {
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
 /* deck */
 .deck-table th:nth-child(1) {
     padding-left: 0px !important;

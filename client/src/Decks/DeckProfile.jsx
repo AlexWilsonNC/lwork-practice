@@ -266,29 +266,29 @@ const formatToCollections = (format) => {
 
 const normalizeAttacks = (attacks) => {
   return attacks.map(attack => ({
-      ...attack,
-      cost: attack.cost.slice().sort()
+    ...attack,
+    cost: attack.cost.slice().sort()
   })).sort((a, b) => a.name.localeCompare(b.name));
 };
 
 const normalizeAbilities = (abilities) => {
   if (!abilities) return [];
   return abilities.map(ability => ({
-      ...ability
+    ...ability
   })).sort((a, b) => a.name.localeCompare(b.name));
 };
 
 const normalizeWeaknesses = (weaknesses) => {
   if (!weaknesses) return [];
   return weaknesses.map(weakness => ({
-      ...weakness
+    ...weakness
   })).sort((a, b) => a.type.localeCompare(b.type));
 };
 
 const normalizeResistances = (resistances) => {
   if (!resistances) return [];
   return resistances.map(resistance => ({
-      ...resistance
+    ...resistance
   })).sort((a, b) => a.type.localeCompare(b.type));
 };
 
@@ -307,10 +307,10 @@ const comparePokemonCards = (card1, card2) => {
 const normalizeEnergyCardName = (name) => {
   // Normalize common variations in energy card names
   return name
-      .toLowerCase()
-      .replace("basic ", "")
-      .replace(" - basic", "")
-      .replace(" energy", "");
+    .toLowerCase()
+    .replace("basic ", "")
+    .replace(" - basic", "")
+    .replace(" energy", "");
 };
 const compareEnergyCards = (card1, card2) => {
   // Normalize both energy card names
@@ -378,19 +378,19 @@ const getPlacementSuffix = (number) => {
   const k = number % 100;
   let suffix;
   if (j === 1 && k !== 11) {
-      suffix = 'st';
+    suffix = 'st';
   } else if (j === 2 && k !== 12) {
-      suffix = 'nd';
+    suffix = 'nd';
   } else if (j === 3 && k !== 13) {
-      suffix = 'rd';
+    suffix = 'rd';
   } else {
-      suffix = 'th';
+    suffix = 'th';
   }
   return (
-      <>
-          {number}
-          <sup className='sup'>{suffix}</sup>
-      </>
+    <>
+      {number}
+      <sup className='sup'>{suffix}</sup>
+    </>
   );
 };
 
@@ -414,143 +414,143 @@ const DeckProfile = () => {
     setSelectedFormat(urlFormat); // Set the format directly from the URL
 
     const fetchDecks = async () => {
-        try {
-            const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
-            if (!response.ok) {
-                throw new Error('Deck not found');
-            }
-            const data = await response.json();
-            setDecks(data);
-            
-            // Use the format from the URL, and only fallback if none is provided
-            const formats = data.flatMap(d => d.decks.map(deck => deck.eventFormat));
-            const uniqueFormats = [...new Set(formats)];
-            const mostRecentFormat = uniqueFormats[uniqueFormats.length - 1]; // Fallback to most recent format if none selected
-            const formatToUse = urlFormat || mostRecentFormat;
-            setSelectedFormat(formatToUse); // Set the selected format to the format in the URL
-            
-            // Fetch card data for the format
-            await fetchCardData(formatToUse);
-        } catch (error) {
-            console.error('Error fetching decks:', error);
-        } finally {
-            setLoading(false);
+      try {
+        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
+        if (!response.ok) {
+          throw new Error('Deck not found');
         }
+        const data = await response.json();
+        setDecks(data);
+
+        // Use the format from the URL, and only fallback if none is provided
+        const formats = data.flatMap(d => d.decks.map(deck => deck.eventFormat));
+        const uniqueFormats = [...new Set(formats)];
+        const mostRecentFormat = uniqueFormats[uniqueFormats.length - 1]; // Fallback to most recent format if none selected
+        const formatToUse = urlFormat || mostRecentFormat;
+        setSelectedFormat(formatToUse); // Set the selected format to the format in the URL
+
+        // Fetch card data for the format
+        await fetchCardData(formatToUse);
+      } catch (error) {
+        console.error('Error fetching decks:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchDecks();
   }, [id, searchParams]); // Now also depends on searchParams to handle format changes
 
-const fetchCardData = async (format) => {
-  try {
+  const fetchCardData = async (format) => {
+    try {
       const collectionsParam = formatToCollections(format).join(',');
       const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
 
       const response = await fetch(url);
 
       if (response.ok) {
-          const cards = await response.json();
-          const cardMap = {};
+        const cards = await response.json();
+        const cardMap = {};
 
-          cards.forEach(card => {
-              const key = `${card.setAbbrev}-${card.number}`;
-              cardMap[key] = card;
-          });
+        cards.forEach(card => {
+          const key = `${card.setAbbrev}-${card.number}`;
+          cardMap[key] = card;
+        });
 
-          setCardData(cardMap);
+        setCardData(cardMap);
       } else {
-          console.error('Failed to fetch card data, status:', response.status);
+        console.error('Failed to fetch card data, status:', response.status);
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error fetching card data:', error);
-  }
-};
+    }
+  };
 
-useEffect(() => {
-  if (decks.length && cardData) {
+  useEffect(() => {
+    if (decks.length && cardData) {
       const cardSets = {
-          pokemon: new Map(),
-          trainer: new Map(),
-          energy: new Map(),
+        pokemon: new Map(),
+        trainer: new Map(),
+        energy: new Map(),
       };
 
       const normalizeString = (str) => {
-          return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return str?.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
       };
 
       // Filter decks by the selected format and division
       const filteredDecks = decks.flatMap(d => d.decks)
-          .filter(deck =>
-              deck.eventFormat === selectedFormat &&
-              (selectedDivision === 'All Divisions' || selectedDivision === '' || deck.division === selectedDivision)
-          );
+        .filter(deck =>
+          deck.eventFormat === selectedFormat &&
+          (selectedDivision === 'All Divisions' || selectedDivision === '' || deck.division === selectedDivision)
+        );
 
       filteredDecks.forEach(({ decklist }) => {
-          if (decklist) {
-              ['pokemon', 'trainer', 'energy'].forEach((category) => {
-                  if (decklist[category]) {
-                      decklist[category].forEach(card => {
-                          const existingCardKey = Array.from(cardSets[category].keys()).find(key => {
-                              const existingCard = cardSets[category].get(key).cardInfo;
-                              if (category === 'pokemon') {
-                                  return normalizeString(existingCard.name) === normalizeString(card.name) &&
-                                      comparePokemonCards(existingCard, card);
-                              } else if (category === 'energy') {
-                                  return compareEnergyCards(existingCard, card);
-                              } else {
-                                  return normalizeString(existingCard.name) === normalizeString(card.name);
-                              }
-                          });
-
-                          if (existingCardKey) {
-                              const cardData = cardSets[category].get(existingCardKey);
-                              cardData.count += parseInt(card.count, 10);
-                              cardData.occurrences += 1;
-                              cardSets[category].set(existingCardKey, cardData);
-                          } else {
-                              const cardKey = `${card.set}-${card.number}`;
-                              cardSets[category].set(cardKey, {
-                                  cardInfo: card,
-                                  count: parseInt(card.count, 10),
-                                  occurrences: 1,
-                              });
-                          }
-                      });
+        if (decklist) {
+          ['pokemon', 'trainer', 'energy'].forEach((category) => {
+            if (decklist[category]) {
+              decklist[category].forEach(card => {
+                const existingCardKey = Array.from(cardSets[category].keys()).find(key => {
+                  const existingCard = cardSets[category].get(key).cardInfo;
+                  if (category === 'pokemon') {
+                    return normalizeString(existingCard.name) === normalizeString(card.name) &&
+                      comparePokemonCards(existingCard, card);
+                  } else if (category === 'energy') {
+                    return compareEnergyCards(existingCard, card);
+                  } else {
+                    return normalizeString(existingCard.name) === normalizeString(card.name);
                   }
+                });
+
+                if (existingCardKey) {
+                  const cardData = cardSets[category].get(existingCardKey);
+                  cardData.count += parseInt(card.count, 10);
+                  cardData.occurrences += 1;
+                  cardSets[category].set(existingCardKey, cardData);
+                } else {
+                  const cardKey = `${card.set}-${card.number}`;
+                  cardSets[category].set(cardKey, {
+                    cardInfo: card,
+                    count: parseInt(card.count, 10),
+                    occurrences: 1,
+                  });
+                }
               });
-          }
+            }
+          });
+        }
       });
 
       const commonCards = {
-          pokemon: [],
-          trainer: [],
-          energy: [],
+        pokemon: [],
+        trainer: [],
+        energy: [],
       };
 
       // Populate the commonCards and sort them by averageCount
       ['pokemon', 'trainer', 'energy'].forEach((category) => {
-          cardSets[category].forEach((cardData) => {
-              const totalDecks = filteredDecks.length;
-              const averageCount = cardData.count / totalDecks;
-              commonCards[category].push({
-                  ...cardData.cardInfo,
-                  averageCount: averageCount.toFixed(2), // Ensure two decimal places
-              });
+        cardSets[category].forEach((cardData) => {
+          const totalDecks = filteredDecks.length;
+          const averageCount = cardData.count / totalDecks;
+          commonCards[category].push({
+            ...cardData.cardInfo,
+            averageCount: averageCount.toFixed(2), // Ensure two decimal places
           });
+        });
 
-          // Sort each category by averageCount in descending order
-          commonCards[category].sort((a, b) => b.averageCount - a.averageCount);
+        // Sort each category by averageCount in descending order
+        commonCards[category].sort((a, b) => b.averageCount - a.averageCount);
       });
 
       const allCommonCards = [
-          ...commonCards.pokemon,
-          ...commonCards.trainer,
-          ...commonCards.energy,
+        ...commonCards.pokemon,
+        ...commonCards.trainer,
+        ...commonCards.energy,
       ];
 
       setAverageCardCounts(allCommonCards);
-  }
-}, [decks, cardData, selectedFormat, selectedDivision, showTop30]);
+    }
+  }, [decks, cardData, selectedFormat, selectedDivision, showTop30]);
 
   const cardImageUrl = (card) => {
     if (!cardData) {
@@ -583,25 +583,25 @@ useEffect(() => {
     return <div>No data found for this deck.</div>;
   }
 
-const formatParam = searchParams.get('format');
+  const formatParam = searchParams.get('format');
 
-// 2. pull every format this archetype appears in
-const rawFormats = decks.flatMap(d => d.decks.map(deck => deck.eventFormat));
+  // 2. pull every format this archetype appears in
+  const rawFormats = decks.flatMap(d => d.decks.map(deck => deck.eventFormat));
 
-// 3. dedupe
-const uniqueFormatsRaw = Array.from(new Set(rawFormats));
+  // 3. dedupe
+  const uniqueFormatsRaw = Array.from(new Set(rawFormats));
 
-// 4. re-order them to match your master list
-const sortedFormats = formatOrder.filter(f => uniqueFormatsRaw.includes(f));
+  // 4. re-order them to match your master list
+  const sortedFormats = formatOrder.filter(f => uniqueFormatsRaw.includes(f));
   const uniqueDivisions = ['All Divisions', ...new Set(decks.flatMap(d => d.decks.map(deck => deck.division)))];
 
   const divisionOrder = {
     "masters": 1,
     "seniors": 2,
     "juniors": 3
-};
+  };
 
-const filteredDecks = decks.flatMap(d => d.decks)
+  const filteredDecks = decks.flatMap(d => d.decks)
     .filter(result =>
       (selectedFormat === '' || result.eventFormat === selectedFormat) &&
       (selectedDivision === 'All Divisions' || selectedDivision === '' || result.division === selectedDivision) &&
@@ -623,28 +623,28 @@ const filteredDecks = decks.flatMap(d => d.decks)
   return (
     <DeckProfileContainer theme={theme} className='center-me'>
       <Helmet>
-          <title>Decks - {decks[0].label}</title>
-          <meta
-              name='description'
-              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
-          />
-          <meta property='og:title' content="Deck Profile" />
-          <meta
-              property='og:description'
-              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
-          />
-          <meta
-              property='og:url'
-              content={`https://www.ptcglegends.com/decks/${id}`}
-          />
-          <meta property='og:type' content='website' />
-          <meta name='author' content='PTCG Legends' />
-          <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:title' content="Deck Profile" />
-          <meta
-              name='twitter:description'
-              content={`All ${decks[0].label} decks documented on PTCG Legends.`}
-          />
+        <title>Decks - {decks[0].label}</title>
+        <meta
+          name='description'
+          content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+        />
+        <meta property='og:title' content="Deck Profile" />
+        <meta
+          property='og:description'
+          content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+        />
+        <meta
+          property='og:url'
+          content={`https://www.ptcglegends.com/decks/${id}`}
+        />
+        <meta property='og:type' content='website' />
+        <meta name='author' content='PTCG Legends' />
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' content="Deck Profile" />
+        <meta
+          name='twitter:description'
+          content={`All ${decks[0].label} decks documented on PTCG Legends.`}
+        />
       </Helmet>
       <div className='player-results-container'>
         <div className='completed-n-upcoming'>
@@ -667,31 +667,31 @@ const filteredDecks = decks.flatMap(d => d.decks)
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
               <select
-    value={selectedFormat}
-    onChange={e => {
-      setSelectedFormat(e.target.value);
-      setSearchParams({ format: e.target.value });
-    }}
-  >
-    {sortedFormats.map(fmt => (
-      <option key={fmt} value={fmt}>{fmt}</option>
-    ))}
-  </select>
+                value={selectedFormat}
+                onChange={e => {
+                  setSelectedFormat(e.target.value);
+                  setSearchParams({ format: e.target.value });
+                }}
+              >
+                {sortedFormats.map(fmt => (
+                  <option key={fmt} value={fmt}>{fmt}</option>
+                ))}
+              </select>
             </div>
             <div className='indiv-filter'>
-            <p className='sort-events'>Division:</p>
-            <select value={selectedDivision} onChange={(e) => setSelectedDivision(e.target.value)}>
-              {uniqueDivisions.map((division, index) => (
-                <option key={index} value={division}>{division.charAt(0).toUpperCase() + division.slice(1)}</option>
-              ))}
-            </select>
+              <p className='sort-events'>Division:</p>
+              <select value={selectedDivision} onChange={(e) => setSelectedDivision(e.target.value)}>
+                {uniqueDivisions.map((division, index) => (
+                  <option key={index} value={division}>{division.charAt(0).toUpperCase() + division.slice(1)}</option>
+                ))}
+              </select>
             </div>
             <button onClick={resetFilters} className="reset-btn">Reset</button>
           </div>
         </div>
         {/* <div className='average-card-counts'>
           <p>Avg. Card Count in {decks[0].label}</p> */}
-          {/* <div className='button-container'>
+        {/* <div className='button-container'>
             <button
               onClick={handleShowTop30}
               className={showTop30 ? 'active-button' : ''}
@@ -705,7 +705,7 @@ const filteredDecks = decks.flatMap(d => d.decks)
               Only Cards in All Lists
             </button>
           </div> */}
-          {/* <div className="deck-cards">
+        {/* <div className="deck-cards">
             {averageCardCounts.length > 0 ? (
               averageCardCounts.map((card, index) => (
                 <div key={index} className="card-container-avg" onClick={() => handleCardClick(card)}>
@@ -746,33 +746,39 @@ const filteredDecks = decks.flatMap(d => d.decks)
                     </EventSeparator>
                   )}
                   <tr>
-                  <td>{getPlacementSuffix(result.placement)}</td>
-                  <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
+                    <td>{getPlacementSuffix(result.placement)}</td>
+                    <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
                     <td><span className='grey'>{formatName(result.division)}</span></td>
                     <td></td>
                     <td className='player-deck-icons center-content'>
-                      <img
-                        src={`/assets/sprites/${result.sprite1}.png`}
-                        alt={`${result.playerName}'s deck`}
-                        style={{ width: '55px' }}
-                      />
-                      {result.sprite2 && (
-                        <img
-                          className='movesecondspritedecks'
-                          src={`/assets/sprites/${result.sprite2}.png`}
-                          alt={`${result.playerName}'s deck`}
-                          style={{ width: '55px' }}
-                        />
-                      )}
-                      <Link
-                        to={`/tournaments/${result.eventId}/${result.division}/${result.playerName}-${result.playerFlag}`}
-                        className={result.decklist ? '' : 'no-decklist'}
-                      >
-                        <span className={`material-symbols-outlined ${result.decklist ? '' : 'no-decklist'}`}>
-                          format_list_bulleted
-                        </span>
-                      </Link>
-                    </td>
+  <div className='deck-profile-sprites'>
+    {result.sprite1 && result.sprite1 !== 'blank' && (
+      <img
+        src={`/assets/sprites/${result.sprite1}.png`}
+        alt={`${result.playerName}'s deck`}
+        style={{ width: '55px' }}
+      />
+    )}
+
+    {result.sprite2 && result.sprite2 !== 'hyphen' && (
+      <img
+        className={result.sprite1 && result.sprite1 !== 'blank' ? 'movesecondspritedecks' : ''}
+        src={`/assets/sprites/${result.sprite2}.png`}
+        alt={`${result.playerName}'s deck`}
+        style={{ width: '55px' }}
+      />
+    )}
+  </div>
+
+  <Link
+    to={`/tournaments/${result.eventId}/${result.division}/${result.playerName}-${result.playerFlag}`}
+    className={result.decklist ? '' : 'no-decklist'}
+  >
+    <span className={`material-symbols-outlined ${result.decklist ? '' : 'no-decklist'}`}>
+      format_list_bulleted
+    </span>
+  </Link>
+</td>
                   </tr>
                 </React.Fragment>
               );
