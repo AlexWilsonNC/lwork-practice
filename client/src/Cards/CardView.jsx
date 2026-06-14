@@ -1019,11 +1019,30 @@ const CardView = () => {
                                                     </>
                                                 )}
                                                 <td className="player-deck-icons pushright">
-                                                    <DisplayPokemonSprites
-                                                        decklist={result.decklist}
-                                                        sprite1={result.sprite1}
-                                                        sprite2={result.sprite2}
-                                                    />
+                                                    {(() => {
+                                                        const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
+                                                        const sprite2 = result.sprite2 === 'hyphen' ? '' : result.sprite2;
+
+                                                        return (
+                                                            <>
+                                                                {sprite1 && (
+                                                                    <img
+                                                                        className="sprite"
+                                                                        src={`/assets/sprites/${sprite1}.png`}
+                                                                        alt="sprite"
+                                                                    />
+                                                                )}
+
+                                                                {sprite2 && sprite2 !== sprite1 && (
+                                                                    <img
+                                                                        className={sprite1 ? 'sprite second-sprite' : 'sprite'}
+                                                                        src={`/assets/sprites/${sprite2}.png`}
+                                                                        alt="sprite"
+                                                                    />
+                                                                )}
+                                                            </>
+                                                        );
+                                                    })()}
                                                     <Link
                                                         to={
                                                             eventId.includes('FEATURED')
