@@ -343,6 +343,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('starmie-mega');
         secondSprite  = getPokemonSpriteURL('froslass');
     }
+    else if (hasPokemon('Mega Starmie ex') && hasPokemon('Mega Froslass ex')) {
+        firstSprite  = getPokemonSpriteURL('starmie-mega');
+        secondSprite  = getPokemonSpriteURL('froslass-mega');
+    }
     else if(hasPokemon('Marnie\'s Grimmsnarl ex') && hasPokemon('Froslass')) {
         firstSprite  = getPokemonSpriteURL('grimmsnarl');
         secondSprite  = getPokemonSpriteURL('froslass');

@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'blank-beedrill': 'Beedrill',
         'clefairy-kangaskhan-mega': "Clefairy Box",
         'dragonite-mega-eelektrik': "Mega Dragonite Eels",
         'diancie-mega-dusknoir': "Mega Diancie Dusknoir",
@@ -10,6 +11,7 @@ const customLabelsConfig = {
         'lopunny-mega-dudunsparce': "Mega Lopunny Dudunsparce",
         'starmie-mega-dusknoir': "Mega Starmie",
         'starmie-mega-froslass': "Mega Starmie",
+        'starmie-mega-froslass-mega': "Mega Starmie",
         'honchkrow-porygon2': "Rocket's Honchkrow",
         'toxtricity-brute-bonnet': 'Toxtricity Brute Bonnet',
         'blank-lucario-mega': 'Mega Lucario',

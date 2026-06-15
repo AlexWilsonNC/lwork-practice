@@ -167,3 +167,17 @@
         font-size: 7px !important;
     }
 }
+.player-profile-sprites .sprite {
+    width: 50px !important;
+    height: auto;
+}
+@media screen and (max-width: 600px) {
+    .player-profile-sprites .sprite {
+        width: 44px !important;
+    }
+}
+@media screen and (max-width: 480px) {
+    .player-profile-sprites .sprite {
+        width: 40px !important;
+    }
+}

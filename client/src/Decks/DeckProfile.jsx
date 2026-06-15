@@ -750,19 +750,20 @@ const DeckProfile = () => {
                     <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
                     <td><span className='grey'>{formatName(result.division)}</span></td>
                     <td></td>
-                    <td className='player-deck-icons center-content'>
+                    <td className='player-deck-icons center-content player-profile-sprites'>
                       <div className='deck-profile-sprites'>
                         {result.sprite1 && result.sprite1 !== 'blank' && (
                           <img
                             src={`/assets/sprites/${result.sprite1}.png`}
                             alt={`${result.playerName}'s deck`}
                             style={{ width: '55px' }}
+                            className='sprite'
                           />
                         )}
 
                         {result.sprite2 && result.sprite2 !== 'hyphen' && (
                           <img
-                            className={result.sprite1 && result.sprite1 !== 'blank' ? 'movesecondspritedecks' : ''}
+                            className={`sprite ${result.sprite1 && result.sprite1 !== 'blank' ? 'movesecondspritedecks' : ''}`}
                             src={`/assets/sprites/${result.sprite2}.png`}
                             alt={`${result.playerName}'s deck`}
                             style={{ width: '55px' }}

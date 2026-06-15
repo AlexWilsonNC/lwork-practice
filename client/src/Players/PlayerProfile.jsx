@@ -444,7 +444,7 @@ const PlayerProfile = () => {
                                 <td className='player-deck-icons center-content player-profile-sprites'>
                                     {(() => {
                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
-                                        const sprite2 = result.sprite2 === 'hyphen' ? '' : result.sprite2;
+                                        const sprite2 = result.sprite2 || '';
 
                                         return (
                                             <>
