@@ -1007,7 +1007,7 @@ const PlayerDeck = () => {
                                                             sprite2={sprites.second}
                                                         />
                                                     ) : (
-                                                        <em style={{ opacity: 0.7 }}>{opponent?.decklist ? '—' : ''}</em>
+                                                        <em style={{ opacity: 0.5, marginLeft: '35px' }}>—</em>
                                                     )}
                                                 </td>
 
@@ -1021,9 +1021,7 @@ const PlayerDeck = () => {
                                                                 format_list_bulleted
                                                             </span>
                                                         </Link>
-                                                    ) : (
-                                                        <span style={{ opacity: 0.4 }}>—</span>
-                                                    )}
+                                                    ) : null}
                                                 </td>
                                             </tr>
                                         );
