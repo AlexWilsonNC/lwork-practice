@@ -90,6 +90,13 @@ import jersey from '../assets/flags/jersey.png';
 import uzbekistan from '../assets/flags/uzbekistan.png';
 import estonia from '../assets/flags/estonia.png';
 import armenia from '../assets/flags/armenia.png';
+import vietnam from '../assets/flags/vietnam.png';
+import papuanewguinea from '../assets/flags/papua-new-guinea.png';
+import keeling from '../assets/flags/keeling.png';
+import pitcairnislands from '../assets/flags/pitcairn-islands.png';
+import anguilla from '../assets/flags/anguilla.png';
+import aruba from '../assets/flags/aruba.png';
+import serbia from '../assets/flags/serbia.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
@@ -185,6 +192,13 @@ export const flags = {
      UZ: uzbekistan,
      AM: armenia,
      EE: estonia,
+     VN: vietnam,
+     PG: papuanewguinea,
+     CC: keeling,
+     AI: anguilla,
+     PN: pitcairnislands,
+     CS: serbia,
+     AW: aruba,
     unknown: unknown
 };
 
@@ -230,6 +244,7 @@ export const countryNames = {
     MA: 'Moroco (Europe)',
     NL: 'Netherlands (Europe)',
     NZ: 'New Zealand (Oceania)',
+    PG: 'Papua New Guinea (Oceania)',
     NI: 'Nicaragua (Latin America)',
     NO: 'Norway (Europe)',
     PE: 'Peru (Latin America)',
@@ -250,7 +265,6 @@ export const countryNames = {
     UK: 'United Kingdom (Europe)',
     GB: 'United Kingdom (Europe)',
     US: 'USA (North America)',
-    unknown: 'Unknown',
     UY: 'Uruguay (Latin America)',
     GT: 'Guatemala (Latin America)',
     BO: 'Bolivia (Latin America)',
@@ -270,7 +284,7 @@ export const countryNames = {
     VE: 'venezuela (Latin America)',
     IN: 'India (Asia-Pacific)',
     PA: 'Panama (Latin America)',
-    HN: 'honduras (Latin America)',
+    HN: 'Honduras (Latin America)',
     JE: 'Jersey (Europe)',
     UA: 'Ukraine (Europe)',
     QA: 'Qatar (Middle East-South Africa)',
@@ -280,8 +294,15 @@ export const countryNames = {
     UZ: 'Uzbekistan (Middle East-South Africa)',
     BZ: 'Belize (Latin America)',
     EE: 'Estonia (Europe)',
+    CS: 'Serbia (Europe)',
     AM: 'Armenia (Asia-Pacific)',
-    EC: 'Ecuador (Latin America)'
+    VN: 'Vietnam (Asia-Pacific)',
+    EC: 'Ecuador (Latin America)',
+    AI: 'Anguilla (Latin America)',
+    AW: 'Aruba (Latin America)',
+    CC: 'Cocos "Keeling" Islands (Oceania)',
+    PN: 'Pitcairn Islands (Oceania)',
+    unknown: 'Unknown',
 };
 
 export const playerCountryDropdown = {
@@ -367,7 +388,7 @@ export const playerCountryDropdown = {
     KZ: 'Kazakhstan',
     GG: 'Guernsey',
     PA: 'Panama',
-    HN: 'honduras',
+    HN: 'Honduras',
     IN: 'India',
     QA: 'Qatar',
     AE: 'United Arab Emirates',
@@ -377,15 +398,22 @@ export const playerCountryDropdown = {
     UZ: 'Uzbekistan',
     EE: 'Estonia',
     AM: 'Armenia',
-    SZ: 'Eswatini'
+    SZ: 'Eswatini',
+    PG: 'Papua New Guinea',
+    CC: 'Cocos "Keeling" Islands',
+    PN: 'Pitcairn Islands',
+    AI: 'Anguilla',
+    AW: 'Aruba',
+    CS: 'Serbia',
+    VN: 'Vietnam'
     // ,unknown: 'Unknown'
 };
 
 export const regions = {
   NA: ['US','CA','PR'],
-  LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN'],
-  EU: ['DE','EE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO'],
-  OC: ['AU','NZ'],
-  AP: ['CN','AM','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ'],
+  LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN','AI','AW'],
+  EU: ['DE','EE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO','CS'],
+  OC: ['AU','NZ','PG','CC','PN'],
+  AP: ['CN','AM','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ','VN'],
   MS: ['ZA','TR','KW','QA','SZ','AE','LB','UZ']
 };

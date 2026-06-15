@@ -4,6 +4,7 @@ import DisplayPokemonSprites from './pokemon-sprites';
 import styled from 'styled-components';
 
 import { flags, countryNames } from '../Tools/flags';
+import { getCustomLabel } from './pokemon-labels';
 
 const OlResults = styled.ol`
     .player-deck-icons a {
@@ -47,6 +48,31 @@ const OlResults = styled.ol`
     .dq-player {
         text-decoration: line-through;
         opacity: 0.6;
+    }
+    .deck-tooltip-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+    .deck-tooltip {
+        visibility: hidden;
+        background-color: #1290eb;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 12px;
+        position: absolute;
+        z-index: 9999 !important;
+        bottom: 95%;
+        left: 65%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        display: block;
+    }
+    .deck-tooltip-container:hover .deck-tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 `;
 
@@ -105,16 +131,16 @@ const formatName = (name) => {
         .join(' ');
 };
 
-export const displayResults = (players, eventId, division, customPlacement) => {
+export const displayResults = (players, eventId, division, customPlacement, eventFormat) => {
     return (
         <OlResults className='result-list-ol'>
             {players.map((player, index) => {
                 const placement = Number.isInteger(customPlacement)
                     ? customPlacement + index
-                    : (player.placing != null 
-                        ? player.placing 
+                    : (player.placing != null
+                        ? player.placing
                         : index + 1
-                      );
+                    );
                 const displayPlacement = placement === 9999 ? '' : placement;
                 let code = player.flag;
                 if (code && !flags[code]) {
@@ -122,25 +148,30 @@ export const displayResults = (players, eventId, division, customPlacement) => {
                 }
                 const imgSrc = code
                     ? (flags[code] || '')
-                    : flags.unknown; 
+                    : flags.unknown;
                 <img
                     className="flag-size"
                     src={imgSrc}
                     alt={code || "unknown"}
                 />
+                const deckLabel = getCustomLabel(eventId, player.sprite1, player.sprite2);
+                const deckUrl =
+                    deckLabel && eventFormat
+                        ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
+                        : null;
                 return (
                     <li key={`${player.name}-${index}`} className='player-list-hover'>
                         <div className='results-list-item'>
                             <div className='name-n-flag'>
                                 <div className='player-placement'>
-                                  {/* only show a number & dot if not blank */}
-                                  {displayPlacement !== '' && `${displayPlacement}.`}
+                                    {/* only show a number & dot if not blank */}
+                                    {displayPlacement !== '' && `${displayPlacement}.`}
                                 </div>
                                 <div className="flag-container">
-                                    <img 
+                                    <img
                                         className='flag-size'
                                         src={imgSrc}
-                                        alt="flag" 
+                                        alt="flag"
                                     />
                                     <div className="flag-tooltip">
                                         {getCountryName(player.flag)}
@@ -151,7 +182,36 @@ export const displayResults = (players, eventId, division, customPlacement) => {
                                 </Link>
                             </div>
                             <div className="player-deck-icons">
-                                <DisplayPokemonSprites decklist={player.decklist} sprite1={player.sprite1} sprite2={player.sprite2} />
+                                {deckUrl ? (
+                                    <Link
+                                        to={deckUrl}
+                                        className="deck-tooltip-container"
+                                    >
+                                        <DisplayPokemonSprites
+                                            decklist={player.decklist}
+                                            sprite1={player.sprite1}
+                                            sprite2={player.sprite2}
+                                        />
+
+                                        <div className="deck-tooltip">
+                                            {deckLabel}
+                                        </div>
+                                    </Link>
+                                ) : (
+                                    <div className="deck-tooltip-container">
+                                        <DisplayPokemonSprites
+                                            decklist={player.decklist}
+                                            sprite1={player.sprite1}
+                                            sprite2={player.sprite2}
+                                        />
+
+                                        {deckLabel && (
+                                            <div className="deck-tooltip">
+                                                {deckLabel}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                                 <a
                                     href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}
                                     style={{

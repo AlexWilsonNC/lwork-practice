@@ -2472,7 +2472,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                 {viewTab === 'Decks' ? (
                                     results.length ? (
                                         <>
-                                            {displayResults(day2Results, eventId, division)}
+                                            {displayResults(day2Results, eventId, division, undefined, getEventFormat(division))}
 
                                             {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
@@ -2504,7 +2504,9 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                                     {displayResults(
                                                         eliminatedDecks,
                                                         eventId,
-                                                        division
+                                                        division, 
+                                                        undefined, 
+                                                        getEventFormat(division)
                                                     )}
                                                     <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                         <button
@@ -2786,7 +2788,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                             <hr style={{ marginTop: '5px', border: 'none', borderBottom: '2px solid #ccc', opacity: 0.35 }} />
                                             <br />
                                             <div className='results-table charted-decks'>
-                                                {displayResults(filteredResults, eventId, division)}
+                                                {displayResults(filteredResults, eventId, division, customPlacement, eventData?.format)}
                                             </div>
                                         </div>
                                     </>
