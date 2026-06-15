@@ -108,9 +108,16 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('ogerpon');
     }
     else if (hasPokemon('Raging Bolt ex') && hasPokemon('Teal Mask Ogerpon ex')) {
-        firstSprite  = getPokemonSpriteURL('raging-bolt');
-        secondSprite  = getPokemonSpriteURL('ogerpon');
-    }
+        const ragingboltCount = getPokemonCount('Raging Bolt ex');
+        if (ragingboltCount >= 2) {
+            firstSprite  = getPokemonSpriteURL('raging-bolt');
+            secondSprite  = getPokemonSpriteURL('ogerpon');
+        }
+        else if (ragingboltCount < 2) {
+            firstSprite  = getPokemonSpriteURL('ogerpon');
+            secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
+        }
+    }  
     else if (hasPokemon('Mew VMAX') && hasPokemon('Genesect V')) {
         firstSprite  = getPokemonSpriteURL('mew-vmax');
         secondSprite  = getPokemonSpriteURL('genesect');
@@ -331,7 +338,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }
-    else if (hasPokemon('Lillie\'s Clefairy ex') && hasPokemon('Mega Kangaskhan ex') && hasPokemon('Meowth ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Koraidon ex') && !hasPokemon('Noctowl')) {
+    else if (hasPokemon('Lillie\'s Clefairy ex') && hasPokemon('Mega Kangaskhan ex') && hasPokemon('Meowth ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Koraidon ex') && !hasPokemon('Noctowl') && (hasTrainer('Lillie\'s Pearl'))) {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('kangaskhan-mega');
     }
@@ -660,6 +667,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         }
         else if(hasPokemon('Inteleon VMAX')) {
             secondSprite  = getPokemonSpriteURL('inteleon-vmax');
+        }
+        else if (hasPokemon('Mega Greninja ex')) {
+            secondSprite = getPokemonSpriteURL('greninja-mega');
         }
         else if(hasPokemon('Dragapult ex')) {
             secondSprite  = getPokemonSpriteURL('dragapult');

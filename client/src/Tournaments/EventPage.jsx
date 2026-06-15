@@ -795,6 +795,8 @@ const EventPage = () => {
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
     const is2026Event = eventId.includes('2026');
     const isModernEvent = is2025Event || is2026Event;
+    const hasResultsForDivision = results.length > 0;
+const showPhaseCounts = isModernEvent && hasResultsForDivision;
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
@@ -1591,6 +1593,9 @@ const EventPage = () => {
     const getPlayerCount = (division) => {
         switch (division) {
             case 'masters':
+                if (!showPhaseCounts) {
+                    return null;
+                }
                 const total = mastersResults.length;
                 const day2 = day2Results.length;
                 const day1Count = eventData.dayOneMasters ?? total;
@@ -1643,6 +1648,9 @@ const EventPage = () => {
                     </>
                 );
             case 'seniors':
+                if (!showPhaseCounts) {
+                    return null;
+                }
                 const totalSrs = seniorsResults.length;
                 const day2Srs = day2Results.length;
                 const day1CountSrs = eventData.dayOneSeniors ?? totalSrs;
@@ -1660,6 +1668,9 @@ const EventPage = () => {
                     </>
                 );
             case 'juniors':
+                if (!showPhaseCounts) {
+                    return null;
+                }
                 const totalJrs = juniorsResults.length;
                 const day2Jrs = day2Results.length;
                 const day1CountJrs = eventData.dayOneJuniors ?? totalJrs;
@@ -1899,18 +1910,18 @@ const EventPage = () => {
     }, [eventData, EVENT_PAGE_STATE_KEY]);
 
     if (!eventData) {
-    return (
-        <EventPageContent theme={theme}>
-            <div className="deck-profile-spinner-wrap">
-                <img
-                    src={blueUltraBallSpinner}
-                    alt="Loading"
-                    className="pokeball-spinner"
-                />
-            </div>
-        </EventPageContent>
-    );
-}
+        return (
+            <EventPageContent theme={theme}>
+                <div className="deck-profile-spinner-wrap">
+                    <img
+                        src={blueUltraBallSpinner}
+                        alt="Loading"
+                        className="pokeball-spinner"
+                    />
+                </div>
+            </EventPageContent>
+        );
+    }
 
     const divisionLabelMap = {
         masters: 'Masters',
@@ -2327,6 +2338,14 @@ const EventPage = () => {
                                 Venue Address:{' '}
                                 <a href={eventData.address} target='_blank'>
                                     Map
+                                </a>
+                            </p>
+                        )}
+                        {eventData.eventSite && (
+                            <p>
+                                Event{' '}
+                                <a href={eventData.eventSite} target='_blank'>
+                                    Website
                                 </a>
                             </p>
                         )}
