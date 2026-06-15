@@ -1,11 +1,24 @@
-.spinner {
-  width: 48px;
-  height: 48px;
-  margin: 40px auto;
-  border: 5px solid #333;
-  border-left-color: #1290eb;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.deck-profile-spinner-wrap {
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokeball-spinner {
+    width: 64px;
+    height: 64px;
+    animation: pokeball-spin 1.2s linear infinite;
+}
+
+@keyframes pokeball-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 @keyframes spin {
   to {

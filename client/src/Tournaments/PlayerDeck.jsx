@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { flags, countryNames } from '../Tools/flags';
+import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
 const PlayerDeckCenter = styled.div`
     background: ${({ theme }) => theme.body};
@@ -28,9 +29,6 @@ const PlayerDeckCenter = styled.div`
     .list-item {
         background: ${({ theme }) => theme.listCardBg};
         color: ${({ theme }) => theme.listCardText};
-    }
-    .spinner {
-        border-left-color: ${({ theme }) => theme.spinner};
     }
     .link-to-playerprofile {
         color: ${({ theme }) => theme.text};
@@ -675,9 +673,13 @@ const PlayerDeck = () => {
 
     if (loadingPage) {
         return (
-            <PlayerDeckCenter className='center' theme={theme}>
-                <div className="spinner"></div>
-            </PlayerDeckCenter>
+            <div className="deck-profile-spinner-wrap">
+                <img
+                    src={blueUltraBallSpinner}
+                    alt="Loading"
+                    className="pokeball-spinner"
+                />
+            </div>
         );
     }
 
@@ -713,7 +715,13 @@ const PlayerDeck = () => {
     if (!playerData || !eventData) {
         return (
             <PlayerDeckCenter className='center' theme={theme}>
-                <div className="spinner"></div>
+                <div className="deck-profile-spinner-wrap">
+                    <img
+                        src={blueUltraBallSpinner}
+                        alt="Loading"
+                        className="pokeball-spinner"
+                    />
+                </div>
             </PlayerDeckCenter>
         );
     }
@@ -856,7 +864,13 @@ const PlayerDeck = () => {
                     {!playerData ? (
                         null
                     ) : !cardData ? (
-                        <div className="spinner"></div>
+                        <div className="deck-profile-spinner-wrap">
+                            <img
+                                src={blueUltraBallSpinner}
+                                alt="Loading"
+                                className="pokeball-spinner"
+                            />
+                        </div>
                     ) : viewMode === 'grid' ? (
                         <div className="deck-cards">
                             {playerData.decklist.pokemon.map((card, index) => (

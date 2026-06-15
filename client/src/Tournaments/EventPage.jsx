@@ -11,6 +11,7 @@ import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
 // import LiveStandings from '../Live/LiveStandings';
 import { flags, countryNames } from '../Tools/flags';
+import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -1898,8 +1899,18 @@ const EventPage = () => {
     }, [eventData, EVENT_PAGE_STATE_KEY]);
 
     if (!eventData) {
-        return null;
-    }
+    return (
+        <EventPageContent theme={theme}>
+            <div className="deck-profile-spinner-wrap">
+                <img
+                    src={blueUltraBallSpinner}
+                    alt="Loading"
+                    className="pokeball-spinner"
+                />
+            </div>
+        </EventPageContent>
+    );
+}
 
     const divisionLabelMap = {
         masters: 'Masters',

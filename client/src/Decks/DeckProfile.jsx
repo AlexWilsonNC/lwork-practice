@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import '../css/deckspage.css';
 import { formatOrder } from './DecksPage';
+import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
 // Define styled components
 const DeckProfileContainer = styled.div`
@@ -30,9 +31,6 @@ const DeckProfileContainer = styled.div`
   }
   .sort-events {
     color: ${({ theme }) => theme.text};
-  }
-  .spinner {
-    border-left-color: ${({ theme }) => theme.spinner};
   }
   .search-input .searcheventsfield {
     background: ${({ theme }) => theme.searchBg};
@@ -576,7 +574,15 @@ const DeckProfile = () => {
   };
 
   if (loading) {
-    return <div className="spinner"></div>;
+    return (
+      <div className="deck-profile-spinner-wrap">
+        <img
+          src={blueUltraBallSpinner}
+          alt="Loading"
+          className="pokeball-spinner"
+        />
+      </div>
+    );
   }
 
   if (!decks.length) {
