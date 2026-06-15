@@ -794,25 +794,26 @@ const EventPage = () => {
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
     const is2026Event = eventId.includes('2026');
     const isModernEvent = is2025Event || is2026Event;
+    const hideRecordsForEvent = eventId === '2026_NAIC';
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
-    if (isModernEvent) {
-        // only for 2025+ events do we cut on Swiss rounds
-        const totalPlayers = results.length;
-        const day1Rounds =
-            totalPlayers >= 2049 ? 9 :
-                totalPlayers >= 257 ? 8 :
-                    7;
+    if (hideRecordsForEvent) {
+    day2Results = resultsWithPlacement;
+} else if (isModernEvent) {
+    const totalPlayers = results.length;
+    const day1Rounds =
+        totalPlayers >= 2049 ? 9 :
+            totalPlayers >= 257 ? 8 :
+                7;
 
-        day2Results = resultsWithPlacement.filter(p => {
-            const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
-            return wins + losses + ties > day1Rounds;
-        });
-    } else {
-        // legacy events (pre-2025): everyone is shown
-        day2Results = resultsWithPlacement;
-    }
+    day2Results = resultsWithPlacement.filter(p => {
+        const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
+        return wins + losses + ties > day1Rounds;
+    });
+} else {
+    day2Results = resultsWithPlacement;
+}
 
     const EVENT_PAGE_STATE_KEY = `PTCGLegendsEventPageState_${eventId}`;
 
@@ -1081,16 +1082,18 @@ const EventPage = () => {
         }
     }, [viewTab, eliminatedRecords.length, loadingEliminatedRecs]);
 
-    const handleRecordClick = (player) => {
-        setViewTab('Records');
-        sessionStorage.setItem(`viewTab_${eventId}`, 'Records');
-        setModalPlayer(player);
-        setShowModal(true);
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({ placing: player.placing, name: player.name })
-        );
-    };
+   const handleRecordClick = (player) => {
+    if (hideRecordsForEvent) return;
+
+    setViewTab('Records');
+    sessionStorage.setItem(`viewTab_${eventId}`, 'Records');
+    setModalPlayer(player);
+    setShowModal(true);
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ placing: player.placing, name: player.name })
+    );
+};
 
     const closeModal = () => {
         setShowModal(false);
@@ -1708,16 +1711,21 @@ const EventPage = () => {
     };
 
     const handleTabChange = (tab) => {
-        setViewTab(tab);
+    if (hideRecordsForEvent && tab === 'Records') {
+        setViewTab('Decks');
+        return;
+    }
 
-        if (tab === 'Decks') {
-            setShowAllDecks(false);
-            setEliminatedDecks([]);
-        } else {
-            setShowAllRecs(false);
-            setEliminatedRecords([]);
-        }
-    };
+    setViewTab(tab);
+
+    if (tab === 'Decks') {
+        setShowAllDecks(false);
+        setEliminatedDecks([]);
+    } else {
+        setShowAllRecs(false);
+        setEliminatedRecords([]);
+    }
+};
 
     const handleActiveTabChange = (tab) => {
         setActiveTab(tab);
@@ -2421,8 +2429,8 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results' onClickCapture={handleEventResultsClickCapture}>
-                                {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
-                                    <div className="decks-records-btns">
+{isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !hideRecordsForEvent && (
+                                        <div className="decks-records-btns">
                                         <button
                                             onClick={() => handleTabChange('Decks')}
                                             className={viewTab === 'Decks' ? 'active' : ''}
