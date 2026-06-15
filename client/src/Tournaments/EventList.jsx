@@ -500,7 +500,7 @@ const EventList = () => {
                 <optgroup label="TPCi Events">
                   <option value="internationals">Internationals</option>
                   <option value="regionals">Regionals</option>
-                  <option value="speSeries">Special Events</option>
+                  <option value="speSeries">Special Championships</option>
                   {viewType === 'completed' && (<option value="nationals">Nationals</option>)}
                 </optgroup>
                 <optgroup label="Asia-Pacific">

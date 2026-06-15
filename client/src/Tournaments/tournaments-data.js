@@ -1836,6 +1836,16 @@ const tournamentList = [
         "flag": brazil,
         "location": "Campinas, Brazil"
     },
+    // 2027
+    {
+        "id": "2027_NAIC",
+        "name": "NAIC 2027",
+        "eventType": "internationals",
+        "eventLogo": internats25,
+        "date": "2027",
+        "flag": usa,
+        "location": "Chicago, Illinois",
+    },
 ];
 
 const parseDate = (dateStr) => {

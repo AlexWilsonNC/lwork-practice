@@ -99,6 +99,18 @@ const Homepage = () => {
 
     const [latestCompletedEventData, setLatestCompletedEventData] = useState(null);
 
+    const formatUpcomingDate = (date) => {
+        // Year only (2027, 2028, etc.)
+        if (/^\d{4}$/.test(date)) {
+            return date;
+        }
+
+        return new Date(date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+    };
+
     useEffect(() => {
         const fetchLatestCompletedEventData = async () => {
             if (!latestCompletedEvent?.id) return;
@@ -260,7 +272,9 @@ const Homepage = () => {
                                                         <img src={event.flag} alt="Country flag" />
                                                         <p className='white-letters'>{event.location}</p>
                                                     </div>
-                                                    <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                    <p className='white-letters'>
+                                                        {formatUpcomingDate(event.date)}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </li>
@@ -464,7 +478,9 @@ const Homepage = () => {
                                                     <img src={event.flag} alt="Country flag" />
                                                     <p className='white-letters'>{event.location}</p>
                                                 </div>
-                                                <p className='white-letters'>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                <p className='white-letters'>
+                                                    {formatUpcomingDate(event.date)}
+                                                </p>
                                             </div>
                                         </div>
                                     </li>
