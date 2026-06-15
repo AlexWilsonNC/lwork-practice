@@ -546,7 +546,7 @@
     align-items: center;
     margin-top: -5px;
 }
-.player-deck-icons a {
+.player-deck-icons > a:last-child {
     margin-top: 8px;
 }
 .sprite {
@@ -792,7 +792,7 @@
     .results-list-item {
         height: 43px;
     }
-    .player-deck-icons a {
+    .player-deck-icons > a:last-child {
         width: 15px;
     }
     .notavailable{
