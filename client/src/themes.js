@@ -72,7 +72,7 @@ export const lightTheme = {
   setChangeBtn: 'rgb(240, 240, 240)',
   setChangeHover: '#0721b5 !important',
   setinfodark: 'rgb(236, 240, 244)',
-  day1btn: 'rgb(180, 180, 180)',
+  day1btn: 'grey',
   chartNumber: '#FFF',
   chartdescrip: '#000',
   spinner: '#1290eb',
@@ -112,6 +112,7 @@ export const lightTheme = {
   awaitingMoreEvents: 'rgba(129, 129, 129, 0.79)',
   bookletButtons: '#2f2f2f',
   scanCtrlButtons: '#2f2f2f',
+  statsBtns: 'grey',
 };
 
 const decklistSvgDark = `
@@ -217,4 +218,5 @@ export const darkTheme = {
   setTileBtnHr: '2px solid rgba(255,255,255,0.12)',
   bookletButtons: 'rgb(83, 83, 83)',
   scanCtrlButtons: 'rgba(38, 127, 182, 0.75)',
+  statsBtns: '#505050',
 };

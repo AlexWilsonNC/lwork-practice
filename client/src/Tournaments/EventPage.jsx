@@ -487,12 +487,13 @@ const EventPageContent = styled.div`
         color: white;
     }
     .button-container button:not(.active-button) {
-        background-color: rgb(80, 80, 80);
+        background-color: ${({ theme }) => theme.statsBtns};
     }
     .active-button {
         background-color: #1290eb !important;
         border: 1px solid #007bff;
     }
+    .stat-toggle-buttons button {background-color: ${({ theme }) => theme.statsBtns};}
     .day-toggle-buttons button {
         padding: 5px 7px;
         border-radius: 2px;
@@ -504,7 +505,7 @@ const EventPageContent = styled.div`
         overflow: hidden;
     }
     .day-toggle-buttons button:not(.active-button) {
-        background-color: rgb(80, 80, 80);
+        background-color: ${({ theme }) => theme.statsBtns};
     }
     .flag-container {
         position: relative;
@@ -718,6 +719,59 @@ const compareEnergyCards = (card1, card2) => {
     return normalizedCard1Name === normalizedCard2Name && card1.set === card2.set && card1.number === card2.number;
 };
 
+const forcedArchetypeSprites = {
+    'Gardevoir & Sylveon': ['gardevoir-sylveon-tagteam'],
+    'Gliscor': ['gliscor'],
+    'Tyranitar PRIME': ['tyranitar'],
+    'Malamar': ['malamar'],
+    'Blacephalon GX': ['blacephalon'],
+    'Spiritomb': ['spiritomb'],
+    'Zapdos': ['zapdos'],
+    'Wall Stall': ['substitute'],
+    'Lucario GX': ['lucario'],
+    'Gardevoir GX': ['gardevoir'],
+    'Gardevoir': ['gardevoir'],
+    'Buzzwole GX': ['buzzwole'],
+    'Volcanion': ['volcanion'],
+    'Rainbow Road': ['xerneas-active'],
+    'Zoroark BREAK': ['zoroark'],
+    'Gardevoir ex': ['gardevoir'],
+    'Darkrai': ['darkrai'],
+    'Mega Mewtwo': ['mewtwo-mega-y'],
+    'Vespiquen': ['vespiquen'],
+    'Mega Rayquaza': ['rayquaza-mega'],
+    'Mega Gardevoir Brilliant Arrow': ['gardevoir-mega'],
+    'Toad Bats': ['seismitoad', 'crobat'],
+    'Primal Groudon': ['groudon-primal'],
+    'Mega Manectric': ['manectric-mega'],
+    'Darkrai-EX': ['darkrai'],
+    'Yanmega PRIME': ['yanmega'],
+    'Empoleon': ['empoleon'],
+    'Scizor': ['scizor'],
+    'Flygon': ['flygon'],
+    'LBS': ['lugia', 'blastoise'],
+    'Medicham': ['medicham'],
+    'Walrein': ['walrein'],
+    'Blaziken': ['blaziken'],
+    'Dark Feraligatr': ['feraligatr'],
+    'Espeon': ['espeon'],
+    'Kingdra': ['kingdra'],
+    'Dark Blastoise': ['blastoise'],
+    'Sneasel': ['sneasel'],
+    'Riptide Feraligatr': ['feraligatr'],
+    'Crobat': ['crobat'],
+    'Typhlosion': ['typhlosion'],
+    'Steelix': ['steelix'],
+    'Wigglytuff': ['wigglytuff'],
+    'Haymaker': ['hitmonchan'],
+    'Mega Starmie': ['starmie-mega'],
+    'Hydrapple': ['hydrapple'],
+};
+
+const getForcedSprites = (key, fallback = []) => {
+    return forcedArchetypeSprites[key] || fallback;
+};
+
 const EventPage = () => {
     const { theme } = useTheme();
     const { eventId, division: divisionParam } = useParams();
@@ -743,7 +797,7 @@ const EventPage = () => {
     const [dataDay, setDataDay] = useState('day2'); // 'day2' or 'day1'
     const [showAllCardsList, setShowAllCardsList] = useState(false);
     const [matchupDay, setMatchupDay] = useState('day2');
-    const [matchupView, setMatchupView] = useState('list');
+    const [matchupView, setMatchupView] = useState('matrix');
 
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
@@ -752,9 +806,10 @@ const EventPage = () => {
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
-    const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'matchups'
+    const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'records' | 'matchups'
     const [infoArchetype, setInfoArchetype] = useState(null);
     const [infoStats, setInfoStats] = useState({ wins: 0, losses: 0, ties: 0 });
+    const [infoOpponentArchetype, setInfoOpponentArchetype] = useState(null);
 
     const didFetchCounts = useRef({});
 
@@ -794,9 +849,10 @@ const EventPage = () => {
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
     const is2026Event = eventId.includes('2026');
+    const showMatchupsTab = is2026Event;
     const isModernEvent = is2025Event || is2026Event;
     const hasResultsForDivision = results.length > 0;
-const showPhaseCounts = isModernEvent && hasResultsForDivision;
+    const showPhaseCounts = isModernEvent && hasResultsForDivision;
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
@@ -958,6 +1014,12 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
     useEffect(() => {
         sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
     }, [activeTab, eventId]);
+
+    useEffect(() => {
+        if (!showMatchupsTab && (statView === 'matchups' || statView === 'records')) {
+            setStatView('meta');
+        }
+    }, [showMatchupsTab, statView]);
 
     useEffect(() => {
         if (!results.length) return;
@@ -1273,18 +1335,68 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
         return acc;
     }, {});
 
+    const getPhaseOneRoundCount = (playerCount) => {
+        if (!isModernEvent) return 0;
+
+        if (playerCount >= 4097) return 9;
+
+        if (playerCount >= 129) return 8;
+
+        return 7;
+    };
+
+    const getMatchupSourcePlayers = () => {
+        if (matchupDay === 'day1') {
+            return [...day2Results, ...eliminatedDecks];
+        }
+
+        if (matchupDay === 'combined') {
+            return [...day2Results, ...eliminatedDecks];
+        }
+
+        return day2Results;
+    };
+
+    const getRoundsForMatchupDay = (player) => {
+        const rounds = Object.entries(player.rounds || {});
+        const phaseOneRoundCount = getPhaseOneRoundCount(day2Results.length + eliminatedDecks.length);
+        if (!isModernEvent) {
+            return rounds;
+        }
+
+        if (matchupDay === 'day1') {
+            return rounds.filter(([round]) => Number(round) <= phaseOneRoundCount);
+        }
+
+        if (matchupDay === 'day2') {
+            return rounds.filter(([round]) => Number(round) > phaseOneRoundCount);
+        }
+
+        return rounds;
+    };
+
+    const getRecordForMatchupDay = (player) => {
+        const rounds = getRoundsForMatchupDay(player);
+
+        return rounds.reduce(
+            (acc, [, info]) => {
+                if (info.result === 'W') acc.wins += 1;
+                else if (info.result === 'L') acc.losses += 1;
+                else if (info.result === 'T') acc.ties += 1;
+                return acc;
+            },
+            { wins: 0, losses: 0, ties: 0 }
+        );
+    };
+
     const matchupRecordByArchetype = useMemo(() => {
         // pick which players to include
-        const sourcePlayers = matchupDay === 'day2'
-            ? day2Results
-            : matchupDay === 'day1'
-                ? eliminatedDecks
-                : results;
+        const sourcePlayers = getMatchupSourcePlayers();
 
         // aggregate wins/losses/ties *and* collect sprites
         const acc = {};
         sourcePlayers.forEach(p => {
-            const { wins = 0, losses = 0, ties = 0 } = p.record || {};
+            const { wins, losses, ties } = getRecordForMatchupDay(p);
 
             // normalize sprites
             let s1 = p.sprite1 || '';
@@ -1312,7 +1424,13 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
         // turn into an array for rendering, sorted by total matches
         return Object.entries(acc)
             .filter(([key]) => key !== 'blank-')
-            .map(([key, { wins, losses, ties, sprites }]) => ({ key, wins, losses, ties, sprites }))
+            .map(([key, { wins, losses, ties, sprites }]) => ({
+                key,
+                wins,
+                losses,
+                ties,
+                sprites: getForcedSprites(key, sprites)
+            }))
             .sort((a, b) => {
                 const totalA = a.wins + a.losses + a.ties;
                 const totalB = b.wins + b.losses + b.ties;
@@ -1320,238 +1438,11 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
             });
     }, [matchupDay, day2Results, eliminatedDecks, results, eventId]);
 
-    if (deckTypeCount['Gardevoir & Sylveon']) {
-        deckTypeCount['Gardevoir & Sylveon'].sprites = [
-            'gardevoir-sylveon-tagteam'
-        ];
-    }
-    if (deckTypeCount['Gliscor']) {
-        deckTypeCount['Gliscor'].sprites = [
-            'gliscor'
-        ];
-    }
-    if (deckTypeCount['Tyranitar PRIME']) {
-        deckTypeCount['Tyranitar PRIME'].sprites = [
-            'tyranitar'
-        ];
-    }
-    if (deckTypeCount['Malamar']) {
-        deckTypeCount['Malamar'].sprites = [
-            'malamar'
-        ];
-    }
-    if (deckTypeCount['Blacephalon GX']) {
-        deckTypeCount['Blacephalon GX'].sprites = [
-            'blacephalon'
-        ];
-    }
-    if (deckTypeCount['Spiritomb']) {
-        deckTypeCount['Spiritomb'].sprites = [
-            'spiritomb'
-        ];
-    }
-    if (deckTypeCount['Zapdos']) {
-        deckTypeCount['Zapdos'].sprites = [
-            'zapdos'
-        ];
-    }
-    if (deckTypeCount['Wall Stall']) {
-        deckTypeCount['Wall Stall'].sprites = [
-            'substitute'
-        ];
-    }
-    if (deckTypeCount['Lucario GX']) {
-        deckTypeCount['Lucario GX'].sprites = [
-            'lucario'
-        ];
-    }
-    if (deckTypeCount['Gardevoir GX']) {
-        deckTypeCount['Gardevoir GX'].sprites = [
-            'gardevoir'
-        ];
-    }
-    if (deckTypeCount['Gardevoir']) {
-        deckTypeCount['Gardevoir'].sprites = [
-            'gardevoir'
-        ];
-    }
-    if (deckTypeCount['Buzzwole GX']) {
-        deckTypeCount['Buzzwole GX'].sprites = [
-            'buzzwole'
-        ];
-    }
-    if (deckTypeCount['Volcanion']) {
-        deckTypeCount['Volcanion'].sprites = [
-            'volcanion'
-        ];
-    }
-    if (deckTypeCount['Rainbow Road']) {
-        deckTypeCount['Rainbow Road'].sprites = [
-            'xerneas-active'
-        ];
-    }
-    if (deckTypeCount['Zoroark BREAK']) {
-        deckTypeCount['Zoroark BREAK'].sprites = [
-            'zoroark'
-        ];
-    }
-    if (deckTypeCount['Gardevoir ex']) {
-        deckTypeCount['Gardevoir ex'].sprites = [
-            'gardevoir'
-        ];
-    }
-    if (deckTypeCount['Darkrai']) {
-        deckTypeCount['Darkrai'].sprites = [
-            'darkrai'
-        ];
-    }
-    if (deckTypeCount['Mega Mewtwo']) {
-        deckTypeCount['Mega Mewtwo'].sprites = [
-            'mewtwo-mega-y'
-        ];
-    }
-    if (deckTypeCount['Vespiquen']) {
-        deckTypeCount['Vespiquen'].sprites = [
-            'vespiquen'
-        ];
-    }
-    if (deckTypeCount['Mega Rayquaza']) {
-        deckTypeCount['Mega Rayquaza'].sprites = [
-            'rayquaza-mega'
-        ];
-    }
-    if (deckTypeCount['Mega Gardevoir Brilliant Arrow']) {
-        deckTypeCount['Mega Gardevoir Brilliant Arrow'].sprites = [
-            'gardevoir-mega'
-        ];
-    }
-    if (deckTypeCount['Toad Bats']) {
-        deckTypeCount['Toad Bats'].sprites = [
-            'seismitoad',
-            'crobat'
-        ];
-    }
-    if (deckTypeCount['Primal Groudon']) {
-        deckTypeCount['Primal Groudon'].sprites = [
-            'groudon-primal'
-        ];
-    }
-    if (deckTypeCount['Mega Manectric']) {
-        deckTypeCount['Mega Manectric'].sprites = [
-            'manectric-mega'
-        ];
-    }
-    if (deckTypeCount['Darkrai-EX']) {
-        deckTypeCount['Darkrai-EX'].sprites = [
-            'darkrai'
-        ];
-    }
-    if (deckTypeCount['Yanmega PRIME']) {
-        deckTypeCount['Yanmega PRIME'].sprites = [
-            'yanmega'
-        ];
-    }
-    if (deckTypeCount['Empoleon']) {
-        deckTypeCount['Empoleon'].sprites = [
-            'empoleon'
-        ];
-    }
-    if (deckTypeCount['Scizor']) {
-        deckTypeCount['Scizor'].sprites = [
-            'scizor'
-        ];
-    }
-    if (deckTypeCount['Flygon']) {
-        deckTypeCount['Flygon'].sprites = [
-            'flygon'
-        ];
-    }
-    if (deckTypeCount['LBS']) {
-        deckTypeCount['LBS'].sprites = [
-            'lugia',
-            'blastoise'
-        ];
-    }
-    if (deckTypeCount['Medicham']) {
-        deckTypeCount['Medicham'].sprites = [
-            'medicham'
-        ];
-    }
-    if (deckTypeCount['Walrein']) {
-        deckTypeCount['Walrein'].sprites = [
-            'walrein'
-        ];
-    }
-    if (deckTypeCount['Blaziken']) {
-        deckTypeCount['Blaziken'].sprites = [
-            'blaziken'
-        ];
-    }
-    if (deckTypeCount['Dark Feraligatr']) {
-        deckTypeCount['Dark Feraligatr'].sprites = [
-            'feraligatr'
-        ];
-    }
-    if (deckTypeCount['Espeon']) {
-        deckTypeCount['Espeon'].sprites = [
-            'espeon'
-        ];
-    }
-    if (deckTypeCount['Kingdra']) {
-        deckTypeCount['Kingdra'].sprites = [
-            'kingdra'
-        ];
-    }
-    if (deckTypeCount['Dark Blastoise']) {
-        deckTypeCount['Dark Blastoise'].sprites = [
-            'blastoise'
-        ];
-    }
-    if (deckTypeCount['Sneasel']) {
-        deckTypeCount['Sneasel'].sprites = [
-            'sneasel'
-        ];
-    }
-    if (deckTypeCount['Riptide Feraligatr']) {
-        deckTypeCount['Riptide Feraligatr'].sprites = [
-            'feraligatr'
-        ];
-    }
-    if (deckTypeCount['Crobat']) {
-        deckTypeCount['Crobat'].sprites = [
-            'crobat'
-        ];
-    }
-    if (deckTypeCount['Typhlosion']) {
-        deckTypeCount['Typhlosion'].sprites = [
-            'typhlosion'
-        ];
-    }
-    if (deckTypeCount['Steelix']) {
-        deckTypeCount['Steelix'].sprites = [
-            'steelix'
-        ];
-    }
-    if (deckTypeCount['Wigglytuff']) {
-        deckTypeCount['Wigglytuff'].sprites = [
-            'wigglytuff'
-        ];
-    }
-    if (deckTypeCount['Haymaker']) {
-        deckTypeCount['Haymaker'].sprites = [
-            'hitmonchan'
-        ];
-    }
-    if (deckTypeCount['Mega Starmie']) {
-        deckTypeCount['Mega Starmie'].sprites = [
-            'starmie-mega'
-        ];
-    }
-    if (deckTypeCount['Hydrapple']) {
-        deckTypeCount['Hydrapple'].sprites = [
-            'hydrapple'
-        ];
-    }
+    Object.entries(forcedArchetypeSprites).forEach(([key, sprites]) => {
+        if (deckTypeCount[key]) {
+            deckTypeCount[key].sprites = sprites;
+        }
+    });
 
     const deckTypeCountArray = Object.entries(deckTypeCount)
         .map(([key, value]) => ({ key, ...value }))
@@ -1808,10 +1699,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
         });
 
         // pick which players (day1/day2/combined)
-        const source =
-            matchupDay === 'day2' ? day2Results
-                : matchupDay === 'day1' ? eliminatedDecks
-                    : [...day2Results, ...eliminatedDecks];
+        const source = getMatchupSourcePlayers();
 
         source.forEach(p => {
             const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
@@ -1819,7 +1707,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
             // If somehow we didn’t seed this bucket, skip
             if (!m[myKey]) return;
 
-            Object.values(p.rounds || {}).forEach(info => {
+            getRoundsForMatchupDay(p).forEach(([, info]) => {
                 const { code: flag, name: oppName } = parseOpponent(info.name);
                 const opp = source.find(pl => pl.name === oppName && pl.flag === flag);
 
@@ -2504,8 +2392,8 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                                     {displayResults(
                                                         eliminatedDecks,
                                                         eventId,
-                                                        division, 
-                                                        undefined, 
+                                                        division,
+                                                        undefined,
                                                         getEventFormat(division)
                                                     )}
                                                     <div style={{ textAlign: 'center', margin: '1rem 0' }}>
@@ -2669,13 +2557,23 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                     <button onClick={() => setStatView('decklists')}
                                         className={statView === 'decklists' ? 'active-button' : ''}>Decks
                                     </button>
-                                    {isModernEvent && (
-                                        <button onClick={() => setStatView('matchups')}
-                                            className={statView === 'matchups' ? 'active-button' : ''}
-                                            style={{ opacity: '0.1', pointerEvents: 'none' }}
-                                        >
-                                            Matchups
-                                        </button>
+                                    {showMatchupsTab && (
+                                        <>
+                                            <button
+                                                className={`chart-button ${statView === 'records' ? 'active' : ''}`}
+                                                onClick={() => setStatView('records')}
+                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                            >
+                                                Records
+                                            </button>
+                                            <button
+                                                className={`chart-button ${statView === 'matchups' ? 'active' : ''}`}
+                                                onClick={() => setStatView('matchups')}
+                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                            >
+                                                Matchups
+                                            </button>
+                                        </>
                                     )}
                                 </div>
                                 {statView === 'meta' && (
@@ -2793,9 +2691,9 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                         </div>
                                     </>
                                 )}
-                                {statView === 'matchups' && (
+                                {statView === 'records' && showMatchupsTab && (
                                     <div className="matchups-overview">
-                                        <h3 className='stats-tab-h3-label'>Matchup & Record Data</h3>
+                                        <h3 className='stats-tab-h3-label'>Deck Records</h3>
                                         <div className="day-toggle-buttons" style={{ margin: '1rem 0' }}>
                                             <button
                                                 onClick={() => setMatchupDay('day2')}
@@ -2808,57 +2706,76 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                             <button
                                                 onClick={() => setMatchupDay('combined')}
                                                 className={matchupDay === 'combined' ? 'active-button' : ''}
-                                                style={{ opacity: '0.1', pointerEvents: 'none' }}
-                                            >Combined</button>
-                                            <button onClick={() => setMatchupView('list')}
-                                                className={matchupView === 'list' ? 'active-button' : ''}>
-                                                List
-                                            </button>
-                                            <button onClick={() => setMatchupView('matrix')}
-                                                className={matchupView === 'matrix' ? 'active-button' : ''}>
-                                                Matrix
+                                            >
+                                                Combined
                                             </button>
                                         </div>
-                                        {matchupView === 'list' ? (
-                                            <table className="matchup-table archetype-records">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Archetype</th>
-                                                        <th style={{ textAlign: 'start' }}>Record</th>
-                                                        <th style={{ textAlign: 'center' }}>Win %</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {matchupRecordByArchetype.map(({ key, wins, losses, ties, sprites }) => {
-                                                        const total = wins + losses + ties;
-                                                        const winPct = total > 0
-                                                            ? ((wins + ties * 0.5) / total * 100).toFixed(2)
-                                                            : '0.00';
-                                                        return (
-                                                            <tr key={key}>
-                                                                <td className="opponent-sprites-cell sing-cells-sprites">
-                                                                    {sprites.map(spr => (
-                                                                        <img
-                                                                            key={spr}
-                                                                            src={`/assets/sprites/${spr}.png`}
-                                                                            alt={spr}
-                                                                            className="archetype-sprite"
-                                                                        />
-                                                                    ))}
-                                                                </td>
-                                                                <td className='sing-arch-name'>{key}</td>
-                                                                <td className='record-summary sing-arch-rec tabular table-nums-sizes'>{wins}-{losses}-{ties}</td>
-                                                                <td className='table-nums-sizes' style={{ textAlign: 'center' }}>
-                                                                    {winPct}%
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        ) : (
+                                        <table className="matchup-table archetype-records">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Archetype</th>
+                                                    <th style={{ textAlign: 'start' }}>Record</th>
+                                                    <th style={{ textAlign: 'center' }}>Win %</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {matchupRecordByArchetype.map(({ key, wins, losses, ties, sprites }) => {
+                                                    const total = wins + losses + ties;
+                                                    const winPct = total > 0
+                                                        ? ((wins + ties * 0.5) / total * 100).toFixed(2)
+                                                        : '0.00';
+                                                    return (
+                                                        <tr key={key}>
+                                                            <td className="opponent-sprites-cell sing-cells-sprites">
+                                                                {sprites.map(spr => (
+                                                                    <img
+                                                                        key={spr}
+                                                                        src={`/assets/sprites/${spr}.png`}
+                                                                        alt={spr}
+                                                                        className="archetype-sprite"
+                                                                    />
+                                                                ))}
+                                                            </td>
+                                                            <td className='sing-arch-name'>{key}</td>
+                                                            <td className='record-summary sing-arch-rec tabular table-nums-sizes'>{wins}-{losses}-{ties}</td>
+                                                            <td className='table-nums-sizes' style={{ textAlign: 'center' }}>
+                                                                {winPct}%
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                                {statView === 'matchups' && (
+                                    <div className="matchups-overview">
+                                        <h3 className='stats-tab-h3-label'>VS Matchup Data</h3>
+                                        <div className="day-toggle-buttons matchup-and-record-data-btns" style={{ margin: '1rem 0' }}>
+                                            <button
+                                                onClick={() => setMatchupDay('day2')}
+                                                className={matchupDay === 'day2' ? 'active-button' : ''}
+                                            >{label(2)}</button>
+                                            <button
+                                                onClick={() => setMatchupDay('day1')}
+                                                className={matchupDay === 'day1' ? 'active-button' : ''}
+                                            >{label(1)}</button>
+                                            <button
+                                                onClick={() => setMatchupDay('combined')}
+                                                className={matchupDay === 'combined' ? 'active-button' : ''}
+                                            >
+                                                Combined
+                                            </button>
+                                        </div>
+
+                                        {statView === 'matchups' && showMatchupsTab && (
                                             <div className="matchup-matrix-wrapper">
+                                                <ul className='matchups-graph-instructions'>
+                                                    <li>Pick a deck on the left side (↕ row).</li>
+                                                    <li>Move across to a deck on the top (↔ column).</li>
+                                                    <li>The percentage in the box is the row deck's <strong>win</strong>% against the column deck.</li>
+                                                </ul>
                                                 <table className="matchup-matrix">
                                                     <thead>
                                                         <tr>
@@ -2878,7 +2795,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                                                                 />
                                                                             );
                                                                         })}
-                                                                        <button
+                                                                        {/* <button
                                                                             className="matrix-info-btn"
                                                                             onClick={() => {
                                                                                 setInfoArchetype(ck);
@@ -2886,8 +2803,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                                                             }}
                                                                         >
                                                                             ℹ️
-                                                                            {/* <span class="material-symbols-outlined">info</span> */}
-                                                                        </button>
+                                                                        </button> */}
                                                                     </th>
                                                                 );
                                                             })}
@@ -2934,6 +2850,12 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                                                     return (
                                                                         <td
                                                                             key={ck}
+                                                                            className="matchup-matrix-cell"
+                                                                            onClick={() => {
+                                                                                setInfoArchetype(rk);
+                                                                                setInfoOpponentArchetype(ck);
+                                                                                setInfoStats({ wins, losses, ties });
+                                                                            }}
                                                                             style={{
                                                                                 background: bg,
                                                                                 textAlign: 'center',
@@ -2957,24 +2879,50 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                         {infoArchetype && (
                             <div className="matrix-info-modal-overlay" onClick={() => setInfoArchetype(null)}>
                                 <div className="matrix-info-modal" onClick={e => e.stopPropagation()}>
-                                    <h4>{infoArchetype}</h4>
-                                    <div className="modal-sprites">
-                                        {(spriteMap[infoArchetype] || []).map(s => (
-                                            <img key={s} src={`/assets/sprites/${s}.png`} alt={s} />
-                                        ))}
+                                    <h4>
+                                        {infoArchetype}
+                                        {infoOpponentArchetype && ` vs ${infoOpponentArchetype}`}
+                                    </h4>
+                                    <div className="matrix-modal-vs-sprites">
+                                        <div className="modal-sprites tight-modal-sprites">
+                                            {(spriteMap[infoArchetype] || []).map(s => (
+                                                <img key={s} src={`/assets/sprites/${s}.png`} alt={s} />
+                                            ))}
+                                        </div>
+
+                                        {infoOpponentArchetype && (
+                                            <>
+                                                <span className="matrix-modal-vs-text">vs</span>
+
+                                                <div className="modal-sprites tight-modal-sprites">
+                                                    {(spriteMap[infoOpponentArchetype] || []).map(s => (
+                                                        <img key={s} src={`/assets/sprites/${s}.png`} alt={s} />
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
-                                    <p>Record: {infoStats.wins}–{infoStats.losses}–{infoStats.ties}</p>
+                                    <p style={{ marginBottom: '15px' }}>Record: {infoStats.wins}–{infoStats.losses}–{infoStats.ties}</p>
                                     <p>
-                                        Win %:{" "}
                                         {(() => {
                                             const total = infoStats.wins + infoStats.losses + infoStats.ties;
                                             const pct = total
                                                 ? ((infoStats.wins + infoStats.ties * .5) / total * 100).toFixed(2)
                                                 : "0.00";
                                             return pct;
-                                        })()}%
+                                        })()}% win rate<br></br>for {infoArchetype}
                                     </p>
-                                    <button onClick={() => setInfoArchetype(null)}>Close</button>
+                                    <button
+                                        onClick={() => {
+                                            setInfoArchetype(null);
+                                            setInfoOpponentArchetype(null);
+                                        }}
+                                        aria-label="Close"
+                                    >
+                                        <span className="material-symbols-outlined">
+                                            close
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         )}
