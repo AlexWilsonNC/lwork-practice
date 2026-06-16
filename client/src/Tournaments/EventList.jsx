@@ -398,7 +398,7 @@ const EventList = () => {
         (countryFilter ? event.flag === countryFilter : true) &&
         (yearFilter ? eventYear === yearFilter : true) &&
         (() => {
-        const cutoffDate = new Date(eventDate);
+          const cutoffDate = new Date(eventDate);
           cutoffDate.setDate(cutoffDate.getDate() + 2);
           return showUpcoming ? cutoffDate >= new Date() : cutoffDate < new Date();
         })() &&
@@ -578,7 +578,7 @@ const EventList = () => {
                     <th>Registration</th>
                   )} */}
                 {showUpcoming && (
-                  <th style={{opacity:0}}>Information</th>
+                  <th>Event Site</th>
                 )}
               </tr>
             </thead>
@@ -634,15 +634,21 @@ const EventList = () => {
                     )}
 
                     {/* For upcoming events, show the information icon */}
-                    {/* {showUpcoming && (
+                    {showUpcoming && (
                       <td>
-                        {event.registrationTime ? (
-                          <a href={event.registrationLink} className='event-icon-links' target='_blank' style={{ position: 'relative', display: 'inline-block' }}>
-                            <CountdownTooltip registrationTime={event.registrationTime} />
+                        {event.eventSite ? (
+                          <a
+                            href={event.eventSite}
+                            className="event-icon-links"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Event website"
+                          >
+                            <span className="material-symbols-outlined">link_2</span>
                           </a>
                         ) : null}
                       </td>
-                    )} */}
+                    )}
 
                     {/* For upcoming events, show the "note stack" icon */}
                     {showUpcoming && (

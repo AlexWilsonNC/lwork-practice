@@ -27,36 +27,38 @@ import NotFound from './Catch/NotFound';
 import DeckBuilder from './DeckBuilder/DeckBuilder';
 import PrintDecklist from './DeckBuilder/PrintDecklist'
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
-import Login   from './pages/Login';
+import Login from './pages/Login';
 import Account from './pages/Account';
 import TournamentReportForm from './pages/TournamentReportForm';
 import TournamentReportPage from './pages/TournamentReportPage';
+import WorldsBookletsPage from './Other/WorldsBookletsPage';
+import WorldsBookletViewer from './Other/WorldsBookletViewer';
 
 export function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
   if (loading) return null;
-  if (!user)   return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 }
 
 function App() {
   const { pathname } = useLocation()
   useEffect(() => {
-  if (window.gtag) {
-    window.gtag('event', 'page_view', {
-      page_path: pathname,
-      page_location: window.location.href,
-      page_title: document.title,
-    });
-  }
-}, [pathname]);
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: pathname,
+        page_location: window.location.href,
+        page_title: document.title,
+      });
+    }
+  }, [pathname]);
   const noNavBarOn = ['/print']
   const noFooterOn = ['/deckbuilder', '/print']
 
   return (
     <AuthProvider>
       <div className="all-app-container">
-        { !noNavBarOn.includes(pathname) && <Navbar/> }
+        {!noNavBarOn.includes(pathname) && <Navbar />}
         <main className='mainwrapedcontainer'>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -64,7 +66,7 @@ function App() {
               path="/account"
               element={
                 <PrivateRoute>
-                  <Account/>
+                  <Account />
                 </PrivateRoute>
               }
             />
@@ -95,12 +97,14 @@ function App() {
             <Route path="/tournament-reports/:reportId" element={<TournamentReportPage />} />
             <Route path="/print" element={<PrintDecklist />} />
             <Route path="/deckcalculator" element={<DeckCalculator />} />
+            <Route path="/worlds-booklets" element={<WorldsBookletsPage />} />
+            <Route path="/worlds-booklets/:year" element={<WorldsBookletViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          
+
           {/* <BackToTopButton /> */}
         </main>
-        { !noFooterOn.includes(pathname) && <Footer/> }
+        {!noFooterOn.includes(pathname) && <Footer />}
       </div>
     </AuthProvider>
   );
