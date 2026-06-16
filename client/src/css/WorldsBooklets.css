@@ -279,3 +279,12 @@
         transform: scale(0.9);
     }
 }
+@media screen and (max-width: 450px) {
+    .scan-controls button {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+    .scan-controls span {
+        font-size: 10px;
+    }
+}
