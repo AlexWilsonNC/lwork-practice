@@ -10,7 +10,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
 // import LiveStandings from '../Live/LiveStandings';
-import { flags, countryNames } from '../Tools/flags';
+import { flags, countryNames, regions } from '../Tools/flags';
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -111,6 +111,7 @@ import uk from '../assets/flags/uk.png';
 import uruguay from '../assets/flags/uruguay.png';
 import guatemala from '../assets/flags/guatemala.png';
 import bolivia from '../assets/flags/bolivia.png';
+import all from '../assets/flags/all.png';
 import unknown from '../assets/flags/unknown.png';
 
 const flagForDiffPurpose = {
@@ -163,6 +164,7 @@ const flagForDiffPurpose = {
     uruguay: uruguay,
     guatemala: guatemala,
     bolivia: bolivia,
+    all: all,
     unknown: unknown,
 };
 
@@ -569,6 +571,15 @@ const getCountryName = (code) => {
     return countryNames[code] || 'Unknown';
 };
 
+const regionLabelMap = {
+    NA: 'North America',
+    LA: 'Latin America',
+    EU: 'Europe',
+    OC: 'Oceania',
+    AP: 'Asia-Pacific',
+    MS: 'Middle East-South Africa',
+};
+
 const normalizeAttacks = (attacks) => {
     return attacks.map(attack => ({
         ...attack,
@@ -810,6 +821,9 @@ const EventPage = () => {
     const [infoArchetype, setInfoArchetype] = useState(null);
     const [infoStats, setInfoStats] = useState({ wins: 0, losses: 0, ties: 0 });
     const [infoOpponentArchetype, setInfoOpponentArchetype] = useState(null);
+    const [playerSearch, setPlayerSearch] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [showCountryFilter, setShowCountryFilter] = useState(false);
 
     const didFetchCounts = useRef({});
 
@@ -845,6 +859,14 @@ const EventPage = () => {
     const resultsWithPlacement = results.map((player, idx) => ({
         ...player,
         placing: player.placing ?? idx + 1
+    }));
+
+    const regionCountArray = Object.entries(regions).map(([region, codes]) => ({
+        region,
+        label: regionLabelMap[region] || region,
+        count: results.filter(player =>
+            codes.includes(player.flag || 'unknown')
+        ).length
     }));
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
@@ -1050,7 +1072,10 @@ const EventPage = () => {
     useEffect(() => {
         setShowDayOneMeta(false);
         setShowConversionRate(false);
+        setShowCountryFilter(false);
+        setSelectedCountry('');
     }, [division]);
+
 
     useEffect(() => {
         const shouldUsePhase1 =
@@ -1970,11 +1995,12 @@ const EventPage = () => {
             return acc;
         }, {});
     }
-
+    const allResultsPlayers = isModernEvent
+        ? [...day2Results, ...eliminatedDecks]
+        : resultsWithPlacement;
     const source = dataDay === 'day2'
         ? day2Results
         : [...day2Results, ...eliminatedDecks];
-
     const filteredResults = (dataDay === 'day2'
         ? day2Results
         : [...day2Results, ...eliminatedDecks]
@@ -1987,6 +2013,46 @@ const EventPage = () => {
         }
         return getCustomLabel(eventId, s1, s2) === selectedArchetype;
     });
+
+    const normalizePlayerSearch = (value) =>
+        value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    const shouldFilterPlayers = playerSearch.trim().length >= 2;
+
+    const filterPlayersBySearch = (players) => {
+        if (!shouldFilterPlayers) return players;
+
+        const query = normalizePlayerSearch(playerSearch.trim());
+
+        return players.filter(player =>
+            normalizePlayerSearch(player.name || '').includes(query)
+        );
+    };
+
+    const searchedDay2Results = filterPlayersBySearch(day2Results);
+    const searchedEliminatedDecks = filterPlayersBySearch(eliminatedDecks);
+    const searchedEliminatedRecords = filterPlayersBySearch(eliminatedRecords);
+
+    const allVisiblePlayersForFilters = [...day2Results, ...eliminatedDecks];
+
+    const countryCounts = allVisiblePlayersForFilters.reduce((acc, player) => {
+        const code = player.flag || 'unknown';
+        acc[code] = (acc[code] || 0) + 1;
+        return acc;
+    }, {});
+
+    const countryCountArray = Object.entries(countryCounts)
+        .map(([code, count]) => ({ code, count }))
+        .sort((a, b) => b.count - a.count);
+
+    const filterPlayersByCountry = (players) => {
+        if (!selectedCountry) return players;
+        return players.filter(player => (player.flag || 'unknown') === selectedCountry);
+    };
+
+    const filteredDay2Results = filterPlayersByCountry(searchedDay2Results);
+    const filteredEliminatedDecks = filterPlayersByCountry(searchedEliminatedDecks);
+    const filteredEliminatedRecords = filterPlayersByCountry(searchedEliminatedRecords);
 
     const getDayOneMetaSprites = (meta) => {
         return {
@@ -2357,10 +2423,77 @@ const EventPage = () => {
                                         </button>
                                     </div>
                                 )}
+                                <div className="country-filter-toggle-wrap">
+                                    <button
+                                        type="button"
+                                        className="country-filter-toggle"
+                                        onClick={() => setShowCountryFilter(prev => !prev)}
+                                    >
+                                        Country Filter
+                                        <span className="material-symbols-outlined">
+                                            {showCountryFilter ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+                                        </span>
+                                    </button>
+                                </div>
+                                {showCountryFilter && (
+                                    <div className="results-country-filter">
+                                        <div className="region-filter-counts">
+                                            {regionCountArray.map(({ region, count }) => (
+                                                <div key={region} className="region-count-item">
+                                                    <span>{region}</span>
+                                                    <strong>{count}</strong>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="country-filter-divider" />
+                                        <button
+                                            type="button"
+                                            className={`country-filter-item ${!selectedCountry ? 'active-country-filter' : ''}`}
+                                            onClick={() => setSelectedCountry('')}
+                                            title="All countries"
+                                        >
+                                            <img src={flags.all} alt="All countries" />
+                                            <span>{allResultsPlayers.length}</span>
+                                        </button>
+                                        {countryCountArray.map(({ code, count }) => (
+                                            <button
+                                                key={code}
+                                                type="button"
+                                                className={`country-filter-item ${selectedCountry === code ? 'active-country-filter' : ''}`}
+                                                onClick={() => setSelectedCountry(code)}
+                                                title={getCountryName(code)}
+                                            >
+                                                <img src={flags[code] || flags.unknown} alt={code} />
+                                                <span>{count}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                <div className="results-player-search">
+                                    <div className="player-search-wrapper">
+                                        <input
+                                            type="text"
+                                            value={playerSearch}
+                                            onChange={(e) => setPlayerSearch(e.target.value)}
+                                            placeholder="Search player name..."
+                                        />
+                                        {playerSearch && (
+                                            <button
+                                                type="button"
+                                                className="clear-player-search"
+                                                onClick={() => setPlayerSearch('')}
+                                                aria-label="Clear search"
+                                            >
+                                                ×
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
                                 {viewTab === 'Decks' ? (
                                     results.length ? (
                                         <>
-                                            {displayResults(day2Results, eventId, division, undefined, getEventFormat(division))}
+                                            {displayResults(filteredDay2Results, eventId, division, undefined, getEventFormat(division))}
 
                                             {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
@@ -2381,16 +2514,16 @@ const EventPage = () => {
                                                     <div className="day-divider">
                                                         <span>{label(2)} cutoff</span>
                                                     </div>
-                                                    <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                                                    {/* <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                         <button
                                                             onClick={() => setShowAllDecks(false)}
                                                             className="day1buttons"
                                                         >
                                                             Hide {label(1)} Results
                                                         </button>
-                                                    </div>
+                                                    </div> */}
                                                     {displayResults(
-                                                        eliminatedDecks,
+                                                        filteredEliminatedDecks,
                                                         eventId,
                                                         division,
                                                         undefined,
@@ -2413,7 +2546,7 @@ const EventPage = () => {
                                 ) : (
                                     <>
                                         <ul className="result-list-ol">
-                                            {day2Results.map((p, i) => {
+                                            {filteredDay2Results.map((p, i) => {
                                                 const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
                                                 const matchPts = wins * 3 + ties * 1;
                                                 const imgSrc = p.flag
@@ -2482,7 +2615,7 @@ const EventPage = () => {
 
                                         {/* ─── Day 1 players ─── */}
                                         <ul className="result-list-ol">
-                                            {eliminatedRecords.map((p, i) => {
+                                            {filteredEliminatedRecords.map((p, i) => {
                                                 const { wins = 0, losses = 0, ties = 0 } = p.record ?? {};
                                                 const matchPts = wins * 3 + ties * 1;
                                                 const imgSrc = p.flag
@@ -2562,14 +2695,14 @@ const EventPage = () => {
                                             <button
                                                 className={`chart-button ${statView === 'records' ? 'active' : ''}`}
                                                 onClick={() => setStatView('records')}
-                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                            // style={{pointerEvents: 'none', opacity: '0.1'}}
                                             >
                                                 Records
                                             </button>
                                             <button
                                                 className={`chart-button ${statView === 'matchups' ? 'active' : ''}`}
                                                 onClick={() => setStatView('matchups')}
-                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                            // style={{pointerEvents: 'none', opacity: '0.1'}}
                                             >
                                                 Matchups
                                             </button>
@@ -2693,7 +2826,7 @@ const EventPage = () => {
                                 )}
                                 {statView === 'records' && showMatchupsTab && (
                                     <div className="matchups-overview">
-                                        <h3 className='stats-tab-h3-label'>Deck Records</h3>
+                                        <h3 className='stats-tab-h3-label'>Archetype Records</h3>
                                         <div className="day-toggle-buttons" style={{ margin: '1rem 0' }}>
                                             <button
                                                 onClick={() => setMatchupDay('day2')}

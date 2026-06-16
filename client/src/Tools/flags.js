@@ -97,9 +97,11 @@ import pitcairnislands from '../assets/flags/pitcairn-islands.png';
 import anguilla from '../assets/flags/anguilla.png';
 import aruba from '../assets/flags/aruba.png';
 import serbia from '../assets/flags/serbia.png';
+import all from '../assets/flags/all.png';
 import unknown from '../assets/flags/unknown.png';
 
 export const flags = {
+    all: all,
     AR: argentina,
     KZ: kazakhstan,
     KW: kuwait,
