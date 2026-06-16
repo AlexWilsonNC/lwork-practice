@@ -788,9 +788,8 @@
     font-size: 14px;
     color: white;
 }
-.stat-toggle-buttons button:last-child {
-    margin-left: 0px;
-    margin-right: 0px;
+.matchups-btn-only {
+    margin: 0px !important;
 }
 .stat-toggle-buttons button:hover {
     cursor: pointer;

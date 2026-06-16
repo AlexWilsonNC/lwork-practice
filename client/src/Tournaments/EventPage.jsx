@@ -2699,7 +2699,7 @@ const EventPage = () => {
                                                 Records
                                             </button>
                                             <button
-                                                className={`chart-button ${statView === 'matchups' ? 'active' : ''}`}
+                                                className={`matchups-btn-only chart-button ${statView === 'matchups' ? 'active' : ''}`}
                                                 onClick={() => setStatView('matchups')}
                                             >
                                                 Matchups
