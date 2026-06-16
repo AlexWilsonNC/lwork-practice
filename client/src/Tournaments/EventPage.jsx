@@ -2788,7 +2788,7 @@ const showPhaseCounts = isModernEvent && hasResultsForDivision;
                                             <hr style={{ marginTop: '5px', border: 'none', borderBottom: '2px solid #ccc', opacity: 0.35 }} />
                                             <br />
                                             <div className='results-table charted-decks'>
-                                                {displayResults(filteredResults, eventId, division, customPlacement, eventData?.format)}
+                                                {displayResults(filteredResults, eventId, division, undefined, getEventFormat(division))}
                                             </div>
                                         </div>
                                     </>
