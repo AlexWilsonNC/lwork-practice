@@ -61,6 +61,10 @@ export default function WorldsBookletViewer() {
 
             <h1>{year} Worlds Booklet</h1>
 
+            <br></br>
+            <a style={{color: 'red !important'}} href={`'/tournaments/${year}_WORLDS'`}></a>
+            <br></br>
+
             <section className="scan-stage">
                 {scans.map((src, index) => {
                     const offset = index - activeIndex;
