@@ -120,7 +120,7 @@
 
 .scan-stage {
     position: relative;
-    height: min(50vh, 780px);
+    height: min(70vh, 780px);
     margin: 34px auto 24px;
     max-width: 1100px;
     perspective: 1200px;
@@ -197,29 +197,39 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.92);
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     padding: 24px;
-    animation: lightboxFadeIn 0.22s ease;
 }
 
 .scan-lightbox-inner {
-    width: min(96vw, 1400px);
-    height: 88vh;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     overflow: auto;
-    cursor: grab;
-    border-radius: 14px;
 }
 
 .scan-lightbox-image {
-    display: block;
-    width: 150%;
-    max-width: none;
-    margin: 0 auto;
+    max-width: 95vw;
+    max-height: 90vh;
+
+    width: auto;
+    height: auto;
+
     border-radius: 12px;
-    background: white;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+
+    cursor: zoom-in;
+
+    transition: transform .25s ease;
 }
 
 .scan-lightbox-close {
@@ -252,9 +262,20 @@
         font-size: 14px;
         margin-top: -25px;
     }
-}
-@media screen and (max-width: 800px) {
-    .booklets-hero p {
-        font-size: 13px;
-    }
 } */
+@media screen and (max-width: 800px) {
+    .scan-stage {
+        height: min(50vh, 780px);
+    }
+}
+@media screen and (max-width: 600px) {
+    .scan-stage {
+        height: min(40vh, 780px);
+    }
+    .scan-controls {
+        transform: scale(0.8);
+    }
+    .booklet-viewer-page h1 {
+        transform: scale(0.9);
+    }
+}
