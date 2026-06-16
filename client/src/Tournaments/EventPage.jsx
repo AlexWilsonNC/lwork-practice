@@ -2562,14 +2562,14 @@ const EventPage = () => {
                                             <button
                                                 className={`chart-button ${statView === 'records' ? 'active' : ''}`}
                                                 onClick={() => setStatView('records')}
-                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                                // style={{pointerEvents: 'none', opacity: '0.1'}}
                                             >
                                                 Records
                                             </button>
                                             <button
                                                 className={`chart-button ${statView === 'matchups' ? 'active' : ''}`}
                                                 onClick={() => setStatView('matchups')}
-                                                style={{pointerEvents: 'none', opacity: '0.1'}}
+                                                // style={{pointerEvents: 'none', opacity: '0.1'}}
                                             >
                                                 Matchups
                                             </button>
