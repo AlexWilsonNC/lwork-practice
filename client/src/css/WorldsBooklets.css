@@ -96,7 +96,7 @@
     color: white;
     padding: 8px 34px;
     border-radius: 14px;
-    font-family: 'Segoe UI', serif;
+    font-weight: 500;
     font-size: 1.45rem;
     box-shadow: inset 0 -2px 0 rgba(255,255,255,0.08);
 }

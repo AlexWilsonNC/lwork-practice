@@ -49,24 +49,25 @@ const BurgerOpen = styled.ul`
 
     a {
       color: ${({ theme }) => theme.burgerTxt};
+      text-shadow: 0 2px 4px rgba(0,0,0,0.35);
     }
 
     &::before {
-    content: '';
-    position: absolute;
-    top: -15%;
-    left: -30%;
-    width: 700px;
-    height: 700px;
-    padding-bottom: 80%;
-    transform: rotate(-45deg);
-    background-image: url(${pokeball});
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    opacity: 0.1;
-    pointer-events: none;
-  }
+      content: '';
+      position: absolute;
+      top: -15%;
+      left: -30%;
+      width: 700px;
+      height: 700px;
+      padding-bottom: 80%;
+      transform: rotate(-45deg);
+      background-image: url(${pokeball});
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: 0.1;
+      pointer-events: none;
+    }
 `;
 
 const ToggleButton = styled.div`
@@ -83,7 +84,7 @@ const ToggleButton = styled.div`
 const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
   const { theme, toggleTheme } = useTheme();
   const { user } = useContext(AuthContext);  // null when not logged in
-  
+
   // State for managing the interstitial modal
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
@@ -134,7 +135,12 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
           <ul className='burgered-links-more'>
             <li><a href='/archive-updates'>Archive Updates</a></li>
             {/* <li className='not-ready'><a href=''>Articles</a></li> */}
-            <li><a href='/deckbuilder'>Deck Builder</a></li>
+            <li>
+              <a href='/deckbuilder' className='new-link-look'>
+                Deck Builder
+                <span className="new-badge">NEW</span>
+              </a>
+            </li>
             {/* Trigger interstitial for the "Decks by Era" link */}
             <li>
               <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main' onClick={(e) => handleLinkClick(e, 'https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/main')}>
@@ -142,7 +148,12 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
               </a>
             </li>
             <li><a href='/rules-by-era'>Rules by Era</a></li>
-            {/* <li className='not-ready'><a>Worlds Booklets</a></li> */}
+            <li>
+              <a href='/worlds-booklets' className='new-link-look'>
+                Worlds Booklets
+                <span className="new-badge">NEW</span>
+              </a>
+            </li>
           </ul>
         </div>
         <div className='burdered-socials'>

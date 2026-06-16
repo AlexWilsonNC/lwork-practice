@@ -41,7 +41,7 @@ function Footer() {
                             <a href='' className='not-ready'>Articles</a>
                             <a href='/deckbuilder'>Deck Builder</a>
                             <a href='/rules-by-era'>Rules by Era</a>
-                            <a href='' className='not-ready'>Worlds Booklets</a>
+                            <a href='/worlds-booklets'>Worlds Booklets</a>
                         </div>
                     </div>
                 </div>

@@ -110,6 +110,8 @@ export const lightTheme = {
   setTileBtnBgHover: 'rgba(0,0,0,0.2)',
   setTileBtnHr: '2px solid rgba(0,0,0,0.12)',
   awaitingMoreEvents: 'rgba(129, 129, 129, 0.79)',
+  bookletButtons: '#2f2f2f',
+  scanCtrlButtons: '#2f2f2f',
 };
 
 const decklistSvgDark = `
@@ -213,5 +215,6 @@ export const darkTheme = {
   setTileBtnBorder: '1px solid rgba(255,255,255,0.16)',
   setTileBtnBgHover: 'rgba(255, 255, 255, 0.2)',
   setTileBtnHr: '2px solid rgba(255,255,255,0.12)',
-
+  bookletButtons: 'rgb(83, 83, 83)',
+  scanCtrlButtons: 'rgba(38, 127, 182, 0.75)',
 };

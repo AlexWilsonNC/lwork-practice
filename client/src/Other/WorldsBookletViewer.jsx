@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import '../css/WorldsBooklets.css';
+import styled from 'styled-components';
+import { useTheme } from '../contexts/ThemeContext';
 
 const scanImports = import.meta.glob('../assets/worlds-booklets/*/scans/*.{jpg,jpeg,png,webp}', {
     eager: true,
@@ -8,7 +10,15 @@ const scanImports = import.meta.glob('../assets/worlds-booklets/*/scans/*.{jpg,j
     import: 'default'
 });
 
+const WorldsBookletViewPage = styled.main`
+    color: ${({ theme }) => theme.text};
+    .scan-controls button {
+        background-color: ${({ theme }) => theme.scanCtrlButtons};
+    }
+`;
+
 export default function WorldsBookletViewer() {
+    const { theme } = useTheme();
     const { year } = useParams();
     const [activeIndex, setActiveIndex] = useState(0);
     const goFirst = () => setActiveIndex(0);
@@ -44,7 +54,7 @@ export default function WorldsBookletViewer() {
     }
 
     return (
-        <main className="booklet-viewer-page">
+        <WorldsBookletViewPage className="booklet-viewer-page" theme={theme}>
             <Link to="/worlds-booklets" className="booklet-back">
                 ← Back to Booklets
             </Link>
@@ -132,6 +142,6 @@ export default function WorldsBookletViewer() {
                     </div>
                 </div>
             )}
-        </main>
+        </WorldsBookletViewPage>
     );
 }

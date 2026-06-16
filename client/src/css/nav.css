@@ -107,6 +107,10 @@ nav {
     /* border-top-left-radius: 30px; */
     border-bottom-left-radius: 30px;
   }
+  .new-link-look {
+    display: flex;
+    align-items: center;
+  }
   .burgered-links li,
   .burgered-links-more li {
     transition: ease-in-out 0.3s;
@@ -268,4 +272,53 @@ nav {
   .burgered-links li {
     font-size: 20px;
   }
+}
+
+.new-badge {
+    margin-left: 10px;
+    padding: 3px 10px;
+
+    background: linear-gradient(
+        135deg,
+        #1290eb,
+        #7a4cff,
+        #ff4fd8
+    );
+
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+
+    border-radius: 999px;
+
+    text-shadow: 0 1px 3px rgba(0,0,0,.4);
+
+    box-shadow:
+        0 0 10px rgba(18,144,235,.6),
+        0 0 18px rgba(122,76,255,.4);
+
+    animation: shinyBadge 2.5s infinite;
+}
+@keyframes shinyBadge  {
+    0% {
+        transform: scale(1);
+        box-shadow:
+            0 0 10px rgba(18,144,235,.6),
+            0 0 18px rgba(122,76,255,.5);
+    }
+
+    50% {
+        transform: scale(1.08);
+        box-shadow:
+            0 0 10px rgba(18,144,235,.6),
+            0 0 18px rgba(122,76,255,.8);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 0 10px rgba(18,144,235,.6),
+            0 0 18px rgba(122,76,255,.5);
+    }
 }

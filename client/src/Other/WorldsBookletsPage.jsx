@@ -1,6 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/WorldsBooklets.css';
+import styled from 'styled-components';
+import { useTheme } from '../contexts/ThemeContext';
+
+const WorldsBookletPageMain = styled.main`
+    .booklet-button {
+        background-color: ${({ theme }) => theme.bookletButtons};
+    }
+`;
 
 const covers = import.meta.glob('../assets/worlds-booklets/*/cover.{jpg,jpeg,png,webp}', {
     eager: true,
@@ -21,8 +29,10 @@ const bookletYears = Object.entries(covers)
     .sort((a, b) => Number(b.year) - Number(a.year));
 
 export default function WorldsBookletsPage() {
+    const { theme } = useTheme();
+
     return (
-        <main className="booklets-page">
+        <WorldsBookletPageMain className="booklets-page" theme={theme}>
             <section className="booklets-hero">
                 {/* <h1>World Championship Booklets</h1> */}
                 {/* <p>Browse official Worlds booklet scans from past Pokémon TCG World Championships.</p> */}
@@ -45,6 +55,6 @@ export default function WorldsBookletsPage() {
                     </Link>
                 ))}
             </section>
-        </main>
+        </WorldsBookletPageMain>
     );
 }
