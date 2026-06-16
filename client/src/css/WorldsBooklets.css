@@ -282,9 +282,9 @@
 @media screen and (max-width: 450px) {
     .scan-controls button {
         padding: 8px 15px;
-        font-size: 10px;
+        font-size: 12px;
     }
     .scan-controls span {
-        font-size: 10px;
+        font-size: 12px;
     }
 }
