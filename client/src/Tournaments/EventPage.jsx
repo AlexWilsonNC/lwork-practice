@@ -5,15 +5,16 @@ import '../css/eventpage.css';
 import { displayResults } from './event-results';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement } from 'chart.js';
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
 import { getCustomLabel } from './pokemon-labels';
 // import LiveStandings from '../Live/LiveStandings';
 import { flags, countryNames, regions } from '../Tools/flags';
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
@@ -405,6 +406,7 @@ const EventPageContent = styled.div`
     color: ${({ theme }) => theme.text};
     cursor: pointer;
   }
+  .meta-pie-legend, .meta-share-list {color: ${({ theme }) => theme.text};}
   .active-option {
     background: ${({ theme }) => theme.body};
   }
@@ -495,7 +497,7 @@ const EventPageContent = styled.div`
         background-color: #1290eb !important;
         border: 1px solid #007bff;
     }
-    .stat-toggle-buttons button {background-color: ${({ theme }) => theme.statsBtns};}
+    .stat-toggle-buttons button, .meta-view-toggle button {background-color: ${({ theme }) => theme.statsBtns};}
     .day-toggle-buttons button {
         padding: 5px 7px;
         border-radius: 2px;
@@ -540,6 +542,24 @@ const EventPageContent = styled.div`
     .flag-container:hover .flag-tooltip {
         visibility: visible;
         opacity: 1;
+    }
+    .matchup-matrix th:first-child {
+        background-color: ${({ theme }) => theme.themeName === 'dark' ? '#27292c' : '#fff'};
+    }
+    .matchup-matrix-table th,
+    .matchup-matrix-table td {
+        border-color: ${({ theme }) => theme.themeName === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.18)'};
+    }
+    .matchup-matrix-table th {
+        background: ${({ theme }) => theme.themeName === 'dark' ? '#f4f4f4' : '#fff'};
+    }
+    .matchup-matrix-table .row-header,
+    .matchup-matrix-table .corner-cell {
+        background: ${({ theme }) => theme.themeName === 'dark' ? '#f7f7f7' : '#fff'};
+    }
+    .matchup-matrix-cell {
+        color: ${({ theme }) => theme.themeName === 'dark' ? '#f5f5f5' : '#111'};
+        text-shadow: ${({ theme }) => theme.themeName === 'dark' ? '0 1px 2px rgba(0,0,0,0.65)' : 'none'};
     }
 `;
 
@@ -818,14 +838,17 @@ const EventPage = () => {
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
     const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'records' | 'matchups'
+    const [metaView, setMetaView] = useState('bar'); // 'bar' | 'list' | 'pie'
     const [infoArchetype, setInfoArchetype] = useState(null);
     const [infoStats, setInfoStats] = useState({ wins: 0, losses: 0, ties: 0 });
     const [infoOpponentArchetype, setInfoOpponentArchetype] = useState(null);
     const [playerSearch, setPlayerSearch] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('');
     const [showCountryFilter, setShowCountryFilter] = useState(false);
-
+    const doughnutSpriteCache = useRef({});
     const didFetchCounts = useRef({});
+    const [hoveredDoughnutIndex, setHoveredDoughnutIndex] = useState(null);
+    const doughnutChartRef = useRef(null);
 
     useEffect(() => {
         didFetchCounts.current[division] = false;
@@ -1477,6 +1500,120 @@ const EventPage = () => {
     const finalDeckTypeCountArray = filteredDeckTypeCountArray.map(d => {
         return d;
     });
+    const barSpritePlugin = {
+        id: 'barSpritePlugin',
+        afterDatasetsDraw(chart) {
+            const { ctx } = chart;
+            const meta = chart.getDatasetMeta(0);
+            const dataset = chart.data.datasets[0];
+
+            chart.data.labels.forEach((label, index) => {
+                const data = dataset.data[index];
+
+                const sprites = showDayOneMeta
+                    ? dayOneTypeArray[index]?.sprites || []
+                    : deckTypeCount[label]?.sprites || [];
+
+                const bar = meta.data[index];
+                if (!bar || !sprites.length) return;
+
+                const { x } = bar.tooltipPosition();
+                const displayWidth = 35;
+                const spacing = -15;
+                const totalWidth = sprites.length * displayWidth + (sprites.length - 1) * spacing;
+                const startX = x - totalWidth / 2;
+
+                sprites.forEach((spr, i) => {
+                    const img = new Image();
+                    img.src = `/assets/sprites/${spr}.png`;
+
+                    if (!img.complete) {
+                        img.onload = () => chart.draw();
+                        return;
+                    }
+
+                    const aspectRatio = img.width / img.height;
+                    const w = displayWidth;
+                    const h = w / aspectRatio;
+                    const drawX = startX + i * (displayWidth + spacing);
+                    const drawY = bar.y - h;
+
+                    ctx.drawImage(img, drawX, drawY, w, h);
+                });
+
+                if (data > 0) {
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = theme.chartNumber;
+                    ctx.fillText(data, x, bar.y + 10);
+                    ctx.restore();
+                }
+            });
+        }
+    };
+    const spriteOnDoughnutPlugin = {
+        id: 'spriteOnDoughnutPlugin',
+        afterDatasetsDraw(chart) {
+            const { ctx } = chart;
+            const meta = chart.getDatasetMeta(0);
+
+            meta.data.forEach((slice, index) => {
+                const deck = doughnutRows[index];
+
+                if (!deck || deck.key === 'Other Decks') return;
+
+                const sprites = (deck?.sprites || [])
+                    .filter(s => s && s !== 'blank')
+                    .slice(0, 2);
+
+                if (!sprites.length) return;
+
+                const angle = (slice.startAngle + slice.endAngle) / 2;
+                const radius = (slice.outerRadius + slice.innerRadius) / 2;
+
+                const x = slice.x + Math.cos(angle) * radius;
+                const y = slice.y + Math.sin(angle) * radius;
+
+                sprites.forEach((sprite, spriteIndex) => {
+                    const src = `/assets/sprites/${sprite}.png`;
+
+                    if (!doughnutSpriteCache.current[src]) {
+                        const image = new Image();
+                        image.src = src;
+                        image.onload = () => chart.draw();
+                        doughnutSpriteCache.current[src] = image;
+                    }
+
+                    const image = doughnutSpriteCache.current[src];
+
+                    if (!image.complete) return;
+
+                    const offsetX = sprites.length === 2
+                        ? spriteIndex === 0
+                            ? -10
+                            : 10
+                        : 0;
+
+                    ctx.save();
+                    const displayWidth = 36;
+                    const aspectRatio = image.width / image.height;
+
+                    const drawWidth = displayWidth;
+                    const drawHeight = drawWidth / aspectRatio;
+
+                    ctx.drawImage(
+                        image,
+                        x - drawWidth / 2 + offsetX,
+                        y - drawHeight / 2,
+                        drawWidth,
+                        drawHeight
+                    );
+                    ctx.restore();
+                });
+            });
+        }
+    };
 
     const handleDataDayChange = (day) => {
         setDataDay(day);
@@ -1934,6 +2071,71 @@ const EventPage = () => {
 
     const nonBlankDecks = finalDeckTypeCountArray.filter(e => e.key !== 'blank-');
 
+    const buildMetaShareRows = (rows) => {
+        const cleanRows = rows.filter(e => e.key !== 'blank-');
+        const total = cleanRows.reduce((sum, deck) => sum + deck.count, 0);
+
+        return cleanRows.map(deck => ({
+            ...deck,
+            percent: total > 0
+                ? ((deck.count / total) * 100).toFixed(1)
+                : '0.0'
+        }));
+    };
+
+    const dayTwoMetaRows = buildMetaShareRows(nonBlankDecks);
+    const dayOneMetaRows = buildMetaShareRows(dayOneTypeArray);
+
+    const conversionMetaRows = combinedData
+        .map(d => {
+            const matchingDeck =
+                dayOneTypeArray.find(deck => deck.key === d.label) ||
+                nonBlankDecks.find(deck => deck.key === d.label);
+
+            return {
+                key: d.label,
+                count: Number(d.conversionRate),
+                countLabel: `${Number(d.conversionRate).toFixed(1)}%`,
+                percent: Number(d.conversionRate).toFixed(1),
+                sprites: matchingDeck?.sprites || []
+            };
+        })
+        .filter(deck => deck.key && deck.key !== 'blank-')
+        .sort((a, b) => b.count - a.count);
+
+    const metaShareRows = showConversionRate
+        ? conversionMetaRows
+        : showDayOneMeta
+            ? dayOneMetaRows
+            : dayTwoMetaRows;
+
+    const shouldGroupOtherDecks = metaShareRows.length > 10 && !showConversionRate;
+
+    const doughnutRows = shouldGroupOtherDecks
+        ? (() => {
+            const mainDecks = metaShareRows.filter(deck => Number(deck.percent) >= 2);
+            const otherDecks = metaShareRows.filter(deck => Number(deck.percent) < 2);
+
+            const otherCount = otherDecks.reduce((sum, deck) => sum + deck.count, 0);
+
+            if (otherCount === 0) return mainDecks;
+
+            const visibleTotal = metaShareRows.reduce((sum, deck) => sum + deck.count, 0);
+
+            return [
+                ...mainDecks,
+                {
+                    key: 'Other Decks',
+                    count: otherCount,
+                    percent: visibleTotal > 0
+                        ? ((otherCount / visibleTotal) * 100).toFixed(1)
+                        : '0.0',
+                    sprites: []
+                }
+            ];
+        })()
+        : metaShareRows;
+
     const chartData = showDayOneMeta
         ? {
             labels: dayOneTypeArray.map(e => e.key),
@@ -1953,6 +2155,93 @@ const EventPage = () => {
                     backgroundColor: '#1291eb8b'
                 }]
             };
+
+    const doughnutColors = [
+        '#ff0000', // Red
+        '#ff7f00', // Orange
+        '#ffd700', // Yellow
+        '#7fff00', // Yellow-Green
+        '#00c853', // Green
+        '#00bcd4', // Cyan
+        '#2196f3', // Blue
+        '#3f51b5', // Indigo
+        '#7b1fa2', // Violet
+        '#e91e63', // Pink
+        '#ff4081', // Hot Pink
+        '#ff5722', // Deep Orange
+    ];
+
+    const isDarkMode = theme.themeName === 'dark';
+    const doughnutBorderColor = isDarkMode
+        ? '#27292C'
+        : '#ffffff';
+
+    const doughnutData = {
+        labels: doughnutRows.map(e => e.key),
+        datasets: [{
+            label: 'Deck Count',
+            data: doughnutRows.map(e => e.count),
+            borderColor: doughnutBorderColor,
+            borderWidth: 3,
+            backgroundColor: (context) => {
+                const { chart, dataIndex } = context;
+                const { ctx, chartArea } = chart;
+
+                if (!chartArea) return doughnutColors[dataIndex % doughnutColors.length];
+                const deck = doughnutRows[dataIndex];
+                if (deck.key === 'Other Decks') {
+                    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+
+                    gradient.addColorStop(0, 'rgb(210, 210, 210)');
+                    gradient.addColorStop(1, 'rgb(245, 245, 245)');
+
+                    return gradient;
+                }
+
+                const base = doughnutColors[dataIndex % doughnutColors.length];
+
+                const gradient = ctx.createLinearGradient(
+                    chartArea.left,
+                    chartArea.top,
+                    chartArea.right,
+                    chartArea.bottom
+                );
+
+                gradient.addColorStop(0, '#ffffff');
+                gradient.addColorStop(1, base);
+
+                return gradient;
+            },
+
+            offset: doughnutRows.map((deck, index) => {
+                if (index === 0) return 28;
+                return [0, 0, 0, 0, 0, 0][index % 6];
+            }),
+
+            hoverOffset: 50,
+            spacing: 0
+        }]
+    };
+
+    const pieOptions = {
+        cutout: '37.5%',
+        radius: '125%',
+        layout: {
+            padding: 35
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+        },
+        onHover: (event, activeElements) => {
+            if (activeElements.length > 0) {
+                setHoveredDoughnutIndex(activeElements[0].index);
+            } else {
+                setHoveredDoughnutIndex(null);
+            }
+        },
+        maintainAspectRatio: false
+    };
 
     const dropdownOptions = dataDay === 'day2'
         ? finalDeckTypeCountArray
@@ -2061,6 +2350,33 @@ const EventPage = () => {
         };
     };
 
+    const centerImagePlugin = {
+        id: 'centerImage',
+
+        afterDraw(chart) {
+            const { ctx } = chart;
+
+            const image = new Image();
+            image.src = eventData?.eventLogo;
+
+            image.onload = () => {
+                const x =
+                    chart.getDatasetMeta(0).data[0].x;
+
+                const y =
+                    chart.getDatasetMeta(0).data[0].y;
+
+                ctx.drawImage(
+                    image,
+                    x - 75,
+                    y - 40,
+                    150,
+                    80
+                );
+            };
+        }
+    };
+
     const chartOptions = {
         plugins: {
             tooltip: {
@@ -2083,54 +2399,9 @@ const EventPage = () => {
         },
         animation: {
             onComplete: () => {
-                setIsChartReady(true)
-                if (chartRef.current) {
-                    const chartInstance = chartRef.current;
-                    const ctx = chartInstance.ctx;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = theme.chartNumber;
-
-                    chartInstance.data.labels.forEach((label, index) => {
-                        const meta = chartInstance.getDatasetMeta(0);
-                        const dataset = chartInstance.data.datasets[0];
-                        const data = dataset.data[index];
-
-                        const sprites = showDayOneMeta
-                            ? dayOneTypeArray[index]?.sprites || []
-                            : deckTypeCount[label]?.sprites || [];
-
-                        const bar = meta.data[index];
-                        if (bar && sprites.length) {
-                            const { x } = bar.tooltipPosition();
-                            const displayWidth = 35;
-                            const spacing = -15;
-                            const totalWidth = sprites.length * displayWidth
-                                + (sprites.length - 1) * spacing;
-                            // start so that strip is centered on the bar
-                            const startX = x - totalWidth / 2;
-
-                            sprites.forEach((spr, i) => {
-                                const img = new Image();
-                                img.src = `/assets/sprites/${spr}.png`;
-                                img.onload = () => {
-                                    const aspectRatio = img.width / img.height;
-                                    const w = displayWidth;
-                                    const h = w / aspectRatio;
-                                    const drawX = startX + i * (displayWidth + spacing);
-                                    const drawY = bar.y - h;
-                                    ctx.drawImage(img, drawX, drawY, w, h);
-                                };
-                            });
-                            if (data > 0) {
-                                const textY = bar.y + 10;   // tweak as needed
-                                ctx.fillText(data, x, textY);
-                            }
-                        }
-                    });
-                }
-            },
-        },
+                setIsChartReady(true);
+            }
+        }
     };
 
     const handleCardClick = (card) => {
@@ -2711,7 +2982,6 @@ const EventPage = () => {
                                     <>
                                         <h3 className='stats-tab-h3-label'>Meta Share</h3>
                                         <div className='chart-btns-container'>
-
                                             <div className='alignrow'>
                                                 <button
                                                     className={`chart-button day2btn ${!showDayOneMeta && !showConversionRate ? 'active' : ''}`}
@@ -2744,22 +3014,132 @@ const EventPage = () => {
                                                 )}
                                             </div>
                                         )}
+                                        <div className="meta-view-toggle">
+                                            <button className={metaView === 'bar' ? 'active-button' : ''} onClick={() => setMetaView('bar')}>Bar</button>
+                                            <button className={metaView === 'doughnut' ? 'active-button' : ''} onClick={() => setMetaView('doughnut')}>Pie</button>
+                                            <button className={metaView === 'list' ? 'active-button' : ''} onClick={() => setMetaView('list')}>List</button>
+                                        </div>
                                         {!hasChartData && (
                                             <div className='chart-description'><p>* No known decks available for this division</p></div>
                                         )}
-                                        <div className='chart-container-wrapper' style={{ overflowX: 'auto', paddingBottom: showDayOneMeta ? '1rem' : undefined }}>
-                                            {!isModernEvent && !eventId.includes('2024') && chartResults.length > 1 && (
-                                                <div className='chart-description'>
-                                                    <p>* Total count for each deck archetype from {label(2)}</p>
+                                        {metaView === 'bar' && (
+                                            <div className='chart-container-wrapper' style={{ overflowX: 'auto', paddingBottom: showDayOneMeta ? '1rem' : undefined }}>
+                                                <div className='chart-container' style={{ minWidth: `${Math.max(chartData.labels.length * 50, 600)}px`, height: '400px' }}>
+                                                    <Bar
+                                                        key={`bar-${eventId}-${division}-${showDayOneMeta}-${showConversionRate}`}
+                                                        ref={chartRef}
+                                                        data={chartData}
+                                                        options={chartOptions}
+                                                        plugins={[barSpritePlugin]}
+                                                    />
                                                 </div>
-                                            )}
-                                            <div className='chart-container' style={{ minWidth: `${Math.max(chartData.labels.length * 50, 600)}px`, height: '400px' }}>
-                                                <Bar ref={chartRef} data={chartData} options={chartOptions} />
                                             </div>
-                                        </div>
+                                        )}
+                                        {metaView === 'doughnut' && (
+                                            <div className="pie-chart-container">
+                                                <div className="meta-doughnut-canvas">
+                                                    <Doughnut
+                                                        ref={doughnutChartRef}
+                                                        key={`doughnut-${eventId}-${division}-${doughnutRows.length}`}
+                                                        data={doughnutData}
+                                                        options={pieOptions}
+                                                        plugins={[spriteOnDoughnutPlugin]}
+                                                    />
+                                                </div>
+                                                <div className="meta-pie-legend">
+                                                    {metaShareRows.map(deck => (
+                                                        <div
+                                                            key={deck.key}
+                                                            className={`legend-row ${hoveredDoughnutIndex !== null && doughnutRows[hoveredDoughnutIndex]?.key === deck.key ? 'legend-row-highlighted' : ''}`}
+                                                            onMouseEnter={() => {
+                                                                const index = doughnutRows.findIndex(row => row.key === deck.key);
+
+                                                                if (index === -1) return;
+
+                                                                setHoveredDoughnutIndex(index);
+
+                                                                const chart = doughnutChartRef.current;
+                                                                if (!chart) return;
+
+                                                                chart.setActiveElements([
+                                                                    {
+                                                                        datasetIndex: 0,
+                                                                        index
+                                                                    }
+                                                                ]);
+
+                                                                chart.tooltip.setActiveElements(
+                                                                    [
+                                                                        {
+                                                                            datasetIndex: 0,
+                                                                            index
+                                                                        }
+                                                                    ],
+                                                                    {
+                                                                        x: chart.chartArea.left + chart.chartArea.width / 2,
+                                                                        y: chart.chartArea.top + chart.chartArea.height / 2
+                                                                    }
+                                                                );
+
+                                                                chart.update();
+                                                            }}
+                                                            onMouseLeave={() => {
+                                                                setHoveredDoughnutIndex(null);
+
+                                                                const chart = doughnutChartRef.current;
+                                                                if (!chart) return;
+
+                                                                chart.setActiveElements([]);
+                                                                chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                                                                chart.update();
+                                                            }}
+                                                        >
+                                                            <div className="legend-sprites">
+                                                                {(deck.sprites || []).map(sprite => (
+                                                                    <img
+                                                                        key={sprite}
+                                                                        src={`/assets/sprites/${sprite}.png`}
+                                                                        alt={sprite}
+                                                                    />
+                                                                ))}
+                                                            </div>
+
+                                                            <span>{deck.key}</span>
+
+                                                            <strong>{deck.percent}%</strong>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {metaView === 'list' && (
+                                            <div className="meta-share-list">
+                                                {metaShareRows.map(deck => (
+                                                    <div key={deck.key} className="meta-share-list-item">
+                                                        <div className="meta-share-list-name">
+                                                            <div className="meta-share-list-sprites">
+                                                                {(deck.sprites || []).map(sprite => (
+                                                                    <img
+                                                                        key={sprite}
+                                                                        src={`/assets/sprites/${sprite}.png`}
+                                                                        alt={sprite}
+                                                                    />
+                                                                ))}
+                                                            </div>
+
+                                                            <span>{deck.key}</span>
+                                                        </div>
+
+                                                        <div className="meta-share-list-counts">
+                                                            <strong>{deck.count}</strong>
+                                                            <span>{deck.percent}%</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </>
                                 )}
-
                                 {statView === 'decklists' && isChartReady && (
                                     <>
                                         <div className='deck-archetypes'>
@@ -2971,12 +3351,23 @@ const EventPage = () => {
                                                                         );
                                                                     }
 
-                                                                    // otherwise compute %
                                                                     const pct = ((wins + ties * 0.5) / total) * 100;
                                                                     const intensity = Math.abs(pct - 50) / 50;
-                                                                    const bg = pct >= 50
-                                                                        ? `rgba(18,144,235,${intensity})`
-                                                                        : `rgba(235,18,18,${intensity})`;
+                                                                    const isDarkMode = theme.themeName === 'dark';
+
+                                                                    let bg;
+
+                                                                    if (isDarkMode && Math.abs(pct - 50) < 0.01) {
+                                                                        bg = '#27292c';
+                                                                    } else {
+                                                                        bg = pct >= 50
+                                                                            ? isDarkMode
+                                                                                ? `rgba(47, 129, 177, ${0.18 + intensity * 0.72})`
+                                                                                : `rgba(18, 144, 235, ${intensity})`
+                                                                            : isDarkMode
+                                                                                ? `rgba(164, 55, 65, ${0.18 + intensity * 0.72})`
+                                                                                : `rgba(235, 18, 18, ${intensity})`;
+                                                                    }
 
                                                                     return (
                                                                         <td

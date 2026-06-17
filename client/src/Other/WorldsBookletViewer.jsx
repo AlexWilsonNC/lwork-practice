@@ -62,7 +62,13 @@ export default function WorldsBookletViewer() {
             <h1>{year} Worlds Booklet</h1>
 
             <br></br>
-            <a style={{color: 'red !important'}} href={`'/tournaments/${year}_WORLDS'`}></a>
+            <Link
+                to={`/tournaments/${year}_WORLDS`}
+                style={{ color: '#1290eb' }}
+                className='link-to-worlds-event-page'
+            >
+                View {year} Worlds Event Page
+            </Link>
             <br></br>
 
             <section className="scan-stage">

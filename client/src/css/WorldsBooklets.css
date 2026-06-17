@@ -278,6 +278,7 @@
     .booklet-viewer-page h1 {
         transform: scale(0.9);
     }
+    .link-to-worlds-event-page {font-size: 14px;}
 }
 @media screen and (max-width: 450px) {
     .scan-controls button {
