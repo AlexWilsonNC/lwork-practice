@@ -562,6 +562,11 @@ const EventPageContent = styled.div`
         color: ${({ theme }) => theme.themeName === 'dark' ? '#f5f5f5' : '#111'};
         text-shadow: ${({ theme }) => theme.themeName === 'dark' ? '0 1px 2px rgba(0,0,0,0.65)' : 'none'};
     }
+    .results-country-filter {color: ${({ theme }) => theme.text};}
+    .results-country-filter {background: ${({ theme }) => theme.resultscountryfilter};}
+    .player-search-wrapper input {background: ${({ theme }) => theme.searchwrapperinputbg};}
+    .country-filter-toggle {background: ${({ theme }) => theme.searchwrapperbtn};}
+    .country-filter-toggle {color: ${({ theme }) => theme.text};}
 `;
 
 const cleanSpriteName = url => {

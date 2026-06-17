@@ -113,6 +113,9 @@ export const lightTheme = {
   bookletButtons: '#2f2f2f',
   scanCtrlButtons: '#2f2f2f',
   statsBtns: 'grey',
+  resultscountryfilter: 'rgba(128, 128, 128, 0.15)',
+  searchwrapperinputbg: '#FFF',
+  searchwrapperbtn: '#FFF',
 };
 
 const decklistSvgDark = `
@@ -219,4 +222,7 @@ export const darkTheme = {
   bookletButtons: 'rgb(83, 83, 83)',
   scanCtrlButtons: 'rgba(38, 127, 182, 0.75)',
   statsBtns: '#505050',
+  resultscountryfilter: 'rgba(101, 127, 153, 0.20)',
+  searchwrapperinputbg: 'rgba(101, 127, 153, 0.20)',
+  searchwrapperbtn: 'rgba(130, 146, 161, 0.35)',
 };
