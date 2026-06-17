@@ -871,7 +871,8 @@ object-assign
         visibility: visible;
         opacity: 1;
     }
-    .matchup-matrix th:first-child {
+    .matchup-matrix th:first-child,
+    .matchup-matrix thead th {
         background-color: ${({theme:e})=>e.themeName==="dark"?"#27292c":"#fff"};
     }
     .matchup-matrix-table th,
