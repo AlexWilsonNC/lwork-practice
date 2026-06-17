@@ -115,7 +115,7 @@ export const lightTheme = {
   statsBtns: 'grey',
   resultscountryfilter: 'rgba(128, 128, 128, 0.15)',
   searchwrapperinputbg: '#FFF',
-  searchwrapperbtn: '#FFF',
+  searchwrapperbtn: 'rgb(230, 230, 230)',
 };
 
 const decklistSvgDark = `

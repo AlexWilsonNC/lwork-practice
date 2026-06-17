@@ -517,7 +517,7 @@ const EventPageContent = styled.div`
         text-align: center;
         margin-top: 5px;
     }
-    .link-to-playerrecords {
+    .link-to-playerrecords, .results-country-filter, .country-filter-toggle, .meta-share-table {
         color: ${({ theme }) => theme.text};
     }
     .link-to-playerrecords:hover {
@@ -562,11 +562,9 @@ const EventPageContent = styled.div`
         color: ${({ theme }) => theme.themeName === 'dark' ? '#f5f5f5' : '#111'};
         text-shadow: ${({ theme }) => theme.themeName === 'dark' ? '0 1px 2px rgba(0,0,0,0.65)' : 'none'};
     }
-    .results-country-filter {color: ${({ theme }) => theme.text};}
     .results-country-filter {background: ${({ theme }) => theme.resultscountryfilter};}
     .player-search-wrapper input {background: ${({ theme }) => theme.searchwrapperinputbg};}
     .country-filter-toggle {background: ${({ theme }) => theme.searchwrapperbtn};}
-    .country-filter-toggle {color: ${({ theme }) => theme.text};}
 `;
 
 const cleanSpriteName = url => {
@@ -833,9 +831,8 @@ const EventPage = () => {
     const [fetchedDayOneCount, setFetchedDayOneCount] = useState(null);
     const [dataDay, setDataDay] = useState('day2'); // 'day2' or 'day1'
     const [showAllCardsList, setShowAllCardsList] = useState(false);
-    const [matchupDay, setMatchupDay] = useState('day2');
+    const [matchupDay, setMatchupDay] = useState('combined');
     const [matchupView, setMatchupView] = useState('matrix');
-
     const [eliminatedDecks, setEliminatedDecks] = useState([]);
     const [loadingEliminatedDecks, setLoadingEliminatedDecks] = useState(false);
     const [showAllDecks, setShowAllDecks] = useState(false);
@@ -855,6 +852,7 @@ const EventPage = () => {
     const didFetchCounts = useRef({});
     const [hoveredDoughnutIndex, setHoveredDoughnutIndex] = useState(null);
     const doughnutChartRef = useRef(null);
+    const [showAllAverageCards, setShowAllAverageCards] = useState(false);
 
     useEffect(() => {
         didFetchCounts.current[division] = false;
@@ -1104,7 +1102,9 @@ const EventPage = () => {
         setShowCountryFilter(false);
         setSelectedCountry('');
     }, [division]);
-
+    useEffect(() => {
+        setShowAllAverageCards(false);
+    }, [selectedArchetype, dataDay, showTop30]);
 
     useEffect(() => {
         const shouldUsePhase1 =
@@ -1353,6 +1353,10 @@ const EventPage = () => {
             : (eventId === '2007_WORLDS' && division === 'masters')
                 ? mastersResults.slice(0, 16)
                 : results;
+
+    const visibleAverageCards = showAllAverageCards
+        ? averageCardCounts
+        : averageCardCounts.slice(0, 30);
 
     const deckTypeCount = chartResults.reduce((acc, player) => {
         let sprite1 = player.sprite1 || '';
@@ -2094,20 +2098,23 @@ const EventPage = () => {
 
     const conversionMetaRows = combinedData
         .map(d => {
-            const matchingDeck =
-                dayOneTypeArray.find(deck => deck.key === d.label) ||
-                nonBlankDecks.find(deck => deck.key === d.label);
+            const matchingDayOneDeck = dayOneTypeArray.find(deck => deck.key === d.label);
+            const matchingDayTwoDeck = nonBlankDecks.find(deck => deck.key === d.label);
 
             return {
                 key: d.label,
-                count: Number(d.conversionRate),
-                countLabel: `${Number(d.conversionRate).toFixed(1)}%`,
+
+                // this keeps the pie hover as real deck count
+                count: matchingDayTwoDeck?.count || 0,
+
+                // this keeps the legend as conversion %
                 percent: Number(d.conversionRate).toFixed(1),
-                sprites: matchingDeck?.sprites || []
+
+                sprites: matchingDayOneDeck?.sprites || matchingDayTwoDeck?.sprites || []
             };
         })
         .filter(deck => deck.key && deck.key !== 'blank-')
-        .sort((a, b) => b.count - a.count);
+        .sort((a, b) => Number(b.percent) - Number(a.percent));
 
     const metaShareRows = showConversionRate
         ? conversionMetaRows
@@ -3011,8 +3018,8 @@ const EventPage = () => {
                                         </div>
                                         {isModernEvent && chartResults.length > 16 && (
                                             <div className='chart-description'>
-                                                {showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(1)}</p>}
-                                                {!showDayOneMeta && !showConversionRate && <p>* Total count for each deck archetype from {label(2)}</p>}
+                                                {showDayOneMeta && !showConversionRate && <p>* Total count for each archetype from {label(1)}</p>}
+                                                {!showDayOneMeta && !showConversionRate && <p>* Total count for each archetype from {label(2)} only</p>}
                                                 {showConversionRate && (
                                                     <p>* Conversion rate of each archetype, from {label(1)} into {label(2)}<br />
                                                         &nbsp;&nbsp;&nbsp;&nbsp;(decimal values = percentage)
@@ -3119,30 +3126,44 @@ const EventPage = () => {
                                             </div>
                                         )}
                                         {metaView === 'list' && (
-                                            <div className="meta-share-list">
-                                                {metaShareRows.map(deck => (
-                                                    <div key={deck.key} className="meta-share-list-item">
-                                                        <div className="meta-share-list-name">
-                                                            <div className="meta-share-list-sprites">
-                                                                {(deck.sprites || []).map(sprite => (
-                                                                    <img
-                                                                        key={sprite}
-                                                                        src={`/assets/sprites/${sprite}.png`}
-                                                                        alt={sprite}
-                                                                    />
-                                                                ))}
-                                                            </div>
+                                            <table className="meta-share-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Archetype</th>
+                                                        <th></th>
+                                                        <th style={{ textAlign: 'center' }}>Players</th>
+                                                        <th style={{ textAlign: 'center' }}>Meta %</th>
+                                                    </tr>
+                                                </thead>
 
-                                                            <span>{deck.key}</span>
-                                                        </div>
+                                                <tbody>
+                                                    {metaShareRows.map(deck => (
+                                                        <tr key={deck.key}>
+                                                            <td>
+                                                                <div className="meta-share-list-sprites">
+                                                                    {(deck.sprites || []).map(sprite => (
+                                                                        <img
+                                                                            key={sprite}
+                                                                            src={`/assets/sprites/${sprite}.png`}
+                                                                            alt={sprite}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </td>
 
-                                                        <div className="meta-share-list-counts">
-                                                            <strong>{deck.count}</strong>
-                                                            <span>{deck.percent}%</span>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                            <td>{deck.key}</td>
+
+                                                            <td style={{ textAlign: 'center' }}>
+                                                                {deck.count}
+                                                            </td>
+
+                                                            <td style={{ textAlign: 'center' }}>
+                                                                {deck.percent}%
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         )}
                                     </>
                                 )}
@@ -3172,7 +3193,7 @@ const EventPage = () => {
                                         </div>
                                         {selectedArchetype && (
                                             <div className='average-card-counts'>
-                                                <p>Average card count from all {dataDay === 'day2' ? label(2) : label(1)}{' '}
+                                                <p>Average card count from all {dataDay === 'day2' ? label(2) : ''}{' '}
                                                     <strong style={{ color: '#1290eb' }}>
                                                         {selectedArchetype === 'blank-' ? 'Unknown' : selectedArchetype}
                                                     </strong> lists
@@ -3185,13 +3206,23 @@ const EventPage = () => {
                                                     </button>
                                                 </div>
                                                 <div className="deck-cards">
-                                                    {averageCardCounts.length > 0 ? averageCardCounts.map((card, idx) => (
+                                                    {visibleAverageCards.length > 0 ? visibleAverageCards.map((card, idx) => (
                                                         <div key={idx} className="card-container-avg" onClick={() => handleCardClick(card)}>
                                                             <img src={cardImageUrl(card)} alt={card.name} />
                                                             <div className="card-count-avg">{card.averageCount}</div>
                                                         </div>
                                                     )) : <p></p>}
                                                 </div>
+                                                {averageCardCounts.length > 30 && (
+                                                    <button
+                                                        className="expand-average-cards-btn"
+                                                        onClick={() => setShowAllAverageCards(prev => !prev)}
+                                                    >
+                                                        {showAllAverageCards
+                                                            ? 'Show Less Cards'
+                                                            : `Show All ${averageCardCounts.length} Cards`}
+                                                    </button>
+                                                )}
                                             </div>
                                         )}
                                         <div className='filtered-results'>
@@ -3213,6 +3244,12 @@ const EventPage = () => {
                                         <h3 className='stats-tab-h3-label'>Archetype Records</h3>
                                         <div className="day-toggle-buttons" style={{ margin: '1rem 0' }}>
                                             <button
+                                                onClick={() => setMatchupDay('combined')}
+                                                className={matchupDay === 'combined' ? 'active-button' : ''}
+                                            >
+                                                Overall
+                                            </button>
+                                            <button
                                                 onClick={() => setMatchupDay('day2')}
                                                 className={matchupDay === 'day2' ? 'active-button' : ''}
                                             >{label(2)}</button>
@@ -3220,18 +3257,25 @@ const EventPage = () => {
                                                 onClick={() => setMatchupDay('day1')}
                                                 className={matchupDay === 'day1' ? 'active-button' : ''}
                                             >{label(1)}</button>
-                                            <button
-                                                onClick={() => setMatchupDay('combined')}
-                                                className={matchupDay === 'combined' ? 'active-button' : ''}
-                                            >
-                                                Combined
-                                            </button>
+                                        </div>
+                                        <div className='chart-description'>
+                                            {matchupDay === 'day1' && (
+                                                <p>* Records for each archetype from {label(1)} rounds only</p>
+                                            )}
+
+                                            {matchupDay === 'day2' && (
+                                                <p>* Records for each archetype from {label(2)} rounds only</p>
+                                            )}
+
+                                            {matchupDay === 'combined' && (
+                                                <p>* Records for each archetype from both {label(1)} and {label(2)} rounds</p>
+                                            )}
                                         </div>
                                         <table className="matchup-table archetype-records">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
                                                     <th>Archetype</th>
+                                                    <th></th>
                                                     <th style={{ textAlign: 'start' }}>Record</th>
                                                     <th style={{ textAlign: 'center' }}>Win %</th>
                                                 </tr>
@@ -3271,6 +3315,12 @@ const EventPage = () => {
                                         <h3 className='stats-tab-h3-label'>VS Matchup Data</h3>
                                         <div className="day-toggle-buttons matchup-and-record-data-btns" style={{ margin: '1rem 0' }}>
                                             <button
+                                                onClick={() => setMatchupDay('combined')}
+                                                className={matchupDay === 'combined' ? 'active-button' : ''}
+                                            >
+                                                Overall
+                                            </button>
+                                            <button
                                                 onClick={() => setMatchupDay('day2')}
                                                 className={matchupDay === 'day2' ? 'active-button' : ''}
                                             >{label(2)}</button>
@@ -3278,41 +3328,48 @@ const EventPage = () => {
                                                 onClick={() => setMatchupDay('day1')}
                                                 className={matchupDay === 'day1' ? 'active-button' : ''}
                                             >{label(1)}</button>
-                                            <button
-                                                onClick={() => setMatchupDay('combined')}
-                                                className={matchupDay === 'combined' ? 'active-button' : ''}
-                                            >
-                                                Combined
-                                            </button>
                                         </div>
+                                        <div className='chart-description' style={{ marginBottom: '15px' }}>
+                                            {matchupDay === 'day1' && (
+                                                <p>* Records for each archetype from {label(1)} rounds only</p>
+                                            )}
 
+                                            {matchupDay === 'day2' && (
+                                                <p>* Records for each archetype from {label(2)} rounds only</p>
+                                            )}
+
+                                            {matchupDay === 'combined' && (
+                                                <p>* Records for each archetype from both {label(1)} and {label(2)} rounds</p>
+                                            )}
+                                        </div>
                                         {statView === 'matchups' && showMatchupsTab && (
-                                            <div className="matchup-matrix-wrapper">
+                                            <>
                                                 <ul className='matchups-graph-instructions'>
                                                     <li>Pick a deck on the left side (↕ row).</li>
                                                     <li>Move across to a deck on the top (↔ column).</li>
                                                     <li>The percentage in the box is the row deck's <strong>win</strong>% against the column deck.</li>
                                                 </ul>
-                                                <table className="matchup-matrix">
-                                                    <thead>
-                                                        <tr>
-                                                            {/* top-left corner blank */}
-                                                            <th>vs</th>
-                                                            {archetypes.map(ck => {
-                                                                const sprites = spriteMap[ck] || [];
-                                                                return (
-                                                                    <th key={ck} className="matrix-header-cell">
-                                                                        {sprites.map(s => {
-                                                                            return (
-                                                                                <img
-                                                                                    key={s}
-                                                                                    src={`/assets/sprites/${s}.png`}
-                                                                                    alt={s}
-                                                                                    className="matrix-header-sprite"
-                                                                                />
-                                                                            );
-                                                                        })}
-                                                                        {/* <button
+                                                <div className="matchup-matrix-wrapper">
+                                                    <table className="matchup-matrix">
+                                                        <thead>
+                                                            <tr>
+                                                                {/* top-left corner blank */}
+                                                                <th>vs</th>
+                                                                {archetypes.map(ck => {
+                                                                    const sprites = spriteMap[ck] || [];
+                                                                    return (
+                                                                        <th key={ck} className="matrix-header-cell">
+                                                                            {sprites.map(s => {
+                                                                                return (
+                                                                                    <img
+                                                                                        key={s}
+                                                                                        src={`/assets/sprites/${s}.png`}
+                                                                                        alt={s}
+                                                                                        className="matrix-header-sprite"
+                                                                                    />
+                                                                                );
+                                                                            })}
+                                                                            {/* <button
                                                                             className="matrix-info-btn"
                                                                             onClick={() => {
                                                                                 setInfoArchetype(ck);
@@ -3321,84 +3378,85 @@ const EventPage = () => {
                                                                         >
                                                                             ℹ️
                                                                         </button> */}
-                                                                    </th>
-                                                                );
-                                                            })}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {archetypes.map(rk => (
-                                                            <tr key={rk}>
-                                                                <th className='bottom-border-matrix'>
-                                                                    {spriteMap[rk]?.map(spr => (
-                                                                        <img
-                                                                            key={spr}
-                                                                            src={`/assets/sprites/${spr}.png`}
-                                                                            alt={spr}
-                                                                            className="matrix-header-sprite"
-                                                                        />
-                                                                    ))}
-                                                                </th>
-                                                                {archetypes.map(ck => {
-                                                                    const { wins, losses, ties } = headToHead[rk][ck];
-                                                                    const total = wins + losses + ties;
-
-                                                                    // no matches → blank cell
-                                                                    if (total === 0) {
-                                                                        return (
-                                                                            <td
-                                                                                key={ck}
-                                                                                style={{
-                                                                                    background: 'transparent',
-                                                                                    textAlign: 'center',
-                                                                                    fontVariantNumeric: 'tabular-nums',
-                                                                                }}
-                                                                            />
-                                                                        );
-                                                                    }
-
-                                                                    const pct = ((wins + ties * 0.5) / total) * 100;
-                                                                    const intensity = Math.abs(pct - 50) / 50;
-                                                                    const isDarkMode = theme.themeName === 'dark';
-
-                                                                    let bg;
-
-                                                                    if (isDarkMode && Math.abs(pct - 50) < 0.01) {
-                                                                        bg = '#27292c';
-                                                                    } else {
-                                                                        bg = pct >= 50
-                                                                            ? isDarkMode
-                                                                                ? `rgba(47, 129, 177, ${0.18 + intensity * 0.72})`
-                                                                                : `rgba(18, 144, 235, ${intensity})`
-                                                                            : isDarkMode
-                                                                                ? `rgba(164, 55, 65, ${0.18 + intensity * 0.72})`
-                                                                                : `rgba(235, 18, 18, ${intensity})`;
-                                                                    }
-
-                                                                    return (
-                                                                        <td
-                                                                            key={ck}
-                                                                            className="matchup-matrix-cell"
-                                                                            onClick={() => {
-                                                                                setInfoArchetype(rk);
-                                                                                setInfoOpponentArchetype(ck);
-                                                                                setInfoStats({ wins, losses, ties });
-                                                                            }}
-                                                                            style={{
-                                                                                background: bg,
-                                                                                textAlign: 'center',
-                                                                                fontVariantNumeric: 'tabular-nums',
-                                                                            }}
-                                                                        >
-                                                                            {pct.toFixed(2)}%
-                                                                        </td>
+                                                                        </th>
                                                                     );
                                                                 })}
                                                             </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                        </thead>
+                                                        <tbody>
+                                                            {archetypes.map(rk => (
+                                                                <tr key={rk}>
+                                                                    <th className='bottom-border-matrix'>
+                                                                        {spriteMap[rk]?.map(spr => (
+                                                                            <img
+                                                                                key={spr}
+                                                                                src={`/assets/sprites/${spr}.png`}
+                                                                                alt={spr}
+                                                                                className="matrix-header-sprite"
+                                                                            />
+                                                                        ))}
+                                                                    </th>
+                                                                    {archetypes.map(ck => {
+                                                                        const { wins, losses, ties } = headToHead[rk][ck];
+                                                                        const total = wins + losses + ties;
+
+                                                                        // no matches → blank cell
+                                                                        if (total === 0) {
+                                                                            return (
+                                                                                <td
+                                                                                    key={ck}
+                                                                                    style={{
+                                                                                        background: 'transparent',
+                                                                                        textAlign: 'center',
+                                                                                        fontVariantNumeric: 'tabular-nums',
+                                                                                    }}
+                                                                                />
+                                                                            );
+                                                                        }
+
+                                                                        const pct = ((wins + ties * 0.5) / total) * 100;
+                                                                        const intensity = Math.abs(pct - 50) / 50;
+                                                                        const isDarkMode = theme.themeName === 'dark';
+
+                                                                        let bg;
+
+                                                                        if (isDarkMode && Math.abs(pct - 50) < 0.01) {
+                                                                            bg = '#27292c';
+                                                                        } else {
+                                                                            bg = pct >= 50
+                                                                                ? isDarkMode
+                                                                                    ? `rgba(47, 129, 177, ${0.18 + intensity * 0.72})`
+                                                                                    : `rgba(18, 144, 235, ${intensity})`
+                                                                                : isDarkMode
+                                                                                    ? `rgba(164, 55, 65, ${0.18 + intensity * 0.72})`
+                                                                                    : `rgba(235, 18, 18, ${intensity})`;
+                                                                        }
+
+                                                                        return (
+                                                                            <td
+                                                                                key={ck}
+                                                                                className="matchup-matrix-cell"
+                                                                                onClick={() => {
+                                                                                    setInfoArchetype(rk);
+                                                                                    setInfoOpponentArchetype(ck);
+                                                                                    setInfoStats({ wins, losses, ties });
+                                                                                }}
+                                                                                style={{
+                                                                                    background: bg,
+                                                                                    textAlign: 'center',
+                                                                                    fontVariantNumeric: 'tabular-nums',
+                                                                                }}
+                                                                            >
+                                                                                {pct.toFixed(2)}%
+                                                                            </td>
+                                                                        );
+                                                                    })}
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </>
                                         )}
                                     </div>
                                 )}
