@@ -12,6 +12,17 @@
  .margin-top-article {
     margin-top: 25px !important;
  }
+ .articles-toggle-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 80%;
+    font-size: 13px;
+    margin-bottom: 10px;
+ }
+ .articles-toggle-top a:hover {
+    color: #1290eb !important;
+ }
 .article-title {
     margin-bottom: 10px;
     display: flex;
@@ -263,6 +274,10 @@
     .article-content {
         width: 90%;
     }
+    .articles-toggle-top {
+        width: 90%;
+        font-size: 12px;
+    }
     .article-title {
         width:90%;
     }
@@ -273,6 +288,9 @@
     .author-bio {
         width: 90%;
     }
+    .table-of-contents {
+        width: 90%;
+    }
 }
 @media screen and (max-width: 700px) {
     .image-and-text img {
@@ -280,6 +298,9 @@
     }
     .card-of-the-week-mid-multi {
         width: 28% !important; 
+    }
+    .articles-toggle-top {
+        font-size: 10px;
     }
     .column-text {
         width: 100%;
@@ -317,6 +338,9 @@
     .top-backtrack {
         width:95%;
         font-size: 11px;
+    }
+    .articles-toggle-top {
+        width: 95%;
     }
     .author-bio p,
     .author-bio a {
@@ -357,6 +381,12 @@
         font-size: 16px;
         border-radius: 5px;
         margin-top: -15px;
+    }
+    .table-of-contents {
+        width: 95%;
+    }
+    .table-of-contents a {
+        font-size: 13px;
     }
 }
 @media screen and (max-width: 500px) {
@@ -446,4 +476,153 @@
 .shortcircuited {
     margin-top: -16px;
     transform: scale(0.7);
+}
+
+/**/
+
+.all-articles-page {
+    padding: 25px 5vw 50px;
+    margin-top: -25px;
+}
+
+.articles-hero {
+    text-align: center;
+    margin: 0 auto 35px;
+}
+
+.articles-kicker {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0.65;
+    margin-bottom: 8px;
+}
+
+.articles-hero h1 {
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    margin-bottom: 10px;
+    text-align: start;
+}
+
+.articles-hero p {
+    opacity: 0.78;
+}
+
+.articles-grid {
+    max-width: 1150px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.article-card {
+    min-height: 360px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    color: #111;
+    text-decoration: none;
+    border-radius: 22px;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 14px 35px rgba(0,0,0,0.16);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid rgba(0,0,0,0.08);
+    overflow: visible;
+}
+
+.article-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.article-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 45px rgba(18,144,235,0.25);
+}
+
+.article-card-image {
+    display: none;
+}
+
+.article-card-content {
+    position: relative;
+    z-index: 2;
+
+    width: calc(100% - 50px);
+    margin-bottom: -75px;
+    padding: 16px;
+
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+    backdrop-filter: blur(8px);
+}
+
+.article-card-date {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1290eb;
+    margin-bottom: 7px;
+}
+
+.article-card h2 {
+    font-size: 20px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.article-card-preview {
+    font-size: 14px;
+    line-height: 1.35;
+    opacity: 0.75;
+    margin-bottom: 16px;
+}
+
+.article-card-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.article-card-author img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+@media screen and (max-width: 1100px) {
+    .all-articles-page {
+        min-height: 50vh;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .all-articles-page {
+        padding: 0 5vw 50px;
+    }
+}
+@media screen and (max-width: 900px) {
+    .articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media screen and (max-width: 560px) {
+    .all-articles-page {
+        padding: 0 16px 110px;
+    }
+    .articles-grid {
+        grid-template-columns: 1fr;
+        gap: 100px;
+    }
+    .article-card-image {
+        height: 190px;
+    }
 }

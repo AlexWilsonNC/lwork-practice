@@ -116,6 +116,7 @@ export const lightTheme = {
   resultscountryfilter: 'rgba(128, 128, 128, 0.15)',
   searchwrapperinputbg: '#FFF',
   searchwrapperbtn: 'rgb(230, 230, 230)',
+  articleContentBoxAllBg: 'rgba(255,255,255,0.75)',
 };
 
 const decklistSvgDark = `
@@ -225,4 +226,5 @@ export const darkTheme = {
   resultscountryfilter: 'rgba(101, 127, 153, 0.20)',
   searchwrapperinputbg: 'rgba(101, 127, 153, 0.20)',
   searchwrapperbtn: 'rgba(130, 146, 161, 0.35)',
+  articleContentBoxAllBg: 'rgba(0,0,0,0.75)',
 };

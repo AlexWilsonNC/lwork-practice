@@ -16,6 +16,12 @@ import rayeels from '../assets/article-images/rayeels.png';
 import empogor from '../assets/article-images/empogor.png';
 import hoohex from '../assets/article-images/hooh.png';
 import tornadusterrak from '../assets/article-images/tornkion.png';
+import sshEvsBanner from '../assets/article-images/sw-evs-banner.png';
+import sshBrsBanner from '../assets/article-images/sw-brs-banner.png';
+import swlorBanner from '../assets/article-images/sw-lor-banner.png';
+import btspalBanner from '../assets/article-images/bts-pal-banner.png';
+import btspafBanner from '../assets/article-images/bts-paf-banner.png';
+import melbourne22Image from '../assets/article-images/melbourne22.png';
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -29,6 +35,7 @@ const ArticleContainer = styled.div`
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
     }
+    .articles-toggle-top a {color: ${({ theme }) => theme.text};}
 `;
 
 const ArticleComponent = () => {
@@ -39,7 +46,7 @@ const ArticleComponent = () => {
     console.log(`Fetching article with ID: ${articleId}`);
     
     const articles = {
-      'modern-becomes-retro': article1,
+      'when-modern-becomes-retro': article1,
       'forgotten-format': article2,
     };
 
@@ -110,7 +117,44 @@ const ArticleComponent = () => {
           `<a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/2012/bw-drx' target='_blank'>
           <img class='decklist-image' src='${sixprizesscreensho}' alt='article Image' /></a>
           <br>`
-        );
+        )
+        .replace(
+          '{{sshEvsBanner}}',
+          `
+          <img class='decklist-image' src='${sshEvsBanner}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{sshBrsBanner}}',
+          `
+          <img class='decklist-image' src='${sshBrsBanner}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{swlorBanner}}',
+          `
+          <img class='decklist-image' src='${swlorBanner}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{btspalBanner}}',
+          `
+          <img class='decklist-image' src='${btspalBanner}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{btspafBanner}}',
+          `
+          <img class='decklist-image' src='${btspafBanner}' alt='article Image' /></a>
+          <br>`
+        )
+        .replace(
+          '{{melbourne22Image}}',
+          `
+          <img class='decklist-image' src='${melbourne22Image}' alt='article Image' /></a>
+          <br>`
+        )
+        ;
 
       setArticle({ ...selectedArticle, content: updatedContent });
     }
@@ -128,6 +172,9 @@ const ArticleComponent = () => {
   return (
     <div className='new-homepage'>
       <ArticleContainer className='article-container'>
+        <div className='articles-toggle-top'>
+          <a href='/'>Home</a>&nbsp;/&nbsp;<a href='/articles/all'>Articles</a>&nbsp;/&nbsp;<a style={{color:'#1290eb'}}>...</a>
+        </div>
         <div className='article-title'>
           <h2>{article.title}</h2>
           <p>By: {article.author} | <a href={article.authorSocialLink} target='_blank'>{article.authorSocial}</a> | {article.date}</p>

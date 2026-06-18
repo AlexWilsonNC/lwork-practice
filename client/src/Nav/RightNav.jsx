@@ -134,7 +134,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
         <div className='burger-resources'>
           <ul className='burgered-links-more'>
             <li><a href='/archive-updates'>Archive Updates</a></li>
-            {/* <li className='not-ready'><a href=''>Articles</a></li> */}
+            <li><a href='/articles/all'>Articles</a></li>
             <li>
               <a href='/deckbuilder' className='new-link-look'>
                 Deck Builder

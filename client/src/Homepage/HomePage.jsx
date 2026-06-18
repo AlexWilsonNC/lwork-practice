@@ -12,7 +12,6 @@ import playPokemonProfile from '../assets/profile-pics/play-pokemon-logo.png';
 import latestSet from '../assets/sets-filter-backgrounds/me/cri.jpg';
 import deckBuilder from '../../public/images/deckbuilder-preview.png';
 
-import article1 from '../Articles/whenModernBecomesRetro';
 import article2 from '../Articles/forgottenFormat';
 import patreonImg from '../assets/social-media-icons/patreon-red-old-logo.png';
 
@@ -57,7 +56,7 @@ const ArticleType = styled.div`
 const Homepage = () => {
     const { theme } = useTheme();
 
-    const articles = [article1, article2 /* Add more articles as needed */];
+    const articles = [article2 /* Add more articles as needed */];
 
     // Find the latest article
     const latestArticle = articles.reduce((latest, article) => {
@@ -208,7 +207,7 @@ const Homepage = () => {
                         <div className='homepage-box'>
                             <div className='flex-row-wide'>
                                 <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
-                                <a href='/articles/all' className='blue not-ready'>View All</a>
+                                <a href='/articles/all' className='blue'>View All</a>
                             </div>
                             <a href={`/articles/${latestArticle.id}`}>
                                 <WrappedFeature className="wrapped-feature">
@@ -434,7 +433,7 @@ const Homepage = () => {
                     <div className='homepage-box'>
                         <div className='flex-row-wide'>
                             <FeaturedHeaders className='featured-headers'>Latest Article</FeaturedHeaders>
-                            <a href='/articles/all' className='blue not-ready'>View All</a>
+                            <a href='/articles/all' className='blue'>View All</a>
                         </div>
                         <a href={`/articles/${latestArticle.id}`}>
                             <WrappedFeature className="wrapped-feature">

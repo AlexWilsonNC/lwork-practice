@@ -1,25 +1,54 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../css/articles.css';
+import styled from 'styled-components';
+import { useTheme } from '../contexts/ThemeContext';
+
+import whenModernBecomesRetro from '../Articles/whenModernBecomesRetro';
+import forgottenFormat from '../Articles/forgottenFormat';
+
+const AllArticlesHomePage = styled.div`
+  .article-card-content {color: ${({ theme }) => theme.text};}
+  .article-card-content {background: ${({ theme }) => theme.articleContentBoxAllBg};}
+`;
+
+const articles = [
+  forgottenFormat,
+  whenModernBecomesRetro,
+];
 
 const AllArticlesPage = () => {
-  // Example list of articles, replace with real data
-  const articles = [
-    { id: 1, title: 'When Modern Becomes Retro' },
-    { id: 2, title: 'Exploring the 2021 Meta' },
-    // Add more articles here
-  ];
-
+  const { theme } = useTheme();
   return (
-    <div>
-      <h1>All Articles</h1>
-      <ul>
+    <AllArticlesHomePage theme={theme} className="all-articles-page">
+      <section className="articles-hero">
+        {/* <h1>Latest Articles</h1>
+        <p>
+          Browse strategy, retro format breakdowns, archive updates, and Pokémon TCG history.
+        </p> */}
+      </section>
+      <section className="articles-grid">
         {articles.map((article) => (
-          <li key={article.id}>
-            <Link to={`/articles/${article.id}`}>{article.title}</Link>
-          </li>
+          <Link
+            key={article.id}
+            to={`/articles/${article.id}`}
+            className="article-card"
+            style={{ backgroundImage: `url(${article.headerImage})` }}
+          >
+            <div className="article-card-content">
+              <p className="article-card-date">{article.date}</p>
+              <h2>{article.title}</h2>
+              <p className="article-card-preview">{article.sneakPeakText}</p>
+
+              <div className="article-card-author">
+                <img src={article.authorImage} alt={article.author} />
+                <span>{article.author}</span>
+              </div>
+            </div>
+          </Link>
         ))}
-      </ul>
-    </div>
+      </section>
+    </AllArticlesHomePage>
   );
 };
 

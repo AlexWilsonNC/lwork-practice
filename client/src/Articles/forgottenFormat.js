@@ -1,4 +1,4 @@
-const article1 = {
+const article2 = {
   id: 'forgotten-format',
   title: 'A Forgotten Format: BW - DRX',
   author: 'Simon Boschert',
@@ -30,7 +30,7 @@ const article1 = {
 <h3 id='formatview'>Format Overview</h3>
 <hr class='title-hr'></hr>
 
-<p>To look at the <a href='/cards/BLW' target='_blank'>Black & White</a> - <a href='/cards/DRX' target='_blank'>Dragons Exalted</a> format as a whole, we need to examine the surrounding formats to determine why this era has been mostly forgotten or passed over in retrospect. Firstly, I think that one of the “features” of the BLW-BCR format is actually to its detriment. ACE SPECs are, in my opinion, fundamentally flawed card designs that cause major balancing issues in any format they reside in. While having options between multiple ACE SPECs makes them feel more diverse, the BLW-BCR format overwhelmingly plays Computer Search, with the occasional Gold Potion here or there. Computer Search allowing you to find any one card in your deck is extremely powerful within the context of the game, as these sorts of effects don’t commonly pop up. Coupled with the fact that it was limited to one copy per deck, ACE SPECs could create imbalances in momentum when one player found it at a more opportune time than the other. Landorus-EX, another release in the Boundaries Crossed set, created pressure from the first turn of the game. It required minimal energy investment to start setting up relevant damage numbers for KOs, while also having a strong typing against some of the main attackers in the format.</p>
+<p>To look at the <a href='https://alexwilsonnc.github.io/ptcg-legends-legacy/decks-by-era/2012/bw-drx' target='_blank'>Black & White - Dragons Exalted</a> format as a whole, we need to examine the surrounding formats to determine why this era has been mostly forgotten or passed over in retrospect. Firstly, I think that one of the “features” of the BLW-BCR format is actually to its detriment. ACE SPECs are, in my opinion, fundamentally flawed card designs that cause major balancing issues in any format they reside in. While having options between multiple ACE SPECs makes them feel more diverse, the BLW-BCR format overwhelmingly plays Computer Search, with the occasional Gold Potion here or there. Computer Search allowing you to find any one card in your deck is extremely powerful within the context of the game, as these sorts of effects don’t commonly pop up. Coupled with the fact that it was limited to one copy per deck, ACE SPECs could create imbalances in momentum when one player found it at a more opportune time than the other. Landorus-EX, another release in the Boundaries Crossed set, created pressure from the first turn of the game. It required minimal energy investment to start setting up relevant damage numbers for KOs, while also having a strong typing against some of the main attackers in the format.</p>
 
 <p>The Worlds 2012 format had all the HeartGold & SoulSilver cards available to play with, which led to unique decks, but not necessarily ones that felt designed together. Cards like Portrait Smeargle and Junk Arm made decks hyper-consistent and allowed you to reuse powerful cards and effects many times over. Additionally, Allergy Flower Vileplume placed Item Locks with relative ease, leading to game states that could have one player feeling helpless and entirely locked out of doing anything productive. I believe that many of the cards from those releases, such as Typhlosion Prime, Jirachi UL, Pokémon Collector, and Mew Prime, are on the backburner here when compared to cards like Mewtwo-EX and Darkrai-EX. They tend to be more enjoyable to play in the Worlds 2011 format, where they can be at the forefront of the decks that they are in.</p>
 
@@ -162,4 +162,4 @@ const article1 = {
 `
 };
 
-export default article1;
+export default article2;

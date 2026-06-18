@@ -38,7 +38,7 @@ function Footer() {
                         <div className='useful-row2'>
                             <a href='/about'>About</a>
                             <a href='/archive-updates'>Archive Updates</a>
-                            <a href='' className='not-ready'>Articles</a>
+                            <a href='/articles/all'>Articles</a>
                             <a href='/deckbuilder'>Deck Builder</a>
                             <a href='/rules-by-era'>Rules by Era</a>
                             <a href='/worlds-booklets'>Worlds Booklets</a>
