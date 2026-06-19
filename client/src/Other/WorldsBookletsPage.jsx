@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 
 const WorldsBookletPageMain = styled.main`
-    .booklet-button {
-        background-color: ${({ theme }) => theme.bookletButtons};
-    }
+    // .booklet-button {
+    //     background-color: ${({ theme }) => theme.bookletButtons};
+    // }
 `;
 
 const covers = import.meta.glob('../assets/worlds-booklets/*/cover.{jpg,jpeg,png,webp}', {
@@ -45,12 +45,15 @@ export default function WorldsBookletsPage() {
                         to={`/worlds-booklets/${year}`}
                         className="booklet-card"
                     >
-                        <div className="booklet-cover-wrap">
-                            <img src={src} alt={`${year} Worlds Booklet`} />
-                        </div>
-
-                        <div className="booklet-button">
-                            {year} Worlds
+                        <div
+                            className="booklet-card-bg"
+                            style={{ backgroundImage: `url(${src})` }}
+                        >
+                            <div className="booklet-card-content">
+                                <div className="booklet-button">
+                                    {year} Worlds
+                                </div>
+                            </div>
                         </div>
                     </Link>
                 ))}

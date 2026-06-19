@@ -453,7 +453,7 @@ const EventPageContent = styled.div`
     color: ${({ theme }) => theme.text};
   }
     .stats-tab-h3-label {
-        color: grey;
+        color: ${({ theme }) => theme.text};
         margin-bottom: 10px;
     }
   .chart-description {

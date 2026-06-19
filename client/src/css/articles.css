@@ -402,6 +402,9 @@
         width:97%;
         font-size: 10px;
     }
+    .articles-toggle-top {
+        width: 97%;
+    }
     .article-content {
         width: 97%;
     }
@@ -444,6 +447,9 @@
         width:99%;
     }
     .article-content {
+        width: 99%;
+    }
+    .articles-toggle-top {
         width: 99%;
     }
     .top-article-image {
@@ -603,6 +609,10 @@
     .all-articles-page {
         min-height: 50vh;
     }
+    .articles-grid {
+        margin-bottom: 75px;
+    }
+    
 }
 @media screen and (max-width: 1000px) {
     .all-articles-page {
