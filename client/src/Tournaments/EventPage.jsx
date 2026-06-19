@@ -3129,7 +3129,7 @@ const EventPage = () => {
                                             <table className="meta-share-table">
                                                 <thead>
                                                     <tr>
-                                                        <th style={{ textAlign: 'start' }}>Archetype</th>
+                                                        <th style={{ padding: '0', textAlign: 'start' }}>Archetype</th>
                                                         <th></th>
                                                         <th style={{ textAlign: 'center' }}>Players</th>
                                                         <th style={{ textAlign: 'center' }}>Meta %</th>
@@ -3274,7 +3274,7 @@ const EventPage = () => {
                                         <table className="matchup-table archetype-records">
                                             <thead>
                                                 <tr>
-                                                    <th>Archetype</th>
+                                                    <th style={{ textAlign: 'start' }}>Archetype</th>
                                                     <th></th>
                                                     <th style={{ textAlign: 'start' }}>Record</th>
                                                     <th style={{ textAlign: 'center' }}>Win %</th>
