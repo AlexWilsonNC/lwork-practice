@@ -517,7 +517,7 @@ const EventPageContent = styled.div`
         text-align: center;
         margin-top: 5px;
     }
-    .link-to-playerrecords, .results-country-filter, .country-filter-toggle, .meta-share-table {
+    .link-to-playerrecords, .results-country-filter, .country-filter-toggle, .meta-share-table, .player-search-wrapper input {
         color: ${({ theme }) => theme.text};
     }
     .link-to-playerrecords:hover {
