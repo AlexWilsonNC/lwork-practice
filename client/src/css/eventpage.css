@@ -904,7 +904,7 @@
     }
     .matchup-table th, 
     .matchup-table td {
-        font-size: 10px;
+        font-size: 12px;
     }
     .link-to-playerrecords {
         font-size: 10px !important;
@@ -942,6 +942,9 @@
     .country-filter-toggle {
         font-weight: 600;
     }
+    .meta-share-table {
+        font-size: 12px;
+    }
 }
 @media screen and (max-width: 625px) {
     .regional-info {
@@ -949,6 +952,9 @@
         align-items: flex-start;
         padding: 15px 25px;
     } 
+    .meta-share-list-sprites img:nth-of-type(1) {
+        margin-left: -15px;
+    }
     .archetype-dropdown {
         padding: 2px 0;
     }

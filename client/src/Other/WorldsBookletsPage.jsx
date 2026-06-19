@@ -5,9 +5,10 @@ import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 
 const WorldsBookletPageMain = styled.main`
-    // .booklet-button {
-    //     background-color: ${({ theme }) => theme.bookletButtons};
-    // }
+    .booklet-card-content {
+        background: ${({ theme }) => theme.articleContentBoxAllBg};
+        color: ${({ theme }) => theme.text};
+    }
 `;
 
 const covers = import.meta.glob('../assets/worlds-booklets/*/cover.{jpg,jpeg,png,webp}', {

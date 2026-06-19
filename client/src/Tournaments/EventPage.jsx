@@ -3129,7 +3129,7 @@ const EventPage = () => {
                                             <table className="meta-share-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Archetype</th>
+                                                        <th style={{ textAlign: 'start' }}>Archetype</th>
                                                         <th></th>
                                                         <th style={{ textAlign: 'center' }}>Players</th>
                                                         <th style={{ textAlign: 'center' }}>Meta %</th>

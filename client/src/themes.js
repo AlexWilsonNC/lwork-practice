@@ -226,5 +226,5 @@ export const darkTheme = {
   resultscountryfilter: 'rgba(101, 127, 153, 0.20)',
   searchwrapperinputbg: 'rgba(101, 127, 153, 0.20)',
   searchwrapperbtn: 'rgba(130, 146, 161, 0.35)',
-  articleContentBoxAllBg: 'rgba(0,0,0,0.75)',
+  articleContentBoxAllBg: 'rgba(15,15,15,0.75)',
 };
