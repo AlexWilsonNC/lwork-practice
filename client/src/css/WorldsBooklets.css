@@ -271,15 +271,17 @@
         opacity: 1;
     }
 }
-/* @media screen and (max-width: 1000px) {
-    .booklets-hero p {
-        font-size: 14px;
-        margin-top: -25px;
+@media screen and (max-width: 1000px) {
+    .booklets-page {
+        padding-top: 10px;
     }
-} */
+}
 @media screen and (max-width: 800px) {
     .scan-stage {
         height: min(50vh, 780px);
+    }
+    .booklets-page {
+        padding-top: 0px;
     }
 }
 @media screen and (max-width: 600px) {
