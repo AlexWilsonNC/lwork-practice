@@ -284,6 +284,11 @@
         padding-top: 0px;
     }
 }
+@media screen and (max-width: 700px) {
+    .booklets-page {
+        margin-top: -20px;
+    }
+}
 @media screen and (max-width: 600px) {
     .scan-stage {
         height: min(40vh, 780px);
