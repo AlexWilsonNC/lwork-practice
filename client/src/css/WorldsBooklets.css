@@ -1,7 +1,7 @@
 .booklets-page,
 .booklet-viewer-page {
     min-height: 100vh;
-    padding: 0px 5vw 70px;
+    padding: 25px 5vw 70px;
     color: var(--text);
 }
 
