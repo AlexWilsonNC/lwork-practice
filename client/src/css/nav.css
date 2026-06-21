@@ -104,33 +104,11 @@ nav {
   .burgered-links,
   .burgered-links-more {
     list-style: none;
-    /* border-top-left-radius: 30px; */
-    border-bottom-left-radius: 30px;
   }
   .new-link-look {
     display: flex;
     align-items: center;
   }
-  .burgered-links li,
-  .burgered-links-more li {
-    transition: ease-in-out 0.3s;
-    margin-bottom: 25px;
-  }
-  .burgered-links-more li:nth-child(0),
-  .burgered-links-more li:nth-child(1),
-  .burgered-links-more li:nth-child(2),
-  .burgered-links-more li:nth-child(3),
-  .burgered-links-more li:nth-child(4),
-  .burgered-links-more li:nth-child(5) {
-    margin-bottom: 15px;
-  }
-  .burgered-links-more li:nth-child(6) {
-    margin-bottom: 0px;
-  }
-  /* .burgered-links li:hover,
-  .burgered-links-more li:hover {
-    margin-left: 10px;
-  } */
   .burger-resources {
     width: 93%;
     background-color: rgba(255, 255, 255, 0.25);
@@ -651,5 +629,58 @@ nav {
     }
     .mobile-nav-main-links a > .material-symbols-outlined:last-child {
       font-size: 30px;
+    }
+    .burgered-links-more a {
+      min-height: 40px;
+      margin-bottom: 4px;
+      gap: 5px;
+    }
+    .burgered-links-more a .material-symbols-outlined {
+      font-size: 26px;
+    }
+    .burgered-links-more a strong {
+      font-size: 18px;
+    }
+    .mobile-resources-title {
+      font-size: 11px;
+    }
+    .mobile-nav-actions-row {
+      height: 54px;
+      margin: 5px 0 10px;
+      gap: 8px;
+      padding: 0px 10px;
+    }
+    .mobile-account-link strong {font-size: 18px;margin-left: -5px;}
+    .mobile-account-link > .material-symbols-outlined:first-child {
+      font-size: 26px;
+    }
+    .mobile-account-link > .material-symbols-outlined:last-child {
+      font-size: 28px;
+    }
+    .theme-pill {
+      height: 35px;
+      width: 110px;
+      margin-left: -10px;
+    }
+    .theme-slider {
+      top: 4px;
+      left: 4px;
+      
+      width: 42.5px;
+      height: 27px;
+    }
+    .mobile-theme-toggle.is-dark .theme-slider {
+      transform: translateX(58px);
+    }
+    .mobile-theme-toggle.is-light .theme-slider {
+      transform: translateX(2px);
+    }
+    .burdered-socials {
+      border-radius: 25px;
+      height: 50px;
+    }
+    .burdered-socials img {
+      width: 39px;
+      border-radius: 10px;
     }
   }
