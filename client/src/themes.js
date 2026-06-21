@@ -43,7 +43,7 @@ export const lightTheme = {
   burgerTxt: '#FFF !important',
   toggleBorder: '#FFF',
   background: '#363537',
-  navBg: 'transparent',
+  navBg: '#FFF',
   navBtmBorder: 'none',
   featuredheadertext: 'rgb(70, 70, 70)',
   whiteBackground: '#FFF',
@@ -117,6 +117,9 @@ export const lightTheme = {
   searchwrapperinputbg: '#FFF',
   searchwrapperbtn: 'rgb(230, 230, 230)',
   articleContentBoxAllBg: 'rgba(255,255,255,0.75)',
+  burgerLinkCircle: 'rgba(255, 255, 255, 0.72);',
+  burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(255,255,255,.85), 0 5px 12px rgba(18,144,235,.08);',
+  burgerLinkSymbol: '#1290eb',
 };
 
 const decklistSvgDark = `
@@ -227,4 +230,7 @@ export const darkTheme = {
   searchwrapperinputbg: 'rgba(101, 127, 153, 0.20)',
   searchwrapperbtn: 'rgba(130, 146, 161, 0.35)',
   articleContentBoxAllBg: 'rgba(15,15,15,0.75)',
+  burgerLinkCircle: 'rgba(75, 75, 75, 0.72);',
+  burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(75,75,75,.85), 0 5px 12px rgba(18,144,235,.08);',
+  burgerLinkSymbol: 'white',
 };
