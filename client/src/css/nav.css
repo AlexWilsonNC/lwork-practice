@@ -341,7 +341,7 @@ nav {
   position: relative;
   z-index: 2;
   width: 100%;
-  margin-top: -5px;
+  margin-top: 5px;
 }
 
 .mobile-nav-main-links a {
@@ -611,12 +611,21 @@ nav {
 }
 
  @media screen and (max-width: 850px) {
+    .mobile-nav-top-bg {
+      height: 90px;
+    }
+    .mobile-nav-header {
+      height: 58px;
+    }
+    .mobile-nav-top-bg svg {
+      height: 42px;
+    }
     .mobile-nav-main-links {
-      margin-top: -25px;
+      margin-top: -15px;
     }
     .mobile-nav-main-links a {
       gap: 5px;
-      margin-bottom: 0;
+      margin-bottom: -8.5px;
     }
     .mobile-nav-main-links strong {
       font-size: 20px;
@@ -685,7 +694,6 @@ nav {
     }
     .mobile-nav-brand {
       font-size: 16px;
-      margin-top: -20px;
     }
     .mobile-nav-brand img {
       width: 30px;
