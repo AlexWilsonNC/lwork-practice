@@ -676,11 +676,19 @@ nav {
       transform: translateX(2px);
     }
     .burdered-socials {
-      border-radius: 25px;
+      border-radius: 999px;
       height: 50px;
     }
     .burdered-socials img {
       width: 39px;
       border-radius: 10px;
+    }
+    .mobile-nav-brand {
+      font-size: 16px;
+      margin-top: -20px;
+    }
+    .mobile-nav-brand img {
+      width: 30px;
+      height: 30px;
     }
   }
