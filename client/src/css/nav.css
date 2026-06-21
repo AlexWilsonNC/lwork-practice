@@ -631,3 +631,25 @@ nav {
   color: #1290eb;
   font-size: 31px;
 }
+
+ @media screen and (max-width: 850px) {
+    .mobile-nav-main-links {
+      margin-top: -25px;
+    }
+    .mobile-nav-main-links a {
+      gap: 5px;
+      margin-bottom: 0;
+    }
+    .mobile-nav-main-links strong {
+      font-size: 20px;
+    }
+    .mobile-nav-main-links a > .material-symbols-outlined:first-child {
+      width: 34px;
+      height: 34px;
+      border-radius: 5px;
+      font-size: 24px;
+    }
+    .mobile-nav-main-links a > .material-symbols-outlined:last-child {
+      font-size: 30px;
+    }
+  }
