@@ -125,7 +125,6 @@ nav {
   }
   .burdered-socials {
     width: 100%;
-    border-radius: 15px;
     height: 65px;
     display: flex;
     justify-content: center;
@@ -133,6 +132,7 @@ nav {
     padding-top: 5px;
     margin: 0;
     gap: 25px;
+    border-radius: 999px;
   }
   .burdered-socials img {
     width: 45px;
@@ -326,7 +326,7 @@ nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: white !important;
   font-weight: 900;
   font-size: 17px;
   letter-spacing: 1px;
@@ -439,6 +439,7 @@ nav {
   gap: 10px;
 
   border-radius: 16px;
+    overflow: hidden;
 
   backdrop-filter: blur(8px);
 }
@@ -668,7 +669,7 @@ nav {
     }
     .theme-pill {
       height: 35px;
-      width: 110px;
+      width: 100px;
       margin-left: -10px;
     }
     .theme-slider {
@@ -679,13 +680,12 @@ nav {
       height: 27px;
     }
     .mobile-theme-toggle.is-dark .theme-slider {
-      transform: translateX(58px);
+      transform: translateX(48px);
     }
     .mobile-theme-toggle.is-light .theme-slider {
       transform: translateX(2px);
     }
     .burdered-socials {
-      border-radius: 999px;
       height: 50px;
     }
     .burdered-socials img {

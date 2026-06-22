@@ -111,10 +111,10 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
       <BurgerOpen open={open} theme={theme} className='burgered-links'>
         <div className="mobile-nav-top-bg">
           <div className='mobile-nav-header'>
-            <div className="mobile-nav-brand">
+            <a href='/' className="mobile-nav-brand">
               <img src={pokeball} alt="PTCG Legends" />
               <span>PTCG LEGENDS</span>
-            </div>
+            </a>
           </div>
           <svg viewBox="0 0 430 110" preserveAspectRatio="none">
             <path
