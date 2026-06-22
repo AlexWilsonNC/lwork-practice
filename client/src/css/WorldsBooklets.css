@@ -262,6 +262,8 @@
     cursor: pointer;
 }
 
+.link-to-worlds-event-page:hover {color: rgb(177, 18, 235) !important;}
+
 @keyframes lightboxFadeIn {
     from {
         opacity: 0;

@@ -84,16 +84,6 @@ nav {
     position: relative;
     display: inline-block;
   }
-  /* .toggle-darkmode {
-    position: relative;
-    cursor: pointer;
-    transition: 0.5s;
-    width: 30px; height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 25px 0;
-  } */
   .burger:hover {
     cursor: pointer;
   }
@@ -297,6 +287,8 @@ nav {
   padding: 0 18px;
 
   background: linear-gradient(-145deg, #1290eb 0%, #1290eb 20%, #083fc0 100%);
+  /* pride month? */
+  /* background: linear-gradient(145deg, #be0000 0%, #c25700 14%, #d3bb00 28%, #1fba00 42%, #0070ba 56%, #6700ac 70%, #ad00b3 85%); */
   overflow: hidden;
 }
 .mobile-nav-top-bg::before,
@@ -322,6 +314,9 @@ nav {
   position: relative;
   z-index: 3;
 }
+.mobile-nav-header:hover .mobile-nav-brand img {
+  transform: rotate(0deg);
+}
 .mobile-nav-brand {
   display: flex;
   align-items: center;
@@ -335,6 +330,7 @@ nav {
   width: 34px;
   height: 34px;
   transform: rotate(-37.5deg);
+  transition: ease all 0.3s;
 }
 
 .mobile-nav-main-links {
@@ -387,10 +383,10 @@ nav {
   margin-left: 10px;
 }
 .mobile-nav-main-links a:hover > .material-symbols-outlined:first-child {
-  background: linear-gradient(180deg, #12e4eb, #0a9da2);
+  background: linear-gradient(180deg, rgb(177, 18, 235), rgb(124, 7, 202));
 }
 .mobile-nav-main-links a:hover > .material-symbols-outlined:last-child {
-  color: #0a9da2;
+  color: rgb(177, 18, 235);
 }
 .mobile-nav-arrow {
   color: #1290eb;

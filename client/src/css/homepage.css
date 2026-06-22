@@ -114,6 +114,9 @@
     font-size: 13px;
     font-weight: 600;
 }
+.blue:hover {
+    color: rgb(177, 18, 235) !important;
+}
 .zmore {z-index: 10;}
 .wrapped-feature {
     overflow: hidden;
@@ -323,7 +326,7 @@
     font-weight: 600;
 }
 .side-section a:hover {
-    color: #1290eb;
+    color: rgb(177, 18, 235);
 }
 .side-section h4 {
     margin-bottom: 5px;

@@ -77,26 +77,24 @@ const BurgerOpen = styled.ul`
 
 const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
   const { theme, toggleTheme } = useTheme();
-  const { user } = useContext(AuthContext);  // null when not logged in
+  const { user } = useContext(AuthContext);
 
-  // State for managing the interstitial modal
   const [showModal, setShowModal] = useState(false);
   const [externalUrl, setExternalUrl] = useState('');
 
-  // Handle link click for external links
   const handleLinkClick = (e, url) => {
     e.preventDefault();
-    setExternalUrl(url); // Store the URL to navigate to after confirmation
-    setShowModal(true);   // Show the interstitial modal
+    setExternalUrl(url);
+    setShowModal(true);
   };
 
   const handleConfirm = () => {
     setShowModal(false);
-    window.location.href = externalUrl; // Redirect to the external site
+    window.location.href = externalUrl;
   };
 
   const handleClose = () => {
-    setShowModal(false); // Close the modal without redirecting
+    setShowModal(false);
   };
 
   return (
@@ -231,8 +229,6 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
           <a href='mailto:ptcglegends@gmail.com'><img src={emailIcon} alt="social-icon" /></a>
         </div>
       </BurgerOpen>
-
-      {/* Modal for external link confirmation */}
       <Modal
         show={showModal}
         handleClose={handleClose}

@@ -87,7 +87,6 @@
     margin-top: 20px;
     color:rgb(200, 200, 200);
     font-size: 16px;
-    transition: ease-in-out 0.3s;
 }
 .useful-row1 a:hover,
 .useful-row2 a:hover,
@@ -125,7 +124,6 @@
     align-items: center;
     justify-content: flex-start;
     color:rgb(200, 200, 200);
-    transition: ease-in-out 0.3s;
     margin-bottom: 25px;
     font-size: 16px;
 }
