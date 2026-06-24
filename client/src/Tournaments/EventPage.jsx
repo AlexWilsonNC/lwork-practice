@@ -2707,18 +2707,20 @@ const EventPage = () => {
                                         </button>
                                     </div>
                                 )}
-                                <div className="country-filter-toggle-wrap">
-                                    <button
-                                        type="button"
-                                        className="country-filter-toggle"
-                                        onClick={() => setShowCountryFilter(prev => !prev)}
-                                    >
-                                        Country Filter
-                                        <span className="material-symbols-outlined">
-                                            {showCountryFilter ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
-                                        </span>
-                                    </button>
-                                </div>
+                                {results.length > 0 && (
+                                    <div className="country-filter-toggle-wrap">
+                                        <button
+                                            type="button"
+                                            className="country-filter-toggle"
+                                            onClick={() => setShowCountryFilter(prev => !prev)}
+                                        >
+                                            Country Filter
+                                            <span className="material-symbols-outlined">
+                                                {showCountryFilter ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+                                            </span>
+                                        </button>
+                                    </div>
+                                )}
                                 {showCountryFilter && (
                                     <div className="results-country-filter">
                                         <div className="region-filter-counts">
@@ -2754,26 +2756,28 @@ const EventPage = () => {
                                         ))}
                                     </div>
                                 )}
-                                <div className="results-player-search">
-                                    <div className="player-search-wrapper">
-                                        <input
-                                            type="text"
-                                            value={playerSearch}
-                                            onChange={(e) => setPlayerSearch(e.target.value)}
-                                            placeholder="Search player name..."
-                                        />
-                                        {playerSearch && (
-                                            <button
-                                                type="button"
-                                                className="clear-player-search"
-                                                onClick={() => setPlayerSearch('')}
-                                                aria-label="Clear search"
-                                            >
-                                                ×
-                                            </button>
-                                        )}
+                                {results.length > 0 && (
+                                    <div className="results-player-search">
+                                        <div className="player-search-wrapper">
+                                            <input
+                                                type="text"
+                                                value={playerSearch}
+                                                onChange={(e) => setPlayerSearch(e.target.value)}
+                                                placeholder="Search player name..."
+                                            />
+                                            {playerSearch && (
+                                                <button
+                                                    type="button"
+                                                    className="clear-player-search"
+                                                    onClick={() => setPlayerSearch('')}
+                                                    aria-label="Clear search"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                                 {viewTab === 'Decks' ? (
                                     results.length ? (
                                         <>

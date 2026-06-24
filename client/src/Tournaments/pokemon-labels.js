@@ -634,6 +634,8 @@ const customLabelsConfig = {
         'houndoom-bunnelby': 'Houndoom Mill',
     },
     '2015': {
+        'blank-rayquaza-mega': 'Mega Rayquaza',
+        'manectric-mega-crobat': 'Mega Manectric',
         'donphan-groudon-primal': 'Donphan',
         'exeggutor-garbodor': 'Exeggutor',
         'seismitoad-slurpuff': 'Seismitoad Slurpuff',
