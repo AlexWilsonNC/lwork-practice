@@ -64,8 +64,8 @@ const OlResults = styled.ol`
         font-size: 12px;
         position: absolute;
         z-index: 9999 !important;
-        bottom: 95%;
-        left: 65%;
+        bottom: 45%;
+        left: 52.5%;
         transform: translateX(-50%);
         white-space: nowrap;
         display: block;
