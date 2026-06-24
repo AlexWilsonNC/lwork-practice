@@ -173,6 +173,13 @@ const ArchiveUpdates = () => {
           </a>
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={groudonprimal} alt="sprite" />
+            </div>
+            <p>Stefan Tabaco (Masters) - 91<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
               <img className="sprite" src={megamanectric} alt="sprite" />
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>

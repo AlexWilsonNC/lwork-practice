@@ -1756,7 +1756,6 @@ const CardSearch = React.forwardRef(function CardSearch(
         s = s
             .replace(/\bprism\b/g, 'prismstar')
             .replace(/\bgoldstar\b/g, 'goldstar')
-            .replace(/\bstar\b/g, 'goldstar')
             .replace(/\bdelta\b/g, 'deltaspecies')
             .replace(/\bspecies\b/g, 'deltaspecies');
 
@@ -1825,7 +1824,6 @@ const CardSearch = React.forwardRef(function CardSearch(
         sym = sym.replace(/\bgold\s*star\b/g, '★');
         sym = sym.replace(/\bdelta\s*species\b/g, 'δ');
         sym = sym.replace(/\bprism\b/g, '♢');
-        sym = sym.replace(/\bstar\b/g, '★');
         sym = sym.replace(/\bdelta\b/g, 'δ');
         sym = sym.replace(/\bspecies\b/g, 'δ');
         if (sym !== base.toLowerCase()) variants.add(sym);
@@ -1860,6 +1858,11 @@ const CardSearch = React.forwardRef(function CardSearch(
                 variants.add('Ho oh');
                 variants.add('Hooh');
             }
+        }
+
+        if (/^star$/i.test(base)) {
+            variants.add('vstar');
+            variants.add('VSTAR');
         }
 
         return Array.from(variants);
@@ -1949,12 +1952,19 @@ const CardSearch = React.forwardRef(function CardSearch(
                         }
 
                         const primeSetCodes = setOrder.filter(code => /^(HS|UL|UD|TM|HGSS)/i.test(code));
-                        if (!primeSetCodes.length) {
-                            return searchMode === 'flavor'
-                                ? variants.map(v => `/api/cards/searchbyflavor/partial/${encodeURIComponent(v)}`)
-                                : variants.map(v => `/api/cards/searchbytext/partial/${encodeURIComponent(v)}`);
-                        }
-                        return primeSetCodes.map(s => `/api/cards/${encodeURIComponent(s)}`);
+
+                        const primePokemonRoutes = primeSetCodes.map(s =>
+                            `/api/cards/${encodeURIComponent(s)}`
+                        );
+
+                        const namePrimeRoutes = variants.map(v =>
+                            `/api/cards/searchbyname/partial/${encodeURIComponent(v)}`
+                        );
+
+                        return [
+                            ...primePokemonRoutes,
+                            ...namePrimeRoutes
+                        ];
                     })();
 
                     const resLists = await Promise.all(
@@ -1993,8 +2003,28 @@ const CardSearch = React.forwardRef(function CardSearch(
                         if (typeof c.subtype === 'string') return [c.subtype];
                         return [];
                     };
+
+                    arr = arr.filter(c => {
+                        const nameHasPrime = (c.name || '').toLowerCase().includes('prime');
+
+                        const subtypeHasPrime = getSubtypes(c).some(st =>
+                            (st || '').toLowerCase().includes('prime')
+                        );
+
+                        return nameHasPrime || subtypeHasPrime;
+                    });
+                }
+
+                const goldStarMode = /\bgold\s*star\b/i.test(rawQuery);
+
+                if (goldStarMode) {
                     arr = arr.filter(c =>
-                        getSubtypes(c).some(st => (st || '').toLowerCase().includes('prime'))
+                        (c.name || '').includes('★') ||
+                        aliasNormalize(c.name || '').includes('goldstar') ||
+                        getSubtypesArr(c).some(st => st === 'star') ||
+                        (Array.isArray(c.rules) ? c.rules.join(' ') : String(c.rules || ''))
+                            .toLowerCase()
+                            .includes('gold star')
                     );
                 }
 
