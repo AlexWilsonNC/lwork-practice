@@ -48,6 +48,7 @@ import ninetales from '../../public/assets/sprites/ninetales.png'
 import slaking from '../../public/assets/sprites/slaking.png'
 import gorebyss from '../../public/assets/sprites/gorebyss.png'
 import rayquaza from '../../public/assets/sprites/rayquaza.png'
+import megarayquaza from '../../public/assets/sprites/rayquaza-mega.png'
 import lanturn from '../../public/assets/sprites/lanturn.png'
 import swampert from '../../public/assets/sprites/swampert.png'
 import leafeon from '../../public/assets/sprites/leafeon.png'
@@ -81,6 +82,9 @@ import hariyama from '../../public/assets/sprites/hariyama.png'
 import dragonite from '../../public/assets/sprites/dragonite.png'
 import electrode from '../../public/assets/sprites/electrode.png'
 import hypno from '../../public/assets/sprites/hypno.png'
+import malamar from '../../public/assets/sprites/malamar.png'
+import ultranecrozma from '../../public/assets/sprites/necrozma-ultra.png'
+import zoroark from '../../public/assets/sprites/zoroark.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -121,7 +125,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 11, 2026</p>
+          <p>Last Updated: June 24, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -138,6 +142,65 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
+          <a href='/tournaments/2018_NAIC/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={malamar} alt="sprite" />
+              <img className="sprite second-sprite" src={ultranecrozma} alt="sprite" />
+            </div>
+            <p>Chris Fulop (Masters) - 77<sup>th</sup> Place <span>2018 NAIC</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_NAIC/masters/Bert%20Wolters-NL' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={zoroark} alt="sprite" />
+            </div>
+            <p>Bert Wolters (Masters) - 117<sup>th</sup> Place <span>2018 NAIC</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <hr className='archive-updates-mini-hr'></hr>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Andrew Tandianus (Masters) - 58<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Louis Chi (Masters) - 64<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={megamanectric} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Tristan Wagner (Masters) - 96<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
+            </div>
+            <p>Jordan Palmer (Masters) - 121<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters/Goncalo%20Ferreira-PT' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={megamanectric} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Goncalo Ferreira (Masters) - 128<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <hr className='archive-updates-mini-hr'></hr>
+          <a href='/tournaments/2013_WORLDS/masters/Martin%20Janouš-CZ' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blastoise} alt="sprite" />
+              <img className="sprite second-sprite" src={keldeo} alt="sprite" />
+            </div>
+            <p>Martin Janouš (Masters) - 18<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <hr className='archive-updates-mini-hr'></hr>
           <a href='/tournaments/2013_NATS_US/masters/ray%20Cipoletti-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blastoise} alt="sprite" />
@@ -241,6 +304,7 @@ const ArchiveUpdates = () => {
             </div>
             <p>Andrew Krekeler (Juniors) - 3<sup>rd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for the 2013 Worlds, 2015 & 2018 lists!</p>
 
           <hr className='title-hr' />
           <br />
