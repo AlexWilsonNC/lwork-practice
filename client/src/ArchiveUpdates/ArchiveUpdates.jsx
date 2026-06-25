@@ -142,175 +142,230 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
+          <h4 className='archive-update-h4'><a href='/tournaments/2018_NAIC/masters'>2018 NAIC</a></h4>
+          <br></br>
+
           <a href='/tournaments/2018_NAIC/masters/Chris%20Fulop-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={malamar} alt="sprite" />
               <img className="sprite second-sprite" src={ultranecrozma} alt="sprite" />
             </div>
-            <p>Chris Fulop (Masters) - 77<sup>th</sup> Place <span>2018 NAIC</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Chris Fulop (Masters) - 77<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2018_NAIC/masters/Bert%20Wolters-NL' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={zoroark} alt="sprite" />
             </div>
-            <p>Bert Wolters (Masters) - 117<sup>th</sup> Place <span>2018 NAIC</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Bert Wolters (Masters) - 117<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
           <hr className='archive-updates-mini-hr'></hr>
-          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+          <h4 className='archive-update-h4'><a href='/tournaments/2017_EUIC/masters'>2017 EUIC</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2017_EUIC/masters/Jose%20Marrero-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={joltik} alt="sprite" />
-              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
             </div>
-            <p>Andrew Tandianus (Masters) - 58<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Jose Marrero (Masters) - 38<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2015_WORLDS/masters'>2015 Worlds</a></h4>
+          <br></br>
+
+          <div className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Diego Cassiraga (Masters) - 57<sup>th</sup> Place</p>
+          </div>
+          <div className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Andrew Tandianus (Masters) - 58<sup>th</sup> Place</p>
+          </div>
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={joltik} alt="sprite" />
               <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
-            <p>Louis Chi (Masters) - 64<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Louis Chi (Masters) - 64<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={groudonprimal} alt="sprite" />
             </div>
-            <p>Stefan Tabaco (Masters) - 91<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Stefan Tabaco (Masters) - 91<sup>st</sup> Place</p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters/Chase%20Moloney-CA' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Chase Moloney (Masters) - 93<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={megamanectric} alt="sprite" />
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
-            <p>Tristan Wagner (Masters) - 96<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Tristan Wagner (Masters) - 96<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Maximilian Armitage (Masters) - 109<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2015_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
             </div>
-            <p>Jordan Palmer (Masters) - 121<sup>st</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Jordan Palmer (Masters) - 121<sup>st</sup> Place</p>
           </a>
           <a href='/tournaments/2015_WORLDS/masters/Goncalo%20Ferreira-PT' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={megamanectric} alt="sprite" />
               <img className="sprite second-sprite" src={crobat} alt="sprite" />
             </div>
-            <p>Goncalo Ferreira (Masters) - 128<sup>th</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Goncalo Ferreira (Masters) - 128<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
           <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2013_WORLDS/masters'>2013 Worlds</a></h4>
+          <br></br>
+
           <a href='/tournaments/2013_WORLDS/masters/Martin%20Janouš-CZ' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blastoise} alt="sprite" />
               <img className="sprite second-sprite" src={keldeo} alt="sprite" />
             </div>
-            <p>Martin Janouš (Masters) - 18<sup>th</sup> Place <span>2013 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Martin Janouš (Masters) - 18<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
           <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2013_NATS_US/masters'>2013 US Nationals</a></h4>
+          <br></br>
+
           <a href='/tournaments/2013_NATS_US/masters/ray%20Cipoletti-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blastoise} alt="sprite" />
               <img className="sprite second-sprite" src={keldeo} alt="sprite" />
             </div>
-            <p>Ray Cipoletti (Masters) - 30<sup>th</sup> Place <span>2013 US Nationals</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Ray Cipoletti (Masters) - 30<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
           <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2012_WORLDS/masters'>2012 Worlds</a></h4>
+          <br></br>
+
           <a href='/tournaments/2012_WORLDS/masters/Sami%20Sekkoum-UK' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={darkrai} alt="sprite" />
             </div>
-            <p>Sami Sekkoum (Masters) - 5<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Sami Sekkoum (Masters) - 5<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
-
           <a href='/tournaments/2012_WORLDS/masters/Jason%20Klaczynski-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={darkrai} alt="sprite" />
             </div>
-            <p>Jason Klaczynski (Masters) - 20<sup>th</sup> Place <span>2012 Worlds</span> <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+            <p>Jason Klaczynski (Masters) - 20<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2005_NATS_US/masters'>2005 US Nationals</a></h4>
+          <br></br>
 
           <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={medicham} alt="sprite" />
             </div>
-            <p>Matt Gillespie (Masters) - 18<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Matt Gillespie (Masters) - 18<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={hariyama} alt="sprite" />
             </div>
-            <p>John Wetz (Masters) - 28<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>John Wetz (Masters) - 28<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={dragonite} alt="sprite" />
               <img className="sprite second-sprite" src={electrode} alt="sprite" />
             </div>
-            <p>Kath Schell (Masters) - 30<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Kath Schell (Masters) - 30<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={blaziken} alt="sprite" />
             </div>
-            <p>Chris Schell (Masters) - 32<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Chris Schell (Masters) - 32<sup>nd</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={medicham} alt="sprite" />
               <img className="sprite second-sprite" src={hariyama} alt="sprite" />
             </div>
-            <p>Stuart Benson (Seniors) - 1<sup>st</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Stuart Benson (Seniors) - 1<sup>st</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={ampharos} alt="sprite" />
             </div>
-            <p>Tyler Ninomura (Seniors) - 2<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Tyler Ninomura (Seniors) - 2<sup>nd</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={ampharos} alt="sprite" />
             </div>
-            <p>Jeffrey Vernola (Seniors) - 4<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Jeffrey Vernola (Seniors) - 4<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/seniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={ampharos} alt="sprite" />
             </div>
-            <p>Michael Stephens (Seniors) - 6<sup>th</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Michael Stephens (Seniors) - 6<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
               <img className="sprite second-sprite" src={medicham} alt="sprite" />
             </div>
-            <p>Curran Hill (Juniors) - 1<sup>st</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Curran Hill (Juniors) - 1<sup>st</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={tyranitar} alt="sprite" />
               <img className="sprite second-sprite" src={ampharos} alt="sprite" />
             </div>
-            <p>James Ballard (Juniors) - 2<sup>nd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>James Ballard (Juniors) - 2<sup>nd</sup> Place</p>
           </a>
           <a href='/tournaments/2005_NATS_US/juniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={lanturn} alt="sprite" />
               <img className="sprite second-sprite" src={hypno} alt="sprite" />
             </div>
-            <p>Andrew Krekeler (Juniors) - 3<sup>rd</sup> Place <span>2005 US Nationals</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
+            <p>Andrew Krekeler (Juniors) - 3<sup>rd</sup> Place</p>
           </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
           <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for the 2013 Worlds, 2015 & 2018 lists!</p>
 
           <hr className='title-hr' />
@@ -336,7 +391,6 @@ const ArchiveUpdates = () => {
             </div>
             <p>Alex Dao (Masters) - 62<sup>nd</sup> Place <span>2015 Worlds</span> <span className='small-text-archive archive-update-nolist'>list&nbsp;X</span></p>
           </a>
-
           <a href='/tournaments/2015_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={klinklang} alt="sprite" />

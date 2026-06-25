@@ -636,3 +636,11 @@
         height: 190px;
     }
 }
+.archive-update-h4 {
+    color:#1290eb;
+}
+@media screen and (max-width: 850px) {
+    .archive-update-h4 {
+        font-size: 14px;
+    }
+}
