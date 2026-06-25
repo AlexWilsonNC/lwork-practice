@@ -6,6 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 import whenModernBecomesRetro from '../Articles/whenModernBecomesRetro';
 import forgottenFormat from '../Articles/forgottenFormat';
+import problemsof2010 from '../Articles/problemsof2010';
 
 const AllArticlesHomePage = styled.div`
   .article-card-content {color: ${({ theme }) => theme.text};}
@@ -15,6 +16,7 @@ const AllArticlesHomePage = styled.div`
 const articles = [
   forgottenFormat,
   whenModernBecomesRetro,
+  // problemsof2010,
 ];
 
 const AllArticlesPage = () => {

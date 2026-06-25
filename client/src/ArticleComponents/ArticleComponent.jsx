@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SidebarComponent from '../SideContent/SideContent'
 import article1 from '../Articles/whenModernBecomesRetro';
 import article2 from '../Articles/forgottenFormat';
+import article3 from '../Articles/problemsof2010';
 import '../css/articles.css';
 import fluffychompImg from '../assets/article-images/fluffychomp.png';
 import tinaimg from '../assets/article-images/13498118540092.jpg';
@@ -48,6 +49,7 @@ const ArticleComponent = () => {
     const articles = {
       'when-modern-becomes-retro': article1,
       'forgotten-format': article2,
+      'problems-of-2010': article3,
     };
 
     const selectedArticle = articles[articleId];

@@ -1863,6 +1863,11 @@ const CardSearch = React.forwardRef(function CardSearch(
         if (/^star$/i.test(base)) {
             variants.add('vstar');
             variants.add('VSTAR');
+            variants.add('staryu');
+            variants.add('starmie');
+            variants.add('staraptor');
+            variants.add('staravia');
+            variants.add('starly');
         }
 
         return Array.from(variants);

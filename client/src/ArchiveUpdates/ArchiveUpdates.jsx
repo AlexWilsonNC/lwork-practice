@@ -125,7 +125,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 24, 2026</p>
+          <p>Last Updated: June 25, 2026</p>
         </div>
 
         {/* Article Image */}
