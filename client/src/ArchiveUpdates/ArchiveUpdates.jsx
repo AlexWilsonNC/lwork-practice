@@ -85,6 +85,7 @@ import hypno from '../../public/assets/sprites/hypno.png'
 import malamar from '../../public/assets/sprites/malamar.png'
 import ultranecrozma from '../../public/assets/sprites/necrozma-ultra.png'
 import zoroark from '../../public/assets/sprites/zoroark.png'
+import lucario from '../../public/assets/sprites/lucario.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -125,7 +126,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 25, 2026</p>
+          <p>Last Updated: June 26, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -151,6 +152,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={ultranecrozma} alt="sprite" />
             </div>
             <p>Chris Fulop (Masters) - 77<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_NAIC/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={lucario} alt="sprite" />
+            </div>
+            <p>Angus Johnson (Masters) - 88<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2018_NAIC/masters/Bert%20Wolters-NL' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
