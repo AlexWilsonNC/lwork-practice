@@ -87,6 +87,22 @@ import ultranecrozma from '../../public/assets/sprites/necrozma-ultra.png'
 import zoroark from '../../public/assets/sprites/zoroark.png'
 import lucario from '../../public/assets/sprites/lucario.png'
 import lycanroc from '../../public/assets/sprites/lycanroc-midnight.png'
+import greninja from '../../public/assets/sprites/greninja.png'
+import vileplume from '../../public/assets/sprites/vileplume.png'
+import vespiquen from '../../public/assets/sprites/vespiquen.png'
+import zygarde from '../../public/assets/sprites/zygarde-complete.png'
+import decidueye from '../../public/assets/sprites/decidueye.png'
+import ninetalesalola from '../../public/assets/sprites/ninetales-alola.png'
+import golisopod from '../../public/assets/sprites/golisopod.png'
+import espeon from '../../public/assets/sprites/espeon.png'
+import megascizor from '../../public/assets/sprites/scizor-mega.png'
+import metagross from '../../public/assets/sprites/metagross.png'
+import xerneas from '../../public/assets/sprites/xerneas-active.png'
+import magcargo from '../../public/assets/sprites/magcargo.png'
+import lurantis from '../../public/assets/sprites/lurantis.png'
+import tapubulu from '../../public/assets/sprites/tapu-bulu.png'
+import buzzwole from '../../public/assets/sprites/buzzwole.png'
+import hoopa from '../../public/assets/sprites/hoopa-unbound.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -137,6 +153,306 @@ const ArchiveUpdates = () => {
         <div className='article-content archive-updates'>
 
           {/* <hr className='archive-updates-mini-hr'></hr> */}
+
+          {/* <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>July 2026</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2018_WORLDS/masters'>2018 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2018_WORLDS/masters/Ahmed%20Ali-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Ahmed Ali (Masters) - 36<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={magcargo} alt="sprite" />
+            </div>
+            <p>Robert Kinbrum (Masters) - 45<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={golisopod} alt="sprite" />
+            </div>
+            <p>Benjamin Pham (Masters) - 47<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Tord Reklev (Masters) - 62<sup>nd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Patrick Landis (Masters) - 65<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Bert Wolters (Masters) - 69<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/Angus%20Johnson-AU' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={magcargo} alt="sprite" />
+            </div>
+            <p>Angus Johnson (Masters) - 72<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Aaron van der Kolk (Masters) - 75<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/Caleb%20Gedemer-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Caleb Gedemer (Masters) - 78<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={lucario} alt="sprite" />
+            </div>
+            <p>Shane Chee (Masters) - 84<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Nico Alabas (Masters) - 85<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Lyder Iversen (Masters) - 94<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={malamar} alt="sprite" />
+              <img className="sprite second-sprite" src={hoopa} alt="sprite" />
+            </div>
+            <p>Diego Cassiraga (Masters) - 95<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Tyler Ninomura (Masters) - 102<sup>nd</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2017_WORLDS/masters'>2017 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2017_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gardevoir} alt="sprite" />
+            </div>
+            <p>Tristan Wagner (Masters) - 34<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={decidueye} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Shintaro Ito (Masters) - 41<sup>st</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
+            </div>
+            <p>Ross Cawthon (Masters) - 42<sup>nd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Robin%20Schulz-DE' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={decidueye} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Robin Schulz (Masters) - 43<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Philip%20Schulz-DE' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={decidueye} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Philip Schulz (Masters) - 49<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Takuya%20Hasegawa-JP' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={golisopod} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Takuya Hasegawa (Masters) - 53<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Ryan%20Sabelhaus-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={espeon} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Ryan Sabelhaus (Masters) - 54<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={volcanion} alt="sprite" />
+            </div>
+            <p>Mike Newey (Masters) - 56<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megascizor} alt="sprite" />
+            </div>
+            <p>Grant Manley (Masters) - 70<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Alex%20Wilson-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
+            </div>
+            <p>Alex Wilson (Masters) - 72<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Alex%20Hill-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={espeon} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Alex Hill (Masters) - 73<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={metagross} alt="sprite" />
+            </div>
+            <p>Wesley Hollenberg (Masters) - 76<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Stéphane%20Ivanoff-FR' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={decidueye} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Stéphane Ivanoff (Masters) - 81<sup>st</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Nico%20Alabas-DE' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={decidueye} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Nico Alabas (Masters) - 87<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lurantis} alt="sprite" />
+              <img className="sprite second-sprite" src={tapubulu} alt="sprite" />
+            </div>
+            <p>Fabio Spanò (Masters) - 92<sup>nd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/Mike%20Fouchet-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gardevoir} alt="sprite" />
+            </div>
+            <p>Mike Fouchet (Masters) - 98<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={ninetalesalola} alt="sprite" />
+            </div>
+            <p>Israel Sosa (Masters) - 101<sup>st</sup> Place</p>
+          </a>
+          <a href='/tournaments/2017_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={xerneas} alt="sprite" />
+            </div>
+            <p>Carl Sitavi (Masters) - 126<sup>th</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2016_WORLDS/masters'>2016 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2016_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Günther Kirchhofer (Masters) - 54<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters/Alex%20Hill-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={greninja} alt="sprite" />
+            </div>
+            <p>Alex Hill (Masters) - 59<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={vespiquen} alt="sprite" />
+              <img className="sprite second-sprite" src={vileplume} alt="sprite" />
+            </div>
+            <p>Raphael Branco (Masters) - 60<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={yveltal} alt="sprite" />
+            </div>
+            <p>Clifton Goh (Masters) - 71<sup>st</sup> Place</p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters/Mike%20Fouchet-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={yveltal} alt="sprite" />
+              <img className="sprite second-sprite" src={vespiquen} alt="sprite" />
+            </div>
+            <p>Mike Fouchet (Masters) - 82<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters/Robin%Schulz-DE' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Robin Schulz (Masters) - 87<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zygarde} alt="sprite" />
+              <img className="sprite second-sprite" src={vileplume} alt="sprite" />
+            </div>
+            <p>Tord Reklev (Masters) - 95<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megamanectric} alt="sprite" />
+            </div>
+            <p>Alex Koch (Masters) - 101<sup>st</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a> */}
 
           <hr className='title-hr' />
           <br />
@@ -254,6 +570,18 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={crobat} alt="sprite" />
             </div>
             <p>Goncalo Ferreira (Masters) - 128<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2015_NATS_US/masters'>2015 US Nationals</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2015_NATS_US/masters/Andrew%20Jackson-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={landorustherian} alt="sprite" />
+              <img className="sprite second-sprite" src={crobat} alt="sprite" />
+            </div>
+            <p>Andrew Jackson (Masters) - 64<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>
