@@ -86,6 +86,7 @@ import malamar from '../../public/assets/sprites/malamar.png'
 import ultranecrozma from '../../public/assets/sprites/necrozma-ultra.png'
 import zoroark from '../../public/assets/sprites/zoroark.png'
 import lucario from '../../public/assets/sprites/lucario.png'
+import lycanroc from '../../public/assets/sprites/lycanroc-midnight.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -152,6 +153,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={ultranecrozma} alt="sprite" />
             </div>
             <p>Chris Fulop (Masters) - 77<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_NAIC/masters/Luke%20Morsa-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Luke Morsa (Masters) - 86<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2018_NAIC/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">

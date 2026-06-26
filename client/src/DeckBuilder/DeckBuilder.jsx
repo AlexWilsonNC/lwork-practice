@@ -78,7 +78,8 @@ const IMPORT_SET_ABBREV_ALIASES = {
   XYP: 'PR-XY',
   SMP: 'PR-SM',
   SP: 'PR-SW',
-  SVP: 'PR-SV'
+  SVP: 'PR-SV',
+  ENERGY: 'Energy'
 };
 
 const normalizeImportedSetAbbrev = (setAbbrev) => {

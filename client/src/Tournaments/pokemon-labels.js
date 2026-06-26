@@ -542,6 +542,8 @@ const customLabelsConfig = {
         'gardevoir-xerneas-active': 'Gardevoir GX',
     },
     '2017': {
+        'lurantis-tapu-bulu': 'Lurantis Tapu Bulu',
+        'blank-scizor-mega': 'Mega Scizor',
         'drampa-garbodor': 'Drampa Garbodor',
         'espeon-garbodor': 'Espeon Garbodor',
         'blank-gardevoir': 'Gardevoir GX',
@@ -590,6 +592,7 @@ const customLabelsConfig = {
         'alakazam-mega-espeon': 'Mega Alakazam',
     },
     '2016': {
+        'blank-yveltal': 'Yveltal',
         'blank-exeggutor': 'Exeggutor',
         'vespiquen-yveltal': 'Vespiquen Yveltal',
         'vespiquen-raichu': 'Vespiquen Raichu',
