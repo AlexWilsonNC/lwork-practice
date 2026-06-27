@@ -196,16 +196,13 @@ const tournamentList = [
         "results": false
     },
     {
-        "id": '2025_GDASNK/masters',
+        "id": '2025_GDANSK/masters',
         "name": "Gdańsk Regionals",
         "eventType": "regionals",
         "eventLogo": regional25,
         "date": "Nov 2, 2024",
         "flag": poland,
-        "location": "Gdańsk, Poland",
-        "registrationTime": "2024-09-04T19:00:00+02:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Gdańsk, Poland"
     },
     {
         "id": '2025_BUENOS_AIRES/masters',
@@ -226,10 +223,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 22, 2024",
         "flag": usa,
-        "location": "Sacramento, California",
-        "registrationTime": "2024-09-25T19:00:00-07:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Sacramento, California"
     },
     {
         "id": '2025_STUTTGART/masters',
@@ -266,10 +260,7 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Nov 15, 2024",
         "flag": brazil,
-        "location": "São Paulo, Brazil",
-        "registrationTime": "2024-10-01T18:00:00-03:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "São Paulo, Brazil"
     },
     {
         "id": "2026_LAIC",

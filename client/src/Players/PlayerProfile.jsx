@@ -166,6 +166,15 @@ const PlayerProfileContainer = styled.div`
         text-decoration: line-through;
         opacity: 0.6;
     }
+    .accomplishments-card {
+        background: ${({ theme }) => theme.themeName === 'dark' ? '#181a1f' : '#f5f8fc'};
+        border: 1px solid ${({ theme }) => theme.themeName === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'};
+    }
+    .accomplishments-table td {
+        text-align: center;
+        padding: 13px 10px;
+        background: ${({ theme }) => theme.themeName === 'dark' ? '#22252b' : '#fff'};
+    }
 `;
 const getCountryName = (code) => {
     return countryNames[code] || 'Unknown';
@@ -181,13 +190,11 @@ const formatName = (name) => {
     const lowercaseWords = ['de', 'of', 'the', 'van', 'der'];
     const uppercaseWords = ['jw', 'aj', 'dj', 'bj', 'rj', 'cj', 'lj', 'jp', 'kc', 'mj', 'tj', 'cc', 'jj', 'jt', 'jz', 'pj', 'sj', 'pk', 'j.r.', 'ii', 'iii', 'iiii', 'o.s.', 'mk', 'jc'];
 
-    // Define the special case with capital "De"
     const specialCases = {
         'de haes damien': 'De Haes Damien',
         'jamie depamphilis': 'Jamie DePamphilis',
     };
 
-    // Check for special case match
     const lowerCaseName = name.toLowerCase();
     if (specialCases[lowerCaseName]) {
         return specialCases[lowerCaseName];
@@ -258,6 +265,7 @@ const PlayerProfile = () => {
     const splitAt = decodedId.lastIndexOf('-');
     const rawName = decodedId.substring(0, splitAt);
     const playerFlag = decodedId.substring(splitAt + 1);
+    const [showAllResults, setShowAllResults] = useState(false);
     const formattedName = rawName
         .split(/[-\s]+/)
         .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
@@ -312,6 +320,64 @@ const PlayerProfile = () => {
     const filteredResults = sortedResults.filter(result =>
         result.eventId.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const visibleResults = showAllResults
+        ? filteredResults
+        : filteredResults.slice(0, 10);
+
+    const getEventCategory = (result) => {
+        const name = result.eventName?.toLowerCase() || '';
+        const logo = result.eventLogo || '';
+
+        if (name.includes('world championship') || logo.includes('worlds')) {
+            return 'worlds';
+        }
+
+        if (name.includes('international') || name.includes('naic') || name.includes('laic') || name.includes('euic') || name.includes('ocic') || logo.includes('internats')) {
+            return 'internationals';
+        }
+
+        if (
+            name.includes('regional') ||
+            name.includes('special event') ||
+            name.includes('special championship') ||
+            name.includes('special championships') ||
+            logo.includes('regionals') ||
+            logo.includes('speSeries')
+        ) {
+            return 'regionals';
+        }
+
+        return 'other';
+    };
+
+    const accomplishmentRows = [
+        { label: '1st Place', filter: r => r.placement === 1 },
+        { label: '2nd Place', filter: r => r.placement === 2 },
+        { label: 'Top 4', filter: r => r.placement <= 4 },
+        { label: 'Top 8', filter: r => r.placement <= 8 },
+        { label: 'Top 16', filter: r => r.placement <= 16 },
+        { label: 'Top 32', filter: r => r.placement <= 32 },
+        // { label: 'Total Results', filter: () => true },
+        { label: 'Top 64+', filter: r => r.placement > 32 },
+    ];
+
+    const accomplishmentColumns = [
+        { key: 'worlds', label: 'Worlds' },
+        { key: 'internationals', label: 'Internationals' },
+        { key: 'regionals', label: 'Regionals / SPEs' },
+        { key: 'other', label: 'Other Events' },
+    ];
+
+    const accomplishmentSummary = accomplishmentRows.map(row => ({
+        ...row,
+        counts: accomplishmentColumns.reduce((acc, col) => {
+            acc[col.key] = player.results.filter(result =>
+                row.filter(result) && getEventCategory(result) === col.key
+            ).length;
+            return acc;
+        }, {})
+    }));
 
     const getEventLink = (eventId) => {
         return `/tournaments/${eventId}`;
@@ -431,7 +497,7 @@ const PlayerProfile = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredResults.map((result, index) => (
+                        {visibleResults.map((result, index) => (
                             <tr key={index}>
                                 <td>{formatDate(result.eventDate)}</td>
                                 <td className='center-content'>
@@ -477,8 +543,46 @@ const PlayerProfile = () => {
                         ))}
                     </tbody>
                 </table>
+                {filteredResults.length > 10 && (
+                    <button
+                        className="show-results-btn"
+                        onClick={() => setShowAllResults(prev => !prev)}
+                    >
+                        {showAllResults ? 'Show Less Results' : 'Show All Results'}
+                    </button>
+                )}
+                <div className="accomplishments-card">
+                    <div className="accomplishments-header">
+                        <h2>{formatName(player.name)}</h2>
+                        <p>Accomplishment count by event category</p>
+                    </div>
+                    <table className="accomplishments-table">
+                        <thead>
+                            <tr>
+                                <th>Finish</th>
+                                {accomplishmentColumns.map(col => (
+                                    <th key={col.key}>{col.label}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {accomplishmentSummary.map(row => (
+                                <tr key={row.label}>
+                                    <td>{row.label}</td>
+                                    {accomplishmentColumns.map(col => (
+                                        <td key={col.key}>
+                                            <span className={row.counts[col.key] > 0 ? 'accomplishment-count has-count' : 'accomplishment-count'}>
+                                                {row.counts[col.key]}
+                                            </span>
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on the site, like Regionals.</p>
+            <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on PTCG Legends yet.</p>
         </PlayerProfileContainer>
     );
 };

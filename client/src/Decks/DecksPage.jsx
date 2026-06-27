@@ -439,10 +439,10 @@ const Decks = () => {
                   <option value="SVI-DRI">SVI-DRI</option>
                   <option value="SVI-JTG">SVI-JTG</option>
                   <option value="BRS-PRE">BRS-PRE</option>
-                  <option value="BRS-SCR">BRS-SCR</option>
                 </optgroup>
 
                 <optgroup label="2024">
+                  <option value="BRS-SCR">BRS-SCR</option>
                   <option value="BRS-SFA">BRS-SFA</option>
                   <option value="BRS-TWM">BRS-TWM</option>
                   <option value="BRS-TEF">BRS-TEF</option>
