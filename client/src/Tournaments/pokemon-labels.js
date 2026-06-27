@@ -404,6 +404,7 @@ const customLabelsConfig = {
         'blank-charizard-braixen-tagteam': 'Charizard & Braixen',
     },
     '2019': {
+        'zoroark-lucario': 'Zoroark Lucario',
         'magnezone-zeraora': 'Magnezone',
         'whimsicott-porygon-z': 'Whimsicott Porygon-Z',
         'blank-gengar-mimikyu-tagteam': 'MimiGar',
