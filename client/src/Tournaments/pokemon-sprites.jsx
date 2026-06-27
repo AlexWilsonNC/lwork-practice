@@ -531,6 +531,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('kangaskhan-mega');
         secondSprite  = getPokemonSpriteURL('bouffalant');
     }               
+    else if (hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Mimikyu') && hasPokemon('Rotom V') && hasPokemon('Bloodmoon Ursaluna ex') && !hasPokemon('Snorlax')) {
+        firstSprite  = getPokemonSpriteURL('ogerpon-cornerstone');
+        secondSprite  = getPokemonSpriteURL('mimikyu');
+    }               
     else if (hasPokemon('Gholdengo ex') && hasPokemon('Lunatone')) {
         firstSprite  = getPokemonSpriteURL('gholdengo');
         secondSprite  = getPokemonSpriteURL('lunatone');

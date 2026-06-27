@@ -120,6 +120,7 @@ const customLabelsConfig = {
         'klawf-terapagos': 'Klawf Terapagos',
     },
     '2025': {
+        'ogerpon-cornerstone-mimikyu': 'Ogerpon Mimikyu',
         'blank-greninja': 'Greninja ex',
         'blank-gardevoir': 'Gardevoir ex',
         'gardevoir-jellicent': 'Gardevoir ex',

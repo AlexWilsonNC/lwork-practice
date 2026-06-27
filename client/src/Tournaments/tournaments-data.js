@@ -238,10 +238,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Nov 30, 2024",
         "flag": germany,
-        "location": "Stuttgart, Germany",
-        "registrationTime": "2024-10-02T13:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Stuttgart, Germany"
     },
     {
         "id": '2025_BOGOTA/masters',
@@ -251,8 +248,6 @@ const tournamentList = [
         "date": "Dec 7, 2024",
         "flag": colombia,
         "location": "Bogotá, Colombia",
-        "registrationTime": "2024-09-25T19:00:00-05:00",
-        "registrationLink": "https://x.com/playlatam_op",
         "results": false
     },
     {
@@ -262,10 +257,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Dec 13, 2024",
         "flag": canada,
-        "location": "Toronto, Canada",
-        "registrationTime": "2024-10-16T19:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Toronto, Canada"
     },
     {
         "id": '2025_LAIC/masters',
@@ -358,8 +350,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 24, 2025",
         "flag": usa,
-        "location": "Texas, USA",
-        "results": false
+        "location": "Texas, USA"
     },
     {
         "id": '2024_CAPE_TOWN',
@@ -1367,8 +1358,7 @@ const tournamentList = [
         "flag": uk,
         "location": "Birmingham, UK",
         "registrationTime": "2024-10-16T19:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "registrationLink": "https://rk9.gg/events/pokemon"
     },
     {
         "id": "2025_STOCKHOLM",
@@ -1422,10 +1412,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Jan 18, 2025",
         "flag": brazil,
-        "location": "Rio de Janeiro, Brazil",
-        "registrationTime": "2024-11-27T22:00:00+00:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Rio de Janeiro, Brazil"
     },
     {
         "id": "2025_MERIDA",
@@ -1434,8 +1421,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Feb 8, 2025",
         "flag": mexico,
-        "location": "Merida, Yucatán, México",
-        "results": false
+        "location": "Merida, Yucatán, México"
     },
     {
         "id": "2025_FORTALEZA",
@@ -1480,10 +1466,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Dec 7, 2024",
         "flag": australia,
-        "location": "Perth, Australia",
-        "registrationTime": "2024-10-09T07:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Perth, Australia"
     },
     {
         "id": "2025_BRISBANE",

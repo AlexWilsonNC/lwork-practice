@@ -235,7 +235,7 @@ const promoSets = {
     "DRI": "PR-SV",
     "JTG": "PR-SV",
     "PRE": "PR-SV",
-    "SSP": "PR-SV",
+    "SSP": ["PR-SV", "PRE"],
     "SCR": "PR-SV",
     "SFA": "PR-SV",
     "TWM": "PR-SV",
