@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/about.css';
 import styled from 'styled-components';
-import ferr from '../assets/article-thumbnails/ferr.png'
+import ferr from '../assets/homepage/legends-thumbnail.png'
 
 const AboutContainer = styled.div`
     color: ${({ theme }) => theme.abouttxt};

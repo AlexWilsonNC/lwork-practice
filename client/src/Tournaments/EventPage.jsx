@@ -898,14 +898,22 @@ const EventPage = () => {
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
     const is2026Event = eventId.includes('2026');
-    const showMatchupsTab = is2026Event;
+
     const isModernEvent = is2025Event || is2026Event;
+    const noPhaseDataEvents = ['2026_AUCKLAND'];
+    const usesPhaseData =
+        isModernEvent &&
+        !noPhaseDataEvents.includes(eventId) &&
+        eventId !== '2025_BALTIMORE' &&
+        eventId !== '2025_TOKYO_CL';
+
+    const showMatchupsTab = is2026Event && usesPhaseData;
     const hasResultsForDivision = results.length > 0;
-    const showPhaseCounts = isModernEvent && hasResultsForDivision;
+    const showPhaseCounts = usesPhaseData && hasResultsForDivision;
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;
-    if (isModernEvent) {
+    if (usesPhaseData) {
         // only for 2025+ events do we cut on Swiss rounds
         const totalPlayers = results.length;
         const day1Rounds =
@@ -1018,7 +1026,7 @@ const EventPage = () => {
     }, [eventId]);
 
     useEffect(() => {
-        if (!eventData || !isModernEvent) return;
+        if (!eventData || !usesPhaseData) return;
         if (didFetchCounts.current[division]) return;
         const [year, ...slugParts] = eventId.split('_');
         const slug = slugParts.join('-').toLowerCase();
@@ -1107,10 +1115,7 @@ const EventPage = () => {
     }, [selectedArchetype, dataDay, showTop30]);
 
     useEffect(() => {
-        const shouldUsePhase1 =
-            isModernEvent &&
-            eventId !== '2025_BALTIMORE' &&
-            eventId !== '2025_TOKYO_CL';
+        const shouldUsePhase1 = usesPhaseData;
 
         if (!shouldUsePhase1) return;
         if (viewTab !== 'Decks') return;
@@ -1925,10 +1930,10 @@ const EventPage = () => {
     // }, [isModernEvent, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
 
     useEffect(() => {
-        if (isModernEvent && eliminatedDecks.length === 0) {
+        if (usesPhaseData && eliminatedDecks.length === 0) {
             loadEliminated();
         }
-    }, [isModernEvent, eliminatedDecks.length]);
+    }, [usesPhaseData, eliminatedDecks.length]);
 
     useEffect(() => {
         if (!eventData) return;
@@ -2297,7 +2302,7 @@ const EventPage = () => {
             return acc;
         }, {});
     }
-    const allResultsPlayers = isModernEvent
+    const allResultsPlayers = usesPhaseData
         ? [...day2Results, ...eliminatedDecks]
         : resultsWithPlacement;
     const source = dataDay === 'day2'
@@ -2689,7 +2694,7 @@ const EventPage = () => {
                     <div className='event-content'>
                         {activeTab === 'Results' ? (
                             <div className='event-results' onClickCapture={handleEventResultsClickCapture}>
-                                {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && (
+                                {usesPhaseData && (
                                     <div className="decks-records-btns">
                                         <button
                                             onClick={() => handleTabChange('Decks')}
@@ -2783,7 +2788,7 @@ const EventPage = () => {
                                         <>
                                             {displayResults(filteredDay2Results, eventId, division, undefined, getEventFormat(division))}
 
-                                            {isModernEvent && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
+                                            {usesPhaseData && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL' && !showAllDecks && !loadingEliminatedDecks && (
                                                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                                                     <button onClick={loadEliminated} className="day1buttons">
                                                         Show {label(1)} Results
@@ -3175,7 +3180,7 @@ const EventPage = () => {
                                     <>
                                         <div className='deck-archetypes'>
                                             <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
-                                            {isModernEvent && (
+                                            {usesPhaseData && (
                                                 <div className="day-toggle-buttons" style={{ margin: '0.5rem 0' }}>
                                                     <button onClick={() => handleDataDayChange('day2')} className={dataDay === 'day2' ? 'active-button' : ''}>{label(2)}</button>
                                                     <button onClick={() => handleDataDayChange('day1')} className={dataDay === 'day1' ? 'active-button' : ''}>{label(1)}</button>

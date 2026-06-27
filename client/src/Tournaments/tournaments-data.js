@@ -309,8 +309,7 @@ const tournamentList = [
         "flag": uk,
         "location": "London, United Kingdom",
         "registrationTime": "",
-        "registrationLink": "",
-        "results": false
+        "registrationLink": ""
     },
     {
         "id": '2025_NAIC/masters',
@@ -1645,8 +1644,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Jan 24, 2026",
         "flag": newZealand,
-        "location": "Auckland, New Zealand",
-        "results": false
+        "location": "Auckland, New Zealand"
     },
     {
         "id": "2026_SYDNEY",
