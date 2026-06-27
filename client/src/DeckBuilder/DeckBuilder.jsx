@@ -78,8 +78,45 @@ const IMPORT_SET_ABBREV_ALIASES = {
   XYP: 'PR-XY',
   SMP: 'PR-SM',
   SP: 'PR-SW',
-  SVP: 'PR-SV',
-  ENERGY: 'Energy'
+  SVP: 'PR-SV'
+};
+
+const LIMITLESS_ENERGY_IMPORT_MAP = {
+  '18': { setAbbrev: 'SUM', number: 'grass' },
+  '19': { setAbbrev: 'SUM', number: 'fire' },
+  '20': { setAbbrev: 'SUM', number: 'water' },
+  '21': { setAbbrev: 'SUM', number: 'lightning' },
+  '22': { setAbbrev: 'SUM', number: 'psychic' },
+  '23': { setAbbrev: 'SUM', number: 'fighting' },
+  '24': { setAbbrev: 'SUM', number: 'darkness' },
+  '25': { setAbbrev: 'SUM', number: 'metal' },
+  '26': { setAbbrev: 'SUM', number: 'fairy' },
+  '27': { setAbbrev: 'TEU', number: 'grass' },
+  '28': { setAbbrev: 'TEU', number: 'fire' },
+  '29': { setAbbrev: 'TEU', number: 'water' },
+  '30': { setAbbrev: 'TEU', number: 'lightning' },
+  '31': { setAbbrev: 'TEU', number: 'psychic' },
+  '32': { setAbbrev: 'TEU', number: 'fighting' },
+  '33': { setAbbrev: 'TEU', number: 'darkness' },
+  '34': { setAbbrev: 'TEU', number: 'metal' },
+  '35': { setAbbrev: 'TEU', number: 'fairy' },
+  '36': { setAbbrev: 'SSH', number: 'grass' },
+  '37': { setAbbrev: 'SSH', number: 'fire' },
+  '38': { setAbbrev: 'SSH', number: 'water' },
+  '39': { setAbbrev: 'SSH', number: 'lightning' },
+  '40': { setAbbrev: 'SSH', number: 'psychic' },
+  '41': { setAbbrev: 'SSH', number: 'fighting' },
+  '42': { setAbbrev: 'SSH', number: 'darkness' },
+  '43': { setAbbrev: 'SSH', number: 'metal' },
+  '44': { setAbbrev: 'SSH', number: 'fairy' },
+  '45': { setAbbrev: 'CRZ', number: '152' },
+  '46': { setAbbrev: 'CRZ', number: '153' },
+  '47': { setAbbrev: 'CRZ', number: '154' },
+  '48': { setAbbrev: 'CRZ', number: '155' },
+  '49': { setAbbrev: 'CRZ', number: '156' },
+  '50': { setAbbrev: 'CRZ', number: '157' },
+  '51': { setAbbrev: 'CRZ', number: '158' },
+  '52': { setAbbrev: 'CRZ', number: '159' },
 };
 
 const normalizeImportedSetAbbrev = (setAbbrev) => {
@@ -935,9 +972,14 @@ export default function DeckBuilder() {
         const count = parseInt(parts[0], 10);
         const rawNumber = parts.pop();
         const rawSetAbbrev = parts.pop();
-        const setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
-        const number = normalizeImportedCardNumber(setAbbrev, rawNumber);
+        let setAbbrev = normalizeImportedSetAbbrev(rawSetAbbrev);
+        let number = normalizeImportedCardNumber(setAbbrev, rawNumber);
         const name = parts.slice(1).join(' ');
+        if (setAbbrev === 'ENERGY' && LIMITLESS_ENERGY_IMPORT_MAP[number]) {
+          const mapped = LIMITLESS_ENERGY_IMPORT_MAP[number];
+          setAbbrev = mapped.setAbbrev;
+          number = mapped.number;
+        }
 
         // const safeName = encodeURIComponent(name).replace(/\./g, '%2E');
         // const url = `/api/cards/searchbyname/partial/${safeName}`;
@@ -981,7 +1023,9 @@ export default function DeckBuilder() {
           continue;
         }
 
-        const idx = merged.findIndex(c => c.setAbbrev === setAbbrev && c.number === number);
+        const idx = merged.findIndex(
+          c => c.setAbbrev === match.setAbbrev && c.number === match.number
+        );
 
         if (!limitCounts || isBasicEnergy(match) || isUnlimitedByRules(match)) {
           if (idx > -1) merged[idx].count += count;
