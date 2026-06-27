@@ -437,4 +437,7 @@
     .accomplishments-table td:nth-child(1) {
         font-size: 9px !important;
     }
+    .show-results-btn {
+        width: 97.25%;
+    }
 }

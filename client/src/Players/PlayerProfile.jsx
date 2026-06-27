@@ -354,11 +354,10 @@ const PlayerProfile = () => {
     const accomplishmentRows = [
         { label: '1st Place', filter: r => r.placement === 1 },
         { label: '2nd Place', filter: r => r.placement === 2 },
-        { label: 'Top 4', filter: r => r.placement <= 4 },
-        { label: 'Top 8', filter: r => r.placement <= 8 },
-        { label: 'Top 16', filter: r => r.placement <= 16 },
-        { label: 'Top 32', filter: r => r.placement <= 32 },
-        // { label: 'Total Results', filter: () => true },
+        { label: 'Top 4', filter: r => r.placement >= 3 && r.placement <= 4 },
+        { label: 'Top 8', filter: r => r.placement >= 5 && r.placement <= 8 },
+        { label: 'Top 16', filter: r => r.placement >= 9 && r.placement <= 16 },
+        { label: 'Top 32', filter: r => r.placement >= 17 && r.placement <= 32 },
         { label: 'Top 64+', filter: r => r.placement > 32 },
     ];
 
