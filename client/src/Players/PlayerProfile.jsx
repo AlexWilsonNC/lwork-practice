@@ -329,6 +329,10 @@ const PlayerProfile = () => {
         const name = result.eventName?.toLowerCase() || '';
         const logo = result.eventLogo || '';
 
+        if (name.includes('retro') || logo.includes('retro')) {
+            return 'other';
+        }
+
         if (name.includes('world championship') || logo.includes('worlds')) {
             return 'worlds';
         }
@@ -340,6 +344,7 @@ const PlayerProfile = () => {
         if (
             name.includes('regional') ||
             name.includes('special event') ||
+            name.includes('spe') ||
             name.includes('special championship') ||
             name.includes('special championships') ||
             logo.includes('regionals') ||
@@ -553,7 +558,7 @@ const PlayerProfile = () => {
                 <div className="accomplishments-card">
                     <div className="accomplishments-header">
                         <h2>{formatName(player.name)}</h2>
-                        <p>Accomplishment count by event category</p>
+                        <p>Accomplishment count by event type</p>
                     </div>
                     <table className="accomplishments-table">
                         <thead>
