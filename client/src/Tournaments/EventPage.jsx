@@ -245,7 +245,7 @@ const promoSets = {
     "MEW": "PR-SV",
     "OBF": "PR-SV",
     "PAL": "PR-SV",
-    "SVI": "PR-SV",
+    "SVI": ["PR-SV", "ASC"],
     "SVE": "PR-SV",
     "CRZ": "PR-SW",
     "SIT": "PR-SW",
@@ -900,7 +900,17 @@ const EventPage = () => {
     const is2026Event = eventId.includes('2026');
 
     const isModernEvent = is2025Event || is2026Event;
-    const noPhaseDataEvents = ['2026_AUCKLAND'];
+    const noPhaseDataEvents = [
+        '2026_AUCKLAND',
+        '2026_LIMA',
+        '2026_BUENOS-AIRES',
+        '2026_LILLE',
+        '2025_CAROLINA',
+        '2025_BOGOTA',
+        '2025_BUENOS_AIRES',
+        '2025_LIMA',
+        '2024_CAPE_TOWN',
+    ];
     const usesPhaseData =
         isModernEvent &&
         !noPhaseDataEvents.includes(eventId) &&
@@ -909,7 +919,17 @@ const EventPage = () => {
 
     const showMatchupsTab = is2026Event && usesPhaseData;
     const hasResultsForDivision = results.length > 0;
-    const showPhaseCounts = usesPhaseData && hasResultsForDivision;
+    const hasStoredPhaseCounts =
+        eventData?.dayOneMasters ||
+        eventData?.dayTwoMasters ||
+        eventData?.dayOneSeniors ||
+        eventData?.dayTwoSeniors ||
+        eventData?.dayOneJuniors ||
+        eventData?.dayTwoJuniors;
+
+    const showPhaseCounts =
+        hasResultsForDivision &&
+        (usesPhaseData || hasStoredPhaseCounts);
     const label = (n, colon = false) => `${is2026Event ? 'Phase' : 'Day'} ${n}${colon ? ':' : ''}`;
 
     let day2Results;

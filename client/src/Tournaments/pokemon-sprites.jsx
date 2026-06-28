@@ -166,7 +166,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('regidrago');
     }
-    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Hisuian Goodra VSTAR')) {
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Hisuian Goodra VSTAR') && !hasPokemon('Alolan Vulpix VSTAR')) {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('goodra-hisui');
     }
@@ -536,6 +536,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('mimikyu');
     }               
     else if (hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Mimikyu') && hasPokemon('Rotom V') && hasPokemon('Minior') && !hasPokemon('Snorlax')) {
+        firstSprite  = getPokemonSpriteURL('ogerpon-cornerstone');
+        secondSprite  = getPokemonSpriteURL('mimikyu');
+    }               
+    else if (hasPokemon('Cornerstone Mask Ogerpon ex') && hasPokemon('Mimikyu') && !hasPokemon('Snorlax')) {
         firstSprite  = getPokemonSpriteURL('ogerpon-cornerstone');
         secondSprite  = getPokemonSpriteURL('mimikyu');
     }               

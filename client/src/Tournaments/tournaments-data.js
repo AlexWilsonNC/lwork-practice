@@ -98,6 +98,15 @@ const tournamentList = [
         "location": ""
     },
     {
+        "id": '2024_EUIC/masters',
+        "name": "EUIC 2024",
+        "eventType": "internationals",
+        "eventLogo": ogInternats,
+        "date": "Apr 5, 2024",
+        "flag": usa,
+        "location": "London, United Kingdom"
+    },
+    {
         "id": "2024_LAIC/masters",
         "name": "LAIC 2024",
         "eventType": "internationals",
@@ -154,10 +163,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": germany,
-        "location": "Dortmund, Germany",
-        "registrationTime": "2024-08-07T19:00:00+02:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Dortmund, Germany"
     },
     {
         "id": '2025_JOINVILLE/masters',
@@ -166,10 +172,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Sep 28, 2024",
         "flag": brazil,
-        "location": "Joinville, Brazil",
-        "registrationTime": "2024-08-07T19:00:00-03:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Joinville, Brazil"
     },
     {
         "id": '2025_LIMA/masters',
@@ -178,10 +181,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Oct 5, 2024",
         "flag": peru,
-        "location": "Lime, Peru",
-        "registrationTime": "2024-08-07T19:00:00+02:00",
-        "registrationLink": "https://playlatam.net/tournaments/LIM25-TCG-MA",
-        "results": false
+        "location": "Lime, Peru"
     },
     {
         "id": '2025_LILLE/masters',
@@ -190,10 +190,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Oct 19, 2024",
         "flag": france,
-        "location": "Lille, France",
-        "registrationTime": "2024-08-28T19:00:00+02:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Lille, France"
     },
     {
         "id": '2025_GDANSK/masters',
@@ -211,10 +208,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Nov 9, 2024",
         "flag": argentina,
-        "location": "Buenos Aires, Argentina",
-        "registrationTime": "2024-09-18T19:00:00-03:00",
-        "registrationLink": "https://www.playlatam.net/tournaments/BsAs25-TCG-MA",
-        "results": false
+        "location": "Buenos Aires, Argentina"
     },
     {
         "id": '2025_SACRAMENTO/masters',
@@ -241,8 +235,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Dec 7, 2024",
         "flag": colombia,
-        "location": "Bogotá, Colombia",
-        "results": false
+        "location": "Bogotá, Colombia"
     },
     {
         "id": '2025_TORONTO/masters',
@@ -278,10 +271,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Oct 11, 2024",
         "flag": usa,
-        "location": "Louisville, Kentucky",
-        "registrationTime": "2024-08-28T19:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Louisville, Kentucky"
     },
     {
         "id": '2025_EUIC/masters',
@@ -290,9 +280,7 @@ const tournamentList = [
         "eventLogo": internats25,
         "date": "Feb 21, 2025",
         "flag": uk,
-        "location": "London, United Kingdom",
-        "registrationTime": "",
-        "registrationLink": ""
+        "location": "London, United Kingdom"
     },
     {
         "id": '2025_NAIC/masters',
@@ -350,8 +338,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Jun 1, 2024",
         "flag": southAfrica,
-        "location": "Cape Town, South Africa",
-        "results": false
+        "location": "Cape Town, South Africa"
     },
     {
         "id": "2025_CAROLINA",
@@ -360,10 +347,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Feb 15, 2025",
         "flag": puertoRico,
-        "location": "Carolina, Puerto Rico",
-        "registrationTime": "2024-10-26T19:00:00-04:00",
-        "registrationLink": "https://rk9.gg/events/pokemon",
-        "results": false
+        "location": "Carolina, Puerto Rico"
     },
     {
         "id": "2024_INDONESIA_CHAMPIONSHIPS",
@@ -428,18 +412,18 @@ const tournamentList = [
         "flag": philippines,
         "location": "Taguig, Philippines",
     },
-    {
-        "id": "2025_PH_PBL1",
-        "name": "Philippines Premier League 1",
-        "eventType": "premierBallLeague",
-        "eventLogo": premierBallLeague,
-        "date": "Oct 26, 2024",
-        "flag": philippines,
-        "location": "Pasay City, Philippines",
-        "registrationTime": "2024-08-16T19:00:00+03:00",
-        "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/",
-        "results": false
-    },
+    // {
+    //     "id": "2025_PH_PBL1",
+    //     "name": "Philippines Premier League 1",
+    //     "eventType": "premierBallLeague",
+    //     "eventLogo": premierBallLeague,
+    //     "date": "Oct 26, 2024",
+    //     "flag": philippines,
+    //     "location": "Pasay City, Philippines",
+    //     "registrationTime": "2024-08-16T19:00:00+03:00",
+    //     "registrationLink": "https://asia.pokemon-card.com/ph/archives/6159/",
+    //     "results": false
+    // },
     {
         "id": "2024_SANTIAGO",
         "name": "Santiago Regionals",
@@ -503,18 +487,18 @@ const tournamentList = [
         "flag": southKorea,
         "location": "South Korea",
     },
-    {
-        "id": "2025_KL1",
-        "name": "Korean League Season 1",
-        "eventType": "asiaChampionship",
-        "eventLogo": koreaLeague,
-        "date": "Nov 2, 2024",
-        "flag": southKorea,
-        "location": "Busan, South Korea",
-        "registrationTime": "2024-08-16T19:00:00+03:00",
-        "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025",
-        "results": false
-    },
+    // {
+    //     "id": "2025_KL1",
+    //     "name": "Korean League Season 1",
+    //     "eventType": "asiaChampionship",
+    //     "eventLogo": koreaLeague,
+    //     "date": "Nov 2, 2024",
+    //     "flag": southKorea,
+    //     "location": "Busan, South Korea",
+    //     "registrationTime": "2024-08-16T19:00:00+03:00",
+    //     "registrationLink": "https://pokemonkorea.co.kr/koreanleague_2025",
+    //     "results": false
+    // },
     {
         "id": "2024_BUENOS_AIRES",
         "name": "Buenos Aires Special Event",
@@ -1468,30 +1452,30 @@ const tournamentList = [
         "flag": australia,
         "location": "Brisbane, Australia"
     },
-    {
-        "id": "2025_TH_PBL1",
-        "name": "Thailand Premier League 1",
-        "eventType": "premierBallLeague",
-        "eventLogo": premierBallLeague,
-        "date": "Oct 19, 2024",
-        "flag": thailand,
-        "location": "Nonthaburi, Thailand",
-        "registrationTime": "0",
-        "registrationLink": "https://asia.pokemon-card.com/th/archives/4826/",
-        "results": false
-    },
-    {
-        "id": "2025_SG_PBL1",
-        "name": "Singapore Premier League 1",
-        "eventType": "premierBallLeague",
-        "eventLogo": premierBallLeague,
-        "date": "Nov 2, 2024",
-        "flag": singapore,
-        "location": "Singapore",
-        "registrationTime": "0",
-        "registrationLink": "https://asia.pokemon-card.com/sg/archives/6157/",
-        "results": false
-    },
+    // {
+    //     "id": "2025_TH_PBL1",
+    //     "name": "Thailand Premier League 1",
+    //     "eventType": "premierBallLeague",
+    //     "eventLogo": premierBallLeague,
+    //     "date": "Oct 19, 2024",
+    //     "flag": thailand,
+    //     "location": "Nonthaburi, Thailand",
+    //     "registrationTime": "0",
+    //     "registrationLink": "https://asia.pokemon-card.com/th/archives/4826/",
+    //     "results": false
+    // },
+    // {
+    //     "id": "2025_SG_PBL1",
+    //     "name": "Singapore Premier League 1",
+    //     "eventType": "premierBallLeague",
+    //     "eventLogo": premierBallLeague,
+    //     "date": "Nov 2, 2024",
+    //     "flag": singapore,
+    //     "location": "Singapore",
+    //     "registrationTime": "0",
+    //     "registrationLink": "https://asia.pokemon-card.com/sg/archives/6157/",
+    //     "results": false
+    // },
     {
         "id": "2026_FRANKFURT",
         "name": "Frankfurt Regionals",
@@ -1553,8 +1537,7 @@ const tournamentList = [
         "eventLogo": regional25,
         "date": "Oct 25, 2025",
         "flag": france,
-        "location": "Lille, France",
-        "results": false
+        "location": "Lille, France"
     },
     {
         "id": "2026_GDANSK",
@@ -1581,8 +1564,7 @@ const tournamentList = [
         "eventLogo": speSeries,
         "date": "Nov 15, 2025",
         "flag": argentina,
-        "location": "Buenos Aires, Argentina",
-        "results": false
+        "location": "Buenos Aires, Argentina"
     },
     {
         "id": "2026_STUTTGART",

@@ -79,7 +79,7 @@ const promoSets = {
     "SCR": ["PR-SV", "PRE"],
     "SFA": "PR-SV",
     "TWM": "PR-SV",
-    "TEF": "PR-SV",
+    "TEF": ["PR-SV", "SVI"],
     "PAF": "PR-SV",
     "PAR": "PR-SV",
     "MEW": "PR-SV",
