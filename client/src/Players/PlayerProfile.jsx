@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
+import { getCustomLabel } from '../Tournaments/pokemon-labels';
 import { flags, countryNames } from '../Tools/flags';
 
 import regional25 from '../assets/event-logo/regionals-2025.png';
@@ -127,6 +128,31 @@ const PlayerProfileContainer = styled.div`
     .player-deck-icons a.no-decklist {
     pointer-events: none;
     }
+    .deck-tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.deck-tooltip {
+    visibility: hidden;
+    background-color: #1290eb;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    position: absolute;
+    z-index: 9999 !important;
+    bottom: 45%;
+    left: 52.5%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    display: block;
+}
+.deck-tooltip-container:hover .deck-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
      .day1btn, .day2btn, .conversbtn {
     background-color: ${({ theme }) => theme.day1btn};
   }
@@ -174,6 +200,10 @@ const PlayerProfileContainer = styled.div`
         text-align: center;
         padding: 13px 10px;
         background: ${({ theme }) => theme.themeName === 'dark' ? '#22252b' : '#fff'};
+    }
+    .division-filter-buttons button {
+        background: ${({ theme }) => theme.themeName === 'dark' ? '#22252b' : '#fff'};
+        color: ${({ theme }) => theme.text};
     }
 `;
 const getCountryName = (code) => {
@@ -266,6 +296,7 @@ const PlayerProfile = () => {
     const rawName = decodedId.substring(0, splitAt);
     const playerFlag = decodedId.substring(splitAt + 1);
     const [showAllResults, setShowAllResults] = useState(false);
+    const [accomplishmentDivision, setAccomplishmentDivision] = useState('all');
     const formattedName = rawName
         .split(/[-\s]+/)
         .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
@@ -373,10 +404,15 @@ const PlayerProfile = () => {
         { key: 'other', label: 'Other Events' },
     ];
 
+    const divisionFilteredResults = player.results.filter(result => {
+        if (accomplishmentDivision === 'all') return true;
+        return result.division?.toLowerCase() === accomplishmentDivision;
+    });
+
     const accomplishmentSummary = accomplishmentRows.map(row => ({
         ...row,
         counts: accomplishmentColumns.reduce((acc, col) => {
-            acc[col.key] = player.results.filter(result =>
+            acc[col.key] = divisionFilteredResults.filter(result =>
                 row.filter(result) && getEventCategory(result) === col.key
             ).length;
             return acc;
@@ -515,9 +551,14 @@ const PlayerProfile = () => {
                                     {(() => {
                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
                                         const sprite2 = result.sprite2 || '';
+                                        const deckLabel = getCustomLabel(result.eventId, result.sprite1, result.sprite2);
+                                        const deckUrl =
+                                            deckLabel && result.eventFormat
+                                                ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(result.eventFormat)}`
+                                                : null;
 
-                                        return (
-                                            <>
+                                        const SpriteContent = (
+                                            <div className="deck-tooltip-container">
                                                 {sprite1 && (
                                                     <img
                                                         className="sprite"
@@ -525,7 +566,6 @@ const PlayerProfile = () => {
                                                         alt="sprite"
                                                     />
                                                 )}
-
                                                 {sprite2 && sprite2 !== sprite1 && (
                                                     <img
                                                         className={sprite1 ? 'sprite second-sprite' : 'sprite'}
@@ -533,7 +573,21 @@ const PlayerProfile = () => {
                                                         alt="sprite"
                                                     />
                                                 )}
-                                            </>
+                                                {deckLabel && (
+                                                    <div className="deck-tooltip">
+                                                        {deckLabel}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                        return deckUrl ? (
+                                            <Link to={deckUrl} className="deck-tooltip-container">
+                                                {SpriteContent}
+                                            </Link>
+                                        ) : (
+                                            <div className="deck-tooltip-container">
+                                                {SpriteContent}
+                                            </div>
                                         );
                                     })()}
                                     <Link
@@ -557,8 +611,30 @@ const PlayerProfile = () => {
                 )}
                 <div className="accomplishments-card">
                     <div className="accomplishments-header">
-                        <h2>{formatName(player.name)}</h2>
-                        <p>Accomplishment count by event type</p>
+                        <div>
+                            <h2>{formatName(player.name)}</h2>
+                            <p>Accomplishment count by event type</p>
+                        </div>
+                        <hr className='show-700-only-acc'></hr>
+                        <div className="division-filter">
+                            <span>Division</span>
+                            <div className="division-filter-buttons">
+                                {[
+                                    { key: 'all', label: 'All' },
+                                    { key: 'masters', label: 'Masters' },
+                                    { key: 'seniors', label: 'Seniors' },
+                                    { key: 'juniors', label: 'Juniors' },
+                                ].map(option => (
+                                    <button
+                                        key={option.key}
+                                        className={accomplishmentDivision === option.key ? 'active' : ''}
+                                        onClick={() => setAccomplishmentDivision(option.key)}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                     <table className="accomplishments-table">
                         <thead>

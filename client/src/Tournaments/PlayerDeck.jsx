@@ -6,6 +6,7 @@ import DecklistOptions from '../Tools/DecklistOptions';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites, { getPokemonSprites } from './pokemon-sprites';
+import { getCustomLabel } from './pokemon-labels';
 import { flags, countryNames } from '../Tools/flags';
 import blueUltraBallSpinner from '../assets/logos/blue-ultra-ball.png';
 
@@ -45,6 +46,31 @@ const PlayerDeckCenter = styled.div`
     .dq-player {
         text-decoration: line-through;
         opacity: 0.6;
+    }
+    .deck-tooltip-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+    .deck-tooltip {
+        visibility: hidden;
+        background-color: #1290eb;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 12px;
+        position: absolute;
+        z-index: 9999 !important;
+        bottom: 45%;
+        left: 52.5%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        display: block;
+    }
+    .deck-tooltip-container:hover .deck-tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 `;
 
@@ -969,6 +995,9 @@ const PlayerDeck = () => {
                                             const { firstSprite, secondSprite } = getPokemonSprites(opponent.decklist, '', '');
                                             sprites = makeDisplayPair(firstSprite, secondSprite);
                                         }
+                                        const deckLabel = sprites
+                                            ? getCustomLabel(eventId, sprites.first, sprites.second)
+                                            : '';
 
                                         const bgColor =
                                             info.result === 'W' ? 'rgba(144,238,144,0.6)' :
@@ -980,6 +1009,15 @@ const PlayerDeck = () => {
                                                     info.result === 'T' ? 'rgb(78, 78, 7)' : 'inherit';
 
                                         const isBye = name === 'BYE';
+
+                                        const eventFormat = division === 'professors'
+                                            ? eventData.formatProfessors
+                                            : eventData.format;
+
+                                        const deckUrl =
+                                            deckLabel && eventFormat
+                                                ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
+                                                : null;
 
                                         return (
                                             <tr key={rnd}>
@@ -1001,11 +1039,35 @@ const PlayerDeck = () => {
 
                                                 <td className='opponent-sprites-cell sing-cells-sprites'>
                                                     {sprites ? (
-                                                        <DisplayPokemonSprites
-                                                            decklist={opponent?.decklist}
-                                                            sprite1={sprites.first}
-                                                            sprite2={sprites.second}
-                                                        />
+                                                        deckUrl ? (
+                                                            <Link to={deckUrl} className="deck-tooltip-container">
+                                                                <DisplayPokemonSprites
+                                                                    decklist={opponent?.decklist}
+                                                                    sprite1={sprites.first}
+                                                                    sprite2={sprites.second}
+                                                                />
+
+                                                                {deckLabel && (
+                                                                    <div className="deck-tooltip">
+                                                                        {deckLabel}
+                                                                    </div>
+                                                                )}
+                                                            </Link>
+                                                        ) : (
+                                                            <div className="deck-tooltip-container">
+                                                                <DisplayPokemonSprites
+                                                                    decklist={opponent?.decklist}
+                                                                    sprite1={sprites.first}
+                                                                    sprite2={sprites.second}
+                                                                />
+
+                                                                {deckLabel && (
+                                                                    <div className="deck-tooltip">
+                                                                        {deckLabel}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )
                                                     ) : (
                                                         <em style={{ opacity: 0.5, marginLeft: '35px' }}>—</em>
                                                     )}

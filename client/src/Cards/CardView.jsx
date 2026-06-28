@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import DisplayPokemonSprites from '../Tournaments/pokemon-sprites';
+import { getCustomLabel } from '../Tournaments/pokemon-labels';
 import '../css/card.css';
 import { isGLCLegal, isExpandedLegal, isStandardLegal, isBannedInGLC } from '../Tools/CardLegality';
 import tcgplayerIcon from '../assets/social-media-icons/tcgplayer-logo.png'
@@ -34,6 +35,31 @@ const CardViewTheme = styled.div`
     .link-to-playerprofile:hover,
     .white-link:hover {
         color: #1290eb;
+    }
+    .deck-tooltip-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+    .deck-tooltip {
+        visibility: hidden;
+        background-color: #1290eb;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 12px;
+        position: absolute;
+        z-index: 9999 !important;
+        bottom: 45%;
+        left: 52.5%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        display: block;
+    }
+    .deck-tooltip-container:hover .deck-tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 `;
 
@@ -1022,8 +1048,13 @@ const CardView = () => {
                                                     {(() => {
                                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
                                                         const sprite2 = result.sprite2 === 'hyphen' ? '' : result.sprite2;
+                                                        const deckLabel = getCustomLabel(eventId, result.sprite1, result.sprite2);
+                                                        const deckUrl =
+                                                            deckLabel && eventFormat
+                                                                ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
+                                                                : null;
 
-                                                        return (
+                                                        const SpriteContent = (
                                                             <>
                                                                 {sprite1 && (
                                                                     <img
@@ -1032,7 +1063,6 @@ const CardView = () => {
                                                                         alt="sprite"
                                                                     />
                                                                 )}
-
                                                                 {sprite2 && sprite2 !== sprite1 && (
                                                                     <img
                                                                         className={sprite1 ? 'sprite second-sprite' : 'sprite'}
@@ -1040,7 +1070,22 @@ const CardView = () => {
                                                                         alt="sprite"
                                                                     />
                                                                 )}
+                                                                {deckLabel && (
+                                                                    <div className="deck-tooltip">
+                                                                        {deckLabel}
+                                                                    </div>
+                                                                )}
                                                             </>
+                                                        );
+
+                                                        return deckUrl ? (
+                                                            <Link to={deckUrl} className="deck-tooltip-container">
+                                                                {SpriteContent}
+                                                            </Link>
+                                                        ) : (
+                                                            <div className="deck-tooltip-container">
+                                                                {SpriteContent}
+                                                            </div>
                                                         );
                                                     })()}
                                                     <Link

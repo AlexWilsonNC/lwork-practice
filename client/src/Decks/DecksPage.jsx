@@ -69,6 +69,29 @@ const formatOrder = [
   "BS-FO"
 ];
 
+const WORLDS_FORMATS = [
+  { label: '2025 Worlds', format: 'SVI-BLK' },
+  { label: '2024 Worlds', format: 'BRS-SFA' },
+  { label: '2023 Worlds', format: 'BST-PAL' },
+  { label: '2022 Worlds', format: 'SSH-PGO' },
+  { label: '2019 Worlds', format: 'UPR-UNM' },
+  { label: '2018 Worlds', format: 'BKT-CES' },
+  { label: '2017 Worlds', format: 'PRC-BUS' },
+  { label: '2016 Worlds', format: 'XY-STS' },
+  { label: '2015 Worlds', format: 'BCR-ROS' },
+  { label: '2014 Worlds', format: 'NXD-FLF' },
+  { label: '2013 Worlds', format: 'BLW-PLF' },
+  { label: '2012 Worlds', format: 'HS-DEX' },
+  { label: '2011 Worlds', format: 'HS-BLW' },
+  { label: '2010 Worlds', format: 'DP-UL' },
+  { label: '2009 Worlds', format: 'DP-RR' },
+  { label: '2008 Worlds', format: 'HP-MD' },
+  { label: '2007 Worlds', format: 'DX-DP' },
+  { label: '2006 Worlds', format: 'HL-HP' },
+  { label: '2005 Worlds', format: 'RS-EM' },
+  { label: '2004 Worlds', format: 'EX-HL' },
+];
+
 const DeckListContainer = styled.div`
   background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
@@ -181,6 +204,7 @@ const Decks = () => {
   const [selectedFormat, setSelectedFormat] = useState(DEFAULT_FORMAT);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedWorlds, setSelectedWorlds] = useState('');
 
   // State for managing the interstitial modal
   const [showModal, setShowModal] = useState(false);
@@ -201,6 +225,17 @@ const Decks = () => {
 
   const handleClose = () => {
     setShowModal(false); // Close the modal without redirecting
+  };
+
+  const handleWorldsChange = (e) => {
+    const value = e.target.value;
+
+    setSelectedWorlds(value);
+
+    if (!value) return;
+
+    setSelectedFormat(value);
+    setSearchParams({ format: value });
   };
 
   useEffect(() => {
@@ -267,6 +302,7 @@ const Decks = () => {
     const newFormat = event.target.value;
     setSelectedFormat(newFormat);
     setSearchParams({ format: newFormat });
+    setSelectedWorlds('');
   };
 
   const setSortByFormat = () => {
@@ -424,7 +460,7 @@ const Decks = () => {
             <div className='indiv-filter'>
               <p className='sort-events'>Format:</p>
               <select value={selectedFormat} onChange={handleFormatChange}>
-                <option value={DEFAULT_FORMAT}>Most Recent Format</option>
+                <option value={DEFAULT_FORMAT}>Most Recent</option>
 
                 <optgroup label="2026">
                   <option value="TEF-CRI">TEF-CRI</option>
@@ -562,6 +598,24 @@ const Decks = () => {
                   <option value="BS-FO">BS-FO</option>
                 </optgroup>
 
+              </select>
+            </div>
+            <div className='indiv-filter worlds-sort-event-formats'>
+              <p className='sort-events'>Worlds Format:</p>
+              <select
+                value={selectedWorlds}
+                onChange={handleWorldsChange}
+              >
+                <option value="">Select Worlds...</option>
+
+                {WORLDS_FORMATS.map(worlds => (
+                  <option
+                    key={worlds.format}
+                    value={worlds.format}
+                  >
+                    {worlds.label}
+                  </option>
+                ))}
               </select>
             </div>
             {/* <div className='indiv-filter'>

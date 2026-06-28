@@ -406,6 +406,7 @@ const DeckProfile = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [selectedFormat, setSelectedFormat] = useState('');
+  const [expandedEvents, setExpandedEvents] = useState({});
 
   useEffect(() => {
     const urlFormat = searchParams.get('format'); // Retrieve format from URL query
@@ -616,10 +617,25 @@ const DeckProfile = () => {
     )
     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)); // Sort by date descending
 
+  const eventClusters = Object.entries(
+    filteredDecks.reduce((acc, result) => {
+      acc[result.eventId] = acc[result.eventId] || [];
+      acc[result.eventId].push(result);
+      return acc;
+    }, {})
+  ).sort((a, b) => new Date(b[1][0].eventDate) - new Date(a[1][0].eventDate));
+
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedFormat('');
     setSelectedDivision('');
+  };
+
+  const toggleEventExpansion = (eventId) => {
+    setExpandedEvents(prev => ({
+      ...prev,
+      [eventId]: !prev[eventId],
+    }));
   };
 
   const handleCardClick = (card) => {
@@ -735,58 +751,109 @@ const DeckProfile = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredDecks.map((result, index) => {
-              const isDifferentEvent =
-                index === 0 ||
-                result.eventId !== filteredDecks[index - 1].eventId;
+            {eventClusters.map(([eventId, eventResults]) => {
+              const sortedResults = eventResults.sort((a, b) => {
+                const divisionSort = divisionOrder[a.division] - divisionOrder[b.division];
+                return divisionSort !== 0 ? divisionSort : a.placement - b.placement;
+              });
+
+              const isExpanded = !!expandedEvents[eventId];
+
+              const rowsToShow = isExpanded
+                ? sortedResults
+                : sortedResults.slice(0, 5);
+
+              const firstResult = sortedResults[0];
 
               return (
-                <React.Fragment key={index}>
-                  {isDifferentEvent && (
-                    <EventSeparator>
-                      <td colSpan="6" className='paddingfive'>
-                        <Link className="event-separator-content" to={`/tournaments/${result.eventId}`}>
-                          <strong>{result.eventName}</strong> &nbsp;&nbsp;-&nbsp; {result.eventDate} &nbsp;({result.eventFormat})
-                        </Link>
-                      </td>
-                    </EventSeparator>
-                  )}
-                  <tr>
-                    <td>{getPlacementSuffix(result.placement)}</td>
-                    <td><Link className='link-to-playerprofile' to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}>{formatName(result.playerName)}</Link></td>
-                    <td><span className='grey'>{formatName(result.division)}</span></td>
-                    <td></td>
-                    <td className='player-deck-icons center-content player-profile-sprites'>
-                      <div className='deck-profile-sprites'>
-                        {result.sprite1 && result.sprite1 !== 'blank' && (
-                          <img
-                            src={`/assets/sprites/${result.sprite1}.png`}
-                            alt={`${result.playerName}'s deck`}
-                            style={{ width: '55px' }}
-                            className='sprite'
-                          />
-                        )}
-
-                        {result.sprite2 && result.sprite2 !== 'hyphen' && (
-                          <img
-                            className={`sprite ${result.sprite1 && result.sprite1 !== 'blank' ? 'movesecondspritedecks' : ''}`}
-                            src={`/assets/sprites/${result.sprite2}.png`}
-                            alt={`${result.playerName}'s deck`}
-                            style={{ width: '55px' }}
-                          />
-                        )}
-                      </div>
-
-                      <Link
-                        to={`/tournaments/${result.eventId}/${result.division}/${result.playerName}-${result.playerFlag}`}
-                        className={result.decklist ? '' : 'no-decklist'}
-                      >
-                        <span className={`material-symbols-outlined ${result.decklist ? '' : 'no-decklist'}`}>
-                          format_list_bulleted
-                        </span>
+                <React.Fragment key={eventId}>
+                  <EventSeparator>
+                    <td colSpan="6" className="paddingfive">
+                      <Link className="event-separator-content" to={`/tournaments/${firstResult.eventId}`}>
+                        <strong>{firstResult.eventName}</strong>
+                        &nbsp;&nbsp;-&nbsp; {firstResult.eventDate} &nbsp;({firstResult.eventFormat})
                       </Link>
                     </td>
-                  </tr>
+                  </EventSeparator>
+
+                  {rowsToShow.map((result, index) => (
+                    <tr key={`${result.eventId}-${result.playerName}-${result.playerFlag}-${index}`}>
+                      <td>{getPlacementSuffix(result.placement)}</td>
+
+                      <td>
+                        <Link
+                          className="link-to-playerprofile"
+                          to={`/player/${normalizeName(result.playerName)}-${result.playerFlag}`}
+                        >
+                          {formatName(result.playerName)}
+                        </Link>
+                      </td>
+
+                      <td>
+                        <span className="grey">{formatName(result.division)}</span>
+                      </td>
+
+                      <td></td>
+
+                      <td className="player-deck-icons center-content player-profile-sprites">
+                        <div className="deck-profile-sprites">
+                          {result.sprite1 && result.sprite1 !== 'blank' && (
+                            <img
+                              src={`/assets/sprites/${result.sprite1}.png`}
+                              alt={`${result.playerName}'s deck`}
+                              style={{ width: '55px' }}
+                              className="sprite"
+                            />
+                          )}
+
+                          {result.sprite2 && result.sprite2 !== 'hyphen' && (
+                            <img
+                              className={`sprite ${result.sprite1 && result.sprite1 !== 'blank' ? 'movesecondspritedecks' : ''}`}
+                              src={`/assets/sprites/${result.sprite2}.png`}
+                              alt={`${result.playerName}'s deck`}
+                              style={{ width: '55px' }}
+                            />
+                          )}
+                        </div>
+
+                        <Link
+                          to={`/tournaments/${result.eventId}/${result.division}/${encodeURIComponent(result.playerName)}-${encodeURIComponent(result.playerFlag)}`}
+                          className={result.decklist ? '' : 'no-decklist'}
+                        >
+                          <span className={`material-symbols-outlined ${result.decklist ? '' : 'no-decklist'}`}>
+                            format_list_bulleted
+                          </span>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {sortedResults.length > 5 && (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: 'center' }}>
+                        <a
+                          className="showmoreversions"
+                          onClick={() => toggleEventExpansion(eventId)}
+                        >
+                          {isExpanded ? (
+                            <>
+                              See less{' '}
+                              <span className="material-symbols-outlined">
+                                keyboard_arrow_up
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              Expand {sortedResults.length - 5} more results from this event{' '}
+                              <span className="material-symbols-outlined expand-more-results">
+                                keyboard_arrow_down
+                              </span>
+                            </>
+                          )}
+                        </a>
+                      </td>
+                    </tr>
+                  )}
                 </React.Fragment>
               );
             })}

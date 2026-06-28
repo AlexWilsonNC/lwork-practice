@@ -50,7 +50,7 @@ function renderEnergyIcons(cost) {
 }
 
 const basicEnergyTypes = ["Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness", "Metal", "Fairy"];
-const stageOrder = { "Stage 2": 0, "Stage 1": 1, "Basic": 2 };
+const stageOrder = { "BREAK": -1,"Stage 2": 0, "Stage 1": 1, "Basic": 2 };
 const trainerPriority = {
   "Supporter": 0,
   "Item": 1,

@@ -393,7 +393,7 @@ tr.event-separator:hover td {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    color:#1290eb;
+    color:#1290eb !important;
     margin-top: -15px;
 }
 .showmoreversions:hover {

@@ -120,6 +120,7 @@ export const lightTheme = {
   burgerLinkCircle: 'rgba(255, 255, 255, 0.72);',
   burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(255,255,255,.85), 0 5px 12px rgba(18,144,235,.08);',
   burgerLinkSymbol: '#1290eb',
+  matrixmodalbg: 'white',
 };
 
 const decklistSvgDark = `
@@ -233,4 +234,5 @@ export const darkTheme = {
   burgerLinkCircle: 'rgba(75, 75, 75, 0.72);',
   burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(75,75,75,.85), 0 5px 12px rgba(18,144,235,.08);',
   burgerLinkSymbol: 'white',
+  matrixmodalbg: 'rgb(42, 43, 48)',
 };

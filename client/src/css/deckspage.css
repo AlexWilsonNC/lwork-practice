@@ -4,7 +4,12 @@
     align-items: center;
     justify-content: center;
 }
-
+.worlds-sort-event-formats {
+    margin-left: 5px;
+}
+.worlds-sort-event-formats select {
+    min-width: 110px;
+}
 .pokeball-spinner {
     width: 64px;
     height: 64px;

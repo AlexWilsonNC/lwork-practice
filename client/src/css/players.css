@@ -144,6 +144,43 @@
     border-radius: 18px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
+.accomplishments-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+.division-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+.division-filter span {
+    font-size: 11px;
+    opacity: 0.6;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.division-filter-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.division-filter-buttons button {
+    border: none;
+    border-radius: 999px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 60px;
+}
+.division-filter-buttons button.active {
+    background: #1290eb !important;
+    color: #fff;
+}
 .accomplishments-header h2 {
     margin: 0;
     font-size: 24px;
@@ -197,6 +234,15 @@
     margin-top: -15px;
     text-align: center;
     width: 100%;
+}
+.show-700-only-acc {
+    display: none;
+    width: 50%;
+    border-bottom: 2px solid grey;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-top: -15px;
 }
 @media screen and (max-width: 1600px) {
     .player-results-container {
@@ -323,6 +369,23 @@
     }
     .accomplishment-count.has-count {
         padding: 4px 8px;
+    }
+    .accomplishments-header {
+        flex-direction: column;
+    }
+    .division-filter {
+        align-items: flex-start;
+    }
+    .division-filter span {font-size: 10px;}
+    .division-filter-buttons {
+        justify-content: flex-start;
+    }
+    .division-filter-buttons button {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .show-700-only-acc {
+        display: flex;
     }
 }
 @media screen and (max-width: 600px) {

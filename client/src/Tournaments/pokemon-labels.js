@@ -124,6 +124,7 @@ const customLabelsConfig = {
         'klawf-terapagos': 'Klawf Terapagos',
     },
     '2025': {
+        'blank-palafin-hero': 'Palafin',
         'ogerpon-cornerstone-mimikyu': 'Ogerpon Mimikyu',
         'blank-greninja': 'Greninja ex',
         'blank-gardevoir': 'Gardevoir ex',
@@ -498,6 +499,7 @@ const customLabelsConfig = {
         'malamar-marshadow': 'Malamar',
     },
     '2018': {
+        'zoroark-magcargo': 'Zoroark Magcargo',
         'zoroark-magnezone': 'Zoroark Magnezone',
         'zoroark-garbodor': 'Zoroark Garbodor',
         'blank-rayquaza': 'Rayquaza GX',

@@ -517,7 +517,7 @@ const EventPageContent = styled.div`
         text-align: center;
         margin-top: 5px;
     }
-    .link-to-playerrecords, .results-country-filter, .country-filter-toggle, .meta-share-table, .player-search-wrapper input {
+    .link-to-playerrecords, .results-country-filter, .country-filter-toggle, .meta-share-table, .player-search-wrapper input, .matrix-info-modal {
         color: ${({ theme }) => theme.text};
     }
     .link-to-playerrecords:hover {
@@ -565,6 +565,7 @@ const EventPageContent = styled.div`
     .results-country-filter {background: ${({ theme }) => theme.resultscountryfilter};}
     .player-search-wrapper input {background: ${({ theme }) => theme.searchwrapperinputbg};}
     .country-filter-toggle {background: ${({ theme }) => theme.searchwrapperbtn};}
+    .matrix-info-modal {background: ${({ theme }) => theme.matrixmodalbg};}
 `;
 
 const cleanSpriteName = url => {
@@ -738,21 +739,14 @@ const comparePokemonCards = (card1, card2) => {
 };
 
 const normalizeEnergyCardName = (name) => {
-    // Normalize common variations in energy card names
     return name
         .toLowerCase()
         .replace("basic ", "")
         .replace(" - basic", "")
         .replace(" energy", "");
 };
-const compareEnergyCards = (card1, card2) => {
-    // Normalize both energy card names
-    const normalizedCard1Name = normalizeEnergyCardName(card1.name);
-    const normalizedCard2Name = normalizeEnergyCardName(card2.name);
-
-    // Compare based on normalized names, set, and number
-    return normalizedCard1Name === normalizedCard2Name && card1.set === card2.set && card1.number === card2.number;
-};
+const compareEnergyCards = (card1, card2) =>
+    normalizeEnergyCardName(card1.name) === normalizeEnergyCardName(card2.name);
 
 const forcedArchetypeSprites = {
     'Gardevoir & Sylveon': ['gardevoir-sylveon-tagteam'],
@@ -3030,19 +3024,22 @@ const EventPage = () => {
                                                     onClick={handleDayTwoClick}
                                                 >{label(2, true)}
                                                 </button>
-                                                {(isModernEvent || (eventData?.dayOneMeta?.length > 0 && division === 'masters')) && (
-                                                    <>
-                                                        <button
-                                                            className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
-                                                            onClick={handleDayOneClick}
-                                                        >{label(1)}</button>
-                                                        <button
-                                                            className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
-                                                            onClick={handleConversionRateClick}
-                                                        >Conversion %
-                                                        </button>
-                                                    </>
-                                                )}
+                                                {(
+                                                    usesPhaseData ||
+                                                    (!isModernEvent && eventData?.dayOneMeta?.length > 0 && division === 'masters')
+                                                ) && (
+                                                        <>
+                                                            <button
+                                                                className={`chart-button day1btn ${showDayOneMeta && !showConversionRate ? 'active' : ''}`}
+                                                                onClick={handleDayOneClick}
+                                                            >{label(1)}</button>
+                                                            <button
+                                                                className={`chart-button conversbtn ${showConversionRate ? 'active' : ''}`}
+                                                                onClick={handleConversionRateClick}
+                                                            >Conversion %
+                                                            </button>
+                                                        </>
+                                                    )}
                                             </div>
                                         </div>
                                         {isModernEvent && chartResults.length > 16 && (
