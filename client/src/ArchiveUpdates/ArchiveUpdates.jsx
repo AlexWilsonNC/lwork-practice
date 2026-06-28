@@ -145,7 +145,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 26, 2026</p>
+          <p>Last Updated: June 28, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -162,18 +162,6 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
-          <h4 className='archive-update-h4'><a href='/tournaments/2022_WORLDS/masters'>2022 Worlds</a></h4>
-          <br></br>
-
-          <a href='/tournaments/2022_WORLDS/masters/' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={arceus} alt="sprite" />
-              <img className="sprite second-sprite" src={pikachugmax} alt="sprite" />
-            </div>
-            <p>Ryuki Okada (Masters) - 39<sup>th</sup> Place</p>
-          </a>
-          
-          <hr className='archive-updates-mini-hr'></hr>
           <h4 className='archive-update-h4'><a href='/tournaments/2018_WORLDS/masters'>2018 Worlds</a></h4>
           <br></br>
 
@@ -239,13 +227,6 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
             <p>Caleb Gedemer (Masters) - 78<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
-          </a>
-          <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={buzzwole} alt="sprite" />
-              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
-            </div>
-            <p>Ryuki Okada (Masters) - 82<sup>nd</sup> Place</p>
           </a>
           <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -488,6 +469,30 @@ const ArchiveUpdates = () => {
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
 
+          <h4 className='archive-update-h4'><a href='/tournaments/2022_WORLDS/masters'>2022 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2022_WORLDS/masters/Ryuki%20Okada-JP' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={arceus} alt="sprite" />
+              <img className="sprite second-sprite" src={pikachugmax} alt="sprite" />
+            </div>
+            <p>Ryuki Okada (Masters) - 39<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2018_WORLDS/masters'>2018 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2018_WORLDS/masters/Ryuki%20Okada-JP' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Ryuki Okada (Masters) - 82<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
           <h4 className='archive-update-h4'><a href='/tournaments/2018_NAIC/masters'>2018 NAIC</a></h4>
           <br></br>
 
