@@ -351,7 +351,13 @@ const EventList = () => {
   const [showModal, setShowModal] = useState(false);
   const [showOnlyWithResults, setShowOnlyWithResults] = useState(false);
 
-  const uniqueYears = Array.from(new Set(sortedEvents.map(event => new Date(event.date).getFullYear().toString()))).sort();
+const getEventSeason = (event) => {
+  return event.id?.split('_')?.[0] || '';
+};
+
+const uniqueSeasons = Array.from(
+  new Set(sortedEvents.map(getEventSeason).filter(Boolean))
+).sort();
 
   useEffect(() => {
     const isCompleted = location.pathname.includes("/completed");
@@ -380,7 +386,7 @@ const EventList = () => {
 
   const filteredEvents = sortedEvents.filter(event => {
     const eventDate = new Date(event.date);
-    const eventYear = eventDate.getFullYear().toString();
+    const eventSeason = getEventSeason(event);
     const isInRegion = regionFilter ? regionFlags[regionFilter].includes(event.flag) : true;
     const matchesSearchTerm = event.name.toLowerCase().includes(searchTerm.toLowerCase()) || event.eventType.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -390,13 +396,13 @@ const EventList = () => {
         matchesSearchTerm &&
         (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
         (countryFilter ? event.flag === countryFilter : true) &&
-        (yearFilter ? eventYear === yearFilter : true);
+        (yearFilter ? eventSeason === yearFilter : true);
     } else {
       return isInRegion &&
         matchesSearchTerm &&
         (eventTypeFilter ? event.eventType === eventTypeFilter : true) &&
         (countryFilter ? event.flag === countryFilter : true) &&
-        (yearFilter ? eventYear === yearFilter : true) &&
+        (yearFilter ? eventSeason === yearFilter : true) &&
         (() => {
           const cutoffDate = new Date(eventDate);
           cutoffDate.setDate(cutoffDate.getDate() + 2);
@@ -533,10 +539,10 @@ const EventList = () => {
           </div>
           {!showUpcoming && (
             <div className='indiv-filter'>
-              <p className='sort-events'>Year:</p>
+              <p className='sort-events'>Season:</p>
               <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
                 <option value="">All Years</option>
-                {uniqueYears.slice().reverse().map(year => (
+                {uniqueSeasons.slice().reverse().map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
