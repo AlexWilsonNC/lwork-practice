@@ -125,6 +125,15 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
     },
     {
+            "id": "2024_ORLANDO",
+    "name": "Orlando Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "April 12, 2024",
+    "flag": usa,
+    "location": "Orlando, Florida"
+    },
+    {
         "id": '2024_NAIC_2014_RETRO/all',
         "name": "NAIC Retro Celebration (2014)",
         "eventType": "retro",

@@ -50,7 +50,7 @@ function renderEnergyIcons(cost) {
 }
 
 const basicEnergyTypes = ["Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness", "Metal", "Fairy"];
-const stageOrder = { "BREAK": -1,"Stage 2": 0, "Stage 1": 1, "Basic": 2 };
+const stageOrder = { "BREAK": -1, "Stage 2": 0, "Stage 1": 1, "Basic": 2 };
 const trainerPriority = {
   "Supporter": 0,
   "Item": 1,
@@ -225,12 +225,22 @@ function sortDeck(deck) {
   pokemons.forEach(card => {
     const self = baseName(card.name);
     evoGraph[self] = evoGraph[self] || new Set();
-    if (card.evolvesFrom) {
-      evoGraph[self].add(card.evolvesFrom);
-      evoGraph[card.evolvesFrom] = evoGraph[card.evolvesFrom] || new Set();
-      evoGraph[card.evolvesFrom].add(self);
-    }
-    (card.evolvesTo || []).forEach(child => {
+    const evolvesFromList = Array.isArray(card.evolvesFrom)
+      ? card.evolvesFrom
+      : card.evolvesFrom
+        ? [card.evolvesFrom]
+        : [];
+    evolvesFromList.forEach(parent => {
+      evoGraph[self].add(parent);
+      evoGraph[parent] = evoGraph[parent] || new Set();
+      evoGraph[parent].add(self);
+    });
+    const evolvesToList = Array.isArray(card.evolvesTo)
+      ? card.evolvesTo
+      : card.evolvesTo
+        ? [card.evolvesTo]
+        : [];
+    evolvesToList.forEach(child => {
       evoGraph[self].add(child);
       evoGraph[child] = evoGraph[child] || new Set();
       evoGraph[child].add(self);

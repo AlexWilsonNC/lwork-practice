@@ -234,6 +234,8 @@ const customLabelsConfig = {
         'mewtwo-spidops': 'Team Rocket\'s',
     },
     '2024': {
+        'arceus-regidrago': 'Arceus Regidrago',
+        'arceus-goodra-hisui': 'Arceus Goodra',
         'goodra-hisui-comfey': 'Goodra LZB',
         'blank-substitute': 'Other',
         'blank-snorlax': 'Snorlax Stall',
@@ -322,7 +324,6 @@ const customLabelsConfig = {
         'inteleon-vmax-urshifu-rapid-strike-gmax': 'Rapid Strike',
         'blank-darkrai': 'Darkrai VSTAR',
         'murkrow-flamigo': 'United Wings',
-        'arceus-regidrago': 'Arceus Regidrago',
         'gardevoir-mewtwo': 'Gardevoir ex',
         'arceus-duraludon-gmax': 'Arceus Duraludon',
         'blank-zoroark': 'Zoroark Box',
