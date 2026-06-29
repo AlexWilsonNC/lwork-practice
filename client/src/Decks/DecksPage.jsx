@@ -24,6 +24,7 @@ const formatOrder = [
   "BRS-TEF",
   "BST-PAF",
   "BST-PAR",
+  "BST-MEW",
   "BST-PAL",
   "BST-SVI",
   "SSH-CRZ",
@@ -488,6 +489,7 @@ const Decks = () => {
 
                 <optgroup label="2023">
                   <option value="BST-PAR">BST-PAR</option>
+                  <option value="BST-MEW">BST-MEW</option>
                   <option value="BST-PAL">BST-PAL</option>
                   <option value="BST-SVI">BST-SVI</option>
                   <option value="SSH-CRZ">SSH-CRZ</option>

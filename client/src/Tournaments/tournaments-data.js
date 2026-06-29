@@ -189,6 +189,102 @@ const tournamentList = [
   "flag": usa
     },
     {
+    "id": "2024_BRISBANE",
+  "name": "Brisbane Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Nov 25, 2023",
+  "flag": australia
+    },
+    {
+    "id": "2024_TORONTO",
+  "name": "Toronto Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Oct 27, 2023",
+  "flag": canada
+    },
+    {
+    "id": "2024_LILLE",
+  "name": "Lille Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Oct 21, 2023",
+  "flag": france
+    },
+    {
+    "id": "2024_PORTLAND",
+  "name": "Portland Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Jan 5, 2024",
+  "flag": usa
+    },
+    {
+    "id": "2024_SACRAMENTO",
+  "name": "Sacramento Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Oct 13, 2023",
+  "flag": usa
+    },
+    {
+    "id": "2024_PEORIA",
+  "name": "Peoria Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Oct 6, 2023",
+  "flag": usa
+    },
+    {
+    "id": "2024_SAN-ANTONIO",
+  "name": "San Antonio Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Dec 15, 2023",
+  "flag": usa
+    },
+    {
+    "id": "2024_CURITIBA",
+  "name": "Curitiba Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Sep 23, 2023",
+  "flag": brazil
+    },
+    {
+    "id": "2024_PITTSBURGH",
+  "name": "Pittsburgh Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Sep 8, 2023",
+  "flag": usa
+    },
+    {
+    "id": "2024_BARCELONA",
+  "name": "Barcelona Special Event",
+  "eventType": "speSeries",
+  "eventLogo": speSeries,
+  "date": "Sep 16, 2023",
+  "flag": spain
+    },
+    {
+    "id": "2024_STUTTGART",
+  "name": "Stuttgart Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Dec 9, 2023",
+  "flag": germany
+    },
+    {
+    "id": "2024_GDANSK",
+  "name": "Gdańsk Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Nov 25, 2023",
+  "flag": poland
+    },
+    {
             "id": "2024_UTRECHT",
     "name": "Utrecht Special Event",
     "eventType": "speSeries",

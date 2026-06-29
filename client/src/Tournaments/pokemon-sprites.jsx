@@ -127,8 +127,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('baxcalibur');
     }
     else if (hasPokemon('Origin Forme Palkia VSTAR') && hasPokemon('Chien-Pao ex')) {
-        firstSprite  = getPokemonSpriteURL('palkia-origin');
-        secondSprite  = getPokemonSpriteURL('chien-pao');
+        secondSprite  = getPokemonSpriteURL('palkia-origin');
     }
     else if (hasPokemon('Alolan Vulpix VSTAR') && hasPokemon('Yveltal')) {
         firstSprite  = getPokemonSpriteURL('vulpix-alola');
@@ -186,6 +185,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('giratina-origin');
         secondSprite  = getPokemonSpriteURL('comfey');
     }
+    else if (hasPokemon('Charizard ex') && hasPokemon('Comfey')) {
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('comfey');
+    }
     else if (hasPokemon('Comfey') && hasPokemon('Sableye')) {
         firstSprite  = getPokemonSpriteURL('comfey');
         secondSprite  = getPokemonSpriteURL('sableye');
@@ -233,6 +236,21 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             secondSprite  = getPokemonSpriteURL('pidgeot');
         }
     }
+    else if (hasPokemon('Charizard ex') && hasPokemon('Entei V') && !hasPokemon('Bibarel') && !hasPokemon('Pidgeot ex') && !hasPokemon('Dusknoir') && !hasPokemon('Dragapult ex')) {
+        const zardCount = getPokemonCount('Charizard ex');
+        if (zardCount === 4) {
+            firstSprite  = getPokemonSpriteURL('blank');
+            secondSprite  = getPokemonSpriteURL('charizard');
+        }
+    }
+    else if (hasPokemon('Charizard ex') && hasPokemon('Gallade') && !hasPokemon('Gardevoir ex')) {
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('gallade');
+    }
+    else if (hasPokemon('Hisuian Zoroark VSTAR') && hasPokemon('Gengar')) {
+        firstSprite  = getPokemonSpriteURL('zoroark-hisui');
+        secondSprite  = getPokemonSpriteURL('gengar');
+    }
     else if (hasPokemon('Dragapult ex') && hasPokemon('Pidgeot ex')) {
         firstSprite  = getPokemonSpriteURL('dragapult');
         secondSprite  = getPokemonSpriteURL('pidgeot');
@@ -246,6 +264,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     }
     else if (hasPokemon('Pidgeot ex') && hasPokemon('Chi-Yu ex')) {
         secondSprite  = getPokemonSpriteURL('pidgeot');
+    }
+    else if (hasPokemon('Charizard ex') && hasPokemon('Comfey')) {
+        firstSprite  = getPokemonSpriteURL('charizard');
+        secondSprite  = getPokemonSpriteURL('comfey');
     }
     else if (hasPokemon('Charizard ex') && hasPokemon('Pidgeot ex')) {
         firstSprite  = getPokemonSpriteURL('charizard');
@@ -380,10 +402,6 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('froslass');
         secondSprite  = getPokemonSpriteURL('munkidori');
     }
-    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Duraludon VMAX')) {
-        firstSprite  = getPokemonSpriteURL('duraludon-gmax');
-        secondSprite  = getPokemonSpriteURL('arceus');
-    }
     else if (hasPokemon('Ting-Lu ex') && hasPokemon('Koraidon ex')) {
         firstSprite  = getPokemonSpriteURL('ting-lu');
         secondSprite  = getPokemonSpriteURL('koraidon');
@@ -395,6 +413,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Umbreon VMAX')) {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('umbreon-vmax');
+    }
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Duraludon VMAX')) {
+        firstSprite  = getPokemonSpriteURL('duraludon-gmax');
+        secondSprite  = getPokemonSpriteURL('arceus');
     }
     else if (hasPokemon('Arceus VSTAR') && hasPokemon('Dusknoir')) {
         firstSprite  = getPokemonSpriteURL('arceus');
@@ -627,6 +649,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Metagross') && hasPokemon('Genesect ex')) {
         secondSprite  = getPokemonSpriteURL('metagross');
     }       
+    else if (hasPokemon('Iron Valiant ex') && hasPokemon('Rapid Strike Urshifu VMAX') && !hasPokemon('Inteleon VMAX')) {
+        firstSprite  = getPokemonSpriteURL('iron-valiant');
+        secondSprite  = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
+    }       
     else if (hasPokemon('Steven\'s Metagross ex') && hasPokemon('Genesect ex')) {
         const metagrossCount = getPokemonCount('Steven\'s Metagross ex');
         if (metagrossCount >= 2) {
@@ -639,8 +665,8 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         if (megadragoniteCount >= 2) {
             firstSprite  = getPokemonSpriteURL('dragonite-mega');
             secondSprite  = getPokemonSpriteURL('eelektrik');
-        }
-    }                                                                          
+        }    
+    }                                                                    
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
