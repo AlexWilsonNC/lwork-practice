@@ -107,7 +107,7 @@ const promoSets = {
     "TWM": "PR-SV",
     "TEF": ["PR-SV", "SVI"],
     "PAF": "PR-SV",
-    "PAR": "PR-SV",
+    "PAR": ["PR-SV", "PAF"],
     "MEW": "PR-SV",
     "OBF": "PR-SV",
     "PAL": "PR-SV",
@@ -288,6 +288,7 @@ const formatName = (name) => {
     const specialCases = {
         'de haes damien': 'De Haes Damien',
         'jamie depamphilis': 'Jamie DePamphilis',
+        'der cherng lee': 'Der Cherng Lee',
     };
 
     const lowerCaseName = name.toLowerCase();

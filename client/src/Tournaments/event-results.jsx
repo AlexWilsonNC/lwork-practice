@@ -96,7 +96,8 @@ const formatName = (name) => {
 
     const specialCases = {
         'de haes damien': 'De Haes Damien',
-        'jamie depamphilis': 'Jamie DePamphilis'
+        'jamie depamphilis': 'Jamie DePamphilis',
+        'der cherng lee': 'Der Cherng Lee',
     };
 
     const lowerCaseName = name.toLowerCase();

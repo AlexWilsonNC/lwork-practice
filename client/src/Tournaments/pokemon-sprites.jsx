@@ -138,6 +138,14 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('arceus');
         secondSprite  = getPokemonSpriteURL('aggron-vmax');
     }
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Regigigas VSTAR')) {
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('regigigas');
+    }
+    else if (hasPokemon('Arceus VSTAR') && hasPokemon('Leafeon VSTAR')) {
+        firstSprite  = getPokemonSpriteURL('arceus');
+        secondSprite  = getPokemonSpriteURL('leafeon');
+    }
     else if (hasPokemon('Rapid Strike Urshifu VMAX') && hasPokemon('Inteleon VMAX')) {
         firstSprite  = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
         secondSprite  = getPokemonSpriteURL('inteleon-vmax');
@@ -715,6 +723,13 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             if (moonCount >= 3) {
                 firstSprite = getPokemonSpriteURL('blank');
                 secondSprite = getPokemonSpriteURL('roaring-moon');
+            }
+        }
+        else if (hasPokemon('Arceus VSTAR')) {
+            const arceusCount = getPokemonCount('Arceus VSTAR');
+            if (arceusCount >= 3) {
+                firstSprite = getPokemonSpriteURL('blank');
+                secondSprite = getPokemonSpriteURL('arceus');
             }
         }
     }     

@@ -125,13 +125,84 @@ const tournamentList = [
         "location": "São Paulo, Brazil",
     },
     {
-            "id": "2024_ORLANDO",
-    "name": "Orlando Regionals",
+        "id": "2024_ORLANDO",
+        "name": "Orlando Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "April 12, 2024",
+        "flag": usa
+    },
+    {
+        "id": "2024_VANCOUVER",
+        "name": "Vancouver Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 22, 2024",
+        "flag": canada
+    },
+    {
+        "id": "2024_GOIANIA",
+        "name": "Goiânia Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 9, 2024",
+        "flag": brazil
+    },
+    {
+            "id": "2024_DORTMUND",
+    "name": "Dortmund Regionals",
     "eventType": "regionals",
     "eventLogo": regionals,
-    "date": "April 12, 2024",
-    "flag": usa,
-    "location": "Orlando, Florida"
+    "date": "Feb 10, 2024",
+    "flag": germany
+    },
+    {
+    "id": "2024_KNOXVILLE",
+    "name": "Knoxville Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 2, 2024",
+    "flag": usa
+    },
+    {
+    "id": "2024_MELBOURNE",
+    "name": "Melbourne Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 3, 2024",
+    "flag": australia
+    },
+    {
+    "id": "2024_LIVERPOOL",
+    "name": "Liverpool Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 27, 2024",
+    "flag": uk
+    },
+    {
+    "id": "2024_CHARLOTTE",
+  "name": "Charlotte Regionals",
+  "eventType": "regionals",
+  "eventLogo": regionals,
+  "date": "Jan 19, 2024",
+  "flag": usa
+    },
+    {
+            "id": "2024_UTRECHT",
+    "name": "Utrecht Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 2, 2024",
+    "flag": netherlands
+    },
+    {
+        "id": "2024_PERTH",
+        "name": "Perth Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 13, 2024",
+        "flag": australia
     },
     {
         "id": '2024_NAIC_2014_RETRO/all',

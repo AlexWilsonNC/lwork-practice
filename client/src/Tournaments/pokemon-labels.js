@@ -234,6 +234,11 @@ const customLabelsConfig = {
         'mewtwo-spidops': 'Team Rocket\'s',
     },
     '2024': {
+        'blank-regigigas': "Regis",
+        'arceus-leafeon': 'Arceus Leafeon',
+        'arceus-regigigas': 'Arceus Regigigas',
+        'blank-arceus': 'Arceus VSTAR',
+        'blank-meowscarada': 'Meowscarada ex',
         'arceus-regidrago': 'Arceus Regidrago',
         'arceus-goodra-hisui': 'Arceus Goodra',
         'goodra-hisui-comfey': 'Goodra LZB',

@@ -179,7 +179,7 @@
 }
 .division-filter-buttons button.active {
     background: #1290eb !important;
-    color: #fff;
+    color: #fff !important;
 }
 .accomplishments-header h2 {
     margin: 0;

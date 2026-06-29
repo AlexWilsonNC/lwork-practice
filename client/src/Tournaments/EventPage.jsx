@@ -241,7 +241,7 @@ const promoSets = {
     "TWM": "PR-SV",
     "TEF": "PR-SV",
     "PAF": "PR-SV",
-    "PAR": "PR-SV",
+    "PAR": ["PR-SV", "PAF"],
     "MEW": "PR-SV",
     "OBF": "PR-SV",
     "PAL": "PR-SV",
@@ -657,6 +657,7 @@ const formatName = (name) => {
     const specialCases = {
         'de haes damien': 'De Haes Damien',
         'jamie depamphilis': 'Jamie DePamphilis',
+        'der cherng lee': 'Der Cherng Lee',
     };
 
     const lowerCaseName = name.toLowerCase();
@@ -1240,12 +1241,13 @@ const EventPage = () => {
         // 1) restore the “showTop30” setting
         const saved = sessionStorage.getItem(`showTop30_${eventId}`);
         if (saved !== null) {
-            setShowTop30(JSON.parse(saved));
+            const savedValue = JSON.parse(saved);
+            setShowTop30(prev => prev === savedValue ? prev : savedValue);
         }
 
         // 2) if nothing selected, clear out and bail
         if (!selectedArchetype) {
-            setAverageCardCounts([]);
+            setAverageCardCounts(prev => prev.length ? [] : prev);
             return;
         }
 
