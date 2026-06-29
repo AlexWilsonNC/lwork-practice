@@ -710,6 +710,13 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         else if(hasPokemon('Greninja ex')) {
             secondSprite  = getPokemonSpriteURL('Greninja');
         }
+        else if (hasPokemon('Roaring Moon ex')) {
+            const moonCount = getPokemonCount('Roaring Moon ex');
+            if (moonCount >= 3) {
+                firstSprite = getPokemonSpriteURL('blank');
+                secondSprite = getPokemonSpriteURL('roaring-moon');
+            }
+        }
     }     
 
     if (!firstSprite && !secondSprite) {

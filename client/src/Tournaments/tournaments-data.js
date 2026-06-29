@@ -80,6 +80,15 @@ import unknown from '../assets/flags/unknown.png';
 
 const tournamentList = [
     {
+        "id": "2024_SAO-PAULO",
+        "name": "São Paulo Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 20, 2024",
+        "flag": brazil,
+        "location": "São Paulo, Brazil",
+        },
+    {
         "id": "2024_MALAYSIA_CH",
         "name": "Malaysia Championships",
         "eventType": "asiachampionship",
@@ -95,7 +104,7 @@ const tournamentList = [
         "eventLogo": ogInternats,
         "date": "Jun 7, 2024",
         "flag": usa,
-        "location": ""
+        "location": "New Orleans, Louisiana"
     },
     {
         "id": '2024_EUIC/masters',
@@ -122,7 +131,7 @@ const tournamentList = [
         "eventLogo": retro,
         "date": "Jun 9, 2024",
         "flag": usa,
-        "location": ""
+        "location": "New Orleans, Louisiana"
     },
     {
         "id": '2024_NAIC_2010_RETRO/all',
@@ -131,7 +140,7 @@ const tournamentList = [
         "eventLogo": retro,
         "date": "Jun 6, 2024",
         "flag": usa,
-        "location": ""
+        "location": "New Orleans, Louisiana"
     },
     {
         "id": '2024_WORLDS/masters',
