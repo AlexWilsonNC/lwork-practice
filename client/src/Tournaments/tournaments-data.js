@@ -499,10 +499,26 @@ const tournamentList = [
         "registrationLink": "https://www.pokemon-card.com/info/004574.html"
     },
     {
+        "id": "2025_DURBAN",
+  "name": "Durban Special Event",
+  "eventType": "speSeries",
+  "eventLogo": speSeries,
+  "date": "May 24, 2025",
+  "flag": southAfrica
+    },
+    {
+        "id": "2025_JOHANNESBURG",
+  "name": "Johannesburg Special Event",
+  "eventType": "speSeries",
+  "eventLogo": speSeries,
+  "date": "Apr 26, 2025",
+  "flag": southAfrica
+    },
+    {
         "id": '2024_BOLOGNA',
         "name": "Bologna Special Event",
-        "eventType": "regionals",
-        "eventLogo": regionals,
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
         "date": "Jun 1, 2024",
         "flag": italy,
         "location": "Bologna, Italy"

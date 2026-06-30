@@ -904,6 +904,8 @@ const EventPage = () => {
         '2025_CAROLINA',
         '2025_BOGOTA',
         '2025_BUENOS_AIRES',
+        '2025_JOHANNESBURG',
+        '2025_DURBAN',
         '2025_LIMA',
         '2024_CAPE_TOWN',
     ];

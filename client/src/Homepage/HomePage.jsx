@@ -242,7 +242,7 @@ const Homepage = () => {
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
                                         <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
-                                        <p>New long-lost decklists from the 2012 and 2015 World Championships were recently discovered, plus more! Check them out only on PTCG Legends!</p>
+                                        <p>New long-lost decklists spanning the 2012 World Championships through 2022 were recently discovered, plus more! Check them out only on PTCG Legends!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
                                         <p>Jun 1, 2026</p>
@@ -498,7 +498,7 @@ const Homepage = () => {
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
                                     <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
-                                    <p>New long-lost decklists from the 2012 and 2015 World Championships were recently discovered, plus more! Check them out only on PTCG Legends!</p>
+                                    <p>New long-lost decklists spanning the 2012 and 2World Championships through 2022 recently discovered, plus more! Check them out only on PTCG Legends!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
                                     <p>Jun 1, 2026</p>
