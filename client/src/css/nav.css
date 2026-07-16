@@ -573,12 +573,10 @@ nav {
 
 .mobile-account-link {
   height: 42px;
-
   display: grid;
   grid-template-columns: 34px 1fr 22px;
   align-items: center;
   gap: 8px;
-
   color: #111;
   text-decoration: none;
   background-color: transparent;

@@ -49,6 +49,7 @@ import fourStadiumChallenge from '../assets/event-logo/old-stadium-challenge.png
 import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-logo.png';
 import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 import championsLeague from '../assets/event-logo/champions-league.png';
+import championshipSeries27 from '../assets/event-logo/2027-championship-series.webp';
 
 import argentina from '../assets/flags/argentina.png';
 import andorra from '../assets/flags/andorra.png';
@@ -203,6 +204,7 @@ const logos = {
     superTrainerShowdown: superTrainerShowdown,
     megaTropicalBattle: megaTropicalBattle,
     championsLeague: championsLeague,
+    championshipSeries27: championshipSeries27,
 };
 
 const orderedSets = [
