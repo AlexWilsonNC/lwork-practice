@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
@@ -377,6 +377,7 @@ const EventList = () => {
   const [searchTerm, setSearchTerm] = useState(() => loadFiltersWithExpiration('searchTerm') || '');
   const [showModal, setShowModal] = useState(false);
   const [showOnlyWithResults, setShowOnlyWithResults] = useState(false);
+  const plannerMenuRef = useRef(null);
 
   const getEventSeason = (event) => {
     return event.id?.split('_')?.[0] || '';
@@ -466,6 +467,27 @@ const EventList = () => {
   };
 
   useEffect(() => {
+    const handleClickOutside = event => {
+      if (
+        planMenuEventKey &&
+        plannerMenuRef.current &&
+        !plannerMenuRef.current.contains(event.target)
+      ) {
+        setPlanMenuEventKey('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        handleClickOutside
+      );
+    };
+  }, [planMenuEventKey]);
+
+  useEffect(() => {
     if (!showUpcoming || !token) {
       setPlannedEvents(new Map());
       return;
@@ -544,6 +566,7 @@ const EventList = () => {
           eventType: event.eventType,
           eventLocation: event.location || '',
           eventSite: event.eventSite || '',
+          eventLogo: event.eventLogo,
           attendanceStatus
         })
       });
@@ -664,8 +687,8 @@ const EventList = () => {
             </div>
           )}
           {showUpcoming && (
-            <div style={{ opacity: 0, gap: '10px', marginTop: '12px' }}>
-              <span id='toggleswitchcopy'>Events with results only</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '12px', marginRight: '2px' }}>
+              <span id='toggleswitchcopy'>Select the <strong>+</strong> in the "plan" column to add to your event planner.</span>
             </div>
           )}
         </div>
@@ -765,8 +788,8 @@ const EventList = () => {
                   )} */}
                 {showUpcoming && (
                   <>
-                    <th>Event Site</th>
-                    <th style={{display: 'none'}} className="event-plan-heading">Plan</th>
+                    <th>Website</th>
+                    <th className="event-plan-heading" style={{display: 'none'}}>Plan</th>
                   </>
                 )}
               </tr>
@@ -842,7 +865,7 @@ const EventList = () => {
                       </td>
                     )}
 
-                    {/* {showUpcoming && (() => {
+                    {showUpcoming && (() => {
                       const eventKey = getPlannerEventKey(event);
                       const currentPlan = plannedEvents.get(eventKey);
                       const isSaving = planningEventKey === eventKey;
@@ -852,13 +875,12 @@ const EventList = () => {
                         <td className="event-plan-cell">
                           <div className="event-plan-control">
                             <button
+                            style={{display: 'none'}}
                               type="button"
                               className={[
                                 'event-plan-button',
                                 currentPlan ? 'planned' : '',
-                                currentPlan?.attendanceStatus === 'going'
-                                  ? 'going'
-                                  : ''
+                                currentPlan?.attendanceStatus
                               ].filter(Boolean).join(' ')}
                               disabled={isSaving}
                               title={
@@ -871,7 +893,9 @@ const EventList = () => {
                                   ? `Edit plan for ${event.name}`
                                   : `Add ${event.name} to Event Planner`
                               }
-                              onClick={() => {
+                              onClick={event => {
+                                event.stopPropagation();
+
                                 if (!token) {
                                   navigate('/login', {
                                     state: {
@@ -892,14 +916,16 @@ const EventList = () => {
                               <span className="material-symbols-outlined">
                                 {isSaving
                                   ? 'progress_activity'
-                                  : currentPlan
-                                    ? 'event_available'
-                                    : 'add'}
+                                  : currentPlan?.attendanceStatus === 'cancelled'
+                                    ? 'event_busy'
+                                    : currentPlan
+                                      ? 'event_available'
+                                      : 'add'}
                               </span>
                             </button>
 
                             {menuIsOpen && (
-                              <div className="event-plan-menu">
+                              <div className="event-plan-menu" ref={plannerMenuRef} onMouseDown={event => event.stopPropagation()}>
                                 <button
                                   type="button"
                                   className={
@@ -916,7 +942,6 @@ const EventList = () => {
                                   </span>
                                   Going
                                 </button>
-
                                 <button
                                   type="button"
                                   className={
@@ -933,7 +958,22 @@ const EventList = () => {
                                   </span>
                                   Interested
                                 </button>
-
+                                <button
+                                  type="button"
+                                  className={
+                                    currentPlan?.attendanceStatus === 'cancelled'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'cancelled')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    event_busy
+                                  </span>
+                                  Cancelled
+                                </button>
                                 {currentPlan && (
                                   <>
                                     <button
@@ -973,7 +1013,7 @@ const EventList = () => {
                           </div>
                         </td>
                       );
-                    })()} */}
+                    })()}
                   </tr>
                 )
               })}

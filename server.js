@@ -253,6 +253,10 @@ const plannedEventSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  eventLogo: {
+  type: String,
+  default: ''
+},
   eventType: {
     type: String,
     default: ''
@@ -267,7 +271,7 @@ const plannedEventSchema = new mongoose.Schema({
   },
   attendanceStatus: {
     type: String,
-    enum: ['interested', 'going'],
+    enum: ['interested', 'going', 'cancelled'],
     default: 'interested'
   },
   checklist: {
@@ -275,113 +279,113 @@ const plannedEventSchema = new mongoose.Schema({
     default: () => ({})
   },
   eventDeck: {
-  name: {
-    type: String,
-    default: ''
-  },
+    name: {
+      type: String,
+      default: ''
+    },
 
-  mascotCard: {
-    type: String,
-    default: ''
-  },
+    mascotCard: {
+      type: String,
+      default: ''
+    },
 
-  secondaryMascotCard: {
-    type: String,
-    default: null
-  },
+    secondaryMascotCard: {
+      type: String,
+      default: null
+    },
 
-  description: {
-    type: String,
-    default: ''
-  },
+    description: {
+      type: String,
+      default: ''
+    },
 
-  /*
-   * Uses the same flat array saved by ExportButtons.jsx.
-   */
-  decklist: {
-    type: Array,
-    default: undefined
-  },
+    /*
+     * Uses the same flat array saved by ExportButtons.jsx.
+     */
+    decklist: {
+      type: Array,
+      default: undefined
+    },
 
-  mascotImageUrl: {
-    type: String,
-    default: null
-  },
+    mascotImageUrl: {
+      type: String,
+      default: null
+    },
 
-  secondaryMascotImageUrl: {
-    type: String,
-    default: null
-  },
+    secondaryMascotImageUrl: {
+      type: String,
+      default: null
+    },
 
-  hasAncientTrait: {
-    type: Boolean,
-    default: false
-  },
+    hasAncientTrait: {
+      type: Boolean,
+      default: false
+    },
 
-  isTagTeam: {
-    type: Boolean,
-    default: false
-  },
+    isTagTeam: {
+      type: Boolean,
+      default: false
+    },
 
-  hasBreakTrait: {
-    type: Boolean,
-    default: false
-  },
+    hasBreakTrait: {
+      type: Boolean,
+      default: false
+    },
 
-  isLegendCard: {
-    type: Boolean,
-    default: false
-  },
+    isLegendCard: {
+      type: Boolean,
+      default: false
+    },
 
-  specificallyLugiaLegend: {
-    type: Boolean,
-    default: false
-  },
+    specificallyLugiaLegend: {
+      type: Boolean,
+      default: false
+    },
 
-  specificallyZoroarkGX: {
-    type: Boolean,
-    default: false
-  },
+    specificallyZoroarkGX: {
+      type: Boolean,
+      default: false
+    },
 
-  secondaryHasAncientTrait: {
-    type: Boolean,
-    default: false
-  },
+    secondaryHasAncientTrait: {
+      type: Boolean,
+      default: false
+    },
 
-  secondaryIsTagTeam: {
-    type: Boolean,
-    default: false
-  },
+    secondaryIsTagTeam: {
+      type: Boolean,
+      default: false
+    },
 
-  secondaryHasBreakTrait: {
-    type: Boolean,
-    default: false
-  },
+    secondaryHasBreakTrait: {
+      type: Boolean,
+      default: false
+    },
 
-  secondaryIsLegendCard: {
-    type: Boolean,
-    default: false
-  },
+    secondaryIsLegendCard: {
+      type: Boolean,
+      default: false
+    },
 
-  secondarySpecificallyLugiaLegend: {
-    type: Boolean,
-    default: false
-  },
+    secondarySpecificallyLugiaLegend: {
+      type: Boolean,
+      default: false
+    },
 
-  secondarySpecificallyZoroarkGX: {
-    type: Boolean,
-    default: false
-  },
-  sourceCollectionDeckId: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: null
-  },
+    secondarySpecificallyZoroarkGX: {
+      type: Boolean,
+      default: false
+    },
+    sourceCollectionDeckId: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null
+    },
 
-  updatedAt: {
-    type: Date,
-    default: null
-  }
-},
+    updatedAt: {
+      type: Date,
+      default: null
+    }
+  },
   notes: {
     type: String,
     default: '',
@@ -914,10 +918,10 @@ app.get('/api/users/:username/decks/:deckId', async (req, res) => {
       },
       folder: folder
         ? {
-            _id: String(folder._id),
-            name: folder.name,
-            color: folder.color
-          }
+          _id: String(folder._id),
+          name: folder.name,
+          color: folder.color
+        }
         : null,
       username: user.username
     });
@@ -1746,13 +1750,13 @@ app.get('/api/cards/searchbytext/partial/:q', async (req, res) => {
           { text: rx },
           { rules: rx },
           { 'attacks.name': rx },
-  { 'attacks.text': rx },
-  { 'abilities.name': rx },
-  { 'abilities.text': rx },
-  { 'abilities.type': rx },
-  { 'ability.name': rx },
-  { 'ability.text': rx },
-  { 'ability.type': rx }
+          { 'attacks.text': rx },
+          { 'abilities.name': rx },
+          { 'abilities.text': rx },
+          { 'abilities.type': rx },
+          { 'ability.name': rx },
+          { 'ability.text': rx },
+          { 'ability.type': rx }
         ]
       },
       {
@@ -2913,6 +2917,7 @@ app.post('/api/user/planned-events', requireAuth, async (req, res) => {
       eventKey,
       eventName,
       eventDate,
+      eventLogo,
       eventType = '',
       eventLocation = '',
       eventSite = '',
@@ -2925,7 +2930,7 @@ app.post('/api/user/planned-events', requireAuth, async (req, res) => {
       });
     }
 
-    if (!['interested', 'going'].includes(attendanceStatus)) {
+    if (!['interested', 'going', 'cancelled'].includes(attendanceStatus)) {
       return res.status(400).json({
         error: 'Invalid attendance status'
       });
@@ -2948,6 +2953,7 @@ app.post('/api/user/planned-events', requireAuth, async (req, res) => {
         $set: {
           eventName: String(eventName).trim(),
           eventDate: parsedDate,
+          eventLogo: String(eventLogo || ''),
           eventType: String(eventType || ''),
           eventLocation: String(eventLocation || ''),
           eventSite: String(eventSite || ''),
@@ -3007,7 +3013,7 @@ app.patch('/api/user/planned-events/:planId', requireAuth, async (req, res) => {
 
     if (
       attendanceStatus !== undefined &&
-      !['interested', 'going'].includes(attendanceStatus)
+      !['interested', 'going', 'cancelled'].includes(attendanceStatus)
     ) {
       return res.status(400).json({
         error: 'Invalid attendance status'
@@ -3112,7 +3118,7 @@ app.put(
 
       const cleanSecondary =
         secondaryMascotCard &&
-        String(secondaryMascotCard).trim()
+          String(secondaryMascotCard).trim()
           ? String(secondaryMascotCard).trim()
           : null;
 

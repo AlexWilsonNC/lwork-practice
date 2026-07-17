@@ -1112,8 +1112,8 @@ export default function Account() {
                     </button>
                     <button
                         onClick={() => setTab('events')}
-                        className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
                         style={{display: 'none'}}
+                        className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
                     >
                         Event Planner
                     </button>
@@ -1125,16 +1125,16 @@ export default function Account() {
 
             {tab === 'events' ? (
                 <UpcomingEventPlanner
-  token={token}
-  username={user?.username}
-  initialPlannedEventId={
-    new URLSearchParams(
-      location.search
-    ).get('plannedEventId') ||
-    location.state?.plannedEventId ||
-    ''
-  }
-/>
+                    token={token}
+                    username={user?.username}
+                    initialPlannedEventId={
+                        new URLSearchParams(
+                            location.search
+                        ).get('plannedEventId') ||
+                        location.state?.plannedEventId ||
+                        ''
+                    }
+                />
             ) : tab === 'profile' ? (
                 <section className='profile-settings-display-edit'>
                     <div className='profile-settings'>

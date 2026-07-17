@@ -85,7 +85,7 @@
 }
 
 .event-planner-card.going {
-  border-left-color: #17853b;
+  border-left-color: #1290eb;
 }
 
 .event-planner-card.interested {
@@ -169,8 +169,8 @@
 }
 
 .attendance-badge.going {
-  background: rgba(23, 133, 59, 0.16);
-  color: #17853b;
+  background: rgba(18, 110, 159, 0.16);
+  color: #1290eb;
 }
 
 .attendance-badge.interested {
@@ -576,4 +576,24 @@
     align-items: stretch;
     flex-direction: column;
   }
+}
+
+.event-planner-date-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.event-planner-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.attendance-badge.cancelled {
+  background: rgba(195, 55, 55, 0.16);
+  color: #c33737;
+}
+.event-planner-card.cancelled {
+  border-left-color: #c33737;
 }

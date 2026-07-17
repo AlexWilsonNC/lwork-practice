@@ -283,6 +283,35 @@ td div a {
     .event-icon-links span {
         font-size: 22px;
     }
+    @media screen and (max-width: 860px) {
+        .sort-events {
+            font-size: 10px;
+        }
+        .indiv-filter select {
+            height: 18px;
+            font-size: 8px;
+        }
+        .indiv-filter:nth-child(1) select {
+            width: 85px;
+        }
+        .indiv-filter:nth-child(2) select {
+            width: 85px;
+        }
+        .indiv-filter:nth-child(3) select {
+            width: 85px;
+        }
+        .indiv-filter:nth-child(4) select {
+            width: 85px;
+        }
+        .indiv-filter {
+            margin-right: 5px;
+        }
+        .reset-btn {
+            margin-top: 18px;
+            padding: 3px 5px;
+            font-size: 9px;
+        }
+    }
     @media screen and (max-width: 700px) {
         .upcoming-events {
             width: 100%;
@@ -300,36 +329,14 @@ td div a {
             width: 35px;
         }
     }
-    @media screen and (max-width: 630px) {
-        .indiv-filter select {
-            width: 100px;
-        }
-    }
     @media screen and (max-width: 600px) {
         .nav-searchbar {
             display: none;
         }
     }
     @media screen and (max-width: 530px) {
-        .sort-events {
-            font-size: 10px;
-        }
         .event-type-logo2 {
             width: 25px;
-        }
-        .indiv-filter select {
-            width: 80px;
-            height: 22px;
-            font-size: 10px;
-            padding-left: 0px;
-        }
-        .indiv-filter {
-            margin-right: 8px;
-        }
-        .reset-btn {
-            margin-top: 18px;
-            font-size: 11px;
-            padding: 3px 5px;
         }
         .upcoming-events-table th {
             height: 20px;
@@ -373,6 +380,17 @@ td div a {
         }
         .modalsubpopup {
             width: 80% !important;
+        }
+        .event-plan-button .material-symbols-outlined {
+            font-size: 16px !important;
+        }
+        .event-plan-button {
+            width: 27.5px !important;
+            height: 27.5px !important;
+        }
+        .event-plan-heading,
+        .event-plan-cell {
+            width: 55px !important;
         }
     }
     @media screen and (max-width: 445px) {
@@ -475,7 +493,7 @@ td div a {
   padding: 0;
   border: 1px solid #9aa2aa;
   border-radius: 50%;
-  background: transparent;
+  background: white;
   color: inherit;
   cursor: pointer;
   display: inline-flex;
@@ -493,31 +511,29 @@ td div a {
   color: #1290eb;
   transform: scale(1.05);
 }
-
 .event-plan-button.planned {
   color: #fff;
+  background: #eba312;
+  border-color: #eba312;
+}
+.event-plan-button.going {
   background: #1290eb;
   border-color: #1290eb;
 }
-
-.event-plan-button.going {
-  background: #08772b;
-  border-color: #08772b;
+.event-plan-button.cancelled {
+    background: #c33737;
+    border-color: #c33737;
 }
-
 .event-plan-button:disabled {
   cursor: wait;
   opacity: 0.65;
 }
-
 .event-plan-button .material-symbols-outlined {
   font-size: 21px;
 }
-
 .event-plan-button:disabled .material-symbols-outlined {
   animation: planner-spin 0.8s linear infinite;
 }
-
 .event-plan-menu {
   position: absolute;
   z-index: 200;
@@ -583,11 +599,6 @@ td div a {
 @media screen and (max-width: 650px) {
   .event-plan-heading {
     font-size: 0;
-  }
-
-  .event-plan-heading::after {
-    content: "+";
-    font-size: 16px;
   }
 
   .event-plan-cell {

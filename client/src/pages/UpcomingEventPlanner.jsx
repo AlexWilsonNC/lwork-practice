@@ -27,7 +27,14 @@ const CHECKLIST_ITEMS = [
     },
     {
         key: 'decklistSubmitted',
-        label: 'Decklist Submitted',
+        label: (
+            <>
+                Decklist Submitted{' '}
+                <span style={{ fontSize: '10px' }}>
+                    ( saving your decklist here is not officially submitting it )
+                </span>
+            </>
+        ),
         icon: 'content_paste',
         supportsCost: false
     },
@@ -213,6 +220,7 @@ export default function UpcomingEventPlanner({
                         : item
                 )
             );
+            setExpandedId('');
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -347,6 +355,7 @@ export default function UpcomingEventPlanner({
                         : item
                 )
             );
+            setExpandedId('');
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -381,10 +390,7 @@ export default function UpcomingEventPlanner({
             <div className="event-planner-heading">
                 <div>
                     <h2>Upcoming Event Planner</h2>
-                    <p>
-                        Track the events you are considering, travel
-                        arrangements, registration, decklists, and expenses.
-                    </p>
+                    <p>Track the events you are considering; registration, travel, decklist to submit, expenses, and checklist as you go.</p>
                 </div>
 
                 <button
@@ -429,7 +435,7 @@ export default function UpcomingEventPlanner({
                         <strong>
                             {formatCurrency(totalAcrossAllEvents)}
                         </strong>
-                        <span>total planned cost</span>
+                        <span>total cost</span>
                     </div>
                 </div>
             )}
@@ -494,20 +500,28 @@ export default function UpcomingEventPlanner({
                                         )
                                     }
                                 >
-                                    <div className="event-planner-date">
-                                        <span>
-                                            {new Date(
-                                                plan.eventDate
-                                            ).toLocaleDateString('en-US', {
-                                                month: 'short'
-                                            })}
-                                        </span>
+                                    {plan.eventLogo && (
+                                        <img
+                                            className="event-planner-logo"
+                                            src={plan.eventLogo}
+                                            alt=""
+                                        />
+                                    )}
+                                    <div className="event-planner-date-container">
+                                        <div className="event-planner-date">
+                                            <span>
+                                                {new Date(plan.eventDate).toLocaleDateString(
+                                                    'en-US',
+                                                    {
+                                                        month: 'short'
+                                                    }
+                                                )}
+                                            </span>
 
-                                        <strong>
-                                            {new Date(
-                                                plan.eventDate
-                                            ).getDate()}
-                                        </strong>
+                                            <strong>
+                                                {new Date(plan.eventDate).getDate()}
+                                            </strong>
+                                        </div>
                                     </div>
 
                                     <div className="event-planner-event-info">
@@ -519,7 +533,9 @@ export default function UpcomingEventPlanner({
                                             >
                                                 {plan.attendanceStatus === 'going'
                                                     ? 'Going'
-                                                    : 'Tentative'}
+                                                    : plan.attendanceStatus === 'cancelled'
+                                                        ? 'Cancelled'
+                                                        : 'Tentative'}
                                             </span>
                                         </div>
 
@@ -536,12 +552,11 @@ export default function UpcomingEventPlanner({
 
                                         <div className="event-planner-progress">
                                             <span>
-                                                {completedCount}/{CHECKLIST_ITEMS.length}
-                                                {' '}completed
+                                                Checklist: {completedCount}/{CHECKLIST_ITEMS.length}
                                             </span>
 
                                             <span>
-                                                {formatCurrency(eventTotal)}
+                                                Expected Cost: {formatCurrency(eventTotal)}
                                             </span>
                                         </div>
                                     </div>
@@ -577,6 +592,9 @@ export default function UpcomingEventPlanner({
                                                     </option>
                                                     <option value="interested">
                                                         Tentative
+                                                    </option>
+                                                    <option value="cancelled">
+                                                        Cancelled
                                                     </option>
                                                 </select>
                                             </label>
@@ -796,18 +814,20 @@ export default function UpcomingEventPlanner({
                                                                 <span>$</span>
 
                                                                 <input
-                                                                    type="number"
+                                                                    type="text"
+                                                                    inputMode="decimal"
                                                                     min="0"
                                                                     step="0.01"
                                                                     placeholder="0.00"
-                                                                    value={centsToInput(
+                                                                    defaultValue={
                                                                         checklistItem.costCents
-                                                                    )}
-                                                                    onChange={event => {
-                                                                        const costCents =
-                                                                            dollarsToCents(
-                                                                                event.target.value
-                                                                            );
+                                                                            ? checklistItem.costCents / 100
+                                                                            : ''
+                                                                    }
+                                                                    onBlur={event => {
+                                                                        const costCents = dollarsToCents(
+                                                                            event.target.value
+                                                                        );
 
                                                                         updateLocalPlan(
                                                                             plan._id,
@@ -816,9 +836,7 @@ export default function UpcomingEventPlanner({
                                                                                 checklist: {
                                                                                     ...current.checklist,
                                                                                     [item.key]: {
-                                                                                        ...current.checklist[
-                                                                                        item.key
-                                                                                        ],
+                                                                                        ...current.checklist[item.key],
                                                                                         costCents
                                                                                     }
                                                                                 }
@@ -881,7 +899,7 @@ export default function UpcomingEventPlanner({
                                                     disabled={savingId === plan._id}
                                                     onClick={() => deletePlan(plan)}
                                                 >
-                                                    Cancel Event
+                                                    Remove Event
                                                 </button>
 
                                                 <button
