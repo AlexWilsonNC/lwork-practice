@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
@@ -7,6 +7,7 @@ import '../css/tournament-calendar.css';
 import { sortedEvents } from './tournaments-data';
 import CountdownTooltip from '../Tools/RegCountdown';
 import SubscriptionForm from './SubForm';
+import { AuthContext } from '../contexts/AuthContext';
 
 import argentina from '../assets/flags/argentina.png';
 import australia from '../assets/flags/australia.png';
@@ -334,10 +335,36 @@ const loadFiltersWithExpiration = (key) => {
   return null;
 };
 
+const slugifyEventPart = value =>
+  String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const getPlannerEventKey = event => {
+  if (event.id) {
+    return String(event.id);
+  }
+
+  return [
+    slugifyEventPart(event.name),
+    slugifyEventPart(event.date)
+  ]
+    .filter(Boolean)
+    .join('__');
+};
+
 const EventList = () => {
   const { theme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const token = user?.token || localStorage.getItem('PTCGLegendsToken');
+  const [plannedEvents, setPlannedEvents] = useState(new Map());
+  const [planningEventKey, setPlanningEventKey] = useState('');
+  const [planMenuEventKey, setPlanMenuEventKey] = useState('');
+  const [planError, setPlanError] = useState('');
   const isUpcomingInitially = !location.pathname.includes("/completed") && !location.pathname.includes("/retro");
   const [showUpcoming, setShowUpcoming] = useState(isUpcomingInitially);
   const [showRetro, setShowRetro] = useState(location.pathname.includes("/retro"));
@@ -351,13 +378,13 @@ const EventList = () => {
   const [showModal, setShowModal] = useState(false);
   const [showOnlyWithResults, setShowOnlyWithResults] = useState(false);
 
-const getEventSeason = (event) => {
-  return event.id?.split('_')?.[0] || '';
-};
+  const getEventSeason = (event) => {
+    return event.id?.split('_')?.[0] || '';
+  };
 
-const uniqueSeasons = Array.from(
-  new Set(sortedEvents.map(getEventSeason).filter(Boolean))
-).sort();
+  const uniqueSeasons = Array.from(
+    new Set(sortedEvents.map(getEventSeason).filter(Boolean))
+  ).sort();
 
   useEffect(() => {
     const isCompleted = location.pathname.includes("/completed");
@@ -371,7 +398,6 @@ const uniqueSeasons = Array.from(
     setShowModal(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setShowModal(false);
   };
@@ -437,6 +463,155 @@ const uniqueSeasons = Array.from(
     setYearFilter('');
     setSortOrder('newest');
     setSearchTerm('');
+  };
+
+  useEffect(() => {
+    if (!showUpcoming || !token) {
+      setPlannedEvents(new Map());
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadPlannedEvents = async () => {
+      try {
+        const res = await fetch('/api/user/planned-events', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error('Could not load your event planner');
+        }
+
+        const plans = await res.json();
+
+        if (cancelled) return;
+
+        setPlannedEvents(
+          new Map(
+            plans.map(plan => [
+              plan.eventKey,
+              plan
+            ])
+          )
+        );
+      } catch (err) {
+        console.error(err);
+
+        if (!cancelled) {
+          setPlanError(err.message);
+        }
+      }
+    };
+
+    loadPlannedEvents();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [showUpcoming, token]);
+
+  const addEventToPlanner = async (event, attendanceStatus) => {
+    if (!token) {
+      navigate('/login', {
+        state: {
+          from: location.pathname,
+          message: 'Log in to add tournaments to your Event Planner.'
+        }
+      });
+
+      return;
+    }
+
+    const eventKey = getPlannerEventKey(event);
+
+    setPlanningEventKey(eventKey);
+    setPlanError('');
+
+    try {
+      const res = await fetch('/api/user/planned-events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          eventKey,
+          eventName: event.name,
+          eventDate: event.date,
+          eventType: event.eventType,
+          eventLocation: event.location || '',
+          eventSite: event.eventSite || '',
+          attendanceStatus
+        })
+      });
+
+      const payload = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(
+          payload.error || 'Could not add this event'
+        );
+      }
+
+      setPlannedEvents(previous => {
+        const next = new Map(previous);
+        next.set(eventKey, payload.plan);
+        return next;
+      });
+
+      setPlanMenuEventKey('');
+    } catch (err) {
+      console.error(err);
+      setPlanError(err.message);
+    } finally {
+      setPlanningEventKey('');
+    }
+  };
+
+  const removeEventFromPlanner = async event => {
+    const eventKey = getPlannerEventKey(event);
+    const currentPlan = plannedEvents.get(eventKey);
+
+    if (!currentPlan?._id || !token) return;
+
+    setPlanningEventKey(eventKey);
+    setPlanError('');
+
+    try {
+      const res = await fetch(
+        `/api/user/planned-events/${currentPlan._id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      const payload = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(
+          payload.error || 'Could not remove this event'
+        );
+      }
+
+      setPlannedEvents(previous => {
+        const next = new Map(previous);
+        next.delete(eventKey);
+        return next;
+      });
+
+      setPlanMenuEventKey('');
+    } catch (err) {
+      console.error(err);
+      setPlanError(err.message);
+    } finally {
+      setPlanningEventKey('');
+    }
   };
 
   return (
@@ -570,6 +745,11 @@ const uniqueSeasons = Array.from(
 
           <button onClick={resetFilters} className="reset-btn">Reset</button>
         </FilterTop>
+        {planError && (
+          <div className="event-plan-error">
+            {planError}
+          </div>
+        )}
         <div className='center'>
           <table className='upcoming-events-table'>
             <thead>
@@ -584,7 +764,10 @@ const uniqueSeasons = Array.from(
                     <th>Registration</th>
                   )} */}
                 {showUpcoming && (
-                  <th>Event Site</th>
+                  <>
+                    <th>Event Site</th>
+                    <th style={{display: 'none'}} className="event-plan-heading">Plan</th>
+                  </>
                 )}
               </tr>
             </thead>
@@ -598,7 +781,10 @@ const uniqueSeasons = Array.from(
                   switzerland, taiwan, thailand, usa, uk, unknown
                 }).find(([, img]) => img === event.flag)?.[0] || 'unknown';
                 return (
-                  <tr key={index} className='event-row'>
+                  <tr
+                    key={getPlannerEventKey(event)}
+                    className='event-row'
+                  >
                     <td>{event.date}</td>
                     <td>
                       <img src={event.eventLogo} className='event-type-logo2' alt="Event type" />
@@ -656,16 +842,138 @@ const uniqueSeasons = Array.from(
                       </td>
                     )}
 
-                    {/* For upcoming events, show the "note stack" icon */}
-                    {showUpcoming && (
-                      <td>
-                        {/* {event.id && event.results !== false ? (
-                          <a href={event.id} className='event-icon-links'>
-                            <span className="material-symbols-outlined">description</span>
-                          </a>
-                        ) : null} */}
-                      </td>
-                    )}
+                    {/* {showUpcoming && (() => {
+                      const eventKey = getPlannerEventKey(event);
+                      const currentPlan = plannedEvents.get(eventKey);
+                      const isSaving = planningEventKey === eventKey;
+                      const menuIsOpen = planMenuEventKey === eventKey;
+
+                      return (
+                        <td className="event-plan-cell">
+                          <div className="event-plan-control">
+                            <button
+                              type="button"
+                              className={[
+                                'event-plan-button',
+                                currentPlan ? 'planned' : '',
+                                currentPlan?.attendanceStatus === 'going'
+                                  ? 'going'
+                                  : ''
+                              ].filter(Boolean).join(' ')}
+                              disabled={isSaving}
+                              title={
+                                currentPlan
+                                  ? 'Edit event plan'
+                                  : 'Add to Event Planner'
+                              }
+                              aria-label={
+                                currentPlan
+                                  ? `Edit plan for ${event.name}`
+                                  : `Add ${event.name} to Event Planner`
+                              }
+                              onClick={() => {
+                                if (!token) {
+                                  navigate('/login', {
+                                    state: {
+                                      from: location.pathname,
+                                      message:
+                                        'Log in to add tournaments to your Event Planner.'
+                                    }
+                                  });
+
+                                  return;
+                                }
+
+                                setPlanMenuEventKey(
+                                  menuIsOpen ? '' : eventKey
+                                );
+                              }}
+                            >
+                              <span className="material-symbols-outlined">
+                                {isSaving
+                                  ? 'progress_activity'
+                                  : currentPlan
+                                    ? 'event_available'
+                                    : 'add'}
+                              </span>
+                            </button>
+
+                            {menuIsOpen && (
+                              <div className="event-plan-menu">
+                                <button
+                                  type="button"
+                                  className={
+                                    currentPlan?.attendanceStatus === 'going'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'going')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    flight_takeoff
+                                  </span>
+                                  Going
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className={
+                                    currentPlan?.attendanceStatus === 'interested'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'interested')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    help
+                                  </span>
+                                  Interested
+                                </button>
+
+                                {currentPlan && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setPlanMenuEventKey('');
+                                        navigate('/account', {
+                                          state: {
+                                            accountTab: 'events',
+                                            plannedEventId: currentPlan._id
+                                          }
+                                        });
+                                      }}
+                                    >
+                                      <span className="material-symbols-outlined">
+                                        checklist
+                                      </span>
+                                      Open planner
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      className="remove-plan-option"
+                                      onClick={() =>
+                                        removeEventFromPlanner(event)
+                                      }
+                                    >
+                                      <span className="material-symbols-outlined">
+                                        delete
+                                      </span>
+                                      Remove
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      );
+                    })()} */}
                   </tr>
                 )
               })}

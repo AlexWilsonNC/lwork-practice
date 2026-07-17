@@ -207,6 +207,238 @@ function requireAuth(req, res, next) {
   }
 }
 
+const plannedEventChecklistSchema = new mongoose.Schema(
+  {
+    registered: {
+      completed: { type: Boolean, default: false },
+      costCents: { type: Number, default: 0 }
+    },
+    travelBooked: {
+      completed: { type: Boolean, default: false },
+      costCents: { type: Number, default: 0 }
+    },
+    hotelBooked: {
+      completed: { type: Boolean, default: false },
+      costCents: { type: Number, default: 0 }
+    },
+    decklistSubmitted: {
+      completed: { type: Boolean, default: false }
+    },
+    checkedIn: {
+      completed: { type: Boolean, default: false }
+    },
+    swagPickedUp: {
+      completed: { type: Boolean, default: false }
+    }
+  },
+  { _id: false }
+);
+
+const plannedEventSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true
+  },
+  eventKey: {
+    type: String,
+    required: true
+  },
+  eventName: {
+    type: String,
+    required: true
+  },
+  eventDate: {
+    type: Date,
+    required: true
+  },
+  eventType: {
+    type: String,
+    default: ''
+  },
+  eventLocation: {
+    type: String,
+    default: ''
+  },
+  eventSite: {
+    type: String,
+    default: ''
+  },
+  attendanceStatus: {
+    type: String,
+    enum: ['interested', 'going'],
+    default: 'interested'
+  },
+  checklist: {
+    type: plannedEventChecklistSchema,
+    default: () => ({})
+  },
+  eventDeck: {
+  name: {
+    type: String,
+    default: ''
+  },
+
+  mascotCard: {
+    type: String,
+    default: ''
+  },
+
+  secondaryMascotCard: {
+    type: String,
+    default: null
+  },
+
+  description: {
+    type: String,
+    default: ''
+  },
+
+  /*
+   * Uses the same flat array saved by ExportButtons.jsx.
+   */
+  decklist: {
+    type: Array,
+    default: undefined
+  },
+
+  mascotImageUrl: {
+    type: String,
+    default: null
+  },
+
+  secondaryMascotImageUrl: {
+    type: String,
+    default: null
+  },
+
+  hasAncientTrait: {
+    type: Boolean,
+    default: false
+  },
+
+  isTagTeam: {
+    type: Boolean,
+    default: false
+  },
+
+  hasBreakTrait: {
+    type: Boolean,
+    default: false
+  },
+
+  isLegendCard: {
+    type: Boolean,
+    default: false
+  },
+
+  specificallyLugiaLegend: {
+    type: Boolean,
+    default: false
+  },
+
+  specificallyZoroarkGX: {
+    type: Boolean,
+    default: false
+  },
+
+  secondaryHasAncientTrait: {
+    type: Boolean,
+    default: false
+  },
+
+  secondaryIsTagTeam: {
+    type: Boolean,
+    default: false
+  },
+
+  secondaryHasBreakTrait: {
+    type: Boolean,
+    default: false
+  },
+
+  secondaryIsLegendCard: {
+    type: Boolean,
+    default: false
+  },
+
+  secondarySpecificallyLugiaLegend: {
+    type: Boolean,
+    default: false
+  },
+
+  secondarySpecificallyZoroarkGX: {
+    type: Boolean,
+    default: false
+  },
+  sourceCollectionDeckId: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null
+  },
+
+  updatedAt: {
+    type: Date,
+    default: null
+  }
+},
+  notes: {
+    type: String,
+    default: '',
+    maxlength: 5000
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+plannedEventSchema.index(
+  { userId: 1, eventKey: 1 },
+  { unique: true }
+);
+
+const PlannedEvent = authConnection.model(
+  'PlannedEvent',
+  plannedEventSchema,
+  'plannedEvents'
+);
+
+const cleanMoneyCents = value => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 0;
+
+  return Math.max(0, Math.round(parsed));
+};
+
+const sanitizeChecklist = checklist => ({
+  registered: {
+    completed: Boolean(checklist?.registered?.completed),
+    costCents: cleanMoneyCents(checklist?.registered?.costCents)
+  },
+  travelBooked: {
+    completed: Boolean(checklist?.travelBooked?.completed),
+    costCents: cleanMoneyCents(checklist?.travelBooked?.costCents)
+  },
+  hotelBooked: {
+    completed: Boolean(checklist?.hotelBooked?.completed),
+    costCents: cleanMoneyCents(checklist?.hotelBooked?.costCents)
+  },
+  decklistSubmitted: {
+    completed: Boolean(checklist?.decklistSubmitted?.completed)
+  },
+  checkedIn: {
+    completed: Boolean(checklist?.checkedIn?.completed)
+  },
+  swagPickedUp: {
+    completed: Boolean(checklist?.swagPickedUp?.completed)
+  }
+});
+
 const tournamentReportSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   username: { type: String, required: true },
@@ -2660,6 +2892,460 @@ app.post('/api/user/decks/check-saved', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Could not check saved deck status' });
   }
 });
+
+app.get('/api/user/planned-events', requireAuth, async (req, res) => {
+  try {
+    const plans = await PlannedEvent
+      .find({ userId: req.userId })
+      .sort({ eventDate: 1, createdAt: 1 })
+      .lean();
+
+    res.json(plans);
+  } catch (err) {
+    console.error('Could not load planned events:', err);
+    res.status(500).json({ error: 'Could not load planned events' });
+  }
+});
+
+app.post('/api/user/planned-events', requireAuth, async (req, res) => {
+  try {
+    const {
+      eventKey,
+      eventName,
+      eventDate,
+      eventType = '',
+      eventLocation = '',
+      eventSite = '',
+      attendanceStatus = 'interested'
+    } = req.body;
+
+    if (!eventKey || !eventName || !eventDate) {
+      return res.status(400).json({
+        error: 'eventKey, eventName, and eventDate are required'
+      });
+    }
+
+    if (!['interested', 'going'].includes(attendanceStatus)) {
+      return res.status(400).json({
+        error: 'Invalid attendance status'
+      });
+    }
+
+    const parsedDate = new Date(eventDate);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return res.status(400).json({
+        error: 'Invalid event date'
+      });
+    }
+
+    const plan = await PlannedEvent.findOneAndUpdate(
+      {
+        userId: req.userId,
+        eventKey: String(eventKey)
+      },
+      {
+        $set: {
+          eventName: String(eventName).trim(),
+          eventDate: parsedDate,
+          eventType: String(eventType || ''),
+          eventLocation: String(eventLocation || ''),
+          eventSite: String(eventSite || ''),
+          attendanceStatus,
+          updatedAt: new Date()
+        },
+        $setOnInsert: {
+          userId: req.userId,
+          eventKey: String(eventKey),
+          createdAt: new Date()
+        }
+      },
+      {
+        new: true,
+        upsert: true,
+        runValidators: true
+      }
+    );
+
+    res.json({
+      success: true,
+      plan
+    });
+  } catch (err) {
+    console.error('Could not add planned event:', err);
+
+    if (err?.code === 11000) {
+      return res.status(409).json({
+        error: 'This event is already in your planner'
+      });
+    }
+
+    res.status(500).json({
+      error: 'Could not add planned event'
+    });
+  }
+});
+
+app.patch('/api/user/planned-events/:planId', requireAuth, async (req, res) => {
+  try {
+    const existing = await PlannedEvent.findOne({
+      _id: req.params.planId,
+      userId: req.userId
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        error: 'Planned event not found'
+      });
+    }
+
+    const {
+      attendanceStatus,
+      checklist,
+      notes
+    } = req.body;
+
+    if (
+      attendanceStatus !== undefined &&
+      !['interested', 'going'].includes(attendanceStatus)
+    ) {
+      return res.status(400).json({
+        error: 'Invalid attendance status'
+      });
+    }
+
+    if (attendanceStatus !== undefined) {
+      existing.attendanceStatus = attendanceStatus;
+    }
+
+    if (checklist !== undefined) {
+      existing.checklist = sanitizeChecklist(checklist);
+    }
+
+    if (notes !== undefined) {
+      existing.notes = String(notes || '').slice(0, 5000);
+    }
+
+    existing.updatedAt = new Date();
+
+    await existing.save();
+
+    res.json({
+      success: true,
+      plan: existing
+    });
+  } catch (err) {
+    console.error('Could not update planned event:', err);
+    res.status(500).json({
+      error: 'Could not update planned event'
+    });
+  }
+});
+
+app.delete('/api/user/planned-events/:planId', requireAuth, async (req, res) => {
+  try {
+    const deleted = await PlannedEvent.findOneAndDelete({
+      _id: req.params.planId,
+      userId: req.userId
+    });
+
+    if (!deleted) {
+      return res.status(404).json({
+        error: 'Planned event not found'
+      });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Could not remove planned event:', err);
+    res.status(500).json({
+      error: 'Could not remove planned event'
+    });
+  }
+});
+
+const isValidSavedDecklist = decklist => {
+  return Array.isArray(decklist) && decklist.length > 0;
+};
+
+app.put(
+  '/api/user/planned-events/:planId/deck',
+  requireAuth,
+  async (req, res) => {
+    try {
+      const plan = await PlannedEvent.findOne({
+        _id: req.params.planId,
+        userId: req.userId
+      });
+
+      if (!plan) {
+        return res.status(404).json({
+          error: 'Planned event not found'
+        });
+      }
+
+      const {
+        name,
+        mascotCard,
+        secondaryMascotCard,
+        description = '',
+        decklist
+      } = req.body;
+
+      if (
+        !name?.trim() ||
+        !mascotCard ||
+        !isValidSavedDecklist(decklist)
+      ) {
+        return res.status(400).json({
+          error: 'Deck name, mascot, and decklist are required'
+        });
+      }
+
+      const primary = await getCardByKey(mascotCard);
+
+      if (!primary) {
+        return res.status(400).json({
+          error: 'Could not find the selected mascot card'
+        });
+      }
+
+      const cleanSecondary =
+        secondaryMascotCard &&
+        String(secondaryMascotCard).trim()
+          ? String(secondaryMascotCard).trim()
+          : null;
+
+      const secondary = cleanSecondary
+        ? await getCardByKey(cleanSecondary)
+        : null;
+
+      plan.eventDeck = {
+        name: String(name).trim(),
+        mascotCard: String(mascotCard),
+        secondaryMascotCard: cleanSecondary,
+        description: String(description || ''),
+        decklist,
+        sourceCollectionDeckId: null,
+        updatedAt: new Date(),
+
+        ...pickMascotFields(primary),
+        ...pickMascotFields(secondary, 'secondary')
+      };
+
+      plan.updatedAt = new Date();
+
+      await plan.save();
+
+      res.json({
+        success: true,
+        plan,
+        deck: plan.eventDeck
+      });
+    } catch (err) {
+      console.error('Could not save planned-event deck:', err);
+
+      res.status(500).json({
+        error: 'Could not save planned-event deck'
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/user/planned-events/:planId/deck/from-collection',
+  requireAuth,
+  async (req, res) => {
+    try {
+      const { deckId } = req.body;
+
+      if (!deckId) {
+        return res.status(400).json({
+          error: 'deckId is required'
+        });
+      }
+
+      const [plan, user] = await Promise.all([
+        PlannedEvent.findOne({
+          _id: req.params.planId,
+          userId: req.userId
+        }),
+
+        User.findById(req.userId).select('decks')
+      ]);
+
+      if (!plan) {
+        return res.status(404).json({
+          error: 'Planned event not found'
+        });
+      }
+
+      if (!user) {
+        return res.status(404).json({
+          error: 'User not found'
+        });
+      }
+
+      const collectionDeck = user.decks.id(deckId);
+
+      if (!collectionDeck) {
+        return res.status(404).json({
+          error: 'Collection deck not found'
+        });
+      }
+
+      const source = collectionDeck.toObject
+        ? collectionDeck.toObject()
+        : collectionDeck;
+
+      plan.eventDeck = {
+        name: source.name || '',
+        mascotCard: source.mascotCard || '',
+        secondaryMascotCard:
+          source.secondaryMascotCard || null,
+
+        description: source.description || '',
+        decklist: source.decklist,
+
+        mascotImageUrl:
+          source.mascotImageUrl || null,
+
+        secondaryMascotImageUrl:
+          source.secondaryMascotImageUrl || null,
+
+        hasAncientTrait:
+          Boolean(source.hasAncientTrait),
+
+        isTagTeam:
+          Boolean(source.isTagTeam),
+
+        hasBreakTrait:
+          Boolean(source.hasBreakTrait),
+
+        isLegendCard:
+          Boolean(source.isLegendCard),
+
+        specificallyLugiaLegend:
+          Boolean(source.specificallyLugiaLegend),
+
+        specificallyZoroarkGX:
+          Boolean(source.specificallyZoroarkGX),
+
+        secondaryHasAncientTrait:
+          Boolean(source.secondaryHasAncientTrait),
+
+        secondaryIsTagTeam:
+          Boolean(source.secondaryIsTagTeam),
+
+        secondaryHasBreakTrait:
+          Boolean(source.secondaryHasBreakTrait),
+
+        secondaryIsLegendCard:
+          Boolean(source.secondaryIsLegendCard),
+
+        secondarySpecificallyLugiaLegend:
+          Boolean(source.secondarySpecificallyLugiaLegend),
+
+        secondarySpecificallyZoroarkGX:
+          Boolean(source.secondarySpecificallyZoroarkGX),
+
+        sourceCollectionDeckId: source._id,
+        updatedAt: new Date()
+      };
+
+      plan.updatedAt = new Date();
+
+      await plan.save();
+
+      res.json({
+        success: true,
+        plan,
+        deck: plan.eventDeck
+      });
+    } catch (err) {
+      console.error(
+        'Could not copy collection deck to event:',
+        err
+      );
+
+      res.status(500).json({
+        error: 'Could not copy deck to planned event'
+      });
+    }
+  }
+);
+
+app.get(
+  '/api/user/planned-events/:planId/deck',
+  requireAuth,
+  async (req, res) => {
+    try {
+      const plan = await PlannedEvent.findOne({
+        _id: req.params.planId,
+        userId: req.userId
+      }).lean();
+
+      if (!plan) {
+        return res.status(404).json({
+          error: 'Planned event not found'
+        });
+      }
+
+      if (!isValidSavedDecklist(plan.eventDeck?.decklist)) {
+        return res.status(404).json({
+          error: 'This event does not have a saved deck'
+        });
+      }
+
+      res.json({
+        ...plan.eventDeck,
+        _id: plan._id,
+        plannedEventId: plan._id,
+        eventName: plan.eventName
+      });
+    } catch (err) {
+      console.error('Could not load planned-event deck:', err);
+
+      res.status(500).json({
+        error: 'Could not load planned-event deck'
+      });
+    }
+  }
+);
+app.delete(
+  '/api/user/planned-events/:planId/deck',
+  requireAuth,
+  async (req, res) => {
+    try {
+      const plan = await PlannedEvent.findOne({
+        _id: req.params.planId,
+        userId: req.userId
+      });
+
+      if (!plan) {
+        return res.status(404).json({
+          error: 'Planned event not found'
+        });
+      }
+
+      plan.eventDeck = undefined;
+      plan.updatedAt = new Date();
+
+      await plan.save();
+
+      res.json({
+        success: true,
+        plan
+      });
+    } catch (err) {
+      console.error('Could not remove event deck:', err);
+
+      res.status(500).json({
+        error: 'Could not remove event deck'
+      });
+    }
+  }
+);
 
 app.get('/api/formats/:format/promos', async (req, res) => {
   try {

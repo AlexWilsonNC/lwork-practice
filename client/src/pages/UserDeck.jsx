@@ -6,7 +6,7 @@ import DecklistOptions from '../Tools/DecklistOptions'; // if you use it
 import '../css/decklist.css'; // reuse your existing styles
 
 export default function UserDeck() {
-    const { deckId, username } = useParams();
+    const { deckId, username, plannedEventId } = useParams();
     //   const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -25,9 +25,15 @@ export default function UserDeck() {
         const load = async () => {
             try {
                 const token = localStorage.getItem('PTCGLegendsToken');
-                const res = await fetch(`/api/user/decks/${deckId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const endpoint = plannedEventId
+  ? `/api/user/planned-events/${plannedEventId}/deck`
+  : `/api/user/decks/${deckId}`;
+
+const res = await fetch(endpoint, {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
                 if (!res.ok) throw new Error('Could not load deck');
                 setDeck(await res.json());
             } catch (err) {
@@ -35,16 +41,16 @@ export default function UserDeck() {
             }
         };
         load();
-    }, [deckId]);
+    }, [deckId, plannedEventId]);
 
     useEffect(() => {
         if (!deck) return;
 
         (async () => {
             const all = [
-                ...(deck.decklist.pokemon || []),
-                ...(deck.decklist.trainer || []),
-                ...(deck.decklist.energy || [])
+                ...(normalizedDecklist.pokemon || []),
+                ...(normalizedDecklist.trainer || []),
+                ...(normalizedDecklist.energy || [])
             ];
 
             const map = {};
@@ -81,19 +87,39 @@ export default function UserDeck() {
         return <div className="spinner"></div>;
     }
 
+    const normalizedDecklist = Array.isArray(deck.decklist)
+  ? {
+      pokemon: deck.decklist.filter(
+        card => card.supertype === 'Pokémon'
+      ),
+
+      trainer: deck.decklist.filter(
+        card => card.supertype === 'Trainer'
+      ),
+
+      energy: deck.decklist.filter(
+        card => card.supertype === 'Energy'
+      )
+    }
+  : {
+      pokemon: deck.decklist?.pokemon || [],
+      trainer: deck.decklist?.trainer || [],
+      energy: deck.decklist?.energy || []
+    };
+
     const cleaned = {
         pokemon:
-            deck.decklist.pokemon.map(c => ({
+            normalizedDecklist.pokemon.map(c => ({
                 ...c,
                 name: cleanCardName(c.name)
             })) || [],
         trainer:
-            deck.decklist.trainer.map(c => ({
+            normalizedDecklist.trainer.map(c => ({
                 ...c,
                 name: cleanCardName(c.name)
             })) || [],
         energy:
-            deck.decklist.energy.map(c => ({
+            normalizedDecklist.energy.map(c => ({
                 ...c,
                 name: cleanCardName(c.name)
             })) || []

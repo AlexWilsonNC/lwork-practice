@@ -230,6 +230,7 @@
 }
 
 .decks-account-btn.active,
+.events-account-btn.active,
 .profile-account-btn.active {
   background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
   border-radius: 10px;

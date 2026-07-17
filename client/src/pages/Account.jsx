@@ -4,6 +4,8 @@ import { AuthContext } from '../contexts/AuthContext';
 import '../css/Account.css'
 import styled from 'styled-components';
 import Spinner from '../contexts/Spinner';
+import { useLocation } from 'react-router-dom';
+import UpcomingEventPlanner from './UpcomingEventPlanner';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
@@ -213,6 +215,7 @@ export default function Account() {
     const { username } = useParams();
     const isPublicView = Boolean(username);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [editingField, setEditingField] = useState(null);
     const [tempValue, setTempValue] = useState('');
@@ -223,7 +226,9 @@ export default function Account() {
     const [confirmPw, setConfirmPw] = useState('');
     const [profileError, setProfileError] = useState('');
 
-    const [tab, setTab] = useState('decks');
+    const [tab, setTab] = useState(
+        location.state?.accountTab || 'decks'
+    );
     const [decks, setDecks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
@@ -294,6 +299,12 @@ export default function Account() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [menuOpenId]);
+
+    useEffect(() => {
+        if (location.state?.accountTab) {
+            setTab(location.state.accountTab);
+        }
+    }, [location.state]);
 
     useEffect(() => {
         if (!isPublicView && error && /relogin/i.test(error)) {
@@ -1099,13 +1110,32 @@ export default function Account() {
                     <button onClick={() => setTab('decks')} className={`decks-account-btn ${tab === 'decks' ? 'active' : ''}`}>
                         Deck Collection
                     </button>
+                    <button
+                        onClick={() => setTab('events')}
+                        className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
+                        style={{display: 'none'}}
+                    >
+                        Event Planner
+                    </button>
                     <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
                         Profile
                     </button>
                 </div>
             )}
 
-            {tab === 'profile' ? (
+            {tab === 'events' ? (
+                <UpcomingEventPlanner
+  token={token}
+  username={user?.username}
+  initialPlannedEventId={
+    new URLSearchParams(
+      location.search
+    ).get('plannedEventId') ||
+    location.state?.plannedEventId ||
+    ''
+  }
+/>
+            ) : tab === 'profile' ? (
                 <section className='profile-settings-display-edit'>
                     <div className='profile-settings'>
                         <div className='profile-item'>

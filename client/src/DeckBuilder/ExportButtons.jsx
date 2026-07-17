@@ -430,6 +430,12 @@ const ExportButtons = React.forwardRef(function ExportButtons(
   const overwritePrefilledRef = useRef(false)
   const [originalMeta, setOriginalMeta] = useState(null);
   const prefilledOnceRef = useRef(false);
+  const plannedEventId = new URLSearchParams(
+    window.location.search
+  ).get('plannedEventId');
+  const isPlannedEventDeck = Boolean(plannedEventId);
+  const [plannedEventDeckMeta, setPlannedEventDeckMeta] =
+    useState(null);
 
   useEffect(() => {
     if (!originalDeckId) return;
@@ -506,6 +512,50 @@ const ExportButtons = React.forwardRef(function ExportButtons(
       })
       .catch(console.error);
   }, [showSaveModal, user, overwriteMode, originalMeta, selectedFolderId]);
+
+  useEffect(() => {
+    if (!isPlannedEventDeck || !user) return;
+
+    const token = localStorage.getItem(
+      'PTCGLegendsToken'
+    );
+
+    fetch(
+      `/api/user/planned-events/${plannedEventId}/deck`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+      .then(async res => {
+        if (res.status === 404) return null;
+
+        if (!res.ok) {
+          throw new Error(
+            'Could not load planned-event deck metadata'
+          );
+        }
+
+        return res.json();
+      })
+      .then(data => {
+        if (!data) return;
+
+        setPlannedEventDeckMeta(data);
+        setDeckName(data.name || '');
+        setSelectedMascot(data.mascotCard || '');
+        setSecondaryMascot(
+          data.secondaryMascotCard || ''
+        );
+        setDescription(data.description || '');
+      })
+      .catch(console.error);
+  }, [
+    isPlannedEventDeck,
+    plannedEventId,
+    user
+  ]);
 
   useEffect(() => {
     if (!showCopyMenu) return
@@ -774,30 +824,44 @@ const ExportButtons = React.forwardRef(function ExportButtons(
   };
 
   const handleSaveClick = () => {
-  if (!user) {
+    if (!user) {
+      setShowSaveModal(true);
+      return;
+    }
+
+    const hasPrefill = !!(originalMeta && (originalMeta.name || originalMeta.mascotCard || originalMeta.description));
+    setOverwriteMode(hasPrefill);
+
+    if (!hasPrefill) {
+      setOverwriteDeckName('');
+      setOverwriteMascot('');
+      setOverwriteSecondary('');
+      setOverwriteDescription('');
+    }
+
+    overwritePrefilledRef.current = false;
     setShowSaveModal(true);
-    return;
-  }
-
-  const hasPrefill = !!(originalMeta && (originalMeta.name || originalMeta.mascotCard || originalMeta.description));
-  setOverwriteMode(hasPrefill);
-
-  if (!hasPrefill) {
-    setOverwriteDeckName('');
-    setOverwriteMascot('');
-    setOverwriteSecondary('');
-    setOverwriteDescription('');
-  }
-
-  overwritePrefilledRef.current = false;
-  setShowSaveModal(true);
-};
+  };
 
   const handleModalSave = async () => {
-    const name = overwriteMode ? overwriteDeckName : deckName;
-    const mascotCard = overwriteMode ? overwriteMascot : selectedMascot;
-    const secondaryMascotCard = overwriteMode ? overwriteSecondary : secondaryMascot;
-    const desc = overwriteMode ? overwriteDescription : description;
+    const useOverwriteValues =
+      overwriteMode && !isPlannedEventDeck;
+
+    const name = useOverwriteValues
+      ? overwriteDeckName
+      : deckName;
+
+    const mascotCard = useOverwriteValues
+      ? overwriteMascot
+      : selectedMascot;
+
+    const secondaryMascotCard = useOverwriteValues
+      ? overwriteSecondary
+      : secondaryMascot;
+
+    const desc = useOverwriteValues
+      ? overwriteDescription
+      : description;
 
     if (!name.trim() || !mascotCard) return;
 
@@ -829,17 +893,29 @@ const ExportButtons = React.forwardRef(function ExportButtons(
 
     setSaving(true)
     try {
-      const url = overwriteMode && originalDeckId
-        ? `/api/user/decks/${originalDeckId}`
-        : '/api/user/decks';
-      const method = overwriteMode && originalDeckId ? 'PUT' : 'POST';
+      const url = isPlannedEventDeck
+        ? `/api/user/planned-events/${plannedEventId}/deck`
+        : overwriteMode && originalDeckId
+          ? `/api/user/decks/${originalDeckId}`
+          : '/api/user/decks';
+      const method = isPlannedEventDeck
+        ? 'PUT'
+        : overwriteMode && originalDeckId
+          ? 'PUT'
+          : 'POST';
       const payload = {
         name,
         mascotCard,
         secondaryMascotCard,
         description: desc,
         decklist: flatDeck,
-        ...(overwriteMode ? {} : { folderId: selectedFolderId || null })
+        ...(
+          !isPlannedEventDeck && !overwriteMode
+            ? {
+              folderId: selectedFolderId || null
+            }
+            : {}
+        )
       };
       const res = await fetch(url, {
         method,
@@ -855,7 +931,11 @@ const ExportButtons = React.forwardRef(function ExportButtons(
           ? originalDeckId
           : (data.deck?._id || data._id);
 
-        if (selectedFolderId && deckId) {
+        if (
+          !isPlannedEventDeck &&
+          selectedFolderId &&
+          deckId
+        ) {
           await fetch(`/api/user/decks/${deckId}/move`, {
             method: 'PATCH',
             headers: {
@@ -866,7 +946,9 @@ const ExportButtons = React.forwardRef(function ExportButtons(
           }).catch(console.error);
         }
 
-        window.location.href = '/account';
+        window.location.href = isPlannedEventDeck
+          ? `/account?tab=events&plannedEventId=${plannedEventId}`
+          : '/account';
         setShowSaveModal(false);
         setDeckName('');
         setSelectedMascot('');
@@ -976,38 +1058,48 @@ const ExportButtons = React.forwardRef(function ExportButtons(
               </>
             ) : (
               <>
-                {originalDeckId && originalMeta && (
-                  <>
-                    <label
-                      className={`folder-tab tab-new ${!overwriteMode ? 'active' : ''}`}
-                      onClick={() => setOverwriteMode(false)}
-                    >
-                      <input
-                        type="radio"
-                        checked={!overwriteMode}
-                        onChange={() => setOverwriteMode(false)}
-                        className="visually-hidden"
-                        aria-label="Save as new deck"
-                      />
-                      <span>Save New Deck</span>
-                    </label>
-                    <label
-                      className={`folder-tab tab-overwrite ${overwriteMode ? 'active' : ''}`}
-                      onClick={() => setOverwriteMode(true)}
-                    >
-                      <input
-                        type="radio"
-                        checked={overwriteMode}
-                        onChange={() => setOverwriteMode(true)}
-                        className="visually-hidden"
-                        aria-label="Overwrite existing deck"
-                      />
-                      <span>Overwrite Deck</span>
-                    </label>
-                    <div className="save-overwrite-decks-container only-overwrite" style={{ display: 'none' }} />
-                  </>
-                )}
-                <h3 className='push-ttl-dwn'>{overwriteMode ? 'Overwrite Deck (Opened from Collection)' : 'Save as New Deck'}</h3>
+                {!isPlannedEventDeck &&
+                  originalDeckId &&
+                  originalMeta && (
+                    <>
+                      <label
+                        className={`folder-tab tab-new ${!overwriteMode ? 'active' : ''}`}
+                        onClick={() => setOverwriteMode(false)}
+                      >
+                        <input
+                          type="radio"
+                          checked={!overwriteMode}
+                          onChange={() => setOverwriteMode(false)}
+                          className="visually-hidden"
+                          aria-label="Save as new deck"
+                        />
+                        <span>Save New Deck</span>
+                      </label>
+                      <label
+                        className={`folder-tab tab-overwrite ${overwriteMode ? 'active' : ''}`}
+                        onClick={() => setOverwriteMode(true)}
+                      >
+                        <input
+                          type="radio"
+                          checked={overwriteMode}
+                          onChange={() => setOverwriteMode(true)}
+                          className="visually-hidden"
+                          aria-label="Overwrite existing deck"
+                        />
+                        <span>Overwrite Deck</span>
+                      </label>
+                      <div className="save-overwrite-decks-container only-overwrite" style={{ display: 'none' }} />
+                    </>
+                  )}
+                <h3 className="push-ttl-dwn">
+                  {isPlannedEventDeck
+                    ? plannedEventDeckMeta
+                      ? 'Update Planned Event Deck'
+                      : 'Save Deck to Planned Event'
+                    : overwriteMode
+                      ? 'Overwrite Deck (Opened from Collection)'
+                      : 'Save as New Deck'}
+                </h3>
                 <label>
                   Name*<br />
                   <input
@@ -1016,20 +1108,26 @@ const ExportButtons = React.forwardRef(function ExportButtons(
                     onChange={e => overwriteMode ? setOverwriteDeckName(e.target.value) : setDeckName(e.target.value)}
                   />
                 </label>
-                <label>
-                  Assign to Folder<br />
-                  <select
-                    value={selectedFolderId}
-                    onChange={e => setSelectedFolderId(e.target.value)}
-                  >
-                    <option value="">None</option>
-                    {folders.map(f => (
-                      <option key={f._id} value={f._id}>
-                        {f.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                {!isPlannedEventDeck && (
+                  <label>
+                    Assign to Folder<br />
+
+                    <select
+                      value={selectedFolderId}
+                      onChange={e =>
+                        setSelectedFolderId(e.target.value)
+                      }
+                    >
+                      <option value="">None</option>
+
+                      {folders.map(f => (
+                        <option key={f._id} value={f._id}>
+                          {f.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
                 <label>
                   Mascot*<br />
                   <MascotSelect
@@ -1064,9 +1162,15 @@ const ExportButtons = React.forwardRef(function ExportButtons(
                     onClick={handleModalSave}
                     disabled={
                       saving ||
-                      (overwriteMode
-                        ? !overwriteDeckName.trim() || !overwriteMascot
-                        : !deckName.trim() || !selectedMascot)
+                      (
+                        isPlannedEventDeck
+                          ? !deckName.trim() || !selectedMascot
+                          : overwriteMode
+                            ? !overwriteDeckName.trim() ||
+                            !overwriteMascot
+                            : !deckName.trim() ||
+                            !selectedMascot
+                      )
                     }
                   >Save
                   </button>
