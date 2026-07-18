@@ -6,6 +6,7 @@ import React, {
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/upcoming-event-planner.css';
 import styled from 'styled-components';
+import { sortedEvents } from '../Tournaments/tournaments-data';
 
 const PlannerPage = styled.div`
     color: ${({ theme }) => theme.text};
@@ -113,6 +114,16 @@ const formatEventDate = value => {
         day: 'numeric',
         year: 'numeric'
     });
+};
+
+const getCurrentEventLogo = plan => {
+    const matchingEvent = sortedEvents.find(
+        event =>
+            String(event.id || '') ===
+            String(plan.eventKey || '')
+    );
+
+    return matchingEvent?.eventLogo || plan.eventLogo || '';
 };
 
 export default function UpcomingEventPlanner({
@@ -506,7 +517,7 @@ export default function UpcomingEventPlanner({
                 <div className="event-planner-list">
                     {plans.map(plan => {
                         const expanded = expandedId === plan._id;
-
+                        const eventLogo = getCurrentEventLogo(plan);
                         const eventTotal = CHECKLIST_ITEMS.reduce(
                             (total, item) =>
                                 total +
@@ -540,11 +551,11 @@ export default function UpcomingEventPlanner({
                                         )
                                     }
                                 >
-                                    {plan.eventLogo && (
+                                    {eventLogo && (
                                         <img
                                             className="event-planner-logo"
-                                            src={plan.eventLogo}
-                                            alt=""
+                                            src={eventLogo}
+                                            alt={`${plan.eventName} logo`}
                                         />
                                     )}
                                     <div className="event-planner-date-container">

@@ -566,7 +566,6 @@ const EventList = () => {
           eventType: event.eventType,
           eventLocation: event.location || '',
           eventSite: event.eventSite || '',
-          eventLogo: event.eventLogo,
           attendanceStatus
         })
       });
