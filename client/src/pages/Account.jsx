@@ -1111,7 +1111,7 @@ export default function Account() {
                         Deck Collection
                     </button>
                     <button
-                    //  style={{display: 'none'}}
+                     style={{display: 'none'}}
                         onClick={() => setTab('events')}
                         className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
                     >
