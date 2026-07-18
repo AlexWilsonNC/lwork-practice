@@ -506,7 +506,7 @@ export default function Account() {
     };
 
     const [sharedId, setSharedId] = useState(null);
-
+    const [copiedDeckId, setCopiedDeckId] = useState(null);
     const shareDeckLink = async (deck) => {
         const owner = isPublicView ? username : user?.username;
         if (!owner || !deck?._id) return;
@@ -524,7 +524,71 @@ export default function Account() {
             console.error(err);
         }
     };
+const cleanCopiedCardName = name =>
+    String(name || '')
+        .replace(' - ACESPEC Energy', '')
+        .replace(' - ACESPEC', '')
+        .replace(' - Basic', '')
+        .replace(' - Special', '');
 
+const copyDecklistToClipboard = async deck => {
+    const raw = deck?.decklist;
+
+    const cards = Array.isArray(raw)
+        ? raw
+        : [
+            ...(raw?.pokemon || []),
+            ...(raw?.trainer || []),
+            ...(raw?.energy || [])
+        ];
+
+    if (!cards.length) {
+        return;
+    }
+
+    const text = cards
+        .map(card => {
+            const setCode =
+                card.setAbbrev ||
+                card.set ||
+                '';
+
+            const cardName =
+                cleanCopiedCardName(card.name);
+
+            return [
+                Number(card.count) || 0,
+                cardName,
+                setCode,
+                card.number || ''
+            ]
+                .filter(value => value !== '')
+                .join(' ');
+        })
+        .join('\n');
+
+    try {
+        await navigator.clipboard.writeText(text);
+
+        const deckId = getDeckId(deck);
+
+        setCopiedDeckId(deckId);
+        setMenuOpenId(null);
+
+        window.setTimeout(() => {
+            setCopiedDeckId(current =>
+                current === deckId
+                    ? null
+                    : current
+            );
+        }, 2000);
+    } catch (error) {
+        console.error(
+            'Could not copy decklist:',
+            error
+        );
+    }
+};
     const goToDeckbuilder = (deckObj) => {
         const raw = deckObj.decklist;
         const cards = Array.isArray(raw)
@@ -1712,6 +1776,26 @@ export default function Account() {
                                                                         </span>
                                                                         {menuOpenId === d._id && (
                                                                             <div className="deckcollection-menu-dropdown">
+                                                                                <button
+    onClick={event => {
+        event.stopPropagation();
+        copyDecklistToClipboard(d);
+    }}
+>
+    {copiedDeckId === getDeckId(d) ? (
+        <>
+            <span
+                className="material-symbols-outlined succesfully-shared-btn"
+            >
+                check
+            </span>
+
+            Copied
+        </>
+    ) : (
+        'Copy Decklist'
+    )}
+</button>
                                                                                 <button onClick={e => {
                                                                                     e.stopPropagation();
                                                                                     shareDeckLink(d);
