@@ -493,7 +493,7 @@ td div a {
   padding: 0;
   border: 1px solid #9aa2aa;
   border-radius: 50%;
-  background: white;
+  background: transparent;
   color: inherit;
   cursor: pointer;
   display: inline-flex;

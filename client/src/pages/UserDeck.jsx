@@ -6,7 +6,7 @@ import DecklistOptions from '../Tools/DecklistOptions'; // if you use it
 import '../css/decklist.css'; // reuse your existing styles
 
 export default function UserDeck() {
-    const { deckId, username, plannedEventId } = useParams();
+    const { deckId, username } = useParams();
     //   const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -25,15 +25,14 @@ export default function UserDeck() {
         const load = async () => {
             try {
                 const token = localStorage.getItem('PTCGLegendsToken');
-                const endpoint = plannedEventId
-  ? `/api/user/planned-events/${plannedEventId}/deck`
-  : `/api/user/decks/${deckId}`;
-
-const res = await fetch(endpoint, {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
+                const res = await fetch(
+                `/api/user/decks/${deckId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
                 if (!res.ok) throw new Error('Could not load deck');
                 setDeck(await res.json());
             } catch (err) {
@@ -41,71 +40,120 @@ const res = await fetch(endpoint, {
             }
         };
         load();
-    }, [deckId, plannedEventId]);
+    }, [deckId]);
 
     useEffect(() => {
-        if (!deck) return;
+        if (!deck?.decklist) return;
 
-        (async () => {
+        let cancelled = false;
+
+        const loadCards = async () => {
+            const normalized = normalizeSavedDecklist(
+                deck.decklist
+            );
+
             const all = [
-                ...(normalizedDecklist.pokemon || []),
-                ...(normalizedDecklist.trainer || []),
-                ...(normalizedDecklist.energy || [])
+                ...normalized.pokemon,
+                ...normalized.trainer,
+                ...normalized.energy
             ];
 
             const map = {};
 
-            for (const c of all) {
-                const setCode = c.set || c.setAbbrev;
-                const key = `${setCode}-${c.number}`;
+            for (const savedCard of all) {
+                const setCode = getCardSetCode(savedCard);
+                const key = `${setCode}-${savedCard.number}`;
 
-                if (c.isUploadedImageCard || c.set === 'UPL' || c.setAbbrev === 'UPL') {
+                if (
+                    savedCard.isUploadedImageCard ||
+                    setCode === 'UPL'
+                ) {
                     map[key] = {
-                        ...c,
-                        images: c.images || {
-                            small: c.imageUrl,
-                            large: c.imageUrl
+                        ...savedCard,
+                        set: setCode,
+                        setAbbrev: setCode,
+                        images: savedCard.images || {
+                            small: savedCard.imageUrl,
+                            large: savedCard.imageUrl
                         }
                     };
+
                     continue;
                 }
 
-                const resp = await fetch(`/api/cards/${setCode}/${c.number}`);
-                if (!resp.ok) continue;
+                try {
+                    const response = await fetch(
+                        `/api/cards/${setCode}/${savedCard.number}`
+                    );
 
-                const card = await resp.json();
-                map[key] = card;
+                    if (!response.ok) {
+                        console.warn(
+                            'Could not load saved card:',
+                            setCode,
+                            savedCard.number
+                        );
+
+                        continue;
+                    }
+
+                    const fullCard = await response.json();
+
+                    map[key] = {
+                        ...fullCard,
+                        count: Number(savedCard.count) || 0
+                    };
+                } catch (error) {
+                    console.error(
+                        'Could not load card:',
+                        savedCard,
+                        error
+                    );
+                }
             }
 
-            setCardMap(map);
-        })();
+            if (!cancelled) {
+                setCardMap(map);
+            }
+        };
+
+        setCardMap(null);
+        loadCards();
+
+        return () => {
+            cancelled = true;
+        };
     }, [deck]);
+
+    const normalizedDecklist = normalizeSavedDecklist(
+        deck?.decklist
+    );
 
     if (!deck) {
         return <div className="spinner"></div>;
-    } if (!cardMap) {
+    }
+    if (!cardMap) {
         return <div className="spinner"></div>;
     }
 
-    const normalizedDecklist = Array.isArray(deck.decklist)
-  ? {
-      pokemon: deck.decklist.filter(
-        card => card.supertype === 'Pokémon'
-      ),
+    // const normalizedDecklist = Array.isArray(deck.decklist)
+    //     ? {
+    //         pokemon: deck.decklist.filter(
+    //             card => card.supertype === 'Pokémon'
+    //         ),
 
-      trainer: deck.decklist.filter(
-        card => card.supertype === 'Trainer'
-      ),
+    //         trainer: deck.decklist.filter(
+    //             card => card.supertype === 'Trainer'
+    //         ),
 
-      energy: deck.decklist.filter(
-        card => card.supertype === 'Energy'
-      )
-    }
-  : {
-      pokemon: deck.decklist?.pokemon || [],
-      trainer: deck.decklist?.trainer || [],
-      energy: deck.decklist?.energy || []
-    };
+    //         energy: deck.decklist.filter(
+    //             card => card.supertype === 'Energy'
+    //         )
+    //     }
+    //     : {
+    //         pokemon: deck.decklist?.pokemon || [],
+    //         trainer: deck.decklist?.trainer || [],
+    //         energy: deck.decklist?.energy || []
+    //     };
 
     const cleaned = {
         pokemon:
@@ -125,10 +173,15 @@ const res = await fetch(endpoint, {
             })) || []
     };
 
-    const totalCount =
-        cleaned.pokemon.length +
-        cleaned.trainer.length +
-        cleaned.energy.length;
+    const totalCount = [
+        ...cleaned.pokemon,
+        ...cleaned.trainer,
+        ...cleaned.energy
+    ].reduce(
+        (sum, card) =>
+            sum + (Number(card.count) || 0),
+        0
+    );
 
     return (
         <div className="center player-deck">
@@ -167,7 +220,7 @@ const res = await fetch(endpoint, {
 
                 {totalCount !== 60 && (
                     <div className="warning-message">
-                        <span class="material-symbols-outlined">warning</span> Deck contains {totalCardCount} cards
+                        <span class="material-symbols-outlined">warning</span> Deck contains {totalCount} cards
                     </div>
                 )}
 
@@ -178,11 +231,15 @@ const res = await fetch(endpoint, {
                                 key={i}
                                 className="card-container"
                                 onClick={() =>
-                                    navigate(`/card/${card.set}/${card.number}`)
+                                    navigate(
+                                        `/card/${getCardSetCode(card)}/${card.number}`
+                                    )
                                 }
                             >
                                 <img
-                                    src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                    src={cardMap?.[
+                                        `${getCardSetCode(card)}-${card.number}`
+                                    ]?.images?.small}
                                     alt={card.name}
                                 />
                                 <div className="card-count">{card.count}</div>
@@ -193,11 +250,15 @@ const res = await fetch(endpoint, {
                                 key={i}
                                 className="card-container"
                                 onClick={() =>
-                                    navigate(`/card/${card.set}/${card.number}`)
+                                    navigate(
+                                        `/card/${getCardSetCode(card)}/${card.number}`
+                                    )
                                 }
                             >
                                 <img
-                                    src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                    src={cardMap?.[
+                                        `${getCardSetCode(card)}-${card.number}`
+                                    ]?.images?.small}
                                     alt={card.name}
                                 />
                                 <div className="card-count">{card.count}</div>
@@ -208,11 +269,15 @@ const res = await fetch(endpoint, {
                                 key={i}
                                 className="card-container"
                                 onClick={() =>
-                                    navigate(`/card/${card.set}/${card.number}`)
+                                    navigate(
+                                        `/card/${getCardSetCode(card)}/${card.number}`
+                                    )
                                 }
                             >
                                 <img
-                                    src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                    src={cardMap?.[
+                                        `${getCardSetCode(card)}-${card.number}`
+                                    ]?.images?.small}
                                     alt={card.name}
                                 />
                                 <div className="card-count">{card.count}</div>
@@ -232,14 +297,18 @@ const res = await fetch(endpoint, {
                                         key={i}
                                         className="list-item"
                                         onClick={() =>
-                                            navigate(`/card/${card.set}/${card.number}`)
+                                            navigate(
+                                                `/card/${getCardSetCode(card)}/${card.number}`
+                                            )
                                         }
                                     >
                                         <p className="list-card-count">{card.count}</p>
                                         <p className="bold-name">{card.name}</p>
                                         <img
                                             className="pokemon-list-img"
-                                            src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                            src={cardMap?.[
+                                                `${getCardSetCode(card)}-${card.number}`
+                                            ]?.images?.small}
                                             alt={card.name}
                                         />
                                     </div>
@@ -257,14 +326,18 @@ const res = await fetch(endpoint, {
                                         key={i}
                                         className="list-item"
                                         onClick={() =>
-                                            navigate(`/card/${card.set}/${card.number}`)
+                                            navigate(
+                                                `/card/${getCardSetCode(card)}/${card.number}`
+                                            )
                                         }
                                     >
                                         <p className="list-card-count">{card.count}</p>
                                         <p className="bold-name">{card.name}</p>
                                         <img
                                             className="trainer-list-img"
-                                            src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                            src={cardMap?.[
+                                                `${getCardSetCode(card)}-${card.number}`
+                                            ]?.images?.small}
                                             alt={card.name}
                                         />
                                     </div>
@@ -282,14 +355,18 @@ const res = await fetch(endpoint, {
                                         key={i}
                                         className="list-item"
                                         onClick={() =>
-                                            navigate(`/card/${card.set}/${card.number}`)
+                                            navigate(
+                                                `/card/${getCardSetCode(card)}/${card.number}`
+                                            )
                                         }
                                     >
                                         <p className="list-card-count">{card.count}</p>
                                         <p className="bold-name">{card.name}</p>
                                         <img
                                             className="energy-list-img"
-                                            src={cardMap?.[`${card.set}-${card.number}`]?.images?.small}
+                                            src={cardMap?.[
+                                                `${getCardSetCode(card)}-${card.number}`
+                                            ]?.images?.small}
                                             alt={card.name}
                                         />
                                     </div>

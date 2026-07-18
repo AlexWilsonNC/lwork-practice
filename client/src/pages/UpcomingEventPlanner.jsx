@@ -5,6 +5,13 @@ import React, {
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/upcoming-event-planner.css';
+import styled from 'styled-components';
+
+const PlannerPage = styled.div`
+    color: ${({ theme }) => theme.text};
+    .event-website-button {background: ${({ theme }) => theme.eventWebsiteBtn};}
+    .event-planner-field-row select option {background-color: ${({ theme }) => theme.planFieldSelectColor};}
+`;
 
 const CHECKLIST_ITEMS = [
     {
@@ -118,6 +125,7 @@ export default function UpcomingEventPlanner({
 
     const [plans, setPlans] = useState([]);
     const [decks, setDecks] = useState([]);
+    const [folders, setFolders] = useState([]);
     const [expandedId, setExpandedId] = useState(
         initialPlannedEventId ||
         location.state?.plannedEventId ||
@@ -134,13 +142,24 @@ export default function UpcomingEventPlanner({
         setError('');
 
         try {
-            const [plansRes, decksRes] = await Promise.all([
+            const [
+                plansRes,
+                decksRes,
+                foldersRes
+            ] = await Promise.all([
                 fetch('/api/user/planned-events', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 }),
+
                 fetch('/api/user/decks', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }),
+
+                fetch('/api/user/folders', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -151,17 +170,38 @@ export default function UpcomingEventPlanner({
                 throw new Error('Could not load planned events');
             }
 
-            if (!decksRes.ok) {
-                throw new Error('Could not load saved decks');
+            if (!foldersRes.ok) {
+                throw new Error('Could not load deck folders');
             }
 
-            const [planData, deckData] = await Promise.all([
+            const [
+                planData,
+                deckData,
+                folderData
+            ] = await Promise.all([
                 plansRes.json(),
-                decksRes.json()
+                decksRes.json(),
+                foldersRes.json()
             ]);
 
             setPlans(planData.map(normalizePlan));
             setDecks(Array.isArray(deckData) ? deckData : []);
+            const folderList =
+                folderData?.folders ||
+                folderData ||
+                [];
+
+            setFolders(
+                Array.isArray(folderList)
+                    ? folderList
+                        .slice()
+                        .sort(
+                            (a, b) =>
+                                Number(a.order || 0) -
+                                Number(b.order || 0)
+                        )
+                    : []
+            );
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -386,10 +426,10 @@ export default function UpcomingEventPlanner({
     }
 
     return (
-        <section className="event-planner">
+        <PlannerPage className="event-planner">
             <div className="event-planner-heading">
                 <div>
-                    <h2>Upcoming Event Planner</h2>
+                    <h2>Event Planner</h2>
                     <p>Track the events you are considering; registration, travel, decklist to submit, expenses, and checklist as you go.</p>
                 </div>
 
@@ -415,7 +455,7 @@ export default function UpcomingEventPlanner({
                     <div>
                         <strong>{plans.length}</strong>
                         <span>
-                            planned event{plans.length === 1 ? '' : 's'}
+                            Event{plans.length === 1 ? '' : 's'}
                         </span>
                     </div>
 
@@ -428,14 +468,14 @@ export default function UpcomingEventPlanner({
                                 ).length
                             }
                         </strong>
-                        <span>going</span>
+                        <span>Going</span>
                     </div>
 
                     <div>
                         <strong>
                             {formatCurrency(totalAcrossAllEvents)}
                         </strong>
-                        <span>total cost</span>
+                        <span>2027 Season Cost</span>
                     </div>
                 </div>
             )}
@@ -626,7 +666,7 @@ export default function UpcomingEventPlanner({
                                                                 );
                                                             }}
                                                         >
-                                                            + Create deck
+                                                            Create deck
                                                         </button>
 
                                                         <button
@@ -636,12 +676,13 @@ export default function UpcomingEventPlanner({
                                                                     plan._id,
                                                                     current => ({
                                                                         ...current,
-                                                                        showCollectionDeckPicker: true
+                                                                        showCollectionDeckPicker: true,
+                                                                        selectedCollectionFolderId: null
                                                                     })
                                                                 );
                                                             }}
                                                         >
-                                                            + From collection
+                                                            From collection
                                                         </button>
                                                     </div>
                                                 )}
@@ -662,22 +703,7 @@ export default function UpcomingEventPlanner({
                                                     )}
                                                     <div>
                                                         <strong>{plan.eventDeck.name}</strong>
-                                                        {/* <span>
-                                                            {plan.eventDeck.sourceCollectionDeckId
-                                                                ? 'Copied from your deck collection'
-                                                                : 'Created for this event'}
-                                                        </span> */}
                                                     </div>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `/account/events/${plan._id}/deck`
-                                                            )
-                                                        }
-                                                    >
-                                                        View deck
-                                                    </button>
                                                     <button
                                                         type="button"
                                                         onClick={() =>
@@ -686,7 +712,7 @@ export default function UpcomingEventPlanner({
                                                             )
                                                         }
                                                     >
-                                                        Edit deck
+                                                        Open deck
                                                     </button>
                                                     <button
                                                         type="button"
@@ -702,7 +728,31 @@ export default function UpcomingEventPlanner({
                                             {plan.showCollectionDeckPicker && (
                                                 <div className="collection-deck-picker">
                                                     <div className="collection-deck-picker-top">
-                                                        <h4>Select a saved deck</h4>
+                                                        <div>
+                                                            <h4>
+                                                                {plan.selectedCollectionFolderId === null
+                                                                    ? 'Select a folder'
+                                                                    : 'Select a saved deck'}
+                                                            </h4>
+
+                                                            {plan.selectedCollectionFolderId !== null && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="collection-folder-back"
+                                                                    onClick={() => {
+                                                                        updateLocalPlan(
+                                                                            plan._id,
+                                                                            current => ({
+                                                                                ...current,
+                                                                                selectedCollectionFolderId: null
+                                                                            })
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    ← Back to folders
+                                                                </button>
+                                                            )}
+                                                        </div>
 
                                                         <button
                                                             type="button"
@@ -712,7 +762,8 @@ export default function UpcomingEventPlanner({
                                                                     plan._id,
                                                                     current => ({
                                                                         ...current,
-                                                                        showCollectionDeckPicker: false
+                                                                        showCollectionDeckPicker: false,
+                                                                        selectedCollectionFolderId: null
                                                                     })
                                                                 );
                                                             }}
@@ -723,42 +774,165 @@ export default function UpcomingEventPlanner({
                                                         </button>
                                                     </div>
 
-                                                    {decks.length === 0 ? (
-                                                        <p>You do not have any saved decks yet.</p>
-                                                    ) : (
-                                                        <div className="collection-deck-picker-list">
-                                                            {decks.map(deck => (
+                                                    {plan.selectedCollectionFolderId === null ? (
+                                                        <div className="collection-folder-picker-list">
+                                                            {folders.map(folder => {
+                                                                const folderDeckCount = decks.filter(
+                                                                    deck =>
+                                                                        String(deck.folderId || '') ===
+                                                                        String(folder._id)
+                                                                ).length;
+
+                                                                if (folderDeckCount === 0) {
+                                                                    return null;
+                                                                }
+
+                                                                return (
+                                                                    <button
+                                                                        type="button"
+                                                                        key={folder._id}
+                                                                        onClick={() => {
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+                                                                                    selectedCollectionFolderId:
+                                                                                        String(folder._id)
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        <span
+                                                                            className="collection-folder-color"
+                                                                            style={{
+                                                                                backgroundColor:
+                                                                                    folder.color || '#1290eb'
+                                                                            }}
+                                                                        />
+
+                                                                        <span className="collection-folder-name">
+                                                                            {folder.name}
+                                                                        </span>
+
+                                                                        <span className="collection-folder-count">
+                                                                            {folderDeckCount}
+                                                                        </span>
+
+                                                                        <span className="material-symbols-outlined">
+                                                                            chevron_right
+                                                                        </span>
+                                                                    </button>
+                                                                );
+                                                            })}
+
+                                                            {decks.some(deck => !deck.folderId) && (
                                                                 <button
                                                                     type="button"
-                                                                    key={deck._id}
-                                                                    disabled={savingId === plan._id}
-                                                                    onClick={() =>
-                                                                        assignCollectionDeck(
-                                                                            plan,
-                                                                            deck._id
-                                                                        )
-                                                                    }
+                                                                    onClick={() => {
+                                                                        updateLocalPlan(
+                                                                            plan._id,
+                                                                            current => ({
+                                                                                ...current,
+                                                                                selectedCollectionFolderId:
+                                                                                    'unassigned'
+                                                                            })
+                                                                        );
+                                                                    }}
                                                                 >
-                                                                    {deck.mascotImageUrl && (
-                                                                        <img
-                                                                            src={deck.mascotImageUrl}
-                                                                            alt=""
-                                                                        />
-                                                                    )}
+                                                                    <span
+                                                                        className="collection-folder-color unassigned"
+                                                                    />
 
-                                                                    <span>{deck.name}</span>
+                                                                    <span className="collection-folder-name">
+                                                                        Unassigned
+                                                                    </span>
+
+                                                                    <span className="collection-folder-count">
+                                                                        {
+                                                                            decks.filter(
+                                                                                deck => !deck.folderId
+                                                                            ).length
+                                                                        }
+                                                                    </span>
 
                                                                     <span className="material-symbols-outlined">
-                                                                        add
+                                                                        chevron_right
                                                                     </span>
                                                                 </button>
-                                                            ))}
+                                                            )}
+
+                                                            {folders.every(folder =>
+                                                                decks.every(
+                                                                    deck =>
+                                                                        String(deck.folderId || '') !==
+                                                                        String(folder._id)
+                                                                )
+                                                            ) &&
+                                                                !decks.some(deck => !deck.folderId) && (
+                                                                    <p>
+                                                                        You do not have any saved decks.
+                                                                    </p>
+                                                                )}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="collection-deck-picker-list">
+                                                            {decks
+                                                                .filter(deck => {
+                                                                    if (
+                                                                        plan.selectedCollectionFolderId ===
+                                                                        'unassigned'
+                                                                    ) {
+                                                                        return !deck.folderId;
+                                                                    }
+
+                                                                    return (
+                                                                        String(deck.folderId || '') ===
+                                                                        String(
+                                                                            plan.selectedCollectionFolderId
+                                                                        )
+                                                                    );
+                                                                })
+                                                                .slice()
+                                                                .sort((a, b) =>
+                                                                    String(a.name || '').localeCompare(
+                                                                        String(b.name || '')
+                                                                    )
+                                                                )
+                                                                .map(deck => (
+                                                                    <button
+                                                                        type="button"
+                                                                        key={deck._id}
+                                                                        disabled={savingId === plan._id}
+                                                                        onClick={() =>
+                                                                            assignCollectionDeck(
+                                                                                plan,
+                                                                                deck._id
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {deck.mascotImageUrl ? (
+                                                                            <img
+                                                                                src={deck.mascotImageUrl}
+                                                                                alt=""
+                                                                            />
+                                                                        ) : (
+                                                                            <span className="material-symbols-outlined">
+                                                                                style
+                                                                            </span>
+                                                                        )}
+
+                                                                        <span>{deck.name}</span>
+
+                                                                        <span className="material-symbols-outlined">
+                                                                            add
+                                                                        </span>
+                                                                    </button>
+                                                                ))}
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
                                         </div>
-
                                         <div className="event-checklist">
                                             {CHECKLIST_ITEMS.map(item => {
                                                 const checklistItem =
@@ -874,13 +1048,12 @@ export default function UpcomingEventPlanner({
                                         </label>
 
                                         <div className="event-planner-card-footer">
-                                            <div>
+                                            {/* <div>
                                                 Event total:
                                                 <strong>
                                                     {formatCurrency(eventTotal)}
                                                 </strong>
-                                            </div>
-
+                                            </div> */}
                                             <div>
                                                 {plan.eventSite && (
                                                     <a
@@ -899,7 +1072,7 @@ export default function UpcomingEventPlanner({
                                                     disabled={savingId === plan._id}
                                                     onClick={() => deletePlan(plan)}
                                                 >
-                                                    Remove Event
+                                                    Remove Plans
                                                 </button>
 
                                                 <button
@@ -910,7 +1083,7 @@ export default function UpcomingEventPlanner({
                                                 >
                                                     {savingId === plan._id
                                                         ? 'Saving...'
-                                                        : 'Save Event'}
+                                                        : 'Save Plans'}
                                                 </button>
                                             </div>
                                         </div>
@@ -921,6 +1094,6 @@ export default function UpcomingEventPlanner({
                     })}
                 </div>
             )}
-        </section>
+        </PlannerPage>
     );
 }

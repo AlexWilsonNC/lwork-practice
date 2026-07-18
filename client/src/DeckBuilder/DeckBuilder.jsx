@@ -389,10 +389,14 @@ export default function DeckBuilder() {
   const [exportingImage, setExportingImage] = useState(false)
   const deckRef = useRef()
   const menuRef = useRef(null)
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(
+    window.location.search
+  );
   const originalDeckId = params.get('deckId');
+  const plannedEventId = params.get(
+    'plannedEventId'
+  );
   const [legalInfo, setLegalInfo] = useState({ std: null, exp: null, glc: null });
-
   const WALKTHROUGH_SEEN_KEY = 'ptcglegends_deckbuilder_walkthrough_seen';
   const searchPanelRef = useRef(null);
   const deckAreaRef = useRef(null);
@@ -624,6 +628,9 @@ export default function DeckBuilder() {
   }, [showLimitMenu])
 
   const [deck, setDeck] = useState(() => {
+    if (plannedEventId) {
+      return [];
+    }
     const hash = window.location.hash.slice(1);
     const params = new URLSearchParams(hash);
     if (params.has('deck')) {
@@ -642,10 +649,134 @@ export default function DeckBuilder() {
   });
 
   useEffect(() => {
+    if (!plannedEventId) return;
+
+    let cancelled = false;
+
+    const loadPlannedEventDeck = async () => {
+      setLoadingHash(true);
+
+      try {
+        const token = localStorage.getItem(
+          'PTCGLegendsToken'
+        );
+
+        const response = await fetch(
+          `/api/user/planned-events/${plannedEventId}/deck`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        if (!response.ok) {
+          const payload = await response
+            .json()
+            .catch(() => ({}));
+
+          throw new Error(
+            payload.error ||
+            'Could not load the planned-event deck'
+          );
+        }
+
+        const savedDeck = await response.json();
+
+        const savedCards = Array.isArray(
+          savedDeck.decklist
+        )
+          ? savedDeck.decklist
+          : [
+            ...(savedDeck.decklist?.pokemon || []),
+            ...(savedDeck.decklist?.trainer || []),
+            ...(savedDeck.decklist?.energy || [])
+          ];
+
+        const fullDeck = [];
+
+        for (const savedCard of savedCards) {
+          const setCode =
+            savedCard.set ||
+            savedCard.setAbbrev;
+
+          if (
+            savedCard.isUploadedImageCard ||
+            setCode === 'UPL'
+          ) {
+            fullDeck.push({
+              ...savedCard,
+              set: setCode,
+              setAbbrev: setCode,
+              count:
+                Number(savedCard.count) || 0,
+              images:
+                savedCard.images || {
+                  small:
+                    savedCard.imageUrl,
+                  large:
+                    savedCard.imageUrl
+                }
+            });
+
+            continue;
+          }
+
+          const cardResponse = await fetch(
+            `/api/cards/${setCode}/${savedCard.number}`
+          );
+
+          if (!cardResponse.ok) {
+            console.warn(
+              'Could not load planned-event card:',
+              setCode,
+              savedCard.number
+            );
+
+            continue;
+          }
+
+          const fullCard =
+            await cardResponse.json();
+
+          fullDeck.push({
+            ...fullCard,
+            count:
+              Number(savedCard.count) || 0
+          });
+        }
+
+        if (!cancelled) {
+          setDeck(fullDeck);
+        }
+      } catch (error) {
+        console.error(
+          'Could not load planned-event deck:',
+          error
+        );
+
+        if (!cancelled) {
+          setDeck([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingHash(false);
+        }
+      }
+    };
+
+    loadPlannedEventDeck();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [plannedEventId]);
+
+  useEffect(() => {
+    if (plannedEventId) return;
     const hash = window.location.hash.slice(1);
     const params = new URLSearchParams(hash);
     if (!params.has('deck')) return;
-
     let minimal;
     try {
       minimal = JSON.parse(decodeURIComponent(params.get('deck')));
@@ -693,7 +824,7 @@ export default function DeckBuilder() {
         setLoadingHash(false);
       }
     })();
-  }, []);
+  }, [plannedEventId]);
 
   const [zoomCard, setZoomCard] = useState(null);
   const [isRotated, setIsRotated] = useState(false);

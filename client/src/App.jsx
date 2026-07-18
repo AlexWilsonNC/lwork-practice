@@ -70,10 +70,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-            {/* <Route
-              path="/account/events/:plannedEventId/deck"
-              element={<UserDeck />}
-            /> */}
             <Route path="/" element={<HomePage />} />
             <Route path="/tournaments/completed" element={<EventList showCompleted={true} />} />
             <Route path="/tournaments/upcoming" element={<EventList showCompleted={false} />} />

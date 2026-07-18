@@ -20,11 +20,11 @@
   max-width: 650px;
   margin: 0;
   opacity: 0.72;
+  font-size: 14px;
 }
 
 .event-planner-heading > button,
-.event-planner-empty button,
-.save-event-plan {
+.event-planner-empty button {
   border: 0;
   border-radius: 6px;
   padding: 10px 14px;
@@ -174,7 +174,7 @@
 }
 
 .attendance-badge.interested {
-  background: rgba(235, 217, 18, 0.16);
+  background: rgba(235, 217, 18, 0.116);
   color: #eba312;
 }
 
@@ -216,6 +216,7 @@
   background: inherit;
   color: inherit;
   font: inherit;
+  font-weight: 400;
 }
 
 .event-checklist {
@@ -239,7 +240,7 @@
 }
 
 .event-checklist-item.completed {
-  background: rgba(23, 133, 59, 0.08);
+  background: rgba(23, 133, 59, 0.1);
 }
 
 .event-check-label {
@@ -317,7 +318,7 @@
   margin-top: 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 15px;
 }
 
@@ -331,10 +332,18 @@
   margin-left: 5px;
 }
 
+.save-event-plan {
+  border: 0;
+  padding: 9px;
+  background: #1290eb;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
 .delete-event-plan {
   border: 0;
   padding: 9px;
-  background: rgba(255, 0, 0, 0.687);
+  background: rgba(205, 9, 9, 0.687);
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -342,7 +351,6 @@
 .event-website-button {
   border: 0;
   padding: 9px;
-  background: rgba(48, 45, 45, 0.687);
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -386,7 +394,64 @@
     align-items: stretch;
     flex-direction: column;
   }
-
+  .planned-event-deck-actions button {
+  padding: 7px 8px !important;
+  font-size: 11px;
+}
+  .event-planner-field-row label,
+.event-planner-notes {
+  font-size: 14px;
+}
+.planned-event-deck-heading h4 {
+  font-size: 14px;
+}
+.planned-event-deck-heading p {
+  font-size: 10px !important;
+}
+  .event-planner-heading {
+  margin-bottom: 10px;
+}
+  .event-planner-heading h2 {
+  font-size: 20px;
+}
+  .event-planner-heading p {
+  font-size: 12px;
+}
+.event-planner-summary > div {
+  padding: 8px;
+}
+.event-planner-summary strong {
+  font-size: 16px;
+}
+.event-planner-logo {
+    width: 45px !important;
+    height: 45px !important;
+}
+.event-planner-date {
+  width: 50px;
+  min-width: 50px;
+}
+.event-planner-date span {
+  font-size: 10px;
+}
+.event-planner-date strong {
+  padding: 4px;
+  font-size: 16px;
+}
+.event-planner-event-info h3 {
+  font-size: 14px;
+}
+.attendance-badge {
+  padding: 2px 7.5px;
+  font-size: 9px;
+}
+.event-planner-event-info p {
+  font-size: 12px;
+}
+.event-planner-progress {
+  margin-top: 7px;
+  font-size: 11px;
+}
   .event-planner-heading > button {
     justify-content: center;
   }
@@ -427,6 +492,25 @@
   .event-planner-card-footer > div {
     justify-content: flex-end;
   }
+  .event-checklist-item span {
+  font-size: 14px;
+}
+.event-check-label .material-symbols-outlined {
+  font-size: 17px;
+}
+.event-check-label input {
+  width: 15px;
+  height: 15px;
+}
+.event-cost-input input {
+  padding: 5px;
+  font-size: 12px;
+}
+.event-website-button,
+.delete-event-plan,
+.save-event-plan {
+  font-size: 12px;
+}
 }
 
 .planned-event-deck-section {
@@ -466,19 +550,19 @@
   background: transparent;
   color: #1290eb;
   cursor: pointer;
+  text-wrap: nowrap;
 }
 
 .planned-event-deck-actions .create-event-deck-btn {
   border-color: #1290eb;
   background: #1290eb;
   color: white;
-  display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
 .planned-event-deck-mascot {
-  width: 46px;
+  width: 55px;
   height: 46px;
   border-radius: 5px;
   object-fit: cover;
@@ -596,4 +680,253 @@
 }
 .event-planner-card.cancelled {
   border-left-color: #c33737;
+}
+
+.collection-folder-picker-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.collection-folder-picker-list > button {
+  width: 100%;
+  min-height: 48px;
+  padding: 9px 11px;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.collection-folder-picker-list > button:hover {
+  border-color: #1290eb;
+  background: rgba(18, 144, 235, 0.07);
+}
+
+.collection-folder-color {
+  width: 13px;
+  height: 32px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.collection-folder-color.unassigned {
+  background: rgba(127, 127, 127, 0.55);
+}
+
+.collection-folder-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.collection-folder-count {
+  min-width: 30px;
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.collection-folder-back {
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1290eb;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.collection-deck-picker-top > div {
+  min-width: 0;
+}
+
+.collection-deck-picker-top > div h4 {
+  margin: 0;
+}
+
+/**/
+
+@media screen and (max-width: 550px) {
+  .event-planner {
+    width: calc(100% - 24px);
+    margin: 22px auto 45px;
+  }
+  .event-planner-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .event-planner-card-summary {
+    display: grid;
+    grid-template-columns:
+      54px
+      minmax(0, 1fr)
+      22px;
+    grid-template-areas:
+      "logo info arrow"
+      "date info arrow";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .event-planner-logo {
+    grid-area: logo;
+    justify-self: center;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .event-planner-date-container {
+    grid-area: date;
+    justify-self: center;
+    display: block;
+  }
+
+  .event-planner-date {
+    width: 52px;
+    min-width: 52px;
+  }
+
+  .event-planner-date span {
+    padding: 3px;
+    font-size: 10px;
+  }
+
+  .event-planner-date strong {
+    padding: 4px;
+    font-size: 18px;
+  }
+
+  .event-planner-event-info {
+    grid-area: info;
+    align-self: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .event-planner-card-summary
+    > .material-symbols-outlined:last-child {
+    grid-area: arrow;
+    justify-self: end;
+    align-self: center;
+    font-size: 23px;
+  }
+
+  .event-planner-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .event-planner-event-info h3 {
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .attendance-badge {
+    padding: 2px 7px;
+    font-size: 9px;
+  }
+
+  .event-planner-event-info p {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .event-planner-progress {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  /*
+   * Expanded planner content
+   */
+  .event-planner-details {
+    padding: 13px 10px;
+  }
+
+  .planned-event-deck-section {
+    padding: 11px;
+  }
+
+  .planned-event-deck-actions {
+    width: 100%;
+  }
+
+  .planned-event-deck-actions button {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  .event-checklist-item {
+    padding: 10px;
+  }
+
+  .event-check-label {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .event-check-label > span:last-child {
+    min-width: 0;
+    line-height: 1.3;
+  }
+
+  .event-cost-input {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .event-cost-input input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .event-planner-card-footer {
+    gap: 12px;
+  }
+
+  .event-planner-card-footer > div {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .event-planner-card-footer a,
+  .event-planner-card-footer button {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .event-planner-selected-deck {
+    padding: 10px;
+  }
+
+  .event-planner-selected-deck button {
+    width: 100%;
+  }
+
+  .collection-deck-picker-list {
+    grid-template-columns: 1fr;
+  }
 }

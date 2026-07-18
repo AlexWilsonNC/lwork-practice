@@ -121,6 +121,8 @@ export const lightTheme = {
   burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(255,255,255,.85), 0 5px 12px rgba(18,144,235,.08);',
   burgerLinkSymbol: '#1290eb',
   matrixmodalbg: 'white',
+  eventWebsiteBtn: 'rgba(48, 45, 45, 0.687)',
+  planFieldSelectColor: 'transparent',
 };
 
 const decklistSvgDark = `
@@ -235,4 +237,6 @@ export const darkTheme = {
   burgerLinkInsetBoxShadow: 'inset 0 0 0 1px rgba(75,75,75,.85), 0 5px 12px rgba(18,144,235,.08);',
   burgerLinkSymbol: 'white',
   matrixmodalbg: 'rgb(42, 43, 48)',
+  eventWebsiteBtn: 'rgba(194, 189, 189, 0.69)',
+  planFieldSelectColor: '#27292C',
 };

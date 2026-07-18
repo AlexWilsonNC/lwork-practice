@@ -789,7 +789,9 @@ const EventList = () => {
                 {showUpcoming && (
                   <>
                     <th>Website</th>
-                    <th className="event-plan-heading" style={{display: 'none'}}>Plan</th>
+                    <th className="event-plan-heading" 
+                    // style={{display: 'none'}}
+                    >Plan</th>
                   </>
                 )}
               </tr>
@@ -873,7 +875,9 @@ const EventList = () => {
 
                       return (
                         <td className="event-plan-cell">
-                          <div className="event-plan-control" style={{display: 'none'}}>
+                          <div className="event-plan-control" 
+                          // style={{display: 'none'}}
+                          >
                             <button
                               type="button"
                               className={[
