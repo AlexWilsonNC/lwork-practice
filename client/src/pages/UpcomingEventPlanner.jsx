@@ -443,7 +443,6 @@ export default function UpcomingEventPlanner({
                     <h2>Event Planner</h2>
                     <p>Track the events you are considering; registration, travel, decklist to submit, expenses, and checklist as you go.</p>
                 </div>
-
                 <button
                     type="button"
                     onClick={() => navigate('/tournaments/upcoming')}
@@ -451,26 +450,23 @@ export default function UpcomingEventPlanner({
                     <span className="material-symbols-outlined">
                         add
                     </span>
-                    Add events
+                    Add Events
                 </button>
             </div>
-
             {error && (
                 <div className="event-planner-error">
                     {error}
                 </div>
             )}
-
             {plans.length > 0 && (
                 <div className="event-planner-summary">
-                    <div>
+                    <div className="summary-events desktop-summary-item">
                         <strong>{plans.length}</strong>
                         <span>
                             Event{plans.length === 1 ? '' : 's'}
                         </span>
                     </div>
-
-                    <div>
+                    <div className="summary-going desktop-summary-item">
                         <strong>
                             {
                                 plans.filter(
@@ -481,8 +477,21 @@ export default function UpcomingEventPlanner({
                         </strong>
                         <span>Going</span>
                     </div>
-
-                    <div>
+                    <div className="mobile-attendance-summary">
+                        <span>
+                            {plans.length}{' '}
+                            Event{plans.length === 1 ? '' : 's'}
+                            {' / '}
+                            {
+                                plans.filter(
+                                    plan =>
+                                        plan.attendanceStatus === 'going'
+                                ).length
+                            }{' '}
+                            Going
+                        </span>
+                    </div>
+                    <div className="summary-cost">
                         <strong>
                             {formatCurrency(totalAcrossAllEvents)}
                         </strong>
@@ -490,7 +499,6 @@ export default function UpcomingEventPlanner({
                     </div>
                 </div>
             )}
-
             {plans.length === 0 ? (
                 <div className="event-planner-empty">
                     <span className="material-symbols-outlined">

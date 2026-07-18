@@ -1102,27 +1102,54 @@ export default function Account() {
             </AccountSection>
         );
     }
-
     return (
         <AccountSection className="account-page">
             {!isPublicView && (
-                <div className="account-tabs">
-                    <button onClick={() => setTab('decks')} className={`decks-account-btn ${tab === 'decks' ? 'active' : ''}`}>
-                        Deck Collection
+                <nav
+                    className="account-tabs"
+                    aria-label="Account sections"
+                >
+                    <button
+                        type="button"
+                        onClick={() => setTab('decks')}
+                        className={tab === 'decks' ? 'active' : ''}
+                        aria-current={
+                            tab === 'decks' ? 'page' : undefined
+                        }
+                    >
+                        <span className="material-symbols-outlined">
+                            style
+                        </span>
+                        <span>Deck Collection</span>
                     </button>
                     <button
-                     style={{display: 'none'}}
+                        type="button"
                         onClick={() => setTab('events')}
-                        className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
+                        className={tab === 'events' ? 'active' : ''}
+                        aria-current={
+                            tab === 'events' ? 'page' : undefined
+                        }
                     >
-                        Event Planner
+                        <span className="material-symbols-outlined">
+                            event_note
+                        </span>
+                        <span>Event Planner</span>
                     </button>
-                    <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
-                        User Profile
+                    <button
+                        type="button"
+                        onClick={() => setTab('profile')}
+                        className={tab === 'profile' ? 'active' : ''}
+                        aria-current={
+                            tab === 'profile' ? 'page' : undefined
+                        }
+                    >
+                        <span className="material-symbols-outlined">
+                            person
+                        </span>
+                        <span>Profile</span>
                     </button>
-                </div>
+                </nav>
             )}
-
             {tab === 'events' ? (
                 <UpcomingEventPlanner
                     token={token}

@@ -138,17 +138,6 @@
   font-style: italic;
 }
 
-.account-tabs {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 360px;
-  padding: 5px;
-  border-radius: 12px;
-  margin: 0 auto;
-}
-
 .cant-rem-pw-hint {
   font-size: 7px !important;
   font-style: italic;
@@ -211,29 +200,105 @@
   }
 }
 
+.account-tabs {
+  width: min(900px, calc(100% - 30px));
+  margin: 0 auto 24px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: transparent !important;
+}
+
 .account-tabs button {
-  background-color: transparent;
-  width: 175px;
-  padding: 7px;
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
+  position: relative;
+  min-width: 0;
+  min-height: 66px;
+  padding: 10px 14px;
+
+  border: 1px solid rgb(216, 216, 216);
+  background: transparent;
+  color: inherit;
+
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-}
+  gap: 8px;
 
-.account-tabs button:hover {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-}
 
-.decks-account-btn.active,
-.events-account-btn.active,
-.profile-account-btn.active {
-  background-image: linear-gradient(to bottom right, rgb(6, 174, 174), #1290eb, #1290eb);
-  border-radius: 10px;
+  opacity: 0.7;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.account-tabs button:nth-of-type(1) {
+  border-radius: 8px 0 0 8px;
+}
+.account-tabs button:nth-of-type(3) {
+  border-radius: 0 8px 8px 0;
+}
+.account-tabs button:hover {
+  opacity: 1;
+  background: rgba(18, 145, 235, 0.2);
+}
+.account-tabs button .material-symbols-outlined {
+  font-size: 22px;
+}
+.account-tabs button.active {
+  color: white;
+  opacity: 1;
+  background: linear-gradient(90deg,rgb(6, 174, 174),#1290eb);
+  z-index: 1;
+}
+.account-tabs button.active::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  bottom: -1px;
+  left: 0px;
+  height: 3px;
+  /* bottom line */
+  /* background: linear-gradient(
+    90deg,
+    rgb(6, 174, 174),
+    #1290eb
+  ); */
+}
+@media screen and (max-width: 600px) {
+  .account-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .account-tabs {
+    width: 100%;
+    margin-bottom: 22px;
+    padding: 0;
+  }
+
+  .account-tabs button {
+    min-height: 62px;
+    padding: 8px 4px;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11px;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .account-tabs button .material-symbols-outlined {
+    font-size: 21px;
+  }
+
+  .account-tabs button.active::after {
+    right: 7px;
+    left: 7px;
+  }
 }
 
 /**/
@@ -1872,19 +1937,10 @@
     margin-bottom: 7.5px;
   }
 }
-
 @media (max-width: 450px) {
   .account-page {
     padding: 25px 15px;
   }
-
-  .account-tabs {
-    transform: scale(1);
-    width: 75%;
-    padding: 5px;
-    border-radius: 12px;
-  }
-
   .cropped-mascot-card.legend,
   .secondary-mascot-card.legend {
     left: 180px;
@@ -1899,12 +1955,6 @@
 
   .viewing-other-profile-h2 {
     font-size: 14px;
-  }
-
-  .account-tabs button {
-    width: 120px;
-    padding: 4px;
-    font-size: 10px;
   }
 
   .deck-card {

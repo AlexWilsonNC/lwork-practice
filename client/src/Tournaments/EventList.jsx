@@ -789,7 +789,7 @@ const EventList = () => {
                   <>
                     <th>Website</th>
                     <th className="event-plan-heading" 
-                    style={{display: 'none'}}
+                    // style={{display: 'none'}}
                     >Plan</th>
                   </>
                 )}
@@ -875,7 +875,7 @@ const EventList = () => {
                       return (
                         <td className="event-plan-cell">
                           <div className="event-plan-control" 
-                          style={{display: 'none'}}
+                          // style={{display: 'none'}}
                           >
                             <button
                               type="button"
