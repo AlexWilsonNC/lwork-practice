@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { AuthContext } from '../contexts/AuthContext';
-import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
-import discordIcon from '../assets/social-media-icons/discord-icon.png';
-import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
-import emailIcon from '../assets/social-media-icons/email-icon.png';
+import twitterIcon from '../assets/social-media-icons/x-mark.png';
+import discordIcon from '../assets/social-media-icons/community.png';
+import patreonIcon from '../assets/social-media-icons/support.png';
+import emailIcon from '../assets/social-media-icons/contact.png';
 import Modal from '../Tools/Interstitial';
 import '../css/nav.css';
 import pokeball from '../assets/logos/blue-ultra-ball.png';
@@ -212,7 +212,6 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
             className={`mobile-theme-toggle ${theme.themeName === 'dark' ? 'is-dark' : 'is-light'}`}
             onClick={toggleTheme}
           >
-            <span className="material-symbols-outlined mobile-sun-icon"></span>
             <span className="theme-pill">
               <span className="theme-slider">
                 <span className="material-symbols-outlined">
@@ -222,12 +221,105 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
             </span>
           </button>
         </div>
-        <div className='burdered-socials'>
-          <a href='https://twitter.com/PTCG_Legends' target='_blank' rel="noopener noreferrer"><img src={twitterIcon} alt="social-icon" /></a>
-          <a href='https://discord.com/invite/P8vKM8REr4' target='_blank' rel="noopener noreferrer"><img src={discordIcon} alt="social-icon" /></a>
-          <a href='https://www.patreon.com/PTCGLegends' target='_blank' rel="noopener noreferrer"><img src={patreonIcon} alt="social-icon" /></a>
-          <a href='mailto:ptcglegends@gmail.com'><img src={emailIcon} alt="social-icon" /></a>
-        </div>
+        <div className="burdered-socials">
+  <a
+    href="https://twitter.com/PTCG_Legends"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="PTCG Legends on X"
+  >
+    <img
+      src={twitterIcon}
+      alt=""
+      onError={event => {
+        event.currentTarget.style.display = 'none';
+        event.currentTarget
+          .nextElementSibling
+          ?.classList.remove('social-icon-fallback-hidden');
+      }}
+    />
+
+    <span
+      className="material-symbols-outlined social-icon-fallback-hidden"
+      aria-hidden="true"
+    >
+      alternate_email
+    </span>
+  </a>
+
+  <a
+    href="https://discord.com/invite/P8vKM8REr4"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="PTCG Legends Discord"
+  >
+    <img
+      src={discordIcon}
+      alt=""
+      onError={event => {
+        event.currentTarget.style.display = 'none';
+        event.currentTarget
+          .nextElementSibling
+          ?.classList.remove('social-icon-fallback-hidden');
+      }}
+    />
+
+    <span
+      className="material-symbols-outlined social-icon-fallback-hidden"
+      aria-hidden="true"
+    >
+      groups
+    </span>
+  </a>
+
+  <a
+    href="https://www.patreon.com/PTCGLegends"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Support PTCG Legends"
+  >
+    <img
+      src={patreonIcon}
+      alt=""
+      onError={event => {
+        event.currentTarget.style.display = 'none';
+        event.currentTarget
+          .nextElementSibling
+          ?.classList.remove('social-icon-fallback-hidden');
+      }}
+    />
+
+    <span
+      className="material-symbols-outlined social-icon-fallback-hidden"
+      aria-hidden="true"
+    >
+      favorite
+    </span>
+  </a>
+
+  <a
+    href="mailto:ptcglegends@gmail.com"
+    aria-label="Email PTCG Legends"
+  >
+    <img
+      src={emailIcon}
+      alt=""
+      onError={event => {
+        event.currentTarget.style.display = 'none';
+        event.currentTarget
+          .nextElementSibling
+          ?.classList.remove('social-icon-fallback-hidden');
+      }}
+    />
+
+    <span
+      className="material-symbols-outlined social-icon-fallback-hidden"
+      aria-hidden="true"
+    >
+      mail
+    </span>
+  </a>
+</div>
       </BurgerOpen>
       <Modal
         show={showModal}

@@ -254,6 +254,7 @@
   opacity: 1;
   background: linear-gradient(90deg,rgb(6, 174, 174),#1290eb);
   z-index: 1;
+  border: 1px solid linear-gradient(90deg,rgb(6, 174, 174),#1290eb);
 }
 .account-tabs button.active::after {
   content: "";

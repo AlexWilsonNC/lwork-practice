@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import SidebarComponent from '../SideContent/SideContent'
 import '../css/articles.css';
 import fbIcon from '../assets/social-media-icons/facebook.png';
-import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
+import patreonIcon from '../assets/social-media-icons/contact.png';
 import archiveImage from '../assets/archive-updates/apr-archive.jpg';
 
 import yveltal from '../../public/assets/sprites/yveltal.png'

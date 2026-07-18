@@ -1,9 +1,9 @@
 import '../css/footer.css';
 import React from 'react';
-import twitterIcon from '../assets/social-media-icons/twitter-icon.svg';
-import discordIcon from '../assets/social-media-icons/discord-icon.png';
-import patreonIcon from '../assets/social-media-icons/patreon-icon.png';
-import emailIcon from '../assets/social-media-icons/email-icon.png';
+import twitterIcon from '../assets/social-media-icons/x-mark.png';
+import discordIcon from '../assets/social-media-icons/community.png';
+import patreonIcon from '../assets/social-media-icons/support.png';
+import emailIcon from '../assets/social-media-icons/contact.png';
 import totodileSprite from '../assets/footer/ho-oh.png';
 import feraligatrSprite from '../assets/footer/lugia.png';
 import tcgPlayerLogo from '../assets/social-media-icons/tcgplayer.png';
