@@ -441,7 +441,7 @@ export default function UpcomingEventPlanner({
             <div className="event-planner-heading">
                 <div>
                     <h2>Event Planner</h2>
-                    <p>Track the events you are considering; registration, travel, decklist to submit, expenses, and checklist as you go.</p>
+                    <p>Track the events you are considering; registration, travel, decklist, expenses, and checklist milestones as you go.</p>
                 </div>
                 <button
                     type="button"
