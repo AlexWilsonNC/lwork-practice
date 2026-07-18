@@ -32,7 +32,7 @@ function Footer() {
                             <a href='/tournaments/completed'><span>Tournaments</span>Completed</a>
                             <a href='/tournaments/upcoming'><span>Tournaments</span>Upcoming</a>
                             <a href='/decks'>Decks</a>
-                            <a href='/cards'>Cards</a>
+                            <a href='/cards/PBL'>Cards</a>
                             <a href='/players'>Players</a>
                         </div>
                         <div className='useful-row2'>

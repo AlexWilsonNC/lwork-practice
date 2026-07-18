@@ -75,7 +75,7 @@ const PlayerDeckCenter = styled.div`
 `;
 
 const orderedSets = [
-    "CRI", "POR", "ASC", "PFL", "MEE", "MEG", "MEE", "MEP",
+    "PBL", "CRI", "POR", "ASC", "PFL", "MEE", "MEG", "MEE", "MEP",
     "BLK", "WHT", "DRI", "JTG", "PRE", "SSP", "SCR", "SFA", "TWM", "TEF", "PAF", "PAR", "MEW", "OBF", "PAL", "SVE", "SVI", "SVE", "PR-SV",
     "CRZ", "SIT", "LOR", "PGO", "ASR", "BRS", "FST", "CEL", "EVS", "CRE", "BST",
     "SHF", "VIV", "CPA", "DAA", "RCL", "SSH", "PR-SW",
@@ -90,6 +90,7 @@ const orderedSets = [
 ];
 
 const promoSets = {
+    "PBL": ["PR-SV", "MEP"],
     "CRI": ["PR-SV", "MEP"],
     "POR": ["PR-SV", "MEP"],
     "ASC": ["PR-SV", "MEP"],

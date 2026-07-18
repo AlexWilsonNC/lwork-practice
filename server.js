@@ -1829,6 +1829,7 @@ app.post('/api/cards/filter-search', async (req, res) => {
     } else {
       const ERA_TO_SET_CODES = {
         SV1: [
+          "PBL",
           "CRI",
           "POR",
           "ASC",

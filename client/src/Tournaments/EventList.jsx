@@ -873,9 +873,8 @@ const EventList = () => {
 
                       return (
                         <td className="event-plan-cell">
-                          <div className="event-plan-control">
+                          <div className="event-plan-control" style={{display: 'none'}}>
                             <button
-                            style={{display: 'none'}}
                               type="button"
                               className={[
                                 'event-plan-button',

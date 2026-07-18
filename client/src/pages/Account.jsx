@@ -1111,14 +1111,14 @@ export default function Account() {
                         Deck Collection
                     </button>
                     <button
+                     style={{display: 'none'}}
                         onClick={() => setTab('events')}
-                        style={{display: 'none'}}
                         className={`events-account-btn ${tab === 'events' ? 'active' : ''}`}
                     >
                         Event Planner
                     </button>
                     <button onClick={() => setTab('profile')} className={`profile-account-btn ${tab === 'profile' ? 'active' : ''}`}>
-                        Profile
+                        User<br></br>Profile
                     </button>
                 </div>
             )}
