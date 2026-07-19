@@ -216,7 +216,7 @@
   min-height: 66px;
   padding: 10px 14px;
 
-  border: 1px solid rgb(216, 216, 216);
+  border: 1px solid rgba(216, 216, 216, 0.594);
   background: transparent;
   color: inherit;
 
@@ -250,7 +250,7 @@
   font-size: 22px;
 }
 .account-tabs button.active {
-  color: white;
+  color: white !important;
   opacity: 1;
   background: linear-gradient(90deg,rgb(6, 174, 174),#1290eb);
   z-index: 1;

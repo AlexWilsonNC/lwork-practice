@@ -9,7 +9,7 @@ import UpcomingEventPlanner from './UpcomingEventPlanner';
 
 const AccountSection = styled.div`
     background-color: ${({ theme }) => theme.loginbg};
-
+    .account-tabs button {color: ${({ theme }) => theme.text};}
     .deck-card-info,
     .deck-list-item,
     .not-blue-p,
