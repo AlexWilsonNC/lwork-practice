@@ -788,7 +788,7 @@ const EventList = () => {
                 {showUpcoming && (
                   <>
                     <th>Website</th>
-                    <th className="event-plan-heading" 
+                    <th className="event-plan-heading"
                     // style={{display: 'none'}}
                     >Plan</th>
                   </>
@@ -874,7 +874,7 @@ const EventList = () => {
 
                       return (
                         <td className="event-plan-cell">
-                          <div className="event-plan-control" 
+                          <div className="event-plan-control"
                           // style={{display: 'none'}}
                           >
                             <button
@@ -963,6 +963,54 @@ const EventList = () => {
                                 <button
                                   type="button"
                                   className={
+                                    currentPlan?.attendanceStatus === 'judging'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'judging')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    gavel
+                                  </span>
+                                  Judging
+                                </button>
+                                <button
+                                  type="button"
+                                  className={
+                                    currentPlan?.attendanceStatus === 'staffing'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'staffing')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    badge
+                                  </span>
+                                  Staffing
+                                </button>
+                                <button
+                                  type="button"
+                                  className={
+                                    currentPlan?.attendanceStatus === 'casting'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'casting')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    mic
+                                  </span>
+                                  Casting
+                                </button>
+                                <button
+                                  type="button"
+                                  className={
                                     currentPlan?.attendanceStatus === 'cancelled'
                                       ? 'active'
                                       : ''
@@ -978,6 +1026,7 @@ const EventList = () => {
                                 </button>
                                 {currentPlan && (
                                   <>
+                                  <hr></hr>
                                     <button
                                       type="button"
                                       onClick={() => {

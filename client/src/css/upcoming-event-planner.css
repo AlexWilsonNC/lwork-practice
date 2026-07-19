@@ -3,7 +3,43 @@
   margin: 28px auto 60px;
   color: inherit;
 }
+.event-planner-loading {
+  width: 100%;
+  min-height: 320px;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  color: inherit;
+}
+
+.event-planner-loading-ball {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+
+  animation: event-planner-ball-spin 0.9s linear infinite;
+}
+
+.event-planner-loading span {
+  color: var(--planner-muted, rgba(127, 127, 127, 0.8));
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+@keyframes event-planner-ball-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 .event-planner-heading {
   display: flex;
   align-items: flex-start;
@@ -23,22 +59,47 @@
   font-size: 14px;
 }
 
-.event-planner-heading>button,
+.event-planner-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.event-planner-heading-actions button,
 .event-planner-empty button {
-  border: 0;
+  min-height: 40px;
+  box-sizing: border-box;
   border-radius: 6px;
   padding: 10px 14px;
-  background: #1290eb;
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
-.event-planner-heading>button {
+.event-planner-heading-actions button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   white-space: nowrap;
+}
+
+.event-planner-heading-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.add-plans-button,
+.event-planner-empty button {
+  border: 0;
+  background: #1290eb;
+}
+
+.share-plans-button {
+  border: 1px solid #1290eb;
+  background: transparent;
+  color: #1290eb !important;
 }
 
 .event-planner-summary {
@@ -88,7 +149,10 @@
   background: rgba(127, 127, 127, 0.06);
 }
 
-.event-planner-card.going {
+.event-planner-card.going,
+.event-planner-card.judging,
+.event-planner-card.staffing,
+.event-planner-card.casting {
   border-left-color: #1290eb;
 }
 
@@ -110,11 +174,13 @@
 }
 
 .event-planner-date {
-  width: 60px;
-  min-width: 60px;
+  width: 62px;
+  min-width: 62px;
   overflow: hidden;
   border: 1px solid rgba(127, 127, 127, 0.3);
-  border-radius: 7px;
+  border-color: var(--planner-border);
+  border-radius: 8px;
+  background: var(--planner-detail-bg);
   text-align: center;
 }
 
@@ -146,9 +212,14 @@
   margin: 0;
 }
 
+.event-planner-event-info h3 {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
 .event-planner-event-info p {
   margin-top: 3px;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .event-planner-event-info p .material-symbols-outlined {
@@ -172,7 +243,10 @@
   text-transform: uppercase;
 }
 
-.attendance-badge.going {
+.attendance-badge.going,
+.attendance-badge.judging,
+.attendance-badge.staffing,
+.attendance-badge.casting {
   background: rgba(18, 110, 159, 0.16);
   color: #1290eb;
 }
@@ -394,9 +468,29 @@
   background: rgba(199, 60, 60, 0.1);
 }
 
+.event-location-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-wrap: nowrap;
+}
+
+.event-location-flag {
+  width: 18px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
 @media screen and (max-width: 700px) {
   .desktop-summary-item {
     display: none;
+  }
+
+  .event-location-flag {
+    width: 16px;
+    height: 12px;
   }
 
   .mobile-attendance-summary {
@@ -476,6 +570,7 @@
   .event-planner-date {
     width: 50px;
     min-width: 50px;
+    height: 52.5px;
   }
 
   .event-planner-date span {
@@ -483,8 +578,7 @@
   }
 
   .event-planner-date strong {
-    padding: 4px;
-    font-size: 16px;
+    font-size: 16px !important;
   }
 
   .event-planner-event-info h3 {
@@ -505,8 +599,18 @@
     font-size: 11px;
   }
 
-  .event-planner-heading>button {
-    justify-content: center;
+  .event-planner-heading-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2,
+        minmax(0, 1fr));
+  }
+
+  .event-planner-heading-actions button {
+    width: 100%;
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 12px;
   }
 
   .event-planner-summary {
@@ -834,14 +938,14 @@
   .event-planner-card-summary {
     display: grid;
     grid-template-columns:
-      54px minmax(0, 1fr) 22px;
+      58px minmax(0, 1fr) 22px;
     grid-template-areas:
       "logo info arrow"
       "date info arrow";
-    align-items: center;
-    column-gap: 10px;
+    min-height: 0;
+    column-gap: 11px;
     row-gap: 8px;
-    padding: 12px 10px;
+    padding: 13px 11px;
   }
 
   .event-planner-logo {
@@ -894,7 +998,6 @@
 
   .event-planner-event-info h3 {
     width: 100%;
-    font-size: 15px;
     line-height: 1.15;
     overflow-wrap: anywhere;
   }
@@ -995,5 +1098,710 @@
 
   .planned-event-deck-actions button {
     min-height: 30px !important;
+  }
+}
+
+/**/
+
+.season-share-image-stage {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  width: 900px;
+  pointer-events: none;
+  z-index: -9999;
+}
+
+.season-share-image {
+  width: 900px;
+  box-sizing: border-box;
+  padding: 42px;
+
+  background:
+    radial-gradient(circle at top right,
+      rgba(18, 144, 235, 0.22),
+      transparent 38%),
+    linear-gradient(145deg,
+      #151a22,
+      #0c1016);
+
+  color: #fff;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+.season-share-header {
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.season-share-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.season-share-brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transform: rotate(-45deg);
+}
+
+.season-share-brand strong,
+.season-share-brand span {
+  display: block;
+}
+
+.season-share-brand strong {
+  font-size: 20px;
+  letter-spacing: 1.5px;
+}
+
+.season-share-brand span {
+  margin-top: 3px;
+  color: #69bbff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.season-share-heading {
+  text-align: right;
+}
+
+.season-share-heading span {
+  color: #69bbff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.season-share-heading h2 {
+  margin: 3px 0 0;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.season-share-summary {
+  margin: 24px 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.season-share-summary>div {
+  padding: 13px;
+  border: 1px solid rgba(105, 187, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(18, 144, 235, 0.08);
+  text-align: center;
+}
+
+.season-share-summary strong,
+.season-share-summary span {
+  display: block;
+}
+
+.season-share-summary strong {
+  font-size: 23px;
+}
+
+.season-share-summary span {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.season-share-events {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.season-share-event {
+  min-height: 88px;
+  box-sizing: border-box;
+  padding: 12px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-left: 5px solid #9aa2aa;
+  border-radius: 11px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  display: grid;
+  grid-template-columns:
+    58px 66px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px;
+}
+
+.season-share-event.going,
+.season-share-event.judging,
+.season-share-event.staffing,
+.season-share-event.casting {
+  border-left-color: #1290eb;
+}
+
+.season-share-event.interested {
+  border-left-color: #eba312;
+}
+
+.season-share-event.cancelled {
+  border-left-color: #c33737;
+  opacity: 0.68;
+}
+
+.season-share-event-date {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 7px;
+  text-align: center;
+}
+
+.season-share-event-date span,
+.season-share-event-date strong {
+  display: block;
+}
+
+.season-share-event-date span {
+  padding: 4px;
+  background: #1290eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.season-share-event-date strong {
+  padding: 5px;
+  font-size: 20px;
+}
+
+.season-share-event-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.season-share-event-logo {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+}
+
+.season-share-event-info {
+  min-width: 0;
+}
+
+.season-share-event-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.season-share-event-title h3 {
+  min-width: 0;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.season-share-status {
+  flex-shrink: 0;
+  padding: 3px 8px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.season-share-status.going,
+.season-share-status.judging,
+.season-share-status.staffing,
+.season-share-status.casting {
+  background: rgba(18, 144, 235, 0.2);
+  color: #69bbff;
+}
+
+.season-share-status.interested {
+  background: rgba(235, 163, 18, 0.18);
+  color: #ffc04b;
+}
+
+.season-share-status.cancelled {
+  background: rgba(195, 55, 55, 0.2);
+  color: #ff7676;
+}
+
+.season-share-event-info>p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+}
+
+.season-share-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.season-share-location img {
+  width: 18px;
+  height: 13px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.season-share-footer {
+  margin-top: 28px;
+  padding-top: 17px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.season-share-footer strong {
+  color: #69bbff;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.season-share-footer span {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 11px;
+}
+
+
+.event-planner {
+  width: min(1120px, calc(100% - 30px));
+  box-sizing: border-box;
+  margin: 28px auto 60px;
+  padding: 34px;
+
+  border: 1px solid var(--planner-border);
+  border-radius: 18px;
+
+  background: var(--planner-page-bg);
+  box-shadow: var(--planner-shadow);
+}
+
+
+/* ---------- Heading ---------- */
+
+.event-planner-heading {
+  align-items: center;
+  margin-bottom: 27px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--planner-border);
+}
+
+.event-planner-heading-brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.event-planner-heading-logo {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  object-fit: contain;
+  transform: rotate(-45deg);
+}
+
+.event-planner-eyebrow {
+  display: block;
+  margin-bottom: 2px;
+
+  color: var(--planner-accent-light);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.event-planner-heading h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.event-planner-heading p {
+  max-width: 620px;
+  margin-top: 6px;
+
+  color: var(--planner-muted);
+  opacity: 1;
+  line-height: 1.4;
+}
+
+
+/* ---------- Header buttons ---------- */
+
+.event-planner-heading-actions button {
+  min-height: 43px;
+  border-radius: 8px;
+  padding: 10px 15px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.event-planner-heading-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.add-plans-button {
+  box-shadow:
+    0 7px 18px rgba(18, 144, 235, 0.22);
+}
+
+.share-plans-button {
+  border-color: var(--planner-border-blue);
+  background: var(--planner-panel-bg);
+  color: var(--planner-accent-light) !important;
+}
+
+.share-plans-button:hover {
+  border-color: var(--planner-accent);
+  background: rgba(18, 144, 235, 0.13);
+}
+
+
+/* ---------- Summary ---------- */
+
+.event-planner-summary {
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.event-planner-summary>div {
+  padding: 17px 14px;
+
+  border: 1px solid var(--planner-border-blue);
+  border-radius: 11px;
+
+  background: var(--planner-panel-bg);
+}
+
+.event-planner-summary strong {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.event-planner-summary span {
+  margin-top: 7px;
+
+  color: var(--planner-muted);
+  opacity: 1;
+
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ---------- Event list ---------- */
+
+.event-planner-list {
+  gap: 13px;
+}
+
+.event-planner-card {
+  border: 1px solid var(--planner-border);
+  border-left: 5px solid #9aa2aa;
+  border-radius: 12px;
+
+  background: var(--planner-card-bg);
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.035);
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.event-planner-card:hover {
+  background: var(--planner-card-hover);
+  transform: translateY(-1px);
+}
+
+.event-planner-card.going,
+.event-planner-card.judging,
+.event-planner-card.staffing,
+.event-planner-card.casting {
+  border-left-color: var(--planner-accent);
+}
+
+.event-planner-card.interested {
+  border-left-color: var(--planner-warning);
+}
+
+.event-planner-card.cancelled {
+  border-left-color: var(--planner-danger);
+}
+
+
+/* ---------- Card summary ---------- */
+
+.event-planner-card-summary {
+  min-height: 104px;
+  padding: 14px 18px;
+  gap: 16px;
+}
+
+.event-planner-date span {
+  padding: 5px 4px;
+
+  background: var(--planner-accent);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.event-planner-date strong {
+  padding: 7px 5px;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.event-planner-event-info p {
+  margin-top: 4px;
+  color: var(--planner-muted);
+  opacity: 1;
+  line-height: 1.3;
+}
+
+.event-location-row {
+  gap: 7px;
+}
+
+.event-location-flag {
+  width: 20px;
+  height: 14px;
+}
+
+.event-planner-progress {
+  margin-top: 9px;
+  color: var(--planner-muted);
+  opacity: 1;
+}
+
+
+/* ---------- Badges ---------- */
+
+.attendance-badge {
+  padding: 3px 9px;
+  font-size: 9px;
+  letter-spacing: 0.25px;
+}
+
+.attendance-badge.going,
+.attendance-badge.judging,
+.attendance-badge.staffing,
+.attendance-badge.casting {
+  background: rgba(18, 144, 235, 0.17);
+  color: var(--planner-accent-light);
+}
+
+.attendance-badge.interested {
+  background: rgba(235, 163, 18, 0.17);
+  color: var(--planner-warning);
+}
+
+.attendance-badge.cancelled {
+  background: rgba(195, 55, 55, 0.17);
+  color: var(--planner-danger);
+}
+
+
+/* ---------- Expanded area ---------- */
+
+.event-planner-details {
+  padding: 20px;
+
+  border-top-color: var(--planner-border);
+  background: var(--planner-detail-bg);
+}
+
+.event-planner-field-row select,
+.event-planner-notes textarea,
+.event-cost-input input {
+  border-color: var(--planner-border);
+  background: var(--planner-input-bg);
+}
+
+.event-planner-field-row select:focus,
+.event-planner-notes textarea:focus,
+.event-cost-input input:focus {
+  border-color: var(--planner-accent);
+  outline: 2px solid rgba(18, 144, 235, 0.13);
+}
+
+
+/* ---------- Checklist ---------- */
+
+.event-checklist,
+.planned-event-deck-section {
+  border-color: var(--planner-border);
+  background: var(--planner-card-bg);
+}
+
+.event-checklist-item+.event-checklist-item {
+  border-top-color: var(--planner-border);
+}
+
+.event-checklist-item.completed {
+  background: rgba(23, 133, 59, 0.11);
+}
+
+
+/* ---------- Tournament deck ---------- */
+
+.event-planner-selected-deck {
+  border-color: var(--planner-border-blue);
+  background: var(--planner-panel-bg);
+}
+
+.collection-deck-picker {
+  border-top-color: var(--planner-border);
+}
+
+.collection-folder-picker-list>button,
+.collection-deck-picker-list>button {
+  border-color: var(--planner-border);
+  background: var(--planner-input-bg);
+}
+
+.collection-folder-picker-list>button:hover,
+.collection-deck-picker-list>button:hover {
+  border-color: var(--planner-accent);
+  background: var(--planner-panel-bg);
+}
+
+
+/* ---------- Empty state ---------- */
+
+.event-planner-empty {
+  border-color: var(--planner-border-blue);
+  background: var(--planner-card-bg);
+}
+
+@media screen and (max-width: 700px) {
+  .event-planner {
+    padding: 22px;
+    border-radius: 14px;
+  }
+
+  .event-planner-heading {
+    align-items: stretch;
+    padding-bottom: 20px;
+  }
+
+  .event-planner-heading-brand {
+    align-items: flex-start;
+  }
+
+  .event-planner-heading-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .event-planner-heading h2 {
+    font-size: 23px;
+  }
+
+  .event-planner-summary {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .event-planner {
+    width: 100%;
+    padding: 17px 12px;
+    border-radius: 12px;
+    margin: 0;
+  }
+
+  .event-planner-heading-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .event-planner-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .event-planner-heading h2 {
+    font-size: 21px;
+  }
+
+  .event-planner-card {
+    border-radius: 10px;
+  }
+
+  .event-planner-date {
+    width: 54px;
+    min-width: 54px;
+  }
+
+  .event-planner-logo {
+    width: 51px !important;
+    height: 51px !important;
+  }
+}
+
+.summary-cost strong,
+.summary-going strong,
+.summary-events strong {
+  font-size: 20px;
+}
+
+@media screen and (max-width: 700px) {
+
+  .summary-cost strong,
+  .summary-going strong,
+  .summary-events strong {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .event-planner {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
+    margin-left: calc(50% - 50vw);
+    padding: 14px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
   }
 }

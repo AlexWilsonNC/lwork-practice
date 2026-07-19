@@ -516,7 +516,10 @@ td div a {
   background: #eba312;
   border-color: #eba312;
 }
-.event-plan-button.going {
+.event-plan-button.going,
+.event-plan-button.judging,
+.event-plan-button.staffing,
+.event-plan-button.casting {
   background: #1290eb;
   border-color: #1290eb;
 }

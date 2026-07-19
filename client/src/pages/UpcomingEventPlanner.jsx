@@ -1,17 +1,109 @@
 import React, {
     useEffect,
     useMemo,
+    useRef,
     useState
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/upcoming-event-planner.css';
 import styled from 'styled-components';
 import { sortedEvents } from '../Tournaments/tournaments-data';
+import { toBlob } from 'html-to-image';
+import ultraball from '../assets/logos/blue-ultra-ball.png';
 
 const PlannerPage = styled.div`
+    /*
+     * Shared planner palette.
+     * All of the regular CSS below uses these variables.
+     */
+    --planner-accent: #1290eb;
+    --planner-accent-light: #1290eb;
+    --planner-warning: #eba312;
+    --planner-danger: #c33737;
+    --planner-success: #17853b;
+
+    --planner-page-bg: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? `
+                radial-gradient(
+                    circle at top right,
+                    rgba(18, 144, 235, 0.16),
+                    transparent 34%
+                ),
+                linear-gradient(
+                    145deg,
+                    #151a22,
+                    #0c1016
+                )
+            `
+            : `
+                radial-gradient(
+                    circle at top right,
+                    rgba(18, 144, 235, 0.14),
+                    transparent 34%
+                ),
+                linear-gradient(
+                    145deg,
+                    #f8fbff,
+                    #edf4fa
+                )
+            `};
+
+    --planner-card-bg: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(255, 255, 255, 0.055)'
+            : 'rgba(255, 255, 255, 0.82)'};
+
+    --planner-card-hover: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(255, 255, 255, 0.08)'
+            : '#ffffff'};
+
+    --planner-detail-bg: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(5, 10, 16, 0.34)'
+            : 'rgba(240, 247, 253, 0.86)'};
+
+    --planner-panel-bg: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(18, 144, 235, 0.07)'
+            : 'rgba(18, 144, 235, 0.055)'};
+
+    --planner-border: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(255, 255, 255, 0.14)'
+            : 'rgba(33, 74, 105, 0.17)'};
+
+    --planner-border-blue: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(105, 187, 255, 0.32)'
+            : 'rgba(18, 144, 235, 0.28)'};
+
+    --planner-muted: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(255, 255, 255, 0.66)'
+            : 'rgba(23, 42, 58, 0.66)'};
+
+    --planner-input-bg: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? 'rgba(255, 255, 255, 0.055)'
+            : 'rgba(255, 255, 255, 0.9)'};
+
+    --planner-shadow: ${({ theme }) =>
+        theme.themeName === 'dark'
+            ? '0 24px 55px rgba(0, 0, 0, 0.24)'
+            : '0 20px 50px rgba(36, 78, 111, 0.12)'};
+
     color: ${({ theme }) => theme.text};
-    .event-website-button {background: ${({ theme }) => theme.eventWebsiteBtn};}
-    .event-planner-field-row select option {background-color: ${({ theme }) => theme.planFieldSelectColor};}
+
+    .event-website-button {
+        background: ${({ theme }) => theme.eventWebsiteBtn};
+    }
+
+    .event-planner-field-row select option {
+        background-color: ${({ theme }) =>
+            theme.planFieldSelectColor};
+    }
 `;
 
 const CHECKLIST_ITEMS = [
@@ -125,6 +217,33 @@ const getCurrentEventLogo = plan => {
 
     return matchingEvent?.eventLogo || plan.eventLogo || '';
 };
+const getCurrentEventFlag = plan => {
+    const matchingEvent = sortedEvents.find(
+        event =>
+            String(event.id || '') ===
+            String(plan.eventKey || '')
+    );
+
+    return matchingEvent?.flag || null;
+};
+const ACTIVE_ATTENDANCE_STATUSES = [
+    'going',
+    'judging',
+    'staffing',
+    'casting'
+];
+
+const ATTENDANCE_LABELS = {
+    going: 'Going',
+    judging: 'Judging',
+    staffing: 'Staffing',
+    casting: 'Casting',
+    interested: 'Tentative',
+    cancelled: 'Cancelled'
+};
+
+const isActivelyAttending = status =>
+    ACTIVE_ATTENDANCE_STATUSES.includes(status);
 
 export default function UpcomingEventPlanner({
     token,
@@ -145,6 +264,9 @@ export default function UpcomingEventPlanner({
     const [loading, setLoading] = useState(true);
     const [savingId, setSavingId] = useState('');
     const [error, setError] = useState('');
+    const shareImageRef = useRef(null);
+    const [creatingShareImage, setCreatingShareImage] =
+        useState(false);
 
     const loadPlanner = async () => {
         if (!token) return;
@@ -415,6 +537,100 @@ export default function UpcomingEventPlanner({
         }
     };
 
+    const sharePlansImage = async () => {
+        const node = shareImageRef.current;
+
+        if (!node || plans.length === 0) {
+            return;
+        }
+
+        setCreatingShareImage(true);
+        setError('');
+
+        try {
+            /*
+             * Wait for the hidden export layout and its images
+             * to be fully ready.
+             */
+            await document.fonts?.ready;
+
+            const images = Array.from(
+                node.querySelectorAll('img')
+            );
+
+            await Promise.all(
+                images.map(image => {
+                    if (image.complete) {
+                        return Promise.resolve();
+                    }
+
+                    return new Promise(resolve => {
+                        image.onload = resolve;
+                        image.onerror = resolve;
+                    });
+                })
+            );
+
+            const blob = await toBlob(node, {
+                cacheBust: true,
+                pixelRatio: 2,
+                backgroundColor: '#101318',
+                width: 900,
+                style: {
+                    display: 'block'
+                }
+            });
+
+            if (!blob) {
+                throw new Error(
+                    'Could not create the season image'
+                );
+            }
+
+            const safeUsername = String(
+                username || 'ptcg-legends'
+            )
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+            const filename =
+                `${safeUsername || 'ptcg-legends'}-2027-season-plans.png`;
+
+            const imageUrl =
+                URL.createObjectURL(blob);
+
+            const anchor =
+                document.createElement('a');
+
+            anchor.href = imageUrl;
+            anchor.download = filename;
+
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+
+            window.setTimeout(() => {
+                URL.revokeObjectURL(imageUrl);
+            }, 1000);
+        } catch (err) {
+
+            if (err?.name === 'AbortError') {
+                return;
+            }
+
+            console.error(err);
+
+            setError(
+                err.message ||
+                'Could not create your season image'
+            );
+        } finally {
+            setCreatingShareImage(false);
+        }
+    };
+
     const totalAcrossAllEvents = useMemo(
         () =>
             plans.reduce((grandTotal, plan) => {
@@ -433,8 +649,18 @@ export default function UpcomingEventPlanner({
     );
 
     if (loading) {
-        return <div className="spinner" />;
-    }
+    return (
+        <div className="event-planner-loading">
+            <img
+                src={ultraball}
+                alt="Loading Event Planner"
+                className="event-planner-loading-ball"
+            />
+
+            <span>Loading Event Planner...</span>
+        </div>
+    );
+}
 
     return (
         <PlannerPage className="event-planner">
@@ -443,15 +669,35 @@ export default function UpcomingEventPlanner({
                     <h2>Event Planner</h2>
                     <p>Track the events you are considering; registration, travel, decklist, expenses, and checklist milestones as you go.</p>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => navigate('/tournaments/upcoming')}
-                >
-                    <span className="material-symbols-outlined">
-                        add
-                    </span>
-                    Add Events
-                </button>
+                <div className="event-planner-heading-actions">
+                    {plans.length > 0 && (
+                        <button
+                            type="button"
+                            className="share-plans-button"
+                            disabled={creatingShareImage}
+                            onClick={sharePlansImage}
+                        >
+                            <span className="material-symbols-outlined">
+                                image
+                            </span>
+                            {creatingShareImage
+                                ? 'Creating...'
+                                : 'Share Plans'}
+                        </button>
+                    )}
+                    <button
+                        type="button"
+                        className="add-plans-button"
+                        onClick={() =>
+                            navigate('/tournaments/upcoming')
+                        }
+                    >
+                        <span className="material-symbols-outlined">
+                            add
+                        </span>
+                        Add Event
+                    </button>
+                </div>
             </div>
             {error && (
                 <div className="event-planner-error">
@@ -471,11 +717,13 @@ export default function UpcomingEventPlanner({
                             {
                                 plans.filter(
                                     plan =>
-                                        plan.attendanceStatus === 'going'
+                                        isActivelyAttending(
+                                            plan.attendanceStatus
+                                        )
                                 ).length
                             }
                         </strong>
-                        <span>Going</span>
+                        <span>Attending</span>
                     </div>
                     <div className="mobile-attendance-summary">
                         <span>
@@ -485,10 +733,12 @@ export default function UpcomingEventPlanner({
                             {
                                 plans.filter(
                                     plan =>
-                                        plan.attendanceStatus === 'going'
+                                        isActivelyAttending(
+                                            plan.attendanceStatus
+                                        )
                                 ).length
                             }{' '}
-                            Going
+                            Attending
                         </span>
                     </div>
                     <div className="summary-cost">
@@ -526,6 +776,7 @@ export default function UpcomingEventPlanner({
                     {plans.map(plan => {
                         const expanded = expandedId === plan._id;
                         const eventLogo = getCurrentEventLogo(plan);
+                        const eventFlag = getCurrentEventFlag(plan);
                         const eventTotal = CHECKLIST_ITEMS.reduce(
                             (total, item) =>
                                 total +
@@ -535,7 +786,6 @@ export default function UpcomingEventPlanner({
                                 ),
                             0
                         );
-
                         const completedCount =
                             CHECKLIST_ITEMS.filter(
                                 item =>
@@ -576,57 +826,54 @@ export default function UpcomingEventPlanner({
                                                     }
                                                 )}
                                             </span>
-
                                             <strong>
                                                 {new Date(plan.eventDate).getDate()}
                                             </strong>
                                         </div>
                                     </div>
-
                                     <div className="event-planner-event-info">
                                         <div className="event-planner-title-row">
                                             <h3>{plan.eventName}</h3>
-
                                             <span
                                                 className={`attendance-badge ${plan.attendanceStatus}`}
                                             >
-                                                {plan.attendanceStatus === 'going'
-                                                    ? 'Going'
-                                                    : plan.attendanceStatus === 'cancelled'
-                                                        ? 'Cancelled'
-                                                        : 'Tentative'}
+                                                {ATTENDANCE_LABELS[
+                                                    plan.attendanceStatus
+                                                ] || 'Tentative'}
                                             </span>
                                         </div>
-
                                         <p>{formatEventDate(plan.eventDate)}</p>
-
                                         {plan.eventLocation && (
-                                            <p>
-                                                <span className="material-symbols-outlined">
-                                                    location_on
-                                                </span>
+                                            <p className="event-location-row">
+                                                {eventFlag ? (
+                                                    <img
+                                                        src={eventFlag}
+                                                        alt=""
+                                                        className="event-location-flag"
+                                                    />
+                                                ) : (
+                                                    <span className="material-symbols-outlined">
+                                                        location_on
+                                                    </span>
+                                                )}
                                                 {plan.eventLocation}
                                             </p>
                                         )}
-
                                         <div className="event-planner-progress">
                                             <span>
                                                 Checklist: {completedCount}/{CHECKLIST_ITEMS.length}
                                             </span>
-
                                             <span>
                                                 Expected Cost: {formatCurrency(eventTotal)}
                                             </span>
                                         </div>
                                     </div>
-
                                     <span className="material-symbols-outlined">
                                         {expanded
                                             ? 'expand_less'
                                             : 'expand_more'}
                                     </span>
                                 </button>
-
                                 {expanded && (
                                     <div className="event-planner-details">
                                         <div className="event-planner-field-row">
@@ -636,7 +883,6 @@ export default function UpcomingEventPlanner({
                                                     value={plan.attendanceStatus}
                                                     onChange={event => {
                                                         const value = event.target.value;
-
                                                         updateLocalPlan(
                                                             plan._id,
                                                             current => ({
@@ -652,13 +898,21 @@ export default function UpcomingEventPlanner({
                                                     <option value="interested">
                                                         Tentative
                                                     </option>
+                                                    <option value="judging">
+                                                        Judging
+                                                    </option>
+                                                    <option value="staffing">
+                                                        Staffing
+                                                    </option>
+                                                    <option value="casting">
+                                                        Casting
+                                                    </option>
                                                     <option value="cancelled">
                                                         Cancelled
                                                     </option>
                                                 </select>
                                             </label>
                                         </div>
-
                                         <div className="planned-event-deck-section">
                                             <div className="planned-event-deck-heading">
                                                 <div>
@@ -1065,7 +1319,6 @@ export default function UpcomingEventPlanner({
                                                 }}
                                             />
                                         </label>
-
                                         <div className="event-planner-card-footer">
                                             {/* <div>
                                                 Event total:
@@ -1113,6 +1366,169 @@ export default function UpcomingEventPlanner({
                     })}
                 </div>
             )}
+            <div
+                className="season-share-image-stage"
+                aria-hidden="true"
+            >
+                <div
+                    ref={shareImageRef}
+                    className="season-share-image"
+                >
+                    <div className="season-share-header">
+                        <div className="season-share-brand">
+                            <img
+                                src={ultraball}
+                                alt=""
+                                className="season-share-brand-logo"
+                            />
+                            <div>
+                                <strong>PTCG LEGENDS</strong>
+                                <span>EVENT PLANNER</span>
+                            </div>
+                        </div>
+                        <div className="season-share-heading">
+                            <span>
+                                {username
+                                    ? `${username}'s`
+                                    : 'My'}
+                            </span>
+                            <h2>2027 Season Plans</h2>
+                        </div>
+                    </div>
+                    <div className="season-share-summary">
+                        <div>
+                            <strong>{plans.length}</strong>
+
+                            <span>
+                                Event{plans.length === 1 ? '' : 's'}
+                            </span>
+                        </div>
+                        <div>
+                            <strong>
+                                {
+                                    plans.filter(plan =>
+                                        isActivelyAttending(
+                                            plan.attendanceStatus
+                                        )
+                                    ).length
+                                }
+                            </strong>
+
+                            <span>Attending</span>
+                        </div>
+
+                        <div>
+                            <strong>
+                                {
+                                    plans.filter(
+                                        plan =>
+                                            plan.attendanceStatus ===
+                                            'interested'
+                                    ).length
+                                }
+                            </strong>
+
+                            <span>Tentative</span>
+                        </div>
+                    </div>
+                    <div className="season-share-events">
+                        {plans.map(plan => {
+                            const eventLogo =
+                                getCurrentEventLogo(plan);
+
+                            const eventFlag =
+                                getCurrentEventFlag(plan);
+
+                            return (
+                                <div
+                                    key={plan._id}
+                                    className={[
+                                        'season-share-event',
+                                        plan.attendanceStatus
+                                    ].join(' ')}
+                                >
+                                    <div className="season-share-event-date">
+                                        <span>
+                                            {new Date(
+                                                plan.eventDate
+                                            ).toLocaleDateString(
+                                                'en-US',
+                                                {
+                                                    month: 'short'
+                                                }
+                                            )}
+                                        </span>
+
+                                        <strong>
+                                            {new Date(
+                                                plan.eventDate
+                                            ).getDate()}
+                                        </strong>
+                                    </div>
+
+                                    <div className="season-share-event-logo-wrap">
+                                        {eventLogo && (
+                                            <img
+                                                src={eventLogo}
+                                                alt=""
+                                                className="season-share-event-logo"
+                                            />
+                                        )}
+                                    </div>
+
+                                    <div className="season-share-event-info">
+                                        <div className="season-share-event-title">
+                                            <h3>
+                                                {plan.eventName}
+                                            </h3>
+
+                                            <span
+                                                className={[
+                                                    'season-share-status',
+                                                    plan.attendanceStatus
+                                                ].join(' ')}
+                                            >
+                                                {
+                                                    ATTENDANCE_LABELS[
+                                                    plan.attendanceStatus
+                                                    ] || 'Tentative'
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <p>
+                                            {formatEventDate(
+                                                plan.eventDate
+                                            )}
+                                        </p>
+
+                                        {plan.eventLocation && (
+                                            <p className="season-share-location">
+                                                {eventFlag && (
+                                                    <img
+                                                        src={eventFlag}
+                                                        alt=""
+                                                    />
+                                                )}
+
+                                                <span>
+                                                    {plan.eventLocation}
+                                                </span>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="season-share-footer">
+                        <strong>PTCGLEGENDS.COM</strong>
+                        <span>
+                            Plan your season. Become a legend.
+                        </span>
+                    </div>
+                </div>
+            </div>
         </PlannerPage>
     );
 }

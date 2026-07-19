@@ -271,9 +271,16 @@ const plannedEventSchema = new mongoose.Schema({
   },
   attendanceStatus: {
     type: String,
-    enum: ['interested', 'going', 'cancelled'],
+    enum: [
+        'interested',
+        'going',
+        'judging',
+        'staffing',
+        'casting',
+        'cancelled'
+    ],
     default: 'interested'
-  },
+},
   checklist: {
     type: plannedEventChecklistSchema,
     default: () => ({})
@@ -2931,7 +2938,7 @@ app.post('/api/user/planned-events', requireAuth, async (req, res) => {
       });
     }
 
-    if (!['interested', 'going', 'cancelled'].includes(attendanceStatus)) {
+    if (!['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled'].includes(attendanceStatus)) {
       return res.status(400).json({
         error: 'Invalid attendance status'
       });
@@ -3014,7 +3021,7 @@ app.patch('/api/user/planned-events/:planId', requireAuth, async (req, res) => {
 
     if (
       attendanceStatus !== undefined &&
-      !['interested', 'going', 'cancelled'].includes(attendanceStatus)
+      !['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled'].includes(attendanceStatus)
     ) {
       return res.status(400).json({
         error: 'Invalid attendance status'
