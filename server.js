@@ -207,31 +207,81 @@ function requireAuth(req, res, next) {
   }
 }
 
+const plannedEventChecklistItemSchema = new mongoose.Schema(
+  {
+    completed: {
+      type: Boolean,
+      default: false
+    },
+
+    costCents: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+
+    role: {
+      type: String,
+      default: '',
+      trim: true,
+      maxlength: 100
+    },
+
+    coveredByOrganizer: {
+      type: Boolean,
+      default: false
+    }
+  },
+  {
+    _id: false
+  }
+);
+
 const plannedEventChecklistSchema = new mongoose.Schema(
   {
     registered: {
-      completed: { type: Boolean, default: false },
-      costCents: { type: Number, default: 0 }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     },
+
     travelBooked: {
-      completed: { type: Boolean, default: false },
-      costCents: { type: Number, default: 0 }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     },
+
     hotelBooked: {
-      completed: { type: Boolean, default: false },
-      costCents: { type: Number, default: 0 }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     },
+
     decklistSubmitted: {
-      completed: { type: Boolean, default: false }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     },
+
     checkedIn: {
-      completed: { type: Boolean, default: false }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     },
+
     swagPickedUp: {
-      completed: { type: Boolean, default: false }
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
+    },
+
+    applicationSubmitted: {
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
+    },
+
+    roleAssigned: {
+      type: plannedEventChecklistItemSchema,
+      default: () => ({})
     }
   },
-  { _id: false }
+  {
+    _id: false
+  }
 );
 
 const plannedEventSchema = new mongoose.Schema({
@@ -254,9 +304,9 @@ const plannedEventSchema = new mongoose.Schema({
     required: true
   },
   eventLogo: {
-  type: String,
-  default: ''
-},
+    type: String,
+    default: ''
+  },
   eventType: {
     type: String,
     default: ''
@@ -272,15 +322,16 @@ const plannedEventSchema = new mongoose.Schema({
   attendanceStatus: {
     type: String,
     enum: [
-        'interested',
-        'going',
-        'judging',
-        'staffing',
-        'casting',
-        'cancelled'
+      'interested',
+      'going',
+      'judging',
+      'staffing',
+      'casting',
+      'spectating'
+      // 'cancelled'
     ],
     default: 'interested'
-},
+  },
   checklist: {
     type: plannedEventChecklistSchema,
     default: () => ({})
@@ -426,28 +477,60 @@ const cleanMoneyCents = value => {
   return Math.max(0, Math.round(parsed));
 };
 
+const cleanChecklistText = (value, maxLength = 100) =>
+  String(value || '')
+    .trim()
+    .slice(0, maxLength);
+
+const sanitizeChecklistItem = item => ({
+  completed: Boolean(item?.completed),
+
+  costCents: cleanMoneyCents(
+    item?.costCents
+  ),
+
+  role: cleanChecklistText(
+    item?.role,
+    100
+  ),
+
+  coveredByOrganizer: Boolean(
+    item?.coveredByOrganizer
+  )
+});
+
 const sanitizeChecklist = checklist => ({
-  registered: {
-    completed: Boolean(checklist?.registered?.completed),
-    costCents: cleanMoneyCents(checklist?.registered?.costCents)
-  },
-  travelBooked: {
-    completed: Boolean(checklist?.travelBooked?.completed),
-    costCents: cleanMoneyCents(checklist?.travelBooked?.costCents)
-  },
-  hotelBooked: {
-    completed: Boolean(checklist?.hotelBooked?.completed),
-    costCents: cleanMoneyCents(checklist?.hotelBooked?.costCents)
-  },
-  decklistSubmitted: {
-    completed: Boolean(checklist?.decklistSubmitted?.completed)
-  },
-  checkedIn: {
-    completed: Boolean(checklist?.checkedIn?.completed)
-  },
-  swagPickedUp: {
-    completed: Boolean(checklist?.swagPickedUp?.completed)
-  }
+  registered: sanitizeChecklistItem(
+    checklist?.registered
+  ),
+
+  travelBooked: sanitizeChecklistItem(
+    checklist?.travelBooked
+  ),
+
+  hotelBooked: sanitizeChecklistItem(
+    checklist?.hotelBooked
+  ),
+
+  decklistSubmitted: sanitizeChecklistItem(
+    checklist?.decklistSubmitted
+  ),
+
+  checkedIn: sanitizeChecklistItem(
+    checklist?.checkedIn
+  ),
+
+  swagPickedUp: sanitizeChecklistItem(
+    checklist?.swagPickedUp
+  ),
+
+  applicationSubmitted: sanitizeChecklistItem(
+    checklist?.applicationSubmitted
+  ),
+
+  roleAssigned: sanitizeChecklistItem(
+    checklist?.roleAssigned
+  )
 });
 
 const tournamentReportSchema = new mongoose.Schema({
@@ -2938,7 +3021,7 @@ app.post('/api/user/planned-events', requireAuth, async (req, res) => {
       });
     }
 
-    if (!['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled'].includes(attendanceStatus)) {
+    if (!['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled', 'spectating'].includes(attendanceStatus)) {
       return res.status(400).json({
         error: 'Invalid attendance status'
       });
@@ -3021,7 +3104,7 @@ app.patch('/api/user/planned-events/:planId', requireAuth, async (req, res) => {
 
     if (
       attendanceStatus !== undefined &&
-      !['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled'].includes(attendanceStatus)
+      !['interested', 'going', 'judging', 'staffing', 'casting', 'cancelled', 'spectating'].includes(attendanceStatus)
     ) {
       return res.status(400).json({
         error: 'Invalid attendance status'

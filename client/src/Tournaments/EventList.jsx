@@ -504,7 +504,7 @@ const EventList = () => {
         });
 
         if (!res.ok) {
-          throw new Error('Could not load your event planner');
+          throw new Error('Log back in to load your event planner');
         }
 
         const plans = await res.json();
@@ -940,9 +940,9 @@ const EventList = () => {
                                   }
                                 >
                                   <span className="material-symbols-outlined">
-                                    flight_takeoff
+                                    swords
                                   </span>
-                                  Going
+                                  Competing
                                 </button>
                                 <button
                                   type="button"
@@ -958,7 +958,7 @@ const EventList = () => {
                                   <span className="material-symbols-outlined">
                                     help
                                   </span>
-                                  Interested
+                                  Tentative
                                 </button>
                                 <button
                                   type="button"
@@ -1011,6 +1011,22 @@ const EventList = () => {
                                 <button
                                   type="button"
                                   className={
+                                    currentPlan?.attendanceStatus === 'spectating'
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    addEventToPlanner(event, 'spectating')
+                                  }
+                                >
+                                  <span className="material-symbols-outlined">
+                                    visibility
+                                  </span>
+                                  Spectating
+                                </button>
+                                {/* <button
+                                  type="button"
+                                  className={
                                     currentPlan?.attendanceStatus === 'cancelled'
                                       ? 'active'
                                       : ''
@@ -1023,7 +1039,7 @@ const EventList = () => {
                                     event_busy
                                   </span>
                                   Cancelled
-                                </button>
+                                </button> */}
                                 {currentPlan && (
                                   <>
                                   <hr></hr>

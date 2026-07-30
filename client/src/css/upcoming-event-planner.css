@@ -149,15 +149,19 @@
   background: rgba(127, 127, 127, 0.06);
 }
 
-.event-planner-card.going,
+.event-planner-card.going {
+  border-left-color: #1290eb;
+}
 .event-planner-card.judging,
 .event-planner-card.staffing,
 .event-planner-card.casting {
-  border-left-color: #1290eb;
+  border-left-color: #eb1212;
 }
-
 .event-planner-card.interested {
   border-left-color: #eba312;
+}
+.event-planner-card.spectating {
+  border-left-color: #7d1eea;
 }
 
 .event-planner-card-summary {
@@ -243,14 +247,20 @@
   text-transform: uppercase;
 }
 
-.attendance-badge.going,
+.attendance-badge.going {
+  background: rgba(18, 110, 159, 0.16);
+  color: #1290eb;
+}
 .attendance-badge.judging,
 .attendance-badge.staffing,
 .attendance-badge.casting {
   background: rgba(18, 110, 159, 0.16);
-  color: #1290eb;
+  color: #eb1212;
 }
-
+.attendance-badge.spectating {
+  background: rgba(142, 67, 234, 0.116);
+  color: #7d1eea;
+}
 .attendance-badge.interested {
   background: rgba(235, 217, 18, 0.116);
   color: #eba312;
@@ -1247,13 +1257,17 @@
   gap: 15px;
 }
 
-.season-share-event.going,
+.season-share-event.going {
+  border-left-color: #1290eb;
+}
 .season-share-event.judging,
 .season-share-event.staffing,
 .season-share-event.casting {
-  border-left-color: #1290eb;
+  border-left-color: #eb1212;
 }
-
+.season-share-event.spectating {
+  border-left-color: #7d1eea;
+}
 .season-share-event.interested {
   border-left-color: #eba312;
 }
@@ -1329,10 +1343,7 @@
   text-transform: uppercase;
 }
 
-.season-share-status.going,
-.season-share-status.judging,
-.season-share-status.staffing,
-.season-share-status.casting {
+.season-share-status.going {
   background: rgba(18, 144, 235, 0.2);
   color: #69bbff;
 }
@@ -1342,11 +1353,17 @@
   color: #ffc04b;
 }
 
-.season-share-status.cancelled {
+.season-share-status.cancelled,
+.season-share-status.judging,
+.season-share-status.staffing,
+.season-share-status.casting {
   background: rgba(195, 55, 55, 0.2);
   color: #ff7676;
 }
-
+.season-share-status.spectating {
+  background: rgba(142, 67, 234, 0.116);
+  color: #7d1eea;
+}
 .season-share-event-info>p {
   margin: 4px 0 0;
   color: rgba(255, 255, 255, 0.68);
@@ -1551,18 +1568,21 @@
   transform: translateY(-1px);
 }
 
-.event-planner-card.going,
-.event-planner-card.judging,
-.event-planner-card.staffing,
-.event-planner-card.casting {
+.event-planner-card.going {
   border-left-color: var(--planner-accent);
 }
 
 .event-planner-card.interested {
   border-left-color: var(--planner-warning);
 }
+.event-planner-card.spectating {
+  border-left-color: var(--planner-spectate);
+}
 
-.event-planner-card.cancelled {
+.event-planner-card.cancelled,
+.event-planner-card.judging,
+.event-planner-card.staffing,
+.event-planner-card.casting {
   border-left-color: var(--planner-danger);
 }
 
@@ -1621,10 +1641,7 @@
   letter-spacing: 0.25px;
 }
 
-.attendance-badge.going,
-.attendance-badge.judging,
-.attendance-badge.staffing,
-.attendance-badge.casting {
+.attendance-badge.going {
   background: rgba(18, 144, 235, 0.17);
   color: var(--planner-accent-light);
 }
@@ -1633,12 +1650,17 @@
   background: rgba(235, 163, 18, 0.17);
   color: var(--planner-warning);
 }
-
-.attendance-badge.cancelled {
+.attendance-badge.spectating {
+  background: rgba(142, 67, 234, 0.116);
+  color: var(--planner-spectate);
+}
+.attendance-badge.cancelled,
+.attendance-badge.judging,
+.attendance-badge.staffing,
+.attendance-badge.casting {
   background: rgba(195, 55, 55, 0.17);
   color: var(--planner-danger);
 }
-
 
 /* ---------- Expanded area ---------- */
 
@@ -1803,5 +1825,94 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
+  }
+}
+
+.event-checklist-item-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.event-role-input {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.event-role-input > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--planner-muted);
+}
+
+.event-role-input input {
+  width: 220px;
+  box-sizing: border-box;
+  padding: 7px 9px;
+
+  border: 1px solid var(--planner-border);
+  border-radius: 5px;
+
+  background: var(--planner-input-bg);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+.event-role-input input:focus {
+  border-color: var(--planner-accent);
+  outline: 2px solid rgba(18, 144, 235, 0.13);
+}
+
+.organizer-coverage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.organizer-coverage-toggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.organizer-coverage-toggle span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--planner-muted);
+}
+
+.event-cost-input input:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media screen and (max-width: 700px) {
+  .event-checklist-item-controls {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .event-role-input {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .event-role-input input {
+    width: 100%;
+  }
+
+  .organizer-coverage-toggle {
+    width: 100%;
+    padding-left: 0;
   }
 }

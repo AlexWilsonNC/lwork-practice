@@ -19,6 +19,7 @@ const PlannerPage = styled.div`
     --planner-accent: #1290eb;
     --planner-accent-light: #1290eb;
     --planner-warning: #eba312;
+    --planner-spectate: #7d1eea;
     --planner-danger: #c33737;
     --planner-success: #17853b;
 
@@ -102,11 +103,11 @@ const PlannerPage = styled.div`
 
     .event-planner-field-row select option {
         background-color: ${({ theme }) =>
-            theme.planFieldSelectColor};
+        theme.planFieldSelectColor};
     }
 `;
 
-const CHECKLIST_ITEMS = [
+const PLAYER_CHECKLIST_ITEMS = [
     {
         key: 'registered',
         label: 'Registered for Event',
@@ -152,17 +153,120 @@ const CHECKLIST_ITEMS = [
     }
 ];
 
-const emptyChecklistItem = supportsCost => ({
+const SPECTATOR_CHECKLIST_ITEMS =
+    PLAYER_CHECKLIST_ITEMS.filter(
+        item => item.key !== 'decklistSubmitted'
+    );
+
+const STAFF_CHECKLIST_ITEMS = [
+    {
+        key: 'applicationSubmitted',
+        label: 'Application Submitted',
+        icon: 'assignment_turned_in'
+    },
+    {
+        key: 'roleAssigned',
+        label: 'Role Assigned',
+        icon: 'badge',
+        supportsRole: true
+    },
+    {
+        key: 'travelBooked',
+        label: 'Travel Booked',
+        icon: 'flight_takeoff',
+        supportsCost: true,
+        supportsOrganizerCoverage: true
+    },
+    {
+        key: 'hotelBooked',
+        label: 'Hotel Booked',
+        icon: 'hotel',
+        supportsCost: true,
+        supportsOrganizerCoverage: true
+    }
+];
+
+const CASTING_CHECKLIST_ITEMS = [
+    {
+        key: 'roleAssigned',
+        label: 'Role Assigned',
+        icon: 'mic',
+        supportsRole: true
+    },
+    {
+        key: 'travelBooked',
+        label: 'Travel Booked',
+        icon: 'flight_takeoff',
+        supportsCost: true,
+        supportsOrganizerCoverage: true
+    },
+    {
+        key: 'hotelBooked',
+        label: 'Hotel Booked',
+        icon: 'hotel',
+        supportsCost: true,
+        supportsOrganizerCoverage: true
+    }
+];
+
+/*
+ * Includes every possible item so information is not destroyed
+ * when someone temporarily changes their attendance status.
+ */
+const ALL_CHECKLIST_ITEMS = [
+    ...PLAYER_CHECKLIST_ITEMS,
+    ...STAFF_CHECKLIST_ITEMS,
+    ...CASTING_CHECKLIST_ITEMS
+].filter(
+    (item, index, array) =>
+        array.findIndex(
+            candidate => candidate.key === item.key
+        ) === index
+);
+
+const getChecklistItemsForStatus = status => {
+    switch (status) {
+        case 'judging':
+        case 'staffing':
+            return STAFF_CHECKLIST_ITEMS;
+
+        case 'casting':
+            return CASTING_CHECKLIST_ITEMS;
+
+        case 'spectating':
+            return SPECTATOR_CHECKLIST_ITEMS;
+
+        case 'going':
+        case 'interested':
+        default:
+            return PLAYER_CHECKLIST_ITEMS;
+    }
+};
+
+const createEmptyChecklistItem = item => ({
     completed: false,
-    ...(supportsCost ? { costCents: 0 } : {})
+
+    ...(item.supportsCost
+        ? {
+            costCents: 0,
+            coveredByOrganizer: false
+        }
+        : {}),
+
+    ...(item.supportsRole
+        ? {
+            role: ''
+        }
+        : {})
 });
 
 const normalizePlan = plan => ({
     ...plan,
-    checklist: CHECKLIST_ITEMS.reduce(
+
+    checklist: ALL_CHECKLIST_ITEMS.reduce(
         (result, item) => {
             result[item.key] = {
-                ...emptyChecklistItem(item.supportsCost),
+                ...createEmptyChecklistItem(item),
                 ...(plan?.checklist?.[item.key] || {})
             };
 
@@ -230,16 +334,18 @@ const ACTIVE_ATTENDANCE_STATUSES = [
     'going',
     'judging',
     'staffing',
-    'casting'
+    'casting',
+    'spectating'
 ];
 
 const ATTENDANCE_LABELS = {
-    going: 'Going',
+    going: 'Competing',
     judging: 'Judging',
     staffing: 'Staffing',
     casting: 'Casting',
     interested: 'Tentative',
-    cancelled: 'Cancelled'
+    spectating: 'Spectating',
+    // cancelled: 'Cancelled'
 };
 
 const isActivelyAttending = status =>
@@ -631,36 +737,64 @@ export default function UpcomingEventPlanner({
         }
     };
 
+    const getPlanTotal = plan => {
+        const checklistItems =
+            getChecklistItemsForStatus(
+                plan.attendanceStatus
+            );
+
+        return checklistItems.reduce(
+            (total, item) => {
+                if (!item.supportsCost) {
+                    return total;
+                }
+
+                const checklistItem =
+                    plan.checklist?.[item.key];
+
+                /*
+                 * Organizer-covered travel and hotels do not count
+                 * toward the user's personal season cost.
+                 */
+                if (
+                    item.supportsOrganizerCoverage &&
+                    checklistItem?.coveredByOrganizer
+                ) {
+                    return total;
+                }
+
+                return (
+                    total +
+                    Number(checklistItem?.costCents || 0)
+                );
+            },
+            0
+        );
+    };
+
     const totalAcrossAllEvents = useMemo(
         () =>
-            plans.reduce((grandTotal, plan) => {
-                const eventTotal = CHECKLIST_ITEMS.reduce(
-                    (subtotal, item) =>
-                        subtotal +
-                        Number(
-                            plan.checklist?.[item.key]?.costCents || 0
-                        ),
-                    0
-                );
-
-                return grandTotal + eventTotal;
-            }, 0),
+            plans.reduce(
+                (grandTotal, plan) =>
+                    grandTotal + getPlanTotal(plan),
+                0
+            ),
         [plans]
     );
 
     if (loading) {
-    return (
-        <div className="event-planner-loading">
-            <img
-                src={ultraball}
-                alt="Loading Event Planner"
-                className="event-planner-loading-ball"
-            />
+        return (
+            <div className="event-planner-loading">
+                <img
+                    src={ultraball}
+                    alt="Loading Event Planner"
+                    className="event-planner-loading-ball"
+                />
 
-            <span>Loading Event Planner...</span>
-        </div>
-    );
-}
+                <span>Loading Event Planner...</span>
+            </div>
+        );
+    }
 
     return (
         <PlannerPage className="event-planner">
@@ -777,21 +911,23 @@ export default function UpcomingEventPlanner({
                         const expanded = expandedId === plan._id;
                         const eventLogo = getCurrentEventLogo(plan);
                         const eventFlag = getCurrentEventFlag(plan);
-                        const eventTotal = CHECKLIST_ITEMS.reduce(
-                            (total, item) =>
-                                total +
-                                Number(
-                                    plan.checklist?.[item.key]
-                                        ?.costCents || 0
-                                ),
-                            0
-                        );
+                        const checklistItems =
+                            getChecklistItemsForStatus(
+                                plan.attendanceStatus
+                            );
+
+                        const supportsTournamentDeck = [
+                            'going',
+                            'interested'
+                        ].includes(plan.attendanceStatus);
+
+                        const eventTotal = getPlanTotal(plan);
+
                         const completedCount =
-                            CHECKLIST_ITEMS.filter(
+                            checklistItems.filter(
                                 item =>
                                     plan.checklist?.[item.key]?.completed
                             ).length;
-
                         return (
                             <article
                                 key={plan._id}
@@ -861,7 +997,7 @@ export default function UpcomingEventPlanner({
                                         )}
                                         <div className="event-planner-progress">
                                             <span>
-                                                Checklist: {completedCount}/{CHECKLIST_ITEMS.length}
+                                                Checklist: {completedCount}/{checklistItems.length}
                                             </span>
                                             <span>
                                                 Expected Cost: {formatCurrency(eventTotal)}
@@ -893,7 +1029,7 @@ export default function UpcomingEventPlanner({
                                                     }}
                                                 >
                                                     <option value="going">
-                                                        Going
+                                                        Competing
                                                     </option>
                                                     <option value="interested">
                                                         Tentative
@@ -907,309 +1043,315 @@ export default function UpcomingEventPlanner({
                                                     <option value="casting">
                                                         Casting
                                                     </option>
-                                                    <option value="cancelled">
-                                                        Cancelled
+                                                    <option value="spectating">
+                                                        Spectating
                                                     </option>
+                                                    {/* <option value="cancelled">
+                                                        Cancelled
+                                                    </option> */}
                                                 </select>
                                             </label>
                                         </div>
-                                        <div className="planned-event-deck-section">
-                                            <div className="planned-event-deck-heading">
-                                                <div>
-                                                    <h4>Tournament deck</h4>
+                                        {supportsTournamentDeck && (
+                                            <div className="planned-event-deck-section">
+                                                <div className="planned-event-deck-heading">
+                                                    <div>
+                                                        <h4>Tournament deck</h4>
+                                                        {!plan.eventDeck?.decklist?.length && (
+                                                            <p>
+                                                                Create a deck for this event or copy one from your
+                                                                existing deck collection.
+                                                            </p>
+                                                        )}
+                                                        {plan.eventDeck?.decklist?.length && (
+                                                            <br></br>
+                                                        )}
+                                                    </div>
+
                                                     {!plan.eventDeck?.decklist?.length && (
-                                                        <p>
-                                                            Create a deck for this event or copy one from your
-                                                            existing deck collection.
-                                                        </p>
-                                                    )}
-                                                    {plan.eventDeck?.decklist?.length && (
-                                                        <br></br>
+                                                        <div className="planned-event-deck-actions">
+                                                            <button
+                                                                type="button"
+                                                                className="create-event-deck-btn"
+                                                                onClick={() => {
+                                                                    navigate(
+                                                                        `/deckbuilder?plannedEventId=${plan._id}`
+                                                                    );
+                                                                }}
+                                                            >
+                                                                Create deck
+                                                            </button>
+
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    updateLocalPlan(
+                                                                        plan._id,
+                                                                        current => ({
+                                                                            ...current,
+                                                                            showCollectionDeckPicker: true,
+                                                                            selectedCollectionFolderId: null
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            >
+                                                                From collection
+                                                            </button>
+                                                        </div>
                                                     )}
                                                 </div>
 
-                                                {!plan.eventDeck?.decklist?.length && (
-                                                    <div className="planned-event-deck-actions">
+                                                {plan.eventDeck?.decklist?.length > 0 && (
+                                                    <div className="event-planner-selected-deck">
+                                                        {plan.eventDeck.mascotImageUrl ? (
+                                                            <img
+                                                                className="planned-event-deck-mascot"
+                                                                src={plan.eventDeck.mascotImageUrl}
+                                                                alt=""
+                                                            />
+                                                        ) : (
+                                                            <span className="material-symbols-outlined">
+                                                                style
+                                                            </span>
+                                                        )}
+                                                        <div>
+                                                            <strong>{plan.eventDeck.name}</strong>
+                                                        </div>
                                                         <button
                                                             type="button"
-                                                            className="create-event-deck-btn"
-                                                            onClick={() => {
+                                                            onClick={() =>
                                                                 navigate(
                                                                     `/deckbuilder?plannedEventId=${plan._id}`
-                                                                );
-                                                            }}
+                                                                )
+                                                            }
                                                         >
-                                                            Create deck
+                                                            Open deck
                                                         </button>
-
                                                         <button
                                                             type="button"
-                                                            onClick={() => {
-                                                                updateLocalPlan(
-                                                                    plan._id,
-                                                                    current => ({
-                                                                        ...current,
-                                                                        showCollectionDeckPicker: true,
-                                                                        selectedCollectionFolderId: null
-                                                                    })
-                                                                );
-                                                            }}
+                                                            className="remove-event-deck-btn"
+                                                            disabled={savingId === plan._id}
+                                                            onClick={() => removeEventDeck(plan)}
                                                         >
-                                                            From collection
+                                                            Remove
                                                         </button>
                                                     </div>
                                                 )}
-                                            </div>
 
-                                            {plan.eventDeck?.decklist?.length > 0 && (
-                                                <div className="event-planner-selected-deck">
-                                                    {plan.eventDeck.mascotImageUrl ? (
-                                                        <img
-                                                            className="planned-event-deck-mascot"
-                                                            src={plan.eventDeck.mascotImageUrl}
-                                                            alt=""
-                                                        />
-                                                    ) : (
-                                                        <span className="material-symbols-outlined">
-                                                            style
-                                                        </span>
-                                                    )}
-                                                    <div>
-                                                        <strong>{plan.eventDeck.name}</strong>
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `/deckbuilder?plannedEventId=${plan._id}`
-                                                            )
-                                                        }
-                                                    >
-                                                        Open deck
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="remove-event-deck-btn"
-                                                        disabled={savingId === plan._id}
-                                                        onClick={() => removeEventDeck(plan)}
-                                                    >
-                                                        Remove
-                                                    </button>
-                                                </div>
-                                            )}
+                                                {plan.showCollectionDeckPicker && (
+                                                    <div className="collection-deck-picker">
+                                                        <div className="collection-deck-picker-top">
+                                                            <div>
+                                                                <h4>
+                                                                    {plan.selectedCollectionFolderId === null
+                                                                        ? 'Select a folder'
+                                                                        : 'Select a saved deck'}
+                                                                </h4>
 
-                                            {plan.showCollectionDeckPicker && (
-                                                <div className="collection-deck-picker">
-                                                    <div className="collection-deck-picker-top">
-                                                        <div>
-                                                            <h4>
-                                                                {plan.selectedCollectionFolderId === null
-                                                                    ? 'Select a folder'
-                                                                    : 'Select a saved deck'}
-                                                            </h4>
-
-                                                            {plan.selectedCollectionFolderId !== null && (
-                                                                <button
-                                                                    type="button"
-                                                                    className="collection-folder-back"
-                                                                    onClick={() => {
-                                                                        updateLocalPlan(
-                                                                            plan._id,
-                                                                            current => ({
-                                                                                ...current,
-                                                                                selectedCollectionFolderId: null
-                                                                            })
-                                                                        );
-                                                                    }}
-                                                                >
-                                                                    ← Back to folders
-                                                                </button>
-                                                            )}
-                                                        </div>
-
-                                                        <button
-                                                            type="button"
-                                                            aria-label="Close deck picker"
-                                                            onClick={() => {
-                                                                updateLocalPlan(
-                                                                    plan._id,
-                                                                    current => ({
-                                                                        ...current,
-                                                                        showCollectionDeckPicker: false,
-                                                                        selectedCollectionFolderId: null
-                                                                    })
-                                                                );
-                                                            }}
-                                                        >
-                                                            <span className="material-symbols-outlined">
-                                                                close
-                                                            </span>
-                                                        </button>
-                                                    </div>
-
-                                                    {plan.selectedCollectionFolderId === null ? (
-                                                        <div className="collection-folder-picker-list">
-                                                            {folders.map(folder => {
-                                                                const folderDeckCount = decks.filter(
-                                                                    deck =>
-                                                                        String(deck.folderId || '') ===
-                                                                        String(folder._id)
-                                                                ).length;
-
-                                                                if (folderDeckCount === 0) {
-                                                                    return null;
-                                                                }
-
-                                                                return (
+                                                                {plan.selectedCollectionFolderId !== null && (
                                                                     <button
                                                                         type="button"
-                                                                        key={folder._id}
+                                                                        className="collection-folder-back"
+                                                                        onClick={() => {
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+                                                                                    selectedCollectionFolderId: null
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        ← Back to folders
+                                                                    </button>
+                                                                )}
+                                                            </div>
+
+                                                            <button
+                                                                type="button"
+                                                                aria-label="Close deck picker"
+                                                                onClick={() => {
+                                                                    updateLocalPlan(
+                                                                        plan._id,
+                                                                        current => ({
+                                                                            ...current,
+                                                                            showCollectionDeckPicker: false,
+                                                                            selectedCollectionFolderId: null
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <span className="material-symbols-outlined">
+                                                                    close
+                                                                </span>
+                                                            </button>
+                                                        </div>
+
+                                                        {plan.selectedCollectionFolderId === null ? (
+                                                            <div className="collection-folder-picker-list">
+                                                                {folders.map(folder => {
+                                                                    const folderDeckCount = decks.filter(
+                                                                        deck =>
+                                                                            String(deck.folderId || '') ===
+                                                                            String(folder._id)
+                                                                    ).length;
+
+                                                                    if (folderDeckCount === 0) {
+                                                                        return null;
+                                                                    }
+
+                                                                    return (
+                                                                        <button
+                                                                            type="button"
+                                                                            key={folder._id}
+                                                                            onClick={() => {
+                                                                                updateLocalPlan(
+                                                                                    plan._id,
+                                                                                    current => ({
+                                                                                        ...current,
+                                                                                        selectedCollectionFolderId:
+                                                                                            String(folder._id)
+                                                                                    })
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            <span
+                                                                                className="collection-folder-color"
+                                                                                style={{
+                                                                                    backgroundColor:
+                                                                                        folder.color || '#1290eb'
+                                                                                }}
+                                                                            />
+
+                                                                            <span className="collection-folder-name">
+                                                                                {folder.name}
+                                                                            </span>
+
+                                                                            <span className="collection-folder-count">
+                                                                                {folderDeckCount}
+                                                                            </span>
+
+                                                                            <span className="material-symbols-outlined">
+                                                                                chevron_right
+                                                                            </span>
+                                                                        </button>
+                                                                    );
+                                                                })}
+
+                                                                {decks.some(deck => !deck.folderId) && (
+                                                                    <button
+                                                                        type="button"
                                                                         onClick={() => {
                                                                             updateLocalPlan(
                                                                                 plan._id,
                                                                                 current => ({
                                                                                     ...current,
                                                                                     selectedCollectionFolderId:
-                                                                                        String(folder._id)
+                                                                                        'unassigned'
                                                                                 })
                                                                             );
                                                                         }}
                                                                     >
                                                                         <span
-                                                                            className="collection-folder-color"
-                                                                            style={{
-                                                                                backgroundColor:
-                                                                                    folder.color || '#1290eb'
-                                                                            }}
+                                                                            className="collection-folder-color unassigned"
                                                                         />
 
                                                                         <span className="collection-folder-name">
-                                                                            {folder.name}
+                                                                            Unassigned
                                                                         </span>
 
                                                                         <span className="collection-folder-count">
-                                                                            {folderDeckCount}
+                                                                            {
+                                                                                decks.filter(
+                                                                                    deck => !deck.folderId
+                                                                                ).length
+                                                                            }
                                                                         </span>
 
                                                                         <span className="material-symbols-outlined">
                                                                             chevron_right
                                                                         </span>
                                                                     </button>
-                                                                );
-                                                            })}
-
-                                                            {decks.some(deck => !deck.folderId) && (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        updateLocalPlan(
-                                                                            plan._id,
-                                                                            current => ({
-                                                                                ...current,
-                                                                                selectedCollectionFolderId:
-                                                                                    'unassigned'
-                                                                            })
-                                                                        );
-                                                                    }}
-                                                                >
-                                                                    <span
-                                                                        className="collection-folder-color unassigned"
-                                                                    />
-
-                                                                    <span className="collection-folder-name">
-                                                                        Unassigned
-                                                                    </span>
-
-                                                                    <span className="collection-folder-count">
-                                                                        {
-                                                                            decks.filter(
-                                                                                deck => !deck.folderId
-                                                                            ).length
-                                                                        }
-                                                                    </span>
-
-                                                                    <span className="material-symbols-outlined">
-                                                                        chevron_right
-                                                                    </span>
-                                                                </button>
-                                                            )}
-
-                                                            {folders.every(folder =>
-                                                                decks.every(
-                                                                    deck =>
-                                                                        String(deck.folderId || '') !==
-                                                                        String(folder._id)
-                                                                )
-                                                            ) &&
-                                                                !decks.some(deck => !deck.folderId) && (
-                                                                    <p>
-                                                                        You do not have any saved decks.
-                                                                    </p>
                                                                 )}
-                                                        </div>
-                                                    ) : (
-                                                        <div className="collection-deck-picker-list">
-                                                            {decks
-                                                                .filter(deck => {
-                                                                    if (
-                                                                        plan.selectedCollectionFolderId ===
-                                                                        'unassigned'
-                                                                    ) {
-                                                                        return !deck.folderId;
-                                                                    }
 
-                                                                    return (
-                                                                        String(deck.folderId || '') ===
-                                                                        String(
-                                                                            plan.selectedCollectionFolderId
-                                                                        )
-                                                                    );
-                                                                })
-                                                                .slice()
-                                                                .sort((a, b) =>
-                                                                    String(a.name || '').localeCompare(
-                                                                        String(b.name || '')
+                                                                {folders.every(folder =>
+                                                                    decks.every(
+                                                                        deck =>
+                                                                            String(deck.folderId || '') !==
+                                                                            String(folder._id)
                                                                     )
-                                                                )
-                                                                .map(deck => (
-                                                                    <button
-                                                                        type="button"
-                                                                        key={deck._id}
-                                                                        disabled={savingId === plan._id}
-                                                                        onClick={() =>
-                                                                            assignCollectionDeck(
-                                                                                plan,
-                                                                                deck._id
-                                                                            )
+                                                                ) &&
+                                                                    !decks.some(deck => !deck.folderId) && (
+                                                                        <p>
+                                                                            You do not have any saved decks.
+                                                                        </p>
+                                                                    )}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="collection-deck-picker-list">
+                                                                {decks
+                                                                    .filter(deck => {
+                                                                        if (
+                                                                            plan.selectedCollectionFolderId ===
+                                                                            'unassigned'
+                                                                        ) {
+                                                                            return !deck.folderId;
                                                                         }
-                                                                    >
-                                                                        {deck.mascotImageUrl ? (
-                                                                            <img
-                                                                                src={deck.mascotImageUrl}
-                                                                                alt=""
-                                                                            />
-                                                                        ) : (
+
+                                                                        return (
+                                                                            String(deck.folderId || '') ===
+                                                                            String(
+                                                                                plan.selectedCollectionFolderId
+                                                                            )
+                                                                        );
+                                                                    })
+                                                                    .slice()
+                                                                    .sort((a, b) =>
+                                                                        String(a.name || '').localeCompare(
+                                                                            String(b.name || '')
+                                                                        )
+                                                                    )
+                                                                    .map(deck => (
+                                                                        <button
+                                                                            type="button"
+                                                                            key={deck._id}
+                                                                            disabled={savingId === plan._id}
+                                                                            onClick={() =>
+                                                                                assignCollectionDeck(
+                                                                                    plan,
+                                                                                    deck._id
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            {deck.mascotImageUrl ? (
+                                                                                <img
+                                                                                    src={deck.mascotImageUrl}
+                                                                                    alt=""
+                                                                                />
+                                                                            ) : (
+                                                                                <span className="material-symbols-outlined">
+                                                                                    style
+                                                                                </span>
+                                                                            )}
+
+                                                                            <span>{deck.name}</span>
+
                                                                             <span className="material-symbols-outlined">
-                                                                                style
+                                                                                add
                                                                             </span>
-                                                                        )}
-
-                                                                        <span>{deck.name}</span>
-
-                                                                        <span className="material-symbols-outlined">
-                                                                            add
-                                                                        </span>
-                                                                    </button>
-                                                                ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
+                                                                        </button>
+                                                                    ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                         <div className="event-checklist">
-                                            {CHECKLIST_ITEMS.map(item => {
+                                            {checklistItems.map(item => {
                                                 const checklistItem =
-                                                    plan.checklist[item.key];
+                                                    plan.checklist[item.key] ||
+                                                    createEmptyChecklistItem(item);
 
                                                 return (
                                                     <div
@@ -1219,29 +1361,40 @@ export default function UpcomingEventPlanner({
                                                             checklistItem.completed
                                                                 ? 'completed'
                                                                 : ''
-                                                        ].filter(Boolean).join(' ')}
+                                                        ]
+                                                            .filter(Boolean)
+                                                            .join(' ')}
                                                     >
                                                         <label className="event-check-label">
                                                             <input
                                                                 type="checkbox"
                                                                 checked={
-                                                                    checklistItem.completed
+                                                                    Boolean(
+                                                                        checklistItem.completed
+                                                                    )
                                                                 }
                                                                 onChange={event => {
-                                                                    const checked =
+                                                                    const completed =
                                                                         event.target.checked;
 
                                                                     updateLocalPlan(
                                                                         plan._id,
                                                                         current => ({
                                                                             ...current,
+
                                                                             checklist: {
                                                                                 ...current.checklist,
+
                                                                                 [item.key]: {
+                                                                                    ...createEmptyChecklistItem(
+                                                                                        item
+                                                                                    ),
+
                                                                                     ...current.checklist[
                                                                                     item.key
                                                                                     ],
-                                                                                    completed: checked
+
+                                                                                    completed
                                                                                 }
                                                                             }
                                                                         })
@@ -1256,55 +1409,217 @@ export default function UpcomingEventPlanner({
                                                             <span>{item.label}</span>
                                                         </label>
 
-                                                        {item.supportsCost && (
-                                                            <label className="event-cost-input">
-                                                                <span>$</span>
+                                                        <div className="event-checklist-item-controls">
+                                                            {item.supportsRole && (
+                                                                <label className="event-role-input">
+                                                                    <span>Role</span>
 
-                                                                <input
-                                                                    type="text"
-                                                                    inputMode="decimal"
-                                                                    min="0"
-                                                                    step="0.01"
-                                                                    placeholder="0.00"
-                                                                    defaultValue={
-                                                                        checklistItem.costCents
-                                                                            ? checklistItem.costCents / 100
-                                                                            : ''
-                                                                    }
-                                                                    onBlur={event => {
-                                                                        const costCents = dollarsToCents(
-                                                                            event.target.value
-                                                                        );
+                                                                    <input
+                                                                        type="text"
+                                                                        maxLength="100"
+                                                                        placeholder={
+                                                                            plan.attendanceStatus ===
+                                                                                'casting'
+                                                                                ? 'Example: Play-by-play caster'
+                                                                                : 'Example: Floor Judge'
+                                                                        }
+                                                                        value={
+                                                                            checklistItem.role || ''
+                                                                        }
+                                                                        onChange={event => {
+                                                                            const role =
+                                                                                event.target.value;
 
-                                                                        updateLocalPlan(
-                                                                            plan._id,
-                                                                            current => ({
-                                                                                ...current,
-                                                                                checklist: {
-                                                                                    ...current.checklist,
-                                                                                    [item.key]: {
-                                                                                        ...current.checklist[item.key],
-                                                                                        costCents
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+
+                                                                                    checklist: {
+                                                                                        ...current.checklist,
+
+                                                                                        [item.key]: {
+                                                                                            ...createEmptyChecklistItem(
+                                                                                                item
+                                                                                            ),
+
+                                                                                            ...current
+                                                                                                .checklist[
+                                                                                            item.key
+                                                                                            ],
+
+                                                                                            role
+                                                                                        }
                                                                                     }
-                                                                                }
-                                                                            })
-                                                                        );
-                                                                    }}
-                                                                />
-                                                            </label>
-                                                        )}
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </label>
+                                                            )}
+
+                                                            {item.supportsCost && (
+                                                                <label className="event-cost-input">
+                                                                    <span>$</span>
+
+                                                                    <input
+                                                                        type="text"
+                                                                        inputMode="decimal"
+                                                                        placeholder="0.00"
+                                                                        value={
+                                                                            checklistItem.costInput ??
+                                                                            (
+                                                                                checklistItem.costCents
+                                                                                    ? checklistItem
+                                                                                        .costCents /
+                                                                                    100
+                                                                                    : ''
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            item.supportsOrganizerCoverage &&
+                                                                            checklistItem
+                                                                                .coveredByOrganizer
+                                                                        }
+                                                                        onChange={event => {
+                                                                            const costInput =
+                                                                                event.target.value;
+
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+
+                                                                                    checklist: {
+                                                                                        ...current.checklist,
+
+                                                                                        [item.key]: {
+                                                                                            ...createEmptyChecklistItem(
+                                                                                                item
+                                                                                            ),
+
+                                                                                            ...current
+                                                                                                .checklist[
+                                                                                            item.key
+                                                                                            ],
+
+                                                                                            costInput
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                        onBlur={event => {
+                                                                            const costCents =
+                                                                                dollarsToCents(
+                                                                                    event.target.value
+                                                                                );
+
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+
+                                                                                    checklist: {
+                                                                                        ...current.checklist,
+
+                                                                                        [item.key]: {
+                                                                                            ...createEmptyChecklistItem(
+                                                                                                item
+                                                                                            ),
+
+                                                                                            ...current
+                                                                                                .checklist[
+                                                                                            item.key
+                                                                                            ],
+
+                                                                                            costCents,
+                                                                                            costInput:
+                                                                                                costCents
+                                                                                                    ? (
+                                                                                                        costCents /
+                                                                                                        100
+                                                                                                    ).toFixed(
+                                                                                                        2
+                                                                                                    )
+                                                                                                    : ''
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </label>
+                                                            )}
+
+                                                            {item.supportsOrganizerCoverage && (
+                                                                <label className="organizer-coverage-toggle">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={
+                                                                            Boolean(
+                                                                                checklistItem
+                                                                                    .coveredByOrganizer
+                                                                            )
+                                                                        }
+                                                                        onChange={event => {
+                                                                            const coveredByOrganizer =
+                                                                                event.target
+                                                                                    .checked;
+
+                                                                            updateLocalPlan(
+                                                                                plan._id,
+                                                                                current => ({
+                                                                                    ...current,
+
+                                                                                    checklist: {
+                                                                                        ...current.checklist,
+
+                                                                                        [item.key]: {
+                                                                                            ...createEmptyChecklistItem(
+                                                                                                item
+                                                                                            ),
+
+                                                                                            ...current
+                                                                                                .checklist[
+                                                                                            item.key
+                                                                                            ],
+
+                                                                                            coveredByOrganizer
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            );
+                                                                        }}
+                                                                    />
+
+                                                                    <span>
+                                                                        Covered by organizer
+                                                                    </span>
+                                                                </label>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 );
                                             })}
                                         </div>
-
                                         <label className="event-planner-notes">
                                             Private notes
 
                                             <textarea
                                                 rows="4"
                                                 maxLength="5000"
-                                                placeholder="Travel details, testing notes, meta predictions, people traveling with you, people you plan to avoid..."
+                                                placeholder={
+                                                    ['judging', 'staffing'].includes(
+                                                        plan.attendanceStatus
+                                                    )
+                                                        ? 'Staff contacts, assigned team, shift details, travel information, schedule notes...'
+                                                        : plan.attendanceStatus === 'casting'
+                                                            ? 'Production contacts, broadcast schedule, call times, segment notes, travel information...'
+                                                            : plan.attendanceStatus === 'spectating'
+                                                                ? 'Travel details, people you are attending with, activities, side events, reminders...'
+                                                                : 'Travel details, testing notes, meta predictions, people traveling with you, reminders...'
+                                                }
                                                 value={plan.notes || ''}
                                                 onChange={event => {
                                                     const value = event.target.value;
@@ -1524,7 +1839,7 @@ export default function UpcomingEventPlanner({
                     <div className="season-share-footer">
                         <strong>PTCGLEGENDS.COM</strong>
                         <span>
-                            Plan your season. Become a legend.
+                            Plan your season. Become a LEGEND.
                         </span>
                     </div>
                 </div>

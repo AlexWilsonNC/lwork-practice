@@ -104,6 +104,9 @@ import tapubulu from '../../public/assets/sprites/tapu-bulu.png'
 import buzzwole from '../../public/assets/sprites/buzzwole.png'
 import hoopa from '../../public/assets/sprites/hoopa-unbound.png'
 import arceus from '../../public/assets/sprites/arceus.png'
+import manaphy from '../../public/assets/sprites/manaphy.png'
+import lugia from '../../public/assets/sprites/lugia.png'
+import excadrill from '../../public/assets/sprites/excadrill.png'
 import pikachugmax from '../../public/assets/sprites/pikachu-gmax.png'
 
 const ArticleContainer = styled.div`
@@ -145,7 +148,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: June 28, 2026</p>
+          <p>Last Updated: July 30, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -156,7 +159,7 @@ const ArchiveUpdates = () => {
 
           {/* <hr className='archive-updates-mini-hr'></hr> */}
 
-          {/* <hr className='title-hr' />
+          <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>July 2026</h3>
           <br />
@@ -171,6 +174,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
             </div>
             <p>Ahmed Ali (Masters) - 36<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/Brent%20Tonisson-AU' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={magcargo} alt="sprite" />
+            </div>
+            <p>Brent Tonisson (Masters) - 37<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -241,6 +251,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={garbodor} alt="sprite" />
             </div>
             <p>Nico Alabas (Masters) - 85<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/Ross%20Cawthon-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Ross Cawthon (Masters) - 87<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2018_WORLDS/masters/' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -406,6 +423,13 @@ const ArchiveUpdates = () => {
           <h4 className='archive-update-h4'><a href='/tournaments/2016_WORLDS/masters'>2016 Worlds</a></h4>
           <br></br>
 
+          <a href='/tournaments/2016_WORLDS/masters/Jit%20Min%20Lim-SG' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={vespiquen} alt="sprite" />
+              <img className="sprite second-sprite" src={excadrill} alt="sprite" />
+            </div>
+            <p>Jit Min Lim (Masters) - 26<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
           <a href='/tournaments/2016_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={joltik} alt="sprite" />
@@ -461,7 +485,47 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={megamanectric} alt="sprite" />
             </div>
             <p>Alex Koch (Masters) - 101<sup>st</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
-          </a> */}
+          </a>
+          <a href='/tournaments/2016_WORLDS/masters/Alex%20Koch-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manaphy} alt="sprite" />
+            </div>
+            <p>Mees Brenninkmeijer (Masters) - 109<sup>th</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <h4 className='archive-update-h4'><a href='/tournaments/2013_NATS_US/masters'>2013 US Nationals</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2013_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blastoise} alt="sprite" />
+              <img className="sprite second-sprite" src={keldeo} alt="sprite" />
+            </div>
+            <p>Jon Bristow (Masters) - 46<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2013_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={deoxys} alt="sprite" />
+            </div>
+            <p>Edwin Lopez (Masters) - 52<sup>nd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2013_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={deoxys} alt="sprite" />
+            </div>
+            <p>David Lopez (Masters) - 60<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2013_NATS_US/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={deoxys} alt="sprite" />
+            </div>
+            <p>Isaiah Bettridge (Masters) - 62<sup>nd</sup> Place</p>
+          </a>
 
           <hr className='title-hr' />
           <br />

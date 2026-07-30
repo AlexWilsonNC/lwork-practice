@@ -234,6 +234,7 @@ const customLabelsConfig = {
         'mewtwo-spidops': 'Team Rocket\'s',
     },
     '2024': {
+        'ogerpon-cornerstone-mimikyu': 'Ogerpon Mimikyu',
         'arceus-tapu-koko': 'Arceus Tapu Koko',
         'mimikyu-yveltal': 'Control Box',
         'arceus-umbreon-vmax': 'Arceus Umbreon',

@@ -523,6 +523,10 @@ td div a {
   background: #1290eb;
   border-color: #1290eb;
 }
+.event-plan-button.spectating {
+  background: #7d1eea;
+  border-color: #7d1eea;
+}
 .event-plan-button.cancelled {
     background: #c33737;
     border-color: #c33737;
