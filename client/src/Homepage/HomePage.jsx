@@ -242,10 +242,10 @@ const Homepage = () => {
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
                                         <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
-                                        <p>New long-lost decklists spanning the 2012 World Championships through 2022 were recently discovered, plus more! Check them out only on PTCG Legends!</p>
+                                        <p>A ton of newly discovered long-lost decklists and results from the 2016, 2017, & 2018 World Championships have been discovered! Including a new retro archetype!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Jun 1, 2026</p>
+                                        <p>Jun 31, 2026</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -498,10 +498,10 @@ const Homepage = () => {
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
                                     <h3>Long-lost <span className='new-color'>Worlds</span> Results Discovered!</h3>
-                                    <p>New long-lost decklists spanning the 2012 and 2World Championships through 2022 recently discovered, plus more! Check them out only on PTCG Legends!</p>
+                                    <p>A ton of newly discovered long-lost decklists and results from the 2016, 2017, & 2018 World Championships have been discovered! Including a new retro archetype!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Jun 1, 2026</p>
+                                    <p>Jun 31, 2026</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>

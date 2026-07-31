@@ -527,6 +527,9 @@ const ArchiveUpdates = () => {
             <p>Isaiah Bettridge (Masters) - 62<sup>nd</sup> Place</p>
           </a>
 
+          <hr className='archive-updates-mini-hr'></hr>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> for many of this month's lists, limitlesstcg for some of the results, and all the players we reached out to for information.</p>
+
           <hr className='title-hr' />
           <br />
           <h3 className='boxxed'>June 2026</h3>
