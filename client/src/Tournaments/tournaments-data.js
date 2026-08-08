@@ -2294,6 +2294,26 @@ const tournamentList = [
         "location": "Bologna, Italy",
         "eventSite": "https://www.trainerchampionships.com/event/bologna-2027/"
     },
+    {
+          "id": "2027_ATLANTA",
+  "name": "Atlanta Regionals",
+  "eventType": "regionals",
+  "eventLogo": regional25,
+  "date": "Jan 15, 2027",
+  "flag": usa,
+  "location": "Atlanta, Georgia",
+  "eventSite": "https://www.trainerchampionships.com/event/atlanta-2027/"
+    },
+    {
+          "id": "2027_TORONTO",
+  "name": "Toronto Regionals",
+  "eventType": "regionals",
+  "eventLogo": regional25,
+  "date": "Apr 2, 2027",
+  "flag": canada,
+  "location": "Toronto, Canada",
+  "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/"
+    },
 ];
 
 const parseDate = (dateStr) => {
