@@ -245,7 +245,7 @@ const Homepage = () => {
                                         <p>A ton of newly discovered long-lost decklists and results from the 2016, 2017, & 2018 World Championships have been discovered! Including a new retro archetype!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Jun 31, 2026</p>
+                                        <p>Jul 31, 2026</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -501,7 +501,7 @@ const Homepage = () => {
                                     <p>A ton of newly discovered long-lost decklists and results from the 2016, 2017, & 2018 World Championships have been discovered! Including a new retro archetype!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Jun 31, 2026</p>
+                                    <p>Jul 31, 2026</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>

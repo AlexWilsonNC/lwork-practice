@@ -107,7 +107,13 @@ import arceus from '../../public/assets/sprites/arceus.png'
 import manaphy from '../../public/assets/sprites/manaphy.png'
 import lugia from '../../public/assets/sprites/lugia.png'
 import excadrill from '../../public/assets/sprites/excadrill.png'
+import whimsicott from '../../public/assets/sprites/whimsicott.png'
+import porygonz from '../../public/assets/sprites/porygon-z.png'
 import pikachugmax from '../../public/assets/sprites/pikachu-gmax.png'
+import magmortar from '../../public/assets/sprites/magmortar.png'
+import palkia from '../../public/assets/sprites/palkia.png'
+import nidoqueen from '../../public/assets/sprites/nidoqueen.png'
+import pyroar from '../../public/assets/sprites/pyroar.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -148,7 +154,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: July 30, 2026</p>
+          <p>Last Updated: August 22, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -158,6 +164,175 @@ const ArchiveUpdates = () => {
         <div className='article-content archive-updates'>
 
           {/* <hr className='archive-updates-mini-hr'></hr> */}
+
+          <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>August 2026</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2019_WORLDS/masters'>2019 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2019_WORLDS/masters/Connor%20Finton-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={whimsicott} alt="sprite" />
+              <img className="sprite second-sprite" src={porygonz} alt="sprite" />
+            </div>
+            <p>Connor Finton (Masters) - 112<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2018_WORLDS/masters'>2018 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2018_WORLDS/masters/Lyder%20Iversen-NO' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Lyder Iversen (Masters) - 94<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          
+          <h4 className='archive-update-h4'><a href='/tournaments/2017_WORLDS/masters'>2017 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2017_WORLDS/masters/Ross%20Cawthon-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
+            </div>
+            <p>Ross Cawthon (Masters) - 42<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2017_OCIC/masters'>2017 OCIC</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2017_OCIC/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={darkrai} alt="sprite" />
+            </div>
+            <p>Brent Tonisson (Masters) - 44<sup>th</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2016_WORLDS/masters'>2016 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2016_WORLDS/masters/Marton%20Skjæveland-NO' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={joltik} alt="sprite" />
+              <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
+            </div>
+            <p>Marton Skjæveland (Masters) - 78<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2014_WORLDS/masters'>2014 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2014_WORLDS/seniors/Jeffrey%20Cheng-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={pyroar} alt="sprite" />
+            </div>
+            <p>Jeffrey Cheng (Seniors) - 7<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2009_WORLDS/masters'>2009 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2009_WORLDS/masters/Milan-unknown' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={palkia} alt="sprite" />
+            </div>
+            <p>Milan -- (Masters) - 33<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2008_WORLDS/masters'>2008 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2008_WORLDS/masters/Ross%20Cawthon-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gardevoir} alt="sprite" />
+              <img className="sprite second-sprite" src={gallade} alt="sprite" />
+            </div>
+            <p>Ross Cawthon (Masters) - 33<sup>rd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2008_WORLDS/seniors/Sam-AU' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={leafeon} alt="sprite" />
+              <img className="sprite second-sprite" src={magmortar} alt="sprite" />
+            </div>
+            <p>Sam -- (Seniors) - 17<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2006_WORLDS/masters'>2006 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2006_WORLDS/masters/Adam%20Capriola-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={blastoise} alt="sprite" />
+            </div>
+            <p>Adam Capriola (Masters) - 35<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2006_WORLDS/masters/Anna%20Schipper-NL' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={blastoise} alt="sprite" />
+            </div>
+            <p>Anna Schipper (Masters) - 38<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2006_WORLDS/masters/Mike%20Reynolds-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={lugia} alt="sprite" />
+              <img className="sprite second-sprite" src={blastoise} alt="sprite" />
+            </div>
+            <p>Mike Reynolds (Masters) - 50<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2005_WORLDS/masters'>2005 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2005_WORLDS/masters/Adam%20Capriola-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={nidoqueen} alt="sprite" />
+            </div>
+            <p>Adam Capriola (Masters) - 38<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2005_WORLDS/masters/Kyle%20Sucevich-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={tyranitar} alt="sprite" />
+            </div>
+            <p>Kyle Sucevich (Masters) - 42<sup>nd</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2005_WORLDS/masters/Jay-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={metagross} alt="sprite" />
+            </div>
+            <p>Jay -- (Masters) - 45<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
 
           <hr className='title-hr' />
           <br />
