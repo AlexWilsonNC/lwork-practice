@@ -543,6 +543,8 @@ const Homepage = () => {
                 <ul className='patreonLegendsUl'>
                     <li>Jesse Benedict</li>
                     <li>CachoOfSinnoh</li>
+                    <li>Simon Boschert</li>
+                    <li>Nick Aiello</li>
                 </ul>
             </div>
         </Container>
