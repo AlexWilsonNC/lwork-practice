@@ -26,6 +26,7 @@ const orderedSets = [
     "PAL",
     "SVE",
     "SVI",
+    "SVE",
     "PR-SV",
 // swsh
     "CRZ",

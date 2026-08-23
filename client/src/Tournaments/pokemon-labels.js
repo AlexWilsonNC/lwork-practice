@@ -317,6 +317,7 @@ const customLabelsConfig = {
     },
     '2023': {
         'blank-substitute': 'Other',
+        'blank-urshifu-rapid-strike-gmax': 'Rapid Strike',
         'blank-snorlax': 'Snorlax Stall',
         'comfey-charizard-shiny': 'Radiant Charizard LZB',
         'comfey-sableye': 'Lost Box',
