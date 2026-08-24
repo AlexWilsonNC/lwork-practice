@@ -57,7 +57,6 @@ import thailand from '../assets/flags/thailand.png';
 import turkey from '../assets/flags/turkey.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
-import greatBritain from '../assets/flags/uk.png';
 import uruguay from '../assets/flags/uruguay.png';
 import guatemala from '../assets/flags/guatemala.png';
 import bolivia from '../assets/flags/bolivia.png';
@@ -165,7 +164,6 @@ export const flags = {
      TR: turkey,
      US: usa,
      UK: uk,
-     GB: greatBritain,
      UY: uruguay,
      GT: guatemala,
      BO: bolivia,
@@ -267,7 +265,6 @@ export const countryNames = {
     TH: 'Thailand (Asia-Pacific)',
     TR: 'Turkey (Middle East-South Africa)',
     UK: 'United Kingdom (Europe)',
-    GB: 'United Kingdom (Europe)',
     US: 'USA (North America)',
     UY: 'Uruguay (Latin America)',
     GT: 'Guatemala (Latin America)',
@@ -377,7 +374,6 @@ export const playerCountryDropdown = {
     TR: 'Turkey',
     US: 'USA',
     UK: 'UK',
-    GB: 'UK',
     UY: 'Uruguay',
     UA: 'Ukraine',
     GT: 'Guatemala',
@@ -418,7 +414,7 @@ export const playerCountryDropdown = {
 export const regions = {
   NA: ['US','CA','PR'],
   LA: ['BR','BZ','AR','PE','PY','PA','CO','MX','CL','SV','EC','BO','GT','TT','DO','VE','JM','HN','AI','AW'],
-  EU: ['DE','EE','JE','AD','GG','UA','FR','UK','GB','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO','CS'],
+  EU: ['DE','EE','JE','AD','GG','UA','FR','UK','ES','PL','AT','BY','BE','HR','CZ','DK','FI','IT','NL','NO','PT','RU','SK','SE','CH','LU','SI','LV','AL','BG','CY','GE','GI','RO','CS'],
   OC: ['AU','NZ','PG','CC','PN','FM'],
   AP: ['CN','AM','HK','ID','JP','KR','MY','PH','SG','TW','TH','IN','KZ','VN'],
   MS: ['ZA','TR','KW','QA','SZ','AE','LB','UZ']

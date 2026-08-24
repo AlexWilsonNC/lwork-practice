@@ -317,6 +317,8 @@ const customLabelsConfig = {
     },
     '2023': {
         'blank-substitute': 'Other',
+        'blank-arceus': 'Arceus VSTAR',
+        'vikavolt-regieliki-vmax': 'Vikavolt',
         'blank-urshifu-rapid-strike-gmax': 'Rapid Strike',
         'blank-snorlax': 'Snorlax Stall',
         'comfey-charizard-shiny': 'Radiant Charizard LZB',
@@ -329,6 +331,7 @@ const customLabelsConfig = {
         'chien-pao-baxcalibur': 'Chien Pao Baxcalibur',
         'arceus-umbreon-vmax': 'Arceus Umbreon',
         'blank-palkia-origin': 'Palkia VSTAR',
+        'urshifu-rapid-strike-gmax-blaziken': 'Rapid Strike',
         'urshifu-rapid-strike-gmax-inteleon-vmax': 'Rapid Strike',
         'inteleon-vmax-urshifu-rapid-strike-gmax': 'Rapid Strike',
         'blank-miraidon': 'Miraidon',

@@ -154,7 +154,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: August 22, 2026</p>
+          <p>Last Updated: August 24, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -194,6 +194,13 @@ const ArchiveUpdates = () => {
             </div>
             <p>Lyder Iversen (Masters) - 94<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+          <a href='/tournaments/2018_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={buzzwole} alt="sprite" />
+              <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
+            </div>
+            <p>Pablo Meza (Masters) - 113<sup>th</sup> Place</p>
+          </a>
 
           <hr className='archive-updates-mini-hr'></hr>
           
@@ -232,6 +239,19 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={pumpkaboo} alt="sprite" />
             </div>
             <p>Marton Skjæveland (Masters) - 78<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2015_WORLDS/masters'>2015 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2015_WORLDS/masters/Pablo%20Meza-MX' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={groudonprimal} alt="sprite" />
+              <img className="sprite second-sprite" src={wobbuffet} alt="sprite" />
+            </div>
+            <p>Pablo Meza (Masters) - 114<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>

@@ -2314,6 +2314,69 @@ const tournamentList = [
   "location": "Toronto, Canada",
   "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/"
     },
+    {
+              "id": "2023_PUERTO_RICO",
+    "name": "Puerto Rico Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 24, 2023",
+    "flag": puertoRico,
+    "location": "Puerto Rico"
+    },
+    {
+              "id": "2023_CAPE_TOWN",
+    "name": "Cape Town Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 17, 2023",
+    "flag": southAfrica,
+    "location": "Cape Town, South Africa"
+    },
+    {
+             "id": "2023_JOHANNESBURG",
+    "name": "Johannesburg Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 10, 2023",
+    "flag": southAfrica,
+    "location": "Johannesburg, South Africa"
+    },
+    {
+             "id": "2023_FRESNO",
+    "name": "Fresno Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 9, 2023",
+    "flag": usa,
+    "location": "Fresno, California"
+    },
+    {
+            "id": "2023_SANTIAGO",
+    "name": "Santiago Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 3, 2023",
+    "flag": chile,
+    "location": "Santiago, Chile"
+    },
+    {
+            "id": "2023_MILWAUKEE",
+    "name": "Milwaukee Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 2, 2023",
+    "flag": usa,
+    "location": "Milwaukee, Wisconsin"
+    },
+    {
+            "id": "2023_TURIN",
+    "name": "Turin Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 3, 2023",
+    "flag": italy,
+    "location": "Turin, Italy"
+    },
 ];
 
 const parseDate = (dateStr) => {
