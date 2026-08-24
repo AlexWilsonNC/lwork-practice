@@ -2377,6 +2377,87 @@ const tournamentList = [
     "flag": italy,
     "location": "Turin, Italy"
     },
+    {
+            "id": "2023_LIMA",
+    "name": "Lima Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 27, 2023",
+    "flag": peru,
+    "location": "Lima, Peru"
+    },
+    {
+            "id": "2023_BUENOS_AIRES",
+    "name": "Buenos Aires Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 20, 2023",
+    "flag": argentina,
+    "location": "Buenos Aires, Argentina"
+    },
+    {
+            "id": "2023_MALMO",
+    "name": "Malmö Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 20, 2023",
+    "flag": sweden,
+    "location": "Malmö, Sweden"
+    },
+    {
+           "id": "2023_HARTFORD",
+    "name": "Hartford Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 19, 2023",
+    "flag": usa,
+    "location": "Hartford, Connecticut"
+    },
+    {
+           "id": "2023_BOGOTA",
+    "name": "Bogotá Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 14, 2023",
+    "flag": colombia,
+    "location": "Bogotá, Colombia"
+    },
+    {
+           "id": "2023_SAO_PAULO",
+    "name": "São Paulo Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 6, 2023",
+    "flag": brazil,
+    "location": "São Paulo, Brazil"
+    },
+    {
+           "id": "2023_PORTLAND",
+    "name": "Portland Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 5, 2023",
+    "flag": usa,
+    "location": "Portland, Oregon"
+    },
+    {
+           "id": "2023_SYDNEY",
+    "name": "Sydney Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Apr 1, 2023",
+    "flag": australia,
+    "location": "Sydney, Australia"
+    },
+    {
+           "id": "2023_FORT_WAYNE",
+    "name": "Fort Wayne Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 31, 2023",
+    "flag": usa,
+    "location": "Fort Wayne, Indiana"
+    },
 ];
 
 const parseDate = (dateStr) => {

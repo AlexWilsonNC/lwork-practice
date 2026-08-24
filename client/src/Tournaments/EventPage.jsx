@@ -800,6 +800,8 @@ const forcedArchetypeSprites = {
     'Haymaker': ['hitmonchan'],
     'Mega Starmie': ['starmie-mega'],
     'Hydrapple': ['hydrapple'],
+    'Miraidon': ['miraidon'],
+    'Eternatus VMAX': ['eternatus-eternamax'],
 };
 
 const getForcedSprites = (key, fallback = []) => {
@@ -818,7 +820,14 @@ const EventPage = () => {
     const navigate = useNavigate();
     const [showDayOneMeta, setShowDayOneMeta] = useState(false);
     const [showConversionRate, setShowConversionRate] = useState(false);
-    const [selectedArchetype, setSelectedArchetype] = useState('');
+    const [
+        selectedArchetype,
+        setSelectedArchetype
+    ] = useState(() =>
+        sessionStorage.getItem(
+            `selectedArchetype_${eventId}`
+        ) || ''
+    );
     const [averageCardCounts, setAverageCardCounts] = useState([]);
     // const [top30CardCounts, setTop30CardCounts] = useState([]);
     const [showTop30, setShowTop30] = useState(true);
@@ -839,7 +848,13 @@ const EventPage = () => {
     const [eliminatedRecords, setEliminatedRecords] = useState([]);
     const [loadingEliminatedRecs, setLoadingEliminatedRecs] = useState(false);
     const [showAllRecs, setShowAllRecs] = useState(false);
-    const [statView, setStatView] = useState('meta'); // 'meta' | 'decklists' | 'records' | 'matchups'
+    // 'meta' | 'decklists' | 'records' | 'matchups'
+    const [statView, setStatView] = useState(() => {
+        return (
+            sessionStorage.getItem(`statView_${eventId}`) ||
+            'meta'
+        );
+    });
     const [metaView, setMetaView] = useState('bar'); // 'bar' | 'list' | 'pie'
     const [infoArchetype, setInfoArchetype] = useState(null);
     const [infoStats, setInfoStats] = useState({ wins: 0, losses: 0, ties: 0 });
@@ -1092,6 +1107,13 @@ const EventPage = () => {
     useEffect(() => {
         sessionStorage.setItem(`activeTab_${eventId}`, activeTab);
     }, [activeTab, eventId]);
+
+    useEffect(() => {
+        sessionStorage.setItem(
+            `statView_${eventId}`,
+            statView
+        );
+    }, [statView, eventId]);
 
     useEffect(() => {
         if (!showMatchupsTab && (statView === 'matchups' || statView === 'records')) {
@@ -1349,9 +1371,19 @@ const EventPage = () => {
     }, [selectedArchetype, showTop30, dataDay, eliminatedDecks, eventId, results]);
 
     const cardImageUrl = (card) => {
-        if (!cardData) {
-            return 'https://via.placeholder.com/150';
-        }
+        const cardImageUrl = card => {
+            if (!cardData) {
+                return '';
+            }
+
+            const key =
+                `${card.set}-${card.number}`;
+
+            const cardInfo =
+                cardData[key];
+
+            return cardInfo?.images?.small || '';
+        };
 
         const key = `${card.set}-${card.number}`;
 
@@ -1665,20 +1697,46 @@ const EventPage = () => {
     };
 
     useEffect(() => {
-        if (!isChartReady || deckTypeCountArray.length === 0) return;
+        if (deckTypeCountArray.length === 0) return;
         if (selectedArchetype) return;
 
-        const storageKey = `selectedArchetype_${eventId}`;
-        const savedKey = sessionStorage.getItem(storageKey);
-        const validSaved = savedKey && finalDeckTypeCountArray.some(a => a.key === savedKey);
+        const storageKey =
+            `selectedArchetype_${eventId}`;
 
-        const defaultKey = validSaved
-            ? savedKey
-            : finalDeckTypeCountArray[0].key;
+        const savedKey =
+            sessionStorage.getItem(storageKey);
+
+        const validSaved =
+            savedKey &&
+            finalDeckTypeCountArray.some(
+                archetype =>
+                    archetype.key === savedKey
+            );
+
+        const defaultKey =
+            validSaved
+                ? savedKey
+                : finalDeckTypeCountArray.find(
+                    archetype =>
+                        archetype.key !== 'blank-'
+                )?.key ||
+                finalDeckTypeCountArray[0]?.key ||
+                '';
+
+        if (!defaultKey) return;
 
         setSelectedArchetype(defaultKey);
-        sessionStorage.setItem(storageKey, defaultKey);
-    }, [isChartReady, deckTypeCountArray, eventId, selectedArchetype]);
+
+        sessionStorage.setItem(
+            storageKey,
+            defaultKey
+        );
+    }, [
+        deckTypeCountArray,
+        finalDeckTypeCountArray,
+        eventId,
+        selectedArchetype
+    ]);
 
     const getPlayerCount = (division) => {
         switch (division) {
@@ -2699,12 +2757,13 @@ const EventPage = () => {
                         Results
                     </a>
                     <a
-                        className={`event-option ${activeTab === 'Statistics' ? 'active-option' : ''}`}
+                        className={`event-option ${activeTab === 'Statistics'
+                            ? 'active-option'
+                            : ''
+                            }`}
                         onClick={() => {
-                            // only open Statistics when allowed…
                             if (resultsAvailable) {
                                 setActiveTab('Statistics');
-                                setStatView('meta');      // ← reset to the “Meta” sub‐tab
                             }
                         }}
                     >
@@ -3201,7 +3260,7 @@ const EventPage = () => {
                                         )}
                                     </>
                                 )}
-                                {statView === 'decklists' && isChartReady && (
+                                {statView === 'decklists' && (
                                     <>
                                         <div className='deck-archetypes'>
                                             <h3 className='stats-tab-h3-label'>Data per Archetype</h3>
@@ -3239,14 +3298,37 @@ const EventPage = () => {
                                                         Only Cards in All Lists
                                                     </button>
                                                 </div>
-                                                <div className="deck-cards">
-                                                    {visibleAverageCards.length > 0 ? visibleAverageCards.map((card, idx) => (
-                                                        <div key={idx} className="card-container-avg" onClick={() => handleCardClick(card)}>
-                                                            <img src={cardImageUrl(card)} alt={card.name} />
-                                                            <div className="card-count-avg">{card.averageCount}</div>
-                                                        </div>
-                                                    )) : <p></p>}
-                                                </div>
+                                                {!cardData ? (
+                                                    <div className="average-cards-loading">
+                                                        <img
+                                                            src={blueUltraBallSpinner}
+                                                            alt="Loading cards"
+                                                            className="pokeball-spinner"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="deck-cards">
+                                                        {visibleAverageCards.length > 0
+                                                            ? visibleAverageCards.map((card, idx) => (
+                                                                <div
+                                                                    key={`${card.set}-${card.number}-${idx}`}
+                                                                    className="card-container-avg"
+                                                                    onClick={() => handleCardClick(card)}
+                                                                >
+                                                                    <img
+                                                                        src={cardImageUrl(card)}
+                                                                        alt={card.name}
+                                                                    />
+
+                                                                    <div className="card-count-avg">
+                                                                        {card.averageCount}
+                                                                    </div>
+                                                                </div>
+                                                            ))
+                                                            : <p></p>
+                                                        }
+                                                    </div>
+                                                )}
                                                 {averageCardCounts.length > 30 && (
                                                     <button
                                                         className="expand-average-cards-btn"
