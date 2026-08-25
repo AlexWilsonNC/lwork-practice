@@ -2,6 +2,7 @@ import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
 import internats25 from '../assets/event-logo/internats-2025.png';
 import speSeries from '../assets/profile-pics/play-pokemon-logo.png';
+import worldsOpen from '../assets/profile-pics/play-pokemon-logo.png';
 import worlds from '../assets/event-logo/worlds-hd.png';
 import premierBallLeague from '../assets/event-logo/premier-ball-league.png';
 import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
@@ -2628,6 +2629,33 @@ const tournamentList = [
     "date": "Sep 17, 2022",
     "flag": spain,
     "location": "Bilbao, Spain"
+    },
+    {
+           "id": "2023_BALTIMORE",
+    "name": "Baltimore Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 16, 2022",
+    "flag": usa,
+    "location": "Baltimore, Maryland"
+    },
+    {
+            "id": "2023_PORTO_ALEGRE",
+    "name": "Porto Alegre Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 17, 2022",
+    "flag": brazil,
+    "location": "Porto Alegre, Brazil"
+    },
+    {
+            "id": "2023_LONDON_OPEN",
+    "name": "London Open",
+    "eventType": "worldsOpen",
+    "eventLogo": worldsOpen,
+    "date": "Aug 20, 2022",
+    "flag": uk,
+    "location": "London, UK"
     },
 ];
 

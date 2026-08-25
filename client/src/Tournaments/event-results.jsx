@@ -133,56 +133,131 @@ const formatName = (name) => {
 };
 
 export const displayResults = (players, eventId, division, customPlacement, eventFormat) => {
+
+    const hasPods =
+        eventId === '2023_LONDON_OPEN' &&
+        players.some(player => player.pod);
+
+    const sortedPlayers = hasPods
+        ? [...players].sort((a, b) => {
+            const aPlacement = a.placement ?? a.placing ?? 9999;
+            const bPlacement = b.placement ?? b.placing ?? 9999;
+
+            if (aPlacement !== bPlacement) {
+                return aPlacement - bPlacement;
+            }
+
+            const podOrder = {
+                yellow: 0,
+                blue: 1
+            };
+
+            return (
+                (podOrder[a.pod?.toLowerCase()] ?? 99) -
+                (podOrder[b.pod?.toLowerCase()] ?? 99)
+            );
+        })
+        : players;
+
     return (
         <OlResults className='result-list-ol'>
-            {players.map((player, index) => {
-                const placement = Number.isInteger(customPlacement)
-                    ? customPlacement + index
-                    : (player.placing != null
-                        ? player.placing
-                        : index + 1
+            {sortedPlayers.map((player, index) => {
+
+                /*
+                 * Pod events must preserve each player's actual pod placement.
+                 *
+                 * Example:
+                 * 1 Yellow
+                 * 1 Blue
+                 * 2 Yellow
+                 * 2 Blue
+                 */
+                const placement = hasPods
+                    ? (player.placement ?? player.placing ?? index + 1)
+                    : (
+                        Number.isInteger(customPlacement)
+                            ? customPlacement + index
+                            : (
+                                player.placing != null
+                                    ? player.placing
+                                    : player.placement != null
+                                        ? player.placement
+                                        : index + 1
+                            )
                     );
+
                 const displayPlacement = placement === 9999 ? '' : placement;
+
                 let code = player.flag;
+
                 if (code && !flags[code]) {
-                    console.warn(`Unknown flag code "${code}" for player "${player.name}" (placing ${player.placing})`);
+                    console.warn(
+                        `Unknown flag code "${code}" for player "${player.name}" (placing ${player.placing ?? player.placement})`
+                    );
                 }
+
                 const imgSrc = code
                     ? (flags[code] || '')
                     : flags.unknown;
-                <img
-                    className="flag-size"
-                    src={imgSrc}
-                    alt={code || "unknown"}
-                />
-                const deckLabel = getCustomLabel(eventId, player.sprite1, player.sprite2);
+
+                const deckLabel = getCustomLabel(
+                    eventId,
+                    player.sprite1,
+                    player.sprite2
+                );
+
                 const deckUrl =
                     deckLabel && eventFormat
                         ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
                         : null;
+
+                const pod = player.pod?.toLowerCase();
+
                 return (
-                    <li key={`${player.name}-${index}`} className='player-list-hover'>
+                    <li
+                        key={`${player.name}-${player.flag}-${pod || index}`}
+                        className={`
+                            player-list-hover
+                            ${pod ? `pod-${pod}` : ''}
+                        `}
+                    >
                         <div className='results-list-item'>
+
                             <div className='name-n-flag'>
+
                                 <div className='player-placement'>
-                                    {/* only show a number & dot if not blank */}
                                     {displayPlacement !== '' && `${displayPlacement}.`}
                                 </div>
+
                                 <div className="flag-container">
                                     <img
                                         className='flag-size'
                                         src={imgSrc}
                                         alt="flag"
                                     />
+
                                     <div className="flag-tooltip">
                                         {getCountryName(player.flag)}
                                     </div>
                                 </div>
-                                <Link className={`link-to-playerprofile ${player.dq ? 'dq-player' : ''}`} to={`/player/${normalizeName(player.name)}-${player.flag}`}>
+
+                                <Link
+                                    className={`link-to-playerprofile ${player.dq ? 'dq-player' : ''}`}
+                                    to={`/player/${normalizeName(player.name)}-${player.flag}`}
+                                >
                                     {formatName(player.name)}
                                 </Link>
+
+                                {pod && (
+                                    <span className={`pod-badge ${pod}`}>
+                                        {pod} pod
+                                    </span>
+                                )}
+
                             </div>
+
                             <div className="player-deck-icons">
+
                                 {deckUrl ? (
                                     <Link
                                         to={deckUrl}
@@ -200,6 +275,7 @@ export const displayResults = (players, eventId, division, customPlacement, even
                                     </Link>
                                 ) : (
                                     <div className="deck-tooltip-container">
+
                                         <DisplayPokemonSprites
                                             decklist={player.decklist}
                                             sprite1={player.sprite1}
@@ -211,19 +287,24 @@ export const displayResults = (players, eventId, division, customPlacement, even
                                                 {deckLabel}
                                             </div>
                                         )}
+
                                     </div>
                                 )}
+
                                 <a
                                     href={`/tournaments/${eventId}/${division}/${encodeURIComponent(player.name)}-${encodeURIComponent(player.flag)}`}
                                     style={{
                                         opacity: player.decklist ? 1 : 0,
-                                        pointerEvents: player.decklist ? 'auto' : 'none'
+                                        pointerEvents: player.decklist
+                                            ? 'auto'
+                                            : 'none'
                                     }}
                                 >
                                     <span className="material-symbols-outlined">
                                         format_list_bulleted
                                     </span>
                                 </a>
+
                             </div>
                         </div>
                     </li>
