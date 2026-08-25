@@ -317,6 +317,12 @@ const customLabelsConfig = {
     },
     '2023': {
         'blank-substitute': 'Other',
+        'blank-durant': 'Durant',
+        'frosmoth-inteleon': 'Frosmoth Inteleon',
+        'palkia-origin-vikavolt': 'Palkia Vikavolt',
+        'ditto-cinccino': 'Ditto Control',
+        'zoroark-hisui-gengar': 'Hisuian Zoroark',
+        'mewtwo-gengar': 'Mewtwo Gengar',
         'blank-weezing-galar': 'Galarian Weezing',
         'weezing-galar-crobat-vmax': 'Galarian Weezing',
         'arceus-inteleon': 'Arceus Inteleon',
@@ -380,6 +386,8 @@ const customLabelsConfig = {
         'comfey-rayquaza': 'LZB Amazing Rayquaza',
         'blissey-yveltal': 'Blissey',
         'charizard-shiny-inteleon': 'Radiant Charizard Inteleon',
+        'beedrill-inteleon': 'Beedrill Inteleon',
+        'vulpix-alola-comfey': 'Vulpix LZ Box',
     },
     '2022': {
         'palkia-origin-inteleon': 'Palkia Inteleon',

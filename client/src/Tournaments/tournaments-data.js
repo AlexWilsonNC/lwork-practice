@@ -2468,15 +2468,6 @@ const tournamentList = [
     "location": "Charlotte, North Carolina"
     },
     {
-           "id": "2023_CHARLOTTE",
-    "name": "Charlotte Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 23, 2023",
-    "flag": usa,
-    "location": "Charlotte, North Carolina"
-    },
-    {
            "id": "2023_UTRECHT",
     "name": "Utrecht Special Event",
     "eventType": "speSeries",
@@ -2556,6 +2547,51 @@ const tournamentList = [
     "date": "Jan 6, 2023",
     "flag": usa,
     "location": "San Diego, California"
+    },
+    {
+           "id": "2023_ARLINGTON",
+    "name": "Arlington Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 16, 2022",
+    "flag": usa,
+    "location": "Arlington, Texas"
+    },
+    {
+           "id": "2023_TORONTO",
+    "name": "Toronto Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 2, 2022",
+    "flag": canada,
+    "location": "Toronto, Canada"
+    },
+    {
+           "id": "2023_STUTTGART",
+    "name": "Stuttgart Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 3, 2022",
+    "flag": germany,
+    "location": "Stuttgart, Germany"
+    },
+    {
+           "id": "2023_BRISBANE",
+    "name": "Brisbane Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 3, 2022",
+    "flag": australia,
+    "location": "Brisbane, Australia"
+    },
+    {
+           "id": "2023_WARSAW",
+    "name": "Warsaw Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Nov 12, 2022",
+    "flag": poland,
+    "location": "Warsaw, Poland"
     },
 ];
 
