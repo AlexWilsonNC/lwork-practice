@@ -317,6 +317,12 @@ const customLabelsConfig = {
     },
     '2023': {
         'blank-substitute': 'Other',
+        'blank-stonjourner': 'Stonjourner',
+        'arceus-aggron': 'Arceus Aggron',
+        'calyrex-shadow-rider-arceus': 'Shadow Rider Arceus',
+        'calyrex-ice-rider-palkia-origin': 'Palkia Ice Rider',
+        'leafeon-comfey': 'Leafeon LZ Box',
+        'blank-blissey': 'Blissey',
         'blank-durant': 'Durant',
         'frosmoth-inteleon': 'Frosmoth Inteleon',
         'palkia-origin-vikavolt': 'Palkia Vikavolt',

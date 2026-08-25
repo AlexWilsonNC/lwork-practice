@@ -2593,6 +2593,42 @@ const tournamentList = [
     "flag": poland,
     "location": "Warsaw, Poland"
     },
+    {
+           "id": "2023_LILLE",
+    "name": "Lille Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Oct 22, 2022",
+    "flag": france,
+    "location": "Lille, France"
+    },
+    {
+           "id": "2023_SALT_LAKE_CITY",
+    "name": "Salt Lake City Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Oct 14, 2022",
+    "flag": usa,
+    "location": "Salt Lake City, Utah"
+    },
+    {
+           "id": "2023_PEORIA",
+    "name": "Peoria Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 30, 2022",
+    "flag": usa,
+    "location": "Peoria, Illinois"
+    },
+    {
+           "id": "2023_BILBAO",
+    "name": "Bilbao Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Sep 17, 2022",
+    "flag": spain,
+    "location": "Bilbao, Spain"
+    },
 ];
 
 const parseDate = (dateStr) => {
