@@ -11,6 +11,7 @@ import regional25 from '../assets/event-logo/regionals-2025.png';
 import regionals from '../assets/event-logo/regionals-hd.png';
 import internats25 from '../assets/event-logo/internats-2025.png';
 import speSeries from '../assets/profile-pics/play-pokemon-logo.png';
+import worldsOpen from '../assets/profile-pics/play-pokemon-logo.png';
 import worlds from '../assets/event-logo/worlds-hd.png';
 import premierBallLeague from '../assets/event-logo/premier-ball-league.png';
 import malaysiaChampionships from '../assets/event-logo/ch-malaysia.png';
@@ -46,6 +47,7 @@ const logos = {
     retro: retro,
     regionals: regionals,
     speSeries: speSeries,
+    worldsOpen: worldsOpen,
     ogInternats: ogInternats,
     worlds: worlds,
     indonesiaChampionships: indonesiaChampionships,
@@ -367,7 +369,7 @@ const PlayerProfile = () => {
             return 'other';
         }
 
-        if (name.includes('world championship') || logo.includes('worlds')) {
+        if (name.includes('world championship') || logo === ('worlds')) {
             return 'worlds';
         }
 
