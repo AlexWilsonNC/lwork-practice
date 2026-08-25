@@ -2458,6 +2458,105 @@ const tournamentList = [
     "flag": usa,
     "location": "Fort Wayne, Indiana"
     },
+    {
+           "id": "2023_CHARLOTTE",
+    "name": "Charlotte Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 23, 2023",
+    "flag": usa,
+    "location": "Charlotte, North Carolina"
+    },
+    {
+           "id": "2023_CHARLOTTE",
+    "name": "Charlotte Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 23, 2023",
+    "flag": usa,
+    "location": "Charlotte, North Carolina"
+    },
+    {
+           "id": "2023_UTRECHT",
+    "name": "Utrecht Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 18, 2023",
+    "flag": netherlands,
+    "location": "Utrecht, Netherlands"
+    },
+    {
+           "id": "2023_NATAL",
+    "name": "Natal Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 11, 2023",
+    "flag": brazil,
+    "location": "Natal, Brazil"
+    },
+    {
+           "id": "2023_VANCOUVER",
+    "name": "Vancouver Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 10, 2023",
+    "flag": canada,
+    "location": "Vancouver, Canada"
+    },
+    {
+           "id": "2023_PERTH",
+    "name": "Perth Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 4, 2023",
+    "flag": australia,
+    "location": "Perth, Australia"
+    },
+    {
+           "id": "2023_BOCHUM",
+    "name": "Bochum Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 25, 2023",
+    "flag": germany,
+    "location": "Bochum, Germany"
+    },
+    {
+           "id": "2023_KNOXVILLE",
+    "name": "Knoxville Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 24, 2023",
+    "flag": usa,
+    "location": "Knoxville, Tennessee"
+    },
+    {
+           "id": "2023_ORLANDO",
+    "name": "Orlando Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 3, 2023",
+    "flag": usa,
+    "location": "Orlando, Florida"
+    },
+    {
+           "id": "2023_LIVERPOOL",
+    "name": "Liverpool Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 21, 2023",
+    "flag": uk,
+    "location": "Liverpool, United Kingdom"
+    },
+    {
+           "id": "2023_SAN_DIEGO",
+    "name": "San Diego Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 6, 2023",
+    "flag": usa,
+    "location": "San Diego, California"
+    },
 ];
 
 const parseDate = (dateStr) => {
