@@ -257,7 +257,7 @@ const promoSets = {
     "LOR": "PR-SW",
     "PGO": "PR-SW",
     "ASR": "PR-SW",
-    "BRS": ["PR-SW", "PRE"],
+    "BRS": ["PR-SW", "PRE", "ASR"],
     "BST": ["PR-SW", "PAF"],
     "CEC": "PR-SM",
     "HIF": "PR-SM",

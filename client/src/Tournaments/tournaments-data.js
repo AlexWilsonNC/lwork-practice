@@ -2657,6 +2657,46 @@ const tournamentList = [
     "flag": uk,
     "location": "London, UK"
     },
+    {
+            "id": "2022_MILWAUKEE",
+    "name": "Milwaukee Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 17, 2022",
+    "flag": usa
+    },
+    {
+            "id": "2022_MELBOURNE",
+    "name": "Melbourne Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 11, 2022",
+    "flag": australia
+    },
+    {
+            "id": "2022_SANTIAGO",
+    "name": "Santiago Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 4, 2022",
+    "flag": chile
+    },
+    {
+            "id": "2022_MILAN",
+    "name": "Milan Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 4, 2022",
+    "flag": italy
+    },
+    {
+            "id": "2022_BREMEN",
+    "name": "Bremen Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 28, 2022",
+    "flag": germany
+    },
 ];
 
 const parseDate = (dateStr) => {
