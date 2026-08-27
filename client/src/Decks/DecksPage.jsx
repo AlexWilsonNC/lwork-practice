@@ -13,6 +13,7 @@ const formatOrder = [
   "SVI-ASC",
   "SVI-PFL",
   "SVI-MEG",
+
   "SVI-BLK",
   "SVI-DRI",
   "SVI-JTG",
@@ -20,19 +21,28 @@ const formatOrder = [
   "BRS-SSP",
   "BRS-SCR",
   "BRS-SFA",
+
   "BRS-TWM",
   "BRS-TEF",
   "BST-PAF",
   "BST-PAR",
   "BST-MEW",
+  "BST-OBF",
+
   "BST-PAL",
   "BST-SVI",
   "SSH-CRZ",
   "SSH-SIT",
+  "SSH-LOR",
+
   "SSH-PGO",
   "SSH-ASR",
   "SSH-BRS",
+
+  "TEU-CRE",
+
   "UPR-SSH",
+  
   "UPR-CEC",
   "UPR-UNM",
   "SUM-UNB",
@@ -468,38 +478,52 @@ const Decks = () => {
                   <option value="TEF-CRI">TEF-CRI</option>
                   <option value="TEF-POR">TEF-POR</option>
                   <option value="SVI-ASC">SVI-ASC</option>
-                </optgroup>
-
-                <optgroup label="2025">
                   <option value="SVI-PFL">SVI-PFL</option>
                   <option value="SVI-MEG">SVI-MEG</option>
+                  <option value="SVI-BLK">SVI-BLK</option>
+                </optgroup>
+
+                {/* complete */}
+                <optgroup label="2025">
                   <option value="SVI-BLK">SVI-BLK</option>
                   <option value="SVI-DRI">SVI-DRI</option>
                   <option value="SVI-JTG">SVI-JTG</option>
                   <option value="BRS-PRE">BRS-PRE</option>
+                  <option value="BRS-SCR">BRS-SSP</option>
+                  <option value="BRS-SCR">BRS-SCR</option>
+                  <option value="BRS-SFA">BRS-SFA</option>
                 </optgroup>
 
+                {/* complete */}
                 <optgroup label="2024">
-                  <option value="BRS-SCR">BRS-SCR</option>
                   <option value="BRS-SFA">BRS-SFA</option>
                   <option value="BRS-TWM">BRS-TWM</option>
                   <option value="BRS-TEF">BRS-TEF</option>
                   <option value="BST-PAF">BST-PAF</option>
-                </optgroup>
-
-                <optgroup label="2023">
                   <option value="BST-PAR">BST-PAR</option>
                   <option value="BST-MEW">BST-MEW</option>
+                  <option value="BST-OBF">BST-OBF</option>
+                </optgroup>
+
+                {/* complete */}
+                <optgroup label="2023">
                   <option value="BST-PAL">BST-PAL</option>
                   <option value="BST-SVI">BST-SVI</option>
                   <option value="SSH-CRZ">SSH-CRZ</option>
+                  <option value="SSH-SIT">SSH-SIT</option>
+                  <option value="SSH-LOR">SSH-LOR</option>
+                  <option value="SSH-PGO">SSH-PGO</option>
                 </optgroup>
 
+                {/* complete */}
                 <optgroup label="2022">
-                  <option value="SSH-SIT">SSH-SIT</option>
                   <option value="SSH-PGO">SSH-PGO</option>
                   <option value="SSH-ASR">SSH-ASR</option>
                   <option value="SSH-BRS">SSH-BRS</option>
+                </optgroup>
+
+                <optgroup label="2021">
+                  <option value="TEU-CRE">TEU-CRE</option>
                 </optgroup>
 
                 <optgroup label="2020">
