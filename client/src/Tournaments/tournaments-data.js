@@ -2697,6 +2697,46 @@ const tournamentList = [
     "date": "May 28, 2022",
     "flag": germany
     },
+    {
+           "id": "2022_VANCOUVER",
+    "name": "Vancouver Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 27, 2022",
+    "flag": canada
+    },
+    {
+           "id": "2022_PERTH",
+    "name": "Perth Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 21, 2022",
+    "flag": australia
+    },
+    {
+           "id": "2022_SECAUCUS",
+    "name": "Secaucus Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 20, 2022",
+    "flag": usa
+    },
+    {
+           "id": "2022_LILLE",
+    "name": "Lille Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 21, 2022",
+    "flag": france
+    },
+    {
+           "id": "2022_BILBAO",
+    "name": "Bilbao Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 7, 2022",
+    "flag": spain
+    },
 ];
 
 const parseDate = (dateStr) => {
