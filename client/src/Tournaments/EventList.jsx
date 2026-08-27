@@ -704,8 +704,9 @@ const EventList = () => {
                   <option value="internationals">Internationals</option>
                   <option value="regionals">Regionals</option>
                   <option value="speSeries">Special Championships</option>
-                  <option value="worldsOpen">Worlds Open</option>
                   {viewType === 'completed' && (<option value="nationals">Nationals</option>)}
+                  <option value="worldsOpen">Worlds Open</option>
+                  <option value="ptcgo">Players Cup</option>
                 </optgroup>
                 <optgroup label="Asia-Pacific">
                   <option value="asiachampionship">Countries Championship</option>

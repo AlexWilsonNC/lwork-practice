@@ -42,6 +42,7 @@ import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-lo
 import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 import championsLeague from '../assets/event-logo/champions-league.png';
 import championshipSeries27 from '../assets/event-logo/2027-championship-series.webp';
+import ptcgo from '../assets/event-logo/ptcgo.png';
 
 const logos = {
     retro: retro,
@@ -78,6 +79,7 @@ const logos = {
     megaTropicalBattle: megaTropicalBattle,
     championsLeague: championsLeague,
     championshipSeries27: championshipSeries27,
+    ptcgo: ptcgo,
 }
 
 const PlayerProfileContainer = styled.div`

@@ -544,15 +544,31 @@ const PlayerDeck = () => {
                 setPlayerData(player);
 
                 let pl = null;
-                if (typeof player.placing === 'number' && player.placing > 0) {
+                const usesExplicitPlacement = [
+                    '2023_LONDON_OPEN',
+                    '2021_PLAYERS_CUP_IV'
+                ].includes(eventId);
+
+                if (
+                    usesExplicitPlacement &&
+                    typeof player.placement === 'number' &&
+                    player.placement > 0
+                ) {
+                    pl = player.placement;
+                } else if (
+                    typeof player.placing === 'number' &&
+                    player.placing > 0
+                ) {
                     pl = player.placing;
                 } else {
                     const idx = divisionData.findIndex(p =>
                         normalizeString(p.name) === normalizeString(player.name) &&
                         p.flag === player.flag
                     );
+
                     pl = idx >= 0 ? idx + 1 : null;
                 }
+
                 setPlacement(pl);
 
                 const fmt = division === 'professors'

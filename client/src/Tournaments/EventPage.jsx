@@ -51,6 +51,7 @@ import superTrainerShowdown from '../assets/event-logo/super-trainer-showdown-lo
 import megaTropicalBattle from '../assets/event-logo/mega-tropical-battle.png';
 import championsLeague from '../assets/event-logo/champions-league.png';
 import championshipSeries27 from '../assets/event-logo/2027-championship-series.webp';
+import ptcgo from '../assets/event-logo/ptcgo.png';
 
 import argentina from '../assets/flags/argentina.png';
 import andorra from '../assets/flags/andorra.png';
@@ -116,8 +117,10 @@ import guatemala from '../assets/flags/guatemala.png';
 import bolivia from '../assets/flags/bolivia.png';
 import all from '../assets/flags/all.png';
 import unknown from '../assets/flags/unknown.png';
+import online from '../assets/flags/wifi.png';
 
 const flagForDiffPurpose = {
+    online: online,
     usa: usa,
     italy: italy,
     southAfrica: southAfrica,
@@ -207,6 +210,7 @@ const logos = {
     megaTropicalBattle: megaTropicalBattle,
     championsLeague: championsLeague,
     championshipSeries27: championshipSeries27,
+    ptcgo: ptcgo,
 };
 
 const orderedSets = [

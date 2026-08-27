@@ -134,11 +134,12 @@ const formatName = (name) => {
 
 export const displayResults = (players, eventId, division, customPlacement, eventFormat) => {
 
-    const hasPods =
-        eventId === '2023_LONDON_OPEN' &&
-        players.some(player => player.pod);
+    const explicitPlacementEvents = [
+        '2023_LONDON_OPEN',
+        '2021_PLAYERS_CUP_IV'
+    ];
 
-    const sortedPlayers = hasPods
+    const sortedPlayers = explicitPlacementEvents
         ? [...players].sort((a, b) => {
             const aPlacement = a.placement ?? a.placing ?? 9999;
             const bPlacement = b.placement ?? b.placing ?? 9999;
@@ -163,16 +164,7 @@ export const displayResults = (players, eventId, division, customPlacement, even
         <OlResults className='result-list-ol'>
             {sortedPlayers.map((player, index) => {
 
-                /*
-                 * Pod events must preserve each player's actual pod placement.
-                 *
-                 * Example:
-                 * 1 Yellow
-                 * 1 Blue
-                 * 2 Yellow
-                 * 2 Blue
-                 */
-                const placement = hasPods
+                const placement = explicitPlacementEvents
                     ? (player.placement ?? player.placing ?? index + 1)
                     : (
                         Number.isInteger(customPlacement)
@@ -180,9 +172,7 @@ export const displayResults = (players, eventId, division, customPlacement, even
                             : (
                                 player.placing != null
                                     ? player.placing
-                                    : player.placement != null
-                                        ? player.placement
-                                        : index + 1
+                                    : index + 1
                             )
                     );
 
