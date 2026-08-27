@@ -2737,6 +2737,54 @@ const tournamentList = [
     "date": "May 7, 2022",
     "flag": spain
     },
+    {
+           "id": "2022_INDIANAPOLIS",
+    "name": "Indianapolis Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 6, 2022",
+    "flag": usa
+    },
+    {
+           "id": "2022_JOINVILLE",
+    "name": "Joinville Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 7, 2022",
+    "flag": brazil
+    },
+    {
+           "id": "2022_SAO_PAULO",
+    "name": "São Paulo Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Apr 2, 2022",
+    "flag": brazil
+    },
+    {
+           "id": "2022_LIVERPOOL",
+    "name": "Liverpool Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 26, 2022",
+    "flag": uk
+    },
+    {
+           "id": "2022_SALT_LAKE_CITY",
+    "name": "Salt Lake City Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 18, 2022",
+    "flag": usa
+    },
+    {
+           "id": "2022_BRISBANE",
+    "name": "Brisbane Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 12, 2022",
+    "flag": australia
+    },
 ];
 
 const parseDate = (dateStr) => {
