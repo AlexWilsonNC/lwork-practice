@@ -1510,8 +1510,7 @@ const tournamentList = [
         "date": "Aug 28, 2026",
         "flag": usa,
         "location": "San Francisco, California",
-        "eventSite": "https://worlds.pokemon.com/en-us",
-        "results": false
+        "eventSite": "https://worlds.pokemon.com/en-us"
     },
     {
         "id": "2025_VANCOUVER",

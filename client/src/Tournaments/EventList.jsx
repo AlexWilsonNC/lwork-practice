@@ -431,9 +431,19 @@ const EventList = () => {
         (countryFilter ? event.flag === countryFilter : true) &&
         (yearFilter ? eventSeason === yearFilter : true) &&
         (() => {
+          const now = new Date();
+
+          // Exception: 2026 Worlds should display as completed immediately
+          if (event.id === '2026_WORLDS') {
+            return showUpcoming ? false : true;
+          }
+
           const cutoffDate = new Date(eventDate);
           cutoffDate.setDate(cutoffDate.getDate() + 2);
-          return showUpcoming ? cutoffDate >= new Date() : cutoffDate < new Date();
+
+          return showUpcoming
+            ? cutoffDate >= now
+            : cutoffDate < now;
         })() &&
         event.eventType !== 'retro' &&
         (!showUpcoming && showOnlyWithResults ? event.id && event.results !== false : true);
@@ -1044,7 +1054,7 @@ const EventList = () => {
                                 </button> */}
                                 {currentPlan && (
                                   <>
-                                  <hr></hr>
+                                    <hr></hr>
                                     <button
                                       type="button"
                                       onClick={() => {
