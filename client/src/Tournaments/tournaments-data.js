@@ -45,6 +45,7 @@ import canada from '../assets/flags/canada.png';
 import chile from '../assets/flags/chile.png';
 import china from '../assets/flags/china.png';
 import colombia from '../assets/flags/colombia.png';
+import costaRica from '../assets/flags/costa-rica.png';
 import croatia from '../assets/flags/croatia.png';
 import czechia from '../assets/flags/czech-republic.png';
 import denmark from '../assets/flags/denmark.png';
@@ -53,6 +54,7 @@ import elSalvador from '../assets/flags/el-salvador.png';
 import finland from '../assets/flags/finland.png';
 import france from '../assets/flags/france.png';
 import germany from '../assets/flags/germany.png';
+import guatemala from '../assets/flags/guatemala.png';
 import hongKong from '../assets/flags/hong-kong.png';
 import indonesia from '../assets/flags/indonesia.png';
 import italy from '../assets/flags/italy.png';
@@ -2794,6 +2796,143 @@ const tournamentList = [
     "eventLogo": ptcgo,
     "date": "Jul 30, 2021",
     "flag": online
+    },
+    {
+           "id": "2021_PLAYERS_CUP_III",
+    "name": "Players Cup III Global Finals",
+    "eventType": "ptcgo",
+    "eventLogo": ptcgo,
+    "date": "Apr 23, 2021",
+    "flag": online
+    },
+    {
+           "id": "2021_PLAYERS_CUP_II",
+    "name": "Players Cup II Global Finals",
+    "eventType": "ptcgo",
+    "eventLogo": ptcgo,
+    "date": "Dec 11, 2020",
+    "flag": online
+    },
+    {
+           "id": "2021_PLAYERS_CUP_I",
+    "name": "Players Cup I Global Finals",
+    "eventType": "ptcgo",
+    "eventLogo": ptcgo,
+    "date": "Aug 29, 2020",
+    "flag": online
+    },
+    {
+           "id": "2020_PLAYERS_CUP_INVITATIONAL",
+    "name": "Players Cup Kickoff Invitational",
+    "eventType": "ptcgo",
+    "eventLogo": ptcgo,
+    "date": "Jun 13, 2020",
+    "flag": online
+    },
+    {
+           "id": "2020_SANTIAGO",
+    "name": "Santiago Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 14, 2020",
+    "flag": chile
+    },
+    {
+           "id": "2020_GUATEMALA",
+    "name": "Guatemala Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 14, 2020",
+    "flag": guatemala
+    },
+    {
+           "id": "2020_PERTH",
+    "name": "Perth Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 14, 2020",
+    "flag": australia
+    },
+    {
+           "id": "2020_MALMO",
+    "name": "Malmö Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 7, 2020",
+    "flag": sweden
+    },
+    {
+          "id": "2020_PUERTO_RICO",
+    "name": "Puerto Rico Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Feb 29, 2020",
+    "flag": puertoRico
+    },
+    {
+          "id": "2020_COLLINSVILLE",
+    "name": "Collinsville Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Feb 28, 2020",
+    "flag": usa,
+    "expanded": true
+    },
+    {
+          "id": "2020_LIMA",
+    "name": "Lima Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Feb 15, 2020",
+    "flag": peru
+    },
+    {
+          "id": "2020_COSTA_RICA",
+    "name": "Costa Rica Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Feb 15, 2020",
+    "flag": costaRica
+    },
+    {
+          "id": "2020_GUAIBA",
+    "name": "Guaíba Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Feb 15, 2020",
+    "flag": brazil
+    },
+    {
+          "id": "2020_BUENOS_AIRES",
+    "name": "Buenos Aires Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Feb 8, 2020",
+    "flag": argentina
+    },
+    {
+          "id": "2020_SAO_PAULO",
+    "name": "São Paulo Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 25, 2020",
+    "flag": brazil
+    },
+    {
+          "id": "2020_DALLAS",
+    "name": "Dallas Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 17, 2020",
+    "flag": usa
+    },
+    {
+          "id": "2020_BOCHUM",
+    "name": "Bochum Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jan 11, 2020",
+    "flag": germany
     },
 ];
 

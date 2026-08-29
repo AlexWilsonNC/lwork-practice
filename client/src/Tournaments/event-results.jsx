@@ -136,7 +136,11 @@ export const displayResults = (players, eventId, division, customPlacement, even
 
     const explicitPlacementEvents = [
         '2023_LONDON_OPEN',
-        '2021_PLAYERS_CUP_IV'
+        '2021_PLAYERS_CUP_IV',
+        '2021_PLAYERS_CUP_III',
+        '2021_PLAYERS_CUP_II',
+        '2021_PLAYERS_CUP_I',
+        '2020_PLAYERS_CUP_INVITATIONAL'
     ];
 
     const sortedPlayers = explicitPlacementEvents

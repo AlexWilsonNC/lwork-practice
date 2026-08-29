@@ -97,6 +97,7 @@ const PlayerProfileContainer = styled.div`
     background-position: center;
     background-repeat: no-repeat;
   }
+    h1 { color: ${({ theme }) => theme.text}; }
     @media screen and (max-width: 1000px) {
         .center-error {
             height: 60vh !important;
@@ -495,7 +496,17 @@ const PlayerProfile = () => {
                 {/* <meta name='twitter:image' content={eventData.thumbnail} /> */}
             </Helmet>
             <div className='player-results-container meep'>
-                <div className='completed-n-upcoming'>
+                {/* <div className='search-input'>
+                    <span className="material-symbols-outlined">search</span>
+                    <input
+                        type="text"
+                        className='searcheventsfield'
+                        placeholder="Search results..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                    />
+                </div> */}
+                {/* <div className='completed-n-upcoming'>
                     <div className='bts-in'>
                         <div className="flag-container">
                             <img
@@ -509,16 +520,68 @@ const PlayerProfile = () => {
                         </div>
                         <h1>{formatName(player.name)}</h1>
                     </div>
-                    {/* <div className='search-input'>
-                        <span className="material-symbols-outlined">search</span>
-                        <input
-                            type="text"
-                            className='searcheventsfield'
-                            placeholder="Search results..."
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                        />
-                    </div> */}
+                </div> */}
+                <div className="accomplishments-card">
+                    <div className="accomplishments-header">
+                        <div className='bts-in'>
+                            <div className="flag-container">
+                                <img
+                                    className='flag-size'
+                                    src={flags[player.flag]}
+                                    alt="flag"
+                                />
+                                <div className="flag-tooltip">
+                                    {getCountryName(player.flag)}
+                                </div>
+                            </div>
+                            <h1>{formatName(player.name)}</h1>
+                        </div>
+                        {/* <p>Accomplishment count by event type</p> */}
+                        <hr className='show-700-only-acc'></hr>
+                        <div className="division-filter">
+                            <span>Division</span>
+                            <div className="division-filter-buttons">
+                                {[
+                                    { key: 'all', label: 'All' },
+                                    { key: 'masters', label: 'Masters' },
+                                    { key: 'seniors', label: 'Seniors' },
+                                    { key: 'juniors', label: 'Juniors' },
+                                ].map(option => (
+                                    <button
+                                        key={option.key}
+                                        className={accomplishmentDivision === option.key ? 'active' : ''}
+                                        onClick={() => setAccomplishmentDivision(option.key)}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <table className="accomplishments-table">
+                        <thead>
+                            <tr>
+                                <th>Finish</th>
+                                {accomplishmentColumns.map(col => (
+                                    <th key={col.key}>{col.label}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {accomplishmentSummary.map(row => (
+                                <tr key={row.label}>
+                                    <td>{row.label}</td>
+                                    {accomplishmentColumns.map(col => (
+                                        <td key={col.key}>
+                                            <span className={row.counts[col.key] > 0 ? 'accomplishment-count has-count' : 'accomplishment-count'}>
+                                                {row.counts[col.key]}
+                                            </span>
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
                 <div className='sort-buttons'>
                     <button
@@ -616,58 +679,6 @@ const PlayerProfile = () => {
                         {showAllResults ? 'Show Less Results' : 'Show All Results'}
                     </button>
                 )}
-                <div className="accomplishments-card">
-                    <div className="accomplishments-header">
-                        <div>
-                            <h2>{formatName(player.name)}</h2>
-                            <p>Accomplishment count by event type</p>
-                        </div>
-                        <hr className='show-700-only-acc'></hr>
-                        <div className="division-filter">
-                            <span>Division</span>
-                            <div className="division-filter-buttons">
-                                {[
-                                    { key: 'all', label: 'All' },
-                                    { key: 'masters', label: 'Masters' },
-                                    { key: 'seniors', label: 'Seniors' },
-                                    { key: 'juniors', label: 'Juniors' },
-                                ].map(option => (
-                                    <button
-                                        key={option.key}
-                                        className={accomplishmentDivision === option.key ? 'active' : ''}
-                                        onClick={() => setAccomplishmentDivision(option.key)}
-                                    >
-                                        {option.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    <table className="accomplishments-table">
-                        <thead>
-                            <tr>
-                                <th>Finish</th>
-                                {accomplishmentColumns.map(col => (
-                                    <th key={col.key}>{col.label}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {accomplishmentSummary.map(row => (
-                                <tr key={row.label}>
-                                    <td>{row.label}</td>
-                                    {accomplishmentColumns.map(col => (
-                                        <td key={col.key}>
-                                            <span className={row.counts[col.key] > 0 ? 'accomplishment-count has-count' : 'accomplishment-count'}>
-                                                {row.counts[col.key]}
-                                            </span>
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
             </div>
             <p className='center-me italic playermayhavemore'>~ Player may have additional results not yet documented on PTCG Legends yet.</p>
         </PlayerProfileContainer>

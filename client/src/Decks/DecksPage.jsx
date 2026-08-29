@@ -40,8 +40,15 @@ const formatOrder = [
   "SSH-BRS",
 
   "TEU-CRE",
+  "TEU-BST",
+  "TEU-VIV",
+  "TEU-DAA",
 
+  "UPR-RCL",
   "UPR-SSH",
+  "UPR-CEC",
+  "BLW-SSH",
+  "BLW-CEC",
   
   "UPR-CEC",
   "UPR-UNM",
@@ -522,12 +529,22 @@ const Decks = () => {
                   <option value="SSH-BRS">SSH-BRS</option>
                 </optgroup>
 
+                {/* complete */}
                 <optgroup label="2021">
                   <option value="TEU-CRE">TEU-CRE</option>
+                  <option value="TEU-BST">TEU-BST</option>
+                  <option value="TEU-VIV">TEU-VIV</option>
+                  <option value="TEU-DAA">TEU-DAA</option>
                 </optgroup>
 
+                {/* complete */}
                 <optgroup label="2020">
+                  <option value="UPR-RCL">UPR-RCL</option>
                   <option value="UPR-SSH">UPR-SSH</option>
+                  <option value="UPR-CEC">UPR-CEC</option>
+                  {/* expanded */}
+                  <option value="BLW-SSH">BLW-SSH</option>
+                  <option value="BLW-CEC">BLW-CEC</option>
                 </optgroup>
 
                 <optgroup label="2019">

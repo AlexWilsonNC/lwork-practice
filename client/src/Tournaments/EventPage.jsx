@@ -127,6 +127,7 @@ const flagForDiffPurpose = {
     indonesia: indonesia,
     japan: japan,
     mexico: mexico,
+    costaRica: costaRica,
     peru: peru,
     philippines: philippines,
     chile: chile,
@@ -808,6 +809,8 @@ const forcedArchetypeSprites = {
     'Hydrapple': ['hydrapple'],
     'Miraidon': ['miraidon'],
     'Eternatus VMAX': ['eternatus-eternamax'],
+    'Victini VMAX': ['victini'],
+    'Pikarom': ['pikachu-zekrom-tagteam'],
 };
 
 const getForcedSprites = (key, fallback = []) => {
@@ -2748,7 +2751,9 @@ const EventPage = () => {
                                 )}
                             </p>
                         )}
-
+                        {eventData.expanded && (
+                            <p style={{fontStyle: 'italic'}}>{eventData.expanded}</p>
+                        )}
                         {getPlayerCount(division)}
                     </div>
                 </div>

@@ -546,7 +546,11 @@ const PlayerDeck = () => {
                 let pl = null;
                 const usesExplicitPlacement = [
                     '2023_LONDON_OPEN',
-                    '2021_PLAYERS_CUP_IV'
+                    '2021_PLAYERS_CUP_IV',
+                    '2021_PLAYERS_CUP_III',
+                    '2021_PLAYERS_CUP_II',
+                    '2021_PLAYERS_CUP_I',
+                    '2020_PLAYERS_CUP_INVITATIONAL'
                 ].includes(eventId);
 
                 if (
@@ -869,7 +873,7 @@ const PlayerDeck = () => {
                                     </p>
                                     {eventData && <p><Link className='blue-link bold' to={`/tournaments/${eventId}/${division}`}>{eventData.name}</Link></p>}
                                     {eventData && <p><span className='bold'>Date:</span> {eventData.date}</p>}
-                                    {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link></p>}
+                                    {eventData && <p><span className='bold'>Format:</span> <Link className='blue-link' to={`/decks?format=${division === 'professors' ? eventData.formatProfessors : eventData.format}`}>{division === 'professors' ? eventData.formatProfessors : eventData.format}</Link> {eventData.expanded}</p>}
                                 </>
                             )}
                         </div>
