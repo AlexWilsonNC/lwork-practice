@@ -2830,7 +2830,7 @@ const tournamentList = [
     },
     {
            "id": "2020_SANTIAGO",
-    "name": "Santiago Special Event",
+    "name": "Santiago Special Event 2",
     "eventType": "speSeries",
     "eventLogo": speSeries,
     "date": "Mar 14, 2020",
@@ -2875,7 +2875,7 @@ const tournamentList = [
     "eventLogo": regionals,
     "date": "Feb 28, 2020",
     "flag": usa,
-    "expanded": true
+    "expanded": "(Expanded)"
     },
     {
           "id": "2020_LIMA",
@@ -2923,7 +2923,8 @@ const tournamentList = [
     "eventType": "regionals",
     "eventLogo": regionals,
     "date": "Jan 17, 2020",
-    "flag": usa
+    "flag": usa,
+    "expanded": "(Expanded)"
     },
     {
           "id": "2020_BOCHUM",
@@ -2979,6 +2980,64 @@ const tournamentList = [
     "eventType": "regionals",
     "eventLogo": regionals,
     "date": "Nov 29, 2019",
+    "flag": usa
+    },
+    {
+          "id": "2020_PORTLAND",
+    "name": "Portland Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Nov 8, 2019",
+    "flag": usa,
+    "expanded": "(Expanded)"
+    },
+    {
+         "id": "2020_PARIS",
+    "name": "Paris Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Nov 2, 2019",
+    "flag": france
+    },
+    {
+         "id": "2020_RICHMOND",
+    "name": "Richmond Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Nov 1, 2019",
+    "flag": usa,
+    "expanded": "(Expanded)",
+    },
+    {
+         "id": "2020_KNOXVILLE",
+    "name": "Knoxville Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Oct 11, 2019",
+    "flag": usa
+    },
+    {
+         "id": "2020_SANTIAGO1",
+    "name": "Santiago Special Event 1",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Oct 12, 2019",
+    "flag": chile
+    },
+    {
+         "id": "2020_COLOGNE",
+    "name": "Cologne Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 28, 2019",
+    "flag": germany
+    },
+    {
+         "id": "2020_ATLANTIC_CITY",
+    "name": "Atlantic City Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 27, 2019",
     "flag": usa
     },
 ];
