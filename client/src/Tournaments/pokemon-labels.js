@@ -1,5 +1,10 @@
 const customLabelsConfig = {
     '2026': {
+        'blank-lopunny-mega': 'Mega Lopunny',
+        'bronzong-dusknoir': 'Bronzong Dusknoir',
+        'blank-excadrill-mega': 'Mega Excadrill',
+        'blank-alakazam': 'Alakazam',
+        'alakazam-dusknoir': 'Alakazam Dusknoir',
         'iron-hands-magneton': 'Iron Hands Magneton',
         'blank-greninja-mega': 'Mega Greninja',
         'blank-beedrill': 'Beedrill',

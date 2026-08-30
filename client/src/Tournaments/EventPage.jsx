@@ -811,6 +811,7 @@ const forcedArchetypeSprites = {
     'Eternatus VMAX': ['eternatus-eternamax'],
     'Victini VMAX': ['victini'],
     'Pikarom': ['pikachu-zekrom-tagteam'],
+    'Alakazam': ['alakazam'],
 };
 
 const getForcedSprites = (key, fallback = []) => {
