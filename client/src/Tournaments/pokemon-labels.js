@@ -1,5 +1,6 @@
 const customLabelsConfig = {
     '2026': {
+        'thwackey-seaking': 'Festival Lead',
         'blank-lopunny-mega': 'Mega Lopunny',
         'bronzong-dusknoir': 'Bronzong Dusknoir',
         'blank-excadrill-mega': 'Mega Excadrill',
@@ -524,7 +525,7 @@ const customLabelsConfig = {
         'magcargo-oranguru': 'Magcargo Mill',
         'lucario-melmetal-tagteam-zacian-crowned': 'LucMetal Zacian',
         'oranguru-pidgeotto': 'Pidgeotto Control',
-        'adp-keldeo': 'ADP',
+        'adp-keldeo-resolute': 'ADP',
         'blank-adp': 'ADP',
         'blacephalon-pidgeotto': 'Baby Blowns',
         'blacephalon-naganadel': 'Blacephalon Naganadel',
@@ -545,6 +546,15 @@ const customLabelsConfig = {
         'rampardos-carracosta': 'Fossils',
         'pidgeotto-persian': 'Pidgeotto Checkmate',
         'blank-tangrowth': 'Tangrowth',
+        'spiritomb-adp': 'Spiritomb ADP',
+        'blank-lucario-melmetal-tagteam': 'LucMetal',
+        'adp-pheromosa-buzzwole-tagteam': 'ADP Pheromosa & Buzzwole',
+        'adp-glaceon': 'ADP Glaceon',
+        'persian-alola-spiritomb': 'Alolan Persian Spiritomb',
+        'quagsire-silvally': 'Quagsire Silvally',
+        'malamar-necrozma-ultra': 'Malamar',
+        'blank-charizard': 'Charizard',
+        'blacephalon-silvally': 'Blacephalon Silvally',
         // expanded
         'necrozma-ultra-garbodor': 'Ultra Necrozma Garbodor',
         'blank-necrozma-ultra': 'Ultra Necrozma',

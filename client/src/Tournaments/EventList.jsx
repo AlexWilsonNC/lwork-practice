@@ -54,6 +54,7 @@ import thailand from '../assets/flags/thailand.png';
 import usa from '../assets/flags/usa.png';
 import uk from '../assets/flags/uk.png';
 import unknown from '../assets/flags/unknown.png';
+import online from '../assets/flags/wifi.png';
 
 const countryNames = {
   'argentina': 'Argentina (Latin America)',
@@ -113,6 +114,7 @@ const countryNames = {
   'uk': 'United Kingdom (Europe)',
   'unknown': 'Unknown',
   'usa': 'USA (North America)',
+  'online': 'Online',
 };
 
 const UpcomingEvents = styled.div`
@@ -284,12 +286,12 @@ const FilterTop = styled.div`
 `;
 
 const regionFlags = {
-  'NA': [usa, canada, puertoRico],
-  'LA': [brazil, argentina, peru, colombia, mexico, chile, elSalvador, ecuador],
-  'EU': [germany, france, uk, spain, poland, austria, belarus, belgium, croatia, czechia, denmark, finland, italy, netherlands, norway, portugal, russia, slovakia, spain, sweden, switzerland],
-  'OC': [australia, newZealand],
-  'AP': [china, hongKong, indonesia, japan, southKorea, malaysia, philippines, singapore, taiwan, thailand],
-  'MS': [southAfrica]
+  'NA': [usa, canada, puertoRico, online],
+  'LA': [brazil, argentina, peru, colombia, mexico, chile, elSalvador, ecuador, online],
+  'EU': [germany, france, uk, spain, poland, austria, belarus, belgium, croatia, czechia, denmark, finland, italy, netherlands, norway, portugal, russia, slovakia, spain, sweden, switzerland, online],
+  'OC': [australia, newZealand, online],
+  'AP': [china, hongKong, indonesia, japan, southKorea, malaysia, philippines, singapore, taiwan, thailand, online],
+  'MS': [southAfrica, online]
 };
 
 function flagNameToKey(url) {
@@ -814,7 +816,7 @@ const EventList = () => {
                   croatia, czechia, denmark, ecuador, elSalvador, finland, france, germany, hongKong, indonesia,
                   italy, japan, southKorea, malaysia, mexico, netherlands, newZealand, norway, peru, philippines,
                   poland, portugal, puertoRico, russia, singapore, slovakia, southAfrica, spain, sweden,
-                  switzerland, taiwan, thailand, usa, uk, unknown
+                  switzerland, taiwan, thailand, usa, uk, unknown, online
                 }).find(([, img]) => img === event.flag)?.[0] || 'unknown';
                 return (
                   <tr

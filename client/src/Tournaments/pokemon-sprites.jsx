@@ -670,6 +670,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             secondSprite  = getPokemonSpriteURL('eelektrik');
         }    
     }                                                                    
+    else if (hasPokemon('Thwackey') && hasPokemon('Seaking') && !hasPokemon('Dipplin')) {
+            firstSprite  = getPokemonSpriteURL('thwackey');
+            secondSprite  = getPokemonSpriteURL('seaking');
+    }                                                                    
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {

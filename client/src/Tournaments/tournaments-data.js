@@ -2933,6 +2933,54 @@ const tournamentList = [
     "date": "Jan 11, 2020",
     "flag": germany
     },
+    {
+          "id": "2020_KUALA_LUMPUR",
+    "name": "Kuala Lumpur Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 21, 2019",
+    "flag": malaysia
+    },
+    {
+          "id": "2020_IQUIQUE",
+    "name": "Iquique Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Dec 14, 2019",
+    "flag": chile
+    },
+    {
+          "id": "2020_SAN_DIEGO",
+    "name": "San Diego Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 6, 2019",
+    "flag": usa
+    },
+    {
+          "id": "2020_SINGAPORE",
+    "name": "Singapore Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Dec 7, 2019",
+    "flag": singapore
+    },
+    {
+          "id": "2020_BRISBANE",
+    "name": "Brisbane Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Dec 7, 2019",
+    "flag": australia
+    },
+    {
+          "id": "2020_DAYTONA_BEACH",
+    "name": "Daytona Beach Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Nov 29, 2019",
+    "flag": usa
+    },
 ];
 
 const parseDate = (dateStr) => {
