@@ -361,8 +361,14 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
     }    
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex') && hasPokemon('Mega Kangaskhan ex') && (hasTrainer('Lillie\'s Pearl'))) {
+        const megaKangCount = getPokemonCount('Mega Kangaskhan ex');
+        if (megaKangCount > 3) {
+            firstSprite  = getPokemonSpriteURL('clefairy');
+            secondSprite  = getPokemonSpriteURL('kangaskhan-mega');
+        } else {
         firstSprite  = getPokemonSpriteURL('clefairy');
         secondSprite  = getPokemonSpriteURL('ogerpon');
+        }
     }
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
