@@ -646,7 +646,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Beedrill ex') && hasPokemon('Dudunsparce')) {
         secondSprite  = getPokemonSpriteURL('beedrill');
     }       
-    else if (hasPokemon('Metagross') && hasPokemon('Genesect ex')) {
+    else if (hasPokemon('Metagross') && hasPokemon('Genesect ex') && !hasPokemon('Mega Excadrill ex')) {
         secondSprite  = getPokemonSpriteURL('metagross');
     }       
     else if (hasPokemon('Iron Valiant ex') && hasPokemon('Rapid Strike Urshifu VMAX') && !hasPokemon('Inteleon VMAX')) {
@@ -659,7 +659,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             firstSprite  = getPokemonSpriteURL('metagross');
             secondSprite  = getPokemonSpriteURL('genesect');
         }
-    }                                      
+    }     
+    else if (hasPokemon('Mega Excadrill ex') && hasPokemon('Metang')) {
+        secondSprite  = getPokemonSpriteURL('excadrill-mega');
+    }                                    
     else if (hasPokemon('Mega Dragonite ex') && hasPokemon('Eelektrik')) {
         const megadragoniteCount = getPokemonCount('Mega Dragonite ex');
         if (megadragoniteCount >= 2) {
