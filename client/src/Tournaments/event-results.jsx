@@ -197,7 +197,8 @@ export const displayResults = (players, eventId, division, customPlacement, even
                 const deckLabel = getCustomLabel(
                     eventId,
                     player.sprite1,
-                    player.sprite2
+                    player.sprite2,
+                    player.decklist
                 );
 
                 const deckUrl =

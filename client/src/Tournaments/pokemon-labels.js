@@ -845,7 +845,7 @@ const customLabelsConfig = {
         'yveltal-seismitoad': 'Yveltal',
         'yveltal-crobat': 'Yveltal Bats',
         'raichu-leafeon': 'Raichu',
-        'seismitoad-shaymin-sky': 'Seismitoad Shaymin',        
+        'seismitoad-shaymin-sky': 'Seismitoad Shaymin',
         'manectric-mega-trubbish': 'Mega Manectric',
         'manectric-mega-reshiram': 'Mega Manectric',
         'raichu-bronzong': 'Raichu Box',
@@ -1326,11 +1326,11 @@ const customLabelsConfig = {
         'wigglytuff-hitmonchan': 'Wigglytuff',
         'wigglytuff-dodrio': 'Wigglytuff',
         'hitmonchan-zapdos': 'Haymaker',
-        'hitmonchan-sandslash' : 'Hitmonchan Sandslash',
-        'hitmonchan-dodrio' : 'Haymaker',
-        'wigglytuff-magmar' : 'Wigglytuff',
-        'blastoise-wigglytuff' : 'Rain Dance',
-        'magmar-arcanine' : 'Haymaker',
+        'hitmonchan-sandslash': 'Hitmonchan Sandslash',
+        'hitmonchan-dodrio': 'Haymaker',
+        'wigglytuff-magmar': 'Wigglytuff',
+        'blastoise-wigglytuff': 'Rain Dance',
+        'magmar-arcanine': 'Haymaker',
         'clefable-hitmonchan': 'Clefable',
         'aerodactyl-hitmonchan': 'Haymaker',
         'venusaur-kangaskhan': 'Venusaur',
@@ -1360,32 +1360,32 @@ const customLabelsConfig = {
     },
 };
 
-const getCustomLabel = (eventId, sprite1, sprite2) => {
+const getCustomLabel = (eventId, sprite1, sprite2, decklist = null) => {
     let eventYearKey = '';
     if (eventId.includes('1999')) {
-      eventYearKey = '1999';
+        eventYearKey = '1999';
     } else if (eventId.includes('2000')) {
-      eventYearKey = '2000';
+        eventYearKey = '2000';
     } else if (eventId.includes('2001')) {
-      eventYearKey = '2001';
+        eventYearKey = '2001';
     } else if (eventId.includes('2002')) {
-      eventYearKey = '2002';
+        eventYearKey = '2002';
     } else if (eventId.includes('2003')) {
-      eventYearKey = '2003';
+        eventYearKey = '2003';
     } else if (eventId.includes('2004')) {
-      eventYearKey = '2004';
+        eventYearKey = '2004';
     } else if (eventId.includes('2005')) {
-      eventYearKey = '2005';
+        eventYearKey = '2005';
     } else if (eventId.includes('2006')) {
-      eventYearKey = '2006';
+        eventYearKey = '2006';
     } else if (eventId.includes('2007')) {
-      eventYearKey = '2007';
+        eventYearKey = '2007';
     } else if (eventId.includes('2008')) {
-      eventYearKey = '2008';
+        eventYearKey = '2008';
     } else if (eventId.includes('2009')) {
-      eventYearKey = '2009';
+        eventYearKey = '2009';
     } else if (eventId.includes('2010')) {
-      eventYearKey = '2010';
+        eventYearKey = '2010';
     } else if (eventId.includes('2011')) {
         eventYearKey = '2011';
     } else if (eventId.includes('2012')) {
@@ -1413,19 +1413,36 @@ const getCustomLabel = (eventId, sprite1, sprite2) => {
     } else if (eventId.includes('2023')) {
         eventYearKey = '2023';
     } else if (eventId.includes('2024')) {
-    eventYearKey = '2024';
+        eventYearKey = '2024';
     } else if (eventId.includes('2025')) {
-    eventYearKey = '2025';
+        eventYearKey = '2025';
     } else if (eventId.includes('2026')) {
-    eventYearKey = '2026';
+        eventYearKey = '2026';
     }
-const eventLabels = customLabelsConfig[eventYearKey];
-  // always fall back to ‘blank’ if sprite1 is empty
-  const key = `${sprite1 || 'blank'}-${sprite2}`;
-  if (eventLabels) {
-    return eventLabels[key] || key;
-  }
-  return key;
+
+    const hasDragapult =
+        sprite1 === 'dragapult' ||
+        sprite2 === 'dragapult';
+
+    if (hasDragapult && decklist?.trainer) {
+        const hasFourCrushingHammers = decklist.trainer.some(
+            card =>
+                card.name?.toLowerCase() === 'crushing hammer' &&
+                Number(card.count) >= 3
+        );
+
+        if (hasFourCrushingHammers) {
+            return 'Dragapult Hammers';
+        }
+    }
+
+    const eventLabels = customLabelsConfig[eventYearKey];
+    // always fall back to ‘blank’ if sprite1 is empty
+    const key = `${sprite1 || 'blank'}-${sprite2}`;
+    if (eventLabels) {
+        return eventLabels[key] || key;
+    }
+    return key;
 };
 
 export { getCustomLabel };

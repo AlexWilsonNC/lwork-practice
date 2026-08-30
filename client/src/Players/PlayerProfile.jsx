@@ -621,7 +621,7 @@ const PlayerProfile = () => {
                                     {(() => {
                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
                                         const sprite2 = result.sprite2 || '';
-                                        const deckLabel = getCustomLabel(result.eventId, result.sprite1, result.sprite2);
+                                        const deckLabel = getCustomLabel(result.eventId, result.sprite1, result.sprite2, result.decklist);
                                         const deckUrl =
                                             deckLabel && result.eventFormat
                                                 ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(result.eventFormat)}`

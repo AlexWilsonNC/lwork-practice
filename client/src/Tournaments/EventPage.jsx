@@ -761,6 +761,7 @@ const compareEnergyCards = (card1, card2) =>
     normalizeEnergyCardName(card1.name) === normalizeEnergyCardName(card2.name);
 
 const forcedArchetypeSprites = {
+    'Dragapult Hammers': ['dragapult'],
     'Gardevoir & Sylveon': ['gardevoir-sylveon-tagteam'],
     'Gliscor': ['gliscor'],
     'Tyranitar PRIME': ['tyranitar'],
@@ -1299,8 +1300,14 @@ const EventPage = () => {
                 s1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
                 s2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
             }
-            const key = getCustomLabel(eventId, s1, s2);
-            return key === selectedArchetype;
+            const key = getCustomLabel(
+    eventId,
+    s1,
+    s2,
+    player.decklist
+);
+
+return key === selectedArchetype;
         });
 
         // 4) aggregate counts exactly as before
@@ -1439,7 +1446,7 @@ const EventPage = () => {
 
         if (sprite2 === 'hyphen') return acc;
 
-        let key = getCustomLabel(eventId, sprite1, sprite2);
+        let key = getCustomLabel(eventId, sprite1, sprite2, player.decklist);
 
         if (!acc[key]) {
             // start with an array of the two (if present)
@@ -1534,7 +1541,12 @@ const EventPage = () => {
                 s2 = secondSprite.split('/').pop().replace('.png', '');
             }
 
-            const key = getCustomLabel(eventId, s1, s2) || 'Other';
+            const key = getCustomLabel(
+    eventId,
+    s1,
+    s2,
+    p.decklist
+) || 'Other';
 
             if (!acc[key]) acc[key] = { wins: 0, losses: 0, ties: 0, sprites: [] };
             acc[key].wins += wins;
@@ -1905,7 +1917,12 @@ const EventPage = () => {
                     s2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
                 }
                 if (s2 === 'hyphen') return acc;
-                const key = getCustomLabel(eventId, s1, s2);
+                const key = getCustomLabel(
+    eventId,
+    s1,
+    s2,
+    player.decklist
+);
                 if (!acc[key]) acc[key] = { count: 0, sprites: [] };
                 acc[key].count++;
                 [s1, s2].forEach(s => {
@@ -1969,7 +1986,12 @@ const EventPage = () => {
         const source = getMatchupSourcePlayers();
 
         source.forEach(p => {
-            const myKey = getCustomLabel(eventId, p.sprite1, p.sprite2) || 'Other';
+            const myKey = getCustomLabel(
+    eventId,
+    p.sprite1,
+    p.sprite2,
+    p.decklist
+) || 'Other';
 
             // If somehow we didn’t seed this bucket, skip
             if (!m[myKey]) return;
@@ -1980,7 +2002,7 @@ const EventPage = () => {
 
                 // always default to Other
                 const oppKey = opp
-                    ? (getCustomLabel(eventId, opp.sprite1, opp.sprite2) || 'Other')
+                    ? (getCustomLabel(eventId, opp.sprite1, opp.sprite2, opp.decklist) || 'Other')
                     : 'Other';
 
                 // if this meta‐matchup wasn’t initialized, seed it now
@@ -2150,7 +2172,8 @@ const EventPage = () => {
                 const d2Label = getCustomLabel(
                     eventId,
                     firstSprite.replace('/assets/sprites/', '').replace('.png', ''),
-                    secondSprite.replace('/assets/sprites/', '').replace('.png', '')
+                    secondSprite.replace('/assets/sprites/', '').replace('.png', ''),
+                    d2.decklist
                 );
                 return d2Label === dayOneLabel;
             });
@@ -2384,7 +2407,7 @@ const EventPage = () => {
             // skip hyphens/blanks
             if (secondSprite === 'hyphen') return acc;
 
-            const key = getCustomLabel(eventId, firstSprite || '', secondSprite || '');
+            const key = getCustomLabel(eventId, firstSprite || '', secondSprite || '', player.decklist);
             if (!key) return acc;
 
             acc[key] = acc[key] || { count: 0, sprite: firstSprite || secondSprite };
@@ -2408,7 +2431,7 @@ const EventPage = () => {
             s1 = firstSprite.replace('/assets/sprites/', '').replace('.png', '');
             s2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '');
         }
-        return getCustomLabel(eventId, s1, s2) === selectedArchetype;
+        return getCustomLabel(eventId, s1, s2, p.decklist) === selectedArchetype;
     });
 
     const normalizePlayerSearch = (value) =>
