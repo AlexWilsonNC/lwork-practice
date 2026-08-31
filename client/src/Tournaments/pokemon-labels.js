@@ -412,6 +412,7 @@ const customLabelsConfig = {
         'charizard-shiny-inteleon': 'Radiant Charizard Inteleon',
         'beedrill-inteleon': 'Beedrill Inteleon',
         'vulpix-alola-comfey': 'Vulpix LZ Box',
+        'gengar-gmax-houndoom': 'Gengar VMAX',
     },
     '2022': {
         'blank-substitute': 'Other',

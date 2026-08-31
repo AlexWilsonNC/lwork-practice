@@ -209,17 +209,47 @@ function sortDeck(deck) {
   });
 
   const sortedEnergies = [...energies].sort((a, b) => {
-    const typeOf = card => {
-      const m = card.name.match(/^Basic\s+(\w+)/i);
-      return m ? m[1] : card.name.split(" ")[1];
-    };
-    const tA = typeOf(a), tB = typeOf(b);
-    const specA = !basicEnergyTypes.includes(tA);
-    const specB = !basicEnergyTypes.includes(tB);
-    if (specA !== specB) return specA ? 1 : -1;
-    if (b.count !== a.count) return b.count - a.count;
-    return basicEnergyTypes.indexOf(tA) - basicEnergyTypes.indexOf(tB);
-  });
+  const getBasicEnergyType = card => {
+    const match = (card.name || '').match(
+      /^Basic\s+(Grass|Fire|Water|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy$/i
+    );
+
+    if (!match) return null;
+
+    return basicEnergyTypes.find(
+      type => type.toLowerCase() === match[1].toLowerCase()
+    ) || null;
+  };
+
+  const typeA = getBasicEnergyType(a);
+  const typeB = getBasicEnergyType(b);
+
+  const isBasicA = typeA !== null;
+  const isBasicB = typeB !== null;
+
+  // Basic Energy always before Special Energy
+  if (isBasicA !== isBasicB) {
+    return isBasicA ? -1 : 1;
+  }
+
+  // Higher counts first within each group
+  if (b.count !== a.count) {
+    return b.count - a.count;
+  }
+
+  // Basic Energy with equal counts:
+  // use your established elemental order
+  if (isBasicA && isBasicB) {
+    return (
+      basicEnergyTypes.indexOf(typeA) -
+      basicEnergyTypes.indexOf(typeB)
+    );
+  }
+
+  // Special Energy with equal counts:
+  // alphabetical by name
+  return (a.name || '').localeCompare(b.name || '');
+});
 
   const evoGraph = {};
   pokemons.forEach(card => {

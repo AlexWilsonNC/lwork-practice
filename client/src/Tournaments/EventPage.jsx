@@ -872,6 +872,7 @@ const EventPage = () => {
     const [infoOpponentArchetype, setInfoOpponentArchetype] = useState(null);
     const [playerSearch, setPlayerSearch] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('');
     const [showCountryFilter, setShowCountryFilter] = useState(false);
     const doughnutSpriteCache = useRef({});
     const didFetchCounts = useRef({});
@@ -1163,6 +1164,7 @@ const EventPage = () => {
         setShowConversionRate(false);
         setShowCountryFilter(false);
         setSelectedCountry('');
+        setSelectedRegion('');
     }, [division]);
     useEffect(() => {
         setShowAllAverageCards(false);
@@ -1301,13 +1303,13 @@ const EventPage = () => {
                 s2 = secondSprite.replace('/assets/sprites/', '').replace('.png', '') || '';
             }
             const key = getCustomLabel(
-    eventId,
-    s1,
-    s2,
-    player.decklist
-);
+                eventId,
+                s1,
+                s2,
+                player.decklist
+            );
 
-return key === selectedArchetype;
+            return key === selectedArchetype;
         });
 
         // 4) aggregate counts exactly as before
@@ -1542,11 +1544,11 @@ return key === selectedArchetype;
             }
 
             const key = getCustomLabel(
-    eventId,
-    s1,
-    s2,
-    p.decklist
-) || 'Other';
+                eventId,
+                s1,
+                s2,
+                p.decklist
+            ) || 'Other';
 
             if (!acc[key]) acc[key] = { wins: 0, losses: 0, ties: 0, sprites: [] };
             acc[key].wins += wins;
@@ -1918,11 +1920,11 @@ return key === selectedArchetype;
                 }
                 if (s2 === 'hyphen') return acc;
                 const key = getCustomLabel(
-    eventId,
-    s1,
-    s2,
-    player.decklist
-);
+                    eventId,
+                    s1,
+                    s2,
+                    player.decklist
+                );
                 if (!acc[key]) acc[key] = { count: 0, sprites: [] };
                 acc[key].count++;
                 [s1, s2].forEach(s => {
@@ -1987,11 +1989,11 @@ return key === selectedArchetype;
 
         source.forEach(p => {
             const myKey = getCustomLabel(
-    eventId,
-    p.sprite1,
-    p.sprite2,
-    p.decklist
-) || 'Other';
+                eventId,
+                p.sprite1,
+                p.sprite2,
+                p.decklist
+            ) || 'Other';
 
             // If somehow we didn’t seed this bucket, skip
             if (!m[myKey]) return;
@@ -2465,14 +2467,26 @@ return key === selectedArchetype;
         .map(([code, count]) => ({ code, count }))
         .sort((a, b) => b.count - a.count);
 
-    const filterPlayersByCountry = (players) => {
-        if (!selectedCountry) return players;
-        return players.filter(player => (player.flag || 'unknown') === selectedCountry);
+    const filterPlayersByLocation = (players) => {
+        if (selectedCountry) {
+            return players.filter(
+                player => (player.flag || 'unknown') === selectedCountry
+            );
+        }
+        if (selectedRegion) {
+            const regionCountries = regions[selectedRegion] || [];
+
+            return players.filter(player =>
+                regionCountries.includes(player.flag || 'unknown')
+            );
+        }
+
+        return players;
     };
 
-    const filteredDay2Results = filterPlayersByCountry(searchedDay2Results);
-    const filteredEliminatedDecks = filterPlayersByCountry(searchedEliminatedDecks);
-    const filteredEliminatedRecords = filterPlayersByCountry(searchedEliminatedRecords);
+    const filteredDay2Results = filterPlayersByLocation(searchedDay2Results);
+    const filteredEliminatedDecks = filterPlayersByLocation(searchedEliminatedDecks);
+    const filteredEliminatedRecords = filterPlayersByLocation(searchedEliminatedRecords);
 
     const getDayOneMetaSprites = (meta) => {
         return {
@@ -2776,7 +2790,7 @@ return key === selectedArchetype;
                             </p>
                         )}
                         {eventData.expanded && (
-                            <p style={{fontStyle: 'italic'}}>{eventData.expanded}</p>
+                            <p style={{ fontStyle: 'italic' }}>{eventData.expanded}</p>
                         )}
                         {getPlayerCount(division)}
                     </div>
@@ -2840,24 +2854,79 @@ return key === selectedArchetype;
                                                 {showCountryFilter ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
                                             </span>
                                         </button>
+
+                                        {(selectedCountry || selectedRegion) && (
+                                            <div className="active-location-filter">
+                                                {selectedCountry ? (
+                                                    <>
+                                                        <img
+                                                            src={flags[selectedCountry] || flags.unknown}
+                                                            alt=""
+                                                        />
+
+                                                        <span>
+                                                            {getCountryName(selectedCountry)}
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    <span>
+                                                        {regionLabelMap[selectedRegion] || selectedRegion}
+                                                    </span>
+                                                )}
+
+                                                <button
+                                                    type="button"
+                                                    className="active-location-filter-clear"
+                                                    onClick={() => {
+                                                        setSelectedCountry('');
+                                                        setSelectedRegion('');
+                                                    }}
+                                                    aria-label="Clear location filter"
+                                                    title="Clear filter"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 {showCountryFilter && (
                                     <div className="results-country-filter">
                                         <div className="region-filter-counts">
-                                            {regionCountArray.map(({ region, count }) => (
-                                                <div key={region} className="region-count-item">
+                                            {regionCountArray.map(({ region, label, count }) => (
+                                                <button
+                                                    key={region}
+                                                    type="button"
+                                                    className={`region-count-item ${selectedRegion === region ? 'active-region-filter' : ''
+                                                        }`}
+                                                    onClick={() => {
+                                                        setSelectedRegion(prev =>
+                                                            prev === region ? '' : region
+                                                        );
+
+                                                        setSelectedCountry('');
+                                                    }}
+                                                >
                                                     <span>{region}</span>
                                                     <strong>{count}</strong>
-                                                </div>
+
+                                                    <div className="region-filter-tooltip">
+                                                        {label}
+                                                    </div>
+                                                </button>
                                             ))}
                                         </div>
-
                                         <div className="country-filter-divider" />
                                         <button
                                             type="button"
-                                            className={`country-filter-item ${!selectedCountry ? 'active-country-filter' : ''}`}
-                                            onClick={() => setSelectedCountry('')}
+                                            className={`country-filter-item ${!selectedCountry && !selectedRegion
+                                                ? 'active-country-filter'
+                                                : ''
+                                                }`}
+                                            onClick={() => {
+                                                setSelectedCountry('');
+                                                setSelectedRegion('');
+                                            }}
                                             title="All countries"
                                         >
                                             <img src={flags.all} alt="All countries" />
@@ -2867,11 +2936,21 @@ return key === selectedArchetype;
                                             <button
                                                 key={code}
                                                 type="button"
-                                                className={`country-filter-item ${selectedCountry === code ? 'active-country-filter' : ''}`}
-                                                onClick={() => setSelectedCountry(code)}
+                                                className={`country-filter-item ${selectedCountry === code
+                                                    ? 'active-country-filter'
+                                                    : ''
+                                                    }`}
+                                                onClick={() => {
+                                                    setSelectedCountry(code);
+                                                    setSelectedRegion('');
+                                                }}
                                                 title={getCountryName(code)}
                                             >
-                                                <img src={flags[code] || flags.unknown} alt={code} />
+                                                <img
+                                                    src={flags[code] || flags.unknown}
+                                                    alt={code}
+                                                />
+
                                                 <span>{count}</span>
                                             </button>
                                         ))}
