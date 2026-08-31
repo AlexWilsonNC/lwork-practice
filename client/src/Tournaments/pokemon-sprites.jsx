@@ -54,6 +54,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
             secondSprite  = getPokemonSpriteURL('dusknoir');
         }
     }  
+    else if (hasPokemon('Dudunsparce') && hasPokemon('Shuckle') && hasPokemon('Sylveon')) {
+        firstSprite  = getPokemonSpriteURL('shuckle');
+        secondSprite  = getPokemonSpriteURL('dudunsparce');
+    } 
     else if (hasPokemon('Charizard ex') && hasPokemon('Noctowl') && !hasPokemon('Dragapult ex')) {
         firstSprite  = getPokemonSpriteURL('charizard');
         secondSprite  = getPokemonSpriteURL('noctowl');
