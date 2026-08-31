@@ -58,6 +58,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('charizard');
         secondSprite  = getPokemonSpriteURL('noctowl');
     } 
+    else if (hasPokemon('Bronzong') && hasPokemon('Dusknoir')) {
+        firstSprite  = getPokemonSpriteURL('bronzong');
+        secondSprite  = getPokemonSpriteURL('dusknoir');
+    }  
     else if (hasPokemon('Mega Lopunny ex') && hasPokemon('Dusknoir')) {
         firstSprite  = getPokemonSpriteURL('lopunny-mega');
         secondSprite  = getPokemonSpriteURL('dusknoir');
@@ -408,7 +412,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Froslass') && hasPokemon('Munkidori') && hasPokemon('Dragapult ex')) {
         secondSprite  = getPokemonSpriteURL('dragapult');
     }
-    else if (hasPokemon('Froslass') && hasPokemon('Munkidori')) {
+    else if (hasPokemon('Froslass') && hasPokemon('Munkidori') && !hasPokemon('N\'s Zoroark ex')) {
         firstSprite  = getPokemonSpriteURL('froslass');
         secondSprite  = getPokemonSpriteURL('munkidori');
     }
