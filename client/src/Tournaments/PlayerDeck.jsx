@@ -131,7 +131,7 @@ const promoSets = {
     "DRM": "PR-SM",
     "CES": "PR-SM",
     "FLI": "PR-SM",
-    "UPR": ["PR-SM", "CIN", "SUM", "GRI"],
+    "UPR": ["PR-SM", "CIN", "SUM", "GRI", "BUS"],
     "CIN": "PR-SM",
     "SLG": "PR-SM",
     "BUS": "PR-SM",
@@ -545,7 +545,8 @@ const PlayerDeck = () => {
 
                 let pl = null;
                 const usesExplicitPlacement = [
-                    '2023_LONDON_OPEN',
+                    '2022_LONDON_OPEN',
+                    '2020_DC_OPEN',
                     '2021_PLAYERS_CUP_IV',
                     '2021_PLAYERS_CUP_III',
                     '2021_PLAYERS_CUP_II',

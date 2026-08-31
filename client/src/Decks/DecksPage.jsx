@@ -8,6 +8,7 @@ import '../css/players.css';
 import '../css/deckspage.css';
 
 const formatOrder = [
+  "TEF-PBL",
   "TEF-CRI",
   "TEF-POR",
   "SVI-ASC",
@@ -47,6 +48,8 @@ const formatOrder = [
   "UPR-RCL",
   "UPR-SSH",
   "UPR-CEC",
+  "UPR-HIF",
+  "UPR-UNM",
   "BLW-SSH",
   "BLW-CEC",
   "BLW-HIF",
@@ -482,7 +485,9 @@ const Decks = () => {
               <select value={selectedFormat} onChange={handleFormatChange}>
                 <option value={DEFAULT_FORMAT}>Most Recent</option>
 
+                {/* complete */}
                 <optgroup label="2026">
+                  <option value="TEF-PBL">TEF-PBL</option>
                   <option value="TEF-CRI">TEF-CRI</option>
                   <option value="TEF-POR">TEF-POR</option>
                   <option value="SVI-ASC">SVI-ASC</option>
@@ -543,6 +548,8 @@ const Decks = () => {
                   <option value="UPR-RCL">UPR-RCL</option>
                   <option value="UPR-SSH">UPR-SSH</option>
                   <option value="UPR-CEC">UPR-CEC</option>
+                  <option value="UPR-HIF">UPR-HIF</option>
+                  <option value="UPR-UNM">UPR-UNM</option>
                   {/* expanded */}
                   <option value="BLW-SSH">BLW-SSH</option>
                   <option value="BLW-CEC">BLW-CEC</option>

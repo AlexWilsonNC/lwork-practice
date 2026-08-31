@@ -2652,7 +2652,7 @@ const tournamentList = [
     "location": "Porto Alegre, Brazil"
     },
     {
-            "id": "2023_LONDON_OPEN",
+            "id": "2022_LONDON_OPEN",
     "name": "London Open",
     "eventType": "worldsOpen",
     "eventLogo": worldsOpen,
@@ -3038,6 +3038,38 @@ const tournamentList = [
     "eventType": "regionals",
     "eventLogo": regionals,
     "date": "Sep 27, 2019",
+    "flag": usa
+    },
+    {
+         "id": "2020_CAMPINAS",
+    "name": "Campinas Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Sep 28, 2019",
+    "flag": brazil
+    },
+    {
+         "id": "2020_SHEFFIELD",
+    "name": "Sheffield Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Sep 7, 2019",
+    "flag": uk
+    },
+    {
+         "id": "2020_MELBOURNE",
+    "name": "Melbourne Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Aug 31, 2019",
+    "flag": australia
+    },
+    {
+         "id": "2020_DC_OPEN",
+    "name": "DC Open",
+    "eventType": "worldsOpen",
+    "eventLogo": worldsOpen,
+    "date": "Aug 17, 2019",
     "flag": usa
     },
 ];

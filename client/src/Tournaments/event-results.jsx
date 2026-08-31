@@ -135,15 +135,16 @@ const formatName = (name) => {
 export const displayResults = (players, eventId, division, customPlacement, eventFormat) => {
 
     const explicitPlacementEvents = [
-        '2023_LONDON_OPEN',
+        '2022_LONDON_OPEN',
+        '2020_DC_OPEN',
         '2021_PLAYERS_CUP_IV',
         '2021_PLAYERS_CUP_III',
         '2021_PLAYERS_CUP_II',
         '2021_PLAYERS_CUP_I',
         '2020_PLAYERS_CUP_INVITATIONAL'
     ];
-
-    const sortedPlayers = explicitPlacementEvents
+    const usesExplicitPlacement = explicitPlacementEvents.includes(eventId);
+    const sortedPlayers = usesExplicitPlacement
         ? [...players].sort((a, b) => {
             const aPlacement = a.placement ?? a.placing ?? 9999;
             const bPlacement = b.placement ?? b.placing ?? 9999;
@@ -168,7 +169,7 @@ export const displayResults = (players, eventId, division, customPlacement, even
         <OlResults className='result-list-ol'>
             {sortedPlayers.map((player, index) => {
 
-                const placement = explicitPlacementEvents
+                const placement = usesExplicitPlacement
                     ? (player.placement ?? player.placing ?? index + 1)
                     : (
                         Number.isInteger(customPlacement)
@@ -208,13 +209,20 @@ export const displayResults = (players, eventId, division, customPlacement, even
 
                 const pod = player.pod?.toLowerCase();
 
+                const podColor =
+                    pod === 'yellow' || pod === 'flight 1'
+                        ? 'yellow'
+                        : pod === 'blue' || pod === 'flight 2'
+                            ? 'blue'
+                            : '';
+
                 return (
                     <li
                         key={`${player.name}-${player.flag}-${pod || index}`}
                         className={`
-                            player-list-hover
-                            ${pod ? `pod-${pod}` : ''}
-                        `}
+        player-list-hover
+        ${podColor ? `pod-${podColor}` : ''}
+    `}
                     >
                         <div className='results-list-item'>
 
@@ -244,8 +252,8 @@ export const displayResults = (players, eventId, division, customPlacement, even
                                 </Link>
 
                                 {pod && (
-                                    <span className={`pod-badge ${pod}`}>
-                                        {pod} pod
+                                    <span className={`pod-badge ${podColor}`}>
+                                        {player.pod}
                                     </span>
                                 )}
 
