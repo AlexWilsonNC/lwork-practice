@@ -108,6 +108,7 @@ import manaphy from '../../public/assets/sprites/manaphy.png'
 import lugia from '../../public/assets/sprites/lugia.png'
 import excadrill from '../../public/assets/sprites/excadrill.png'
 import whimsicott from '../../public/assets/sprites/whimsicott.png'
+import banette from '../../public/assets/sprites/banette.png'
 import porygonz from '../../public/assets/sprites/porygon-z.png'
 import pikachugmax from '../../public/assets/sprites/pikachu-gmax.png'
 import magmortar from '../../public/assets/sprites/magmortar.png'
@@ -154,7 +155,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: August 24, 2026</p>
+          <p>Last Updated: August 30, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -193,6 +194,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={lycanroc} alt="sprite" />
             </div>
             <p>Lyder Iversen (Masters) - 94<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2018_WORLDS/masters/Xander%20Pero-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={banette} alt="sprite" />
+              <img className="sprite second-sprite" src={garbodor} alt="sprite" />
+            </div>
+            <p>Xander Pero (Masters) - 104<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2018_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
@@ -353,6 +361,9 @@ const ArchiveUpdates = () => {
             </div>
             <p>Jay -- (Masters) - 45<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a>, Christopher Hinton, and all the players reached out to for this month's finds.</p>
 
           <hr className='title-hr' />
           <br />

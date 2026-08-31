@@ -3065,7 +3065,7 @@ const tournamentList = [
     "flag": australia
     },
     {
-         "id": "2020_DC_OPEN",
+         "id": "2019_DC_OPEN",
     "name": "DC Open",
     "eventType": "worldsOpen",
     "eventLogo": worldsOpen,
