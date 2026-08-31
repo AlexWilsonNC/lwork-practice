@@ -374,6 +374,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         secondSprite  = getPokemonSpriteURL('ogerpon');
         }
     }
+    else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Lillie\'s Clefairy ex') && hasTrainer('Lillie\'s Pearl') && (!hasPokemon('Mega Kangaskhan ex'))) {
+        firstSprite  = getPokemonSpriteURL('clefairy');
+        secondSprite  = getPokemonSpriteURL('ogerpon');
+    }
     else if (hasPokemon('Teal Mask Ogerpon ex') && hasPokemon('Wellspring Mask Ogerpon ex') && hasPokemon('Cornerstone Mask Ogerpon ex') && (!hasPokemon('Noctowl'))) {
         firstSprite  = getPokemonSpriteURL('ogerpon');
         secondSprite  = getPokemonSpriteURL('ogerpon-wellspring');
@@ -667,7 +671,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('iron-valiant');
         secondSprite  = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
     }       
-    else if (hasPokemon('Dhelmise') && hasPokemon('Banette') && hasPokemon('Sinistcha')) {
+    else if (hasPokemon('Dhelmise') && hasPokemon('Banette') && hasPokemon('Poltchageist')) {
         firstSprite  = getPokemonSpriteURL('dhelmise');
         secondSprite  = getPokemonSpriteURL('banette');
     }       
