@@ -86,6 +86,15 @@ import online from '../assets/flags/wifi.png';
 
 const tournamentList = [
     {
+        "id": "2027_WORLDS",
+        "name": "World Championships 2027",
+        "eventType": "worlds",
+        "eventLogo": worlds,
+        "date": "Aug 13, 2027",
+        "flag": singapore,
+        "location": "Singapore",
+    },
+    {
         "id": "2024_SAO-PAULO",
         "name": "São Paulo Regionals",
         "eventType": "regionals",
