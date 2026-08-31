@@ -1,5 +1,7 @@
 const customLabelsConfig = {
     '2026': {
+        'dhelmise-banette': 'Dhelmise',
+        'blank-chandelure-mega': 'Mega Chandelure',
         'thwackey-seaking': 'Festival Lead',
         'blank-lopunny-mega': 'Mega Lopunny',
         'bronzong-dusknoir': 'Bronzong Dusknoir',

@@ -663,6 +663,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('iron-valiant');
         secondSprite  = getPokemonSpriteURL('urshifu-rapid-strike-gmax');
     }       
+    else if (hasPokemon('Dhelmise') && hasPokemon('Banette') && hasPokemon('Sinistcha')) {
+        firstSprite  = getPokemonSpriteURL('dhelmise');
+        secondSprite  = getPokemonSpriteURL('banette');
+    }       
     else if (hasPokemon('Steven\'s Metagross ex') && hasPokemon('Genesect ex')) {
         const metagrossCount = getPokemonCount('Steven\'s Metagross ex');
         if (metagrossCount >= 2) {
@@ -683,7 +687,7 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
     else if (hasPokemon('Thwackey') && hasPokemon('Seaking') && !hasPokemon('Dipplin')) {
             firstSprite  = getPokemonSpriteURL('thwackey');
             secondSprite  = getPokemonSpriteURL('seaking');
-    }                                                                    
+    }                                                                                                                                     
     // Individual checks
     if (!secondSprite) {
         if (getPokemonCount('Gouging Fire ex') >= 2) {
@@ -715,6 +719,9 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         }
         else if (hasPokemon('Gardevoir ex')) {
             secondSprite  = getPokemonSpriteURL('gardevoir');
+        }
+        else if(hasPokemon('Mega Chandelure ex')) {
+            secondSprite  = getPokemonSpriteURL('chandelure-mega');
         }
         else if(hasPokemon('Comfey')) {
             secondSprite  = getPokemonSpriteURL('comfey');
