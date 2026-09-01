@@ -1218,7 +1218,7 @@ toggle-wrap {
         font-size: 18px;
     }
     .country-filter-toggle {
-        padding: 5px 10px;
+        /* padding: 5px 10px; */
         font-size: 10px;
     }
     .active-location-filter {

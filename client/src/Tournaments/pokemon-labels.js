@@ -1016,6 +1016,7 @@ const customLabelsConfig = {
         'luxray-garchomp': 'LuxChomp',
         'luxray-roserade': 'SP Box',
         'gardevoir-gallade': 'Gardevoir Gallade',
+        'sableye-dialga': 'SableLock Dialga',
         'dialga-garchomp': 'DialgaChomp',
         'blank-gengar': 'Gengar',
         'blank-jumpluff': 'Jumpluff',
