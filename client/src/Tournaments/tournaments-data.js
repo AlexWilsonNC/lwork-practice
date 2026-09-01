@@ -3081,6 +3081,62 @@ const tournamentList = [
     "date": "Aug 17, 2019",
     "flag": usa
     },
+    {
+         "id": "2019_CAPE_TOWN",
+     "name": "Cape Town Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 15, 2019",
+    "flag": southAfrica
+    },
+    {
+         "id": "2019_AUCKLAND",
+    "name": "Auckland Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 15, 2019",
+    "flag": newZealand
+    },
+    {
+        "id": "2019_JONKOPING",
+    "name": "Jonkoping Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 15, 2019",
+    "flag": sweden
+    },
+    {
+        "id": "2019_ORIGINS_OPEN",
+    "name": "Origins Open (Special Event)",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 14, 2019",
+    "flag": usa
+    },
+    {
+        "id": "2019_BANGKOK",
+    "name": "Bangkok Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Jun 8, 2019",
+    "flag": thailand
+    },
+    {
+        "id": "2019_SANTIAGO",
+    "name": "Santiago Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Jun 8, 2019",
+    "flag": chile
+    },
+    {
+        "id": "2019_MADISON",
+    "name": "Madison Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 31, 2019",
+    "flag": usa
+    },
 ];
 
 const parseDate = (dateStr) => {

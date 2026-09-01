@@ -54,7 +54,6 @@ const formatOrder = [
   "BLW-CEC",
   "BLW-HIF",
   
-  "UPR-CEC",
   "UPR-UNM",
   "SUM-UNB",
   "SUM-TEU",
@@ -557,7 +556,6 @@ const Decks = () => {
                 </optgroup>
 
                 <optgroup label="2019">
-                  <option value="UPR-CEC">UPR-CEC</option>
                   <option value="UPR-UNM">UPR-UNM</option>
                   <option value="SUM-UNB">SUM-UNB</option>
                   <option value="SUM-TEU">SUM-TEU</option>
