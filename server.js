@@ -18,6 +18,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const ORIGIN_SECRET = process.env.ORIGIN_SECRET;
+
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const CANONICAL_HOST = 'www.ptcglegends.com';
@@ -27,14 +29,26 @@ const HEROKU_HOSTS = new Set([
 ]);
 
 app.use((req, res, next) => {
-  const host = (req.headers.host || '').toLowerCase();
+  const host = (req.headers.host || '').split(':')[0].toLowerCase();
 
+  // Do not redirect the public Heroku hostname anymore.
+  // Requests hitting Heroku directly should die here instead.
   if (HEROKU_HOSTS.has(host)) {
+    return res.status(403).send('Forbidden');
+  }
+
+  // Keep the apex domain redirect working.
+  if (host === 'ptcglegends.com') {
     return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
   }
 
-  if (host === 'ptcglegends.com') {
-    return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+  // Production traffic for www must have been sent through Cloudflare.
+  if (process.env.NODE_ENV === 'production' && host === CANONICAL_HOST) {
+    const suppliedSecret = req.get('X-PTCGL-Origin');
+
+    if (!ORIGIN_SECRET || suppliedSecret !== ORIGIN_SECRET) {
+      return res.status(403).send('Forbidden');
+    }
   }
 
   next();
