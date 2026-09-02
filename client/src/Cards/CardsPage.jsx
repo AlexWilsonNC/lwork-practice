@@ -326,7 +326,7 @@ const CardsPage = () => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${setName}`);
+        const response = await fetch(`/api/cards/${setName}`);
         if (response.ok) {
           const data = await response.json();
 

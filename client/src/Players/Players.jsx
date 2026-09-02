@@ -150,7 +150,7 @@ const Players = () => {
                     country: countryFilter || ''
                 });
 
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/players?${params.toString()}`);
+                const response = await fetch(`/api/players?${params.toString()}`);
                 const json = await response.json();
 
                 const filteredData = (json.items || []).filter(player => player.name !== '--');

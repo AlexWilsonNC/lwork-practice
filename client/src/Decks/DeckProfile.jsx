@@ -417,7 +417,7 @@ const DeckProfile = () => {
 
     const fetchDecks = async () => {
       try {
-        const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/decks/${id}`);
+        const response = await fetch(`/api/decks/${id}`);
         if (!response.ok) {
           throw new Error('Deck not found');
         }
@@ -446,7 +446,7 @@ const DeckProfile = () => {
   const fetchCardData = async (format) => {
     try {
       const collectionsParam = formatToCollections(format).join(',');
-      const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+      const url = `/api/cards?format=${collectionsParam}`;
 
       const response = await fetch(url);
 

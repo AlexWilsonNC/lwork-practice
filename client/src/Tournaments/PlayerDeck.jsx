@@ -401,7 +401,7 @@ const PlayerDeck = () => {
             try {
                 const collections = formatToCollections(format, eventId);
                 const collectionsParam = collections.join(',');
-                const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+                const url = `/api/cards?format=${collectionsParam}`;
 
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -479,7 +479,7 @@ const PlayerDeck = () => {
                     return;
                 }
 
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                const response = await fetch(`/events/${eventId}`);
                 if (!response.ok) {
                     if (!cancelled) {
                         setPageError('event_not_found');

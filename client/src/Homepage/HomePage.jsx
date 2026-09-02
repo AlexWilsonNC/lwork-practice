@@ -116,7 +116,7 @@ const Homepage = () => {
 
             try {
                 const eventId = latestCompletedEvent.id.replace('/tournaments/', '');
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                const response = await fetch(`/events/${eventId}`);
 
                 if (response.ok) {
                     const data = await response.json();

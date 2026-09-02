@@ -195,7 +195,7 @@ const CardView = () => {
         const fetchCardData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/${set}/${number}`);
+                const response = await fetch(`/api/cards/${set}/${number}`);
                 if (response.ok) {
                     const card = await response.json();
                     setCardInfo(card);
@@ -217,7 +217,7 @@ const CardView = () => {
 
         const fetchOtherVersions = async () => {
             try {
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
+                const response = await fetch(`/api/cards/searchbyname/${encodeURIComponent(cardInfo.name)}`);
                 if (response.ok) {
                     const data = await response.json();
 

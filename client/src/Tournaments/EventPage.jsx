@@ -1023,7 +1023,7 @@ const EventPage = () => {
     const fetchCardData = async (format) => {
         try {
             const collectionsParam = formatToCollections(format, eventId).join(',');
-            const url = `https://ptcg-legends-6abc11783376.herokuapp.com/api/cards?format=${collectionsParam}`;
+            const url = `/api/cards?format=${collectionsParam}`;
             const response = await fetch(url);
 
             if (response.ok) {
@@ -1047,7 +1047,7 @@ const EventPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`https://ptcg-legends-6abc11783376.herokuapp.com/events/${eventId}`);
+                const response = await fetch(`/events/${eventId}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.masters) data.masters = data.masters.map(normalizePlayerSprites);
