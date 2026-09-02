@@ -27,6 +27,7 @@ import magnezone from '../../public/assets/sprites/magnezone.png'
 import altaria from '../../public/assets/sprites/altaria.png'
 import garchomp from '../../public/assets/sprites/garchomp.png'
 import blank from '../../public/assets/sprites/blank.png'
+import vaporeon from '../../public/assets/sprites/vaporeon.png'
 import blastoise from '../../public/assets/sprites/blastoise.png'
 import darkrai from '../../public/assets/sprites/darkrai.png'
 import flygon from '../../public/assets/sprites/flygon.png'
@@ -155,7 +156,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: August 30, 2026</p>
+          <p>Last Updated: Sept 2, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -165,6 +166,65 @@ const ArchiveUpdates = () => {
         <div className='article-content archive-updates'>
 
           {/* <hr className='archive-updates-mini-hr'></hr> */}
+
+          <hr className='title-hr' />
+          <br />
+          <h3 className='boxxed'>September 2026</h3>
+          <br />
+          <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2011_WORLDS/juniors'>2011 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2011_WORLDS/juniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={reshiram} alt="sprite" />
+              <img className="sprite second-sprite" src={emboar} alt="sprite" />
+            </div>
+            <p>Keito Arai (Juniors) - 16<sup>th</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2009_WORLDS/juniors'>2009 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2009_WORLDS/juniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gengar} alt="sprite" />
+              <img className="sprite second-sprite" src={machamp} alt="sprite" />
+            </div>
+            <p>Keito Arai (Juniors) - 10<sup>th</sup> Place</p>
+          </a>
+
+<hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2007_WORLDS/masters'>2007 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2007_WORLDS/masters/Miguel%20Bernal-MX' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={banette} alt="sprite" />
+              <img className="sprite second-sprite" src={vaporeon} alt="sprite" />
+            </div>
+            <p>Miguel Bernal (Masters) - 18<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2004_NATS_US/seniors'>2004 US Nats</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2004_NATS_US/seniors' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={blaziken} alt="sprite" />
+            </div>
+            <p>Aaron Curry (Seniors) - 5<sup>th</sup> Place</p>
+          </a>
+
+
+
 
           <hr className='title-hr' />
           <br />
