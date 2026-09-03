@@ -202,10 +202,14 @@ export const displayResults = (players, eventId, division, customPlacement, even
                     player.decklist
                 );
 
-                const deckUrl =
-                    deckLabel && eventFormat
-                        ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
-                        : null;
+                const isUnknownDeck =
+    deckLabel === 'blank-hyphen' ||
+    deckLabel === 'Unknown';
+
+const deckUrl =
+    deckLabel && eventFormat && !isUnknownDeck
+        ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(eventFormat)}`
+        : null;
 
                 const pod = player.pod?.toLowerCase();
 
@@ -220,9 +224,9 @@ export const displayResults = (players, eventId, division, customPlacement, even
                     <li
                         key={`${player.name}-${player.flag}-${pod || index}`}
                         className={`
-        player-list-hover
-        ${podColor ? `pod-${podColor}` : ''}
-    `}
+                            player-list-hover
+                            ${podColor ? `pod-${podColor}` : ''}
+                        `}
                     >
                         <div className='results-list-item'>
 
@@ -272,9 +276,11 @@ export const displayResults = (players, eventId, division, customPlacement, even
                                             sprite2={player.sprite2}
                                         />
 
-                                        <div className="deck-tooltip">
-                                            {deckLabel}
-                                        </div>
+                                        {deckLabel && !isUnknownDeck && (
+                                                <div className="deck-tooltip">
+                                                    {deckLabel}
+                                                </div>
+                                            )}
                                     </Link>
                                 ) : (
                                     <div className="deck-tooltip-container">
@@ -285,12 +291,11 @@ export const displayResults = (players, eventId, division, customPlacement, even
                                             sprite2={player.sprite2}
                                         />
 
-                                        {deckLabel && (
-                                            <div className="deck-tooltip">
-                                                {deckLabel}
-                                            </div>
-                                        )}
-
+                                        {deckLabel && !isUnknownDeck && (
+                                                <div className="deck-tooltip">
+                                                    {deckLabel}
+                                                </div>
+                                            )}
                                     </div>
                                 )}
 

@@ -621,14 +621,24 @@ const PlayerProfile = () => {
                                     {(() => {
                                         const sprite1 = result.sprite1 === 'blank' ? '' : result.sprite1;
                                         const sprite2 = result.sprite2 || '';
-                                        const deckLabel = getCustomLabel(result.eventId, result.sprite1, result.sprite2, result.decklist);
+                                        const deckLabel = getCustomLabel(
+                                            result.eventId,
+                                            result.sprite1,
+                                            result.sprite2,
+                                            result.decklist
+                                        );
+
+                                        const isUnknownDeck =
+                                            deckLabel === 'blank-hyphen' ||
+                                            deckLabel === 'Unknown';
+
                                         const deckUrl =
-                                            deckLabel && result.eventFormat
+                                            deckLabel && result.eventFormat && !isUnknownDeck
                                                 ? `/deck/${encodeURIComponent(deckLabel)}?format=${encodeURIComponent(result.eventFormat)}`
                                                 : null;
 
                                         const SpriteContent = (
-                                            <div className="deck-tooltip-container">
+                                            <>
                                                 {sprite1 && (
                                                     <img
                                                         className="sprite"
@@ -636,6 +646,7 @@ const PlayerProfile = () => {
                                                         alt="sprite"
                                                     />
                                                 )}
+
                                                 {sprite2 && sprite2 !== sprite1 && (
                                                     <img
                                                         className={sprite1 ? 'sprite second-sprite' : 'sprite'}
@@ -643,13 +654,22 @@ const PlayerProfile = () => {
                                                         alt="sprite"
                                                     />
                                                 )}
-                                                {deckLabel && (
+
+                                                {deckLabel && !isUnknownDeck && (
                                                     <div className="deck-tooltip">
                                                         {deckLabel}
                                                     </div>
                                                 )}
-                                            </div>
-                                        )
+                                            </>
+                                        );
+                                        if (isUnknownDeck) {
+                                            return (
+                                                <a className="deck-tooltip-container">
+                                                    {SpriteContent}
+                                                </a>
+                                            );
+                                        }
+
                                         return deckUrl ? (
                                             <Link to={deckUrl} className="deck-tooltip-container">
                                                 {SpriteContent}

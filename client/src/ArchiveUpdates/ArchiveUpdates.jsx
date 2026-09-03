@@ -80,6 +80,7 @@ import flareon from '../../public/assets/sprites/flareon.png'
 import klinklang from '../../public/assets/sprites/klinklang.png'
 import medicham from '../../public/assets/sprites/medicham.png'
 import hariyama from '../../public/assets/sprites/hariyama.png'
+import luxray from '../../public/assets/sprites/luxray.png'
 import dragonite from '../../public/assets/sprites/dragonite.png'
 import electrode from '../../public/assets/sprites/electrode.png'
 import hypno from '../../public/assets/sprites/hypno.png'
@@ -116,6 +117,10 @@ import magmortar from '../../public/assets/sprites/magmortar.png'
 import palkia from '../../public/assets/sprites/palkia.png'
 import nidoqueen from '../../public/assets/sprites/nidoqueen.png'
 import pyroar from '../../public/assets/sprites/pyroar.png'
+import infernape from '../../public/assets/sprites/infernape.png'
+import kingdra from '../../public/assets/sprites/kingdra.png'
+import dialga from '../../public/assets/sprites/dialga.png'
+import azelf from '../../public/assets/sprites/azelf.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -156,7 +161,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 2, 2026</p>
+          <p>Last Updated: Sept 3, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -186,9 +191,99 @@ const ArchiveUpdates = () => {
 
           <hr className='archive-updates-mini-hr'></hr>
 
+          <h4 className='archive-update-h4'><a href='/tournaments/2010_WORLDS/masters'>2010 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2010_WORLDS/masters/Sho%20Sasaki-JP' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Sho Sasaki (Masters) - 29<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gengar} alt="sprite" />
+            </div>
+            <p>Alessandro Cremascoli (Masters) - 34<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Tracy Key (Masters) - 36<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Sean Takemoto (Masters) - 38<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={sableye} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Gino Lombardi (Masters) - 39<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gardevoir} alt="sprite" />
+              <img className="sprite second-sprite" src={azelf} alt="sprite" />
+            </div>
+            <p>Ross Cawthon (Masters) - 40<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={gardevoir} alt="sprite" />
+              <img className="sprite second-sprite" src={azelf} alt="sprite" />
+            </div>
+            <p>Miska Saari (Masters) - 50<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={gengar} alt="sprite" />
+            </div>
+            <p>Murat Gursoz (Masters) - 53<sup>rd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={jumpluff} alt="sprite" />
+              <img className="sprite second-sprite" src={luxray} alt="sprite" />
+            </div>
+            <p>Edmund Tan (Masters) - 57<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={dialga} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Joao Lopes (Masters) - 58<sup>th</sup> Place</p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={kingdra} alt="sprite" />
+              <img className="sprite second-sprite" src={machamp} alt="sprite" />
+            </div>
+            <p>Chris Fulop (Masters) - 60<sup>th</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
           <h4 className='archive-update-h4'><a href='/tournaments/2009_WORLDS/juniors'>2009 Worlds</a></h4>
           <br></br>
 
+          <a href='/tournaments/2009_WORLDS/masters/Sho%20Sasaki-JP' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={infernape} alt="sprite" />
+            </div>
+            <p>Sho Sasaki (Masters) - 14<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
           <a href='/tournaments/2009_WORLDS/juniors' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={gengar} alt="sprite" />
@@ -197,7 +292,7 @@ const ArchiveUpdates = () => {
             <p>Keito Arai (Juniors) - 10<sup>th</sup> Place</p>
           </a>
 
-<hr className='archive-updates-mini-hr'></hr>
+          <hr className='archive-updates-mini-hr'></hr>
 
           <h4 className='archive-update-h4'><a href='/tournaments/2007_WORLDS/masters'>2007 Worlds</a></h4>
           <br></br>

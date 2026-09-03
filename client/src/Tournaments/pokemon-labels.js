@@ -1018,6 +1018,7 @@ const customLabelsConfig = {
         'ursaring-vileplume': 'Bear Hug',
     },
     '2010': {
+        'jumpluff-luxray': 'Jumpluff',
         'luxray-roserade': 'SP Box',
         'gliscor-spiritomb': 'Gliscor',
         'tyranitar-machamp': 'Tyranitar Machamp',
@@ -1483,11 +1484,15 @@ const getCustomLabel = (eventId, sprite1, sprite2, decklist = null) => {
     }
 
     const eventLabels = customLabelsConfig[eventYearKey];
-    // always fall back to ‘blank’ if sprite1 is empty
     const key = `${sprite1 || 'blank'}-${sprite2}`;
+
+    if (key === 'blank-hyphen') {
+        return 'Unknown';
+    }
     if (eventLabels) {
         return eventLabels[key] || key;
     }
+
     return key;
 };
 
