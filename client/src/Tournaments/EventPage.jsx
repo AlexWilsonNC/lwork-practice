@@ -823,7 +823,9 @@ const EventPage = () => {
     const { theme } = useTheme();
     const { eventId, division: divisionParam } = useParams();
     const [eventData, setEventData] = useState(null);
-    const [division, setDivision] = useState('masters');
+    const [division, setDivision] = useState(
+    divisionParam || 'masters'
+);
     const [activeTab, setActiveTab] = useState(sessionStorage.getItem(`activeTab_${eventId}`) || 'Results');
     const STORAGE_KEY = `lastModalPlayer_${eventId}`;
     const chartRef = useRef(null);
@@ -876,6 +878,7 @@ const EventPage = () => {
     const [showCountryFilter, setShowCountryFilter] = useState(false);
     const doughnutSpriteCache = useRef({});
     const didFetchCounts = useRef({});
+    const eliminatedRequestRef = useRef(0);
     const [hoveredDoughnutIndex, setHoveredDoughnutIndex] = useState(null);
     const doughnutChartRef = useRef(null);
     const [showAllAverageCards, setShowAllAverageCards] = useState(false);
@@ -1183,76 +1186,125 @@ const EventPage = () => {
     }, [division, eventId, viewTab]);
 
     const loadEliminated = async () => {
-        if (viewTab === 'Records') {
-            if (loadingEliminatedRecs) return;
-            setLoadingEliminatedRecs(true);
+    const requestId = ++eliminatedRequestRef.current;
+
+    // Capture exactly what this request is for.
+    const requestedDivision = division;
+    const requestedViewTab = viewTab;
+
+    if (requestedViewTab === 'Records') {
+        if (loadingEliminatedRecs) return;
+        setLoadingEliminatedRecs(true);
+    } else {
+        if (loadingEliminatedDecks) return;
+        setLoadingEliminatedDecks(true);
+    }
+
+    const [year, ...slugParts] = eventId.split('_');
+    const slug = slugParts.join('-').toLowerCase();
+
+    const url =
+        `https://alexwilsonnc.github.io/eliminated-players/` +
+        `${year}/${slug}.json`;
+
+    try {
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        // If another eliminated-player request was started after this one,
+        // this response is stale. Ignore it completely.
+        if (requestId !== eliminatedRequestRef.current) {
+            return;
+        }
+
+        const raw = Array.isArray(data[requestedDivision])
+            ? data[requestedDivision]
+            : [];
+
+        const normalized = raw.map(player => {
+            let sprite1 = player.sprite1 || '';
+            let sprite2 = player.sprite2 || '';
+
+            if (!sprite1 && !sprite2 && player.decklist) {
+                const {
+                    firstSprite,
+                    secondSprite
+                } = getPokemonSprites(
+                    player.decklist,
+                    '',
+                    ''
+                );
+
+                const clean = str =>
+                    str
+                        .split('/')
+                        .pop()
+                        .replace(/^-?assets-sprites-/, '')
+                        .replace(/\.png$/, '');
+
+                sprite1 = clean(firstSprite) || '';
+                sprite2 = clean(secondSprite) || '';
+            }
+
+            if (sprite1 === 'blank') sprite1 = '';
+            if (sprite2 === 'blank') sprite2 = '';
+            if (!sprite1) sprite1 = 'blank';
+
+            return {
+                ...player,
+                sprite1,
+                sprite2
+            };
+        });
+
+        // Check once more before touching state.
+        if (requestId !== eliminatedRequestRef.current) {
+            return;
+        }
+
+        if (requestedViewTab === 'Decks') {
+            setEliminatedDecks(normalized);
+            setShowAllDecks(true);
         } else {
-            if (loadingEliminatedDecks) return;
-            setLoadingEliminatedDecks(true);
+            setEliminatedRecords(normalized);
+            setShowAllRecs(true);
+        }
+    } catch (err) {
+        // Don't let an old failed request wipe out newer data either.
+        if (requestId !== eliminatedRequestRef.current) {
+            return;
         }
 
-        const [year, ...slugParts] = eventId.split('_');
-        const slug = slugParts.join('-').toLowerCase();
-        const url = `https://alexwilsonnc.github.io/eliminated-players/${year}/${slug.toLowerCase()}.json`;
+        console.error(
+            'Failed to load eliminated players:',
+            err
+        );
 
-        try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-            const data = await res.json();
-            const key = `${division}`;
-            const raw = Array.isArray(data[key]) ? data[key] : [];
-
-            const normalized = raw.map(player => {
-                let sprite1 = player.sprite1 || '';
-                let sprite2 = player.sprite2 || '';
-
-                if (!sprite1 && !sprite2 && player.decklist) {
-                    const { firstSprite, secondSprite } = getPokemonSprites(player.decklist, '', '');
-
-                    const clean = str =>
-                        str
-                            .split('/')
-                            .pop()
-                            .replace(/^-?assets-sprites-/, '')
-                            .replace(/\.png$/, '');
-
-                    sprite1 = clean(firstSprite) || '';
-                    sprite2 = clean(secondSprite) || '';
-                }
-
-                if (sprite1 === 'blank') sprite1 = '';
-                if (sprite2 === 'blank') sprite2 = '';
-                if (!sprite1) sprite1 = 'blank';
-
-                return { ...player, sprite1, sprite2 };
-            });
-
-            if (viewTab === 'Decks') {
-                setEliminatedDecks(normalized);
-                setShowAllDecks(true);
-            } else {
-                setEliminatedRecords(normalized);
-                setShowAllRecs(true);
-            }
-        } catch (err) {
-            console.error('Failed to load eliminated players:', err);
-
-            if (viewTab === 'Decks') {
-                setEliminatedDecks([]);
-                setShowAllDecks(false);
-            } else {
-                setEliminatedRecords([]);
-                setShowAllRecs(false);
-            }
-        } finally {
-            if (viewTab === 'Decks') {
-                setLoadingEliminatedDecks(false);
-            } else {
-                setLoadingEliminatedRecs(false);
-            }
+        if (requestedViewTab === 'Decks') {
+            setEliminatedDecks([]);
+            setShowAllDecks(false);
+        } else {
+            setEliminatedRecords([]);
+            setShowAllRecs(false);
         }
-    };
+    } finally {
+        // Only the newest request controls loading state.
+        if (requestId !== eliminatedRequestRef.current) {
+            return;
+        }
+
+        if (requestedViewTab === 'Decks') {
+            setLoadingEliminatedDecks(false);
+        } else {
+            setLoadingEliminatedRecs(false);
+        }
+    }
+};
 
     useEffect(() => {
         if (viewTab !== 'Records') return;
@@ -2043,11 +2095,11 @@ const EventPage = () => {
     //     }
     // }, [isModernEvent, showDayOneMeta, showConversionRate, eliminatedDecks.length]);
 
-    useEffect(() => {
-        if (usesPhaseData && eliminatedDecks.length === 0) {
-            loadEliminated();
-        }
-    }, [usesPhaseData, eliminatedDecks.length]);
+    // useEffect(() => {
+    //     if (usesPhaseData && eliminatedDecks.length === 0) {
+    //         loadEliminated();
+    //     }
+    // }, [usesPhaseData, eliminatedDecks.length]);
 
     useEffect(() => {
         if (!eventData) return;
