@@ -120,7 +120,6 @@ import pyroar from '../../public/assets/sprites/pyroar.png'
 import infernape from '../../public/assets/sprites/infernape.png'
 import kingdra from '../../public/assets/sprites/kingdra.png'
 import dialga from '../../public/assets/sprites/dialga.png'
-import azelf from '../../public/assets/sprites/azelf.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -232,14 +231,14 @@ const ArchiveUpdates = () => {
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={gardevoir} alt="sprite" />
-              <img className="sprite second-sprite" src={azelf} alt="sprite" />
+              <img className="sprite second-sprite" src={gallade} alt="sprite" />
             </div>
             <p>Ross Cawthon (Masters) - 40<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={gardevoir} alt="sprite" />
-              <img className="sprite second-sprite" src={azelf} alt="sprite" />
+              <img className="sprite second-sprite" src={gallade} alt="sprite" />
             </div>
             <p>Miska Saari (Masters) - 50<sup>th</sup> Place</p>
           </a>
