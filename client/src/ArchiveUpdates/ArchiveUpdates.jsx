@@ -120,6 +120,7 @@ import pyroar from '../../public/assets/sprites/pyroar.png'
 import infernape from '../../public/assets/sprites/infernape.png'
 import kingdra from '../../public/assets/sprites/kingdra.png'
 import dialga from '../../public/assets/sprites/dialga.png'
+import mewtwoMewtagteam from '../../public/assets/sprites/mewtwo-mew-tagteam.png'
 
 const ArticleContainer = styled.div`
     width: 100%;
@@ -160,7 +161,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 3, 2026</p>
+          <p>Last Updated: Sept 4, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -176,6 +177,32 @@ const ArchiveUpdates = () => {
           <h3 className='boxxed'>September 2026</h3>
           <br />
           <p style={{ fontWeight: 600 }}>Newly Discovered Results:</p>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2019_WORLDS/seniors'>2019 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2019_WORLDS/seniors/Lucas%20Xing-CA' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={mewtwoMewtagteam} alt="sprite" />
+            </div>
+            <p>Lucas Xing (Seniors) - 28<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2015_WORLDS/seniors'>2015 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2015_WORLDS/seniors/Alex%20Schemanske-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={megarayquaza} alt="sprite" />
+              <img className="sprite second-sprite" src={bronzong} alt="sprite" />
+            </div>
+            <p>Alex Schemanske (Seniors) - 12<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
 
           <h4 className='archive-update-h4'><a href='/tournaments/2011_WORLDS/juniors'>2011 Worlds</a></h4>
           <br></br>

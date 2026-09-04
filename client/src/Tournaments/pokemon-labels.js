@@ -628,6 +628,7 @@ const customLabelsConfig = {
         'regirock-honchkrow': 'Regirock Walls',
     },
     '2019': {
+        'greninja-zoroark-tagteam-naganadel': 'Greninja & Zoroark Naganadel',
         'vikavolt-charjabug': 'Vikavolt Charjabug',
         'zoroark-gyarados': 'Zoroark Gyarados',
         'zoroark-slowking': 'Zoroark Slowking',
@@ -719,6 +720,7 @@ const customLabelsConfig = {
         'jumpluff-natu': 'Lost March',
         'exeggutor-alola-grovyle': 'Tropical Shake',
         'malamar-marshadow': 'Malamar',
+        'vileplume-pheromosa-buzzwole-tagteam': 'Vileplume Pheromosa & Buzzwole',
     },
     '2018': {
         'zoroark-magcargo': 'Zoroark Magcargo',
@@ -835,6 +837,7 @@ const customLabelsConfig = {
         'alakazam-mega-espeon': 'Mega Alakazam',
     },
     '2016': {
+        'blank-zoroark': 'Zoroark',
         'blank-yveltal': 'Yveltal',
         'blank-exeggutor': 'Exeggutor',
         'vespiquen-yveltal': 'Vespiquen Yveltal',
@@ -917,7 +920,7 @@ const customLabelsConfig = {
         'manectric-mega-terrakion': 'Mega Manectric',
         'landorus-therian-leafeon': 'Landorus-EX',
         'blank-manectric-mega': 'Mega Manectric',
-        'rayquaza-mega-bronzong': 'Mega Rayquaza Bronzong',
+        'rayquaza-mega-bronzong': 'Metal Rayquaza',
         'bronzong-aegislash': 'Metal Box',
         'blank-wailord': 'Wailord Stall',
         'bronzong-klinklang': 'Metal Box Klingklang',

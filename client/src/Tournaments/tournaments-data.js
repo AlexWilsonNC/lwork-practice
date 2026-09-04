@@ -3137,6 +3137,38 @@ const tournamentList = [
     "date": "May 31, 2019",
     "flag": usa
     },
+    {
+        "id": "2019_SINGAPORE",
+    "name": "Singapore Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 25, 2019",
+    "flag": singapore
+    },
+    {
+        "id": "2019_SAO_PAULO",
+    "name": "São Paulo Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 18, 2019",
+    "flag": brazil
+    },
+    {
+        "id": "2019_SYDNEY",
+    "name": "Sydney Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 18, 2019",
+    "flag": australia
+    },
+    {
+        "id": "2019_SANTA_CLARA",
+    "name": "Santa Clara Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 17, 2019",
+    "flag": usa
+    },
 ];
 
 const parseDate = (dateStr) => {
