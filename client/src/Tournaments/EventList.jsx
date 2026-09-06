@@ -37,6 +37,7 @@ import mexico from '../assets/flags/mexico.png';
 import netherlands from '../assets/flags/netherlands.png';
 import newZealand from '../assets/flags/new-zealand.png';
 import norway from '../assets/flags/norway.png';
+import panama from '../assets/flags/panama.png';
 import peru from '../assets/flags/peru.png';
 import philippines from '../assets/flags/philippines.png';
 import poland from '../assets/flags/poland.png';
@@ -65,6 +66,7 @@ const countryNames = {
   'brazil': 'Brazil (Latin America)',
   'canada': 'Canada (North America)',
   'chile': 'Chile (Latin America)',
+  'panama': 'Panama (Latin America)',
   'china': 'China (Asia-Pacific)',
   'colombia': 'Colombia (Latin America)',
   'croatia': 'Croatia (Europe)',
@@ -287,7 +289,7 @@ const FilterTop = styled.div`
 
 const regionFlags = {
   'NA': [usa, canada, puertoRico, online],
-  'LA': [brazil, argentina, peru, colombia, mexico, chile, elSalvador, ecuador, online],
+  'LA': [brazil, argentina, peru, colombia, mexico, chile, elSalvador, ecuador, panama, online],
   'EU': [germany, france, uk, spain, poland, austria, belarus, belgium, croatia, czechia, denmark, finland, italy, netherlands, norway, portugal, russia, slovakia, spain, sweden, switzerland, online],
   'OC': [australia, newZealand, online],
   'AP': [china, hongKong, indonesia, japan, southKorea, malaysia, philippines, singapore, taiwan, thailand, online],
@@ -814,7 +816,7 @@ const EventList = () => {
                 const flagKey = Object.entries({
                   argentina, australia, austria, belarus, belgium, brazil, canada, chile, china, colombia,
                   croatia, czechia, denmark, ecuador, elSalvador, finland, france, germany, hongKong, indonesia,
-                  italy, japan, southKorea, malaysia, mexico, netherlands, newZealand, norway, peru, philippines,
+                  italy, japan, southKorea, malaysia, panama, mexico, netherlands, newZealand, norway, peru, philippines,
                   poland, portugal, puertoRico, russia, singapore, slovakia, southAfrica, spain, sweden,
                   switzerland, taiwan, thailand, usa, uk, unknown, online
                 }).find(([, img]) => img === event.flag)?.[0] || 'unknown';

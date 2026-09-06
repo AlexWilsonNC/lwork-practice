@@ -98,6 +98,7 @@ import peru from '../assets/flags/peru.png';
 import philippines from '../assets/flags/philippines.png';
 import poland from '../assets/flags/poland.png';
 import portugal from '../assets/flags/portugal.png';
+import panama from '../assets/flags/panama.png';
 import puertoRico from '../assets/flags/puerto-rico.png';
 import russia from '../assets/flags/russia.png';
 import singapore from '../assets/flags/singapore.png';
@@ -126,6 +127,7 @@ const flagForDiffPurpose = {
     southAfrica: southAfrica,
     indonesia: indonesia,
     japan: japan,
+    panama: panama,
     mexico: mexico,
     costaRica: costaRica,
     peru: peru,

@@ -65,6 +65,7 @@ import mexico from '../assets/flags/mexico.png';
 import netherlands from '../assets/flags/netherlands.png';
 import newZealand from '../assets/flags/new-zealand.png';
 import norway from '../assets/flags/norway.png';
+import panama from '../assets/flags/panama.png';
 import peru from '../assets/flags/peru.png';
 import philippines from '../assets/flags/philippines.png';
 import poland from '../assets/flags/poland.png';
@@ -3169,11 +3170,67 @@ const tournamentList = [
     "date": "May 17, 2019",
     "flag": usa
     },
+    {
+        "id": "2019_JOHANNESBURG",
+    "name": "Johannesburg Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 18, 2019",
+    "flag": southAfrica
+    },
+    {
+        "id": "2019_COLOMBIA",
+    "name": "Bogotá Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 12, 2019",
+    "flag": colombia
+    },
+    {
+        "id": "2019_CANCUN",
+    "name": "Cancún Special Event",
+    "eventType": "speSeries",
+    "eventLogo":speSeries,
+    "date": "May 12, 2019",
+    "flag":mexico
+    },
+    {
+       "id": "2019_PANAMA",
+    "name": "Panama Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "May 12, 2019",
+    "flag": panama
+    },
+    {
+       "id": "2019_BRISTOL",
+    "name": "Bristol Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 11, 2019",
+    "flag": uk
+    },
+    {
+       "id": "2019_MALAYSIA",
+    "name": "Kuala Lumpur Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 11, 2019",
+    "flag": malaysia
+    },
+    {
+       "id": "2019_HARTFORD",
+    "name": "Hartford Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "May 3, 2019",
+    "flag": usa,
+    "expanded": "(Expanded)"
+    },
 ];
 
 const parseDate = (dateStr) => {
     if (dateStr.startsWith('TBA')) {
-        // Handle 'TBA' dates by setting them far in the future
         return new Date('9999-12-31');
     }
     return new Date(dateStr);
