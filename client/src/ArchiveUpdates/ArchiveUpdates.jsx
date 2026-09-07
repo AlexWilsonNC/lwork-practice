@@ -120,6 +120,7 @@ import pyroar from '../../public/assets/sprites/pyroar.png'
 import infernape from '../../public/assets/sprites/infernape.png'
 import kingdra from '../../public/assets/sprites/kingdra.png'
 import dialga from '../../public/assets/sprites/dialga.png'
+import drampa from '../../public/assets/sprites/drampa.png'
 import mewtwoMewtagteam from '../../public/assets/sprites/mewtwo-mew-tagteam.png'
 
 const ArticleContainer = styled.div`
@@ -161,7 +162,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 4, 2026</p>
+          <p>Last Updated: Sept 7, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -191,9 +192,69 @@ const ArchiveUpdates = () => {
 
           <hr className='archive-updates-mini-hr'></hr>
 
-          <h4 className='archive-update-h4'><a href='/tournaments/2015_WORLDS/seniors'>2015 Worlds</a></h4>
+          <h4 className='archive-update-h4'><a href='/tournaments/2018_NAIC/'>2018 NAIC</a></h4>
           <br></br>
 
+          <a href='/tournaments/2018_NAIC/masters/Nick%20Robinson-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={golisopod} alt="sprite" />
+            </div>
+            <p>Nick Robinson (Masters) - 124<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2017_NAIC/'>2017 NAIC</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2017_NAIC/masters/Nick%20Robinson-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={zoroark} alt="sprite" />
+              <img className="sprite second-sprite" src={drampa} alt="sprite" />
+            </div>
+            <p>Nick Robinson (Masters) - 38<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
+          <h4 className='archive-update-h4'><a href='/tournaments/2016_WORLDS'>2016 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2016_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manaphy} alt="sprite" />
+            </div>
+            <p>Steffen Eriksen (Masters) - 33<sup>rd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/seniors/Alex%20Schemanske-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manaphy} alt="sprite" />
+            </div>
+            <p>Simon Eriksen (Seniors) - 52<sup>nd</sup> Place</p>
+          </a>
+          <a href='/tournaments/2015_WORLDS/seniors/Alex%20Schemanske-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={seismitoad} alt="sprite" />
+              <img className="sprite second-sprite" src={manaphy} alt="sprite" />
+            </div>
+            <p>Nick Robinson (Masters) - 71<sup>st</sup> Place</p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+          
+          <h4 className='archive-update-h4'><a href='/tournaments/2015_WORLDS'>2015 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2015_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={donphan} alt="sprite" />
+            </div>
+            <p>Simon Eriksen (Masters) - 98<sup>th</sup> Place</p>
+          </a>
           <a href='/tournaments/2015_WORLDS/seniors/Alex%20Schemanske-US' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={megarayquaza} alt="sprite" />
@@ -226,6 +287,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={garchomp} alt="sprite" />
             </div>
             <p>Sho Sasaki (Masters) - 29<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2010_WORLDS/masters/' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
+            </div>
+            <p>Simon Eriksen (Masters) - 33<sup>rd</sup> Place</p>
           </a>
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
