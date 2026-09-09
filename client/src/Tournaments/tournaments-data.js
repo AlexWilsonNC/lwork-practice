@@ -3227,6 +3227,30 @@ const tournamentList = [
     "flag": usa,
     "expanded": "(Expanded)"
     },
+    {
+       "id": "2019_DAYTONA_BEACH",
+    "name": "Daytona Beach Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Apr 19, 2019",
+    "flag": usa
+    },
+    {
+       "id": "2019_GUATEMALA",
+    "name": "Guatemala Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Apr 13, 2019",
+    "flag": guatemala
+    },
+    {
+       "id": "2019_MANILA",
+    "name": "Manila Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Apr 13, 2019",
+    "flag": philippines
+    },
 ];
 
 const parseDate = (dateStr) => {

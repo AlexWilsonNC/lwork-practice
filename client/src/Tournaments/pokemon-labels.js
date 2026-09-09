@@ -628,6 +628,8 @@ const customLabelsConfig = {
         'regirock-honchkrow': 'Regirock Walls',
     },
     '2019': {
+        'golisopod-lucario': 'Golisopod Lucario',
+        'zygarde-complete-lucario': 'Zygarde Lucario',
         'greninja-zoroark-tagteam-naganadel': 'Greninja & Zoroark Naganadel',
         'vikavolt-charjabug': 'Vikavolt Charjabug',
         'zoroark-gyarados': 'Zoroark Gyarados',
@@ -772,9 +774,13 @@ const customLabelsConfig = {
         'darkrai-weavile': 'Turbo Dark Box',
         'darkrai-greninja-zoroark-tagteam': 'Turbo Dark',
         'regirock-honchkrow': 'Regirock Walls',
-        'blank-blastoise': 'Blastoise',
+        'blank-blastoise': 'Archie\'s Blastoise',
         'zoroark-golisopod': 'Zoroark Golisopod',
         'drampa-garbodor': 'Drampa Garbodor',
+        'seismitoad-zoroark': 'Seismitoad Zoroark',
+        'blank-rayquaza': 'Rayquaza GX',
+        'seismitoad-garbodor': 'Seismitoad Garbodor',
+        'blank-buzzwole': 'Buzzwole',
     },
     '2018': {
         'zoroark-magcargo': 'Zoroark Magcargo',
