@@ -1788,47 +1788,6 @@ const EventPage = () => {
         }
     };
 
-    useEffect(() => {
-        if (deckTypeCountArray.length === 0) return;
-
-        const storageKey = `selectedArchetype_${eventId}`;
-
-        const isValidArchetype = key =>
-            key &&
-            key !== 'Unknown' &&
-            key !== 'blank-hyphen' &&
-            key !== 'blank-' &&
-            finalDeckTypeCountArray.some(
-                archetype => archetype.key === key
-            );
-
-        if (isValidArchetype(selectedArchetype)) {
-            return;
-        }
-
-        const savedKey = sessionStorage.getItem(storageKey);
-
-        const defaultKey =
-            isValidArchetype(savedKey)
-                ? savedKey
-                : finalDeckTypeCountArray[0]?.key || '';
-
-        if (!defaultKey) {
-            setSelectedArchetype('');
-            sessionStorage.removeItem(storageKey);
-            return;
-        }
-
-        setSelectedArchetype(defaultKey);
-        sessionStorage.setItem(storageKey, defaultKey);
-
-    }, [
-        deckTypeCountArray,
-        finalDeckTypeCountArray,
-        eventId,
-        selectedArchetype
-    ]);
-
     const getPlayerCount = (division) => {
         switch (division) {
             case 'masters':
@@ -2040,6 +1999,53 @@ const EventPage = () => {
             eventId
         ]
     );
+
+    useEffect(() => {
+        const availableArchetypes =
+            dataDay === 'day2'
+                ? finalDeckTypeCountArray
+                : dayOneTypeArray;
+
+        if (availableArchetypes.length === 0) return;
+
+        const storageKey = `selectedArchetype_${eventId}`;
+
+        const isValidArchetype = key =>
+            key &&
+            key !== 'Unknown' &&
+            key !== 'blank-hyphen' &&
+            key !== 'blank-' &&
+            availableArchetypes.some(
+                archetype => archetype.key === key
+            );
+
+        if (isValidArchetype(selectedArchetype)) {
+            return;
+        }
+
+        const savedKey = sessionStorage.getItem(storageKey);
+
+        const defaultKey =
+            isValidArchetype(savedKey)
+                ? savedKey
+                : availableArchetypes[0]?.key || '';
+
+        if (!defaultKey) {
+            setSelectedArchetype('');
+            sessionStorage.removeItem(storageKey);
+            return;
+        }
+
+        setSelectedArchetype(defaultKey);
+        sessionStorage.setItem(storageKey, defaultKey);
+
+    }, [
+        dataDay,
+        finalDeckTypeCountArray,
+        dayOneTypeArray,
+        eventId,
+        selectedArchetype
+    ]);
 
     const archetypes = useMemo(() => {
         // gather every archetype you know *plus* “Other”

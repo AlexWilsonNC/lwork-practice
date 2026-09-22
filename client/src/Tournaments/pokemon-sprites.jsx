@@ -169,6 +169,10 @@ export const getPokemonSprites = (decklist, sprite1, sprite2) => {
         firstSprite  = getPokemonSpriteURL('raging-bolt');
         secondSprite  = getPokemonSpriteURL('sandy-shocks');
     }
+    else if (hasPokemon('Comfey') && hasPokemon('Dudunsparce') && hasPokemon('Sylveon') && hasPokemon('Grafaiai')) {
+        firstSprite  = getPokemonSpriteURL('blank');
+        secondSprite  = getPokemonSpriteURL('substitute');
+    }
     else if (hasPokemon('Comfey') && hasPokemon('Hisuian Goodra VSTAR')) {
         firstSprite  = getPokemonSpriteURL('goodra-hisui');
         secondSprite  = getPokemonSpriteURL('comfey');

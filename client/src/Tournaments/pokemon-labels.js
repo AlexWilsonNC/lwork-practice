@@ -65,7 +65,6 @@ const customLabelsConfig = {
         'blank-feraligatr': 'Feraligatr',
         'blank-conkeldurr': 'Conkeldurr',
         'blank-archaludon': 'Archaludon',
-
     },
     '2026': {
         'shuckle-dudunsparce': 'Dudunsparce Control',
