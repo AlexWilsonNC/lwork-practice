@@ -764,6 +764,7 @@ const compareEnergyCards = (card1, card2) =>
 
 const forcedArchetypeSprites = {
     'Dragapult Hammers': ['dragapult'],
+    'Festival Lead': ['dipplin'],
     'Gardevoir & Sylveon': ['gardevoir-sylveon-tagteam'],
     'Gliscor': ['gliscor'],
     'Tyranitar PRIME': ['tyranitar'],
@@ -928,7 +929,9 @@ const EventPage = () => {
     }));
 
     const is2025Event = eventId.includes('2025') && eventId !== '2025_BALTIMORE' && eventId !== '2025_TOKYO_CL';
-    const is2026Event = eventId.includes('2026');
+    const is2026Event =
+        eventId.includes('2026') ||
+        eventId.includes('2027');
 
     const isModernEvent = is2025Event || is2026Event;
     const noPhaseDataEvents = [
