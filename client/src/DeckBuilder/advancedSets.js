@@ -126,8 +126,10 @@ import ascArt from '../assets/sets-filter-backgrounds/me/asc.png';
 import porArt from '../assets/sets-filter-backgrounds/me/por.jpg';
 import cRiArt from '../assets/sets-filter-backgrounds/me/cri.jpg';
 import pblArt from '../assets/sets-filter-backgrounds/me/pbl.jpg';
+import c30Art from '../assets/sets-filter-backgrounds/me/30c.jpg';
 
 export const SET_ARTWORKS = {
+    '30C': c30Art,
     PBL: pblArt,
     CRI: cRiArt,
     ASC: ascArt,
@@ -261,7 +263,7 @@ export const SET_ARTWORKS = {
 export const CUSTOM_FORMAT_SET_SECTIONS = [
     {
         title: 'Mega Evolution',
-        keys: ['PBL', 'CRI', 'POR', 'ASC', 'PFL', 'MEG']
+        keys: ['30C', 'PBL', 'CRI', 'POR', 'ASC', 'PFL', 'MEG']
     },
     {
         title: 'Scarlet & Violet',

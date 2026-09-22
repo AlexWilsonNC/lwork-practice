@@ -140,6 +140,7 @@ const formatDate = (dateString) => {
   export const availableSets = [
     // { name: "Prismatic Evolutions", abbrev: "PRE", releaseDate: "Jan 17, 2025", total: "252", notavailable: true },
     { separator: true, text: "Mega Evolution" },
+    { name: "30th Celebration ", abbrev: "30C", releaseDate: "Sep 16, 2026", total: "160" },
     { name: "Pitch Black", abbrev: "PBL", releaseDate: "Jul 17, 2026", total: "84" },
     { name: "Chaos Rising", abbrev: "CRI", releaseDate: "May 22, 2026", total: "88" },
     { name: "Perfect Order", abbrev: "POR", releaseDate: "Mar 27, 2026", total: "88" },
