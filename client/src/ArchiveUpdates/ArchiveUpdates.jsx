@@ -482,7 +482,7 @@ const ArchiveUpdates = () => {
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>
-          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a> and <a href='https://x.com/TrainerJEvans' target='_blank' rel='noopener noreferrer'>Jeremy Evans</a> for many of this month's finds!</p>
+          <p className='shout-out'>Shout-out to <a href='https://x.com/Whimsicast' target='_blank' rel='noopener noreferrer'>Whimsicast</a>, <a href='https://x.com/TrainerJEvans' target='_blank' rel='noopener noreferrer'>Jeremy Evans</a> and <a href='https://x.com/cetteanneelaTCG' target='_blank' rel='noopener noreferrer'>Rory</a> for many of this month's finds!</p>
 
 
           <hr className='title-hr' />

@@ -1627,10 +1627,13 @@ const CardSearch = React.forwardRef(function CardSearch(
         out.sort((a, b) => {
             const ia = setIdx(a.setAbbrev);
             const ib = setIdx(b.setAbbrev);
+
             if (ia !== ib) return ia - ib;
-            const na = parseInt(a.number, 10) || 0;
-            const nb = parseInt(b.number, 10) || 0;
-            return na - nb;
+
+            const numA = getCardNumberSortValue(a);
+            const numB = getCardNumberSortValue(b);
+
+            return numA - numB;
         });
 
         if (out.length > limit) {
@@ -1770,6 +1773,39 @@ const CardSearch = React.forwardRef(function CardSearch(
 
         return s;
     }
+
+    const getCardNumberSortValue = (card) => {
+        const number = String(card.number || '').toUpperCase();
+        // 30th Celebration
+        // 1–158, then R, G, B, then CC1–CC30
+        if (card.setAbbrev === '30C') {
+            if (/^\d+$/.test(number)) {
+                return Number(number);
+            }
+
+            if (number === 'R') return 159;
+            if (number === 'G') return 160;
+            if (number === 'B') return 161;
+
+            const ccMatch = number.match(/^CC(\d+)$/);
+            if (ccMatch) {
+                return 161 + Number(ccMatch[1]);
+            }
+        }
+        // Celebrations
+        // 1–25, then CC1–CC25
+        if (card.setAbbrev === 'CEL') {
+            if (/^\d+$/.test(number)) {
+                return Number(number);
+            }
+
+            const ccMatch = number.match(/^CC(\d+)$/);
+            if (ccMatch) {
+                return 25 + Number(ccMatch[1]);
+            }
+        }
+        return parseInt(number, 10) || 0;
+    };
 
     const FORMAT_MANUAL_OVERRIDES = {
         'UPR|UNM': { // 2019 Worlds
@@ -2071,8 +2107,8 @@ const CardSearch = React.forwardRef(function CardSearch(
                     const idxA = setOrder.indexOf(a.setAbbrev);
                     const idxB = setOrder.indexOf(b.setAbbrev);
                     if (idxA !== idxB) return idxA - idxB;
-                    const numA = parseInt(a.number, 10) || 0;
-                    const numB = parseInt(b.number, 10) || 0;
+                    const numA = getCardNumberSortValue(a);
+                    const numB = getCardNumberSortValue(b);
                     return numA - numB;
                 });
 

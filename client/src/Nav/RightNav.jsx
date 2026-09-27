@@ -101,7 +101,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
     <div className='right-nav' ref={ref}>
       <ul open={open} className="right-links">
         <li><a href='/tournaments/completed'>Tournaments</a></li>
-        <li><a href='30C'>Cards</a></li>
+        <li><a href='/cards/30C'>Cards</a></li>
         <li><a href='/decks'>Decks</a></li>
         <li><a href='/players'>Players</a></li>
       </ul>
