@@ -164,7 +164,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
               <a href="/deckbuilder">
                 <span className="material-symbols-outlined">construction</span>
                 <strong>Deck Builder</strong>
-                <span className="new-badge">NEW</span>
+                {/* <span className="new-badge">NEW</span> */}
               </a>
             </li>
 
@@ -189,7 +189,7 @@ const RightNav = forwardRef(({ open, setOpen, dark }, ref) => {
               <a href="/worlds-booklets">
                 <span className="material-symbols-outlined">passport</span>
                 <strong>Worlds Booklets</strong>
-                <span className="new-badge">NEW</span>
+                {/* <span className="new-badge">NEW</span> */}
               </a>
             </li>
           </ul>

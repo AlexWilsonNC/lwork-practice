@@ -164,7 +164,7 @@ const ArchiveUpdates = () => {
         </Helmet>
         <div className='article-title'>
           <h2>Documented Archive Updates</h2>
-          <p>Last Updated: Sept 9, 2026</p>
+          <p>Last Updated: Sept 27, 2026</p>
         </div>
 
         {/* Article Image */}
@@ -229,6 +229,13 @@ const ArchiveUpdates = () => {
               <img className="sprite second-sprite" src={drampa} alt="sprite" />
             </div>
             <p>Nick Robinson (Masters) - 38<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+          <a href='/tournaments/2017_NAIC/masters/Chris%20Derocher-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={megarayquaza} alt="sprite" />
+            </div>
+            <p>Chris Derochers (Masters) - 55<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>
@@ -373,66 +380,24 @@ const ArchiveUpdates = () => {
           </a>
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={luxray} alt="sprite" />
-              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
-            </div>
-            <p>Tracy Key (Masters) - 36<sup>th</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={luxray} alt="sprite" />
-              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
-            </div>
-            <p>Sean Takemoto (Masters) - 38<sup>th</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={sableye} alt="sprite" />
-              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
-            </div>
-            <p>Gino Lombardi (Masters) - 39<sup>th</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={gardevoir} alt="sprite" />
-              <img className="sprite second-sprite" src={gallade} alt="sprite" />
-            </div>
-            <p>Ross Cawthon (Masters) - 40<sup>th</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={gardevoir} alt="sprite" />
-              <img className="sprite second-sprite" src={gallade} alt="sprite" />
-            </div>
-            <p>Miska Saari (Masters) - 50<sup>th</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
               <img className="sprite" src={blank} alt="sprite" />
-              <img className="sprite second-sprite" src={gengar} alt="sprite" />
+              <img className="sprite second-sprite" src={blank} alt="sprite" />
             </div>
-            <p>Murat Gursoz (Masters) - 53<sup>rd</sup> Place</p>
-          </a>
-          <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
-            <div className="player-deck-icons">
-              <img className="sprite" src={jumpluff} alt="sprite" />
-              <img className="sprite second-sprite" src={luxray} alt="sprite" />
-            </div>
-            <p>Edmund Tan (Masters) - 57<sup>th</sup> Place</p>
+            <p>All Archetypes (Masters) - 35<sup>th</sup>-64<sup>th</sup> Place</p>
           </a>
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
               <img className="sprite" src={dialga} alt="sprite" />
               <img className="sprite second-sprite" src={garchomp} alt="sprite" />
             </div>
-            <p>Joao Lopes (Masters) - 58<sup>th</sup> Place</p>
+            <p>Joao Lopes (Masters) - 58<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
           </a>
           <a href='/tournaments/2010_WORLDS/masters' className='new-div-fix-wrap'>
             <div className="player-deck-icons">
-              <img className="sprite" src={kingdra} alt="sprite" />
-              <img className="sprite second-sprite" src={machamp} alt="sprite" />
+              <img className="sprite" src={luxray} alt="sprite" />
+              <img className="sprite second-sprite" src={garchomp} alt="sprite" />
             </div>
-            <p>Chris Fulop (Masters) - 60<sup>th</sup> Place</p>
+            <p>Michael Diaz (Seniors) - 5<sup>th</sup> Place</p>
           </a>
 
           <hr className='archive-updates-mini-hr'></hr>

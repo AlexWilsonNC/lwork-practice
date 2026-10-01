@@ -3251,6 +3251,14 @@ const tournamentList = [
     "date": "Apr 13, 2019",
     "flag": philippines
     },
+    {
+    "id": "2019_PERU2",
+    "name": "Peru Special Event #2",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Apr 13, 2019",
+    "flag": peru
+    },
 ];
 
 const parseDate = (dateStr) => {
