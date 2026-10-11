@@ -94,6 +94,7 @@ const tournamentList = [
         "date": "Aug 13, 2027",
         "flag": singapore,
         "location": "Singapore",
+        "results": false
     },
     {
         "id": "2024_SAO-PAULO",
@@ -2016,7 +2017,8 @@ const tournamentList = [
         "date": "Jun 18, 2027",
         "flag": usa,
         "location": "Chicago, Illinois",
-        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships"
+        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships",
+        "results": false
     },
     {
         "id": "2027_BALTIMORE",
@@ -2066,7 +2068,8 @@ const tournamentList = [
         "date": "Oct 9, 2026",
         "flag": usa,
         "location": "Louisville, Kentucky",
-        "eventSite": "https://trainerchampionships.com/event/louisville-2027/"
+        "eventSite": "https://trainerchampionships.com/event/louisville-2027/",
+        "results": false
     },
     {
         "id": "2027_NICE",
@@ -2076,7 +2079,8 @@ const tournamentList = [
         "date": "Oct 17, 2026",
         "flag": france,
         "location": "Nice, France",
-        "eventSite": "https://www.trainerchampionships.com/event/nice-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/nice-2027/",
+        "results": false
     },
     {
         "id": "2027_PUEBLA",
@@ -2086,7 +2090,8 @@ const tournamentList = [
         "date": "Oct 24, 2026",
         "flag": mexico,
         "location": "Puebla, Mexico",
-        "eventSite": "https://www.trainerchampionships.com/event/puebla-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/puebla-2027/",
+        "results": false
     },
     {
         "id": "2027_GDANSK",
@@ -2096,7 +2101,8 @@ const tournamentList = [
         "date": "Oct 31, 2026",
         "flag": poland,
         "location": "Gdańsk, Poland",
-        "eventSite": "https://www.trainerchampionships.com/event/gdansk-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/gdansk-2027/",
+        "results": false
     },
     {
         "id": "2027_BUENOS-AIRES",
@@ -2106,7 +2112,8 @@ const tournamentList = [
         "date": "Nov 14, 2026",
         "flag": argentina,
         "location": "Buenos Aires, Argentina",
-        "eventSite": "https://www.trainerchampionships.com/event/buenos-aires-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/buenos-aires-2027/",
+        "results": false
     },
     {
         "id": "2027_LAIC",
@@ -2116,7 +2123,8 @@ const tournamentList = [
         "date": "Nov 20, 2026",
         "flag": brazil,
         "location": "São Paulo, Brazil",
-        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships"
+        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships",
+        "results": false
     },
     {
         "id": "2027_STUTTGART",
@@ -2126,7 +2134,8 @@ const tournamentList = [
         "date": "Nov 28, 2026",
         "flag": germany,
         "location": "Stuttgart, Germany",
-        "eventSite": "https://www.trainerchampionships.com/event/stuttgart-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/stuttgart-2027/",
+        "results": false
     },
     {
         "id": "2027_LAS-VEGAS",
@@ -2136,7 +2145,8 @@ const tournamentList = [
         "date": "Dec 4, 2026",
         "flag": usa,
         "location": "Las Vegas, Nevada",
-        "eventSite": "https://www.trainerchampionships.com/event/las-vegas-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/las-vegas-2027/",
+        "results": false
     },
     {
         "id": "2027_SYDNEY",
@@ -2146,7 +2156,8 @@ const tournamentList = [
         "date": "Jan 16, 2027",
         "flag": australia,
         "location": "Sydney, Australia",
-        "eventSite": "https://www.trainerchampionships.com/event/sydney-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/sydney-2027/",
+        "results": false
     },
     {
         "id": "2027_MERIDA",
@@ -2156,7 +2167,8 @@ const tournamentList = [
         "date": "Jan 23, 2027",
         "flag": mexico,
         "location": "Mérida, Mexico",
-        "eventSite": "https://www.trainerchampionships.com/event/merida-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/merida-2027/",
+        "results": false
     },
     {
         "id": "2027_BIRMINGHAM",
@@ -2166,7 +2178,8 @@ const tournamentList = [
         "date": "Jan 30, 2027",
         "flag": uk,
         "location": "Birmingham, United Kingdom",
-        "eventSite": "https://www.trainerchampionships.com/event/birmingham-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/birmingham-2027/",
+        "results": false
     },
     {
         "id": "2027_AUCKLAND",
@@ -2176,7 +2189,8 @@ const tournamentList = [
         "date": "Jan 30, 2027",
         "flag": newZealand,
         "location": "Auckland, New Zealand",
-        "eventSite": "https://www.trainerchampionships.com/event/auckland-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/auckland-2027/",
+        "results": false
     },
     {
         "id": "2027_EUIC",
@@ -2186,7 +2200,8 @@ const tournamentList = [
         "date": "Feb 19, 2027",
         "flag": uk,
         "location": "London, United Kingdom",
-        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships"
+        "eventSite": "https://championships.pokemon.com/en-us/about/international-championships",
+        "results": false
     },
     {
         "id": "2027_SANTIAGO",
@@ -2196,7 +2211,8 @@ const tournamentList = [
         "date": "Feb 27, 2027",
         "flag": chile,
         "location": "Santiago, Chile",
-        "eventSite": "https://www.trainerchampionships.com/event/santiago-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/santiago-2027/",
+        "results": false
     },
     {
         "id": "2027_RIO-DE-JANEIRO",
@@ -2206,7 +2222,8 @@ const tournamentList = [
         "date": "Mar 6, 2027",
         "flag": brazil,
         "location": "Rio de Janeiro, Brazil",
-        "eventSite": "https://www.trainerchampionships.com/event/rio-de-janeiro-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/rio-de-janeiro-2027/",
+        "results": false
     },
     {
         "id": "2027_MONTERREY",
@@ -2216,7 +2233,8 @@ const tournamentList = [
         "date": "Apr 10, 2027",
         "flag": mexico,
         "location": "Monterrey, Mexico",
-        "eventSite": "https://www.trainerchampionships.com/event/monterrey-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/monterrey-2027/",
+        "results": false
     },
     {
         "id": "2027_LISBON",
@@ -2226,7 +2244,8 @@ const tournamentList = [
         "date": "Apr 10, 2027",
         "flag": portugal,
         "location": "Lisbon, Portugal",
-        "eventSite": "https://www.trainerchampionships.com/event/lisbon-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/lisbon-2027/",
+        "results": false
     },
     {
         "id": "2027_MILWAUKEE",
@@ -2236,7 +2255,8 @@ const tournamentList = [
         "date": "Apr 16, 2027",
         "flag": usa,
         "location": "Milwaukee, Wisonsin",
-        "eventSite": "https://www.trainerchampionships.com/event/milwaukee-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/milwaukee-2027/",
+        "results": false
     },
     {
         "id": "2027_LIMA",
@@ -2246,7 +2266,8 @@ const tournamentList = [
         "date": "Apr 24, 2027",
         "flag": peru,
         "location": "Lima, Peru",
-        "eventSite": "https://www.trainerchampionships.com/event/lima-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/lima-2027/",
+        "results": false
     },
     {
         "id": "2027_PRAGUE",
@@ -2256,7 +2277,8 @@ const tournamentList = [
         "date": "May 8, 2027",
         "flag": czechia,
         "location": "Prague, Czechia",
-        "eventSite": "https://www.trainerchampionships.com/event/prague-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/prague-2027/",
+        "results": false
     },
     {
         "id": "2027_PORTO-ALEGRE",
@@ -2266,7 +2288,8 @@ const tournamentList = [
         "date": "May 8, 2027",
         "flag": brazil,
         "location": "Porto Alegre, Brazil",
-        "eventSite": "https://www.trainerchampionships.com/event/porto-alegre-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/porto-alegre-2027/",
+        "results": false
     },
     {
         "id": "2027_UTRECHT",
@@ -2276,7 +2299,8 @@ const tournamentList = [
         "date": "May 22, 2027",
         "flag": netherlands,
         "location": "Utrecht, Netherlands",
-        "eventSite": "https://www.trainerchampionships.com/event/utrecht-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/utrecht-2027/",
+        "results": false
     },
     {
         "id": "2027_SAN-DIEGO",
@@ -2286,7 +2310,8 @@ const tournamentList = [
         "date": "May 28, 2027",
         "flag": usa,
         "location": "San Diego, California",
-        "eventSite": "https://www.trainerchampionships.com/event/san-diego-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/san-diego-2027/",
+        "results": false
     },
     {
         "id": "2027_MELBOURNE",
@@ -2296,7 +2321,8 @@ const tournamentList = [
         "date": "May 29, 2027",
         "flag": australia,
         "location": "Melbourne, Australia",
-        "eventSite": "https://www.trainerchampionships.com/event/melbourne-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/melbourne-2027/",
+        "results": false
     },
     {
         "id": "2027_BOLOGNA",
@@ -2306,7 +2332,8 @@ const tournamentList = [
         "date": "June 5, 2027",
         "flag": italy,
         "location": "Bologna, Italy",
-        "eventSite": "https://www.trainerchampionships.com/event/bologna-2027/"
+        "eventSite": "https://www.trainerchampionships.com/event/bologna-2027/",
+        "results": false
     },
     {
           "id": "2027_ATLANTA",
@@ -2316,7 +2343,8 @@ const tournamentList = [
   "date": "Jan 15, 2027",
   "flag": usa,
   "location": "Atlanta, Georgia",
-  "eventSite": "https://www.trainerchampionships.com/event/atlanta-2027/"
+  "eventSite": "https://www.trainerchampionships.com/event/atlanta-2027/",
+        "results": false
     },
     {
           "id": "2027_TORONTO",
@@ -2326,7 +2354,8 @@ const tournamentList = [
   "date": "Apr 2, 2027",
   "flag": canada,
   "location": "Toronto, Canada",
-  "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/"
+  "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/",
+        "results": false
     },
     {
               "id": "2023_PUERTO_RICO",

@@ -241,11 +241,11 @@ const Homepage = () => {
                                     <img className='card-image' src={archiveUpdateImg} />
                                     <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                     <div className='homepage-box-content'>
-                                        <h3><span className='new-color'>NEW</span> long-lost <span className='new-color'>Worlds</span> Decks Discovered!</h3>
-                                        <p>A ton of decks, spanning 2005 Worlds through 2019 Worlds, were discovered and documented throughout August! Check them out, this is history!</p>
+                                        <h3><span className='new-color'>More</span> long-lost <span className='new-color'>Worlds</span> Decks Discovered!</h3>
+                                        <p>A ton of decks, from 2007 through 2019 Worlds, were discovered and documented in September! Nationals and Internationals results too!</p>
                                     </div>
                                     <div className='card-date-plus-read'>
-                                        <p>Sep 1, 2026</p>
+                                        <p>Oct 1, 2026</p>
                                         <p>View Updates</p>
                                     </div>
                                 </WrappedFeature>
@@ -497,11 +497,11 @@ const Homepage = () => {
                                 <img className='card-image' src={archiveUpdateImg} />
                                 <img className='card-profile-pic transparent-profile-pic' src={legendsLogoProfile} />
                                 <div className='homepage-box-content'>
-                                    <h3><span className='new-color'>NEW</span> long-lost <span className='new-color'>Worlds</span> Decks Discovered!</h3>
-                                    <p>A ton of decks, spanning 2005 Worlds through 2019 Worlds, were discovered and documented throughout August! Check them out, this is history!</p>
+                                    <h3><span className='new-color'>More</span> long-lost <span className='new-color'>Worlds</span> Decks Discovered!</h3>
+                                    <p>A ton of decks, from 2007 through 2019 Worlds, were discovered and documented in September! Nationals and Internationals results too!</p>
                                 </div>
                                 <div className='card-date-plus-read'>
-                                    <p>Sep 1, 2026</p>
+                                    <p>Oct 1, 2026</p>
                                     <p>View Updates</p>
                                 </div>
                             </WrappedFeature>
