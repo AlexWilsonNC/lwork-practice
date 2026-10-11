@@ -1,5 +1,10 @@
 const customLabelsConfig = {
     '2027': {
+        'cinccino-metang': 'Cinccino',
+        'ogerpon-arboliva': 'Arboliva',
+        'mew-clefairy': 'Mew Box',
+        'ogerpon-hydrapple': 'Hydrapple',
+        'ogerpon-clefairy': 'Basic Box',
         'blank-zoroark': 'N\'s Zoroark',
         'ogerpon-ogerpon-wellspring': 'Ogerpon Box',
         'blank-slowking': 'Slowking',
