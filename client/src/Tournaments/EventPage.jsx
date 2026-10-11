@@ -936,6 +936,7 @@ const EventPage = () => {
 
     const isModernEvent = is2025Event || is2026Event;
     const noPhaseDataEvents = [
+        '2027_RECIFE',
         '2027_FRANKFURT',
         '2027_BRISBANE',
         '2026_AUCKLAND',
