@@ -346,6 +346,19 @@ const ArchiveUpdates = () => {
 
           <hr className='archive-updates-mini-hr'></hr>
 
+          <h4 className='archive-update-h4'><a href='/tournaments/2012_WORLDS/masters'>2012 Worlds</a></h4>
+          <br></br>
+
+          <a href='/tournaments/2012_WORLDS/masters/Samuel%20Liggett-US' className='new-div-fix-wrap'>
+            <div className="player-deck-icons">
+              <img className="sprite" src={blank} alt="sprite" />
+              <img className="sprite second-sprite" src={darkrai} alt="sprite" />
+            </div>
+            <p>Samuel Liggett (Masters) - 25<sup>th</sup> Place <span className='small-text-archive archive-update-has-list'>list&nbsp;✔</span></p>
+          </a>
+
+          <hr className='archive-updates-mini-hr'></hr>
+
           <h4 className='archive-update-h4'><a href='/tournaments/2010_WORLDS/masters'>2010 Worlds</a></h4>
           <br></br>
 
