@@ -700,6 +700,11 @@ const customLabelsConfig = {
         'regirock-honchkrow': 'Regirock Walls',
     },
     '2019': {
+        'zygarde-complete-buzzwole': 'Zygarde Buzzroc',
+        'gardevoir-zoroark': 'Gardevoir GX',
+        'lycanroc-dusk-non-gmax-persian-alola': 'Lycanroc Perisan',
+        'buzzwole-lucario': 'Buzzwole Lucario',
+        'naganadel-buzzwole': 'Beast Box',
         'golisopod-lucario': 'Golisopod Lucario',
         'zygarde-complete-lucario': 'Zygarde Lucario',
         'greninja-zoroark-tagteam-naganadel': 'Greninja & Zoroark Naganadel',

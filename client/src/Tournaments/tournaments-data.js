@@ -3288,6 +3288,38 @@ const tournamentList = [
     "date": "Apr 13, 2019",
     "flag": peru
     },
+    {
+        "id": "2019_ARGENTINA2",
+    "name": "Argentina Special Event #2",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Apr 6, 2019",
+    "flag": argentina
+    },
+    {
+        "id": "2019_DENVER",
+    "name": "Denver Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Apr 5, 2019",
+    "flag": usa
+    },
+    {
+        "id": "2019_JAKARTA",
+    "name": "Jakarta Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 30, 2019",
+    "flag": indonesia
+    },
+    {
+        "id": "2019_EL_SALVADOR",
+    "name": "El Salvador Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 23, 2019",
+    "flag": elSalvador
+    },
 ];
 
 const parseDate = (dateStr) => {
