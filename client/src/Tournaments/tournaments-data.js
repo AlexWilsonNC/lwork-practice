@@ -2068,8 +2068,7 @@ const tournamentList = [
         "date": "Oct 9, 2026",
         "flag": usa,
         "location": "Louisville, Kentucky",
-        "eventSite": "https://trainerchampionships.com/event/louisville-2027/",
-        "results": false
+        "eventSite": "https://trainerchampionships.com/event/louisville-2027/"
     },
     {
         "id": "2027_NICE",
