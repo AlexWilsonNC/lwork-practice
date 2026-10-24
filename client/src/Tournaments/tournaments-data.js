@@ -2078,8 +2078,7 @@ const tournamentList = [
         "date": "Oct 17, 2026",
         "flag": france,
         "location": "Nice, France",
-        "eventSite": "https://www.trainerchampionships.com/event/nice-2027/",
-        "results": false
+        "eventSite": "https://www.trainerchampionships.com/event/nice-2027/"
     },
     {
         "id": "2027_PUEBLA",
