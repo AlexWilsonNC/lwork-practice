@@ -2103,6 +2103,28 @@ const tournamentList = [
         "results": false
     },
     {
+        "id": "2027_SEATTLE",
+        "name": "Seattle Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "Feb 5, 2027",
+        "flag": usa,
+        "location": "Seattle, Washington",
+        "eventSite": "https://www.trainerchampionships.com/event/seattle-2027/",
+        "results": false
+    },
+    {
+        "id": "2027_SAN_ANTONIO",
+        "name": "San Antonio Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "Feb 26, 2027",
+        "flag": usa,
+        "location": "San Antonio, Texas",
+        "eventSite": "https://www.trainerchampionships.com/event/san-antonio-2027/",
+        "results": false
+    },
+    {
         "id": "2027_BUENOS-AIRES",
         "name": "Buenos Aires Special Event",
         "eventType": "speSeries",
@@ -2334,1029 +2356,1029 @@ const tournamentList = [
         "results": false
     },
     {
-          "id": "2027_ATLANTA",
-  "name": "Atlanta Regionals",
-  "eventType": "regionals",
-  "eventLogo": regional25,
-  "date": "Jan 15, 2027",
-  "flag": usa,
-  "location": "Atlanta, Georgia",
-  "eventSite": "https://www.trainerchampionships.com/event/atlanta-2027/",
+        "id": "2027_ATLANTA",
+        "name": "Atlanta Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "Jan 15, 2027",
+        "flag": usa,
+        "location": "Atlanta, Georgia",
+        "eventSite": "https://www.trainerchampionships.com/event/atlanta-2027/",
         "results": false
     },
     {
-          "id": "2027_TORONTO",
-  "name": "Toronto Regionals",
-  "eventType": "regionals",
-  "eventLogo": regional25,
-  "date": "Apr 2, 2027",
-  "flag": canada,
-  "location": "Toronto, Canada",
-  "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/",
+        "id": "2027_TORONTO",
+        "name": "Toronto Regionals",
+        "eventType": "regionals",
+        "eventLogo": regional25,
+        "date": "Apr 2, 2027",
+        "flag": canada,
+        "location": "Toronto, Canada",
+        "eventSite": "https://www.trainerchampionships.com/event/toronto-2027/",
         "results": false
     },
     {
-              "id": "2023_PUERTO_RICO",
-    "name": "Puerto Rico Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 24, 2023",
-    "flag": puertoRico,
-    "location": "Puerto Rico"
-    },
-    {
-              "id": "2023_CAPE_TOWN",
-    "name": "Cape Town Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 17, 2023",
-    "flag": southAfrica,
-    "location": "Cape Town, South Africa"
-    },
-    {
-             "id": "2023_JOHANNESBURG",
-    "name": "Johannesburg Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 10, 2023",
-    "flag": southAfrica,
-    "location": "Johannesburg, South Africa"
-    },
-    {
-             "id": "2023_FRESNO",
-    "name": "Fresno Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 9, 2023",
-    "flag": usa,
-    "location": "Fresno, California"
-    },
-    {
-            "id": "2023_SANTIAGO",
-    "name": "Santiago Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 3, 2023",
-    "flag": chile,
-    "location": "Santiago, Chile"
-    },
-    {
-            "id": "2023_MILWAUKEE",
-    "name": "Milwaukee Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 2, 2023",
-    "flag": usa,
-    "location": "Milwaukee, Wisconsin"
-    },
-    {
-            "id": "2023_TURIN",
-    "name": "Turin Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 3, 2023",
-    "flag": italy,
-    "location": "Turin, Italy"
-    },
-    {
-            "id": "2023_LIMA",
-    "name": "Lima Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 27, 2023",
-    "flag": peru,
-    "location": "Lima, Peru"
-    },
-    {
-            "id": "2023_BUENOS_AIRES",
-    "name": "Buenos Aires Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 20, 2023",
-    "flag": argentina,
-    "location": "Buenos Aires, Argentina"
-    },
-    {
-            "id": "2023_MALMO",
-    "name": "Malmö Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 20, 2023",
-    "flag": sweden,
-    "location": "Malmö, Sweden"
-    },
-    {
-           "id": "2023_HARTFORD",
-    "name": "Hartford Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 19, 2023",
-    "flag": usa,
-    "location": "Hartford, Connecticut"
-    },
-    {
-           "id": "2023_BOGOTA",
-    "name": "Bogotá Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 14, 2023",
-    "flag": colombia,
-    "location": "Bogotá, Colombia"
-    },
-    {
-           "id": "2023_SAO_PAULO",
-    "name": "São Paulo Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 6, 2023",
-    "flag": brazil,
-    "location": "São Paulo, Brazil"
-    },
-    {
-           "id": "2023_PORTLAND",
-    "name": "Portland Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 5, 2023",
-    "flag": usa,
-    "location": "Portland, Oregon"
-    },
-    {
-           "id": "2023_SYDNEY",
-    "name": "Sydney Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Apr 1, 2023",
-    "flag": australia,
-    "location": "Sydney, Australia"
-    },
-    {
-           "id": "2023_FORT_WAYNE",
-    "name": "Fort Wayne Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 31, 2023",
-    "flag": usa,
-    "location": "Fort Wayne, Indiana"
-    },
-    {
-           "id": "2023_CHARLOTTE",
-    "name": "Charlotte Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 23, 2023",
-    "flag": usa,
-    "location": "Charlotte, North Carolina"
-    },
-    {
-           "id": "2023_UTRECHT",
-    "name": "Utrecht Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 18, 2023",
-    "flag": netherlands,
-    "location": "Utrecht, Netherlands"
-    },
-    {
-           "id": "2023_NATAL",
-    "name": "Natal Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 11, 2023",
-    "flag": brazil,
-    "location": "Natal, Brazil"
-    },
-    {
-           "id": "2023_VANCOUVER",
-    "name": "Vancouver Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 10, 2023",
-    "flag": canada,
-    "location": "Vancouver, Canada"
-    },
-    {
-           "id": "2023_PERTH",
-    "name": "Perth Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 4, 2023",
-    "flag": australia,
-    "location": "Perth, Australia"
-    },
-    {
-           "id": "2023_BOCHUM",
-    "name": "Bochum Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Feb 25, 2023",
-    "flag": germany,
-    "location": "Bochum, Germany"
-    },
-    {
-           "id": "2023_KNOXVILLE",
-    "name": "Knoxville Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Feb 24, 2023",
-    "flag": usa,
-    "location": "Knoxville, Tennessee"
-    },
-    {
-           "id": "2023_ORLANDO",
-    "name": "Orlando Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Feb 3, 2023",
-    "flag": usa,
-    "location": "Orlando, Florida"
-    },
-    {
-           "id": "2023_LIVERPOOL",
-    "name": "Liverpool Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jan 21, 2023",
-    "flag": uk,
-    "location": "Liverpool, United Kingdom"
-    },
-    {
-           "id": "2023_SAN_DIEGO",
-    "name": "San Diego Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jan 6, 2023",
-    "flag": usa,
-    "location": "San Diego, California"
-    },
-    {
-           "id": "2023_ARLINGTON",
-    "name": "Arlington Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 16, 2022",
-    "flag": usa,
-    "location": "Arlington, Texas"
-    },
-    {
-           "id": "2023_TORONTO",
-    "name": "Toronto Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 2, 2022",
-    "flag": canada,
-    "location": "Toronto, Canada"
-    },
-    {
-           "id": "2023_STUTTGART",
-    "name": "Stuttgart Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 3, 2022",
-    "flag": germany,
-    "location": "Stuttgart, Germany"
-    },
-    {
-           "id": "2023_BRISBANE",
-    "name": "Brisbane Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 3, 2022",
-    "flag": australia,
-    "location": "Brisbane, Australia"
-    },
-    {
-           "id": "2023_WARSAW",
-    "name": "Warsaw Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Nov 12, 2022",
-    "flag": poland,
-    "location": "Warsaw, Poland"
-    },
-    {
-           "id": "2023_LILLE",
-    "name": "Lille Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Oct 22, 2022",
-    "flag": france,
-    "location": "Lille, France"
-    },
-    {
-           "id": "2023_SALT_LAKE_CITY",
-    "name": "Salt Lake City Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Oct 14, 2022",
-    "flag": usa,
-    "location": "Salt Lake City, Utah"
-    },
-    {
-           "id": "2023_PEORIA",
-    "name": "Peoria Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 30, 2022",
-    "flag": usa,
-    "location": "Peoria, Illinois"
-    },
-    {
-           "id": "2023_BILBAO",
-    "name": "Bilbao Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Sep 17, 2022",
-    "flag": spain,
-    "location": "Bilbao, Spain"
-    },
-    {
-           "id": "2023_BALTIMORE",
-    "name": "Baltimore Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 16, 2022",
-    "flag": usa,
-    "location": "Baltimore, Maryland"
-    },
-    {
-            "id": "2023_PORTO_ALEGRE",
-    "name": "Porto Alegre Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 17, 2022",
-    "flag": brazil,
-    "location": "Porto Alegre, Brazil"
-    },
-    {
-            "id": "2022_LONDON_OPEN",
-    "name": "London Open",
-    "eventType": "worldsOpen",
-    "eventLogo": worldsOpen,
-    "date": "Aug 20, 2022",
-    "flag": uk,
-    "location": "London, UK"
-    },
-    {
-            "id": "2022_MILWAUKEE",
-    "name": "Milwaukee Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 17, 2022",
-    "flag": usa
-    },
-    {
-            "id": "2022_MELBOURNE",
-    "name": "Melbourne Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 11, 2022",
-    "flag": australia
-    },
-    {
-            "id": "2022_SANTIAGO",
-    "name": "Santiago Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 4, 2022",
-    "flag": chile
-    },
-    {
-            "id": "2022_MILAN",
-    "name": "Milan Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 4, 2022",
-    "flag": italy
-    },
-    {
-            "id": "2022_BREMEN",
-    "name": "Bremen Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 28, 2022",
-    "flag": germany
-    },
-    {
-           "id": "2022_VANCOUVER",
-    "name": "Vancouver Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 27, 2022",
-    "flag": canada
-    },
-    {
-           "id": "2022_PERTH",
-    "name": "Perth Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 21, 2022",
-    "flag": australia
-    },
-    {
-           "id": "2022_SECAUCUS",
-    "name": "Secaucus Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 20, 2022",
-    "flag": usa
-    },
-    {
-           "id": "2022_LILLE",
-    "name": "Lille Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 21, 2022",
-    "flag": france
-    },
-    {
-           "id": "2022_BILBAO",
-    "name": "Bilbao Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 7, 2022",
-    "flag": spain
-    },
-    {
-           "id": "2022_INDIANAPOLIS",
-    "name": "Indianapolis Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 6, 2022",
-    "flag": usa
-    },
-    {
-           "id": "2022_JOINVILLE",
-    "name": "Joinville Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 7, 2022",
-    "flag": brazil
-    },
-    {
-           "id": "2022_SAO_PAULO",
-    "name": "São Paulo Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Apr 2, 2022",
-    "flag": brazil
-    },
-    {
-           "id": "2022_LIVERPOOL",
-    "name": "Liverpool Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 26, 2022",
-    "flag": uk
-    },
-    {
-           "id": "2022_SALT_LAKE_CITY",
-    "name": "Salt Lake City Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 18, 2022",
-    "flag": usa
-    },
-    {
-           "id": "2022_BRISBANE",
-    "name": "Brisbane Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 12, 2022",
-    "flag": australia
-    },
-    {
-           "id": "2021_PLAYERS_CUP_IV",
-    "name": "Players Cup IV Global Finals",
-    "eventType": "ptcgo",
-    "eventLogo": ptcgo,
-    "date": "Jul 30, 2021",
-    "flag": online
-    },
-    {
-           "id": "2021_PLAYERS_CUP_III",
-    "name": "Players Cup III Global Finals",
-    "eventType": "ptcgo",
-    "eventLogo": ptcgo,
-    "date": "Apr 23, 2021",
-    "flag": online
-    },
-    {
-           "id": "2021_PLAYERS_CUP_II",
-    "name": "Players Cup II Global Finals",
-    "eventType": "ptcgo",
-    "eventLogo": ptcgo,
-    "date": "Dec 11, 2020",
-    "flag": online
-    },
-    {
-           "id": "2021_PLAYERS_CUP_I",
-    "name": "Players Cup I Global Finals",
-    "eventType": "ptcgo",
-    "eventLogo": ptcgo,
-    "date": "Aug 29, 2020",
-    "flag": online
-    },
-    {
-           "id": "2020_PLAYERS_CUP_INVITATIONAL",
-    "name": "Players Cup Kickoff Invitational",
-    "eventType": "ptcgo",
-    "eventLogo": ptcgo,
-    "date": "Jun 13, 2020",
-    "flag": online
-    },
-    {
-           "id": "2020_SANTIAGO",
-    "name": "Santiago Special Event 2",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 14, 2020",
-    "flag": chile
-    },
-    {
-           "id": "2020_GUATEMALA",
-    "name": "Guatemala Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 14, 2020",
-    "flag": guatemala
-    },
-    {
-           "id": "2020_PERTH",
-    "name": "Perth Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 14, 2020",
-    "flag": australia
-    },
-    {
-           "id": "2020_MALMO",
-    "name": "Malmö Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 7, 2020",
-    "flag": sweden
-    },
-    {
-          "id": "2020_PUERTO_RICO",
-    "name": "Puerto Rico Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Feb 29, 2020",
-    "flag": puertoRico
-    },
-    {
-          "id": "2020_COLLINSVILLE",
-    "name": "Collinsville Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Feb 28, 2020",
-    "flag": usa,
-    "expanded": "(Expanded)"
-    },
-    {
-          "id": "2020_LIMA",
-    "name": "Lima Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Feb 15, 2020",
-    "flag": peru
-    },
-    {
-          "id": "2020_COSTA_RICA",
-    "name": "Costa Rica Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Feb 15, 2020",
-    "flag": costaRica
-    },
-    {
-          "id": "2020_GUAIBA",
-    "name": "Guaíba Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Feb 15, 2020",
-    "flag": brazil
-    },
-    {
-          "id": "2020_BUENOS_AIRES",
-    "name": "Buenos Aires Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Feb 8, 2020",
-    "flag": argentina
-    },
-    {
-          "id": "2020_SAO_PAULO",
-    "name": "São Paulo Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jan 25, 2020",
-    "flag": brazil
-    },
-    {
-          "id": "2020_DALLAS",
-    "name": "Dallas Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jan 17, 2020",
-    "flag": usa,
-    "expanded": "(Expanded)"
-    },
-    {
-          "id": "2020_BOCHUM",
-    "name": "Bochum Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jan 11, 2020",
-    "flag": germany
-    },
-    {
-          "id": "2020_KUALA_LUMPUR",
-    "name": "Kuala Lumpur Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 21, 2019",
-    "flag": malaysia
-    },
-    {
-          "id": "2020_IQUIQUE",
-    "name": "Iquique Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Dec 14, 2019",
-    "flag": chile
-    },
-    {
-          "id": "2020_SAN_DIEGO",
-    "name": "San Diego Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 6, 2019",
-    "flag": usa
-    },
-    {
-          "id": "2020_SINGAPORE",
-    "name": "Singapore Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Dec 7, 2019",
-    "flag": singapore
-    },
-    {
-          "id": "2020_BRISBANE",
-    "name": "Brisbane Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Dec 7, 2019",
-    "flag": australia
-    },
-    {
-          "id": "2020_DAYTONA_BEACH",
-    "name": "Daytona Beach Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Nov 29, 2019",
-    "flag": usa
-    },
-    {
-          "id": "2020_PORTLAND",
-    "name": "Portland Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Nov 8, 2019",
-    "flag": usa,
-    "expanded": "(Expanded)"
-    },
-    {
-         "id": "2020_PARIS",
-    "name": "Paris Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Nov 2, 2019",
-    "flag": france
-    },
-    {
-         "id": "2020_RICHMOND",
-    "name": "Richmond Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Nov 1, 2019",
-    "flag": usa,
-    "expanded": "(Expanded)",
-    },
-    {
-         "id": "2020_KNOXVILLE",
-    "name": "Knoxville Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Oct 11, 2019",
-    "flag": usa
-    },
-    {
-         "id": "2020_SANTIAGO1",
-    "name": "Santiago Special Event 1",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Oct 12, 2019",
-    "flag": chile
-    },
-    {
-         "id": "2020_COLOGNE",
-    "name": "Cologne Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 28, 2019",
-    "flag": germany
-    },
-    {
-         "id": "2020_ATLANTIC_CITY",
-    "name": "Atlantic City Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 27, 2019",
-    "flag": usa
-    },
-    {
-         "id": "2020_CAMPINAS",
-    "name": "Campinas Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Sep 28, 2019",
-    "flag": brazil
-    },
-    {
-         "id": "2020_SHEFFIELD",
-    "name": "Sheffield Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Sep 7, 2019",
-    "flag": uk
-    },
-    {
-         "id": "2020_MELBOURNE",
-    "name": "Melbourne Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Aug 31, 2019",
-    "flag": australia
-    },
-    {
-         "id": "2019_DC_OPEN",
-    "name": "DC Open",
-    "eventType": "worldsOpen",
-    "eventLogo": worldsOpen,
-    "date": "Aug 17, 2019",
-    "flag": usa
-    },
-    {
-         "id": "2019_CAPE_TOWN",
-     "name": "Cape Town Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 15, 2019",
-    "flag": southAfrica
-    },
-    {
-         "id": "2019_AUCKLAND",
-    "name": "Auckland Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 15, 2019",
-    "flag": newZealand
+        "id": "2023_PUERTO_RICO",
+        "name": "Puerto Rico Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 24, 2023",
+        "flag": puertoRico,
+        "location": "Puerto Rico"
+    },
+    {
+        "id": "2023_CAPE_TOWN",
+        "name": "Cape Town Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 17, 2023",
+        "flag": southAfrica,
+        "location": "Cape Town, South Africa"
+    },
+    {
+        "id": "2023_JOHANNESBURG",
+        "name": "Johannesburg Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 10, 2023",
+        "flag": southAfrica,
+        "location": "Johannesburg, South Africa"
+    },
+    {
+        "id": "2023_FRESNO",
+        "name": "Fresno Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 9, 2023",
+        "flag": usa,
+        "location": "Fresno, California"
+    },
+    {
+        "id": "2023_SANTIAGO",
+        "name": "Santiago Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 3, 2023",
+        "flag": chile,
+        "location": "Santiago, Chile"
+    },
+    {
+        "id": "2023_MILWAUKEE",
+        "name": "Milwaukee Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 2, 2023",
+        "flag": usa,
+        "location": "Milwaukee, Wisconsin"
+    },
+    {
+        "id": "2023_TURIN",
+        "name": "Turin Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 3, 2023",
+        "flag": italy,
+        "location": "Turin, Italy"
+    },
+    {
+        "id": "2023_LIMA",
+        "name": "Lima Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 27, 2023",
+        "flag": peru,
+        "location": "Lima, Peru"
+    },
+    {
+        "id": "2023_BUENOS_AIRES",
+        "name": "Buenos Aires Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 20, 2023",
+        "flag": argentina,
+        "location": "Buenos Aires, Argentina"
+    },
+    {
+        "id": "2023_MALMO",
+        "name": "Malmö Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 20, 2023",
+        "flag": sweden,
+        "location": "Malmö, Sweden"
+    },
+    {
+        "id": "2023_HARTFORD",
+        "name": "Hartford Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 19, 2023",
+        "flag": usa,
+        "location": "Hartford, Connecticut"
+    },
+    {
+        "id": "2023_BOGOTA",
+        "name": "Bogotá Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 14, 2023",
+        "flag": colombia,
+        "location": "Bogotá, Colombia"
+    },
+    {
+        "id": "2023_SAO_PAULO",
+        "name": "São Paulo Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 6, 2023",
+        "flag": brazil,
+        "location": "São Paulo, Brazil"
+    },
+    {
+        "id": "2023_PORTLAND",
+        "name": "Portland Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 5, 2023",
+        "flag": usa,
+        "location": "Portland, Oregon"
+    },
+    {
+        "id": "2023_SYDNEY",
+        "name": "Sydney Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 1, 2023",
+        "flag": australia,
+        "location": "Sydney, Australia"
+    },
+    {
+        "id": "2023_FORT_WAYNE",
+        "name": "Fort Wayne Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 31, 2023",
+        "flag": usa,
+        "location": "Fort Wayne, Indiana"
+    },
+    {
+        "id": "2023_CHARLOTTE",
+        "name": "Charlotte Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 23, 2023",
+        "flag": usa,
+        "location": "Charlotte, North Carolina"
+    },
+    {
+        "id": "2023_UTRECHT",
+        "name": "Utrecht Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 18, 2023",
+        "flag": netherlands,
+        "location": "Utrecht, Netherlands"
+    },
+    {
+        "id": "2023_NATAL",
+        "name": "Natal Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 11, 2023",
+        "flag": brazil,
+        "location": "Natal, Brazil"
+    },
+    {
+        "id": "2023_VANCOUVER",
+        "name": "Vancouver Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 10, 2023",
+        "flag": canada,
+        "location": "Vancouver, Canada"
+    },
+    {
+        "id": "2023_PERTH",
+        "name": "Perth Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 4, 2023",
+        "flag": australia,
+        "location": "Perth, Australia"
+    },
+    {
+        "id": "2023_BOCHUM",
+        "name": "Bochum Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Feb 25, 2023",
+        "flag": germany,
+        "location": "Bochum, Germany"
+    },
+    {
+        "id": "2023_KNOXVILLE",
+        "name": "Knoxville Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Feb 24, 2023",
+        "flag": usa,
+        "location": "Knoxville, Tennessee"
+    },
+    {
+        "id": "2023_ORLANDO",
+        "name": "Orlando Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Feb 3, 2023",
+        "flag": usa,
+        "location": "Orlando, Florida"
+    },
+    {
+        "id": "2023_LIVERPOOL",
+        "name": "Liverpool Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jan 21, 2023",
+        "flag": uk,
+        "location": "Liverpool, United Kingdom"
+    },
+    {
+        "id": "2023_SAN_DIEGO",
+        "name": "San Diego Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jan 6, 2023",
+        "flag": usa,
+        "location": "San Diego, California"
+    },
+    {
+        "id": "2023_ARLINGTON",
+        "name": "Arlington Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 16, 2022",
+        "flag": usa,
+        "location": "Arlington, Texas"
+    },
+    {
+        "id": "2023_TORONTO",
+        "name": "Toronto Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 2, 2022",
+        "flag": canada,
+        "location": "Toronto, Canada"
+    },
+    {
+        "id": "2023_STUTTGART",
+        "name": "Stuttgart Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 3, 2022",
+        "flag": germany,
+        "location": "Stuttgart, Germany"
+    },
+    {
+        "id": "2023_BRISBANE",
+        "name": "Brisbane Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 3, 2022",
+        "flag": australia,
+        "location": "Brisbane, Australia"
+    },
+    {
+        "id": "2023_WARSAW",
+        "name": "Warsaw Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Nov 12, 2022",
+        "flag": poland,
+        "location": "Warsaw, Poland"
+    },
+    {
+        "id": "2023_LILLE",
+        "name": "Lille Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Oct 22, 2022",
+        "flag": france,
+        "location": "Lille, France"
+    },
+    {
+        "id": "2023_SALT_LAKE_CITY",
+        "name": "Salt Lake City Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Oct 14, 2022",
+        "flag": usa,
+        "location": "Salt Lake City, Utah"
+    },
+    {
+        "id": "2023_PEORIA",
+        "name": "Peoria Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 30, 2022",
+        "flag": usa,
+        "location": "Peoria, Illinois"
+    },
+    {
+        "id": "2023_BILBAO",
+        "name": "Bilbao Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Sep 17, 2022",
+        "flag": spain,
+        "location": "Bilbao, Spain"
+    },
+    {
+        "id": "2023_BALTIMORE",
+        "name": "Baltimore Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 16, 2022",
+        "flag": usa,
+        "location": "Baltimore, Maryland"
+    },
+    {
+        "id": "2023_PORTO_ALEGRE",
+        "name": "Porto Alegre Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 17, 2022",
+        "flag": brazil,
+        "location": "Porto Alegre, Brazil"
+    },
+    {
+        "id": "2022_LONDON_OPEN",
+        "name": "London Open",
+        "eventType": "worldsOpen",
+        "eventLogo": worldsOpen,
+        "date": "Aug 20, 2022",
+        "flag": uk,
+        "location": "London, UK"
+    },
+    {
+        "id": "2022_MILWAUKEE",
+        "name": "Milwaukee Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 17, 2022",
+        "flag": usa
+    },
+    {
+        "id": "2022_MELBOURNE",
+        "name": "Melbourne Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 11, 2022",
+        "flag": australia
+    },
+    {
+        "id": "2022_SANTIAGO",
+        "name": "Santiago Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 4, 2022",
+        "flag": chile
+    },
+    {
+        "id": "2022_MILAN",
+        "name": "Milan Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 4, 2022",
+        "flag": italy
+    },
+    {
+        "id": "2022_BREMEN",
+        "name": "Bremen Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 28, 2022",
+        "flag": germany
+    },
+    {
+        "id": "2022_VANCOUVER",
+        "name": "Vancouver Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 27, 2022",
+        "flag": canada
+    },
+    {
+        "id": "2022_PERTH",
+        "name": "Perth Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 21, 2022",
+        "flag": australia
+    },
+    {
+        "id": "2022_SECAUCUS",
+        "name": "Secaucus Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 20, 2022",
+        "flag": usa
+    },
+    {
+        "id": "2022_LILLE",
+        "name": "Lille Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 21, 2022",
+        "flag": france
+    },
+    {
+        "id": "2022_BILBAO",
+        "name": "Bilbao Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 7, 2022",
+        "flag": spain
+    },
+    {
+        "id": "2022_INDIANAPOLIS",
+        "name": "Indianapolis Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 6, 2022",
+        "flag": usa
+    },
+    {
+        "id": "2022_JOINVILLE",
+        "name": "Joinville Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 7, 2022",
+        "flag": brazil
+    },
+    {
+        "id": "2022_SAO_PAULO",
+        "name": "São Paulo Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 2, 2022",
+        "flag": brazil
+    },
+    {
+        "id": "2022_LIVERPOOL",
+        "name": "Liverpool Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 26, 2022",
+        "flag": uk
+    },
+    {
+        "id": "2022_SALT_LAKE_CITY",
+        "name": "Salt Lake City Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 18, 2022",
+        "flag": usa
+    },
+    {
+        "id": "2022_BRISBANE",
+        "name": "Brisbane Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 12, 2022",
+        "flag": australia
+    },
+    {
+        "id": "2021_PLAYERS_CUP_IV",
+        "name": "Players Cup IV Global Finals",
+        "eventType": "ptcgo",
+        "eventLogo": ptcgo,
+        "date": "Jul 30, 2021",
+        "flag": online
+    },
+    {
+        "id": "2021_PLAYERS_CUP_III",
+        "name": "Players Cup III Global Finals",
+        "eventType": "ptcgo",
+        "eventLogo": ptcgo,
+        "date": "Apr 23, 2021",
+        "flag": online
+    },
+    {
+        "id": "2021_PLAYERS_CUP_II",
+        "name": "Players Cup II Global Finals",
+        "eventType": "ptcgo",
+        "eventLogo": ptcgo,
+        "date": "Dec 11, 2020",
+        "flag": online
+    },
+    {
+        "id": "2021_PLAYERS_CUP_I",
+        "name": "Players Cup I Global Finals",
+        "eventType": "ptcgo",
+        "eventLogo": ptcgo,
+        "date": "Aug 29, 2020",
+        "flag": online
+    },
+    {
+        "id": "2020_PLAYERS_CUP_INVITATIONAL",
+        "name": "Players Cup Kickoff Invitational",
+        "eventType": "ptcgo",
+        "eventLogo": ptcgo,
+        "date": "Jun 13, 2020",
+        "flag": online
+    },
+    {
+        "id": "2020_SANTIAGO",
+        "name": "Santiago Special Event 2",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 14, 2020",
+        "flag": chile
+    },
+    {
+        "id": "2020_GUATEMALA",
+        "name": "Guatemala Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 14, 2020",
+        "flag": guatemala
+    },
+    {
+        "id": "2020_PERTH",
+        "name": "Perth Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 14, 2020",
+        "flag": australia
+    },
+    {
+        "id": "2020_MALMO",
+        "name": "Malmö Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 7, 2020",
+        "flag": sweden
+    },
+    {
+        "id": "2020_PUERTO_RICO",
+        "name": "Puerto Rico Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 29, 2020",
+        "flag": puertoRico
+    },
+    {
+        "id": "2020_COLLINSVILLE",
+        "name": "Collinsville Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Feb 28, 2020",
+        "flag": usa,
+        "expanded": "(Expanded)"
+    },
+    {
+        "id": "2020_LIMA",
+        "name": "Lima Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 15, 2020",
+        "flag": peru
+    },
+    {
+        "id": "2020_COSTA_RICA",
+        "name": "Costa Rica Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 15, 2020",
+        "flag": costaRica
+    },
+    {
+        "id": "2020_GUAIBA",
+        "name": "Guaíba Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 15, 2020",
+        "flag": brazil
+    },
+    {
+        "id": "2020_BUENOS_AIRES",
+        "name": "Buenos Aires Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Feb 8, 2020",
+        "flag": argentina
+    },
+    {
+        "id": "2020_SAO_PAULO",
+        "name": "São Paulo Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jan 25, 2020",
+        "flag": brazil
+    },
+    {
+        "id": "2020_DALLAS",
+        "name": "Dallas Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jan 17, 2020",
+        "flag": usa,
+        "expanded": "(Expanded)"
+    },
+    {
+        "id": "2020_BOCHUM",
+        "name": "Bochum Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jan 11, 2020",
+        "flag": germany
+    },
+    {
+        "id": "2020_KUALA_LUMPUR",
+        "name": "Kuala Lumpur Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 21, 2019",
+        "flag": malaysia
+    },
+    {
+        "id": "2020_IQUIQUE",
+        "name": "Iquique Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Dec 14, 2019",
+        "flag": chile
+    },
+    {
+        "id": "2020_SAN_DIEGO",
+        "name": "San Diego Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 6, 2019",
+        "flag": usa
+    },
+    {
+        "id": "2020_SINGAPORE",
+        "name": "Singapore Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Dec 7, 2019",
+        "flag": singapore
+    },
+    {
+        "id": "2020_BRISBANE",
+        "name": "Brisbane Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Dec 7, 2019",
+        "flag": australia
+    },
+    {
+        "id": "2020_DAYTONA_BEACH",
+        "name": "Daytona Beach Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Nov 29, 2019",
+        "flag": usa
+    },
+    {
+        "id": "2020_PORTLAND",
+        "name": "Portland Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Nov 8, 2019",
+        "flag": usa,
+        "expanded": "(Expanded)"
+    },
+    {
+        "id": "2020_PARIS",
+        "name": "Paris Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Nov 2, 2019",
+        "flag": france
+    },
+    {
+        "id": "2020_RICHMOND",
+        "name": "Richmond Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Nov 1, 2019",
+        "flag": usa,
+        "expanded": "(Expanded)",
+    },
+    {
+        "id": "2020_KNOXVILLE",
+        "name": "Knoxville Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Oct 11, 2019",
+        "flag": usa
+    },
+    {
+        "id": "2020_SANTIAGO1",
+        "name": "Santiago Special Event 1",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Oct 12, 2019",
+        "flag": chile
+    },
+    {
+        "id": "2020_COLOGNE",
+        "name": "Cologne Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 28, 2019",
+        "flag": germany
+    },
+    {
+        "id": "2020_ATLANTIC_CITY",
+        "name": "Atlantic City Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 27, 2019",
+        "flag": usa
+    },
+    {
+        "id": "2020_CAMPINAS",
+        "name": "Campinas Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Sep 28, 2019",
+        "flag": brazil
+    },
+    {
+        "id": "2020_SHEFFIELD",
+        "name": "Sheffield Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Sep 7, 2019",
+        "flag": uk
+    },
+    {
+        "id": "2020_MELBOURNE",
+        "name": "Melbourne Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Aug 31, 2019",
+        "flag": australia
+    },
+    {
+        "id": "2019_DC_OPEN",
+        "name": "DC Open",
+        "eventType": "worldsOpen",
+        "eventLogo": worldsOpen,
+        "date": "Aug 17, 2019",
+        "flag": usa
+    },
+    {
+        "id": "2019_CAPE_TOWN",
+        "name": "Cape Town Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 15, 2019",
+        "flag": southAfrica
+    },
+    {
+        "id": "2019_AUCKLAND",
+        "name": "Auckland Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 15, 2019",
+        "flag": newZealand
     },
     {
         "id": "2019_JONKOPING",
-    "name": "Jonkoping Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 15, 2019",
-    "flag": sweden
+        "name": "Jonkoping Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 15, 2019",
+        "flag": sweden
     },
     {
         "id": "2019_ORIGINS_OPEN",
-    "name": "Origins Open (Special Event)",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 14, 2019",
-    "flag": usa
+        "name": "Origins Open (Special Event)",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 14, 2019",
+        "flag": usa
     },
     {
         "id": "2019_BANGKOK",
-    "name": "Bangkok Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Jun 8, 2019",
-    "flag": thailand
+        "name": "Bangkok Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Jun 8, 2019",
+        "flag": thailand
     },
     {
         "id": "2019_SANTIAGO",
-    "name": "Santiago Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Jun 8, 2019",
-    "flag": chile
+        "name": "Santiago Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Jun 8, 2019",
+        "flag": chile
     },
     {
         "id": "2019_MADISON",
-    "name": "Madison Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 31, 2019",
-    "flag": usa
+        "name": "Madison Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 31, 2019",
+        "flag": usa
     },
     {
         "id": "2019_SINGAPORE",
-    "name": "Singapore Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 25, 2019",
-    "flag": singapore
+        "name": "Singapore Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 25, 2019",
+        "flag": singapore
     },
     {
         "id": "2019_SAO_PAULO",
-    "name": "São Paulo Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 18, 2019",
-    "flag": brazil
+        "name": "São Paulo Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 18, 2019",
+        "flag": brazil
     },
     {
         "id": "2019_SYDNEY",
-    "name": "Sydney Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 18, 2019",
-    "flag": australia
+        "name": "Sydney Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 18, 2019",
+        "flag": australia
     },
     {
         "id": "2019_SANTA_CLARA",
-    "name": "Santa Clara Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 17, 2019",
-    "flag": usa
+        "name": "Santa Clara Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 17, 2019",
+        "flag": usa
     },
     {
         "id": "2019_JOHANNESBURG",
-    "name": "Johannesburg Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 18, 2019",
-    "flag": southAfrica
+        "name": "Johannesburg Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 18, 2019",
+        "flag": southAfrica
     },
     {
         "id": "2019_COLOMBIA",
-    "name": "Bogotá Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 12, 2019",
-    "flag": colombia
+        "name": "Bogotá Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 12, 2019",
+        "flag": colombia
     },
     {
         "id": "2019_CANCUN",
-    "name": "Cancún Special Event",
-    "eventType": "speSeries",
-    "eventLogo":speSeries,
-    "date": "May 12, 2019",
-    "flag":mexico
+        "name": "Cancún Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 12, 2019",
+        "flag": mexico
     },
     {
-       "id": "2019_PANAMA",
-    "name": "Panama Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "May 12, 2019",
-    "flag": panama
+        "id": "2019_PANAMA",
+        "name": "Panama Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "May 12, 2019",
+        "flag": panama
     },
     {
-       "id": "2019_BRISTOL",
-    "name": "Bristol Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 11, 2019",
-    "flag": uk
+        "id": "2019_BRISTOL",
+        "name": "Bristol Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 11, 2019",
+        "flag": uk
     },
     {
-       "id": "2019_MALAYSIA",
-    "name": "Kuala Lumpur Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 11, 2019",
-    "flag": malaysia
+        "id": "2019_MALAYSIA",
+        "name": "Kuala Lumpur Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 11, 2019",
+        "flag": malaysia
     },
     {
-       "id": "2019_HARTFORD",
-    "name": "Hartford Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "May 3, 2019",
-    "flag": usa,
-    "expanded": "(Expanded)"
+        "id": "2019_HARTFORD",
+        "name": "Hartford Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "May 3, 2019",
+        "flag": usa,
+        "expanded": "(Expanded)"
     },
     {
-       "id": "2019_DAYTONA_BEACH",
-    "name": "Daytona Beach Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Apr 19, 2019",
-    "flag": usa
+        "id": "2019_DAYTONA_BEACH",
+        "name": "Daytona Beach Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 19, 2019",
+        "flag": usa
     },
     {
-       "id": "2019_GUATEMALA",
-    "name": "Guatemala Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Apr 13, 2019",
-    "flag": guatemala
+        "id": "2019_GUATEMALA",
+        "name": "Guatemala Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Apr 13, 2019",
+        "flag": guatemala
     },
     {
-       "id": "2019_MANILA",
-    "name": "Manila Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Apr 13, 2019",
-    "flag": philippines
+        "id": "2019_MANILA",
+        "name": "Manila Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Apr 13, 2019",
+        "flag": philippines
     },
     {
-    "id": "2019_PERU2",
-    "name": "Peru Special Event #2",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Apr 13, 2019",
-    "flag": peru
+        "id": "2019_PERU2",
+        "name": "Peru Special Event #2",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Apr 13, 2019",
+        "flag": peru
     },
     {
         "id": "2019_ARGENTINA2",
-    "name": "Argentina Special Event #2",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Apr 6, 2019",
-    "flag": argentina
+        "name": "Argentina Special Event #2",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Apr 6, 2019",
+        "flag": argentina
     },
     {
         "id": "2019_DENVER",
-    "name": "Denver Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Apr 5, 2019",
-    "flag": usa
+        "name": "Denver Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Apr 5, 2019",
+        "flag": usa
     },
     {
         "id": "2019_JAKARTA",
-    "name": "Jakarta Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 30, 2019",
-    "flag": indonesia
+        "name": "Jakarta Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 30, 2019",
+        "flag": indonesia
     },
     {
         "id": "2019_EL_SALVADOR",
-    "name": "El Salvador Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 23, 2019",
-    "flag": elSalvador
+        "name": "El Salvador Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 23, 2019",
+        "flag": elSalvador
     },
     {
         "id": "2019_BOLZANO",
-    "name": "Bolzano Special Event",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 23, 2019",
-    "flag": italy
+        "name": "Bolzano Special Event",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 23, 2019",
+        "flag": italy
     },
     {
         "id": "2019_FORTALEZA",
-    "name": "Fortaleza Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 23, 2019",
-    "flag": brazil
+        "name": "Fortaleza Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 23, 2019",
+        "flag": brazil
     },
     {
         "id": "2019_CHILE3",
-    "name": "Chile Special Event #3",
-    "eventType": "speSeries",
-    "eventLogo": speSeries,
-    "date": "Mar 16, 2019",
-    "flag": chile
+        "name": "Chile Special Event #3",
+        "eventType": "speSeries",
+        "eventLogo": speSeries,
+        "date": "Mar 16, 2019",
+        "flag": chile
     },
     {
         "id": "2019_PERTH",
-    "name": "Perth Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 16, 2019",
-    "flag": australia
+        "name": "Perth Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 16, 2019",
+        "flag": australia
     },
     {
         "id": "2019_GREENSBORO",
-    "name": "Greensboro Regionals",
-    "eventType": "regionals",
-    "eventLogo": regionals,
-    "date": "Mar 15, 2019",
-    "flag": usa
+        "name": "Greensboro Regionals",
+        "eventType": "regionals",
+        "eventLogo": regionals,
+        "date": "Mar 15, 2019",
+        "flag": usa
     },
 ];
 
