@@ -3320,6 +3320,46 @@ const tournamentList = [
     "date": "Mar 23, 2019",
     "flag": elSalvador
     },
+    {
+        "id": "2019_BOLZANO",
+    "name": "Bolzano Special Event",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 23, 2019",
+    "flag": italy
+    },
+    {
+        "id": "2019_FORTALEZA",
+    "name": "Fortaleza Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 23, 2019",
+    "flag": brazil
+    },
+    {
+        "id": "2019_CHILE3",
+    "name": "Chile Special Event #3",
+    "eventType": "speSeries",
+    "eventLogo": speSeries,
+    "date": "Mar 16, 2019",
+    "flag": chile
+    },
+    {
+        "id": "2019_PERTH",
+    "name": "Perth Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 16, 2019",
+    "flag": australia
+    },
+    {
+        "id": "2019_GREENSBORO",
+    "name": "Greensboro Regionals",
+    "eventType": "regionals",
+    "eventLogo": regionals,
+    "date": "Mar 15, 2019",
+    "flag": usa
+    },
 ];
 
 const parseDate = (dateStr) => {
