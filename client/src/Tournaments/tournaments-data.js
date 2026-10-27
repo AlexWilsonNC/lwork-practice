@@ -2088,8 +2088,7 @@ const tournamentList = [
         "date": "Oct 24, 2026",
         "flag": mexico,
         "location": "Puebla, Mexico",
-        "eventSite": "https://www.trainerchampionships.com/event/puebla-2027/",
-        "results": false
+        "eventSite": "https://www.trainerchampionships.com/event/puebla-2027/"
     },
     {
         "id": "2027_GDANSK",
